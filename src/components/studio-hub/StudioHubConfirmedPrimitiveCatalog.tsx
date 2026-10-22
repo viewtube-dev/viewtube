@@ -322,7 +322,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{formatDefaultValue(value)}</span></div>)}</div>
         <div className="vt-confirmed-defaults-explainer">
           <strong>HOW TO READ THE CURRENT CONTRACT</strong>
-          <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and 0.86 line-height unless a family exception is documented.</p>
+          <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and default line-height unless a family exception is documented.</p>
           <p><b>Field colors:</b> At rest, value, placeholder, and caret use primary (--pair-a); fill uses primary at 50% opacity, the outer border is black, and the inline primary text stroke matches the selected border width. Focus uses primary fill at 15%, black text and inline stroke, plus a secondary-color outline at 65% of the selected border width with 0px offset.</p>
           <p><b>Global interaction defaults:</b> primitive shells are flat and stationary. No shell shadow, hover/press movement, or transition is part of the default contract; explicitly registered inner-icon effects must remain isolated and honor reduced motion.</p>
           <p><b>Icon presets:</b> the default production preset is 38px / 1.9 stroke standard and 24px / 2.0 compact. Current (28px / 18px) and moderate (34px / 22px) presets are opt-in. Circle icon buttons scale the large preset to 80%.</p>
@@ -335,7 +335,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <p>Canonical sources: <code>src/studio-ui/primitives/StudioControls.tsx</code>, <code>src/studio-ui/tokens.ts</code>, and <code>src/styles/studio-control-system.css</code>. Named size exceptions are registered in <code>STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS</code>; effective CSS can diverge from token metadata.</p>
       <ul>
         <li><strong>BASE SIZE LATTICE:</strong> standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
-        <li><strong>SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact, weight 1000 and 0.86 line-height while retaining selected-size geometry.</li>
+        <li><strong>SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact, weight 1000 and default line-height while retaining selected-size geometry.</li>
         <li><strong>MULTILINE TEXTAREA:</strong> 18px standard / 14px compact, multiline line-height and padding, 92px minimum writing surface, and vertical resize.</li>
         <li><strong>PROMINENT WORKFLOW ACTION:</strong> StudioActionButton is a Supreme 60px default with standard/compact variants and token-driven geometry, and no shell shadow, transition, or hover/press translation.</li>
         <li><strong>GLOBAL SHADOW + MOTION POLICY:</strong> canonical primitive shells and faces are flat and stationary; obsolete shadow/movement declarations must be removed, not masked by override layers. Browser computed-style verification remains a release gate.</li>
@@ -388,7 +388,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
 
     <Family title="Studio Text Box · Standard + Compact + Micro" nonDefaultSettings={[
         "Non-editable, selectable display surface; no caret, editing behavior, or keyboard tab stop.",
-        "Inherits the corresponding textarea border, radius, padding, typography, primary fill, and 0.75 line-height.",
+        "Inherits the corresponding textarea border, radius, padding, typography, primary fill, and default line-height.",
         "Content height grows with text; newlines are preserved and long words wrap.",
       ]} provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Textarea-matched typography: 18px standard / 14px compact / 10px micro; shared global border widths and radii; line-height 0.75." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>STANDARD · 18PX</span><StudioTextBox aria-label="Studio text box standard" data-vt-library-component="StudioTextBox">A read-only description that can contain as little or as much text as needed.</StudioTextBox></div>
