@@ -81,7 +81,7 @@ export const resolveBrainOutputReceiptState = (
  }
 }
 
-const BrainReceiptBackedOutputCard: React.FC<{
+export const BrainReceiptBackedOutputCard: React.FC<{
  chain: BrainRuntimeSnapshot["provenance"]["latestChain"]
  build: Pick<NonNullable<BrainRuntimeSnapshot["build"]>, "id" | "assetIds"> | null
 }> = ({ chain, build }) => {
