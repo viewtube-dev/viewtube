@@ -84,6 +84,7 @@ import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import { isEvidenceRecord, type EvidenceRecord } from "../services/brain/EvidenceRecord"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
  clearBrainSurfaceSelection,
@@ -124,6 +125,7 @@ export type ChatMessage = {
  handoff?: AIBrainChatHandoff | null
  originalUserText?: string
  evidencePack?: AIBrainEvidencePack
+ evidenceRecords?: EvidenceRecord[]
  readiness?: AIBrainTurnReadiness
  contextUsed?: BrainCreatorContextSnapshot
  learningReceipt?: {
@@ -137,6 +139,22 @@ export type ChatMessage = {
  }
  turnStatus?: AIBrainConversationTurn["status"]
  contextMayBeStale?: boolean
+}
+
+/**
+ * Read only the exact typed evidence array recorded as rendered to the model.
+ * If IDs or record contracts disagree, omit the detailed provenance rather than
+ * displaying a different evidence set as though it were the prompt input.
+ */
+export const readPromptEvidenceRecords = (
+ metadata: Record<string, unknown> | undefined,
+): EvidenceRecord[] | undefined => {
+ if (!metadata || !Array.isArray(metadata.evidenceRecords) || !Array.isArray(metadata.promptEvidenceRecordIds)) return undefined
+ const records = metadata.evidenceRecords
+ const ids = metadata.promptEvidenceRecordIds
+ if (!records.every(isEvidenceRecord) || !ids.every((id) => typeof id === "string")) return undefined
+ if (records.length !== ids.length || records.some((record, index) => record.id !== ids[index])) return undefined
+ return records
 }
 
 export type BrainCreatorContextSnapshot = {
@@ -740,7 +758,7 @@ const CreatorResponseCard: React.FC<{
     ) : null}
     <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
     <BrainAnswerModuleGrid modules={modules} compact />
-    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} compact /> : null}
+    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} compact /> : null}
     {openQuestions[0] ? (
      <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
     ) : null}
@@ -1327,7 +1345,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: readPromptEvidenceRecords(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
