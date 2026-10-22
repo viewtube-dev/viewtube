@@ -867,3 +867,14 @@ The AI Brain response evidence panel now receives an explicit prompt-evidence in
 The state is restored with saved turns and recalculated after generation retries. This is a presentation of the existing canonical turn metadata, not a second evidence store; it deliberately does not compare unrelated video/evidence-pack IDs against analytics record IDs as if they shared a namespace.
 
 Regression tests cover all three states and the visible alert/status semantics. **Verification status:** CI pending; no local test execution, live browser verification, or accessibility certification is claimed. Next: broaden the same disclosure to explicitly distinguish empty, partial, stale, unavailable, and conflicting source data, then run the complete Brain-route keyboard/mobile/screen-reader audit.
+
+### Implementation record — explicit evidence-quality conditions (2026-10-22)
+
+Follow-through for UI-2 in the audit-driven backlog:
+
+- The AI Brain evidence ribbon distinguishes an empty prepared selection from a source with missing data; it explicitly avoids treating an empty selection as proof that the source has no records.
+- When prompt evidence identity is verified, the ribbon summarizes partial coverage and counts stale, missing, and conflicting typed records using the same turn-bound `EvidenceRecord` objects.
+- When identity is mismatched, detailed record-derived condition counts remain withheld. Legacy turns without a prompt manifest stay marked unavailable rather than being mislabeled as mismatches.
+- The summary pairs text with status color and uses a labeled semantic region. Existing disclosure sections continue to use native `details/summary` keyboard interaction and visible focus styles.
+
+Regression cases were added for empty selection, partial coverage, stale/missing/conflicting records, and legacy record absence. **Verification remains pending:** CI is running; no local test run, browser test, WCAG conformance, screen-reader walkthrough, or mobile/zoom certification is claimed. Remaining UI-2 work includes actionable source-specific empty reasons and verifying constraint/filter persistence across evidence navigation and conversation restore.
