@@ -305,47 +305,55 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 }
 
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
+/** Certified StudioButton examples arranged by the reusable PR #756 specimen grid. */
 const ConfirmedStudioButtonFamily: React.FC = () => {
   const [v3On, setV3On] = React.useState(false)
   const [v5On, setV5On] = React.useState(true)
   const [v6On, setV6On] = React.useState(false)
 
-  const specimen = (sizeVariant: "standard" | "supreme" | "micro", variant: 1 | 2 | 3 | 4 | 5 | 6 | 7) => {
-    const toggle = variant === 3 || variant === 5 || variant === 6
-    const isOn = variant === 3 ? v3On : variant === 5 ? v5On : variant === 6 ? v6On : false
-    const label = variant === 5 ? (v5On ? "ON" : "OFF") : variant === 6 ? (v6On ? "NO!" : "YES!") : "BUTTON"
-    const onClick = variant === 3 ? () => setV3On(value => !value) : variant === 5 ? () => setV5On(value => !value) : variant === 6 ? () => setV6On(value => !value) : undefined
-    return <div className="vt-confirmed-button-skin-cell" key={variant}>
-      <StudioButton
-        className="vt-confirmed-button-skin"
-        sizeVariant={sizeVariant === "supreme" ? undefined : sizeVariant}
-        heightVariant={sizeVariant === "supreme" ? "60" : sizeVariant === "standard" ? "44" : undefined}
-        data-vt-button-skin={`v${variant}`}
-        data-vt-button-on={toggle && isOn ? "true" : "false"}
-        data-vt-library-component="StudioButton"
-        aria-label={variant === 3 ? "Button V3 toggle" : variant === 5 ? "Button V5 ON/OFF toggle" : variant === 6 ? "Button V6 YES/NO toggle" : `Button V${variant}`}
-        aria-pressed={toggle ? isOn : undefined}
-        onClick={onClick}
-      >{label}</StudioButton>
-    </div>
-  }
+  const variantsForTier = (tier: "supreme" | "standard" | "compact" | "micro") => [
+    { id: `${tier}-row-1`, tier, specimens: [{ id: `${tier}-v1`, label: "V1" }] },
+    { id: `${tier}-row-2`, tier, specimens: [{ id: `${tier}-v2`, label: "V2" }, { id: `${tier}-v3`, label: "V3" }] },
+    { id: `${tier}-row-3`, tier, specimens: [{ id: `${tier}-v4`, label: "V4" }, { id: `${tier}-v5`, label: "V5" }, { id: `${tier}-v6`, label: "V6" }] },
+    { id: `${tier}-row-4`, tier, specimens: [{ id: `${tier}-v7`, label: "V7" }, { id: `${tier}-v1-repeat`, label: "V1" }, { id: `${tier}-v2-repeat`, label: "V2" }, { id: `${tier}-v3-repeat`, label: "V3" }] },
+  ]
 
-  const row = (sizeVariant: "standard" | "supreme" | "micro", variants: Array<1 | 2 | 3 | 4 | 5 | 6 | 7>) => (
-    <div className={`vt-confirmed-button-skin-grid is-${sizeVariant}`} aria-label={`${sizeVariant} button skins`}>
-      {variants.map(variant => specimen(sizeVariant, variant))}
-    </div>
-  )
+  const specimenRows = (["supreme", "standard", "compact", "micro"] as const).flatMap(variantsForTier)
 
   return (
     <Family title="Button" nonDefaultSettings={[
-      "V1 primary fill; V2 secondary fill; V3 toggles primary/secondary fill.",
+      "The PR #756 specimen grid is applied to the original production StudioButton family; rows demonstrate 1×1, 2×1, 3×1, and 4×1 layouts.",
+      "V1 primary fill; V2 secondary fill; V3 toggles primary/secondary fill and its button text names the current fill.",
       "V4 black fill with primary text; V5 toggles primary/secondary with ON/OFF text; V6 toggles primary/black with YES!/NO! text; V7 uses white text.",
-      "Button labels are contained inside the border. Each specimen row uses a 4px vertical gap.",
-    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="44px Standard · 60px Supreme · 12px Micro; shared production button API with catalog-only visual comparison skins." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      "The grid controls arrangement only. All visible specimens remain real StudioButton instances using supported production size APIs.",
+    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="60px Supreme · 44px Standard · 28px Compact · 12px Micro; 4px layout rhythm." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-button-gallery">
-        {row("standard", [1, 2, 3, 4, 5, 6, 7])}
-        {row("supreme", [1, 2, 3, 4])}
-        {row("micro", [1, 2, 3, 4, 5, 6, 7])}
+        <ConfirmedSpecimenGrid
+          familyName="Original StudioButton variants"
+          specimenRows={specimenRows}
+          renderSpecimen={({ id, tier }) => {
+            const variant = Number(id.match(/-v(\d+)/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
+            const toggle = variant === 3 || variant === 5 || variant === 6
+            const isOn = variant === 3 ? v3On : variant === 5 ? v5On : variant === 6 ? v6On : false
+            const label = variant === 3 ? (v3On ? "SECONDARY" : "PRIMARY") : variant === 5 ? (v5On ? "ON" : "OFF") : variant === 6 ? (v6On ? "NO!" : "YES!") : "BUTTON"
+            const onClick = variant === 3 ? () => setV3On(value => !value) : variant === 5 ? () => setV5On(value => !value) : variant === 6 ? () => setV6On(value => !value) : undefined
+            return (
+              <StudioButton
+                className="vt-confirmed-button-skin"
+                sizeVariant={tier}
+                heightVariant={tier === "supreme" ? "60" : tier === "standard" ? "44" : tier === "compact" ? "28" : undefined}
+                data-vt-button-skin={`v${variant}`}
+                data-vt-button-on={toggle && isOn ? "true" : "false"}
+                data-vt-library-component="StudioButton"
+                aria-label={variant === 3 ? "Button V3 primary secondary toggle" : variant === 5 ? "Button V5 ON/OFF toggle" : variant === 6 ? "Button V6 YES/NO toggle" : `Button V${variant}`}
+                aria-pressed={toggle ? isOn : undefined}
+                onClick={onClick}
+              >
+                {label}
+              </StudioButton>
+            )
+          }}
+        />
       </div>
     </Family>
   )
