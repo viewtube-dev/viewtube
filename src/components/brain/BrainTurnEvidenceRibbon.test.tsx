@@ -60,6 +60,8 @@ const pack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvidencePack
   expect(html).toContain("Open exact evidence in Analytics")
   expect(html).toContain("brainEvidenceId=analytics%3Asnapshot-1%3Avideo-abc%3Aviews")
   expect(html).toContain("brainEvidenceSource=analytics-canon")
+  expect(html).toContain("snapshotId=snapshot-1")
+  expect(html).toContain("sourceRef=video-abc")
   expect(html).toContain("metric=views")
   expect(html).toContain("window=28d")
   expect(html).toContain("channelId=channel-9")
