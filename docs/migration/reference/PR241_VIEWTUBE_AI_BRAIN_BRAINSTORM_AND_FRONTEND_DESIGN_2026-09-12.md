@@ -751,3 +751,88 @@ The next /ai-brain slice replaces guessed certainty labels in the per-turn Conte
 A pure projection helper and regression tests cover canonical/visible provenance and missing-scope states. This is presentation-only: no new profile, memory, or evidence store. The change does not claim that context correction propagation is complete; the next slice should connect a proposed correction to the existing governance path and prove the next turn reflects the governed result or exposes a conflict.
 
 **Verification status:** source and test are committed on the implementation branch; CI is pending. No local test execution is claimed.
+
+---
+
+# Current implementation bridge — 2026-10-22
+
+**Purpose:** Connect the historical design ideas above to the current integrated Brain implementation and to the next UI/accessibility work. This section is a current working addendum; it does not retroactively make the 2026-09-12 audit claims current, nor does it treat static source inspection as runtime verification.
+
+## Verified code footholds and recent runtime work
+
+The following source footholds exist on `master/consolidated-feature-integration` at the time this addendum was prepared:
+
+- `src/views/AIBrainCommandInterface.tsx` is the main Brain conversation surface. It already carries per-message evidence-pack and typed evidence-record fields, readiness diagnostics, context snapshots, learning receipts, and imports the Brain evidence/context UI components.
+- `src/components/brain/BrainEvidenceDrawer.tsx` is the existing creator-facing evidence disclosure. It preserves evidence IDs in Analytics deep links and communicates inference vs. measured evidence, missing inputs, caveats, and source references.
+- `src/components/brain/BrainConfidenceChip.tsx` is a shared confidence primitive backed by Studio Controls.
+- `src/components/brain/BrainWorkflowRunPanel.tsx` represents workflow recommendations and local workflow-chain progress, but its visible code does not establish a canonical ToolReceipt/output-asset link. Do not label a workflow as saved/published merely because a local chain exists.
+- `src/services/brain/BrainTrace.ts`, `EvidenceRecord.ts`, and `BrainRuntimeSnapshot.ts` are the runtime/provenance footholds. Rich evidence records now have a path into trace/runtime provenance, and the canonical projector preserves explicit missingness and avoids inventing an observation timestamp from bundle-capture time.
+- PR #667 (rich evidence provenance) and PR #674 (model gateway boundary) were confirmed merged when this addendum was prepared. Those merges improve traceability and provider-neutral routing; they do **not** prove the complete UI, evaluation, or learning loop is finished.
+
+These are source-level observations. They are not a claim that the full test suite, keyboard audit, screen-reader audit, or end-to-end behavior has passed.
+
+## Front-end integration principle
+
+Build the Brain page as a **trust-and-action workspace**, not a collection of unrelated AI panels. The UI must render the canonical records already used by runtime and governance code. It must not invent a second state store, synthesize receipt IDs, or turn an unverified model claim into a visually authoritative metric.
+
+### Shared claim contract
+
+Use one reusable claim presentation across chat answers, insights, workflow recommendations, generated assets, and analytics summaries:
+
+1. **Claim text** — the human-readable statement.
+2. **Evidence status** — measured, calculated, creator-confirmed, inferred, hypothesis, estimated, conflicting, stale, or missing, using the canonical epistemic vocabulary once it is unified.
+3. **Confidence** — sourced from the evidence/quality result, not inferred from styling or model tone.
+4. **Evidence references** — stable canonical IDs, source, observation/update timestamps, freshness, coverage, and missing inputs where available.
+5. **Action** — inspect the source, correct creator context, sync missing data, compare a compatible cohort, or dismiss/propose a correction.
+6. **Lineage** — operation/workflow/content-build/output/trace/receipt IDs when the backing record actually supplies them.
+
+Do not display every technical ID by default. Show creator-readable source labels first; make canonical IDs, version details, and diagnostic fields expandable for operators. Keep chain-of-thought and private internal reasoning out of the UI.
+
+### Recommended Brain page information architecture
+
+- **Conversation:** the primary work surface. Each assistant turn owns the exact evidence pack and readiness state used for that answer. The visible evidence list must be derived from the same recorded IDs/records that were supplied to the model; on mismatch, show a clear integrity warning and withhold detailed provenance rather than silently substituting a different list.
+- **Context & Channel Mind:** a reviewable panel for creator profile facts and active context. Mark each item confirmed, inferred, temporary, or conflicting; show source and age; make correction a proposed governed update with a visible outcome. Do not imply that a prompt-policy sentence is equivalent to structured context metadata.
+- **Evidence & Analytics:** a drill-down for evidence selection constraints (count, date window, format, ranking, filters), data freshness, coverage, and missingness. Preserve filters and canonical evidence IDs across navigation and restore. Empty states must distinguish “searched and found none,” “not requested,” “source unavailable,” and “not connected.”
+- **Actions & Work tray:** one persistent list of proposed, awaiting approval, started, completed, blocked, failed, and saved/published outcomes. Each state must come from the canonical workflow/operation/publication record. A view/open handoff is review-only; it is not approval or execution.
+- **Learning review:** separate user preference/context corrections from performance-learning candidates. Accept/reject feedback must be structured and attributable; candidates stay candidates until the canonical governance path confirms promotion.
+- **Operator diagnostics:** gated/role-appropriate access to trace, evaluation, actual model served, prompt/context versions, cost/latency, failure reason, and evidence omissions. This surface should explain failures without exposing chain-of-thought or secrets.
+
+### Accessibility and interaction contract
+
+- Use semantic landmarks and heading hierarchy; every panel has a meaningful title and predictable reading order.
+- All controls are keyboard reachable with visible focus; disclosure widgets use native disclosure semantics or equivalent accessible state, and expanded state is announced.
+- Buttons and icon-only actions have accessible names; disabled actions explain the blocking reason in adjacent text, not only a tooltip or color.
+- Status is never communicated by color alone. Pair state colors with visible labels/icons and accessible text.
+- Evidence rows, chips, confidence indicators, and compact controls must meet the shared Studio Controls size contract and touch-target minimums; don't introduce local bespoke geometry to imitate existing primitives.
+- Respect reduced-motion preferences; progress and state changes must remain understandable without animation.
+- At narrow widths, evidence and lineage content wraps rather than clipping; dialogs and drawers trap/restore focus correctly; deep links restore filters and selected evidence.
+- Screen-reader text should distinguish evidence quantity from evidence quality (e.g. “4 sources; 1 stale; 2 missing inputs”), and announce loading, empty, mismatch, and failure states.
+- Never use “saved,” “approved,” “published,” “complete,” or “high confidence” unless the canonical record supports that claim.
+
+## Highest-priority UI implementation sequence
+
+| Phase | Implementation | Acceptance evidence |
+|---|---|---|
+| UI-1 | Add a shared evidence integrity/status summary to each answer using the exact recorded prompt evidence IDs and typed records. | Regression test proves rendered IDs equal prompt-supplied IDs; mismatches render a warning, not a fabricated evidence list. |
+| UI-2 | Make empty, partial, stale, unavailable, and conflicting evidence states explicit and actionable in the evidence drawer. | Component tests cover each state and verify links retain count/date/format/ranking/filter constraints. |
+| UI-3 | Add a persistent action/work tray backed by canonical operation/workflow/output records. | Every item resolves to a real record; proposed/started/saved/published are distinct states; retry does not replay external side effects. |
+| UI-4 | Add reviewable creator-context facts and governed correction flow. | Correction updates or reports inconsistency across resolver/profile/saved answers; inferred facts cannot silently become confirmed. |
+| UI-5 | Connect learning review to canonical candidate/governance records and expose promotion outcomes. | Candidate remains unpromoted until the governance API confirms it; reject reason and actor are preserved. |
+| UI-6 | Add operator trace/evaluation detail and link it from creator-facing explanations without exposing private reasoning. | Provenance whitelist test; actual served-model identity only; each visible reference resolves to a canonical record. |
+| UI-7 | Run keyboard, screen-reader, mobile/reflow, focus-management, and reduced-motion audits over the complete Brain route. | Automated accessibility checks plus documented manual walkthrough; report actual results and existing failures separately. |
+
+## Next implementation slice
+
+Start with **UI-1 + UI-2**, not a visual redesign. Reuse the current `AIBrainCommandInterface`, `BrainEvidenceDrawer`, `BrainTurnEvidenceRibbon`, `BrainClaimEvidence`, `BrainConfidenceChip`, and Studio Controls. First add/strengthen tests around the exact evidence record/ID contract and truthful missing/stale/empty states; then implement the smallest accessible UI change. Keep the historical brainstorm as a donor reference and record verified implementation status in the current Brain implementation plan as work lands.
+
+## Explicitly unverified
+
+- Whether conversation restore retains all evidence-selection filters end-to-end.
+- Whether every registry capability call produces a canonical ToolReceipt and whether any call sites bypass the registry.
+- Whether stale/partial inputs consistently downgrade all readiness/confidence outputs.
+- Whether every user-facing output card resolves to canonical receipt and output-asset IDs.
+- Whether all creator-context facts have structured confirmed/inferred/temporary state and corrections reconcile across stores.
+- Whether the golden grounding suite and the full focused/typecheck suite pass on the current integrated branch.
+- Full keyboard, screen-reader, mobile, and reduced-motion verification.
+
+Do not mark these complete until source tracing, executable tests, or documented accessibility checks provide evidence.
