@@ -82,6 +82,7 @@ import { BrainTurnEvidenceRibbon } from "../components/brain/BrainTurnEvidenceRi
 import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavigation"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
+import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
@@ -972,6 +973,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [projectContextCleared, setProjectContextCleared] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
  const composerRef = useRef<HTMLTextAreaElement | null>(null)
+ const journalLauncherRef = useRef<HTMLButtonElement | null>(null)
  const promptLauncherRef = useRef<HTMLButtonElement | null>(null)
  const contextLauncherRef = useRef<HTMLButtonElement | null>(null)
  const promptCloseRef = useRef<HTMLButtonElement | null>(null)
@@ -1774,7 +1776,7 @@ const AIBrainCommandInterface: React.FC = () => {
            <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="standard" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
           </div>
           <div data-vt-brain-part="composer-controls" className="flex min-w-0 items-stretch gap-1">
-           <StudioSquareIconButton sizeVariant="standard" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
+           <StudioSquareIconButton ref={journalLauncherRef} sizeVariant="standard" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
            <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
            <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span data-vt-brain-part="composer-status" className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
@@ -1899,18 +1901,12 @@ const AIBrainCommandInterface: React.FC = () => {
       ) : null}
 
       {journalOpen ? (
-       <div className="absolute inset-0 z-50 grid place-items-center bg-black/40 p-4">
-        <section className={`${shellCard} w-full max-w-2xl overflow-hidden`}>
-         <div data-vt-brain-part="journal-dialog-heading" className="border-b-[2px] border-black bg-[#36E0F6] px-4 py-3"><h2 className="text-xl font-[1000] uppercase">Save To AI Journal</h2></div>
-         <div className="grid gap-3 p-4">
-          <StudioTextArea data-vt-brain-part="journal-entry-input" value={journalInput} onChange={(event) => setJournalInput(event.target.value)} sizeVariant="standard" rows={4} placeholder="A goal, content style note, audience insight, constraint, or decision you want the Brain to remember." className="min-h-[92px] resize-none" />
-          <div data-vt-brain-part="journal-dialog-actions" className="flex justify-end gap-1">
-           <StudioButton data-vt-brain-part="journal-cancel" sizeVariant="compact" tone="neutral" type="button" onClick={() => setJournalOpen(false)}>Cancel</StudioButton>
-           <StudioButton data-vt-brain-part="journal-save" sizeVariant="compact" tone="success" type="button" disabled={!journalInput.trim()} onClick={() => { handleJournalSave(); setJournalOpen(false) }}>Remember this</StudioButton>
-          </div>
-         </div>
-        </section>
-       </div>
+       <BrainJournalDialog
+        value={journalInput}
+        onChange={setJournalInput}
+        onClose={() => setJournalOpen(false)}
+        onSave={() => { handleJournalSave(); setJournalOpen(false) }}
+       />
       ) : null}
      </section>
     )}
