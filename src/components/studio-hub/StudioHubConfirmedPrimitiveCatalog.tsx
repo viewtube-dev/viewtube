@@ -936,23 +936,31 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       nonDefaultSettings={[
         "Composition built from canonical Studio Controls primitives; it is a composition, not a new primitive family.",
         "Outer shell maintains a 5:7 ratio with a black 3px border, 6px radius, and 25% secondary-pair fill.",
-        "Includes fixed-label title and description, a 16:9 image upload frame, removable tags, and Playlist / Category / Location / Publish Date multi-select controls.",
+        "Includes standard, compact, and micro density variants; micro uses the canonical compact textarea because Studio textareas do not define a micro tier.",
+        "Includes fixed-label title and description, a 16:9 image upload frame, removable tags, and Playlist / Category / Location / Publish Date selectors.",
         "Uses active primary/secondary pair styling and canonical upload and tag components; composition-specific responsive layout is owned by studio-publishing-card.css.",
       ]}
-      provenance={<Provenance primitive="StudioPublishingCard composition" tsx="src/studio-ui/compositions/StudioPublishingCard.tsx" css="src/styles/studio-publishing-card.css" tokens="5:7 shell · 16:9 thumbnail · standard controls · black 3px border · 25% secondary fill · primary inset + secondary outline" imports={["src/studio-ui/compositions/StudioPublishingCard.tsx", "src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioPublishingCard composition" tsx="src/studio-ui/compositions/StudioPublishingCard.tsx" css="src/styles/studio-publishing-card.css" tokens="5:7 shell · standard 44px / compact 28px / micro 12px control tiers · 16:9 thumbnail · 25% secondary fill · size-matched black border/radius · primary inset + secondary outline" imports={["src/studio-ui/compositions/StudioPublishingCard.tsx", "src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioPublishingCard">
-        <span>Standard · publishing composition</span>
-        <div style={{ width: "min(100%, 360px)", marginInline: "auto" }}>
-          <StudioPublishingCard
-            title="NEW VIDEO"
-            description="A short description of the video and what viewers can expect."
-            playlistOptions={[{ value: "featured", label: "FEATURED" }, { value: "gameplay", label: "GAMEPLAY" }, { value: "tutorial", label: "TUTORIAL" }]}
-            categoryOptions={[{ value: "gaming", label: "GAMING" }, { value: "education", label: "EDUCATION" }, { value: "entertainment", label: "ENTERTAINMENT" }]}
-            locationOptions={[{ value: "youtube", label: "YOUTUBE" }, { value: "shorts", label: "SHORTS" }, { value: "community", label: "COMMUNITY" }]}
-            publishDateOptions={[{ value: "2026-10-21", label: "10/21/2026" }, { value: "2026-10-22", label: "10/22/2026" }]}
-          />
-        </div>
+        {([
+          { size: "standard" as const, label: "Standard · 44px controls" },
+          { size: "compact" as const, label: "Compact · 28px controls" },
+          { size: "micro" as const, label: "Micro · 12px controls (textarea uses canonical compact tier)" },
+        ]).map(({ size, label }) => <div className="vt-confirmed-publishing-card-specimen" key={size} data-publishing-card-size={size}>
+          <span>{label}</span>
+          <div style={{ width: "min(100%, 360px)", marginInline: "auto" }}>
+            <StudioPublishingCard
+              sizeVariant={size}
+              title="NEW VIDEO"
+              description="A short description of the video and what viewers can expect."
+              playlistOptions={[{ value: "featured", label: "FEATURED" }, { value: "gameplay", label: "GAMEPLAY" }, { value: "tutorial", label: "TUTORIAL" }]}
+              categoryOptions={[{ value: "gaming", label: "GAMING" }, { value: "education", label: "EDUCATION" }, { value: "entertainment", label: "ENTERTAINMENT" }]}
+              locationOptions={[{ value: "youtube", label: "YOUTUBE" }, { value: "shorts", label: "SHORTS" }, { value: "community", label: "COMMUNITY" }]}
+              publishDateOptions={[{ value: "2026-10-21", label: "10/21/2026" }, { value: "2026-10-22", label: "10/22/2026" }]}
+            />
+          </div>
+        </div>)}
       </div>
     </Family>
     <ConfirmedStudioInlineStepperFamily />
