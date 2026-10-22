@@ -9,7 +9,7 @@ import { BrainEvidenceDrawer } from "../BrainEvidenceDrawer"
 const emptyPack = (dataStatus: AIBrainEvidencePack["dataStatus"]): AIBrainEvidencePack => ({
  promptVersion: "brain-chat-v2",
  requestSpec: { count: null, since: null, until: null, formats: [], filters: [], rankBy: "views", selectionMode: "top" },
- intent: "general",
+ intent: "strategy",
  channelId: null,
  channelName: null,
  channelDescription: null,
