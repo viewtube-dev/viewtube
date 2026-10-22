@@ -500,7 +500,7 @@ test("the original Button family uses the PR #756 specimen grid and all button v
   for (const variant of ["v1", "v2", "v3", "v4", "v5", "v6", "v7"]) {
     assert.ok(styles.includes(`data-vt-button-skin="${variant}"`), `Button ${variant} has a catalog skin`);
   }
-  assert.match(catalog, /const variantsForTier[\s\S]*?\{ id: `\$\{tier\}-row-4`[\s\S]*?specimens:/);
+  assert.match(catalog, /const rowsForTier[\s\S]*?\{ id: `\$\{tier\}-row-4`[\s\S]*?specimens:/);
   assert.match(catalog, /sizeVariant=\{tier\}/);
   assert.match(catalog, /isOn \? "SECONDARY" : "PRIMARY"/);
   assert.match(catalog, /aria-label=\{variant === 3 \? "Button V3 primary secondary toggle"/);
