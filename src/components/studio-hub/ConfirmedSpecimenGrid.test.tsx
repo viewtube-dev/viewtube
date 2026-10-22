@@ -50,7 +50,7 @@ describe("ConfirmedSpecimenGrid", () => {
 
     expect(toggle?.getAttribute("aria-checked")).toBe("true")
     expect(container.querySelector('[role="region"][aria-label="Input"]')?.getAttribute("data-view")).toBe("clean")
-    expect(container.querySelector("button:not([role='switch'])")?.textContent).not.toContain("Documentation action")
+    expect(container.textContent).not.toContain("Documentation action")
     expect(container.querySelectorAll(".vt-specimen-row--3")).toHaveLength(4)
     expect(container.querySelectorAll(".vt-specimen-row--4")).toHaveLength(4)
   })
