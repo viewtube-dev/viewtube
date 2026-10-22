@@ -2,7 +2,7 @@ import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 
-import { BrainRuntimePanel, resolveBrainOutputReceiptState } from "./BrainRuntimePanel"
+import { BrainReceiptBackedOutputCard, BrainRuntimePanel, resolveBrainOutputReceiptState } from "./BrainRuntimePanel"
 
 describe("BrainRuntimePanel", () => {
  it("renders the live backend pipeline without turning it into a developer-only dump", () => {
@@ -199,6 +199,35 @@ describe("BrainRuntimePanel", () => {
   })
   expect(resolveBrainOutputReceiptState({ ...chain, receiptId: null }, build).status).toBe("unavailable")
   expect(resolveBrainOutputReceiptState({ ...chain, outputAssetIds: [] }, build).status).toBe("empty")
+ })
+
+
+ it("withholds a stale output card when receipt asset IDs do not resolve in the current build", () => {
+  const chain = {
+   receiptId: "tool_receipt_1",
+   contentBuildId: "cb-1",
+   outputAssetIds: ["deleted-asset"],
+   versionIds: [],
+   generationRecordId: "generation-1",
+   traceId: "trace-1",
+  } as any
+  const html = renderToStaticMarkup(
+   <BrainReceiptBackedOutputCard chain={chain} build={{ id: "cb-1", assetIds: ["asset-current"] }} />,
+  )
+
+  expect(html).toContain('role="alert"')
+  expect(html).toContain("output card is withheld")
+  expect(html).toContain("deleted-asset")
+  expect(html).not.toContain('data-vt-brain-output-asset-id="deleted-asset"')
+ })
+
+ it("does not label a missing receipt as a saved output", () => {
+  const html = renderToStaticMarkup(
+   <BrainReceiptBackedOutputCard chain={null} build={null} />,
+  )
+
+  expect(html).toContain("No completed ToolReceipt is linked")
+  expect(html).not.toContain('data-vt-brain-output-asset-id=')
  })
 
  it("supports the flat embedded composition used by the Brain Hub mobile surface", () => {
