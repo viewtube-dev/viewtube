@@ -465,23 +465,21 @@ test("ConfirmedSpecimenGrid is full-width and does not split the module into sid
 });
 
 
-test("button catalog uses production StudioButton for seven standard skins and four Supreme skins", () => {
-  const buttonFamily = catalog.match(/<Family title="Button"[^]*?<\/Family>/)?.[0] ?? "";
-  assert.ok(buttonFamily.includes('data-vt-button-skin="v7"'), "standard V7 specimen exists");
-  assert.ok(buttonFamily.includes('data-vt-button-skin="v4"'), "V4 specimen exists");
-  assert.ok(buttonFamily.includes('sizeVariant="supreme"'), "Supreme specimens use production StudioButton sizing");
-  assert.ok(buttonFamily.includes('sizeVariant="micro"'), "micro specimens use production StudioButton sizing");
-  assert.equal((buttonFamily.match(/data-vt-button-skin="v[1-7]"/g) ?? []).length >= 7, true);
-  assert.doesNotMatch(buttonFamily, /standard [1-7]|supreme [1-4]/i, "specimen labels use no numbered standard/supreme names");
-  assert.match(buttonFamily, /variant === 3 \? "Button V3 toggle"[^]*?onClick=\{onClick\}/);
-  assert.match(buttonFamily, /aria-label="Button V5 ON/OFF toggle"[^]*?onClick=/);
-  assert.match(buttonFamily, /aria-label="Button V6 YES/NO toggle"[^]*?onClick=/);
+test("button catalog uses the PR #756 grid and real StudioButton specimens for every tier", () => {
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?export const StudioHubConfirmedPrimitiveCatalog/)?.[0] ?? "";
+  assert.ok(buttonFamily.includes("<ConfirmedSpecimenGrid"), "the original Button module uses the shared grid");
+  assert.ok(buttonFamily.includes('specimenRows={specimenRows}'));
+  assert.ok(buttonFamily.includes('sizeVariant={tier}'));
+  assert.ok(buttonFamily.includes('data-vt-button-skin={`v${variant}`}'));
+  assert.ok(buttonFamily.includes('variant === 3 ? (isOn ? "SECONDARY" : "PRIMARY")'));
+  assert.ok(buttonFamily.includes('setToggleStates(current => ({ ...current, [id]: !(current[id] ?? (variant === 5)) }))'));
+  assert.ok(buttonFamily.includes('aria-pressed={toggle ? isOn : undefined}'));
 });
 
-test("button specimen faces contain long text within the production button border", () => {
-  assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?min-width:\s*0/s);
-  assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?overflow:\s*hidden/s);
-  assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?overflow-wrap:\s*anywhere/s);
+test("button specimen labels fit inside real StudioButton faces without catalog sizing overrides", () => {
+  assert.match(styles, /\.vt-confirmed-button-skin\s*\{[^}]*width:\s*100%/s);
+  assert.match(styles, /\.vt-confirmed-button-skin\s*>\s*\[data-vt-studio-button-face\][^{]*\{[^}]*overflow-wrap:\s*anywhere/s);
+  assert.doesNotMatch(styles.slice(styles.indexOf("/* Confirmed StudioButton V1–V7 specimen gallery.")), /\.vt-confirmed-button-skin\[data-size="micro"\]/);
 });
 
 test("Confirmed Specimen Grid renders every tier in 1/2/3/4-column layouts without numbered tier captions", () => {
