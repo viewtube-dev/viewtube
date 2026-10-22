@@ -318,8 +318,8 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
     return <div className="vt-confirmed-button-skin-cell" key={variant}>
       <StudioButton
         className="vt-confirmed-button-skin"
-        sizeVariant={sizeVariant === "micro" ? undefined : sizeVariant}
-        heightVariant={sizeVariant === "micro" ? undefined : sizeVariant === "supreme" ? "60" : "44"}
+        sizeVariant={sizeVariant === "supreme" ? undefined : sizeVariant}
+        heightVariant={sizeVariant === "supreme" ? "60" : sizeVariant === "standard" ? "44" : undefined}
         data-vt-button-skin={`v${variant}`}
         data-vt-button-on={toggle && isOn ? "true" : "false"}
         data-vt-library-component="StudioButton"
