@@ -136,6 +136,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
           const key = itemKey(item, index);
           const active = key === shownKey;
           const selected = key === selectedKey;
+          const triggerId = `vt-studio-split-accordion-${idPrefix}-trigger-${index}`;
           const panelId = `vt-studio-split-accordion-${idPrefix}-panel-${index}`;
           return (
             <div
@@ -147,6 +148,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
               style={item.style}
             >
               <button
+                id={triggerId}
                 type="button"
                 className="vt-studio-split-accordion__trigger"
                 data-vt-studio-split-accordion-trigger="true"
@@ -171,6 +173,8 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
               <div
                 className="vt-studio-split-accordion__content"
                 id={panelId}
+                role="region"
+                aria-labelledby={triggerId}
                 data-active={active ? "true" : "false"}
                 hidden={!active}
               >
