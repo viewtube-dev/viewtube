@@ -122,7 +122,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
    <details data-vt-brain-part="prompt-evidence-records" className="min-w-0 border-t border-black/20 pt-1.5">
     <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 text-[10px] font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">
      <span>Prompt evidence records</span>
-     <span className="shrink-0">{evidenceRecords === undefined ? "Unavailable" : evidenceRecords.length}</span>
+     <span className="shrink-0">{evidenceIntegrityStatus === "mismatch" ? "Mismatch" : evidenceRecords === undefined ? "Unavailable" : evidenceRecords.length}</span>
     </summary>
     {evidenceIntegrityStatus === "mismatch" ? (
      <p className="break-words py-1 text-[10px] font-bold leading-4 text-black/70">Record-level provenance is withheld because the prompt manifest and saved record IDs disagree.</p>
