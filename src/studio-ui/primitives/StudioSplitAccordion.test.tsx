@@ -17,8 +17,9 @@ describe("StudioSplitAccordion", () => {
     expect(html).toContain('data-vt-studio-split-accordion="true"');
     expect(html).toContain('data-active-index="2"');
     expect(html).toContain("RIGHT PANEL");
-    expect(html).not.toContain("MIDDLE PANEL");
-    expect(html).not.toContain("LEFT PANEL");
+    expect(html).toContain("MIDDLE PANEL");
+    expect(html).toContain("LEFT PANEL");
+    expect(html).toContain("hidden=\"\"");
     expect(html).toContain('data-vt-library-component="StudioSplitAccordion"');
   });
 
