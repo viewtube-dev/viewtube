@@ -691,6 +691,7 @@ export const readBrainRuntimeSnapshot = (
       stage: build.stage,
       revision: build.revision,
       assetCount: build.assetIds?.length || 0,
+      assetIds: [...(build.assetIds || [])],
       versionCount: build.versions?.length || 0,
       variantGroupCount: build.variantGroups?.length || 0,
       relationCount: build.relations?.length || 0,
