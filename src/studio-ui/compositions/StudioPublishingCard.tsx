@@ -1,4 +1,5 @@
 import React from "react"
+import type { StudioControlSize } from "../tokens"
 import { StudioCloseableBadge, StudioLegendMultiDropdown, StudioUploadFrame, StudioTextInput, StudioTextArea, type StudioLegendMultiDropdownOption } from "../primitives/StudioControls"
 import "../../styles/studio-publishing-card.css"
 
@@ -11,7 +12,10 @@ export type StudioPublishingCardMetadata = {
   publishDate: string[]
 }
 
+export type StudioPublishingCardSize = Extract<StudioControlSize, "standard" | "compact" | "micro">
+
 export type StudioPublishingCardProps = {
+  sizeVariant?: StudioPublishingCardSize
   title?: string
   onTitleChange?: (value: string) => void
   description?: string
@@ -31,6 +35,7 @@ export type StudioPublishingCardProps = {
 
 /** 5:7 publishing-card composition; controls remain canonical Studio primitives. */
 export function StudioPublishingCard({
+  sizeVariant = "standard",
   title = "",
   onTitleChange,
   description = "",
@@ -70,15 +75,15 @@ export function StudioPublishingCard({
     setTagDraft("")
   }
   return (
-    <article className={["vt-studio-publishing-card", className].filter(Boolean).join(" ")} data-vt-studio-control="true" data-vt-studio-publishing-card="true" aria-label="Publishing card">
+    <article className={["vt-studio-publishing-card", className].filter(Boolean).join(" ")} data-vt-studio-control="true" data-vt-studio-publishing-card="true" data-size={sizeVariant} aria-label="Publishing card">
       <header className="vt-studio-publishing-card__title">
-        <StudioTextInput variant="fixed-label" label="TITLE" value={title} placeholder="ADD A TITLE" onChange={event => onTitleChange?.(event.target.value)} aria-label="Title" />
+        <StudioTextInput sizeVariant={sizeVariant} variant="fixed-label" label="TITLE" value={title} placeholder="ADD A TITLE" onChange={event => onTitleChange?.(event.target.value)} aria-label="Title" />
       </header>
       <section className="vt-studio-publishing-card__thumbnail" aria-label="Thumbnail upload">
         <StudioUploadFrame accept="image/*" prompt="UPLOAD THUMBNAIL" aria-label="Upload thumbnail image" onFileChange={onThumbnailChange} className="vt-studio-publishing-card__upload" />
       </section>
       <section className="vt-studio-publishing-card__description">
-        <StudioTextArea variant="fixed-label" label="DESCRIPTION" value={description} placeholder="WRITE A DESCRIPTION" rows={3} onChange={event => onDescriptionChange?.(event.target.value)} aria-label="Description" />
+        <StudioTextArea sizeVariant={sizeVariant === "micro" ? "compact" : sizeVariant} variant="fixed-label" label="DESCRIPTION" value={description} placeholder="WRITE A DESCRIPTION" rows={3} onChange={event => onDescriptionChange?.(event.target.value)} aria-label="Description" />
       </section>
       <div className="vt-studio-publishing-card__lower">
         <section className="vt-studio-publishing-card__tags" aria-label="Tags">
@@ -86,13 +91,13 @@ export function StudioPublishingCard({
           <div className="vt-studio-publishing-card__tag-list">
             {tags.map((tag, index) => <StudioCloseableBadge key={tag + index} label={tag} entering={false} onClose={() => updateTags(tags.filter((_, tagIndex) => tagIndex !== index))} />)}
           </div>
-          <input className="vt-studio-publishing-card__tag-input" aria-label="Add tag" value={tagDraft} placeholder="+ ADD TAG" onChange={event => setTagDraft(event.target.value)} onKeyDown={addTag} />
+          <input data-vt-studio-control="true" data-size={sizeVariant} className="vt-studio-publishing-card__tag-input" aria-label="Add tag" value={tagDraft} placeholder="+ ADD TAG" onChange={event => setTagDraft(event.target.value)} onKeyDown={addTag} />
         </section>
         <section className="vt-studio-publishing-card__metadata" aria-label="Publishing metadata">
-          <StudioLegendMultiDropdown label="PLAYLIST" accessibleLabel="Playlist" options={playlistOptions} value={selectedMetadata.playlist} onChange={value => updateMetadata("playlist", value)} placeholder="SELECT" />
-          <StudioLegendMultiDropdown label="CATEGORY" accessibleLabel="Category" options={categoryOptions} value={selectedMetadata.category} onChange={value => updateMetadata("category", value)} placeholder="SELECT" />
-          <StudioLegendMultiDropdown label="LOCATION" accessibleLabel="Location" options={locationOptions} value={selectedMetadata.location} onChange={value => updateMetadata("location", value)} placeholder="SELECT" />
-          <StudioLegendMultiDropdown label="PUBLISH DATE" accessibleLabel="Publish date" options={publishDateOptions} value={selectedMetadata.publishDate} onChange={value => updateMetadata("publishDate", value)} placeholder="SELECT" selectionMode="single" />
+          <StudioLegendMultiDropdown sizeVariant={sizeVariant} label="PLAYLIST" accessibleLabel="Playlist" options={playlistOptions} value={selectedMetadata.playlist} onChange={value => updateMetadata("playlist", value)} placeholder="SELECT" />
+          <StudioLegendMultiDropdown sizeVariant={sizeVariant} label="CATEGORY" accessibleLabel="Category" options={categoryOptions} value={selectedMetadata.category} onChange={value => updateMetadata("category", value)} placeholder="SELECT" />
+          <StudioLegendMultiDropdown sizeVariant={sizeVariant} label="LOCATION" accessibleLabel="Location" options={locationOptions} value={selectedMetadata.location} onChange={value => updateMetadata("location", value)} placeholder="SELECT" />
+          <StudioLegendMultiDropdown sizeVariant={sizeVariant} label="PUBLISH DATE" accessibleLabel="Publish date" options={publishDateOptions} value={selectedMetadata.publishDate} onChange={value => updateMetadata("publishDate", value)} placeholder="SELECT" selectionMode="single" />
         </section>
       </div>
     </article>
