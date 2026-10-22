@@ -41,3 +41,11 @@ test("value-toggle text panels use solid primary split-family fill at rest and f
   assert.doesNotMatch(fill[1], /color-mix|50%|15%/);
   assert.match(css, /\.vt-studio-value-toggle[^{}]*\{[^}]*--vt-toggle-fill:\s*var\(--vt-studio-control-accent/);
 });
+
+test("nested split labels keep solid primary toggle fill at rest and focus", () => {
+  const start = css.lastIndexOf("Value toggles are split-family controls");
+  const rules = css.slice(start);
+  assert.match(rules, /\.vt-studio-value-toggle > \[data-vt-studio-split-label\][\s\S]*?background:\s*var\(--vt-toggle-fill\)\s*!important/);
+  assert.match(rules, /\.vt-studio-value-toggle:focus-within\s*\{[^}]*background:\s*var\(--vt-toggle-fill\)/);
+  assert.doesNotMatch(rules, /\.vt-studio-value-toggle:focus-within\s*\{[^}]*color-mix/);
+});

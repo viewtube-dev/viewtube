@@ -5527,3 +5527,25 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 [data-vt-studio-control] .vt-studio-value-toggle__arrow:active svg {
   animation: vt-studio-value-toggle-grow 180ms ease-out;
 }
+
+/* Value toggles are split-family controls: keep the entire text panel opaque
+   primary at rest and while focused. Focus changes only the outline. */
+.vt-studio-value-toggle {
+  --vt-toggle-fill: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-toggle-fill);
+}
+.vt-studio-value-toggle > [data-vt-studio-split-label],
+.vt-studio-value-toggle [data-vt-studio-split-label],
+.vt-studio-value-toggle .vt-studio-value-toggle__face {
+  background: var(--vt-toggle-fill) !important;
+  color: #000;
+  -webkit-text-fill-color: #000;
+}
+.vt-studio-value-toggle:focus-within {
+  background: var(--vt-toggle-fill);
+}
+.vt-studio-value-toggle > [data-vt-studio-split-label]:focus,
+.vt-studio-value-toggle [data-vt-studio-split-label]:focus,
+.vt-studio-value-toggle .vt-studio-value-toggle__face:focus {
+  background: var(--vt-toggle-fill) !important;
+}
