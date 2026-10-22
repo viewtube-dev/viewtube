@@ -2626,8 +2626,6 @@
   max-width: 40ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   font-size: 9px; font-weight: 850; line-height: 1.1; text-transform: uppercase;
 }
-.vt-confirmed-catalog [data-vt-studio-username-input="true"],
-.vt-confirmed-catalog [data-vt-studio-username-input="true"] input { width: 100%; min-width: 0; }
 .vt-confirmed-square-effect-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .vt-confirmed-square-effect-pair { gap: 5px; padding: 6px; }
 .vt-confirmed-square-effect-pair > strong {
