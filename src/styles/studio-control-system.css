@@ -5221,10 +5221,10 @@ html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7
 .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow { flex: 1 1 50%; min-height: 0; min-width: 0; }
 .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg { width: 24px; height: 24px; }
 .vt-studio-value-toggle--side .vt-studio-value-toggle__face { justify-content: flex-start; }
-.vt-studio-value-toggle--double { background: transparent; border: 0; border-radius: 0; }
+.vt-studio-value-toggle--double { background: transparent; border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: 0; }
 .vt-studio-value-toggle__double-side { display: flex; flex: 1 1 0; min-width: 0; }
 .vt-studio-value-toggle__double-side[data-content-width="true"] { flex: 0 1 auto; width: max-content; max-width: 50%; }
-.vt-studio-value-toggle--nested { border-radius: 0; min-width: 0; }
+.vt-studio-value-toggle--nested { border: 0; border-radius: 0; min-width: 0; }
 .vt-studio-value-toggle__divider { flex: 0 0 1px; background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
 .vt-studio-value-toggle--bar { align-items: stretch; }
 .vt-studio-value-toggle--bar .vt-studio-value-toggle__arrow { min-width: 38px; }
