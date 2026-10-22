@@ -67,7 +67,14 @@ describe("StudioSplitRailAccordion", () => {
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
   });
 
-  it("locks hover preview for the full activation tween", () => {\n    const source = readFileSync(new URL("./StudioSplitRailAccordion.tsx", import.meta.url), "utf8");\n    expect(source).toContain("const [motionLocked, setMotionLocked] = React.useState(false)");\n    expect(source).toContain("if (!motionLocked && !items[index].disabled) setPreviewIndex(index)");\n    expect(source).toContain("}, 280)");\n  });\n\n  it("exposes selection and expansion state for accessible keyboard interaction", () => {
+  it("locks hover preview for the full activation tween", () => {
+    const source = readFileSync(new URL("./StudioSplitRailAccordion.tsx", import.meta.url), "utf8");
+    expect(source).toContain("const [motionLocked, setMotionLocked] = React.useState(false)");
+    expect(source).toContain("if (!motionLocked && !items[index].disabled) setPreviewIndex(index)");
+    expect(source).toContain("}, 280)");
+  });
+
+  it("exposes selection and expansion state for accessible keyboard interaction", () => {
     const html = renderToStaticMarkup(<StudioSplitRailAccordion items={items} />)
     expect(html).toContain('aria-label="Middle"')
     expect(html).toContain('aria-expanded="false"')
