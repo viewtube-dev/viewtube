@@ -5354,8 +5354,9 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   display: grid; grid-template-columns: max-content; grid-template-rows: max-content;
   width: max-content; min-width: max-content; flex: 0 0 auto; padding-inline: 8px;
 }
-.vt-studio-value-toggle__face[data-content-width="true"] > span { grid-area: 1 / 1; white-space: nowrap; }
-.vt-studio-value-toggle__measure { visibility: hidden; pointer-events: none; }
+.vt-studio-value-toggle__face[data-content-width="true"] { position: relative; }
+.vt-studio-value-toggle__face[data-content-width="true"] > span:first-child { position: absolute; inset: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vt-studio-value-toggle__face[data-content-width="true"] > .vt-studio-value-toggle__measure { grid-area: 1 / 1; white-space: nowrap; visibility: hidden; pointer-events: none; }
 
 /* The shared outer Double Side Toggle perimeter inherits the same size contract as each side. */
 .vt-studio-value-toggle--double[data-size="supreme"] { --vt-studio-control-height: 60px; --vt-studio-control-stroke: 4.09px; --vt-studio-control-radius: 8.18px; min-height: 60px; }
