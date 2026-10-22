@@ -208,10 +208,10 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
         params.set("rankBy", evidencePack.requestSpec.rankBy)
         params.set("selectionMode", evidencePack.requestSpec.selectionMode)
         evidencePack.requestSpec.filters.forEach((filter) => params.append("filter", filter))
-        return \`\${baseRoute}\${baseRoute.includes("?") ? "&" : "?"}\${params.toString()}\`
+        return `${baseRoute}${baseRoute.includes("?") ? "&" : "?"}${params.toString()}`
        })()
        const coverageLabel = typeof record.coverage === "number" && record.coverage < 1
-        ? \`\${Math.round(Math.max(0, record.coverage) * 100)}% coverage\`
+        ? `${Math.round(Math.max(0, record.coverage) * 100)}% coverage`
         : null
        const availabilityLabel = record.availability === "partial"
         ? "Partial coverage"
