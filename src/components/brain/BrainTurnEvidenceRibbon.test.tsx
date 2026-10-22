@@ -24,6 +24,74 @@ const pack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvidencePack
  evidenceIds: ["video:abc"],
  transcriptRouteRequired: false,
  ...overrides,
+ it("shows distinct stale, missing, and conflicting evidence conditions", () => {
+  const html = renderToStaticMarkup(
+   <MemoryRouter>
+    <BrainTurnEvidenceRibbon
+     turnId="turn-conditions"
+     evidencePack={pack({ dataStatus: "partial" })}
+     evidenceIntegrityStatus="verified"
+     evidenceRecords={[
+      record({ id: "stale", freshness: "stale", epistemicState: "STALE" }),
+      record({ id: "missing", freshness: "unknown", epistemicState: "MISSING", value: null, availability: "unavailable", missingness: ["retention"] }),
+      record({ id: "conflict", epistemicState: "CONFLICTING", availability: "partial" }),
+     ]}
+    />
+   </MemoryRouter>,
+  )
+  expect(html).toContain("Evidence conditions")
+  expect(html).toContain("Partial coverage")
+  expect(html).toContain("1 stale")
+  expect(html).toContain("1 missing")
+  expect(html).toContain("1 conflicting")
+  expect(html).toContain('aria-label="Evidence condition summary"')
+ })
+
+ it("explains a truly empty evidence pack separately from unavailable evidence", () => {
+  const html = renderToStaticMarkup(
+   <MemoryRouter>
+    <BrainTurnEvidenceRibbon
+     turnId="turn-no-selection"
+     evidencePack={pack({ dataStatus: "ready", items: [], evidenceIds: [], missingInputs: [] })}
+     evidenceIntegrityStatus="verified"
+     evidenceRecords={[]}
+    />
+   </MemoryRouter>,
+  )
+  expect(html).toContain("No evidence items were selected for this turn")
+  expect(html).not.toContain("Missing evidence")
+ })
+
+ it("keeps legacy record absence separate from a recorded empty evidence set", () => {
+  const html = renderToStaticMarkup(
+   <MemoryRouter>
+    <BrainTurnEvidenceRibbon
+     turnId="turn-legacy-empty"
+     evidencePack={pack({ items: [], evidenceIds: [] })}
+     evidenceIntegrityStatus="unavailable"
+     evidenceRecords={undefined}
+    />
+   </MemoryRouter>,
+  )
+  expect(html).toContain("Prompt evidence identity unavailable")
+  expect(html).toContain("Record-level provenance is unavailable")
+ })
+
+})
+
+
+const record = (overrides: Partial<import("../../services/brain/EvidenceRecord").EvidenceRecord> = {}) => ({
+ id: "analytics:snapshot-1:channel_summary:views",
+ owner: "analytics-canon" as const,
+ sourceRef: "channel_summary",
+ sourceSnapshotId: "snapshot-1",
+ metric: "views",
+ value: 2800,
+ freshness: "fresh" as const,
+ epistemicState: "OBSERVED" as const,
+ availability: "available" as const,
+ provenance: { evidenceIds: ["source-evidence-1"], sourceRoute: "/analytics" },
+ ...overrides,
 })
 
 describe("BrainTurnEvidenceRibbon", () => {
