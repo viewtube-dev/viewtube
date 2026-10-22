@@ -51,8 +51,8 @@ describe("StudioSplitAccordion", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-split-accordion.css"), "utf8");
     const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitAccordion.tsx"), "utf8");
     expect(css).toContain("var(--vt-studio-control-height, 44px)");
-    expect(css).toContain("width: var(--vt-studio-split-accordion-face)");
-    expect(css).toContain("height: var(--vt-studio-split-accordion-face)");
+    expect(css).toContain("width: var(--vt-studio-split-accordion-face, 38px)");
+    expect(css).toContain("height: var(--vt-studio-split-accordion-face, 38px)");
     expect(css).not.toContain("box-shadow:");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(source).toContain("const MOTION_LOCK_MS = 280");
