@@ -441,3 +441,10 @@ The next AI Brain page slice turns the existing **Propose correction** affordanc
 Channel Knowledge Model hypotheses and learning candidates do not share that claim-update contract. Those corrections are recorded as unconfirmed proposals and explicitly remain unapplied; the UI does not misrepresent a proposal as a changed profile. The next-turn verification prompt is offered only after an applied correction.
 
 Regression tests cover governance routing, channel scope, empty corrections, proposal-only behavior for non-claim sources, accessible dialog semantics, and the distinction between explicit confirmation and inference. **Verification status:** CI and browser keyboard/focus checks are pending; no local test execution is claimed.
+
+
+## Next UI slice — restored evidence selection constraints (PR #802)
+
+The evidence snapshot ribbon is being extended to show the stored `EvidenceRequestSpec` on each conversation turn: requested count, formats, date window, ranking, text filters, and cohort selection. The full constraints are available in a keyboard-operable disclosure; a visible summary keeps the applied selection understandable after a conversation is restored. Legacy snapshots without a request spec explicitly say the filters were not recorded rather than attempting to reconstruct them.
+
+A conversation-store round-trip regression test checks that the exact request spec survives turn completion and restore. **Verification status:** CI is pending for the current implementation branch; no local execution or browser/screen-reader certification is claimed.
