@@ -84,6 +84,7 @@ import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
 import { isEvidenceRecord, type EvidenceRecord } from "../services/brain/EvidenceRecord"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
@@ -223,14 +224,11 @@ const BrainContextUsedDrawer: React.FC<{
  onCorrectItem?: (id: string, statement: string) => void
 }> = ({ contextUsed, turnId, onCorrectItem }) => {
  if (!contextUsed) return null
- const selection = contextUsed.selection
- const project = contextUsed.project
- const items = [
-  { id: "channel", label: "Channel", value: contextUsed.channelId || "No channel ID", status: "confirmed" },
-  { id: "project", label: "Project", value: project ? `${project.title || project.projectId} · ${project.projectId}` : "No project in this answer's context", status: project?.source === "canonical_project" || project?.source === "canonical_project_content_build" ? "confirmed" : "inferred" },
-  { id: "content-build", label: "ContentBuild", value: project?.contentBuildId || "No linked ContentBuild", status: project?.contentBuildId ? "confirmed" : "temporary" },
-  { id: "selection", label: "Selected video / asset", value: selection ? `${selection.label} · ${selection.sourceId}` : "No selected video or asset was supplied", status: selection ? "temporary" : "inferred" },
- ]
+ const items = buildBrainContextDisplayItems({
+  channelId: contextUsed.channelId,
+  project: contextUsed.project,
+  selection: contextUsed.selection,
+ })
  return (
   <details data-vt-brain-component="BrainContextUsedDrawer" data-vt-brain-turn-id={turnId} className="w-full rounded-[7px] border-[2px] border-black bg-white">
    <summary data-vt-brain-part="context-used-trigger" className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
@@ -241,7 +239,7 @@ const BrainContextUsedDrawer: React.FC<{
     <ul className="grid gap-1">
      {items.map((item) => (
       <li data-vt-brain-part="context-used-item" key={item.id} className="grid gap-0.5 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
-       <span className="text-[9px] font-black uppercase">{item.label} · {item.status}</span>
+       <span className="text-[9px] font-black uppercase">{item.label} · {item.provenance}</span>
        <span className="break-words text-[10px] font-bold">{item.value}</span>
       </li>
      ))}
@@ -283,7 +281,7 @@ const BrainContextUsedDrawer: React.FC<{
          <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(item.statement)}</p>
          <code className="block break-all text-[8px] text-black/55">{item.id}</code>
          {item.evidenceRefs.length ? <p className="break-all text-[8px] text-black/55">Evidence: {item.evidenceRefs.join(", ")}</p> : null}
-         {onCorrectItem ? <button type="button" onClick={() => onCorrectItem(item.id, item.statement)} className="mt-1 min-h-9 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Correct context</button> : null}
+         {onCorrectItem ? <button type="button" onClick={() => onCorrectItem(item.id, item.statement)} className="mt-1 min-h-9 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Propose correction</button> : null}
         </li>
        ))}
       </ul>
