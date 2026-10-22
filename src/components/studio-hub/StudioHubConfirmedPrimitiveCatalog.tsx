@@ -310,26 +310,36 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 const ConfirmedStudioButtonFamily: React.FC = () => {
   const [toggleStates, setToggleStates] = React.useState<Record<string, boolean>>({})
 
-  const rowsForTier = (tier: "standard" | "compact" | "micro") => [
-    { id: `${tier}-row-1`, tier, specimens: [{ id: `${tier}-v1`, label: "PRIMARY" }] },
-    { id: `${tier}-row-2`, tier, specimens: [{ id: `${tier}-v2`, label: "SECONDARY" }, { id: `${tier}-v3`, label: "PRIMARY" }] },
-    { id: `${tier}-row-3`, tier, specimens: [{ id: `${tier}-v4`, label: "BLACK" }, { id: `${tier}-v5`, label: "OFF" }, { id: `${tier}-v6`, label: "YES!" }] },
-    { id: `${tier}-row-4`, tier, specimens: [{ id: `${tier}-v7`, label: "WHITE TEXT" }, { id: `${tier}-v1-repeat`, label: "PRIMARY" }, { id: `${tier}-v2-repeat`, label: "SECONDARY" }, { id: `${tier}-v3-repeat`, label: "PRIMARY" }] },
-  ]
   const specimenRows = [
-    { id: "supreme-row-4", tier: "supreme" as const, specimens: [1, 2, 3, 4].map(variant => ({ id: `supreme-v${variant}`, label: `V${variant}` })) },
-    ...rowsForTier("standard"),
-    ...rowsForTier("compact"),
-    ...rowsForTier("micro"),
+    { id: "supreme-full-row", tier: "supreme" as const, specimens: [{ id: "supreme-full-v1", label: "BUTTON" }] },
+    { id: "supreme-half-row", tier: "supreme" as const, specimens: [{ id: "supreme-half-v1", label: "BUTTON" }, { id: "supreme-half-v2", label: "BUTTON" }] },
+    { id: "standard-full-row", tier: "standard" as const, specimens: [{ id: "standard-full-v1", label: "BUTTON" }] },
+    { id: "standard-half-row", tier: "standard" as const, specimens: [{ id: "standard-half-v1", label: "BUTTON" }, { id: "standard-half-v3", label: "BUTTON" }] },
+    { id: "standard-quarter-row", tier: "standard" as const, specimens: [
+      { id: "standard-quarter-v4", label: "BLACK" },
+      { id: "standard-quarter-v5", label: "ON/OFF" },
+      { id: "standard-quarter-v6", label: "YES/NO" },
+      { id: "standard-quarter-v7", label: "WHITE" },
+    ] },
+    { id: "supreme-compare-row-1", tier: "supreme" as const, comparisonGroup: "supreme" as const, specimens: [{ id: "supreme-compare-v1", label: "BUTTON" }] },
+    { id: "supreme-compare-row-2", tier: "supreme" as const, comparisonGroup: "supreme" as const, specimens: [{ id: "supreme-compare-v1-repeat", label: "BUTTON" }, { id: "supreme-compare-v3", label: "BUTTON" }] },
+    { id: "micro-compare-row-1", tier: "micro" as const, comparisonGroup: "micro" as const, specimens: [{ id: "micro-compare-v1", label: "BUTTON" }] },
+    { id: "micro-compare-row-2", tier: "micro" as const, comparisonGroup: "micro" as const, specimens: [{ id: "micro-compare-v1-repeat", label: "BUTTON" }, { id: "micro-compare-v2", label: "BUTTON" }] },
+    { id: "micro-compare-row-3", tier: "micro" as const, comparisonGroup: "micro" as const, specimens: [
+      { id: "micro-compare-v4", label: "BLACK" }, { id: "micro-compare-v5", label: "ON/OFF" }, { id: "micro-compare-v6", label: "YES/NO" },
+    ] },
+    { id: "micro-compare-row-4", tier: "micro" as const, comparisonGroup: "micro" as const, specimens: [
+      { id: "micro-compare-v7", label: "WHITE" }, { id: "micro-compare-v1-repeat-2", label: "BUTTON" }, { id: "micro-compare-v2-repeat", label: "BUTTON" }, { id: "micro-compare-v3-repeat", label: "BUTTON" },
+    ] },
   ]
 
   return (
     <Family title="Button" nonDefaultSettings={[
-      "The PR #756 specimen grid is applied to the original production StudioButton family; rows demonstrate 1×1, 2×1, 3×1, and 4×1 layouts.",
-      "V1 primary fill; V2 secondary fill; V3 toggles primary/secondary fill and its button text names the current fill.",
-      "V4 black fill with primary text; V5 toggles primary/secondary with ON/OFF text; V6 toggles primary/black with YES!/NO! text; V7 uses white text.",
+      "The PR #756 grid is applied only to the original production StudioButton family: full Supreme, half Supreme, full Standard, half Standard, quarter Standard, then paired Supreme/Micro size stacks.",
+      "All ordinary buttons say BUTTON. The exceptions are BLACK, WHITE, ON/OFF, and YES/NO. V3 toggles primary/secondary fill without changing its BUTTON label.",
+      "V1 and V3-off use primary fill; V2 and V3-on use secondary fill; V4 is black; V5 toggles primary/secondary with ON/OFF; V6 toggles primary/black with YES/NO; V7 uses white text.",
       "The grid controls arrangement only. All visible specimens remain real StudioButton instances using supported production size APIs.",
-    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="60px Supreme (V1–V4) · 44px Standard (V1–V7) · 12px Micro (V1–V7); 4px layout rhythm." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
+    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="60px Supreme · 44px Standard · 12px Micro; 4px layout rhythm, with the authored variants arranged by row." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-button-gallery">
         <ConfirmedSpecimenGrid
           familyName="Original StudioButton variants"
@@ -338,7 +348,7 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
             const variant = Number(id.match(/-v(\d+)/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
             const toggle = variant === 3 || variant === 5 || variant === 6
             const isOn = toggleStates[id] ?? (variant === 5)
-            const label = variant === 1 ? "PRIMARY" : variant === 2 ? "SECONDARY" : variant === 3 ? (isOn ? "SECONDARY" : "PRIMARY") : variant === 4 ? "BLACK" : variant === 5 ? (isOn ? "ON" : "OFF") : variant === 6 ? (isOn ? "NO!" : "YES!") : "WHITE TEXT"
+            const label = variant === 4 ? "BLACK" : variant === 5 ? (isOn ? "ON" : "OFF") : variant === 6 ? (isOn ? "YES" : "NO") : variant === 7 ? "WHITE" : "BUTTON"
             const onClick = toggle ? () => setToggleStates(current => ({ ...current, [id]: !(current[id] ?? (variant === 5)) })) : undefined
             return (
               <StudioButton
@@ -348,7 +358,7 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
                 data-vt-button-skin={`v${variant}`}
                 data-vt-button-on={toggle && isOn ? "true" : "false"}
                 data-vt-library-component="StudioButton"
-                aria-label={variant === 3 ? "Button V3 primary secondary toggle" : variant === 5 ? "Button V5 ON/OFF toggle" : variant === 6 ? "Button V6 YES/NO toggle" : `Button V${variant}`}
+                aria-label={variant === 3 ? "Button primary/secondary color toggle" : variant === 5 ? "Button ON/OFF toggle" : variant === 6 ? "Button YES/NO toggle" : variant === 4 ? "Black button" : variant === 7 ? "White button" : "Button"}
                 aria-pressed={toggle ? isOn : undefined}
                 onClick={onClick}
               >

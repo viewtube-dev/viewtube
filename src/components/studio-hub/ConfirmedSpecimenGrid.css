@@ -17,3 +17,23 @@
 .vt-specimen-row--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .vt-specimen-slot { display: grid; min-width: 0; align-content: start; }
 .vt-specimen-documentation { min-width: 0; }
+
+
+/* Optional paired size stacks keep the button-family comparison aligned without
+   changing production primitive geometry. */
+.vt-specimen-size-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--vt-specimen-gap);
+  min-width: 0;
+  align-items: start;
+}
+.vt-specimen-comparison-column {
+  display: grid;
+  gap: var(--vt-specimen-gap);
+  min-width: 0;
+  align-content: start;
+}
+.vt-specimen-comparison-column > .vt-specimen-row {
+  min-width: 0;
+}

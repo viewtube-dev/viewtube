@@ -498,27 +498,31 @@ test("Confirmed Specimen Grid renders every tier in 1/2/3/4-column layouts witho
   assert.match(catalogSource, /data-vt-specimen-tier=\{tier\}/);
 });
 
-test("the original Button family uses the PR #756 specimen grid and all button variants", () => {
+test("the original Button family uses the PR #756 specimen grid with the requested row hierarchy and variant labels", () => {
   assert.match(catalog, /const ConfirmedStudioButtonFamily[\s\S]*?<ConfirmedSpecimenGrid[\s\S]*?renderSpecimen=/);
   for (const variant of ["v1", "v2", "v3", "v4", "v5", "v6", "v7"]) {
     assert.ok(styles.includes(`data-vt-button-skin="${variant}"`), `Button ${variant} has a catalog skin`);
   }
-  assert.match(catalog, /const rowsForTier[\s\S]*?\{ id: `\$\{tier\}-row-4`[\s\S]*?specimens:/);
-  assert.match(catalog, /sizeVariant=\{tier\}/);
-  assert.match(catalog, /isOn \? "SECONDARY" : "PRIMARY"/);
-  assert.match(catalog, /aria-label=\{variant === 3 \? "Button V3 primary secondary toggle"/);
+  assert.match(catalog, /supreme-full-row[\s\S]*?tier: "supreme"[\s\S]*?standard-full-row[\s\S]*?standard-half-row[\s\S]*?standard-quarter-row/);
+  assert.match(catalog, /comparisonGroup: "supreme"/);
+  assert.match(catalog, /comparisonGroup: "micro"/);
+  for (const label of ["BUTTON", "BLACK", "WHITE", "ON/OFF", "YES/NO"]) {
+    assert.ok(catalog.includes(`label: "${label}"`), `button specimens include the ${label} label`);
+  }
+  assert.match(catalog, /const toggle = variant === 3 \|\| variant === 5 \|\| variant === 6/);
   assert.match(catalog, /onClick=\{onClick\}/);
 });
 
-test("button primary/secondary skins use the canonical primary and secondary palette in the correct order", () => {
+test("button primary and secondary skins use stable pair tokens in the correct order", () => {
   const buttonStyles = styles.slice(styles.indexOf("/* Confirmed StudioButton V1–V7 specimen gallery."));
-  assert.match(buttonStyles, /data-vt-button-skin="v1"[\s\S]*?background:\s*var\(--vt-studio-control-accent,\s*var\(--pair-a,\s*#36e0f6\)\)/);
-  assert.match(buttonStyles, /data-vt-button-skin="v2"[\s\S]*?background:\s*var\(--vt-studio-control-secondary,\s*var\(--pair-b,\s*#ff7f6b\)\)/);
-  assert.match(buttonStyles, /data-vt-button-skin="v3"\][\s\S]*?background:\s*var\(--vt-studio-control-accent,\s*var\(--pair-a,\s*#36e0f6\)\)/);
-  assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*var\(--vt-studio-control-secondary,\s*var\(--pair-b,\s*#ff7f6b\)\)/);
+  assert.match(buttonStyles, /data-vt-button-skin="v1"[\s\S]*?background:\s*var\(--pair-a,\s*#36e0f6\)/);
+  assert.match(buttonStyles, /data-vt-button-skin="v2"[\s\S]*?background:\s*var\(--pair-b,\s*#ff7f6b\)/);
+  assert.match(buttonStyles, /data-vt-button-skin="v3"\][\s\S]*?background:\s*var\(--pair-a,\s*#36e0f6\)/);
+  assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*var\(--pair-b,\s*#ff7f6b\)/);
+  assert.doesNotMatch(buttonStyles, /--vt-studio-control-accent/);
   const grid = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
   assert.match(grid, /specimenRows\?: SpecimenGridRow\[\]/);
-  assert.match(grid, /specimenRows\s*\?\s*authoredRows/);
+  assert.match(grid, /comparisonGroup/);
 });
 
 test("button gallery maps primary and secondary directly to canonical pair tokens", () => {
@@ -530,20 +534,20 @@ test("button gallery maps primary and secondary directly to canonical pair token
   assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="false"\][^{}]*\{[^}]*background:\s*var\(--pair-a,/s);
 });
 
-test("V3 button toggle changes both the visible state label and primary/secondary face", () => {
-  assert.match(catalog, /variant === 3 \? \(isOn \? "SECONDARY" : "PRIMARY"\)/);
-  assert.match(catalog, /data-vt-button-on=\{toggle && isOn \? "true" : "false"\}/);
-  assert.match(catalog, /onClick=\{onClick\}/);
+test("V3 button toggle changes its primary/secondary face while retaining BUTTON text", () => {
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?export const StudioHubConfirmedPrimitiveCatalog/)?.[0] ?? "";
+  assert.match(buttonFamily, /const label = variant === 4 \? "BLACK"[^;]*: "BUTTON"/);
+  assert.match(buttonFamily, /data-vt-button-on=\{toggle && isOn \? "true" : "false"\}/);
+  assert.match(buttonFamily, /aria-pressed=\{toggle \? isOn : undefined\}/);
+  assert.match(buttonFamily, /onClick=\{onClick\}/);
 });
 
-
-test("original StudioButton family reapplies PR #756 grid tiers and uses button-face labels", () => {
+test("original StudioButton family uses button labels and the intended comparison tiers", () => {
   const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?export const StudioHubConfirmedPrimitiveCatalog/)?.[0] ?? "";
-  assert.match(buttonFamily, /rowsForTier\("standard"\)[\s\S]*?rowsForTier\("compact"\)[\s\S]*?rowsForTier\("micro"\)/);
-  for (const label of ["PRIMARY", "SECONDARY", "BLACK", "WHITE TEXT"]) {
-    assert.ok(buttonFamily.includes(`label: "${label}"`) || buttonFamily.includes(`? "${label}"`), `button specimens use visible ${label} text`);
-  }
-  assert.match(buttonFamily, /const label = variant === 1 \? "PRIMARY" : variant === 2 \? "SECONDARY"/);
+  assert.match(buttonFamily, /supreme-full-row[\s\S]*?standard-full-row[\s\S]*?standard-half-row[\s\S]*?standard-quarter-row/);
+  assert.match(buttonFamily, /comparisonGroup: "supreme"/);
+  assert.match(buttonFamily, /comparisonGroup: "micro"/);
+  assert.match(buttonFamily, /V3 toggles primary\/secondary fill without changing its BUTTON label/);
   assert.match(buttonFamily, /aria-pressed=\{toggle \? isOn : undefined\}/);
   assert.match(buttonFamily, /onClick=\{onClick\}/);
 });
