@@ -307,60 +307,61 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 /** Certified StudioButton examples arranged by the reusable PR #756 specimen grid. */
-const ConfirmedStudioButtonFamily: React.FC = () => {
-  const [toggleStates, setToggleStates] = React.useState<Record<string, boolean>>({})
+const buttonVariantNumbers = [1, 2, 3, 4, 5, 6, 7] as const
 
+const buildStudioButtonRows = (tier: "standard" | "compact") => {
+  const makeSpecimen = (variant: number, suffix = "") => ({
+    id: `${tier}-${suffix}${variant === 1 && suffix === "repeat-v" ? "v1-repeat" : `v${variant}`}`,
+    label: variant === 4 ? "BLACK" : variant === 5 ? "OFF" : variant === 6 ? "NO" : variant === 7 ? "WHITE" : "BUTTON",
+  })
+  const row = (id: string, variants: number[]) => ({
+    id: `${tier}-${id}`,
+    tier,
+    specimens: variants.map((variant, index) => ({
+      id: `${tier}-${id}-v${variant}${variant === 1 && index > 0 ? "-repeat" : ""}`,
+      label: variant === 4 ? "BLACK" : variant === 5 ? "OFF" : variant === 6 ? "NO" : variant === 7 ? "WHITE" : "BUTTON",
+    })),
+  })
+  return [
+    ...buttonVariantNumbers.map(variant => row(`full-v${variant}`, [variant])),
+    row("half-v1-v2", [1, 2]),
+    row("half-v3-v4", [3, 4]),
+    row("half-v5-v6", [5, 6]),
+    row("half-v7-v1", [7, 1]),
+    row("quarter-v1-v4", [1, 2, 3, 4]),
+    row("quarter-v5-v7", [5, 6, 7, 1]),
+  ]
+}
+
+const ConfirmedStudioButtonFamily: React.FC = () => {
   const specimenRows = [
-    { id: "supreme-full-row", tier: "supreme" as const, specimens: [{ id: "supreme-full-v1", label: "BUTTON" }] },
-    { id: "supreme-half-row", tier: "supreme" as const, specimens: [{ id: "supreme-half-v1", label: "BUTTON" }, { id: "supreme-half-v2", label: "BUTTON" }] },
-    { id: "standard-full-row", tier: "standard" as const, specimens: [{ id: "standard-full-v1", label: "BUTTON" }] },
-    { id: "standard-half-row", tier: "standard" as const, specimens: [{ id: "standard-half-v1", label: "BUTTON" }, { id: "standard-half-v3", label: "BUTTON" }] },
-    { id: "standard-quarter-row", tier: "standard" as const, specimens: [
-      { id: "standard-quarter-v4", label: "BLACK" },
-      { id: "standard-quarter-v5", label: "ON/OFF" },
-      { id: "standard-quarter-v6", label: "YES/NO" },
-      { id: "standard-quarter-v7", label: "WHITE" },
-    ] },
-    { id: "supreme-compare-row-1", tier: "supreme" as const, comparisonGroup: "supreme" as const, specimens: [{ id: "supreme-compare-v1", label: "BUTTON" }] },
-    { id: "supreme-compare-row-2", tier: "supreme" as const, comparisonGroup: "supreme" as const, specimens: [{ id: "supreme-compare-v1-repeat", label: "BUTTON" }, { id: "supreme-compare-v3", label: "BUTTON" }] },
-    { id: "micro-compare-row-1", tier: "micro" as const, comparisonGroup: "micro" as const, specimens: [{ id: "micro-compare-v1", label: "BUTTON" }] },
-    { id: "micro-compare-row-2", tier: "micro" as const, comparisonGroup: "micro" as const, specimens: [{ id: "micro-compare-v1-repeat", label: "BUTTON" }, { id: "micro-compare-v2", label: "BUTTON" }] },
-    { id: "micro-compare-row-3", tier: "micro" as const, comparisonGroup: "micro" as const, specimens: [
-      { id: "micro-compare-v4", label: "BLACK" }, { id: "micro-compare-v5", label: "ON/OFF" }, { id: "micro-compare-v6", label: "YES/NO" },
-    ] },
-    { id: "micro-compare-row-4", tier: "micro" as const, comparisonGroup: "micro" as const, specimens: [
-      { id: "micro-compare-v7", label: "WHITE" }, { id: "micro-compare-v1-repeat-2", label: "BUTTON" }, { id: "micro-compare-v2-repeat", label: "BUTTON" }, { id: "micro-compare-v3-repeat", label: "BUTTON" },
-    ] },
+    ...buildStudioButtonRows("standard"),
+    ...buildStudioButtonRows("compact"),
   ]
 
   return (
-    <Family title="Button" nonDefaultSettings={[
-      "The PR #756 grid is applied only to the original production StudioButton family: full Supreme, half Supreme, full Standard, half Standard, quarter Standard, then paired Supreme/Micro size stacks.",
-      "All ordinary buttons say BUTTON. The exceptions are BLACK, WHITE, ON/OFF, and YES/NO. V3 toggles primary/secondary fill without changing its BUTTON label.",
-      "V1 and V3-off use primary fill; V2 and V3-on use secondary fill; V4 is black; V5 toggles primary/secondary with ON/OFF; V6 toggles primary/black with YES/NO; V7 uses white text.",
-      "The grid controls arrangement only. All visible specimens remain real StudioButton instances using supported production size APIs.",
-    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="60px Supreme · 44px Standard · 12px Micro; 4px layout rhythm, with the authored variants arranged by row." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
+    <Family title="Button · V1–V7 · Standard + Compact" nonDefaultSettings={[
+      "Every production variant is shown at standard 44px and compact 28px in full-width, half-width and four-column quarter-width arrangements.",
+      "V1 primary/black; V2 secondary/black; V3 independently toggles V1 and V2; V4 black/primary; V5 toggles V1/V2 with configurable alternate text/icon; V6 toggles V1/black with white text and configurable alternate text/icon; V7 primary/white.",
+      "Button geometry, fill, label state and icon behavior belong to StudioButton. The PR #756 grid controls arrangement only. Labels are single-line and ellipsized inside their assigned cells.",
+    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="44px Standard · 28px Compact · 4px layout rhythm" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-button-gallery">
         <ConfirmedSpecimenGrid
           familyName="Original StudioButton variants"
           specimenRows={specimenRows}
           renderSpecimen={({ id, tier }) => {
-            const variant = Number(id.match(/-v(\d+)/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
-            const toggle = variant === 3 || variant === 5 || variant === 6
-            const isOn = toggleStates[id] ?? (variant === 5)
-            const label = variant === 4 ? "BLACK" : variant === 5 ? (isOn ? "ON" : "OFF") : variant === 6 ? (isOn ? "YES" : "NO") : variant === 7 ? "WHITE" : "BUTTON"
-            const onClick = toggle ? () => setToggleStates(current => ({ ...current, [id]: !(current[id] ?? (variant === 5)) })) : undefined
+            const variant = Number(id.match(/-v(\\d+)/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
+            const label = variant === 4 ? "BLACK" : variant === 5 ? "OFF" : variant === 6 ? "NO" : variant === 7 ? "WHITE" : "BUTTON"
+            const activeChildren = variant === 5 ? "ON" : variant === 6 ? "YES" : undefined
             return (
               <StudioButton
                 className="vt-confirmed-button-skin"
+                variant={`v${variant}` as "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7"}
+                activeChildren={activeChildren}
                 sizeVariant={tier}
-                heightVariant={tier === "supreme" ? "60" : tier === "standard" ? "44" : tier === "compact" ? "28" : undefined}
-                data-vt-button-skin={`v${variant}`}
-                data-vt-button-on={toggle && isOn ? "true" : "false"}
+                heightVariant={tier === "standard" ? "44" : "28"}
                 data-vt-library-component="StudioButton"
-                aria-label={variant === 3 ? "Button primary/secondary color toggle" : variant === 5 ? "Button ON/OFF toggle" : variant === 6 ? "Button YES/NO toggle" : variant === 4 ? "Black button" : variant === 7 ? "White button" : "Button"}
-                aria-pressed={toggle ? isOn : undefined}
-                onClick={onClick}
+                aria-label={variant === 3 ? "Button primary/secondary color toggle" : variant === 5 ? "Button ON/OFF toggle" : variant === 6 ? "Button NO/YES toggle" : variant === 4 ? "Black button" : variant === 7 ? "White button" : `Button variant ${variant}`}
               >
                 {label}
               </StudioButton>
