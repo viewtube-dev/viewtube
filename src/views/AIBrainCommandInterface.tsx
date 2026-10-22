@@ -128,6 +128,7 @@ export type ChatMessage = {
  originalUserText?: string
  evidencePack?: AIBrainEvidencePack
  evidenceRecords?: EvidenceRecord[]
+ evidenceIntegrityStatus?: PromptEvidenceIntegrityStatus
  readiness?: AIBrainTurnReadiness
  contextUsed?: BrainCreatorContextSnapshot
  learningReceipt?: {
@@ -148,17 +149,32 @@ export type ChatMessage = {
  * If IDs or record contracts disagree, omit the detailed provenance rather than
  * displaying a different evidence set as though it were the prompt input.
  */
+export type PromptEvidenceIntegrityStatus = "verified" | "unavailable" | "mismatch"
+
+/**
+ * Distinguish legacy turns with no manifest from a present-but-invalid prompt
+ * evidence manifest. Only the latter is an integrity failure.
+ */
+export const getPromptEvidenceIntegrityStatus = (
+ metadata: Record<string, unknown> | undefined,
+): PromptEvidenceIntegrityStatus => {
+ if (!metadata || !Object.prototype.hasOwnProperty.call(metadata, "promptEvidenceRecordIds")) return "unavailable"
+ if (!Array.isArray(metadata.promptEvidenceRecordIds) || !Array.isArray(metadata.evidenceRecords)) return "mismatch"
+ const rawRecords: unknown[] = metadata.evidenceRecords
+ const rawIds: unknown[] = metadata.promptEvidenceRecordIds
+ if (!rawRecords.every(isEvidenceRecord) || !rawIds.every((id) => typeof id === "string")) return "mismatch"
+ const records = rawRecords as EvidenceRecord[]
+ const ids = rawIds as string[]
+ return records.length === ids.length && records.every((record, index) => record.id === ids[index])
+  ? "verified"
+  : "mismatch"
+}
+
 export const readPromptEvidenceRecords = (
  metadata: Record<string, unknown> | undefined,
 ): EvidenceRecord[] | undefined => {
- if (!metadata || !Array.isArray(metadata.evidenceRecords) || !Array.isArray(metadata.promptEvidenceRecordIds)) return undefined
- const rawRecords: unknown[] = metadata.evidenceRecords
- const rawIds: unknown[] = metadata.promptEvidenceRecordIds
- if (!rawRecords.every(isEvidenceRecord) || !rawIds.every((id) => typeof id === "string")) return undefined
- const records = rawRecords as EvidenceRecord[]
- const ids = rawIds as string[]
- if (records.length !== ids.length || records.some((record, index) => record.id !== ids[index])) return undefined
- return records
+ if (getPromptEvidenceIntegrityStatus(metadata) !== "verified") return undefined
+ return metadata!.evidenceRecords as EvidenceRecord[]
 }
 
 export type BrainCreatorContextSnapshot = {
@@ -759,7 +775,7 @@ const CreatorResponseCard: React.FC<{
     ) : null}
     <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
     <BrainAnswerModuleGrid modules={modules} compact />
-    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} compact /> : null}
+    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} evidenceIntegrityStatus={message.evidenceIntegrityStatus || "unavailable"} compact /> : null}
     {openQuestions[0] ? (
      <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
     ) : null}
@@ -1347,7 +1363,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: readPromptEvidenceRecords(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: readPromptEvidenceRecords(result.turn.metadata), evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
