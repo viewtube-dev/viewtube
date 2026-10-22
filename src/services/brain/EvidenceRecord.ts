@@ -40,6 +40,30 @@ export const EVIDENCE_EPISTEMIC_STATES = [
 
 export type EvidenceEpistemicState = typeof EVIDENCE_EPISTEMIC_STATES[number]
 
+
+const EVIDENCE_OWNERS: readonly EvidenceOwner[] = [
+ "analytics-canon", "youtube-read", "comments", "transcript", "vault", "project",
+ "publishing", "outcomes", "experiment", "research", "creator-confirmed",
+]
+
+/** Runtime guard for evidence metadata restored from durable conversation turns. */
+export const isEvidenceRecord = (value: unknown): value is EvidenceRecord => {
+ if (!value || typeof value !== "object" || Array.isArray(value)) return false
+ const record = value as Record<string, unknown>
+ if (typeof record.id !== "string" || !record.id.trim()) return false
+ if (typeof record.owner !== "string" || !EVIDENCE_OWNERS.includes(record.owner as EvidenceOwner)) return false
+ if (typeof record.sourceRef !== "string" || !record.sourceRef.trim()) return false
+ if (!["fresh", "stale", "unknown"].includes(String(record.freshness))) return false
+ if (!EVIDENCE_EPISTEMIC_STATES.includes(record.epistemicState as EvidenceEpistemicState)) return false
+ const provenance = record.provenance
+ if (!provenance || typeof provenance !== "object" || Array.isArray(provenance)) return false
+ const evidenceIds = (provenance as Record<string, unknown>).evidenceIds
+ if (!Array.isArray(evidenceIds) || !evidenceIds.every((id) => typeof id === "string")) return false
+ const valueField = record.value
+ if (valueField !== undefined && valueField !== null && !["string", "number", "boolean"].includes(typeof valueField)) return false
+ return true
+}
+
 export interface EvidenceRecord {
  id: string
  owner: EvidenceOwner
