@@ -502,8 +502,8 @@ test("the original Button family uses the PR #756 specimen grid and all button v
   }
   assert.match(catalog, /const variantsForTier[\s\S]*?\{ id: `\$\{tier\}-row-4`[\s\S]*?specimens:/);
   assert.match(catalog, /sizeVariant=\{tier\}/);
-  assert.match(catalog, /v3On \? "SECONDARY" : "PRIMARY"/);
-  assert.match(catalog, /aria-label=\{variant === 3 \? "Button V3 toggle"/);
+  assert.match(catalog, /isOn \? "SECONDARY" : "PRIMARY"/);
+  assert.match(catalog, /aria-label=\{variant === 3 \? "Button V3 primary secondary toggle"/);
   assert.match(catalog, /onClick=\{onClick\}/);
 });
 
