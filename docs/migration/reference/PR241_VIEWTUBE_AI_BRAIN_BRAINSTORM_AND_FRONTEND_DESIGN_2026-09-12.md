@@ -722,3 +722,17 @@ The first UI implementation slice is in progress on `/ai-brain`:
 - Added a component regression test for the accessible dialog contract and empty-save prevention.
 
 **Verification status:** the test is committed on the implementation branch but has not yet been reported green by CI. This slice does not certify the broader restore, evidence-parity, receipt-lineage, or full accessibility checklist. The next implementation gate remains a turn-bound evidence presentation contract and claim-to-source parity, followed by receipt-backed result states.
+
+
+### Follow-through — render the exact typed prompt evidence (2026-10-22)
+
+The same UI slice now also carries the canonical `EvidenceRecord[]` persisted on each Brain turn into the response’s existing `BrainTurnEvidenceRibbon`. The presentation projection validates record shape and requires the ordered `promptEvidenceRecordIds` to match the rendered records before exposing them. A mismatch or malformed record falls back to an explicit “record-level provenance unavailable” state rather than showing a different evidence set as authoritative.
+
+The expandable record list exposes the canonical record ID, metric/value (with missing values explicitly not rendered as zero), epistemic state, freshness, source owner/ref, observation/update timestamps, window, missingness/limitations and source evidence IDs. A source link is rendered only when the record supplies a safe same-app absolute path; the UI does not fabricate a route or confidence score. Restored turns and retry results use the same saved metadata contract.
+
+Regression coverage added:
+- `src/services/brain/__tests__/EvidenceRecord.test.ts` validates restored record shape.
+- `src/views/__tests__/AIBrainCommandInterface.test.tsx` verifies exact ordered ID parity before records can be presented.
+- `src/components/brain/__tests__/BrainTurnEvidenceRibbon.test.tsx` covers rendered provenance, missingness and legacy-turn limitations.
+
+**Verification status:** these tests are added; CI and browser-level accessibility verification remain pending. The existing evidence-pack summary remains distinct from the typed prompt-record list, so the page does not falsely equate dataset readiness with proof of the exact model input.
