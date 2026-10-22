@@ -8,6 +8,7 @@ import { BrainReceiptBackedOutputCard, BrainRuntimePanel, resolveBrainOutputRece
 describe("BrainRuntimePanel", () => {
  it("renders the live backend pipeline without turning it into a developer-only dump", () => {
   const html = renderToStaticMarkup(
+    <MemoryRouter>
    <BrainRuntimePanel
     snapshot={{
      project: { id: "project-2", name: "Austerlitz package", status: "active" },
@@ -152,6 +153,7 @@ describe("BrainRuntimePanel", () => {
      },
     }}
    />,
+    </MemoryRouter>
   )
 
   expect(html).toContain("LIVE BRAIN RUNTIME")
