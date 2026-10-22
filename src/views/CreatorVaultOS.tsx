@@ -282,6 +282,8 @@ const CreatorVaultOS: React.FC = () => {
  const [visibleModules, setVisibleModules] = useState<VaultWorkspaceModuleId[]>(initialWorkspace.visibleModules)
  const [moduleOrder, setModuleOrder] = useState<VaultWorkspaceModuleId[]>(initialWorkspace.moduleOrder)
  const [selectedAssetIds, setSelectedAssetIds] = useState<string[]>([])
+  const [deepLinkNotice, setDeepLinkNotice] = useState<{ tone: "status" | "alert"; message: string } | null>(null)
+  const [deepLinkTargetId, setDeepLinkTargetId] = useState<string | null>(null)
  const [selectionAnchorId, setSelectionAnchorId] = useState<string | null>(null)
  const selectionShiftRef = useRef(false)
  const [batchTag, setBatchTag] = useState("")
@@ -330,6 +332,14 @@ const CreatorVaultOS: React.FC = () => {
  const compareVersionsRef = useRef<HTMLDivElement | null>(null)
 
  const allAssets = useMemo(() => listVaultAssets(), [refreshTick])
+  const assetDeepLink = useMemo(
+   () => resolveVaultAssetDeepLink({
+    search: location.search,
+    assets: allAssets,
+    getBuildAssetIds: (contentBuildId) => getContentBuild(contentBuildId)?.assetIds ?? null,
+   }),
+   [location.search, allAssets],
+  )
  const vaultTagLibrary = useMemo(
   () => Array.from(new Set([
    ...CORE_TAGS.map((tag) => tag.toUpperCase()),
@@ -544,6 +554,37 @@ const CreatorVaultOS: React.FC = () => {
   () => allAssets.find((asset) => asset.id === selectedAssetIds[0]) || null,
   [allAssets, selectedAssetIds],
  )
+
+  useEffect(() => {
+   if (assetDeepLink.status === "none") return
+   if (assetDeepLink.status === "resolved") {
+    const asset = allAssets.find((candidate) => candidate.id === assetDeepLink.assetId)
+    if (!asset) return
+    setSelectedAssetIds([asset.id])
+    setVisibleModules((current) => current.includes("inspector") ? current : [...current, "inspector"])
+    setDeepLinkTargetId(asset.id)
+    setDeepLinkNotice({
+     tone: "status",
+     message: assetDeepLink.contentBuildId
+      ? `Opened ${asset.name} from Brain and verified it against ContentBuild ${assetDeepLink.contentBuildId}. Your library filters were preserved.`
+      : `Opened ${asset.name} from a direct asset link. ContentBuild scope was not supplied.`,
+    })
+    return
+   }
+   const message = assetDeepLink.status === "asset-not-found"
+    ? `Brain linked asset ${assetDeepLink.assetId}, but that ID is not present in the canonical Vault inventory. No asset was selected.`
+    : assetDeepLink.status === "build-not-found"
+     ? `ContentBuild ${assetDeepLink.contentBuildId} is unavailable. The linked asset was not selected because its scope could not be verified.`
+     : `Asset ${assetDeepLink.assetId} does not belong to ContentBuild ${assetDeepLink.contentBuildId}. The linked asset was not selected.`
+   setDeepLinkNotice({ tone: "alert", message })
+  }, [assetDeepLink, allAssets])
+
+  useEffect(() => {
+   if (!deepLinkTargetId || selectedAsset?.id !== deepLinkTargetId) return
+   inspectorRef.current?.scrollIntoView({ behavior: "auto", block: "start" })
+   inspectorRef.current?.focus({ preventScroll: true })
+   setDeepLinkTargetId(null)
+  }, [deepLinkTargetId, selectedAsset])
  const selectedMediaCapabilities = useMemo(() => {
   const selectedRecords = selectedAssetIds
    .map((id) => allAssets.find((asset) => asset.id === id))
