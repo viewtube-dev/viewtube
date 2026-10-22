@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
-import { StudioSplitShell, type StudioControlSize } from "./StudioControls";
+import { StudioSplitShell } from "./StudioControls";
+import type { StudioControlSize } from "../tokens";
 
 export type StudioToggleAppearance = {
   textColor?: string;
