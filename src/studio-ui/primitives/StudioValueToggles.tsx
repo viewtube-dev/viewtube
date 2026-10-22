@@ -67,7 +67,6 @@ function ArrowButton({ direction, disabled, onClick, label }: {
 }
 
 function arrowRail(props: CommonProps, direction: -1 | 1, iconDirection: "left" | "right") {
-  const index = props.options.indexOf(props.value);
   return <ArrowButton direction={iconDirection} label={direction < 0 ? "Previous option" : "Next option"}
     disabled={props.disabled || !props.options.length}
     onClick={() => changeOption(props, direction)} />;
