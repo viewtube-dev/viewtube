@@ -194,8 +194,11 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
         const params = new URLSearchParams()
         params.set("brainEvidenceId", record.id)
         params.set("brainEvidenceSource", record.owner)
+        if (record.sourceSnapshotId) params.set("snapshotId", record.sourceSnapshotId)
+        if (record.sourceRef) params.set("sourceRef", record.sourceRef)
         if (record.metric) params.set("metric", record.metric)
         if (record.window?.kind) params.set("window", record.window.kind)
+        if (record.videoId) params.set("videoId", record.videoId)
         const channelId = record.channelId || evidencePack.channelId
         if (channelId) params.set("channelId", channelId)
         if (evidencePack.requestSpec.count !== null) params.set("count", String(evidencePack.requestSpec.count))
