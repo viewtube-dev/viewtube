@@ -307,9 +307,7 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 /** Certified StudioButton examples arranged by the reusable PR #756 specimen grid. */
 const ConfirmedStudioButtonFamily: React.FC = () => {
-  const [v3On, setV3On] = React.useState(false)
-  const [v5On, setV5On] = React.useState(true)
-  const [v6On, setV6On] = React.useState(false)
+  const [toggleStates, setToggleStates] = React.useState<Record<string, boolean>>({})
 
   const variantsForTier = (tier: "supreme" | "standard" | "compact" | "micro") => [
     { id: `${tier}-row-1`, tier, specimens: [{ id: `${tier}-v1`, label: "V1" }] },
@@ -334,9 +332,9 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
           renderSpecimen={({ id, tier }) => {
             const variant = Number(id.match(/-v(\d+)/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
             const toggle = variant === 3 || variant === 5 || variant === 6
-            const isOn = variant === 3 ? v3On : variant === 5 ? v5On : variant === 6 ? v6On : false
-            const label = variant === 3 ? (v3On ? "SECONDARY" : "PRIMARY") : variant === 5 ? (v5On ? "ON" : "OFF") : variant === 6 ? (v6On ? "NO!" : "YES!") : "BUTTON"
-            const onClick = variant === 3 ? () => setV3On(value => !value) : variant === 5 ? () => setV5On(value => !value) : variant === 6 ? () => setV6On(value => !value) : undefined
+            const isOn = toggleStates[id] ?? (variant === 5)
+            const label = variant === 3 ? (isOn ? "SECONDARY" : "PRIMARY") : variant === 5 ? (isOn ? "ON" : "OFF") : variant === 6 ? (isOn ? "NO!" : "YES!") : "BUTTON"
+            const onClick = toggle ? () => setToggleStates(current => ({ ...current, [id]: !(current[id] ?? (variant === 5)) })) : undefined
             return (
               <StudioButton
                 className="vt-confirmed-button-skin"
