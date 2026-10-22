@@ -5347,3 +5347,12 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 }
 .vt-studio-split-shell.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow-stack > .vt-studio-value-toggle__arrow:first-child { border-bottom-width: 2px; }
 .vt-studio-split-shell.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__arrow-stack > .vt-studio-value-toggle__arrow:first-child { border-bottom-width: 1px; }
+
+/* Content-width variants reserve the widest word across all available options without
+   rendering it visibly; the actual value and measurement share one intrinsic grid cell. */
+.vt-studio-split-shell.vt-studio-value-toggle--nested .vt-studio-value-toggle__face[data-content-width="true"] {
+  display: grid; grid-template-columns: max-content; grid-template-rows: max-content;
+  width: max-content; min-width: max-content; flex: 0 0 auto; padding-inline: 8px;
+}
+.vt-studio-value-toggle__face[data-content-width="true"] > span { grid-area: 1 / 1; white-space: nowrap; }
+.vt-studio-value-toggle__measure { visibility: hidden; pointer-events: none; }
