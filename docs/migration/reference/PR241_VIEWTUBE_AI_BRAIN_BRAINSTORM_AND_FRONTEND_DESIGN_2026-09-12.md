@@ -722,3 +722,10 @@ The first UI implementation slice is in progress on `/ai-brain`:
 - Added a component regression test for the accessible dialog contract and empty-save prevention.
 
 **Verification status:** the test is committed on the implementation branch but has not yet been reported green by CI. This slice does not certify the broader restore, evidence-parity, receipt-lineage, or full accessibility checklist. The next implementation gate remains a turn-bound evidence presentation contract and claim-to-source parity, followed by receipt-backed result states.
+
+
+### Verification note — UI evidence integration PR #785 (2026-10-22)
+
+The first implementation PR, [#785](https://github.com/viewtube-dev/viewtube/pull/785), merged the accessible AI Journal dialog and turn-bound typed evidence list into the target branch. The CI run showed `production-build` and `local-smoke` passing. The Brain quality-loop, static-quality and focused-contract jobs failed on other currently failing contracts; this run does not certify the new UI tests as fully green. The broader browser accessibility walkthrough remains outstanding. Deployment previews were rate-limited by the Vercel account, so no deployed visual verification is claimed.
+
+Next: fix/confirm the type-safe evidence metadata guard, then continue with receipt-backed result states and canonical context correction. Do not treat workflow-step status as a ToolReceipt or saved-output proof.
