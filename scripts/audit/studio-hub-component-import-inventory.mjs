@@ -67,7 +67,7 @@ export function buildInventory(root = process.cwd(), entry = path.join(root, "sr
       const resolved = resolveLocal(item.source, filePath, options);
       const local = item.source.startsWith(".") || item.source.startsWith("/");
       record.imports.push({ ...item, resolvedPath: resolved && path.relative(root, resolved).replaceAll(path.sep, "/"), external: !local });
-      if (resolved && resolved.startsWith(root + path.sep) && !seen.has(resolved)) queue.push({ file: resolved, parent: filePath, via: item.source });
+      if (resolved && resolved.startsWith(root + path.sep) && !resolved.split(path.sep).includes("node_modules") && !seen.has(resolved)) queue.push({ file: resolved, parent: filePath, via: item.source });
       else if (!resolved && local) unresolved.push({ importer: record.file, specifier: item.source, kind: item.kind });
     }
   }
