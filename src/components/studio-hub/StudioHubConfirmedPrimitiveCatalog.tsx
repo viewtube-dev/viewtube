@@ -310,15 +310,16 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 const ConfirmedStudioButtonFamily: React.FC = () => {
   const [toggleStates, setToggleStates] = React.useState<Record<string, boolean>>({})
 
-  const rowsForTier = (tier: "standard" | "micro") => [
-    { id: `${tier}-row-1`, tier, specimens: [{ id: `${tier}-v1`, label: "V1" }] },
-    { id: `${tier}-row-2`, tier, specimens: [{ id: `${tier}-v2`, label: "V2" }, { id: `${tier}-v3`, label: "V3" }] },
-    { id: `${tier}-row-3`, tier, specimens: [{ id: `${tier}-v4`, label: "V4" }, { id: `${tier}-v5`, label: "V5" }, { id: `${tier}-v6`, label: "V6" }] },
-    { id: `${tier}-row-4`, tier, specimens: [{ id: `${tier}-v7`, label: "V7" }, { id: `${tier}-v1-repeat`, label: "V1" }, { id: `${tier}-v2-repeat`, label: "V2" }, { id: `${tier}-v3-repeat`, label: "V3" }] },
+  const rowsForTier = (tier: "standard" | "compact" | "micro") => [
+    { id: `${tier}-row-1`, tier, specimens: [{ id: `${tier}-v1`, label: "PRIMARY" }] },
+    { id: `${tier}-row-2`, tier, specimens: [{ id: `${tier}-v2`, label: "SECONDARY" }, { id: `${tier}-v3`, label: "PRIMARY" }] },
+    { id: `${tier}-row-3`, tier, specimens: [{ id: `${tier}-v4`, label: "BLACK" }, { id: `${tier}-v5`, label: "OFF" }, { id: `${tier}-v6`, label: "YES!" }] },
+    { id: `${tier}-row-4`, tier, specimens: [{ id: `${tier}-v7`, label: "WHITE TEXT" }, { id: `${tier}-v1-repeat`, label: "PRIMARY" }, { id: `${tier}-v2-repeat`, label: "SECONDARY" }, { id: `${tier}-v3-repeat`, label: "PRIMARY" }] },
   ]
   const specimenRows = [
     { id: "supreme-row-4", tier: "supreme" as const, specimens: [1, 2, 3, 4].map(variant => ({ id: `supreme-v${variant}`, label: `V${variant}` })) },
     ...rowsForTier("standard"),
+    ...rowsForTier("compact"),
     ...rowsForTier("micro"),
   ]
 
@@ -337,7 +338,7 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
             const variant = Number(id.match(/-v(\d+)/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
             const toggle = variant === 3 || variant === 5 || variant === 6
             const isOn = toggleStates[id] ?? (variant === 5)
-            const label = variant === 3 ? (isOn ? "SECONDARY" : "PRIMARY") : variant === 5 ? (isOn ? "ON" : "OFF") : variant === 6 ? (isOn ? "NO!" : "YES!") : "BUTTON"
+            const label = variant === 1 ? "PRIMARY" : variant === 2 ? "SECONDARY" : variant === 3 ? (isOn ? "SECONDARY" : "PRIMARY") : variant === 4 ? "BLACK" : variant === 5 ? (isOn ? "ON" : "OFF") : variant === 6 ? (isOn ? "NO!" : "YES!") : "WHITE TEXT"
             const onClick = toggle ? () => setToggleStates(current => ({ ...current, [id]: !(current[id] ?? (variant === 5)) })) : undefined
             return (
               <StudioButton
