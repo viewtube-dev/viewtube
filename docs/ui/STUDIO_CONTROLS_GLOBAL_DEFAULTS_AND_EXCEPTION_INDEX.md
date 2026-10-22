@@ -117,7 +117,7 @@ These are content-driven components, not fixed-width row controls. Their intrins
 
 ### Single-line input (default)
 
-- Typography ownership: the native input value/placeholder remains 38px standard / 24px compact. Floating-label presentation scales only the raised label to its registered 80% size; it must never shrink the native input text.
+- Typography ownership: the native input value/placeholder remains 38px standard / 24px compact. Floating-label presentation keeps the native input text unchanged; the shared raised label is 18px for every field type and size.
 - Floating-label shared metrics (identical for `StudioTextInput` and `StudioTextArea` at the same size tier): resting label typography follows the primitive: input 38px / 24px and textarea 18px / 14px, with matching primitive color and text-stroke; all raised labels share one 18px rule; the raised label sits 48% above the outer black border (prior 40% × the 1.2 offset ratio). Text inputs and text areas must read the same `floatingLabelHeight` / `floatingLabelOffsetRatio` tokens — no separate hard-coded values per field type.
 - Alignment: left; vertically centered.
 - Standard/compact type: 38px / 24px, weight 1000, uppercase, `-0.02em` tracking, default line-height (`1`).
