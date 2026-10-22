@@ -1,3 +1,6 @@
+export const brainKnowledgeStatusFromConfirmation = (confirmationState: string | null): "confirmed" | "inferred" =>
+ confirmationState === "confirmed" || confirmationState === "explicit" ? "confirmed" : "inferred"
+
 export interface BrainContextDisplayItem {
  id: "channel" | "project" | "content-build" | "selection"
  label: string
