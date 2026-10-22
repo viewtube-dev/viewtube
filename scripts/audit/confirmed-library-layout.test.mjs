@@ -500,8 +500,11 @@ test("Confirmed Specimen Grid renders every tier in 1/2/3/4-column layouts witho
 test("the original Button family uses the PR #756 specimen grid and all button variants", () => {
   assert.match(catalog, /const ConfirmedStudioButtonFamily[\s\S]*?<ConfirmedSpecimenGrid[\s\S]*?renderSpecimen=/);
   for (const variant of ["v1", "v2", "v3", "v4", "v5", "v6", "v7"]) {
-    assert.ok(catalog.includes(`data-vt-button-skin={${JSON.stringify(variant)}}`) || catalog.includes(`data-vt-button-skin="${variant}"`), `Button ${variant} is represented`);
+    assert.ok(styles.includes(`data-vt-button-skin="${variant}"`), `Button ${variant} has a catalog skin`);
   }
+  assert.match(catalog, /const variantsForTier[\s\S]*?\{ id: `\$\{tier\}-row-4`[\s\S]*?specimens:/);
+  assert.match(catalog, /sizeVariant=\{tier\}/);
+  assert.match(catalog, /v3On \? "SECONDARY" : "PRIMARY"/);
   assert.match(catalog, /aria-label=\{variant === 3 \? "Button V3 toggle"/);
   assert.match(catalog, /onClick=\{onClick\}/);
 });
@@ -512,4 +515,7 @@ test("button primary/secondary skins use the canonical primary and secondary pal
   assert.match(buttonStyles, /data-vt-button-skin="v2"[\s\S]*?background:\s*var\(--vt-studio-control-secondary,\s*var\(--pair-b,\s*#ff7f6b\)\)/);
   assert.match(buttonStyles, /data-vt-button-skin="v3"\][\s\S]*?background:\s*var\(--vt-studio-control-accent,\s*var\(--pair-a,\s*#36e0f6\)\)/);
   assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*var\(--vt-studio-control-secondary,\s*var\(--pair-b,\s*#ff7f6b\)\)/);
+  const grid = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
+  assert.match(grid, /specimenRows\?: SpecimenGridRow\[\]/);
+  assert.match(grid, /specimenRows\s*\?\s*authoredRows/);
 });
