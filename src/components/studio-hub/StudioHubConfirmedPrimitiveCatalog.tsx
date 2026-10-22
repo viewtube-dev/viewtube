@@ -363,7 +363,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       title="Confirmed Specimen Grid · Layout Contract"
       nonDefaultSettings={[
         "This is the reusable arrangement component from PR #756, integrated with real production Studio Controls.",
-        "Supreme, standard, and compact render through StudioButton's supported heightVariant API; micro is shown with StudioBrainStatusBadge because StudioButton does not certify a micro tier.",
+        "This general layout-contract preview uses a status badge for its informational micro sample; the original Button family below separately exercises all four supported StudioButton tiers, including micro.",
         "The grid controls catalog arrangement only. It does not override primitive faces, sizing tokens, focus, or interaction behavior.",
       ]}
       provenance={<Provenance primitive="ConfirmedSpecimenGrid + StudioButton + StudioBrainStatusBadge" tsx="src/components/studio-hub/ConfirmedSpecimenGrid.tsx" css="src/components/studio-hub/ConfirmedSpecimenGrid.css" tokens="4px layout rhythm; tier availability remains component-specific." imports={["src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "src/studio-ui/primitives/StudioControls.tsx"]} />}
