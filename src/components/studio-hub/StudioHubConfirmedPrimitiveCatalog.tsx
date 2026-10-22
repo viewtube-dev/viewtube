@@ -36,6 +36,7 @@ import {
   StudioUploadFrame,
   STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
 } from "../../studio-ui/primitives/StudioControls"
+import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import "./studio-hub-primitive-catalogs.css"
 
 type Size = "44px" | "28px"
@@ -306,6 +307,34 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
+    <Family
+      title="Confirmed Specimen Grid · Layout Contract"
+      nonDefaultSettings={[
+        "This is the reusable arrangement component from PR #756, integrated with real production Studio Controls.",
+        "Supreme, standard, and compact render through StudioButton's supported heightVariant API; micro is shown with StudioBrainStatusBadge because StudioButton does not certify a micro tier.",
+        "The grid controls catalog arrangement only. It does not override primitive faces, sizing tokens, focus, or interaction behavior.",
+      ]}
+      provenance={<Provenance primitive="ConfirmedSpecimenGrid + StudioButton + StudioBrainStatusBadge" tsx="src/components/studio-hub/ConfirmedSpecimenGrid.tsx" css="src/components/studio-hub/ConfirmedSpecimenGrid.css" tokens="4px layout rhythm; tier availability remains component-specific." imports={["src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <ConfirmedSpecimenGrid
+        familyName="Studio control tier and layout reference"
+        documentation={<p>Use this reusable grid as the migration target for catalog families. Do not map unsupported size tiers onto a primitive.</p>}
+        renderSpecimen={({ id, tier, label }) => (
+          <div className="vt-confirmed-variant" data-vt-specimen-id={id} data-vt-specimen-tier={tier}>
+            <span>{label}</span>
+            {tier === "supreme" ? (
+              <StudioButton heightVariant="60">SUPREME</StudioButton>
+            ) : tier === "standard" ? (
+              <StudioButton heightVariant="44">STANDARD</StudioButton>
+            ) : tier === "compact" ? (
+              <StudioButton heightVariant="28">COMPACT</StudioButton>
+            ) : (
+              <StudioBrainStatusBadge label="MICRO" tone="cyan" appearance="tinted" sizeVariant="micro" />
+            )}
+          </div>
+        )}
+      />
+    </Family>
     <section className="vt-confirmed-family vt-confirmed-defaults-combined" aria-labelledby="vt-confirmed-global-defaults-title">
       <h3 id="vt-confirmed-global-defaults-title">Global Defaults · Current Source Contract</h3>
       <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 12px micro · 4.09px / 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
