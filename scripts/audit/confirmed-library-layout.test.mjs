@@ -471,7 +471,7 @@ test("button catalog uses production StudioButton for seven standard skins and f
   assert.ok(buttonFamily.includes('sizeVariant="micro"'), "micro specimens use production StudioButton sizing");
   assert.equal((buttonFamily.match(/data-vt-button-skin="v[1-7]"/g) ?? []).length >= 7, true);
   assert.doesNotMatch(buttonFamily, /standard [1-7]|supreme [1-4]/i, "specimen labels use no numbered standard/supreme names");
-  assert.match(buttonFamily, /aria-label="Button V3 toggle"[^]*?onClick=/);
+  assert.match(buttonFamily, /variant === 3 \? "Button V3 toggle"[^]*?onClick=\{onClick\}/);
   assert.match(buttonFamily, /aria-label="Button V5 ON/OFF toggle"[^]*?onClick=/);
   assert.match(buttonFamily, /aria-label="Button V6 YES/NO toggle"[^]*?onClick=/);
 });
