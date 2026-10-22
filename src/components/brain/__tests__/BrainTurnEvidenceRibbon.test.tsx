@@ -76,6 +76,7 @@ describe("BrainTurnEvidenceRibbon", () => {
   const html = render([record], pack, "mismatch")
 
   expect(html).toContain("Evidence identity could not be verified")
+  expect(html).toContain("Mismatch")
   expect(html).toContain("The saved record IDs do not match the prompt evidence manifest")
   expect(html).toContain('role="alert"')
   expect(html).not.toContain("Evidence identity verified")
