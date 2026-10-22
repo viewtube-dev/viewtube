@@ -39,6 +39,7 @@ import { VtSyncDataVisualsGate } from "./VtSyncDataVisualsGate"
 import { VtSyncIntelligenceHubGate } from "./VtSyncIntelligenceHubGate"
 import "./VtSyncLocalAnalyticsPage.css"
 import { claimVtSyncSyncRequest } from "./vtSyncProgressModel"
+import { BrainEvidenceHandoff } from "./BrainEvidenceHandoff"
 
 const EMPTY_MANUAL_IMPORTS: VtSyncManualImportState = { rowsByTableId: {}, capturedAtByTableId: {} }
 const EMPTY_PERSISTED_API_ROWS: VtSyncPersistedApiState = { rowsByTableId: {}, capturedAtByTableId: {} }
@@ -518,6 +519,7 @@ const refreshManualImports = useCallback(async (payload?: {
      onChooseDatasets={() => scrollToPanel(syncToolboxRef.current)}
      onViewProgress={() => scrollToPanel(syncToolboxRef.current)}
     />
+    <BrainEvidenceHandoff search={typeof window === "undefined" ? "" : window.location.search} />
 
     <section ref={syncToolboxRef} className="min-w-0">
      <VtSyncUnifiedSyncToolbox

@@ -37,7 +37,11 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
  className = "",
 }) => {
  const preparedCount = evidencePack.items.length
- const citedCount = citedEvidenceIds.length
+ const preparedEvidenceIds = new Set(evidencePack.items.map((item) => item.id))
+ const resolvedCitations = new Set(citedEvidenceIds.filter((id) => preparedEvidenceIds.has(id)))
+ const unresolvedCitationIds = new Set(citedEvidenceIds.filter((id) => !preparedEvidenceIds.has(id)))
+ const citedCount = resolvedCitations.size
+ const unresolvedCitationCount = unresolvedCitationIds.size
  const capturedAt = evidencePack.capturedAt
  const captureLabel = capturedAt && Number.isFinite(Date.parse(capturedAt))
   ? new Date(capturedAt).toLocaleString()
@@ -81,12 +85,22 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
    <div className="flex flex-wrap items-center gap-1">
     <StudioSplitLeftBadge sizeVariant="micro" style={{ width: "max-content" }}>{preparedCount} prepared</StudioSplitLeftBadge>
     <StudioSplitLeftBadge sizeVariant="micro" style={{ width: "max-content" }}>{citedCount} cited</StudioSplitLeftBadge>
+    {unresolvedCitationCount ? (
+     <StudioSplitLeftBadge sizeVariant="micro" style={{ backgroundColor: "#FF7AC8", width: "max-content" }}>
+      {unresolvedCitationCount} unresolved citation{unresolvedCitationCount === 1 ? "" : "s"}
+     </StudioSplitLeftBadge>
+    ) : null}
     {evidencePack.missingInputs.length ? (
      <StudioSplitLeftBadge sizeVariant="micro" style={{ backgroundColor: "#FFDA47", width: "max-content" }}>
       {evidencePack.missingInputs.length} gaps
      </StudioSplitLeftBadge>
     ) : null}
    </div>
+   {unresolvedCitationCount ? (
+    <p data-vt-brain-part="unresolved-citations" role="note" className="break-words text-[10px] font-bold leading-4 text-black/70">
+     {unresolvedCitationCount} response citation{unresolvedCitationCount === 1 ? "" : "s"} did not match the prepared evidence list and {unresolvedCitationCount === 1 ? "is" : "are"} not counted as cited.
+    </p>
+   ) : null}
    <p className="break-words text-[10px] font-bold leading-4 text-black/65">Captured: {captureLabel}</p>
    {noPreparedEvidence ? (
     <p data-vt-brain-part="empty-evidence-selection" role="note" className="break-words border border-black/25 bg-[#f8f8f4] p-2 text-xs font-bold leading-5">
@@ -174,11 +188,48 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
        const displayValue = record.value === null || record.value === undefined
         ? "Unknown / missing — No zero value is inferred"
         : (typeof record.value === "number" ? new Intl.NumberFormat(undefined, { maximumFractionDigits: 4 }).format(record.value) : String(record.value)) + (record.unit ? " " + record.unit : "")
+       const recordHref = (() => {
+        const baseRoute = record.owner === "analytics-canon" ? (safeSourceRoute || "/analytics") : safeSourceRoute
+        if (!baseRoute) return null
+        const params = new URLSearchParams()
+        params.set("brainEvidenceId", record.id)
+        params.set("brainEvidenceSource", record.owner)
+        if (record.sourceSnapshotId) params.set("snapshotId", record.sourceSnapshotId)
+        if (record.sourceRef) params.set("sourceRef", record.sourceRef)
+        if (record.metric) params.set("metric", record.metric)
+        if (record.window?.kind) params.set("window", record.window.kind)
+        if (record.videoId) params.set("videoId", record.videoId)
+        const channelId = record.channelId || evidencePack.channelId
+        if (channelId) params.set("channelId", channelId)
+        if (evidencePack.requestSpec.count !== null) params.set("count", String(evidencePack.requestSpec.count))
+        if (evidencePack.requestSpec.since) params.set("since", evidencePack.requestSpec.since)
+        if (evidencePack.requestSpec.until) params.set("until", evidencePack.requestSpec.until)
+        evidencePack.requestSpec.formats.forEach((format) => params.append("format", format))
+        params.set("rankBy", evidencePack.requestSpec.rankBy)
+        params.set("selectionMode", evidencePack.requestSpec.selectionMode)
+        evidencePack.requestSpec.filters.forEach((filter) => params.append("filter", filter))
+        return `${baseRoute}${baseRoute.includes("?") ? "&" : "?"}${params.toString()}`
+       })()
+       const coverageLabel = typeof record.coverage === "number" && record.coverage < 1
+        ? `${Math.round(Math.max(0, record.coverage) * 100)}% coverage`
+        : null
+       const availabilityLabel = record.availability === "partial"
+        ? "Partial coverage"
+        : record.availability === "unavailable"
+         ? "Unavailable"
+         : null
        return (
         <li key={record.id} data-vt-evidence-record-id={record.id} className="grid min-w-0 gap-1 border-[1.5px] border-black/40 bg-[#f8f8f4] p-2">
          <div className="flex min-w-0 flex-wrap items-start justify-between gap-1.5">
           <strong className="min-w-0 break-words text-[10px] font-[1000]">{record.metric || "Evidence record"}: {displayValue}</strong>
           <span className="shrink-0 border border-black px-1 py-0.5 text-[8px] font-black uppercase">{record.freshness}</span>
+         </div>
+         <div className="flex min-w-0 flex-wrap gap-1" aria-label="Record readiness">
+          {availabilityLabel ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">{availabilityLabel}</span> : null}
+          {coverageLabel ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">{coverageLabel}</span> : null}
+          {record.epistemicState === "STALE" ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Stale observation</span> : null}
+          {record.epistemicState === "MISSING" ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Missing value</span> : null}
+          {record.epistemicState === "CONFLICTING" ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Conflicting values</span> : null}
          </div>
          <p className="break-all text-[9px] font-bold leading-4 text-black/65">{record.id}</p>
          <dl className="grid min-w-0 grid-cols-2 gap-x-2 gap-y-1 text-[9px] leading-4 sm:grid-cols-3">
@@ -192,7 +243,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
          {record.missingness?.length ? <p className="break-words text-[9px] font-bold leading-4">Missing: {record.missingness.join(", ")}</p> : null}
          {record.limitations?.length ? <ul className="grid gap-0.5">{record.limitations.map((limitation) => <li key={limitation} className="break-words text-[9px] font-bold leading-4">Limitation: {limitation}</li>)}</ul> : null}
          {record.provenance.evidenceIds.length ? <p className="break-words text-[9px] font-bold leading-4">Source evidence IDs: {record.provenance.evidenceIds.join(", ")}</p> : null}
-         {safeSourceRoute ? <Link to={safeSourceRoute} className="inline-flex min-h-9 w-fit items-center gap-1 border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">Open source surface</Link> : <p className="text-[9px] font-bold text-black/60">Source link unavailable for this record.</p>}
+         {recordHref ? <Link to={recordHref} className="inline-flex min-h-11 max-w-full items-center gap-1 break-words border-[1.5px] border-black bg-white px-2 py-1 text-[9px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">{record.owner === "analytics-canon" ? "Open Analytics with evidence context" : "Open source with evidence context"}</Link> : <p className="text-[9px] font-bold text-black/60">Source link unavailable for this record.</p>}
         </li>
        )
       })}

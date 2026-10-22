@@ -25,6 +25,55 @@ const pack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvidencePack
  evidenceIds: ["video:abc"],
  transcriptRouteRequired: false,
  ...overrides,
+
+ it("links each verified prompt record by canonical ID and preserves the requested analytics scope", () => {
+  const html = render({
+   evidencePack: pack({
+    channelId: "channel-9",
+    requestSpec: {
+     count: 10,
+     formats: ["long"],
+     since: "2026-01-01",
+     until: "2026-10-01",
+     rankBy: "views",
+     filters: ["title:analysis"],
+     selectionMode: "top",
+    },
+   }),
+   evidenceIntegrityStatus: "verified",
+   evidenceRecords: [record({
+    id: "analytics:snapshot-1:video-abc:views",
+    sourceRef: "video-abc",
+    channelId: "channel-9",
+    freshness: "stale",
+    epistemicState: "STALE",
+    availability: "partial",
+    coverage: 0.6,
+    window: { kind: "28d" },
+   })],
+  })
+
+  expect(html).toContain('data-vt-evidence-record-id="analytics:snapshot-1:video-abc:views"')
+  expect(html).toContain("Partial coverage")
+  expect(html).toContain("60% coverage")
+  expect(html).toContain("Stale")
+  expect(html).toContain("Open Analytics with evidence context")
+  expect(html).toContain("brainEvidenceId=analytics%3Asnapshot-1%3Avideo-abc%3Aviews")
+  expect(html).toContain("brainEvidenceSource=analytics-canon")
+  expect(html).toContain("snapshotId=snapshot-1")
+  expect(html).toContain("sourceRef=video-abc")
+  expect(html).toContain("metric=views")
+  expect(html).toContain("window=28d")
+  expect(html).toContain("channelId=channel-9")
+  expect(html).toContain("count=10")
+  expect(html).toContain("since=2026-01-01")
+  expect(html).toContain("until=2026-10-01")
+  expect(html).toContain("format=long")
+  expect(html).toContain("rankBy=views")
+  expect(html).toContain("selectionMode=top")
+  expect(html).toContain("filter=title%3Aanalysis")
+ })
+
 })
 
 const record = (overrides: Partial<EvidenceRecord> = {}): EvidenceRecord => ({
@@ -114,4 +163,16 @@ describe("BrainTurnEvidenceRibbon", () => {
   expect(html).toContain("Prompt evidence identity unavailable")
   expect(html).toContain("Record-level provenance is unavailable")
  })
+ it("counts only citations that resolve to the prepared evidence list", () => {
+  const html = render({
+   evidencePack: pack(),
+   evidenceIntegrityStatus: "verified",
+   evidenceRecords: [record()],
+   citedEvidenceIds: ["video:abc", "video:not-in-pack", "video:not-in-pack"],
+  })
+  expect(html).toContain("1 cited")
+  expect(html).toContain("1 unresolved citation")
+  expect(html).toContain("not counted as cited")
+ })
+
 })
