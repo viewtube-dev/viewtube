@@ -51,7 +51,6 @@
 .vt-studio-publishing-card *::before,
 .vt-studio-publishing-card *::after { box-sizing: border-box; }
 .vt-studio-publishing-card__title,
-.vt-studio-publishing-card__thumbnail,
 .vt-studio-publishing-card__description,
 .vt-studio-publishing-card__lower { min-width: 0; min-height: 0; }
 .vt-studio-publishing-card__title .vt-studio-fixed-label-field {
