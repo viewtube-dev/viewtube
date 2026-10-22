@@ -19,5 +19,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(panelSource).toContain('label="Metadata versions"')
   expect(panelSource).toContain('label="Learning candidates"')
   expect(panelSource).toContain('label="Promoted"')
+  expect(panelSource).toContain('data-vt-brain-part="evidence-lineage"')
+  expect(panelSource).toContain('data-vt-brain-part="embedded-evidence-lineage"')
  })
 })

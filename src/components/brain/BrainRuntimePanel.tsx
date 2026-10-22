@@ -191,7 +191,43 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
      <RuntimePill label="Comparisons" value={`${metadataIntelligence.readyComparisonCount}/${metadataIntelligence.comparisonCount}`} />
      <RuntimePill label="Learning candidates" value={metadataIntelligence.learningCandidateCount} />
      <RuntimePill label="Promoted" value={metadataIntelligence.promotedKnowledgeCount} />
+     <RuntimePill label="Evidence chains" value={snapshot.provenance.chainCount} />
+     <RuntimePill label="Unresolved chains" value={snapshot.provenance.unresolvedChainCount} />
     </div>
+    <details className="mt-1 rounded-[5px] border border-black/30 bg-white px-2 py-1" data-vt-brain-part="embedded-evidence-lineage">
+     <summary className="min-h-8 cursor-pointer content-center text-[9px] font-[1000] uppercase underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+      Evidence lineage · {snapshot.provenance.unresolvedChainCount} unresolved
+     </summary>
+     {snapshot.provenance.latestChain ? (
+      <dl className="grid gap-1 py-1 text-[9px] leading-4 sm:grid-cols-2">
+       {([
+        ["Request", snapshot.provenance.latestChain.requestId],
+        ["ContentBuild", snapshot.provenance.latestChain.contentBuildId],
+        ["Receipt", snapshot.provenance.latestChain.receiptId],
+        ["Trace", snapshot.provenance.latestChain.traceId],
+        ["Generation record", snapshot.provenance.latestChain.generationRecordId],
+        ["Model served", snapshot.provenance.latestChain.modelServed],
+       ] as Array<[string, string | null]>).map(([label, value]) => (
+        <div key={label} className="min-w-0">
+         <dt className="font-[1000] uppercase opacity-60">{label}</dt>
+         <dd className="break-all">{value || "Not recorded"}</dd>
+        </div>
+       ))}
+       <div className="sm:col-span-2 min-w-0">
+        <dt className="font-[1000] uppercase opacity-60">Evidence IDs</dt>
+        <dd className="break-words">{snapshot.provenance.latestChain.evidenceIds.length ? snapshot.provenance.latestChain.evidenceIds.join(", ") : "No evidence IDs recorded"}</dd>
+       </div>
+       {snapshot.provenance.latestChain.unresolved.length > 0 ? (
+        <div className="sm:col-span-2 break-words" role="status">Unresolved links: {snapshot.provenance.latestChain.unresolved.join(", ")}</div>
+       ) : <div className="sm:col-span-2" role="status">No unresolved links recorded for this chain.</div>}
+       {snapshot.provenance.latestChain.operationIdentityMismatch ? (
+        <div className="sm:col-span-2 border border-black bg-[#FFDA47] p-1 font-[1000]" role="alert">Operation identity mismatch — verify attribution.</div>
+       ) : null}
+      </dl>
+     ) : (
+      <p className="py-1 text-[9px] leading-4">No provenance chain is available yet. This is an empty state, not a claim that lineage is complete.</p>
+     )}
+    </details>
    </section>
   )
  }
@@ -282,6 +318,72 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
       : "Model, evidence, grading, repair, and latency will appear here."}
     />
    </div>
+
+   <section
+    data-vt-brain-part="evidence-lineage"
+    aria-label="Evidence lineage"
+    className="grid gap-2 border-t px-2 py-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]"
+    style={{ borderColor: `${INK}44`, color: INK, backgroundColor: "#FFFFFF" }}
+   >
+    <div className="grid content-start gap-1">
+     <h3 className="text-[10px] font-[1000] uppercase tracking-[0.1em]">Evidence lineage</h3>
+     <div className="flex flex-wrap gap-1">
+      <RuntimePill label="Linked chains" value={snapshot.provenance.chainCount} />
+      <RuntimePill label="Outcomes" value={snapshot.provenance.attributedOutcomeChainCount} />
+      <RuntimePill label="Evaluated" value={snapshot.provenance.evaluatedChainCount} />
+      <RuntimePill label="Learning" value={snapshot.provenance.learningChainCount} />
+      <RuntimePill label="Unresolved" value={snapshot.provenance.unresolvedChainCount} />
+     </div>
+     <p className="text-[9px] leading-4 opacity-70">
+      Shows recorded lineage links only. It does not expose private model reasoning or infer missing identities.
+     </p>
+    </div>
+    <details className="min-w-0 rounded-[6px] border px-2 py-1.5" style={{ borderColor: `${INK}44` }}>
+     <summary className="min-h-8 cursor-pointer content-center text-[10px] font-[1000] underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+      Inspect latest lineage
+     </summary>
+     {snapshot.provenance.latestChain ? (
+      <dl className="mt-2 grid gap-1 text-[10px] leading-4 sm:grid-cols-2">
+       {([
+        ["Request", snapshot.provenance.latestChain.requestId],
+        ["ContentBuild", snapshot.provenance.latestChain.contentBuildId],
+        ["Operation", snapshot.provenance.latestChain.operationId],
+        ["Workflow", snapshot.provenance.latestChain.workflowId],
+        ["Receipt", snapshot.provenance.latestChain.receiptId],
+        ["Trace", snapshot.provenance.latestChain.traceId],
+        ["Generation record", snapshot.provenance.latestChain.generationRecordId],
+        ["Model served", snapshot.provenance.latestChain.modelServed],
+       ] as Array<[string, string | null]>).map(([label, value]) => (
+        <div key={label} className="min-w-0">
+         <dt className="font-[1000] uppercase opacity-60">{label}</dt>
+         <dd className="break-all">{value || "Not recorded"}</dd>
+        </div>
+       ))}
+       <div className="min-w-0 sm:col-span-2">
+        <dt className="font-[1000] uppercase opacity-60">Evidence IDs</dt>
+        <dd className="break-words">{snapshot.provenance.latestChain.evidenceIds.length
+         ? snapshot.provenance.latestChain.evidenceIds.join(", ")
+         : "No evidence IDs recorded"}</dd>
+       </div>
+       {snapshot.provenance.latestChain.unresolved.length > 0 ? (
+        <div className="min-w-0 sm:col-span-2" role="status">
+         <dt className="font-[1000] uppercase">Unresolved links</dt>
+         <dd className="break-words">{snapshot.provenance.latestChain.unresolved.join(", ")}</dd>
+        </div>
+       ) : (
+        <div className="sm:col-span-2 font-bold" role="status">No unresolved links recorded for this chain.</div>
+       )}
+       {snapshot.provenance.latestChain.operationIdentityMismatch ? (
+        <div className="sm:col-span-2 border border-black bg-[#FFDA47] p-1.5 font-[1000]" role="alert">
+         Operation identity mismatch — verify this chain before relying on its attribution.
+        </div>
+       ) : null}
+      </dl>
+     ) : (
+      <p className="mt-2 text-[10px] leading-4 opacity-70">No provenance chain is available yet. This is an empty state, not a claim that lineage is complete.</p>
+     )}
+    </details>
+   </section>
 
    <footer
     className="flex flex-wrap items-center gap-1 border-t px-2 py-1.5"

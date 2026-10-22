@@ -574,3 +574,53 @@ Deliver a thin vertical slice before broad UI expansion:
 7. **Certify accessibility and regressions:** run restore/routing/governance tests, evidence golden cases, responsive/keyboard/screen-reader checks and the deliberate grounding-regression baseline before declaring the rollout complete.
 
 Each delivery should identify the canonical owner, source files, regression test, relevant PR/commit, rollback, and status (**implemented and verified**, **implemented but not verified**, **partial**, **proposed**). Do not mark the UI integration complete just because a component renders or a build succeeds.
+
+---
+
+# Implementation follow-through — AI Brain trust and feature access (2026-10-22)
+
+This section is a current implementation note, not a revision of the historical 2026-09-12 audit. Treat the older maturity claims above as donor evidence; verify all live behavior against the target branch and current tests.
+
+## First UI slice: make provenance inspectable on the AI Brain page
+
+The Brain page already mounts `BrainRuntimePanel` above the conversation. Extend that canonical surface rather than adding a parallel dashboard or a second evidence store.
+
+- Show lineage totals for linked chains, outcome-attributed chains, evaluated chains, learning chains, and unresolved chains.
+- Add a keyboard-accessible, native disclosure for the latest recorded chain. Show request, ContentBuild, operation, workflow, receipt, trace, generation-record, served-model, and evidence IDs.
+- Distinguish “no chain recorded” from “chain complete.” Surface unresolved links and operation identity mismatches as explicit warnings.
+- Keep the display to approved provenance metadata. Never render private chain-of-thought, hidden reasoning, or internal free-form scratchpads.
+- Keep the embedded/mobile runtime strip compact; provide the detailed inspection in the full runtime panel. Do not make hover the only way to reach IDs or warnings.
+
+The associated implementation slice is intended to be tested in `src/components/brain/BrainRuntimePanel.test.tsx` and `src/views/AIBrainRuntimeSurface.contract.test.ts`. CI—not the presence of assertions alone—determines whether the slice is verified.
+
+## AI Brain page information architecture
+
+Use the existing page as the shared workspace, with a stable conversation center and contextual panels that reuse canonical data:
+
+1. **Conversation and work state:** preserve raw message text in storage; distinguish a draft, a prepared plan, an approved action, a running operation, and a saved result. Restoring a thread must restore its evidence filters and scope, not just its messages.
+2. **Context bar:** show active channel, project, ContentBuild/revision, selected surface, and any lock/clear controls. Any correction should route through existing governed profile/context paths; label confirmed, inferred, and temporary facts structurally rather than relying on prompt prose alone.
+3. **Evidence and claim inspection:** use the exact ordered evidence pack supplied to the model as the source for both the explanation and user-visible evidence cards. Show evidence ID, source, observation/update time, freshness, confidence/epistemic state, scope, missing inputs, and limitations where available. An empty result must explain whether data is missing, unavailable, filtered out, or not queried.
+4. **Result and operation receipts:** each proposed/started/saved result should resolve to its canonical output asset and ToolReceipt/operation identity. Retries may repeat generation but must not replay external side effects. Missing receipts must be presented as missing—not simulated success.
+5. **Learning review:** keep preference learning separate from performance learning. Show candidate evidence and sample sufficiency, and distinguish candidate, under review, approved, promoted, rejected, and blocked states from authoritative governance records.
+6. **Analytics diagnosis:** let creators move from a claim or chart into the exact metric/window/scope and source records used. Surface stale/partial/missing coverage and comparisons that are not semantically compatible before presenting a confident conclusion.
+7. **Creator controls:** expose autonomy, memory/personalization, evidence access, model/cost limits, and approval requirements as real persisted settings with visible reasons when a capability is blocked.
+
+## Shared visual and accessibility contract
+
+- Prefer existing Studio controls and Brain components, including `BrainRuntimePanel`, `BrainEvidenceDrawer`, `BrainContextRail`, `BrainCapabilityBrowser`, and `BrainWorkflowRunPanel`; do not create a competing primitive system.
+- Keep status words and icons paired with text. Use explicit loading, empty, partial, stale, blocked/permission, error/retry, and success/next-action states; never make color the only signal.
+- Ensure every disclosure and action works with keyboard, has a visible focus state, has a programmatic name, and remains usable at mobile widths and high zoom. Avoid hover-only details and respect reduced-motion preferences.
+- Preserve filters and scope during drawer open/close, navigation, conversation restore, and deep-link entry.
+- Link provenance using canonical IDs, not display labels or reconstructed identities. If an ID cannot be resolved, say so.
+- Keep developer diagnostics distinct from creator-facing explanations; expose approved lineage metadata, not internal reasoning traces.
+
+## Delivery order and acceptance gates
+
+1. **Trust surface:** show latest lineage and unresolved links in the runtime panel (current first slice).
+2. **Evidence parity:** enforce and test that rendered evidence IDs/fingerprint match the records actually graded and supplied to the prompt.
+3. **Context restore:** round-trip raw messages, scope, and evidence filters through storage and restore.
+4. **Receipts and actions:** trace every capability call to a canonical receipt/output; prove retries do not duplicate external effects.
+5. **Learning and outcomes:** join published output to measured checkpoints, evaluation, candidate review, and governed promotion.
+6. **Accessibility and reliability certification:** keyboard/mobile/screen-reader checks plus a full lifecycle acceptance scenario from question → evidence → operation → receipt → publication → analytics → evaluation → learning.
+
+For each delivery, report the requirement-to-commit mapping, canonical owners reused, tests actually executed, CI result, known failures, and deferred gaps. Static source inspection is not runtime verification, and pre-existing CI debt must be reported separately from failures introduced by a change.
