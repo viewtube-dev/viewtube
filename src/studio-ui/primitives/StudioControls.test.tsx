@@ -1106,3 +1106,36 @@ describe("Studio counter single-click regression", () => {
     }
   });
 });
+
+
+describe("global StudioButton variants and containment contract", () => {
+  it("exposes V1–V7 as production StudioButton variants rather than catalog-only skin attributes", () => {
+    const variants = (["v1", "v2", "v3", "v4", "v5", "v6", "v7"] as const).map(variant =>
+      renderToStaticMarkup(<StudioButton variant={variant} aria-label={`Variant ${variant}`}>BUTTON</StudioButton>),
+    );
+    variants.forEach((html, index) => {
+      expect(html).toContain(`data-vt-studio-button-variant="v${index + 1}"`);
+    });
+  });
+
+  it("keeps long labels inside the face and split-label sections using the global ellipsis contract", () => {
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    const css = readStudioControlCss();
+    expect(controls).toContain("variant?: StudioButtonVariant");
+    expect(css).toContain("[data-vt-studio-button-face]");
+    expect(css).toContain("[data-vt-studio-split-label]");
+    expect(css).toContain("text-overflow: ellipsis");
+    expect(css).toContain("min-width: 0");
+    expect(css).toContain("overflow: hidden");
+    expect(css).toContain("white-space: nowrap");
+  });
+
+  it("defines compact button specimens for full, half, and quarter rows in the original button grid", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(catalog).toContain('id: "compact-full-v1"');
+    expect(catalog).toContain('id: "compact-half-v1"');
+    expect(catalog).toContain('id: "compact-quarter-v1"');
+    expect(catalog).toContain('tier: "compact" as const');
+    expect(catalog).toContain('data-vt-studio-button-variant');
+  });
+});
