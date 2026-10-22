@@ -1,6 +1,6 @@
 import React from "react"
 import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
-import { Check, Settings2, Sparkles } from "lucide-react"
+import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
@@ -981,23 +981,13 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
               sizeVariant={size}
               accessibleLabel={`Confirmed primitive Split Accordion ${size}`}
               items={[
-                { id: "overview", accessibleLabel: "Overview", icon: <span>⌂</span>, content: "OVERVIEW" },
-                { id: "details", accessibleLabel: "Details", icon: <span>◈</span>, content: "DETAILS" },
-                { id: "settings", accessibleLabel: "Settings", icon: <span>⚙</span>, content: "SETTINGS" },
+                { id: "overview", accessibleLabel: "Overview", icon: <Home aria-hidden="true" />, content: "OVERVIEW" },
+                { id: "details", accessibleLabel: "Details", icon: <Info aria-hidden="true" />, content: "DETAILS" },
+                { id: "settings", accessibleLabel: "Settings", icon: <Settings2 aria-hidden="true" />, content: "SETTINGS" },
               ]}
             />
           </div>
         ))}
-        <StudioSplitAccordion
-          layout="double"
-          defaultActiveIndex={1}
-          accessibleLabel="Double split accordion example"
-          items={[
-            { id: "left", accessibleLabel: "Left", icon: <span>◀</span>, content: "LEFT" },
-            { id: "center", accessibleLabel: "Center", icon: <span>◆</span>, content: "CENTER" },
-            { id: "right", accessibleLabel: "Right", icon: <span>▶</span>, content: "RIGHT" },
-          ]}
-        />
       </div>
     </Family>
     <Family
