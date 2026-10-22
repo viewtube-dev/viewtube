@@ -12,7 +12,7 @@ const items = [
 ] as const;
 
 describe("StudioSplitAccordion", () => {
-  it("defaults to the rightmost enabled item and renders only its content", () => {
+  it("defaults to the rightmost enabled item and marks inactive panels hidden", () => {
     const html = renderToStaticMarkup(<StudioSplitAccordion items={items} />);
     expect(html).toContain('data-vt-studio-split-accordion="true"');
     expect(html).toContain('data-active-index="2"');
