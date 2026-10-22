@@ -4981,8 +4981,6 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 .vt-studio-brain-status__label { overflow: hidden; text-overflow: ellipsis; transform: translateY(.5px); }
 @keyframes vt-studio-brain-led-ripple { 0% { transform: scale(.55); opacity: .8; } 100% { transform: scale(2.15); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .vt-studio-brain-status[data-pulse="true"] .vt-studio-brain-status__led-wrap::before, .vt-studio-brain-status[data-pulse="true"] .vt-studio-brain-status__led-wrap::after { animation: none; } }
-.vt-studio-inline-stepper__rail:first-child { border-right: var(--vt-stepper-stroke) solid #000; }
-.vt-studio-inline-stepper__rail:last-child { border-left: var(--vt-stepper-stroke) solid #000; }
 .vt-studio-simple-dropdown select {
   line-height: 1;
   padding-top: 0;
