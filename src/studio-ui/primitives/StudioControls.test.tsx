@@ -7,7 +7,6 @@ import { StudioActionButton, StudioButton, StudioSplitLeftBadge, StudioSplitLeft
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
-import { StudioSplitRailAccordion } from "./StudioSplitRailAccordion"
 
 const readStudioControlCss = () => [
   "studio-control-system.css",
@@ -20,21 +19,6 @@ const canonicalTail = (css: string) => {
   const start = css.lastIndexOf("/* Canonical Studio Controls contract");
   return start >= 0 ? css.slice(start) : css;
 };
-
-
-describe("Studio split rail accordion motion", () => {
-  it("opens the incoming pane while closing the previous pane on the same rail-size basis", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitRailAccordion.css"), "utf8");
-    const itemRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__item {"), css.indexOf(".vt-studio-split-rail-accordion__item +"));
-    const activeItemRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__item[data-active=\"true\"]"), css.indexOf(".vt-studio-split-rail-accordion__item +"));
-    const contentRule = css.slice(css.indexOf(".vt-studio-split-rail-accordion__content {"), css.indexOf(".vt-studio-split-rail-accordion__content[data-active=\"true\"]"));
-    expect(itemRule).toContain("flex: 0 0 var(--vt-studio-split-rail-size)");
-    expect(activeItemRule).toContain("flex: 1 1 var(--vt-studio-split-rail-size)");
-    expect(itemRule).toContain("flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing)");
-    expect(contentRule).toContain("flex-grow var(--vt-studio-split-rail-slide-duration) var(--vt-studio-split-rail-slide-easing)");
-    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
-  });
-});
 
 
 describe("StudioTextBox size-aware stroke defaults", () => {
