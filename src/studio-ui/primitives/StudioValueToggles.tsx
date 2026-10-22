@@ -108,7 +108,7 @@ export function StudioSideToggle(props: StudioSideToggleProps) {
 export function StudioDoubleSideToggle({ left, right, variant = "default", size = "standard", className }: StudioDoubleSideToggleProps) {
   const noDivider = variant === "v2" || variant === "v4";
   const contentWidth = variant === "v3" || variant === "v4";
-  const longestWord = (options: readonly string[]) => options.flatMap(option => option.split(/\\s+/)).reduce((longest, word) => word.length > longest.length ? word : longest, "");
+  const longestWord = (options: readonly string[]) => options.flatMap(option => option.split(/\s+/)).reduce((longest, word) => word.length > longest.length ? word : longest, "");
   return <div className={["vt-studio-value-toggle", "vt-studio-value-toggle--double", className].filter(Boolean).join(" ")}
     data-vt-studio-control="true" data-vt-studio-value-toggle="double" data-variant={variant} data-size={size}>
     <div className="vt-studio-value-toggle__double-side" data-content-width={contentWidth ? "true" : undefined}>
