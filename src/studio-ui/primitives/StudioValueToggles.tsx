@@ -101,7 +101,7 @@ export function StudioSideToggle(props: StudioSideToggleProps) {
     shellProps={{ "data-vt-studio-value-toggle": "side", style: appearanceStyle(props.appearance) }}
     leftRailContent={arrowSide === "left" ? arrows : undefined}
     rightRailContent={arrowSide === "right" ? arrows : undefined}>
-    <span className="vt-studio-value-toggle__face" aria-live="polite" aria-label={ariaLabel} title={current}>{current}</span>
+    <span className="vt-studio-value-toggle__face" data-content-width={reserveLabel ? "true" : undefined} aria-live="polite" aria-label={ariaLabel} title={current}><span>{current}</span>{reserveLabel && <span className="vt-studio-value-toggle__measure" aria-hidden="true">{reserveLabel}</span>}</span>
   </StudioSplitShell>;
 }
 
