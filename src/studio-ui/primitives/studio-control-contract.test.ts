@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { STUDIO_CONTROL_SIZE_BASE, studioSizeTierToCssVars } from "../tokens";
+import { STUDIO_CONTROL_SIZE_BASE, STUDIO_CONTROL_SIZE_CONTRACT, studioSizeTierToCssVars } from "../tokens";
 
 const read = (path: string) => readFileSync(resolve(process.cwd(), path), "utf8");
 
@@ -187,4 +187,14 @@ describe("Studio control global contract", () => {
     expect(css).toContain("grid-template-columns: repeat(4, minmax(0, 1fr))");
   });
 
+});
+
+
+describe("Studio textarea typography token ownership", () => {
+  it("declares explicit text-stroke widths for all four generated textarea tiers", () => {
+    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.supremeTextStroke).toBeCloseTo(0.68, 2);
+    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.standardTextStroke).toBe(0.5);
+    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.compactTextStroke).toBe(0.35);
+    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.microTextStroke).toBe(0.25);
+  });
 });

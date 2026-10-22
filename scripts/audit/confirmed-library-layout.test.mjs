@@ -413,3 +413,17 @@ test("confirmed primitive library grids collapse responsively without fractional
   assert.match(gridContract, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vt-confirmed-variants\s*\{[^}]*min-width:\s*0/);
   assert.match(gridContract, /\.vt-confirmed-variant\s*\{[^}]*min-width:\s*0/s);
 });
+
+
+test("confirmed library keeps the shared 4px grid hierarchy without blanket nested spacing overrides", () => {
+  assert.match(styles, /--vt-confirmed-grid-unit:\s*4px/);
+  assert.match(styles, /--vt-confirmed-space-1:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 1\)/);
+  assert.match(styles, /\.vt-confirmed-catalog\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-3\)/s);
+  assert.match(styles, /\.vt-confirmed-family\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-2\)/s);
+  assert.match(styles, /\.vt-confirmed-variants\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-2\)/s);
+  assert.match(styles, /\.vt-confirmed-variant\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-1\)/s);
+  assert.match(styles, /\.vt-confirmed-control-family\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-3\)/s);
+  assert.doesNotMatch(styles, /:where\(\[class\*="vt-confirmed-"\]:not\(\.vt-confirmed-catalog\)\)\s*\{[^}]*!important/s,
+    "nested catalog selectors must not globally force every gap and padding to 4px");
+  assert.match(styles, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+});

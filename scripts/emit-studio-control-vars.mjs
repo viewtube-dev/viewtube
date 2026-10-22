@@ -9,10 +9,12 @@ const numberContract = tokenSource.match(/export const STUDIO_COUNTER_NUMBER_TOK
 const focusContract = tokenSource.match(/export const STUDIO_FOCUS_INTERACTION_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 const sizeBaseBlock = tokenSource.match(/export const STUDIO_CONTROL_SIZE_BASE = \{([\s\S]*?)\n\} as const/)?.[1] ?? "";
 const sizeContractBlock = tokenSource.match(/export const STUDIO_CONTROL_SIZE_CONTRACT = \{([\s\S]*?)\n\} as const/)?.[1] ?? "";
-const compactSizeLine = tokenSource.match(/const STUDIO_CONTROL_SIZE_BASE_COMPACT = \{([^\n]*)\} as const/)?.[1] ?? "";
-const supremeSizeLine = sizeBaseBlock.match(/supreme: \{([^\n]*)\}/)?.[1] ?? "";
-const standardSizeLine = sizeBaseBlock.match(/standard: \{([^\n]*)\}/)?.[1] ?? "";
-const microSizeLine = sizeBaseBlock.match(/micro: \{([^\n]*)\}/)?.[1] ?? "";
+// Read each tier from the canonical object, including its multiline property block.
+const readTierBlock = (tier) => sizeBaseBlock.match(new RegExp(`${tier}:\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+const supremeSizeLine = readTierBlock("supreme");
+const standardSizeLine = readTierBlock("standard");
+const compactSizeLine = readTierBlock("compact");
+const microSizeLine = readTierBlock("micro");
 function readSizeValue(source, property) {
   const match = source.match(new RegExp(`(?:^|,)\\s*${property}:\\s*([\\d.]+)`));
   if (!match) throw new Error(`Missing Studio size token: ${property}`);
@@ -65,7 +67,7 @@ function readFloatingLabelMetric(source, property, { required = true } = {}) {
   }
   return Number(match[1]);
 }
-const floatingLabelStandardHeight = readFloatingLabelMetric(sizeBaseBlock, "floatingLabelHeight");
+const floatingLabelStandardHeight = readFloatingLabelMetric(standardSizeLine, "floatingLabelHeight");
 const floatingLabelCompactHeight = readFloatingLabelMetric(compactSizeLine, "floatingLabelHeight");
 const floatingLabelOffsetRatio = readFloatingLabelMetric(sizeBaseBlock, "floatingLabelOffsetRatio");
 const numberMix = Number(focusContract.match(/restTextMixPercent:\s*(\d+)/)?.[1]);
