@@ -5178,3 +5178,12 @@ html body button[data-vt-studio-button="true"][data-vt-studio-button-variant^="v
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Split icon rails remain secondary-filled even when the surrounding action is selected. */
+html body button[data-vt-studio-button="true"] [data-vt-studio-split-rail] {
+  background: var(--pair-b, #ff7f6b) !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] [data-vt-studio-split-rail] {
+  background: var(--pair-b, #ff7f6b) !important;
+  color: #fff !important;
+}
