@@ -217,9 +217,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
         ? "Partial coverage"
         : record.availability === "unavailable"
          ? "Unavailable"
-         : record.availability === "unknown"
-          ? "Availability unknown"
-          : null
+         : null
        return (
         <li key={record.id} data-vt-evidence-record-id={record.id} className="grid min-w-0 gap-1 border-[1.5px] border-black/40 bg-[#f8f8f4] p-2">
          <div className="flex min-w-0 flex-wrap items-start justify-between gap-1.5">
