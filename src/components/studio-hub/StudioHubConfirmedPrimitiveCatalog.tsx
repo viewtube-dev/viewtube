@@ -11,21 +11,16 @@ import {
   StudioXCheckbox,
   StudioLegendMultiDropdown,
   StudioCounter,
-  StudioInlineStepper,
-  StudioSplitStepper,
   StudioDoubleSplitSlider,
   StudioSideCounter,
   StudioLeftCounter,
   StudioSplitLeftButton,
-  StudioSplitRailAccordion,
-  StudioPanelAccordion,
   StudioSplitLeftBadge,
   StudioSplitRightBadge,
   StudioDoubleSplitBadge,
   StudioSquareIconButton,
   StudioPlayPauseButton,
   StudioCircleIconButton,
-  StudioUsernameInput,
   StudioSwitch,
   StudioTextArea,
   StudioTextBox,
@@ -221,62 +216,6 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
   </section>
 )
 
-const ConfirmedStudioInlineStepperFamily: React.FC = () => {
-  const [standardValue, setStandardValue] = React.useState(22)
-  const [compactValue, setCompactValue] = React.useState(3)
-  return (
-    <Family
-      title="Inline Stepper · 44px + 28px"
-      nonDefaultSettings={[
-        "One flat three-section shell: decrement, editable numeric value, increment.",
-        "Standard and compact sizes are supported; the stepper does not claim Micro support.",
-      ]}
-      provenance={<Provenance primitive="StudioInlineStepper" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · shared Studio token and palette ownership" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
-      <div className="vt-confirmed-stepper-row" data-vt-library-component="StudioInlineStepper">
-        <div className="vt-confirmed-stepper-row-grid">
-          <div className="vt-confirmed-variant">
-            <span>44px standard · interactive</span>
-            <StudioInlineStepper value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard inline stepper" />
-          </div>
-          <div className="vt-confirmed-variant">
-            <span>28px compact · interactive</span>
-            <StudioInlineStepper value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact inline stepper" />
-          </div>
-        </div>
-      </div>
-    </Family>
-  )
-}
-
-const ConfirmedStudioSplitStepperFamily: React.FC = () => {
-  const [standardValue, setStandardValue] = React.useState(4)
-  const [compactValue, setCompactValue] = React.useState(3)
-  return (
-    <Family
-      title="Split Stepper · Username Foundation"
-      nonDefaultSettings={[
-        "Editable value pane uses the shared username-input foundation and a secondary vertical action rail.",
-        "Standard and compact variants are supported; Micro is intentionally not exposed.",
-      ]}
-      provenance={<Provenance primitive="StudioSplitStepper" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="2:1 editable value pane · square secondary action rail · no shadows" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
-      <div className="vt-confirmed-stepper-row" data-vt-library-component="StudioSplitStepper">
-        <div className="vt-confirmed-stepper-row-grid">
-          <div className="vt-confirmed-variant">
-            <span>44px standard · interactive</span>
-            <StudioSplitStepper value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard split stepper" />
-          </div>
-          <div className="vt-confirmed-variant">
-            <span>28px compact · interactive</span>
-            <StudioSplitStepper value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact split stepper" />
-          </div>
-        </div>
-      </div>
-    </Family>
-  )
-}
-
 const ConfirmedStudioCounterFamily: React.FC = () => {
   const [standardPrimary, setStandardPrimary] = React.useState(22)
   const [standardReversed, setStandardReversed] = React.useState(22)
@@ -466,51 +405,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · two-line · 18px rows</span><StudioButton sizeVariant="standard" textLayout="two-line" firstLine="GENERATE" secondLine="METADATA" aria-label="Generate metadata" data-vt-library-variant="two-line" /></div>
       <div className="vt-confirmed-variant"><span>28px compact · two-line · 12px rows</span><StudioButton sizeVariant="compact" textLayout="two-line" firstLine="AI" secondLine="REFINE" aria-label="AI refine" data-vt-library-variant="two-line" /></div>
     </Family>
-    <Family title="Split Rail Accordion · 44px + 28px" nonDefaultSettings={[
-      "Three square icon rails remain visible; one adjacent content panel expands at a time.",
-      "Rightmost content is visible by default. Hover/focus previews the left or middle panel; clicking selects it.",
-      "Shares Studio split geometry and tokens; no separate shadow or motion system.",
-    ]} provenance={<Provenance primitive="StudioSplitRailAccordion" tsx="src/studio-ui/primitives/StudioSplitRailAccordion.tsx" css="src/studio-ui/primitives/StudioSplitRailAccordion.css" tokens="Three 1:1 icon rails; active panel expands inline; standard 44px / compact 28px." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>44px standard · right panel opens by default</span>
-        <StudioSplitRailAccordion items={[
-          { accessibleLabel: "Left option", icon: <Check aria-hidden="true" />, content: "LEFT PANEL" },
-          { accessibleLabel: "Middle option", icon: <Settings2 aria-hidden="true" />, content: "MIDDLE PANEL" },
-          { accessibleLabel: "Right option", icon: <Sparkles aria-hidden="true" />, content: "RIGHT PANEL" },
-        ]} />
-      </div>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>28px compact · middle panel initially selected</span>
-        <StudioSplitRailAccordion sizeVariant="compact" defaultActiveIndex={1} items={[
-          { accessibleLabel: "Left option compact", icon: <Check aria-hidden="true" />, content: "LEFT" },
-          { accessibleLabel: "Middle option compact", icon: <Settings2 aria-hidden="true" />, content: "MIDDLE" },
-          { accessibleLabel: "Right option compact", icon: <Sparkles aria-hidden="true" />, content: "RIGHT" },
-        ]} />
-      </div>
-    </Family>
 
-    <Family title="Panel Accordion · New Primitive · 44px + 28px" nonDefaultSettings={[
-      "Independent implementation; does not reuse the legacy split-rail accordion.",
-      "Square rail faces are derived from shell height minus both outer strokes: 38px standard / 24px compact.",
-      "Shell owns perimeter edges; internal dividers are single shared strokes. Labels are revealed by clipping rather than text-position animation.",
-    ]} provenance={<Provenance primitive="StudioPanelAccordion" tsx="src/studio-ui/primitives/StudioPanelAccordion.tsx" css="src/styles/studio-panel-accordion.css" tokens="Independent panel accordion; 44px/3px standard, 28px/2px compact; fixed square rails and clipped stationary labels." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>44px standard · right panel opens by default</span>
-        <StudioPanelAccordion items={[
-          { label: "Left panel", icon: <Check aria-hidden="true" />, content: "LEFT PANEL" },
-          { label: "Middle panel", icon: <Settings2 aria-hidden="true" />, content: "MIDDLE PANEL" },
-          { label: "Right panel", icon: <Sparkles aria-hidden="true" />, content: "RIGHT PANEL" },
-        ]} />
-      </div>
-      <div className="vt-confirmed-variant is-full-row">
-        <span>28px compact · middle panel initially selected</span>
-        <StudioPanelAccordion size="compact" defaultActiveIndex={1} items={[
-          { label: "Left panel compact", icon: <Check aria-hidden="true" />, content: "LEFT" },
-          { label: "Middle panel compact", icon: <Settings2 aria-hidden="true" />, content: "MIDDLE" },
-          { label: "Right panel compact", icon: <Sparkles aria-hidden="true" />, content: "RIGHT" },
-        ]} />
-      </div>
-    </Family>
 
     <Family title="Prominent Action · 60px Supreme" nonDefaultSettings={[
         "Supreme 60px is the default; standard 44px and compact 28px are explicit size variants.",
@@ -697,27 +592,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
       <div className="vt-confirmed-variant"><span>44px standard · disabled</span><StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Disabled circle icon button" variant="v1" sizeVariant="standard" disabled data-vt-library-component="StudioCircleIconButton" /></div>
     </Family>
-    <Family
-      title="Username Split-left Input · 44px + 28px"
-      nonDefaultSettings={[
-        "Icon rail is part of the field, not an action button.",
-        "Wrapper owns the focus outline/border; editable area reuses StudioTextInput.",
-      ]}
-      provenance={<Provenance primitive="StudioUsernameInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Composite of canonical StudioTextInput and split-left icon rail; 44px / 28px geometry; no shadow; wrapper focus ring." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row">
-        <span>44px standard · editable username field</span>
-        <StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label="Standard username" placeholder="USERNAME" autoComplete="username" data-vt-library-component="StudioUsernameInput" />
-      </div>
-      <div className="vt-confirmed-variant">
-        <span>28px compact · editable username field</span>
-        <StudioUsernameInput icon={<Settings2 aria-hidden="true" />} sizeVariant="compact" aria-label="Compact username" placeholder="USERNAME" autoComplete="username" data-vt-library-component="StudioUsernameInput" />
-      </div>
-      <div className="vt-confirmed-variant">
-        <span>28px compact · disabled</span>
-        <StudioUsernameInput icon={<Settings2 aria-hidden="true" />} sizeVariant="compact" aria-label="Disabled username" placeholder="USERNAME" disabled data-vt-library-component="StudioUsernameInput" />
-      </div>
-    </Family>
+
     <Family
       title="Dropdown"
       nonDefaultSettings={[
@@ -955,8 +830,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
       </div>
     </Family>
-    <ConfirmedStudioInlineStepperFamily />
-    <ConfirmedStudioSplitStepperFamily />
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioSideCounterFamily />
