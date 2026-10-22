@@ -454,3 +454,14 @@ Regression tests cover governance routing, channel scope, empty corrections, pro
 - Added regression coverage for verified, unavailable, and mismatched manifests, plus the corresponding creator-facing disclosure states.
 
 **Verification status:** tests have been added but not executed locally. CI is the next validation step. UI-2 still needs broader empty/partial/stale/unavailable/contradictory evidence-state coverage, and the full mobile/keyboard/screen-reader audit remains open.
+
+### Follow-through — truthful evidence-condition disclosure (2026-10-22)
+
+The AI Brain turn evidence panel now distinguishes an empty prepared selection from missing underlying data and exposes condition counts only when prompt-evidence identity is verified.
+
+- Empty prepared evidence gets an explicit explanation; the UI does not imply that an empty selection proves the source has no records.
+- Verified typed prompt records contribute separate stale, missing, and conflicting counts. Partial selection/record coverage is shown separately.
+- If the prompt manifest mismatches, condition details are withheld along with record-level provenance. Legacy turns without a manifest remain **unavailable**, not falsely labeled as mismatches.
+- The condition summary includes a limitation that these are recorded evidence-quality signals, not a guarantee that every claim is correct.
+
+Focused regression cases cover empty selection, partial coverage, stale/missing/conflicting records, and legacy record absence. This is a targeted UI slice, not a completed accessibility audit. CI must validate it; keyboard-only, narrow viewport/zoom, screen-reader announcement, and reduced-motion checks remain outstanding. Next: make stale/partial readiness visible at the claim/result surface and verify numeric claim links resolve to canonical evidence IDs.
