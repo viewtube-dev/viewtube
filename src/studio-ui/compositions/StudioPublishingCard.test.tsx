@@ -53,6 +53,18 @@ describe("StudioPublishingCard size variants", () => {
     expect(uploadRule).toContain("min-height: 0;")
   })
 
+  it("scales the micro card to preserve the standard title input height-to-width ratio", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-publishing-card.css"), "utf8")
+    const microRule = css.match(/\.vt-studio-publishing-card\[data-size="micro"\]\s*\{([^}]*)\}/)?.[1] ?? ""
+
+    // Standard title field: 44px tall, with 22px total shell/padding removed from outer width.
+    // Micro title field: 12px tall, so its usable width must be 12/44 of the standard usable width.
+    expect(microRule).toContain("width: calc(27.272727% + 4px);")
+    expect(microRule).toContain("max-width: 100%;")
+    expect(microRule).toContain("align-self: start;")
+    expect(microRule).toContain("aspect-ratio: 5 / 7;")
+  })
+
   it("preserves pair fill, size-matched strokes, and undistorted thumbnail media", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-publishing-card.css"), "utf8")
 
