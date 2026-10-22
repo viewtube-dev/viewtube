@@ -85,12 +85,10 @@ A fixed ratio belongs to the actual control face, indicator, rail, or segment. I
 | Radio button | 1:1 outer footprint; circular face/indicator; centered inner dot | Skin/state owns colors; dot centered |
 | Square icon button | 1:1 outer face at selected size | Primary for v1; secondary for v2; v3 swaps primary/secondary when selected; v4 black face with primary icon; icon centered |
 | Circle icon button | 1:1 footprint with circular face | Same palette variants as square icon button; glyph centered and inset using the named icon preset |
-| Inline stepper | Horizontal 1:2:1 composition: square decrement action : flexible value field : square increment action | Action faces use size-tier geometry and global colors; glyphs centered |
-| Split stepper | Editable value pane is 2:1 relative to its square action rail; action rail is vertically split into two equal actions | Shared borders; centered action glyphs; selected size determines rail dimension |
 | Split-left button/badge | Square icon rail: 1:1 at selected tier; remaining label area flexes | Secondary rail by default, size-tier icon centered; label centered in remaining region |
 | Split-right badge | Square action rail: 1:1 at selected tier; label region flexes | Secondary rail by default, centered icon and centered label |
 | Double-split badge | Two square rails, each 1:1 at selected tier; flexible label region between | Both rails secondary by default; centered icons; exactly two shared dividers |
-| Unified split shell | `StudioSplitShell` is the single left/right/double anatomy used by split-left buttons, split badges, and username inputs; button uses `faceOnly`, username uses the field slot | One size-token owner for rail dimensions, divider stroke, centered label typography, shell radius, and clipping; BEM class names remain compatibility hooks |
+| Unified split shell | `StudioSplitShell` is the single left/right/double anatomy used by split-left buttons and split badges; button uses `faceOnly`, username uses the field slot | One size-token owner for rail dimensions, divider stroke, centered label typography, shell radius, and clipping; BEM class names remain compatibility hooks |
 | Close control within closeable badge | Circular 1:1 face sized from the badge's tier | Secondary fill; icon centered; does not reintroduce a pill ratio for the badge |
 
 ## Dropdown, counter, and slider shared contracts
@@ -220,7 +218,7 @@ The split-left button, split-left/right/double badges, and username composite in
 - `src/styles/studio-control-fields.css`: inline field stroke and focus contract.
 - `src/studio-ui/primitives/studio-control-contract.test.ts`: focused invariants for size tiers, double rails, focus treatment and exception registration.
 
-Visual verification is still required in the running app for supreme/standard/compact/micro split badges, username input, and split-left buttons. Automated tests and typecheck must be run in CI or a checked-out workspace before merge; remote repository editing in this session did not provide a runnable local checkout.
+Visual verification is still required in the running app for supreme/standard/compact/micro split badges and split-left buttons. Automated tests and typecheck must be run in CI or a checked-out workspace before merge; remote repository editing in this session did not provide a runnable local checkout.
 
 
 ## Vertical Studio word toggle — registered height exception
