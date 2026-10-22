@@ -13,6 +13,8 @@ export interface SpecimenGridRow {
   id: string
   tier: SpecimenTier
   specimens: Array<{ id: string; label: string }>
+  /** Rows with the same group render side-by-side as independent size stacks. */
+  comparisonGroup?: "supreme" | "micro"
 }
 
 export interface ConfirmedSpecimenGridProps {
@@ -52,7 +54,7 @@ export function ConfirmedSpecimenGrid({
     </div>
   )
 
-  const authoredRows = specimenRows?.map((item) => (
+  const renderAuthoredRow = (item: SpecimenGridRow) => (
     <div
       className={`vt-specimen-row vt-specimen-row--${item.specimens.length}`}
       key={item.id}
@@ -61,7 +63,20 @@ export function ConfirmedSpecimenGrid({
     >
       {item.specimens.map(({ id, label }) => specimen(id, item.tier, label))}
     </div>
-  ))
+  )
+
+  const authoredRows = specimenRows?.filter((item) => !item.comparisonGroup).map(renderAuthoredRow)
+  const comparisonGroups = specimenRows?.some((item) => item.comparisonGroup)
+    ? (
+      <div className="vt-specimen-size-comparison" aria-label="Supreme and Micro size comparison">
+        {(["supreme", "micro"] as const).map((group) => (
+          <div className={`vt-specimen-comparison-column vt-specimen-comparison-column--${group}`} key={group} aria-label={`${group} button specimens`}>
+            {(specimenRows ?? []).filter((item) => item.comparisonGroup === group).map(renderAuthoredRow)}
+          </div>
+        ))}
+      </div>
+    )
+    : null
 
   return (
     <section
@@ -85,7 +100,7 @@ export function ConfirmedSpecimenGrid({
       <div id={contentId} className="vt-specimen-layout">
         <div className="vt-specimen-stack">
           {specimenRows
-            ? authoredRows
+            ? <>{authoredRows}{comparisonGroups}</>
             : (["supreme", "standard", "compact", "micro"] as const).flatMap((tier) =>
                 [1, 2, 3, 4].map((count) =>
                   row(`${viewPrefix}-${tier}-${count}`, tier, count, tier.toUpperCase()),
