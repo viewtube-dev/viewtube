@@ -32,3 +32,12 @@ test("single-line panels clip overflow without ellipses and exclude textareas", 
 test("click growth animation targets the SVG glyph only", () => {
   assert.match(css, /\.vt-studio-value-toggle__arrow:active svg\s*\{[^}]*animation:\s*vt-studio-value-toggle-grow/);
 });
+
+test("value-toggle text panels use solid primary split-family fill at rest and focus", () => {
+  const family = css.slice(css.indexOf(".vt-studio-value-toggle {"));
+  const fill = family.match(/--vt-toggle-fill:\s*([^;]+);/);
+  assert.ok(fill, "value-toggle family declares its panel fill");
+  assert.match(fill[1], /var\(--vt-studio-control-accent,\s*var\(--pair-a,\s*#36e0f6\)\)\s*$/);
+  assert.doesNotMatch(fill[1], /color-mix|50%|15%/);
+  assert.match(css, /\.vt-studio-value-toggle[^{}]*\{[^}]*--vt-toggle-fill:\s*var\(--vt-studio-control-accent/);
+});
