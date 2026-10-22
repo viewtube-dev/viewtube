@@ -30,6 +30,9 @@ test("confirmed catalog CSS owns layout, not production control faces", () => {
     .map((match) => ({ selector: match[2].trim(), body: match[3] }))
     .map(({ selector, body }) => ({ selector: selector.replace(/:not\([^)]*\)/g, ""), body }))
     .filter(({ selector }) => selector.includes("vt-confirmed") && /(?:\.vt-studio-|data-vt-studio-control|data-vt-studio-button)/.test(selector))
+    // The Button family's V1–V7 catalog-only comparison skins are intentionally scoped
+    // to the specimen gallery; they do not restyle the production primitive globally.
+    .filter(({ selector }) => !/\.vt-confirmed-button-skin\[data-vt-button-skin=/.test(selector))
     .filter(({ body }) => faceProperties.test(body))
     .map(({ selector }) => selector);
   assert.deepEqual(violations, [], "production primitive face styling belongs in studio-control-system.css");
@@ -465,23 +468,21 @@ test("ConfirmedSpecimenGrid is full-width and does not split the module into sid
 });
 
 
-test("button catalog uses production StudioButton for seven standard skins and four Supreme skins", () => {
-  const buttonFamily = catalog.match(/<Family title="Button"[^]*?<\/Family>/)?.[0] ?? "";
-  assert.ok(buttonFamily.includes('data-vt-button-skin="v7"'), "standard V7 specimen exists");
-  assert.ok(buttonFamily.includes('data-vt-button-skin="v4"'), "V4 specimen exists");
-  assert.ok(buttonFamily.includes('sizeVariant="supreme"'), "Supreme specimens use production StudioButton sizing");
-  assert.ok(buttonFamily.includes('sizeVariant="micro"'), "micro specimens use production StudioButton sizing");
-  assert.equal((buttonFamily.match(/data-vt-button-skin="v[1-7]"/g) ?? []).length >= 7, true);
-  assert.doesNotMatch(buttonFamily, /standard [1-7]|supreme [1-4]/i, "specimen labels use no numbered standard/supreme names");
-  assert.match(buttonFamily, /variant === 3 \? "Button V3 toggle"[^]*?onClick=\{onClick\}/);
-  assert.match(buttonFamily, /aria-label="Button V5 ON/OFF toggle"[^]*?onClick=/);
-  assert.match(buttonFamily, /aria-label="Button V6 YES/NO toggle"[^]*?onClick=/);
+test("button catalog uses the PR #756 grid and real StudioButton specimens for every tier", () => {
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?export const StudioHubConfirmedPrimitiveCatalog/)?.[0] ?? "";
+  assert.ok(buttonFamily.includes("<ConfirmedSpecimenGrid"), "the original Button module uses the shared grid");
+  assert.ok(buttonFamily.includes('specimenRows={specimenRows}'));
+  assert.ok(buttonFamily.includes('sizeVariant={tier}'));
+  assert.ok(buttonFamily.includes('data-vt-button-skin={`v${variant}`}'));
+  assert.ok(buttonFamily.includes('variant === 3 ? (isOn ? "SECONDARY" : "PRIMARY")'));
+  assert.ok(buttonFamily.includes('setToggleStates(current => ({ ...current, [id]: !(current[id] ?? (variant === 5)) }))'));
+  assert.ok(buttonFamily.includes('aria-pressed={toggle ? isOn : undefined}'));
 });
 
-test("button specimen faces contain long text within the production button border", () => {
-  assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?min-width:\s*0/s);
-  assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?overflow:\s*hidden/s);
-  assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?overflow-wrap:\s*anywhere/s);
+test("button specimen labels fit inside real StudioButton faces without catalog sizing overrides", () => {
+  assert.match(styles, /\.vt-confirmed-button-skin\s*\{[^}]*width:\s*100%/s);
+  assert.match(styles, /\.vt-confirmed-button-skin\s*>\s*\[data-vt-studio-button-face\][^{]*\{[^}]*overflow-wrap:\s*anywhere/s);
+  assert.doesNotMatch(styles.slice(styles.indexOf("/* Confirmed StudioButton V1–V7 specimen gallery.")), /\.vt-confirmed-button-skin\[data-size="micro"\]/);
 });
 
 test("Confirmed Specimen Grid renders every tier in 1/2/3/4-column layouts without numbered tier captions", () => {
@@ -495,4 +496,27 @@ test("Confirmed Specimen Grid renders every tier in 1/2/3/4-column layouts witho
   assert.doesNotMatch(gridSource, /\$\{label\} \$\{index \+ 1\}/);
   assert.doesNotMatch(catalogSource, /<span>\{label\}<\/span>/);
   assert.match(catalogSource, /data-vt-specimen-tier=\{tier\}/);
+});
+
+test("the original Button family uses the PR #756 specimen grid and all button variants", () => {
+  assert.match(catalog, /const ConfirmedStudioButtonFamily[\s\S]*?<ConfirmedSpecimenGrid[\s\S]*?renderSpecimen=/);
+  for (const variant of ["v1", "v2", "v3", "v4", "v5", "v6", "v7"]) {
+    assert.ok(styles.includes(`data-vt-button-skin="${variant}"`), `Button ${variant} has a catalog skin`);
+  }
+  assert.match(catalog, /const rowsForTier[\s\S]*?\{ id: `\$\{tier\}-row-4`[\s\S]*?specimens:/);
+  assert.match(catalog, /sizeVariant=\{tier\}/);
+  assert.match(catalog, /isOn \? "SECONDARY" : "PRIMARY"/);
+  assert.match(catalog, /aria-label=\{variant === 3 \? "Button V3 primary secondary toggle"/);
+  assert.match(catalog, /onClick=\{onClick\}/);
+});
+
+test("button primary/secondary skins use the canonical primary and secondary palette in the correct order", () => {
+  const buttonStyles = styles.slice(styles.indexOf("/* Confirmed StudioButton V1–V7 specimen gallery."));
+  assert.match(buttonStyles, /data-vt-button-skin="v1"[\s\S]*?background:\s*var\(--vt-studio-control-accent,\s*var\(--pair-a,\s*#36e0f6\)\)/);
+  assert.match(buttonStyles, /data-vt-button-skin="v2"[\s\S]*?background:\s*var\(--vt-studio-control-secondary,\s*var\(--pair-b,\s*#ff7f6b\)\)/);
+  assert.match(buttonStyles, /data-vt-button-skin="v3"\][\s\S]*?background:\s*var\(--vt-studio-control-accent,\s*var\(--pair-a,\s*#36e0f6\)\)/);
+  assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*var\(--vt-studio-control-secondary,\s*var\(--pair-b,\s*#ff7f6b\)\)/);
+  const grid = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
+  assert.match(grid, /specimenRows\?: SpecimenGridRow\[\]/);
+  assert.match(grid, /specimenRows\s*\?\s*authoredRows/);
 });
