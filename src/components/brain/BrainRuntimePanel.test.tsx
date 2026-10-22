@@ -1,5 +1,6 @@
 import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
+import { MemoryRouter } from "react-router-dom"
 import { describe, expect, it } from "vitest"
 
 import { BrainReceiptBackedOutputCard, BrainRuntimePanel, resolveBrainOutputReceiptState } from "./BrainRuntimePanel"
@@ -7,6 +8,7 @@ import { BrainReceiptBackedOutputCard, BrainRuntimePanel, resolveBrainOutputRece
 describe("BrainRuntimePanel", () => {
  it("renders the live backend pipeline without turning it into a developer-only dump", () => {
   const html = renderToStaticMarkup(
+    <MemoryRouter>
    <BrainRuntimePanel
     snapshot={{
      project: { id: "project-2", name: "Austerlitz package", status: "active" },
@@ -150,7 +152,8 @@ describe("BrainRuntimePanel", () => {
       },
      },
     }}
-   />,
+   />
+    </MemoryRouter>,
   )
 
   expect(html).toContain("LIVE BRAIN RUNTIME")
@@ -177,6 +180,8 @@ describe("BrainRuntimePanel", () => {
   expect(html).toContain("Latest receipt-backed output")
   expect(html).toContain("Verified against the current ContentBuild snapshot.")
   expect(html).toContain('data-vt-brain-output-asset-id="asset-title-1"')
+  expect(html).toContain('data-vt-brain-output-asset-link="asset-title-1"')
+  expect(html).toContain('href="/vault?assetId=asset-title-1&amp;contentBuildId=cb%3Aproject%3Aproject-2"')
  })
 
 

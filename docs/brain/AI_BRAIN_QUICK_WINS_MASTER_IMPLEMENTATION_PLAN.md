@@ -421,3 +421,14 @@ Next delivery gate: verify the metadata guard and tests, then connect one genera
 The next vertical slice adds a receipt-backed output card to the existing Brain runtime panel. It requires a recorded ToolReceipt, output asset IDs, and a match against the asset IDs in the current ContentBuild snapshot before showing a verified output card. Missing receipts, empty output lists, mismatched build scope and stale/missing assets receive explicit withheld/unavailable states; a workflow step marked complete is not treated as a saved result.
 
 Regression tests cover both the pure resolution contract and the rendered card. CI is pending. The next gate remains connecting the result to exact user-facing asset navigation only after the canonical route is verified, then context corrections and learning governance.
+
+
+### Follow-through — verified Brain-to-Vault asset navigation (2026-10-22)
+
+The receipt-backed output card offers an **Open in Vault** action for each output asset only after the existing Brain output projection verifies the ToolReceipt, current ContentBuild, and asset-ID membership. The destination is a scoped `/vault?assetId=…&contentBuildId=…` deep link.
+
+The Vault route resolves the request against both canonical owners before selecting anything: the asset must exist in the canonical Vault inventory, and the requested ContentBuild must contain that asset. A resolved asset opens the Inspector and announces the result while preserving existing library filters. Missing assets, missing builds, and scope mismatches produce an accessible alert and do not select an unverified asset.
+
+This is navigation only. It does not mutate assets, grant publish approval, or claim an output is saved beyond the existing receipt contract. Pure resolver and UI tests cover scoped URL encoding, canonical asset/build resolution, scope mismatch, missing IDs, and the rendered Brain link.
+
+**Verification status:** source and regression tests are committed on the implementation branch; CI and browser/mobile/screen-reader verification are pending. No local test execution or accessibility certification is claimed. Next: connect context correction to the canonical learning/governance path, then verify the following turn reflects the governed change or exposes the conflict.

@@ -1,4 +1,6 @@
 import React from "react"
+import { Link } from "react-router-dom"
+import { buildVaultAssetHref } from "../../services/vaultAssetDeepLink"
 import {
  Activity,
  Boxes,
@@ -105,7 +107,7 @@ export const BrainReceiptBackedOutputCard: React.FC<{
      <div className="grid min-w-0 gap-0.5">
       <h4 className="text-[9px] font-[1000] uppercase">Output asset IDs</h4>
       <ul className="grid min-w-0 gap-0.5">
-       {state.outputAssetIds.map((id) => <li key={id} data-vt-brain-output-asset-id={id} className="break-all text-[9px] font-bold">{id}</li>)}
+       {state.outputAssetIds.map((id) => <li key={id} data-vt-brain-output-asset-id={id} className="flex min-w-0 flex-wrap items-center justify-between gap-2 border-t border-black/15 py-1 text-[9px] font-bold"><span className="min-w-0 break-all">{id}</span><Link to={buildVaultAssetHref(id, state.contentBuildId)} data-vt-brain-output-asset-link={id} className="inline-flex min-h-11 shrink-0 items-center border-2 border-black bg-[#36E0F6] px-3 text-[9px] font-[1000] uppercase outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2">Open in Vault <span className="sr-only">asset {id}</span></Link></li>)}
       </ul>
      </div>
      {state.versionIds.length ? <p className="break-words text-[9px] font-bold leading-4">Version IDs: {state.versionIds.join(", ")}</p> : null}
