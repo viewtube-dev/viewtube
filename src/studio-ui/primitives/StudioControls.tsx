@@ -112,7 +112,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   textColor: "text fields use primary by default and black on focus; other controls use their component contract",
   textTransform: "uppercase",
   letterSpacing: "-0.02em",
-  lineHeight: 0.86,
+  lineHeight: 1,
   shadowPolicy: "Global Studio primitive/component rule: no box-shadow, text-shadow, fake-shadow pseudo-layers, or shadow-based geometry compensation. No CSS transitions or press/hover transforms on primitive/component shells. Text-field borders and focus outlines remain explicit non-shadow strokes. Any future exception requires an approved token-backed contract and an accurate Reference Library entry.",
   squareIconButtonDefaults: {
     geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
@@ -157,7 +157,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       compactTextAreaFontSize: "14px",
       rule: "Single-line inputs follow global 38px standard / 24px compact typography. Textareas alone use 18px standard / 14px compact, with multiline line-height, padding, and a 92px minimum writing surface.",
     },
-    sizeFamily: "Single-line inputs use global 38px standard / 24px compact typography and the global .86 line-height. Textareas alone use 18px standard / 14px compact with multiline line-height, padding, and a 92px minimum surface. Size selects 44px/28px height, 3px/2px stroke, and 6px/4px radius for both families.",
+    sizeFamily: "Single-line inputs use global 38px standard / 24px compact typography and the shared default line-height. Textareas alone use 18px standard / 14px compact with multiline line-height, padding, and a 92px minimum surface. Size selects 44px/28px height, 3px/2px stroke, and 6px/4px radius for both families.",
     defaultMode: {
       textColor: "primary",
       textStrokeColor: "matches text color (primary)",
