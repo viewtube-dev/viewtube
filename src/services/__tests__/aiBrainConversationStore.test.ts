@@ -202,6 +202,36 @@ describe("aiBrainConversationStore", () => {
   expect(turns).toHaveLength(1)
  })
 
+ it("restores the exact evidence request filters from the saved turn metadata", async () => {
+  const requestSpec = {
+   count: 10,
+   formats: ["long", "live"],
+   since: "2025-10-22",
+   until: "2026-10-22",
+   rankBy: "views",
+   filters: ["tutorial", "beginner"],
+   selectionMode: "top",
+  }
+  const pending = await beginAIBrainTurn({
+   channelId: "channel-evidence-restore",
+   userText: "Show 10 long-form and live videos from the last year about tutorials, ranked by views.",
+   metadata: { evidencePackSnapshot: { evidenceIds: ["video:abc"], requestSpec } },
+  })
+  await completeAIBrainTurn({
+   turnId: pending.id,
+   status: "complete",
+   assistantText: "Here is the requested evidence.",
+   response: responseFixture,
+  })
+
+  const restored = await resumeAIBrainThread("channel-evidence-restore")
+
+  expect(restored.turns).toHaveLength(1)
+  expect(restored.turns[0]?.metadata?.evidencePackSnapshot).toMatchObject({
+   evidenceIds: ["video:abc"],
+   requestSpec,
+  })
+ })
  it("does not suppress a question when its saved answer is marked outdated", () => {
   const outdated: AIBrainQuestionAnswer = {
    id: "answer-outdated",
