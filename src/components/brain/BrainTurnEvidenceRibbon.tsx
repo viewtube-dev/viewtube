@@ -243,7 +243,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
          {record.missingness?.length ? <p className="break-words text-[9px] font-bold leading-4">Missing: {record.missingness.join(", ")}</p> : null}
          {record.limitations?.length ? <ul className="grid gap-0.5">{record.limitations.map((limitation) => <li key={limitation} className="break-words text-[9px] font-bold leading-4">Limitation: {limitation}</li>)}</ul> : null}
          {record.provenance.evidenceIds.length ? <p className="break-words text-[9px] font-bold leading-4">Source evidence IDs: {record.provenance.evidenceIds.join(", ")}</p> : null}
-         {recordHref ? <Link to={recordHref} className="inline-flex min-h-11 max-w-full items-center gap-1 break-words border-[1.5px] border-black bg-white px-2 py-1 text-[9px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">{record.owner === "analytics-canon" ? "Open exact evidence in Analytics" : "Open source with evidence ID"}</Link> : <p className="text-[9px] font-bold text-black/60">Source link unavailable for this record.</p>}
+         {recordHref ? <Link to={recordHref} className="inline-flex min-h-11 max-w-full items-center gap-1 break-words border-[1.5px] border-black bg-white px-2 py-1 text-[9px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">{record.owner === "analytics-canon" ? "Open Analytics with evidence context" : "Open source with evidence context"}</Link> : <p className="text-[9px] font-bold text-black/60">Source link unavailable for this record.</p>}
         </li>
        )
       })}
