@@ -41,6 +41,23 @@
   box-shadow: inset 0 0 0 1px var(--vt-publishing-primary);
   overflow: hidden;
 }
+.vt-studio-publishing-card__upload.has-img .vt-studio-upload-frame__center {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.vt-studio-publishing-card__upload.has-img .vt-studio-upload-frame__icon {
+  width: 100%;
+  height: 100%;
+}
+.vt-studio-publishing-card__upload.has-img .vt-studio-upload-frame__icon img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .vt-studio-publishing-card__upload img,
 .vt-studio-publishing-card__upload video,
 .vt-studio-publishing-card__upload .vt-studio-upload-preview,
