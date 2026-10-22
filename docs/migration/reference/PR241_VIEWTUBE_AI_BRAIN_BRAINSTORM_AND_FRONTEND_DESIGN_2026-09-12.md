@@ -854,3 +854,10 @@ The AI Brain page's existing **Propose correction** action now opens a dedicated
 Active memory claims use the explicit teaching path and are only reported as applied after the replacement claim is resolvable. Model hypotheses and learning candidates are recorded as unconfirmed correction proposals because no generic source-specific update contract exists for them; their original records remain unchanged. The dialog supports Escape dismissal, focus restoration/trapping, visible result/error messaging, and a next-turn verification prompt after a governed claim update.
 
 Regression tests cover claim routing, channel isolation, empty input, proposal-only sources, dialog semantics, and explicit-vs-inferred status. **Verification status:** CI and live keyboard/screen-reader/mobile checks are pending. No local execution or accessibility certification is claimed.
+
+
+### Next UI slice — restore the evidence request alongside the answer (PR #802)
+
+The turn evidence ribbon now has a planned/implemented extension for the persisted request specification that selected the evidence: count, formats, date bounds, ranking, text filters, and top/recent cohort selection. The concise summary is visible without opening details, and the full structured constraints are exposed through a keyboard-operable disclosure. If a legacy turn lacks the specification, the UI states that it was not recorded and cannot be safely reconstructed.
+
+The implementation adds a round-trip store test so restoration is verified from saved turn metadata, not inferred from the current composer. **Verification status:** CI and browser/mobile/screen-reader checks are pending; no local execution is claimed.
