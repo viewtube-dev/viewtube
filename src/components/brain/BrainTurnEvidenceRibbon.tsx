@@ -95,7 +95,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
        const sourceRoute = record.provenance.sourceRoute
        const safeSourceRoute = typeof sourceRoute === "string" && sourceRoute.startsWith("/") && !sourceRoute.startsWith("//") ? sourceRoute : null
        const displayValue = record.value === null || record.value === undefined
-        ? "Unknown / missing — no zero value is inferred"
+        ? "Unknown / missing — No zero value is inferred"
         : (typeof record.value === "number" ? new Intl.NumberFormat(undefined, { maximumFractionDigits: 4 }).format(record.value) : String(record.value)) + (record.unit ? " " + record.unit : "")
        return (
         <li key={record.id} data-vt-evidence-record-id={record.id} className="grid min-w-0 gap-1 border-[1.5px] border-black/40 bg-[#f8f8f4] p-2">
