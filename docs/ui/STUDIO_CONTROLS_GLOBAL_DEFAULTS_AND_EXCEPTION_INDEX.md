@@ -31,7 +31,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 | Font synthesis | Disabled for badge labels where supported, so synthetic light styles do not override the heavy weight |
 | Text transform | Uppercase for control labels and tags |
 | Letter spacing | `-0.02em`; only named component exceptions may differ |
-| Baseline line-height | `0.86` for single-line controls; multiline areas use their registered line-height below |
+| Baseline line-height | `1` (shared default for single-line controls and multiline areas) |
 | Primary color | `--pair-a` |
 | Secondary color | `--pair-b` |
 | Default fill | Fields use 50% primary fill at rest and 15% on focus. Solid button/badge/action faces may use 100% primary only where their family contract explicitly specifies a solid face; do not generalize that exception to fields or all controls. |
@@ -69,7 +69,7 @@ The size tier determines height, border stroke, radius, typography, icon size, a
 | Floating-label raised-offset ratio | 1.2 | 1.2 | 1.2 | 1.2 |
 | Text transform | Uppercase | Uppercase | Uppercase | Uppercase |
 | Letter spacing | -0.02em | -0.02em | -0.02em | -0.01em |
-| Line height | 0.86 | 0.86 | 0.86 | 1.0 |
+| Line height | 1.0 | 1.0 | 1.0 | 1.0 |
 
 **Color/ratio invariant:** A size change scales geometry and typography; it must not silently change primary/secondary color ownership, text weight, label centering, split-rail color, or row-fill behavior.
 
@@ -118,9 +118,9 @@ These are content-driven components, not fixed-width row controls. Their intrins
 ### Single-line input (default)
 
 - Typography ownership: the native input value/placeholder remains 38px standard / 24px compact. Floating-label presentation scales only the raised label to its registered 80% size; it must never shrink the native input text.
-- Floating-label shared metrics (identical for `StudioTextInput` and `StudioTextArea` at the same size tier): resting label height 32px standard / 21px compact (line-height 1, so the label box height equals its font size); raised label at 80% = 25.6px / 16.8px; the raised label sits 48% above the outer black border (prior 40% × the 1.2 offset ratio). Text inputs and text areas must read the same `floatingLabelHeight` / `floatingLabelOffsetRatio` tokens — no separate hard-coded values per field type.
+- Floating-label shared metrics (identical for `StudioTextInput` and `StudioTextArea` at the same size tier): resting label typography follows the primitive: input 38px / 24px and textarea 18px / 14px, with matching primitive color and text-stroke; all raised labels share one 18px rule; the raised label sits 48% above the outer black border (prior 40% × the 1.2 offset ratio). Text inputs and text areas must read the same `floatingLabelHeight` / `floatingLabelOffsetRatio` tokens — no separate hard-coded values per field type.
 - Alignment: left; vertically centered.
-- Standard/compact type: 38px / 24px, weight 1000, uppercase, `-0.02em` tracking, 0.86 line-height.
+- Standard/compact type: 38px / 24px, weight 1000, uppercase, `-0.02em` tracking, default line-height (`1`).
 - Geometry: 44px / 28px high, 3px / 2px border, 6px / 4px radius.
 - Resting fill: primary color at 50% opacity.
 - Resting value, placeholder, and caret: primary color.
@@ -135,15 +135,15 @@ These are content-driven components, not fixed-width row controls. Their intrins
 ### Multiline textarea (registered typography exception)
 
 - Alignment: left; text starts at the top of the writing area with normal multiline padding.
-- Standard type: 18px, weight 1000, 0.5px text stroke, line-height 0.75.
-- Compact type: 14px, weight 1000, 0.35px text stroke, line-height 0.75.
+- Standard type: 18px, weight 1000, 0.5px text stroke, default line-height (`1`).
+- Compact type: 14px, weight 1000, 0.35px text stroke, default line-height (`1`).
 - Minimum writing surface: 92px.
 - Resize: vertical.
 - Geometry still follows the selected size tier: standard 44px family / 3px border / 6px radius; compact 28px family / 2px border / 4px radius. The 92px minimum surface may make the textarea taller than the nominal one-line control height.
 The multiline exception is sourced from `STUDIO_CONTROL_SIZE_BASE.multiline` in `src/studio-ui/tokens.ts` and emitted by `scripts/emit-studio-control-vars.mjs` into `src/styles/studio-control-vars.generated.css`. Do not use the single-line input font-size or text-stroke tokens for textarea glyphs.
 
 - Rest/focus fill and color contract matches the text input: 50% primary at rest, 15% primary on focus, primary text at rest, black text on focus, secondary 100%-opacity outline at 65% of the selected border width, offset 0.
-- Floating/fixed label variants are presentation variants of the same textarea primitive, not separate typography or border systems. Floating labels use the shared label metrics registered in §5 (32px / 21px resting height, 80% raised scale, 48% raised offset) — identical to text inputs at the same size tier.
+- Floating/fixed label variants are presentation variants of the same textarea primitive, not separate typography or border systems. Resting floating labels match the native field primitive and size tier; every raised label is 18px, regardless of input/textarea type or standard/compact size.
 - No internal gap: textarea shells and any split anatomy inside them are flush; the 4px spacing unit is reserved for external gaps between whole controls.
 
 ## 6. Registered primitive-specific exceptions
@@ -155,7 +155,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Vault spectrum tag | 15px high, 2px border, 4px radius, 8px type, weight 900, 0.3px letter spacing; alphabetical spectrum fill mixed 35% with white; resolved spectrum text/border color | Dense asset-vault metadata chip with an established spectrum-color identity |
 | Closeable badge | Not a global-rule exception: standard/compact/micro 44/28/12px height, 3/2/1px border, 6/4/2px radius, 38/24/10px type, weight 1000, uppercase, black text, primary fill; circular close action uses secondary fill | Must follow global size/color/type rules; explicitly no 999px pill geometry |
 | Tag editor plus/check action | Compact 28px face, 2px stroke, 4px radius, no shadow | Dense inline tag-editing affordance; action remains square |
-| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, line-height 0.75, min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
+| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, default line-height (`1`), min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
 | Prominent action button | Supreme 60px by default; standard/compact variants use shared tier tokens; flat shell, no shadow | Workflow emphasis is a component role, not a separate 56px geometry tier |
 | Switch/choice geometry | 44px reference uses 7.333px rectangular radius, 1.72:1 switch track, and the exact handle/indicator ratios in §3 | Matches the supplied 44px HTML reference; does not redefine ordinary button/field radius |
 | Icon preset variants | Default large preset is 38px / 1.9 standard and 24px / 2.0 compact; moderate 34px/22px and compact 28px/18px are opt-in only | Optional icon density must not silently become the global default |
