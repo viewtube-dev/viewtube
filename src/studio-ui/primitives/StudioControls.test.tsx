@@ -1133,6 +1133,8 @@ describe("global StudioButton variants and containment contract", () => {
     expect(css).toContain("min-width: 0");
     expect(css).toContain("overflow: hidden");
     expect(css).toContain("white-space: nowrap");
+    expect(css).toContain('button[data-vt-studio-button="true"] [data-vt-studio-split-rail]');
+    expect(css).toContain('data-vt-studio-button-variant="v7"');
   });
 
   it("defines compact button specimens for full, half, and quarter rows in the original button grid", () => {
