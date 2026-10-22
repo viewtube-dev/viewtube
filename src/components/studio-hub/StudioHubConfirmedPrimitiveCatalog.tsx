@@ -36,6 +36,10 @@ import {
   StudioSplitLeftDropdown,
   StudioUploadFrame,
   STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
+  StudioArrowToggle,
+  StudioSideToggle,
+  StudioDoubleSideToggle,
+  StudioBarToggle,
 } from "../../studio-ui/primitives/StudioControls"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import "./studio-hub-primitive-catalogs.css"
@@ -923,6 +927,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>)}
       </div>
     </Family>
+    <ConfirmedStudioValueToggleFamily />
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioSideCounterFamily />
@@ -999,5 +1004,53 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
   </div>
 )
+
+
+const ConfirmedStudioValueToggleFamily: React.FC = () => {
+  const [arrow, setArrow] = React.useState("ONE")
+  const [side, setSide] = React.useState("LOW")
+  const [left, setLeft] = React.useState("SOURCE")
+  const [right, setRight] = React.useState("TARGET")
+  const [level, setLevel] = React.useState(50)
+  const options = ["ONE", "TWO", "THREE"] as const
+  return (
+    <Family
+      title="Arrow / Side / Double Side / Bar Toggles"
+      nonDefaultSettings={[
+        "Four production primitives share Studio Controls tokens and controlled selection/value APIs.",
+        "Arrow Toggle supports configurable text, fill, text color, icon color, and icon fill.",
+        "Side Toggle defaults to right-side up/down arrows; its left-side variant is also shown.",
+        "Double Side Toggle demonstrates independent left/right values and the V1–V4 divider/width variants.",
+        "Bar Toggle uses ten fixed-width bars, each representing 10 percentage points, with press-and-hold arrow controls.",
+      ]}
+      provenance={<Provenance primitive="StudioArrowToggle · StudioSideToggle · StudioDoubleSideToggle · StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="Studio size lattice · semantic primary/secondary colors · ten 18×38px standard bars" imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/styles/studio-control-system.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle">
+        <span>ARROW TOGGLE · STANDARD</span>
+        <StudioArrowToggle value={arrow} options={options} onValueChange={setArrow} ariaLabel="Arrow toggle specimen"
+          appearance={{ fillColor: "color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent)", textColor: "#000", iconColor: "#000", iconFillColor: "transparent" }} />
+        <span>SIDE TOGGLE · DEFAULT RIGHT / V2 LEFT</span>
+        <div style={{ display: "grid", gap: 4 }}>
+          <StudioSideToggle value={side} options={["LOW", "MID", "HIGH"]} onValueChange={setSide} />
+          <StudioSideToggle value={side} options={["LOW", "MID", "HIGH"]} onValueChange={setSide} arrowSide="left" size="compact" />
+        </div>
+        <span>DOUBLE SIDE TOGGLE · V1–V4</span>
+        <div style={{ display: "grid", gap: 4 }}>
+          {(["default", "v2", "v3", "v4"] as const).map(variant => <StudioDoubleSideToggle key={variant} variant={variant}
+            left={{ value: left, options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: setLeft, ariaLabel: "Left side selection" }}
+            right={{ value: right, options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: setRight, ariaLabel: "Right side selection" }} />)}
+        </div>
+        <span>BAR TOGGLE · {level}%</span>
+        <StudioBarToggle value={level} onValueChange={setLevel} ariaLabel="Bar toggle specimen" />
+        <span>COMPACT SPECIMENS</span>
+        <div style={{ display: "grid", gap: 4 }}>
+          <StudioArrowToggle size="compact" value={arrow} options={options} onValueChange={setArrow} />
+          <StudioSideToggle size="compact" value={side} options={["LOW", "MID", "HIGH"]} onValueChange={setSide} />
+          <StudioBarToggle size="compact" value={level} onValueChange={setLevel} />
+        </div>
+      </div>
+    </Family>
+  )
+}
 
 export default StudioHubConfirmedPrimitiveCatalog
