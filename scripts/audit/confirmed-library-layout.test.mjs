@@ -438,3 +438,26 @@ test("StudioButton library module applies the canonical 4px grid rhythm without 
   assert.match(moduleGrid, /\.vt-confirmed-button-family\s*>\s*\.vt-confirmed-variants\s*>\s*\.vt-confirmed-variant\.is-full-row\s*\{[^}]*grid-column:\s*1 \/ -1/s);
   assert.doesNotMatch(moduleGrid, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\s*:/, "catalog layout must not restyle production StudioButton geometry");
 });
+
+
+test("PR 756 ConfirmedSpecimenGrid is integrated into the confirmed production primitive library", () => {
+  assert.match(catalog, /import ConfirmedSpecimenGrid from "\.\/ConfirmedSpecimenGrid"/);
+  assert.match(catalog, /title="Confirmed Specimen Grid · Layout Contract"/);
+  assert.match(catalog, /<ConfirmedSpecimenGrid[\s\S]*?familyName="Studio control tier and layout reference"/);
+  assert.match(catalog, /<StudioButton heightVariant="60">SUPREME<\/StudioButton>/);
+  assert.match(catalog, /<StudioButton heightVariant="44">STANDARD<\/StudioButton>/);
+  assert.match(catalog, /<StudioButton heightVariant="28">COMPACT<\/StudioButton>/);
+  assert.match(catalog, /<StudioBrainStatusBadge label="MICRO"[^>]*sizeVariant="micro"/);
+  assert.match(catalog, /The grid controls catalog arrangement only/);
+  assert.match(catalog, /Do not map unsupported size tiers onto a primitive/);
+});
+
+test("ConfirmedSpecimenGrid uses catalog-only 4px arrangement styles without responsive face overrides", () => {
+  const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
+  const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
+  assert.match(gridCss, /--vt-specimen-gap:\s*var\(--vt-studio-space-unit,\s*4px\)/);
+  assert.match(gridCss, /\.vt-specimen-columns\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/s);
+  assert.match(gridSource, /aria-checked=\{clean\}/);
+  assert.match(gridSource, /aria-controls=\{contentId\}/);
+  assert.doesNotMatch(gridCss, /\.vt-specimen-slot\s+(?:button|input|textarea|select)[^{]*\{[^}]*(?:height|border|background|font-size|padding)\s*:/s);
+});
