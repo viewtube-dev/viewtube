@@ -13,6 +13,17 @@ const readStudioControlCss = () => [
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
+  it("registers the independent Split Accordion at standard, compact, and micro sizes", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    expect(html).toContain("Split Accordion · Standard + Compact + Micro");
+    expect(html).toContain('data-vt-studio-split-accordion="true"');
+    expect(html).toContain('data-vt-library-component="StudioSplitAccordion"');
+    expect(html).toContain('data-size="standard"');
+    expect(html).toContain('data-size="compact"');
+    expect(html).toContain('data-size="micro"');
+    expect(html).toContain('data-layout="double"');
+  });
+
   it("registers StudioTextBox in standard, compact, and micro sizes using shared field geometry and 0.75 line height", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain('title="StudioTextBox · Standard + Compact + Micro"')

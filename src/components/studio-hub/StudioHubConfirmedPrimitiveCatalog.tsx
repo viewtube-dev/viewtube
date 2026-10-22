@@ -1,6 +1,7 @@
 import React from "react"
 import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
 import { Check, Settings2, Sparkles } from "lucide-react"
+import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
@@ -870,6 +871,43 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioSideCounterFamily />
+    <Family
+      title="Split Accordion · Standard + Compact + Micro"
+      nonDefaultSettings={[
+        "Independent primitive; it does not import or wrap the retired split-rail accordion.",
+        "Horizontal single-open panels with square icon faces and left, right, or double split layouts.",
+        "Defaults to the rightmost enabled item; supports keyboard navigation and a 280ms preview lock.",
+        "Flat Studio Control geometry and reduced-motion styling.",
+      ]}
+      provenance={<Provenance primitive="StudioSplitAccordion" tsx="src/studio-ui/primitives/StudioSplitAccordion.tsx" css="src/styles/studio-split-accordion.css" tokens="44px / 28px / 12px · square faces · 280ms panel tween · left/right/double layouts" imports={["src/studio-ui/primitives/StudioSplitAccordion.tsx", "src/styles/studio-split-accordion.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion">
+        {(["standard", "compact", "micro"] as const).map((size) => (
+          <div key={size} style={{ display: "grid", gap: 4, marginBlock: 4 }}>
+            <span>{size.toUpperCase()} · SPLIT ACCORDION</span>
+            <StudioSplitAccordion
+              sizeVariant={size}
+              accessibleLabel={`Confirmed primitive Split Accordion ${size}`}
+              items={[
+                { id: "overview", accessibleLabel: "Overview", icon: <span>⌂</span>, content: "OVERVIEW" },
+                { id: "details", accessibleLabel: "Details", icon: <span>◈</span>, content: "DETAILS" },
+                { id: "settings", accessibleLabel: "Settings", icon: <span>⚙</span>, content: "SETTINGS" },
+              ]}
+            />
+          </div>
+        ))}
+        <StudioSplitAccordion
+          layout="double"
+          defaultActiveIndex={1}
+          accessibleLabel="Double split accordion example"
+          items={[
+            { id: "left", accessibleLabel: "Left", icon: <span>◀</span>, content: "LEFT" },
+            { id: "center", accessibleLabel: "Center", icon: <span>◆</span>, content: "CENTER" },
+            { id: "right", accessibleLabel: "Right", icon: <span>▶</span>, content: "RIGHT" },
+          ]}
+        />
+      </div>
+    </Family>
     <Family
       title="Brain Status LED Badges"
       nonDefaultSettings={[
