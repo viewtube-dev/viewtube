@@ -9,14 +9,14 @@ const evidencePack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvid
  promptVersion: "brain-chat-v2",
  requestSpec: {
   count: 10,
-  formats: ["long-form", "shorts"],
+  formats: ["long", "short"],
   since: "2026-01-01",
   until: "2026-10-01",
   rankBy: "views",
   filters: ["title:analysis", "language:en"],
   selectionMode: "top",
  },
- intent: "analysis",
+ intent: "analytics",
  channelId: "channel-1",
  channelName: "Test channel",
  channelDescription: null,
@@ -58,8 +58,8 @@ describe("BrainEvidenceDrawer", () => {
   expect(html).toContain("count=10")
   expect(html).toContain("since=2026-01-01")
   expect(html).toContain("until=2026-10-01")
-  expect(html).toContain("format=long-form")
-  expect(html).toContain("format=shorts")
+  expect(html).toContain("format=long")
+  expect(html).toContain("format=short")
   expect(html).toContain("filter=title%3Aanalysis")
   expect(html).toContain("filter=language%3Aen")
  })
