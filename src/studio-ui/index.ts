@@ -54,6 +54,7 @@ export {
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
+  StudioButtonVariant,
   StudioTwoLineButtonProps,
   StudioActionButtonProps,
   StudioLegendMultiDropdownProps,

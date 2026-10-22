@@ -3299,116 +3299,31 @@
 }
 
 
-/* Confirmed StudioButton V1–V7 specimen gallery.
- * Layout belongs to ConfirmedSpecimenGrid; the catalog changes only the comparison face palette.
- */
-.vt-confirmed-button-gallery {
-  display: grid;
-  min-width: 0;
-  width: 100%;
-}
+
+/* Button catalog is arrangement-only: primitive owns variant faces and text containment. */
 .vt-confirmed-button-skin {
   min-width: 0 !important;
   max-width: 100% !important;
   width: 100% !important;
+  overflow: hidden !important;
 }
 .vt-confirmed-button-skin > [data-vt-studio-button-face] {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   min-width: 0 !important;
   max-width: 100% !important;
-  overflow-wrap: anywhere !important;
-  white-space: normal !important;
-  text-overflow: ellipsis;
+  width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
 }
-.vt-confirmed-button-skin[data-vt-button-skin="v1"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #000 !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v2"] > [data-vt-studio-button-face] {
-  background: var(--pair-b, #ff7f6b) !important;
-  color: #000 !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v3"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #000 !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v3"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
-  background: var(--pair-b, #ff7f6b) !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v3"][data-vt-button-on="false"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v4"] > [data-vt-studio-button-face] {
-  background: #000 !important;
-  color: var(--pair-a, #36e0f6) !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v5"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #000 !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="false"] > [data-vt-studio-button-face] {
-  background: var(--pair-b, #ff7f6b) !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v6"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #000 !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v6"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
-  background: #000 !important;
-  color: #fff !important;
-}
-.vt-confirmed-button-skin[data-vt-button-skin="v7"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #fff !important;
-  -webkit-text-stroke-color: #fff !important;
-}
-
-
-/* Button gallery face-state contract.
- * The production StudioButton has a generic aria-pressed => secondary rule.
- * These scoped, more-specific catalog selectors preserve each documented V1–V7 skin,
- * while V3/V5/V6 still visibly switch with their own state attributes.
- */
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v1"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #000 !important;
-}
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v2"] > [data-vt-studio-button-face] {
-  background: var(--pair-b, #ff7f6b) !important;
-  color: #000 !important;
-}
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v3"][data-vt-button-on="false"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #000 !important;
-}
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v3"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
-  background: var(--pair-b, #ff7f6b) !important;
-  color: #000 !important;
-}
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v4"] > [data-vt-studio-button-face] {
-  background: #000 !important;
-  color: var(--pair-a, #36e0f6) !important;
-}
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #000 !important;
-}
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="false"] > [data-vt-studio-button-face] {
-  background: var(--pair-b, #ff7f6b) !important;
-  color: #000 !important;
-}
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v6"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
-  background: #000 !important;
-  color: #fff !important;
-}
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v6"][data-vt-button-on="false"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #000 !important;
-}
-html body button.vt-confirmed-button-skin[data-vt-button-skin="v7"] > [data-vt-studio-button-face] {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #fff !important;
-  -webkit-text-stroke-color: #fff !important;
+.vt-confirmed-button-skin [data-vt-studio-button-label] {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }

@@ -99,6 +99,16 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   globalSizeLattice: "supreme 60px / 4.09px border / 8.18px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
+  textContainment: "Global rule for all text-bearing Studio primitives: labels stay within their assigned face/rail section; shrink within available grid/flex space; use single-line ellipsis for button and split-badge labels; never overlap adjacent controls or cross a split divider.",
+  buttonVariantContract: {
+    v1: "primary fill / black text",
+    v2: "secondary fill / black text",
+    v3: "independent click toggle between V1 and V2",
+    v4: "black fill / primary text",
+    v5: "V1 initially; toggle to V2 with optional alternate text and/or icon",
+    v6: "V1 initially; toggle to black fill / white text with optional alternate text and/or icon",
+    v7: "primary fill / white text; split icon rails use secondary fill and white icons",
+  },
 
   width: "full-row by default; data-width=content is an explicit opt-in exception",
   labelAlignment: "centered by default for all primitive labels",
@@ -998,7 +1008,21 @@ export const StudioSelect = React.forwardRef<
 ))
 StudioSelect.displayName = "StudioSelect"
 
+export type StudioButtonVariant = "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7"
+
 export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Global visual/interaction variant shared by all StudioButton consumers. */
+  variant?: StudioButtonVariant
+  /** Keep nested split-shell anatomy intact; ordinary labels use a constrained text slot. */
+  faceLayout?: "label" | "split"
+  /** Alternate label/content for V5 and V6 when toggled on. */
+  activeChildren?: React.ReactNode
+  /** Optional leading icon; activeIcon replaces it when V5/V6 is toggled on. */
+  icon?: React.ReactNode
+  activeIcon?: React.ReactNode
+  /** Initial local toggle state for V3, V5 and V6; every instance owns independent state. */
+  defaultOn?: boolean
+  onVariantChange?: (on: boolean) => void
   /** StudioButton also supports the canonical 12px Micro tier for dense UI surfaces. */
   sizeVariant?: StudioControlSize
   tone?: StudioControlTone
@@ -1017,6 +1041,14 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
   (
     {
+      variant = "v1",
+      faceLayout = "label",
+      activeChildren,
+      icon,
+      activeIcon,
+      defaultOn = false,
+      onVariantChange,
+      onClick,
       sizeVariant,
       tone = "accent",
       loading = false,
@@ -1032,12 +1064,28 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
     },
     ref,
   ) => {
+    const [localOn, setLocalOn] = React.useState(defaultOn)
+    const isToggleVariant = variant === "v3" || variant === "v5" || variant === "v6"
+    const isOn = isToggleVariant && localOn
     // Height is the authoritative geometry when supplied. This prevents a 28px
-    // control from accidentally inheriting standard border/radius/shadow tokens.
+    // control from accidentally inheriting standard border/radius tokens.
     const resolvedSize = heightVariant
       ? heightVariant === "28" ? "compact" : heightVariant === "60" ? "supreme" : "standard"
       : sizeVariant ?? "standard"
     const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : resolvedSize === "micro" ? "12" : "44")
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+      onClick?.(event)
+      if (event.defaultPrevented || event.currentTarget.disabled || !isToggleVariant) return
+      const next = !localOn
+      setLocalOn(next)
+      onVariantChange?.(next)
+    }
+    const visibleChildren = (variant === "v5" || variant === "v6") && isOn && activeChildren !== undefined
+      ? activeChildren
+      : children
+    const visibleIcon = (variant === "v5" || variant === "v6") && isOn && activeIcon !== undefined
+      ? activeIcon
+      : icon
 
     return (
       <button
@@ -1046,20 +1094,28 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
         {...props}
         {...withStudioAttrs(resolvedSize, tone)}
         data-vt-studio-button="true"
+        data-vt-studio-button-variant={variant}
+        data-vt-studio-button-on={isOn ? "true" : "false"}
         data-vt-studio-button-lines={textLayout === "two-line" ? "two" : undefined}
         data-height-variant={resolvedHeight}
         data-selected={selected || undefined}
-        aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
+        aria-pressed={props["aria-pressed"] ?? (isToggleVariant ? isOn : selected || undefined)}
         aria-busy={loading || undefined}
         disabled={disabled || loading}
+        onClick={handleClick}
       >
         <span data-vt-studio-button-face>
-          {textLayout === "two-line" ? (
-            <>
-              <span data-vt-studio-button-line="first">{firstLine}</span>
-              <span data-vt-studio-button-line="second">{secondLine}</span>
-            </>
-          ) : children}
+          {visibleIcon !== undefined && <span data-vt-studio-button-icon>{visibleIcon}</span>}
+          {faceLayout === "split" ? visibleChildren : (
+            <span data-vt-studio-button-label>
+              {textLayout === "two-line" ? (
+                <>
+                  <span data-vt-studio-button-line="first">{firstLine}</span>
+                  <span data-vt-studio-button-line="second">{secondLine}</span>
+                </>
+              ) : visibleChildren}
+            </span>
+          )}
         </span>
       </button>
     )
@@ -1384,7 +1440,7 @@ const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
 
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
   ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" data-vt-studio-split="left" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-left="true" data-vt-studio-split="left" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
       <StudioSplitShell layout="left" sizeVariant={sizeVariant} iconLeft={icon} faceOnly>{children}</StudioSplitShell>
     </StudioButton>
   ),
@@ -1399,7 +1455,7 @@ export interface StudioSplitRightButtonProps extends StudioButtonProps {
 }
 export const StudioSplitRightButton = React.forwardRef<HTMLButtonElement, StudioSplitRightButtonProps>(
   ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitRightButton" {...props}>
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitRightButton" {...props}>
       <StudioSplitShell layout="right" sizeVariant={sizeVariant} iconRight={icon} faceOnly>{children}</StudioSplitShell>
     </StudioButton>
   ),
