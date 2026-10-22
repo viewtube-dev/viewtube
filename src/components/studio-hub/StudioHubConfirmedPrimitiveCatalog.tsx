@@ -306,6 +306,52 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 }
 
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
+const ConfirmedStudioButtonFamily: React.FC = () => {
+  const [v3On, setV3On] = React.useState(false)
+  const [v5On, setV5On] = React.useState(true)
+  const [v6On, setV6On] = React.useState(false)
+
+  const specimen = (sizeVariant: "standard" | "supreme" | "micro", variant: 1 | 2 | 3 | 4 | 5 | 6 | 7) => {
+    const toggle = variant === 3 || variant === 5 || variant === 6
+    const isOn = variant === 3 ? v3On : variant === 5 ? v5On : variant === 6 ? v6On : false
+    const label = variant === 5 ? (v5On ? "ON" : "OFF") : variant === 6 ? (v6On ? "NO!" : "YES!") : "BUTTON"
+    const onClick = variant === 3 ? () => setV3On(value => !value) : variant === 5 ? () => setV5On(value => !value) : variant === 6 ? () => setV6On(value => !value) : undefined
+    return <div className="vt-confirmed-button-skin-cell" key={variant}>
+      <StudioButton
+        className="vt-confirmed-button-skin"
+        sizeVariant={sizeVariant === "supreme" ? undefined : sizeVariant}
+        heightVariant={sizeVariant === "supreme" ? "60" : sizeVariant === "standard" ? "44" : undefined}
+        data-vt-button-skin={`v${variant}`}
+        data-vt-button-on={toggle && isOn ? "true" : "false"}
+        data-vt-library-component="StudioButton"
+        aria-label={variant === 3 ? "Button V3 toggle" : variant === 5 ? "Button V5 ON/OFF toggle" : variant === 6 ? "Button V6 YES/NO toggle" : `Button V${variant}`}
+        aria-pressed={toggle ? isOn : undefined}
+        onClick={onClick}
+      >{label}</StudioButton>
+    </div>
+  }
+
+  const row = (sizeVariant: "standard" | "supreme" | "micro", variants: Array<1 | 2 | 3 | 4 | 5 | 6 | 7>) => (
+    <div className={`vt-confirmed-button-skin-grid is-${sizeVariant}`} aria-label={`${sizeVariant} button skins`}>
+      {variants.map(variant => specimen(sizeVariant, variant))}
+    </div>
+  )
+
+  return (
+    <Family title="Button" nonDefaultSettings={[
+      "V1 primary fill; V2 secondary fill; V3 toggles primary/secondary fill.",
+      "V4 black fill with primary text; V5 toggles primary/secondary with ON/OFF text; V6 toggles primary/black with YES!/NO! text; V7 uses white text.",
+      "Button labels are contained inside the border. Each specimen row uses a 4px vertical gap.",
+    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="44px Standard · 60px Supreme · 12px Micro; shared production button API with catalog-only visual comparison skins." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-button-gallery">
+        {row("standard", [1, 2, 3, 4, 5, 6, 7])}
+        {row("supreme", [1, 2, 3, 4])}
+        {row("micro", [1, 2, 3, 4, 5, 6, 7])}
+      </div>
+    </Family>
+  )
+}
+
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
     <Family
@@ -427,14 +473,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
     <CanonicalControlFamilies />
     <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
-    <Family title="Button"  provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioButton sizeVariant="standard">button</StudioButton></div>
-      <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioButton sizeVariant="compact">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioButton sizeVariant="compact" tone="neutral">button</StudioButton></div>
-      <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioButton selected sizeVariant="standard">button</StudioButton></div>
-      <div className="vt-confirmed-variant"><span>28px compact · selected</span><StudioButton selected sizeVariant="compact">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · selected + disabled</span><StudioButton selected disabled sizeVariant="compact">button</StudioButton></div>
-      <div className="vt-confirmed-variant is-full-row"><span>44px standard · two-line · 18px rows</span><StudioButton sizeVariant="standard" textLayout="two-line" firstLine="GENERATE" secondLine="METADATA" aria-label="Generate metadata" data-vt-library-variant="two-line" /></div>
-      <div className="vt-confirmed-variant"><span>28px compact · two-line · 12px rows</span><StudioButton sizeVariant="compact" textLayout="two-line" firstLine="AI" secondLine="REFINE" aria-label="AI refine" data-vt-library-variant="two-line" /></div>
-    </Family>
+    <ConfirmedStudioButtonFamily />
 
 
     <Family title="Prominent Action · 60px Supreme" nonDefaultSettings={[

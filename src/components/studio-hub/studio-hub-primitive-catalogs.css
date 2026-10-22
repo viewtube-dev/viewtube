@@ -3297,3 +3297,97 @@
 .vt-confirmed-button-family > .vt-confirmed-variants > .vt-confirmed-variant.is-full-row {
   grid-column: 1 / -1;
 }
+
+
+/* Confirmed StudioButton V1–V7 specimen gallery.
+ * The catalog changes only face skins; geometry and behavior remain StudioButton-owned.
+ */
+.vt-confirmed-button-gallery,
+.vt-confirmed-button-skin-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-button-skin-cell {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.vt-confirmed-button-skin {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+.vt-confirmed-button-skin > [data-vt-studio-button-face] {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+  text-overflow: ellipsis;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v1"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v2"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-a, #36e0f6)) !important;
+  color: #000 !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v3"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v3"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-a, #36e0f6)) !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v4"] > [data-vt-studio-button-face] {
+  background: #000 !important;
+  color: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b)) !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v5"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b)) !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="false"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-a, #36e0f6)) !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v6"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v6"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
+  background: #000 !important;
+  color: #fff !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v7"] > [data-vt-studio-button-face] {
+  color: #fff !important;
+  -webkit-text-stroke-color: #fff !important;
+}
+.vt-confirmed-button-skin[data-size="micro"] {
+  --vt-studio-control-height: 12px !important;
+  --vt-studio-control-stroke: 1px !important;
+  --vt-studio-control-radius: 2px !important;
+  --vt-studio-control-font-size: 10px !important;
+  --vt-studio-control-text-stroke: 0.25px !important;
+  height: 12px !important;
+  min-height: 12px !important;
+  border-radius: 2px !important;
+}
+.vt-confirmed-button-skin[data-size="micro"] > [data-vt-studio-button-face] {
+  height: 12px !important;
+  min-height: 12px !important;
+  border-width: 1px !important;
+  border-radius: 2px !important;
+  padding-inline: 2px !important;
+  font-size: 10px !important;
+  -webkit-text-stroke-width: 0.25px !important;
+}

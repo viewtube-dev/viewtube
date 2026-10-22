@@ -999,7 +999,8 @@ export const StudioSelect = React.forwardRef<
 StudioSelect.displayName = "StudioSelect"
 
 export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  sizeVariant?: StudioControlInteractiveSize
+  /** StudioButton also supports the canonical 12px Micro tier for dense UI surfaces. */
+  sizeVariant?: StudioControlSize
   tone?: StudioControlTone
   loading?: boolean
   selected?: boolean
@@ -1036,7 +1037,7 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
     const resolvedSize = heightVariant
       ? heightVariant === "28" ? "compact" : heightVariant === "60" ? "supreme" : "standard"
       : sizeVariant ?? "standard"
-    const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : "44")
+    const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : resolvedSize === "micro" ? "12" : "44")
 
     return (
       <button
