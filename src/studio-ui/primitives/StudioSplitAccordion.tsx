@@ -154,7 +154,6 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
                 data-vt-studio-split-accordion-trigger="true"
                 aria-label={item.accessibleLabel}
                 aria-expanded={active}
-                aria-pressed={selected}
                 aria-controls={panelId}
                 disabled={disabled || item.disabled}
                 tabIndex={active ? 0 : -1}
