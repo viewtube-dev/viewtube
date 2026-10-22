@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { StudioLegendMultiDropdown, StudioSpectrumTag, StudioSplitLeftInput, StudioTextArea, StudioTextBox, StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
+import { StudioLegendMultiDropdown, StudioSpectrumTag, StudioTextArea, StudioTextBox, StudioTextInput, StudioUploadFrame } from "../studio-ui/primitives/StudioControls"
 import {
  Archive,
  Database,
@@ -1855,8 +1855,8 @@ const CreatorVaultOS: React.FC = () => {
         >
          Library
         </button>
-        <StudioSplitLeftInput
-         icon={<Search aria-hidden="true" />}
+        <StudioTextInput
+         sizeVariant="standard"
          ref={searchInputRef}
          value={query}
          onChange={(event) => setQuery(event.target.value)}
