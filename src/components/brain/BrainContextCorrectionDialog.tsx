@@ -25,15 +25,18 @@ export const BrainContextCorrectionDialog: React.FC<{
 }> = ({ channelId, item, onClose, onApplied }) => {
  const [correctedStatement, setCorrectedStatement] = useState(item.statement)
  const [busy, setBusy] = useState(false)
+ const busyRef = useRef(false)
  const [result, setResult] = useState<BrainContextCorrectionResult | null>(null)
  const [error, setError] = useState<string | null>(null)
  const valueRef = useRef<HTMLTextAreaElement | null>(null)
+
+ busyRef.current = busy
 
  useEffect(() => {
   const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
   valueRef.current?.focus()
   const handleKeyDown = (event: KeyboardEvent) => {
-   if (event.key === "Escape" && !busy) {
+   if (event.key === "Escape" && !busyRef.current) {
     event.preventDefault()
     onClose()
    }
@@ -43,7 +46,7 @@ export const BrainContextCorrectionDialog: React.FC<{
    document.removeEventListener("keydown", handleKeyDown)
    previousFocus?.focus()
   }
- }, [busy, onClose])
+ }, [onClose])
 
  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault()
