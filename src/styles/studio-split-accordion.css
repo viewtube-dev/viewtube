@@ -5,7 +5,7 @@
   gap: 0;
   width: 100%;
   min-width: 0;
-  min-height: var(--vt-studio-control-height, 44px);
+  height: var(--vt-studio-control-height, 44px);
   overflow: hidden;
   box-sizing: border-box;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
@@ -50,7 +50,8 @@
   flex: 0 0 var(--vt-studio-control-height, 44px);
   place-items: center;
   min-width: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
+  min-height: 0;
+  height: 100%;
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -62,12 +63,14 @@
 .vt-studio-split-accordion[data-size="compact"] .vt-studio-split-accordion__trigger {
   flex-basis: 28px;
   min-width: 28px;
-  min-height: 28px;
+  min-height: 0;
+  height: 100%;
 }
 .vt-studio-split-accordion[data-size="micro"] .vt-studio-split-accordion__trigger {
   flex-basis: 12px;
   min-width: 12px;
-  min-height: 12px;
+  min-height: 0;
+  height: 100%;
 }
 .vt-studio-split-accordion__trigger:focus-visible {
   outline: var(--vt-studio-control-secondary-outline-width, 1.95px) solid var(--vt-studio-control-secondary, #ff7f6b);
