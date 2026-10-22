@@ -135,3 +135,9 @@ These patterns are registered in `STUDIO_HUB_MIGRATED_FAMILIES` and rendered on 
 
 - Two-line buttons belong inside the **Button** module in `StudioHubConfirmedPrimitiveCatalog.tsx`, using the `StudioButton` `textLayout="two-line"` variant.
 - They are not a separate family in the legacy `StudioHubCompletePrimitiveCatalog.tsx` registry.
+
+## Confirmed compound compositions
+
+These are cataloged compositions built from existing registered Studio Controls primitives. They are intentionally tracked separately from the frozen primitive-family count.
+
+- **Publishing Card · 5:7 Compound Composition** — `src/studio-ui/compositions/StudioPublishingCard.tsx`; composition styling: `src/styles/studio-publishing-card.css`; confirmed-library specimen: `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`. Includes title, 16:9 thumbnail upload, description, removable tags, and Playlist / Category / Location / Publish Date selectors.
