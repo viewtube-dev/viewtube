@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { resolveVaultAssetDeepLink } from "./vaultAssetDeepLink"
+import { buildVaultAssetHref, resolveVaultAssetDeepLink } from "./vaultAssetDeepLink"
 
 const assets = [
  { id: "asset-1", name: "Verified title", kind: "text" },
@@ -7,6 +7,10 @@ const assets = [
 ] as any
 
 describe("resolveVaultAssetDeepLink", () => {
+ it("builds a scoped Vault route without losing reserved characters", () => {
+  expect(buildVaultAssetHref("asset:one / two", "build:project/1"))
+   .toBe("/vault?assetId=asset%3Aone+%2F+two&contentBuildId=build%3Aproject%2F1")
+ })
  it("resolves only a canonical Vault asset that belongs to the requested ContentBuild", () => {
   expect(resolveVaultAssetDeepLink({
    search: "?assetId=asset-1&contentBuildId=build-1",
