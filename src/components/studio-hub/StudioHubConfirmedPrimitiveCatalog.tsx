@@ -307,13 +307,13 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 const ConfirmedStudioButtonFamily: React.FC = () => {
   const [v3On, setV3On] = React.useState(false)
-  const [v5On, setV5On] = React.useState(false)
+  const [v5On, setV5On] = React.useState(true)
   const [v6On, setV6On] = React.useState(false)
 
   const specimen = (sizeVariant: "standard" | "supreme" | "micro", variant: 1 | 2 | 3 | 4 | 5 | 6 | 7) => {
     const toggle = variant === 3 || variant === 5 || variant === 6
     const isOn = variant === 3 ? v3On : variant === 5 ? v5On : variant === 6 ? v6On : false
-    const label = variant === 5 ? (v5On ? "ON" : "OFF") : variant === 6 ? (v6On ? "NO!" : "YES!") : variant === 3 ? (v3On ? "SECONDARY" : "PRIMARY") : "BUTTON"
+    const label = variant === 5 ? (v5On ? "ON" : "OFF") : variant === 6 ? (v6On ? "NO!" : "YES!") : "BUTTON"
     const onClick = variant === 3 ? () => setV3On(value => !value) : variant === 5 ? () => setV5On(value => !value) : variant === 6 ? () => setV6On(value => !value) : undefined
     return <div className="vt-confirmed-button-skin-cell" key={variant}>
       <StudioButton
