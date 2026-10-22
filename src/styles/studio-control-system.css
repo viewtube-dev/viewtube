@@ -5356,3 +5356,12 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 
 /* Both the outer wrapper and split-shell children use the global data-size token contract. */
 .vt-studio-value-toggle--double { height: var(--vt-studio-control-height, 44px); min-height: var(--vt-studio-control-height, 44px); }
+
+/* Double Side Toggle owns one perimeter; propagate the same size tokens into both nested shells. */
+.vt-studio-value-toggle--double[data-size="supreme"] { --vt-studio-control-height: 60px; --vt-studio-control-stroke: 4.09px; --vt-studio-control-radius: 8.18px; --vt-studio-control-font-size: 51.82px; --vt-studio-control-icon-size: 51.82px; }
+.vt-studio-value-toggle--double[data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px; --vt-studio-control-font-size: 38px; --vt-studio-control-icon-size: 38px; }
+.vt-studio-value-toggle--double[data-size="compact"] { --vt-studio-control-height: 28px; --vt-studio-control-stroke: 2px; --vt-studio-control-radius: 4px; --vt-studio-control-font-size: 24px; --vt-studio-control-icon-size: 24px; }
+.vt-studio-value-toggle--double[data-size="micro"] { --vt-studio-control-height: 12px; --vt-studio-control-stroke: 1px; --vt-studio-control-radius: 2px; --vt-studio-control-font-size: 10px; --vt-studio-control-icon-size: 10px; }
+.vt-studio-value-toggle--double .vt-studio-value-toggle__double-side > .vt-studio-split-shell { height: 100%; min-height: 100%; font-size: var(--vt-studio-control-font-size); }
+.vt-studio-value-toggle--double[data-variant="v2"] .vt-studio-value-toggle__divider,
+.vt-studio-value-toggle--double[data-variant="v4"] .vt-studio-value-toggle__divider { display: none; }
