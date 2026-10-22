@@ -310,11 +310,7 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 const buttonVariantNumbers = [1, 2, 3, 4, 5, 6, 7] as const
 
 const buildStudioButtonRows = (tier: "standard" | "compact") => {
-  const makeSpecimen = (variant: number, suffix = "") => ({
-    id: `${tier}-${suffix}${variant === 1 && suffix === "repeat-v" ? "v1-repeat" : `v${variant}`}`,
-    label: variant === 4 ? "BLACK" : variant === 5 ? "OFF" : variant === 6 ? "NO" : variant === 7 ? "WHITE" : "BUTTON",
-  })
-  const row = (id: string, variants: number[]) => ({
+    const row = (id: string, variants: number[]) => ({
     id: `${tier}-${id}`,
     tier,
     specimens: variants.map((variant, index) => ({
