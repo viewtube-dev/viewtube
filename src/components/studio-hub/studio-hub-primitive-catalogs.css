@@ -3355,6 +3355,9 @@
   color: #000 !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b)) !important;
+}
+.vt-confirmed-button-skin[data-vt-button-skin="v5"][data-vt-button-on="false"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-secondary, var(--pair-a, #36e0f6)) !important;
 }
 .vt-confirmed-button-skin[data-vt-button-skin="v6"] > [data-vt-studio-button-face] {
