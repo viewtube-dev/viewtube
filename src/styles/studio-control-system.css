@@ -5326,8 +5326,19 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-value-toggle__double-side[data-content-width="true"] > .vt-studio-split-shell { width: max-content; }
 .vt-studio-value-toggle__double-side[data-content-width="true"] .vt-studio-value-toggle__face { width: max-content; flex: 0 0 auto; padding-inline: 8px; }
 .vt-studio-value-toggle__divider { flex: 0 0 var(--vt-studio-control-stroke, 3px); background: #000; }
-.vt-studio-split-shell.vt-studio-value-toggle--nested { border: 0; border-radius: 0; box-shadow: none; }
-.vt-studio-split-shell.vt-studio-value-toggle--nested > [data-vt-studio-split-rail] { border-radius: 0; }
+/* Nested side toggles contribute no perimeter: the double toggle owns one shared border. */
+.vt-studio-split-shell.vt-studio-value-toggle.vt-studio-value-toggle--nested { border: 0; border-radius: 0; box-shadow: none; }
+.vt-studio-split-shell.vt-studio-value-toggle.vt-studio-value-toggle--nested > [data-vt-studio-split-rail] { border-radius: 0; }
+.vt-studio-value-toggle__arrow { transform-origin: center; }
+.vt-studio-value-toggle__arrow:active:not(:disabled) { animation: vt-studio-value-toggle-grow 140ms ease-out; }
+@keyframes vt-studio-value-toggle-grow {
+  0% { transform: scale(1); }
+  55% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-value-toggle__arrow:active:not(:disabled) { animation: none; }
+}
 .vt-studio-split-shell.vt-studio-value-toggle--bar > [data-vt-studio-split-label] { overflow: visible; }
 .vt-studio-value-toggle__bars { display: flex; flex: 1 1 auto; align-items: center; justify-content: center; min-width: 0; gap: 2px; padding: 0 4px; overflow: hidden; }
 .vt-studio-value-toggle__bar { display: block; flex: 0 0 18px; width: 18px; height: 38px; background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent); border: 0; box-sizing: border-box; }
