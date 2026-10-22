@@ -54,7 +54,8 @@ const pack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvidencePack
   })
 
   expect(html).toContain('data-vt-evidence-record-id="analytics:snapshot-1:video-abc:views"')
-  expect(html).toContain("Partial coverage · 60%")
+  expect(html).toContain("Partial coverage")
+  expect(html).toContain("60% coverage")
   expect(html).toContain("Stale")
   expect(html).toContain("Open exact evidence in Analytics")
   expect(html).toContain("brainEvidenceId=analytics%3Asnapshot-1%3Avideo-abc%3Aviews")
