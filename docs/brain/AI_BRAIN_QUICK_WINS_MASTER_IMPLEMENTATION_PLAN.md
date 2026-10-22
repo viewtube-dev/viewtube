@@ -407,3 +407,10 @@ The companion [AI Brain page evidence-first implementation plan](../migration/re
 **In progress:** the existing AI Journal overlay on `src/views/AIBrainCommandInterface.tsx` is being moved into a reusable, accessible dialog component at `src/components/brain/BrainJournalDialog.tsx`. It reuses the existing journal save callback, adds semantic dialog/label relationships, keyboard dismissal and focus management, and prevents empty saves. It does not add a second store or silently promote notes to confirmed knowledge.
 
 See the [frontend design reference implementation record](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md#implementation-record--accessible-ai-journal-capture-2026-10-22). The focused test is added; CI verification is pending. The next vertical slice remains evidence-to-claim provenance parity, then canonical receipt-backed result cards and governed context corrections.
+
+
+### Verification note — AI Brain page UI slice (2026-10-22)
+
+PR [#785](https://github.com/viewtube-dev/viewtube/pull/785) merged the accessible journal modal and canonical prompt-evidence details into the target branch. In the observed CI run, `production-build` and `local-smoke` passed; `brain-quality-loop`, `static-quality` and `focused-contracts` failed on existing/other failing contracts. The UI regression tests have been added, but this is not a green full-suite result. Vercel deployment previews were rate-limited, so there is no deployed screenshot/browser verification.
+
+Next delivery gate: verify the metadata guard and tests, then connect one generation result card to the canonical operation/ToolReceipt/output asset and add proposed/started/saved/failed contract tests. Do not display a saved badge without a resolvable canonical output.
