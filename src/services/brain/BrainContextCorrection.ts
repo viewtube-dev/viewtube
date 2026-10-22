@@ -1,4 +1,4 @@
-import type { AIBrainLearningEntry, BrainMemoryClaim } from "../../types"
+import type { BrainMemoryClaim } from "../../types"
 import { captureAIBrainLearningEvent, teachAIBrainExplicitly } from "../aiBrainSelfImprovement"
 import { getBrainMemoryClaimDB } from "./Persistence"
 import { listActiveBrainMemoryClaims } from "./BrainMemoryClaims"
