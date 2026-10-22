@@ -196,6 +196,7 @@ describe("readBrainRuntimeSnapshot", () => {
    stage: "package",
    revision: 7,
    assetCount: 3,
+   assetIds: ["asset-script", "asset-title-1", "asset-title-2"],
    versionCount: 2,
    variantGroupCount: 1,
    selectedSlotCount: 2,

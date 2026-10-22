@@ -722,3 +722,17 @@ The first UI implementation slice is in progress on `/ai-brain`:
 - Added a component regression test for the accessible dialog contract and empty-save prevention.
 
 **Verification status:** the test is committed on the implementation branch but has not yet been reported green by CI. This slice does not certify the broader restore, evidence-parity, receipt-lineage, or full accessibility checklist. The next implementation gate remains a turn-bound evidence presentation contract and claim-to-source parity, followed by receipt-backed result states.
+
+
+### Verification note — UI evidence integration PR #785 (2026-10-22)
+
+The first implementation PR, [#785](https://github.com/viewtube-dev/viewtube/pull/785), merged the accessible AI Journal dialog and turn-bound typed evidence list into the target branch. The CI run showed `production-build` and `local-smoke` passing. The Brain quality-loop, static-quality and focused-contract jobs failed on other currently failing contracts; this run does not certify the new UI tests as fully green. The broader browser accessibility walkthrough remains outstanding. Deployment previews were rate-limited by the Vercel account, so no deployed visual verification is claimed.
+
+Next: fix/confirm the type-safe evidence metadata guard, then continue with receipt-backed result states and canonical context correction. Do not treat workflow-step status as a ToolReceipt or saved-output proof.
+
+
+### Follow-through — receipt-backed output card (2026-10-22)
+
+The Brain runtime panel now projects the latest provenance chain into a small output card only when the chain contains a ToolReceipt and every receipt output asset ID exists in the same current ContentBuild snapshot. It displays the receipt, ContentBuild, generation-record and trace IDs, plus output asset and version IDs. If the receipt is absent, contains no output IDs, belongs to a different/unavailable build, or references missing assets, the UI shows an explicit unavailable/withheld state; it never emits a stale “saved” card.
+
+The runtime snapshot now exposes its canonical ContentBuild asset IDs for this read-only check. Tests cover resolved output, missing/stale output IDs, missing receipts, and snapshot asset identity. CI for this follow-up is pending; the browser/mobile/screen-reader verification gate remains open.
