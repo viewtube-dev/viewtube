@@ -28,3 +28,7 @@ test("single-line panels clip overflow without ellipses and exclude textareas", 
   assert.match(css, /text-overflow:\s*clip/);
   assert.doesNotMatch(css, /textarea\s*\{[^}]*text-overflow:\s*clip/s);
 });
+
+test("click growth animation targets the SVG glyph only", () => {
+  assert.match(css, /\.vt-studio-value-toggle__arrow:active svg\s*\{[^}]*animation:\s*vt-studio-value-toggle-grow/);
+});

@@ -5522,3 +5522,8 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
     solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
+
+/* Click feedback scales only the glyph; the split shell and rail geometry stay fixed. */
+[data-vt-studio-control] .vt-studio-value-toggle__arrow:active svg {
+  animation: vt-studio-value-toggle-grow 180ms ease-out;
+}
