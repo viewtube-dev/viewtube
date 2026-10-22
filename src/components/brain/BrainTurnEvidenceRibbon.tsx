@@ -37,7 +37,11 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
  className = "",
 }) => {
  const preparedCount = evidencePack.items.length
- const citedCount = citedEvidenceIds.length
+ const preparedEvidenceIds = new Set(evidencePack.items.map((item) => item.id))
+ const resolvedCitations = new Set(citedEvidenceIds.filter((id) => preparedEvidenceIds.has(id)))
+ const unresolvedCitationIds = new Set(citedEvidenceIds.filter((id) => !preparedEvidenceIds.has(id)))
+ const citedCount = resolvedCitations.size
+ const unresolvedCitationCount = unresolvedCitationIds.size
  const capturedAt = evidencePack.capturedAt
  const captureLabel = capturedAt && Number.isFinite(Date.parse(capturedAt))
   ? new Date(capturedAt).toLocaleString()
@@ -81,12 +85,22 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
    <div className="flex flex-wrap items-center gap-1">
     <StudioSplitLeftBadge sizeVariant="micro" style={{ width: "max-content" }}>{preparedCount} prepared</StudioSplitLeftBadge>
     <StudioSplitLeftBadge sizeVariant="micro" style={{ width: "max-content" }}>{citedCount} cited</StudioSplitLeftBadge>
+    {unresolvedCitationCount ? (
+     <StudioSplitLeftBadge sizeVariant="micro" style={{ backgroundColor: "#FF7AC8", width: "max-content" }}>
+      {unresolvedCitationCount} unresolved citation{unresolvedCitationCount === 1 ? "" : "s"}
+     </StudioSplitLeftBadge>
+    ) : null}
     {evidencePack.missingInputs.length ? (
      <StudioSplitLeftBadge sizeVariant="micro" style={{ backgroundColor: "#FFDA47", width: "max-content" }}>
       {evidencePack.missingInputs.length} gaps
      </StudioSplitLeftBadge>
     ) : null}
    </div>
+   {unresolvedCitationCount ? (
+    <p data-vt-brain-part="unresolved-citations" role="note" className="break-words text-[10px] font-bold leading-4 text-black/70">
+     {unresolvedCitationCount} response citation{unresolvedCitationCount === 1 ? "" : "s"} did not match the prepared evidence list and {unresolvedCitationCount === 1 ? "is" : "are"} not counted as cited.
+    </p>
+   ) : null}
    <p className="break-words text-[10px] font-bold leading-4 text-black/65">Captured: {captureLabel}</p>
    {noPreparedEvidence ? (
     <p data-vt-brain-part="empty-evidence-selection" role="note" className="break-words border border-black/25 bg-[#f8f8f4] p-2 text-xs font-bold leading-5">
