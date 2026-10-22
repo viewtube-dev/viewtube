@@ -87,6 +87,8 @@
   height: var(--vt-studio-split-accordion-face, 38px);
   box-sizing: border-box;
   color: #000;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  line-height: 1;
   background: color-mix(in srgb, var(--vt-studio-control-accent, #36e0f6) 50%, #fff);
 }
 .vt-studio-split-accordion__face > * { max-width: 100%; max-height: 100%; }
