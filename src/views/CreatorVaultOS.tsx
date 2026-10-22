@@ -556,7 +556,11 @@ const CreatorVaultOS: React.FC = () => {
  )
 
   useEffect(() => {
-   if (assetDeepLink.status === "none") return
+   if (assetDeepLink.status === "none") {
+    setDeepLinkNotice(null)
+    setDeepLinkTargetId(null)
+    return
+   }
    if (assetDeepLink.status === "resolved") {
     const asset = allAssets.find((candidate) => candidate.id === assetDeepLink.assetId)
     if (!asset) return
