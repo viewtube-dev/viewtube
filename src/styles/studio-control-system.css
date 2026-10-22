@@ -1089,11 +1089,11 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   font-weight: var(--vt-studio-control-font-weight, 1000);
   -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary);
   /* Only textarea-specific typography override: compact description row spacing. */
-  line-height: var(--vt-studio-textarea-line-height, 0.75);
+  line-height: var(--vt-studio-textarea-line-height, 1);
   letter-spacing: var(--vt-studio-control-letter-spacing);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="supreme"] {
-  line-height: var(--vt-studio-textarea-line-height, .75);
+  line-height: var(--vt-studio-textarea-line-height, 1);
   font-size: var(--vt-studio-textarea-supreme-font-size, 24.55px);
   padding: calc(var(--vt-studio-textarea-standard-padding-block, 10px) * 1.363636) calc(var(--vt-studio-textarea-standard-padding-inline, 12px) * 1.363636);
 }
@@ -1339,7 +1339,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {  }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:var(--vt-studio-space-unit, 4px); width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:var(--vt-studio-control-font-weight,1000); line-height:var(--vt-studio-control-line-height,.86); letter-spacing:var(--vt-studio-control-letter-spacing,-.02em); text-transform:var(--vt-studio-control-text-transform,uppercase); -webkit-text-stroke:var(--vt-studio-control-text-stroke,1px) currentColor; transform:none;  }
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:var(--vt-studio-space-unit, 4px); width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:var(--vt-studio-control-font-weight,1000); line-height:var(--vt-studio-control-line-height,1); letter-spacing:var(--vt-studio-control-letter-spacing,-.02em); text-transform:var(--vt-studio-control-text-transform,uppercase); -webkit-text-stroke:var(--vt-studio-control-text-stroke,1px) currentColor; transform:none;  }
 /* Compact text buttons follow the global row-fill default. Icon-only controls retain their fixed square geometry. */
 button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {
   box-sizing: border-box;
@@ -2848,7 +2848,7 @@ no shell shadows{
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: var(--vt-studio-control-line-height, .86);
+  line-height: var(--vt-studio-control-line-height, 1);
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
   text-transform: var(--vt-studio-control-text-transform, uppercase);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
@@ -2931,7 +2931,7 @@ no shell shadows{
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: var(--vt-studio-control-line-height, .86);
+  line-height: var(--vt-studio-control-line-height, 1);
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
   text-transform: var(--vt-studio-control-text-transform, uppercase);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
@@ -3107,7 +3107,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   border-radius: 0;
   text-align: center;
   vertical-align: middle;
-  line-height: var(--vt-studio-control-line-height, .86);
+  line-height: var(--vt-studio-control-line-height, 1);
   color: #000;
 }
 button[data-vt-studio-button="true"][data-size="compact"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-label] {
@@ -3169,7 +3169,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   text-shadow: none;
 }
 input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"] {
-  line-height: var(--vt-studio-control-line-height, .86);
+  line-height: var(--vt-studio-control-line-height, 1);
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
 }
 input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"] {
@@ -4734,7 +4734,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   font-weight: 1000;
   -webkit-text-stroke: var(--studio-text-box-text-stroke-width) #000;
   text-stroke: var(--studio-text-box-text-stroke-width) #000;
-  line-height: var(--textarea-description-line-height, 0.75);
+  line-height: var(--textarea-description-line-height, 1);
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
   text-transform: uppercase;
   white-space: pre-wrap;
@@ -4756,15 +4756,15 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 }
 /* Textarea and read-only text display share the canonical 0.85 line-height token. */
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
-  line-height: var(--vt-studio-textarea-line-height, .75);
+  line-height: var(--vt-studio-textarea-line-height, 1);
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
-  line-height: var(--vt-studio-textarea-line-height, .75);
+  line-height: var(--vt-studio-textarea-line-height, 1);
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
-  line-height: var(--vt-studio-textarea-line-height, .75);
+  line-height: var(--vt-studio-textarea-line-height, 1);
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
 }
 
