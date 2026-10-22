@@ -421,3 +421,12 @@ Next delivery gate: verify the metadata guard and tests, then connect one genera
 The next vertical slice adds a receipt-backed output card to the existing Brain runtime panel. It requires a recorded ToolReceipt, output asset IDs, and a match against the asset IDs in the current ContentBuild snapshot before showing a verified output card. Missing receipts, empty output lists, mismatched build scope and stale/missing assets receive explicit withheld/unavailable states; a workflow step marked complete is not treated as a saved result.
 
 Regression tests cover both the pure resolution contract and the rendered card. CI is pending. The next gate remains connecting the result to exact user-facing asset navigation only after the canonical route is verified, then context corrections and learning governance.
+
+
+## Implementation progress — governed context corrections (2026-10-22)
+
+The next AI Brain page slice turns the existing **Propose correction** affordance into an accessible correction dialog backed by the existing learning-governance owners. Corrections to an active canonical Brain memory claim are submitted through explicit teaching, and the UI reports success only after the new active claim resolves and the previous claim is superseded. Stale, inactive, missing, or cross-channel claims are rejected rather than overwritten.
+
+Channel Knowledge Model hypotheses and learning candidates do not share that claim-update contract. Those corrections are recorded as unconfirmed proposals and explicitly remain unapplied; the UI does not misrepresent a proposal as a changed profile. The next-turn verification prompt is offered only after an applied correction.
+
+Regression tests cover governance routing, channel scope, empty corrections, proposal-only behavior for non-claim sources, accessible dialog semantics, and the distinction between explicit confirmation and inference. **Verification status:** CI and browser keyboard/focus checks are pending; no local test execution is claimed.
