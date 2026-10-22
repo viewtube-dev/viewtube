@@ -2887,3 +2887,6 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
     </div>
   );
 };
+
+export { StudioPanelAccordion } from "./StudioPanelAccordion"
+export type { StudioPanelAccordionItem, StudioPanelAccordionProps } from "./StudioPanelAccordion"
