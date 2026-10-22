@@ -416,6 +416,17 @@ For each family, display the production source paths, standard and compact sizes
 - Browser visual certification and contrast checks remain outstanding.
 
 
+## Split Accordion — confirmed primitive entry (2026-10-22)
+
+`StudioSplitAccordion` is an independent production primitive at `src/studio-ui/primitives/StudioSplitAccordion.tsx`, styled by `src/styles/studio-split-accordion.css`. It is registered in `StudioHubConfirmedPrimitiveCatalog.tsx` with source provenance and Standard / Compact / Micro specimens.
+
+- Do not revive, import, wrap, or reuse the retired `StudioSplitRailAccordion` implementation.
+- API: `items`, `sizeVariant` (standard / compact / micro), `layout` (left / right / double), optional controlled `activeIndex` / `onActiveIndexChange`, `defaultActiveIndex`, `disabled`, and `accessibleLabel`.
+- Each item exposes `id?`, `accessibleLabel`, `icon`, `content`, optional `trailing`, `disabled`, and `style`.
+- The accordion defaults to the rightmost enabled item; keyboard navigation supports arrow keys, Home, and End. Inactive panels use the native `hidden` attribute, and active panels are labelled by their trigger.
+- The component owns no shadows or global-token changes. The 280ms panel tween is disabled under `prefers-reduced-motion: reduce`; interaction lock remains deterministic.
+- Contract coverage: `src/studio-ui/primitives/StudioSplitAccordion.test.tsx` and the confirmed catalog test. Source registration does not by itself claim browser visual certification.
+
 ## Confirmed Primitive Library grid system — 2026-10-20
 
 The Confirmed Primitive Library uses a shared **4px spacing unit** for catalog layout. The unit governs external gaps between the catalog shell, family cards, variant grids, and specimen cells; multiples of the unit (4px, 8px, 12px, 16px) may be used to establish hierarchy. Responsive rules may change column count but must retain min-width: 0 on grid children so long labels and full-row controls cannot force horizontal overflow.

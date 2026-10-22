@@ -4,14 +4,14 @@
 **Reviewed:** 2026-10-20  
 **Repository:** `viewtube-dev/viewtube`  
 **Work branch:** `master/consolidated-feature-integration` (canonical integration target)  
-**Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/styles/studio-control-system.css`  
+**Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/studio-ui/primitives/StudioSplitAccordion.tsx`, `src/styles/studio-control-system.css`, `src/styles/studio-split-accordion.css`  
 **Rendered reference:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
 
 > This document is the normative reference for Studio primitives. Historical notes and old audit snapshots elsewhere in this file are superseded by this section. When implementation differs, treat it as drift to fix—not as a new default—unless an exception is explicitly registered below and represented in the Confirmed Primitive Library.
 
 ## Confirmed catalog ownership and certification
 
-The Confirmed Primitive Library is a production-component specimen and provenance surface—not a second control implementation. Specimens import real primitives from `src/studio-ui/primitives/StudioControls.tsx`. The catalog stylesheet owns family cards, grids, specimen arrangement, and disclosure panels; production control geometry, typography, fill, stroke, shadow, and motion belong to the Studio token/control stylesheet system.
+The Confirmed Primitive Library is a production-component specimen and provenance surface—not a second control implementation. Specimens import real primitives from `src/studio-ui/primitives/StudioControls.tsx` or a dedicated production primitive module when the family is intentionally standalone (for example, `StudioSplitAccordion`). The catalog stylesheet owns family cards, grids, specimen arrangement, and disclosure panels; production control geometry, typography, fill, stroke, shadow, and motion belong to the Studio token/control stylesheet system.
 
 **NON-DEFAULT SETTINGS** must list only true departures from shared defaults. Do not repeat the 44px/28px lattice, global typography, ordinary selected/disabled behavior, or generic interaction rules under every family. Keep family-specific anatomy, real variants, and registered exceptions; put global contracts in the defaults strip and this index.
 
@@ -19,6 +19,16 @@ The canonical ladder is Supreme (60px), Standard (44px), Compact (28px), and Mic
 
 A family is **source-confirmed** only when its specimen uses the production export, provenance identifies TSX/CSS/tokens/import paths, exception notes are concise, and source/API regression tests cover the public contract. Full visual certification additionally requires computed-style/browser evidence for standard, compact, and applicable exception sizes. The word “confirmed” alone is not proof that visual regression passed.
 
+
+## Split Accordion — independent primitive contract (2026-10-22)
+
+- Canonical component: `src/studio-ui/primitives/StudioSplitAccordion.tsx`; family stylesheet: `src/styles/studio-split-accordion.css`.
+- It is a new standalone implementation. It must not import, wrap, or depend on the retired `StudioSplitRailAccordion` implementation.
+- Supported size API is Standard (44px), Compact (28px), and Micro (12px). The outer shell uses the shared tier stroke/radius; inner icon faces remain square (38px / 24px / 10px).
+- Horizontal single-open layout defaults to the rightmost enabled item. Left, right, and double split layouts are supported; keyboard navigation uses arrow keys, Home, and End.
+- Activation holds hover-preview changes for 280ms. Reduced-motion removes the CSS transition while preserving deterministic interaction state.
+- No shadow, fake shadow, movement, or component-specific global-token change is introduced. Panel content is hidden when inactive and is labelled by its controlling trigger.
+- The Confirmed Primitive Library specimen and component/catalog contract tests are the source-certification surface. Visual browser certification must be reported separately from source/test certification.
 
 ## 1. Global defaults — independent of size
 
