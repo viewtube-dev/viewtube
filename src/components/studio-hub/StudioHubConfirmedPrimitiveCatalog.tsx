@@ -366,9 +366,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <ConfirmedSpecimenGrid
         familyName="Studio control tier and layout reference"
         documentation={<p>Use this reusable grid as the migration target for catalog families. Do not map unsupported size tiers onto a primitive.</p>}
-        renderSpecimen={({ id, tier, label }) => (
-          <div className="vt-confirmed-variant" data-vt-specimen-id={id} data-vt-specimen-tier={tier}>
-            <span>{label}</span>
+        renderSpecimen={({ id, tier }) => (
+          <div className="vt-confirmed-variant" data-vt-specimen-id={id} data-vt-specimen-tier={tier} aria-label={`${tier} specimen`}>
             {tier === "supreme" ? (
               <StudioButton heightVariant="60">SUPREME</StudioButton>
             ) : tier === "standard" ? (

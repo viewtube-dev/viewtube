@@ -483,3 +483,16 @@ test("button specimen faces contain long text within the production button borde
   assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?overflow:\s*hidden/s);
   assert.match(styles, /\.vt-confirmed-button-skin-grid[^]*?overflow-wrap:\s*anywhere/s);
 });
+
+test("Confirmed Specimen Grid renders every tier in 1/2/3/4-column layouts without numbered tier captions", () => {
+  const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
+  const catalogSource = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
+  for (const tier of ["supreme", "standard", "compact", "micro"]) {
+    assert.match(gridSource, new RegExp('"' + tier + '"'));
+  }
+  assert.match(gridSource, /\[1, 2, 3, 4\]\.map\(\(count\)/);
+  assert.match(gridSource, /specimen\(`\$\{id\}-\$\{index \+ 1\}`, tier, label\)/);
+  assert.doesNotMatch(gridSource, /\$\{label\} \$\{index \+ 1\}/);
+  assert.doesNotMatch(catalogSource, /<span>\{label\}<\/span>/);
+  assert.match(catalogSource, /data-vt-specimen-tier=\{tier\}/);
+});
