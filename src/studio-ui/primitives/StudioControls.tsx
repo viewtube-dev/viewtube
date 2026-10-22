@@ -99,6 +99,16 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   globalSizeLattice: "supreme 60px / 4.09px border / 8.18px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
+  textContainment: "Global rule for all text-bearing Studio primitives: labels stay within their assigned face/rail section; shrink within available grid/flex space; use single-line ellipsis for button and split-badge labels; never overlap adjacent controls or cross a split divider.",
+  buttonVariantContract: {
+    v1: "primary fill / black text",
+    v2: "secondary fill / black text",
+    v3: "independent click toggle between V1 and V2",
+    v4: "black fill / primary text",
+    v5: "V1 initially; toggle to V2 with optional alternate text and/or icon",
+    v6: "V1 initially; toggle to black fill / white text with optional alternate text and/or icon",
+    v7: "primary fill / white text; split icon rails use secondary fill and white icons",
+  },
 
   width: "full-row by default; data-width=content is an explicit opt-in exception",
   labelAlignment: "centered by default for all primitive labels",
