@@ -1,0 +1,180 @@
+/*
+ * Studio Panel Accordion — new primitive, independent of the legacy split-rail accordion.
+ * Shell owns perimeter; square rail face = shell height - 2 * shell stroke.
+ */
+.vt-studio-panel-accordion {
+  --vt-studio-accordion-height: 44px;
+  --vt-studio-accordion-stroke: 3px;
+  --vt-studio-accordion-face: calc(var(--vt-studio-accordion-height) - 2 * var(--vt-studio-accordion-stroke));
+  --vt-studio-accordion-duration: 280ms;
+  --vt-studio-accordion-ease: cubic-bezier(.4, 0, .2, 1);
+  --vt-studio-accordion-ink: var(--vt-studio-control-ink, #050505);
+  --vt-studio-accordion-accent: var(--pair-a, #ffb52e);
+  --vt-studio-accordion-secondary: var(--pair-b, #cbeaf1);
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: var(--vt-studio-accordion-height);
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: var(--vt-studio-accordion-stroke) solid var(--vt-studio-accordion-ink);
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: transparent;
+  color: var(--vt-studio-accordion-ink);
+  isolation: isolate;
+}
+
+.vt-studio-panel-accordion[data-size="compact"] {
+  --vt-studio-accordion-height: 28px;
+  --vt-studio-accordion-stroke: 2px;
+  --vt-studio-accordion-face: calc(var(--vt-studio-accordion-height) - 2 * var(--vt-studio-accordion-stroke));
+  border-radius: var(--vt-studio-compact-control-radius, 4px);
+}
+
+.vt-studio-panel-accordion,
+.vt-studio-panel-accordion * {
+  box-sizing: border-box;
+}
+
+.vt-studio-panel-accordion__item {
+  display: flex;
+  position: relative;
+  flex: 0 0 var(--vt-studio-accordion-face);
+  width: var(--vt-studio-accordion-face);
+  min-width: var(--vt-studio-accordion-face);
+  height: 100%;
+  min-height: 0;
+  overflow: visible;
+  transition: flex-grow var(--vt-studio-accordion-duration) var(--vt-studio-accordion-ease);
+}
+
+.vt-studio-panel-accordion__item[data-active="true"] {
+  flex-grow: 1;
+}
+
+.vt-studio-panel-accordion__rail {
+  display: grid;
+  place-items: center;
+  position: relative;
+  flex: 0 0 var(--vt-studio-accordion-face);
+  width: var(--vt-studio-accordion-face);
+  min-width: var(--vt-studio-accordion-face);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  appearance: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.vt-studio-panel-accordion__item[data-active="true"] > .vt-studio-panel-accordion__rail {
+  background: var(--vt-studio-accordion-accent);
+}
+
+/* Exactly one shared divider at each internal boundary. No divider is added at the shell's far-right edge. */
+.vt-studio-panel-accordion__item:not(:last-child) > .vt-studio-panel-accordion__rail::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: var(--vt-studio-accordion-stroke);
+  background: var(--vt-studio-accordion-ink);
+  pointer-events: none;
+}
+
+.vt-studio-panel-accordion__icon {
+  display: grid;
+  place-items: center;
+  width: 86%;
+  height: 86%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.vt-studio-panel-accordion__icon > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: var(--vt-studio-accordion-face);
+  max-height: var(--vt-studio-accordion-face);
+}
+
+/* The viewport clips the stationary label; it does not animate the label itself. */
+.vt-studio-panel-accordion__viewport {
+  position: relative;
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--vt-studio-accordion-duration) var(--vt-studio-accordion-ease);
+}
+
+.vt-studio-panel-accordion__item[data-active="true"] > .vt-studio-panel-accordion__viewport {
+  clip-path: inset(0 0 0 0);
+}
+
+/* The label is fixed relative to its item start. Only its clipping viewport changes. */
+.vt-studio-panel-accordion__label {
+  position: absolute;
+  z-index: 1;
+  inset-inline-start: 0;
+  top: 50%;
+  width: max-content;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  transform: translateY(-50%);
+  color: var(--vt-studio-accordion-ink);
+  background: transparent;
+  opacity: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--vt-studio-control-font-family, Inter, sans-serif);
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
+  text-transform: uppercase;
+}
+
+.vt-studio-panel-accordion__content {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.vt-studio-panel-accordion__item[data-active="true"] > .vt-studio-panel-accordion__viewport > .vt-studio-panel-accordion__content {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.vt-studio-panel-accordion__rail:focus-visible {
+  outline: 2px solid var(--vt-studio-accordion-secondary);
+  outline-offset: -4px;
+  z-index: 4;
+}
+
+.vt-studio-panel-accordion__rail:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+.vt-studio-panel-accordion[data-size="compact"] .vt-studio-panel-accordion__label {
+  font-size: var(--vt-studio-control-font-size, 24px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-panel-accordion__item,
+  .vt-studio-panel-accordion__viewport {
+    transition-duration: 0ms;
+  }
+}
