@@ -63,42 +63,26 @@ export function ConfirmedSpecimenGrid({
 
       <div id={contentId} className="vt-specimen-layout">
         {clean ? (
-          <div className="vt-specimen-columns">
-            <div className="vt-specimen-stack">
-              {row("clean-standard", "standard", 1, "STANDARD")}
-              {row("clean-compact", "compact", 3, "COMPACT")}
-            </div>
-            <div className="vt-specimen-stack">
-              {row("clean-supreme", "supreme", 1, "SUPREME")}
-              {row("clean-micro", "micro", 4, "MICRO")}
-            </div>
+          <div className="vt-specimen-stack">
+            {row("clean-standard", "standard", 1, "STANDARD")}
+            {row("clean-compact", "compact", 3, "COMPACT")}
+            {row("clean-supreme", "supreme", 1, "SUPREME")}
+            {row("clean-micro", "micro", 4, "MICRO")}
           </div>
         ) : (
-          <>
+          <div className="vt-specimen-stack">
             {row("ladder-supreme", "supreme", 1, "SUPREME")}
             {row("ladder-standard", "standard", 1, "STANDARD")}
             {row("ladder-halves", "standard", 2, "STANDARD")}
             {row("ladder-quarters", "standard", 4, "STANDARD")}
-            <div className="vt-specimen-columns">
-              <div className="vt-specimen-stack">
-                {row("composition-supreme", "supreme", 1, "SUPREME")}
-              </div>
-              <div className="vt-specimen-stack">
-                {row("composition-compact-full", "compact", 1, "COMPACT")}
-                {row("composition-compact-halves", "compact", 2, "COMPACT")}
-              </div>
-            </div>
-            <div className="vt-specimen-columns">
-              <div className="vt-specimen-stack">
-                {row("composition-supreme-halves", "supreme", 2, "SUPREME")}
-              </div>
-              <div className="vt-specimen-stack">
-                {row("composition-micro-full", "micro", 1, "MICRO")}
-                {row("composition-micro-halves", "micro", 2, "MICRO")}
-                {row("composition-micro-quarters", "micro", 4, "MICRO")}
-              </div>
-            </div>
-          </>
+            {row("composition-supreme", "supreme", 1, "SUPREME")}
+            {row("composition-compact-full", "compact", 1, "COMPACT")}
+            {row("composition-compact-halves", "compact", 2, "COMPACT")}
+            {row("composition-supreme-halves", "supreme", 2, "SUPREME")}
+            {row("composition-micro-full", "micro", 1, "MICRO")}
+            {row("composition-micro-halves", "micro", 2, "MICRO")}
+            {row("composition-micro-quarters", "micro", 4, "MICRO")}
+          </div>
         )}
       </div>
 

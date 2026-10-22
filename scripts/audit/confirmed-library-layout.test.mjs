@@ -452,14 +452,16 @@ test("PR 756 ConfirmedSpecimenGrid is integrated into the confirmed production p
   assert.match(catalog, /Do not map unsupported size tiers onto a primitive/);
 });
 
-test("ConfirmedSpecimenGrid uses catalog-only 4px arrangement styles without responsive face overrides", () => {
+test("ConfirmedSpecimenGrid is full-width and does not split the module into side-by-side columns", () => {
   const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
   const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
-  assert.match(gridCss, /--vt-specimen-gap:\s*var\(--vt-studio-space-unit,\s*4px\)/);
-  assert.match(gridCss, /\.vt-specimen-columns\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/s);
-  assert.match(gridSource, /aria-checked=\{clean\}/);
-  assert.match(gridSource, /aria-controls=\{contentId\}/);
-  assert.doesNotMatch(gridCss, /\.vt-specimen-slot\s+(?:button|input|textarea|select)[^{]*\{[^}]*(?:height|border|background|font-size|padding)\s*:/s);
+  assert.match(gridCss, /--vt-specimen-gap:\\s*var\\(--vt-studio-space-unit,\\s*4px\\)/);
+  assert.match(gridCss, /\\.vt-specimen-module\\s*\\{[^}]*width:\\s*100%/s);
+  assert.doesNotMatch(gridCss, /vt-specimen-columns/);
+  assert.doesNotMatch(gridSource, /vt-specimen-columns/);
+  assert.match(gridSource, /aria-checked=\\{clean\\}/);
+  assert.match(gridSource, /aria-controls=\\{contentId\\}/);
+  assert.doesNotMatch(gridCss, /\\.vt-specimen-slot\\s+(?:button|input|textarea|select)[^{]*\\{[^}]*(?:height|border|background|font-size|padding)\\s*:/s);
 });
 
 
