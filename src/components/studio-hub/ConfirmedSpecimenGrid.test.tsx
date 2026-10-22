@@ -81,6 +81,27 @@ describe("ConfirmedSpecimenGrid", () => {
     expect(comparison?.querySelectorAll('[data-specimen-id^="m"]')).toHaveLength(10)
   })
 
+  it("places Supreme, Standard, Compact, and Micro in four parallel size columns", () => {
+    const renderSpecimen = ({ id, tier, label }: { id: string; tier: string; label: string }) => (
+      <output data-specimen-id={id} data-tier={tier}>{label}</output>
+    )
+    const rows = (["supreme", "standard", "compact", "micro"] as const).flatMap((tier) => [
+      { id: tier + "-full", tier, specimens: [{ id: tier + "-full-v1", label: "BUTTON" }] },
+      { id: tier + "-halves", tier, specimens: [{ id: tier + "-half-v1", label: "BUTTON" }, { id: tier + "-half-v2", label: "BUTTON" }] },
+      { id: tier + "-quarters", tier, specimens: [{ id: tier + "-q1", label: "BUTTON" }, { id: tier + "-q2", label: "BUTTON" }, { id: tier + "-q3", label: "BUTTON" }, { id: tier + "-q4", label: "BUTTON" }] },
+    ])
+    const container = render(<ConfirmedSpecimenGrid familyName="Button variants" renderSpecimen={renderSpecimen} specimenRows={rows} />)
+    const grid = container.querySelector(".vt-specimen-tier-grid")
+    expect(grid?.children).toHaveLength(4)
+    for (const tier of ["supreme", "standard", "compact", "micro"]) {
+      const column = grid?.querySelector(`[data-vt-specimen-tier-column="${tier}"]`)
+      expect(column).toBeTruthy()
+      expect(column?.querySelectorAll("[data-vt-specimen-row]")).toHaveLength(3)
+      expect(column?.querySelectorAll("[data-specimen-id]")).toHaveLength(7)
+    }
+    expect(container.querySelectorAll(".vt-specimen-tier-column")).toHaveLength(4)
+  })
+
   it("keeps the requested two-column composition without a stacking breakpoint", () => {
     const css = readFileSync(resolve(process.cwd(), "src/components/studio-hub/ConfirmedSpecimenGrid.css"), "utf8")
     expect(css).toContain("grid-template-columns: repeat(2, minmax(0, 1fr))")
