@@ -229,9 +229,9 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
          <div className="flex min-w-0 flex-wrap gap-1" aria-label="Record readiness">
           {availabilityLabel ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">{availabilityLabel}</span> : null}
           {coverageLabel ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">{coverageLabel}</span> : null}
-          {record.epistemicState === "STALE" || record.epistemicState === "stale" ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Stale observation</span> : null}
-          {record.epistemicState === "MISSING" || record.epistemicState === "missing" ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Missing value</span> : null}
-          {record.epistemicState === "CONFLICTING" || record.epistemicState === "conflicting" ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Conflicting values</span> : null}
+          {record.epistemicState === "STALE" ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Stale observation</span> : null}
+          {record.epistemicState === "MISSING" ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Missing value</span> : null}
+          {record.epistemicState === "CONFLICTING" ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Conflicting values</span> : null}
          </div>
          <p className="break-all text-[9px] font-bold leading-4 text-black/65">{record.id}</p>
          <dl className="grid min-w-0 grid-cols-2 gap-x-2 gap-y-1 text-[9px] leading-4 sm:grid-cols-3">
