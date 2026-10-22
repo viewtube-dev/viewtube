@@ -5510,3 +5510,15 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
     transition: none !important;
   }
 }
+
+/* The canonical single-line textbox (StudioTextInput / StudioInput) shares the
+   textarea focus color contract while retaining its native left-aligned value. */
+[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"]:is(:focus, :focus-visible) {
+  background: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent);
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
+  outline: calc(var(--vt-studio-control-stroke, 3px) * .65)
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
