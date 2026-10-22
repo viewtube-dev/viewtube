@@ -845,3 +845,11 @@ The Brain runtime output card links each verified output asset to `/vault` with 
 This reuses existing Vault and ContentBuild owners; it introduces no alternate asset store or routing registry. Tests cover scoped URL encoding, asset/build resolution, mismatched scope, and the Brain card's rendered-link contract.
 
 **Verification status:** source and tests are committed on the implementation branch; CI and browser-level accessibility verification are pending. No local test execution or screen-reader certification is claimed. Next: connect “Propose correction” to the canonical learning/governance path and verify the next turn reflects the governed result or exposes an unresolved conflict.
+
+### Implementation record — governed context correction flow (2026-10-22)
+
+The AI Brain page's existing **Propose correction** action now opens a dedicated accessible dialog showing the current statement, source ID, knowledge class, lifecycle, and confirmation state. A creator can edit the replacement statement and submit it through the canonical learning/governance service.
+
+Active memory claims use the explicit teaching path and are only reported as applied after the replacement claim is resolvable. Model hypotheses and learning candidates are recorded as unconfirmed correction proposals because no generic source-specific update contract exists for them; their original records remain unchanged. The dialog supports Escape dismissal, focus restoration/trapping, visible result/error messaging, and a next-turn verification prompt after a governed claim update.
+
+Regression tests cover claim routing, channel isolation, empty input, proposal-only sources, dialog semantics, and explicit-vs-inferred status. **Verification status:** CI and live keyboard/screen-reader/mobile verification are pending. No local execution or accessibility certification is claimed.
