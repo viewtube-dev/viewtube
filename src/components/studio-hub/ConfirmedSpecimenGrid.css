@@ -37,3 +37,42 @@
 .vt-specimen-comparison-column > .vt-specimen-row {
   min-width: 0;
 }
+
+
+/* The canonical Button specimen module compares all four supported sizes in
+   parallel columns. Each column owns its variant rows; size tiers never stack
+   into a single long vertical sequence. Keep the four-column contract at all widths. */
+.vt-specimen-tier-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--vt-specimen-gap);
+  min-width: 0;
+  align-items: start;
+}
+.vt-specimen-tier-column {
+  display: grid;
+  gap: var(--vt-specimen-gap);
+  min-width: 0;
+  align-content: start;
+}
+.vt-specimen-tier-heading {
+  margin: 0;
+  min-width: 0;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 1000;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.vt-specimen-tier-column .vt-specimen-stack {
+  gap: var(--vt-specimen-gap);
+}
+.vt-specimen-tier-column .vt-specimen-row,
+.vt-specimen-tier-column .vt-specimen-slot {
+  min-width: 0;
+  width: 100%;
+}
+.vt-specimen-tier-column .vt-specimen-slot > * {
+  min-width: 0;
+  max-width: 100%;
+}
