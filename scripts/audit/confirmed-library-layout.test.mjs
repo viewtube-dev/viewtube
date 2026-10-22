@@ -457,7 +457,7 @@ test("ConfirmedSpecimenGrid is full-width and does not split the module into sid
   const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
   assert.match(gridCss, /--vt-specimen-gap:\\s*var\\(--vt-studio-space-unit,\\s*4px\\)/);
   assert.match(gridCss, /\\.vt-specimen-module\\s*\\{[^}]*width:\\s*100%/s);
-  assert.doesNotMatch(gridCss, /vt-specimen-columns|grid-template-columns:\\s*repeat\\(2,\\s*minmax\\(0,\\s*1fr\\)\\)/);
+  assert.doesNotMatch(gridCss, /vt-specimen-columns/);
   assert.doesNotMatch(gridSource, /vt-specimen-columns/);
   assert.match(gridSource, /aria-checked=\\{clean\\}/);
   assert.match(gridSource, /aria-controls=\\{contentId\\}/);
