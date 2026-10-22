@@ -42,6 +42,86 @@ const compactId = (value: string | null | undefined): string => {
  return `${value.slice(0, 8)}…${value.slice(-6)}`
 }
 
+export type BrainOutputReceiptState =
+ | { status: "unavailable"; reason: string }
+ | { status: "empty"; receiptId: string; reason: string }
+ | { status: "unverified"; receiptId: string; reason: string }
+ | { status: "unresolved"; receiptId: string; outputAssetIds: string[]; unresolvedAssetIds: string[]; reason: string }
+ | { status: "verified"; receiptId: string; contentBuildId: string; outputAssetIds: string[]; versionIds: string[]; generationRecordId: string | null; traceId: string | null }
+
+export const resolveBrainOutputReceiptState = (
+ chain: BrainRuntimeSnapshot["provenance"]["latestChain"],
+ build: Pick<NonNullable<BrainRuntimeSnapshot["build"]>, "id" | "assetIds"> | null,
+): BrainOutputReceiptState => {
+ if (!chain?.receiptId) return { status: "unavailable", reason: "No completed ToolReceipt is linked. No saved output is asserted." }
+ if (!chain.outputAssetIds.length) {
+  return { status: "empty", receiptId: chain.receiptId, reason: "A ToolReceipt is recorded, but it contains no output asset IDs. No saved output card is shown." }
+ }
+ if (!build || build.id !== chain.contentBuildId) {
+  return { status: "unverified", receiptId: chain.receiptId, reason: "The matching ContentBuild snapshot is unavailable. The output card is withheld." }
+ }
+ const unresolvedAssetIds = chain.outputAssetIds.filter((id) => !build.assetIds.includes(id))
+ if (unresolvedAssetIds.length) {
+  return {
+   status: "unresolved",
+   receiptId: chain.receiptId,
+   outputAssetIds: [...chain.outputAssetIds],
+   unresolvedAssetIds,
+   reason: "The ToolReceipt references asset IDs missing from the current ContentBuild snapshot. The output card is withheld.",
+  }
+ }
+ return {
+  status: "verified",
+  receiptId: chain.receiptId,
+  contentBuildId: chain.contentBuildId,
+  outputAssetIds: [...chain.outputAssetIds],
+  versionIds: [...chain.versionIds],
+  generationRecordId: chain.generationRecordId,
+  traceId: chain.traceId,
+ }
+}
+
+const BrainReceiptBackedOutputCard: React.FC<{
+ chain: BrainRuntimeSnapshot["provenance"]["latestChain"]
+ build: Pick<NonNullable<BrainRuntimeSnapshot["build"]>, "id" | "assetIds"> | null
+}> = ({ chain, build }) => {
+ const state = resolveBrainOutputReceiptState(chain, build)
+ return (
+  <section
+   data-vt-brain-part="receipt-backed-output-card"
+   aria-label="Latest receipt-backed output"
+   className="grid min-w-0 gap-1 border-[1.5px] border-black/40 bg-white p-2"
+  >
+   <h3 className="text-[9px] font-[1000] uppercase tracking-[0.08em]">Latest receipt-backed output</h3>
+   {state.status === "verified" ? (
+    <>
+     <p role="status" className="text-[9px] font-bold leading-4">Verified against the current ContentBuild snapshot.</p>
+     <dl className="grid min-w-0 gap-1 text-[9px] leading-4 sm:grid-cols-2">
+      <div><dt className="font-[1000] uppercase opacity-60">ToolReceipt</dt><dd className="break-all">{state.receiptId}</dd></div>
+      <div><dt className="font-[1000] uppercase opacity-60">ContentBuild</dt><dd className="break-all">{state.contentBuildId}</dd></div>
+      <div><dt className="font-[1000] uppercase opacity-60">Generation record</dt><dd className="break-all">{state.generationRecordId || "Not recorded"}</dd></div>
+      <div><dt className="font-[1000] uppercase opacity-60">Trace</dt><dd className="break-all">{state.traceId || "Not recorded"}</dd></div>
+     </dl>
+     <div className="grid min-w-0 gap-0.5">
+      <h4 className="text-[9px] font-[1000] uppercase">Output asset IDs</h4>
+      <ul className="grid min-w-0 gap-0.5">
+       {state.outputAssetIds.map((id) => <li key={id} data-vt-brain-output-asset-id={id} className="break-all text-[9px] font-bold">{id}</li>)}
+      </ul>
+     </div>
+     {state.versionIds.length ? <p className="break-words text-[9px] font-bold leading-4">Version IDs: {state.versionIds.join(", ")}</p> : null}
+    </>
+   ) : state.status === "unresolved" ? (
+    <div role="alert" className="grid gap-1 break-words border border-black bg-[#FFDA47] p-1.5 text-[9px] font-bold leading-4">
+     <p>{state.reason}</p>
+     <p>Unresolved asset IDs: {state.unresolvedAssetIds.join(", ")}</p>
+    </div>
+   ) : (
+    <p role="status" className="break-words text-[9px] font-bold leading-4">{state.reason}</p>
+   )}
+  </section>
+ )
+}
+
 const formatLatency = (latencyMs: number | null): string => {
  if (latencyMs === null) return "—"
  if (latencyMs < 1000) return `${latencyMs}ms`
