@@ -51,6 +51,7 @@ export const BrainEvidenceDrawer: React.FC<{
  const sourceCount = evidenceItems.length
  const provenanceCount = evidenceChips.length
  const hasAnything = sourceCount || missing.length || caveats.length || provenanceCount
+ const hasNoEvidenceDetails = !hasAnything
 
  const evidenceHref = (item: AIBrainEvidencePack["items"][number]): string => {
   const params = new URLSearchParams()
@@ -69,7 +70,6 @@ export const BrainEvidenceDrawer: React.FC<{
   if (item.source.toLowerCase().includes("traffic")) params.set("trafficSource", item.label)
   return `/analytics?${params.toString()}`
  }
- if (!hasAnything) return null
 
  const confidenceText = typeof confidence === "number"
   ? `${Math.round(Math.max(0, Math.min(1, confidence)) * 100)}% confidence`
@@ -123,6 +123,25 @@ export const BrainEvidenceDrawer: React.FC<{
         <li key={`${index}:${chip}`} className="text-[10px] font-bold leading-4 text-black/70">{chip}</li>
        ))}
       </ul>
+     </section>
+    ) : null}
+
+    {hasNoEvidenceDetails ? (
+     <section
+      role="status"
+      aria-live="polite"
+      className="grid gap-1 border-[2px] border-black bg-[#FFDA47]/20 p-3"
+     >
+      <h4 className="text-[10px] font-[1000] uppercase tracking-[0.08em]">
+       {evidencePack.dataStatus === "missing" ? "Evidence unavailable" : "No evidence references attached"}
+      </h4>
+      <p className="break-words text-xs font-bold leading-5 text-black/75">
+       {evidencePack.dataStatus === "missing"
+        ? "No evidence was available for this answer. Connect or sync a data source, then ask again."
+        : evidencePack.dataStatus === "partial"
+         ? "No evidence references were attached to this answer. Available data may be incomplete; this is not proof that a search returned no results."
+         : "No evidence references were attached to this answer. This does not establish that evidence does not exist; inspect the data sources before relying on the conclusion."}
+      </p>
      </section>
     ) : null}
 
