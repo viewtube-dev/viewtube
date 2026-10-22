@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { buildBrainContextDisplayItems } from "../BrainContextPresentation"
+import { brainKnowledgeStatusFromConfirmation, buildBrainContextDisplayItems } from "../BrainContextPresentation"
 
 describe("Brain context presentation", () => {
  it("labels active scope and source provenance without inventing epistemic certainty", () => {
@@ -34,5 +34,17 @@ describe("Brain context presentation", () => {
   expect(items[1]).toMatchObject({ value: "No project in this answer's context", provenance: "Not supplied" })
   expect(items[2]).toMatchObject({ value: "No linked ContentBuild", provenance: "Not supplied" })
   expect(items[3]).toMatchObject({ value: "No selected video or asset was supplied", provenance: "Not supplied" })
+ })
+})
+
+
+describe("brainKnowledgeStatusFromConfirmation", () => {
+ it("treats explicit creator confirmation as confirmed rather than inferred", () => {
+  expect(brainKnowledgeStatusFromConfirmation("explicit")).toBe("confirmed")
+  expect(brainKnowledgeStatusFromConfirmation("confirmed")).toBe("confirmed")
+ })
+ it("does not upgrade inferred or missing confirmation to confirmed", () => {
+  expect(brainKnowledgeStatusFromConfirmation("inferred")).toBe("inferred")
+  expect(brainKnowledgeStatusFromConfirmation(null)).toBe("inferred")
  })
 })
