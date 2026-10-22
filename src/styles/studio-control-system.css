@@ -5256,7 +5256,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 /* Studio value-toggle family: canonical primitive styles; no motion or shadow. */
 .vt-studio-value-toggle {
   --vt-toggle-text: #000;
-  --vt-toggle-fill: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
+  --vt-toggle-fill: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-toggle-icon: #000;
   --vt-toggle-icon-fill: transparent;
   display: flex; align-items: stretch; gap: 0; min-width: 0; width: 100%; box-sizing: border-box;
