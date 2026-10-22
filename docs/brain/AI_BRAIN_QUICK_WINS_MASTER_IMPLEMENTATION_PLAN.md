@@ -421,3 +421,18 @@ Next delivery gate: verify the metadata guard and tests, then connect one genera
 The next vertical slice adds a receipt-backed output card to the existing Brain runtime panel. It requires a recorded ToolReceipt, output asset IDs, and a match against the asset IDs in the current ContentBuild snapshot before showing a verified output card. Missing receipts, empty output lists, mismatched build scope and stale/missing assets receive explicit withheld/unavailable states; a workflow step marked complete is not treated as a saved result.
 
 Regression tests cover both the pure resolution contract and the rendered card. CI is pending. The next gate remains connecting the result to exact user-facing asset navigation only after the canonical route is verified, then context corrections and learning governance.
+
+
+### Follow-through — verified Brain-to-Vault asset navigation (2026-10-22)
+
+The receipt-backed output card now offers an **Open in Vault** action for each output asset only after the existing Brain output projection verifies the ToolReceipt, current ContentBuild, and asset ID membership. The destination is a scoped `/vault?assetId=…&contentBuildId=…` deep link.
+
+The Vault route resolves that request against both canonical owners before selecting anything:
+- the asset ID must exist in the canonical Vault inventory;
+- the requested ContentBuild must exist and contain that asset ID;
+- the inspector is revealed and focused for a resolved asset, while the creator’s existing library filters are preserved;
+- missing assets, missing builds and scope mismatches produce an accessible `role="alert"` message and do not select an unverified asset.
+
+Implementation adds a pure route resolver and tests for URL encoding, canonical asset existence, ContentBuild membership, missing IDs and mismatched scope. The Brain output card test now requires the scoped link. This is navigation only; it does not mutate assets, mark outputs saved beyond the existing receipt contract, or grant publish approval.
+
+**Verification status:** tests are committed on the implementation branch; CI and browser/mobile/screen-reader verification are pending. No local test execution is claimed. Next: connect “Propose correction” to the existing context-governance owner and verify that the next turn reflects the governed result or exposes a conflict, then audit learning-review state transitions.
