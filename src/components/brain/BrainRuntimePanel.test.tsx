@@ -169,7 +169,7 @@ describe("BrainRuntimePanel", () => {
   expect(html).toContain("Metadata versions")
   expect(html).toContain("Learning candidates")
   expect(html).toContain("Evidence lineage")
-  expect(html).toContain("1 linked chain")
+  expect(html).toContain("Linked chains")
   expect(html).toContain("trace-1")
   expect(html).toContain("generation-record-1")
   expect(html).toContain("Evidence IDs")
