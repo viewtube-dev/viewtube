@@ -48,11 +48,23 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
  const requestSummary = requestConstraints
   ? requestConstraints.map((item) => item.value).join(" · ")
   : "Selection constraints were not recorded for this saved turn."
+ const noPreparedEvidence = preparedCount === 0
  const statusLabel = evidencePack.dataStatus === "missing"
   ? "Missing evidence"
   : evidencePack.dataStatus === "partial"
    ? "Partial evidence"
-   : "Evidence ready"
+   : noPreparedEvidence
+    ? "No evidence selected"
+    : "Evidence ready"
+ const statusColor = evidencePack.dataStatus === "missing" || noPreparedEvidence
+  ? statusTone.missing
+  : statusTone[evidencePack.dataStatus]
+ const verifiedRecords = evidenceIntegrityStatus === "verified" ? evidenceRecords : undefined
+ const staleCount = verifiedRecords?.filter((record) => record.freshness === "stale" || record.epistemicState === "STALE").length ?? 0
+ const missingCount = verifiedRecords?.filter((record) => record.epistemicState === "MISSING" || record.availability === "unavailable").length ?? 0
+ const conflictingCount = verifiedRecords?.filter((record) => record.epistemicState === "CONFLICTING").length ?? 0
+ const hasPartialCoverage = evidencePack.dataStatus === "partial"
+  || Boolean(verifiedRecords?.some((record) => record.availability === "partial" || (typeof record.coverage === "number" && record.coverage < 1)))
 
  return (
   <section
@@ -62,7 +74,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
   >
    <div className="flex min-w-0 flex-wrap items-center gap-1.5">
     <span className="min-w-0 flex-1 text-[9px] font-[1000] uppercase tracking-[0.08em]">Evidence snapshot</span>
-    <StudioSplitLeftBadge sizeVariant="micro" style={{ backgroundColor: statusTone[evidencePack.dataStatus], width: "max-content" }}>
+    <StudioSplitLeftBadge sizeVariant="micro" style={{ backgroundColor: statusColor, width: "max-content" }}>
      {statusLabel}
     </StudioSplitLeftBadge>
    </div>
@@ -76,6 +88,28 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
     ) : null}
    </div>
    <p className="break-words text-[10px] font-bold leading-4 text-black/65">Captured: {captureLabel}</p>
+   {noPreparedEvidence ? (
+    <p data-vt-brain-part="empty-evidence-selection" role="note" className="break-words border border-black/25 bg-[#f8f8f4] p-2 text-xs font-bold leading-5">
+     No evidence items were selected for this turn. This is an empty selection, not proof that the underlying data source has no records.
+    </p>
+   ) : null}
+   {evidenceIntegrityStatus === "verified" && verifiedRecords ? (
+    <section data-vt-brain-part="evidence-condition-summary" aria-label="Evidence condition summary" className="grid min-w-0 gap-1 border-t border-black/20 pt-1.5">
+     <h4 className="text-[9px] font-[1000] uppercase tracking-[0.06em]">Evidence conditions</h4>
+     <div className="flex min-w-0 flex-wrap gap-1">
+      {hasPartialCoverage ? <span className="border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-[1000] uppercase">Partial coverage</span> : null}
+      {staleCount ? <span className="border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-[1000] uppercase">{staleCount} stale</span> : null}
+      {missingCount ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-1 text-[9px] font-[1000] uppercase">{missingCount} missing</span> : null}
+      {conflictingCount ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-1 text-[9px] font-[1000] uppercase">{conflictingCount} conflicting</span> : null}
+      {!hasPartialCoverage && staleCount === 0 && missingCount === 0 && conflictingCount === 0 ? (
+       <span className="border border-black bg-[#C0F240] px-1.5 py-1 text-[9px] font-[1000] uppercase">No recorded quality flags</span>
+      ) : null}
+     </div>
+     <p className="break-words text-[10px] font-bold leading-4 text-black/65">Conditions are calculated from the verified prompt records and this turn's selection status. They describe recorded evidence quality, not a guarantee that every claim is correct.</p>
+    </section>
+   ) : evidenceIntegrityStatus === "mismatch" ? (
+    <p role="note" className="break-words border-t border-black/20 pt-1.5 text-[10px] font-bold leading-4 text-black/65">Evidence quality details are withheld because prompt evidence identity could not be verified.</p>
+   ) : null}
    {evidenceIntegrityStatus === "mismatch" ? (
     <div data-vt-brain-part="evidence-identity-warning" role="alert" className="grid gap-0.5 border-[2px] border-black bg-[#FF7AC8] p-2">
      <strong className="text-[10px] font-[1000] uppercase">Evidence identity could not be verified</strong>
