@@ -150,9 +150,11 @@ export const readPromptEvidenceRecords = (
  metadata: Record<string, unknown> | undefined,
 ): EvidenceRecord[] | undefined => {
  if (!metadata || !Array.isArray(metadata.evidenceRecords) || !Array.isArray(metadata.promptEvidenceRecordIds)) return undefined
- const records = metadata.evidenceRecords
- const ids = metadata.promptEvidenceRecordIds
- if (!records.every(isEvidenceRecord) || !ids.every((id) => typeof id === "string")) return undefined
+ const rawRecords: unknown[] = metadata.evidenceRecords
+ const rawIds: unknown[] = metadata.promptEvidenceRecordIds
+ if (!rawRecords.every(isEvidenceRecord) || !rawIds.every((id) => typeof id === "string")) return undefined
+ const records = rawRecords as EvidenceRecord[]
+ const ids = rawIds as string[]
  if (records.length !== ids.length || records.some((record, index) => record.id !== ids[index])) return undefined
  return records
 }
