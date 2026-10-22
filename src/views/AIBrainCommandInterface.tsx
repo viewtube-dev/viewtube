@@ -679,7 +679,7 @@ const CreatorResponseCard: React.FC<{
  onRetry: (message: ChatMessage, useFreshEvidence: boolean) => void
  onCorrectReceipt: (message: ChatMessage) => void
  onRejectReceipt: (message: ChatMessage) => void
- onCorrectContextItem: (id: string, statement: string) => void
+ onCorrectContextItem: (item: BrainCreatorContextSnapshot["knowledgeItems"][number]) => void
 }> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry, onCorrectReceipt, onRejectReceipt, onCorrectContextItem }) => {
  const response = message.response
  const turnEvidencePack = message.evidencePack
