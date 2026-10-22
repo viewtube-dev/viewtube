@@ -9,9 +9,17 @@ export interface SpecimenRequest {
   label: string
 }
 
+export interface SpecimenGridRow {
+  id: string
+  tier: SpecimenTier
+  specimens: Array<{ id: string; label: string }>
+}
+
 export interface ConfirmedSpecimenGridProps {
   familyName: string
   renderSpecimen: (request: SpecimenRequest) => React.ReactNode
+  /** Optional authored rows let a component family reuse the grid without changing its own specimen semantics. */
+  specimenRows?: SpecimenGridRow[]
   documentation?: React.ReactNode
 }
 
@@ -23,13 +31,15 @@ export interface ConfirmedSpecimenGridProps {
 export function ConfirmedSpecimenGrid({
   familyName,
   renderSpecimen,
+  specimenRows,
   documentation,
 }: ConfirmedSpecimenGridProps) {
   const [clean, setClean] = React.useState(false)
   const contentId = React.useId()
+  const viewPrefix = clean ? "clean" : "reference"
 
   const specimen = (id: string, tier: SpecimenTier, label: string) => (
-    <div className="vt-specimen-slot" key={id}>
+    <div className="vt-specimen-slot" key={id} data-vt-specimen-slot={id}>
       {renderSpecimen({ id, tier, label })}
     </div>
   )
@@ -41,6 +51,17 @@ export function ConfirmedSpecimenGrid({
       )}
     </div>
   )
+
+  const authoredRows = specimenRows?.map((item) => (
+    <div
+      className={`vt-specimen-row vt-specimen-row--${item.specimens.length}`}
+      key={item.id}
+      aria-label={`${item.tier} ${item.specimens.length}-column specimens`}
+      data-vt-specimen-row={item.id}
+    >
+      {item.specimens.map(({ id, label }) => specimen(id, item.tier, label))}
+    </div>
+  ))
 
   return (
     <section
@@ -63,11 +84,13 @@ export function ConfirmedSpecimenGrid({
 
       <div id={contentId} className="vt-specimen-layout">
         <div className="vt-specimen-stack">
-          {(["supreme", "standard", "compact", "micro"] as const).flatMap((tier) =>
-            [1, 2, 3, 4].map((count) =>
-              row(`${clean ? "clean" : "reference"}-${tier}-${count}`, tier, count, tier.toUpperCase()),
-            ),
-          )}
+          {specimenRows
+            ? authoredRows
+            : (["supreme", "standard", "compact", "micro"] as const).flatMap((tier) =>
+                [1, 2, 3, 4].map((count) =>
+                  row(`${viewPrefix}-${tier}-${count}`, tier, count, tier.toUpperCase()),
+                ),
+              )}
         </div>
       </div>
 
