@@ -11,6 +11,7 @@ export type BrainTurnEvidenceRibbonProps = {
  evidencePack: AIBrainEvidencePack
  citedEvidenceIds?: string[]
  evidenceRecords?: EvidenceRecord[]
+ evidenceIntegrityStatus?: "verified" | "unavailable" | "mismatch"
  compact?: boolean
  className?: string
 }
@@ -31,6 +32,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
  evidencePack,
  citedEvidenceIds = [],
  evidenceRecords,
+ evidenceIntegrityStatus = evidenceRecords === undefined ? "unavailable" : "verified",
  compact = false,
  className = "",
 }) => {
@@ -74,6 +76,16 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
     ) : null}
    </div>
    <p className="break-words text-[10px] font-bold leading-4 text-black/65">Captured: {captureLabel}</p>
+   {evidenceIntegrityStatus === "mismatch" ? (
+    <div data-vt-brain-part="evidence-identity-warning" role="alert" className="grid gap-0.5 border-[2px] border-black bg-[#FF7AC8] p-2">
+     <strong className="text-[10px] font-[1000] uppercase">Evidence identity could not be verified</strong>
+     <p className="break-words text-xs font-bold leading-5">The saved record IDs do not match the prompt evidence manifest. Detailed record provenance is withheld so a different evidence set is not presented as the model input.</p>
+    </div>
+   ) : evidenceIntegrityStatus === "verified" ? (
+    <p data-vt-brain-part="evidence-identity-verified" role="status" className="text-[10px] font-bold leading-4 text-black/70">Evidence identity verified against the recorded prompt manifest.</p>
+   ) : (
+    <p data-vt-brain-part="evidence-identity-unavailable" role="note" className="break-words text-[10px] font-bold leading-4 text-black/65">Prompt evidence identity unavailable for this saved turn; no complete manifest was recorded.</p>
+   )}
    <section data-vt-brain-part="evidence-request-constraints" aria-label="Evidence selection request" className="grid min-w-0 gap-1 border-t border-black/20 pt-1.5">
     <div className="grid gap-0.5">
      <h4 className="text-[10px] font-[1000] uppercase tracking-[0.06em]">Selection request</h4>
@@ -112,7 +124,9 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
      <span>Prompt evidence records</span>
      <span className="shrink-0">{evidenceRecords === undefined ? "Unavailable" : evidenceRecords.length}</span>
     </summary>
-    {evidenceRecords === undefined ? (
+    {evidenceIntegrityStatus === "mismatch" ? (
+     <p className="break-words py-1 text-[10px] font-bold leading-4 text-black/70">Record-level provenance is withheld because the prompt manifest and saved record IDs disagree.</p>
+    ) : evidenceRecords === undefined ? (
      <p className="break-words py-1 text-[10px] font-bold leading-4 text-black/70">
       Record-level provenance is unavailable for this saved turn. The legacy evidence summary above is not proof of the exact typed records supplied to the model.
      </p>
