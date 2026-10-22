@@ -405,12 +405,6 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   transform: translateY(calc(-40% * var(--vt-studio-control-floating-label-offset-ratio, 1.2)));
   transform-origin: left center;
 }
-/* Raised labels intentionally converge to one shared 18px size for every
-   input/textarea and standard/compact/micro variant. */
-.vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):focus + .vt-studio-floating-field-label,
-.vt-studio-floating-field:not(.is-textarea) > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
-  font-size: 18px;
-}
 .vt-studio-floating-field.is-textarea > :is(input, textarea):focus + .vt-studio-floating-field-label,
 .vt-studio-floating-field.is-textarea > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
   top: 0;
