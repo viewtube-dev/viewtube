@@ -114,4 +114,16 @@ describe("BrainTurnEvidenceRibbon", () => {
   expect(html).toContain("Prompt evidence identity unavailable")
   expect(html).toContain("Record-level provenance is unavailable")
  })
+ it("counts only citations that resolve to the prepared evidence list", () => {
+  const html = render({
+   evidencePack: pack(),
+   evidenceIntegrityStatus: "verified",
+   evidenceRecords: [record()],
+   citedEvidenceIds: ["video:abc", "video:not-in-pack", "video:not-in-pack"],
+  })
+  expect(html).toContain("1 cited")
+  expect(html).toContain("1 unresolved citation")
+  expect(html).toContain("not counted as cited")
+ })
+
 })
