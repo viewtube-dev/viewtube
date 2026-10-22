@@ -108,8 +108,8 @@ html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type
 /* Focus changes only the glyph stroke to black; keep the secondary outline. */
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
-html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
-html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible) {
   -webkit-text-stroke-color: #000;
 }
 
@@ -182,9 +182,9 @@ html body [data-vt-studio-control="true"] :is(input, textarea, select) {
    raised labels share one 18px rule across input/textarea and standard/compact. */
 html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
   caret-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
   background-color: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent);
 }
