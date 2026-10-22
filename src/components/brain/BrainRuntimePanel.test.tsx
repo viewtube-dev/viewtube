@@ -177,6 +177,8 @@ describe("BrainRuntimePanel", () => {
   expect(html).toContain("Latest receipt-backed output")
   expect(html).toContain("Verified against the current ContentBuild snapshot.")
   expect(html).toContain('data-vt-brain-output-asset-id="asset-title-1"')
+  expect(html).toContain('data-vt-brain-output-asset-link="asset-title-1"')
+  expect(html).toContain('href="/vault?assetId=asset-title-1&contentBuildId=cb%3Aproject%3Aproject-2"')
  })
 
 
