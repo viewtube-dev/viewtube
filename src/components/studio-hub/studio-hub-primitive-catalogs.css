@@ -3274,3 +3274,26 @@
     gap: var(--vt-confirmed-space-1);
   }
 }
+
+/* StudioButton library module — canonical 4px grid.
+ * Catalog-only layout rules; StudioButton itself owns all face geometry and typography.
+ */
+.vt-confirmed-button-family {
+  gap: var(--vt-confirmed-grid-unit, 4px);
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-button-family > .vt-confirmed-variants {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--vt-confirmed-grid-unit, 4px);
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-button-family > .vt-confirmed-variants > .vt-confirmed-variant {
+  gap: var(--vt-confirmed-grid-unit, 4px);
+  min-width: 0;
+}
+.vt-confirmed-button-family > .vt-confirmed-variants > .vt-confirmed-variant.is-full-row {
+  grid-column: 1 / -1;
+}
