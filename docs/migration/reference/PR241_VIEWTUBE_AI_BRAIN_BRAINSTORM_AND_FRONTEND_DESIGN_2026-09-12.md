@@ -736,3 +736,18 @@ Next: fix/confirm the type-safe evidence metadata guard, then continue with rece
 The Brain runtime panel now projects the latest provenance chain into a small output card only when the chain contains a ToolReceipt and every receipt output asset ID exists in the same current ContentBuild snapshot. It displays the receipt, ContentBuild, generation-record and trace IDs, plus output asset and version IDs. If the receipt is absent, contains no output IDs, belongs to a different/unavailable build, or references missing assets, the UI shows an explicit unavailable/withheld state; it never emits a stale “saved” card.
 
 The runtime snapshot now exposes its canonical ContentBuild asset IDs for this read-only check. Tests cover resolved output, missing/stale output IDs, missing receipts, and snapshot asset identity. CI for this follow-up is pending; the browser/mobile/screen-reader verification gate remains open.
+
+
+### Follow-through — truthful context provenance labels (2026-10-22)
+
+The next /ai-brain slice replaces guessed certainty labels in the per-turn Context used disclosure with labels that describe what the source actually establishes:
+
+- Channel is presented as active scope, not as a confirmed fact.
+- Project labels identify canonical project / ContentBuild provenance or visible UI context, without inferring epistemic certainty from the source name.
+- ContentBuild and selected video/asset are described as linked IDs or current surface selection.
+- Missing project, build and selection are explicitly shown as not supplied.
+- “Correct context” is renamed “Propose correction” because the control seeds a correction request; it does not itself mutate a profile or confirm a durable fact.
+
+A pure projection helper and regression tests cover canonical/visible provenance and missing-scope states. This is presentation-only: no new profile, memory, or evidence store. The change does not claim that context correction propagation is complete; the next slice should connect a proposed correction to the existing governance path and prove the next turn reflects the governed result or exposes a conflict.
+
+**Verification status:** source and test are committed on the implementation branch; CI is pending. No local test execution is claimed.
