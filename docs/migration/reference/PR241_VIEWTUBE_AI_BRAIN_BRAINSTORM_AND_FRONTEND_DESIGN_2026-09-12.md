@@ -751,3 +751,12 @@ The next /ai-brain slice replaces guessed certainty labels in the per-turn Conte
 A pure projection helper and regression tests cover canonical/visible provenance and missing-scope states. This is presentation-only: no new profile, memory, or evidence store. The change does not claim that context correction propagation is complete; the next slice should connect a proposed correction to the existing governance path and prove the next turn reflects the governed result or exposes a conflict.
 
 **Verification status:** source and test are committed on the implementation branch; CI is pending. No local test execution is claimed.
+
+
+### Follow-through — scoped Brain output navigation to Vault (2026-10-22)
+
+The Brain runtime output card now links each verified output asset to `/vault` with both `assetId` and `contentBuildId`. The Vault page validates the requested ID against its canonical asset inventory and the matching ContentBuild before selecting the asset. It opens the Inspector, restores its visibility if the workspace layout had hidden it, preserves current library filters, and announces success through a status region. Invalid IDs, unavailable builds and scope mismatches produce an alert and do not select the asset.
+
+This reuses the existing Vault and ContentBuild owners; it introduces no asset store or alternate routing registry. Tests cover scoped URL encoding, asset/build resolution, mismatched scope, and the Brain card's link contract.
+
+**Verification status:** committed tests and source changes are awaiting CI; no local test execution or browser-level accessibility certification is claimed. The next vertical slice is governed context correction: “Propose correction” must submit through the canonical governance path, and the following turn must either reflect the governed change or display the unresolved conflict. Learning review/promotion stays a separate later slice.
