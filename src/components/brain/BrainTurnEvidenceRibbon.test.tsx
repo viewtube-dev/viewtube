@@ -57,7 +57,7 @@ const pack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvidencePack
   expect(html).toContain("Partial coverage")
   expect(html).toContain("60% coverage")
   expect(html).toContain("Stale")
-  expect(html).toContain("Open exact evidence in Analytics")
+  expect(html).toContain("Open Analytics with evidence context")
   expect(html).toContain("brainEvidenceId=analytics%3Asnapshot-1%3Avideo-abc%3Aviews")
   expect(html).toContain("brainEvidenceSource=analytics-canon")
   expect(html).toContain("snapshotId=snapshot-1")
