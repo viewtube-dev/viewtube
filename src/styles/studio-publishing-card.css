@@ -43,9 +43,16 @@
   --vt-publishing-radius: 2px;
   --vt-publishing-control-height: 12px;
   --vt-publishing-control-font: 10px;
-  --vt-publishing-textarea-font: 14px;
+  --vt-publishing-textarea-font: 10px;
   --vt-publishing-focus-outline: .65px;
-  padding: 4px;
+  /* 12px / 44px title-height scaling, compensated for the two tiers' shell/padding. */
+  width: calc(27.272727% + 4px);
+  max-width: 100%;
+  align-self: start;
+  aspect-ratio: 5 / 7;
+  grid-template-rows: 12px auto minmax(25px, .8fr) minmax(0, 1.25fr);
+  gap: 1px;
+  padding: 2px;
 }
 .vt-studio-publishing-card *,
 .vt-studio-publishing-card *::before,
@@ -118,7 +125,17 @@
 .vt-studio-publishing-card__metadata { min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 4px; }
 .vt-studio-publishing-card__section-label { font-size: 18px; line-height: 1; font-weight: 1000; }
 .vt-studio-publishing-card[data-size="compact"] .vt-studio-publishing-card__section-label { font-size: 14px; }
-.vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__section-label { font-size: 10px; }
+.vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__section-label { font-size: 5px; }
+.vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__lower,
+.vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__tags,
+.vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__metadata,
+.vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__tag-list { gap: 1px; }
+.vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__description .vt-studio-fixed-label-field,
+.vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__description textarea { min-height: 25px; }
+.vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__tag-input {
+  padding: 1px;
+  font-size: 5px;
+}
 .vt-studio-publishing-card__tag-list { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 4px; min-height: 0; overflow: auto; }
 .vt-studio-publishing-card__tag-input {
   width: 100%;
@@ -150,8 +167,10 @@
 }
 .vt-studio-publishing-card__metadata .vt-studio-legend-label { font-weight: 1000; }
 .vt-studio-publishing-card[data-size="micro"] .vt-studio-publishing-card__description textarea {
-  /* Textareas intentionally have no canonical micro tier; use Studio's compact textarea contract. */
-  font-size: 14px;
+  /* Micro card is a scaled composition; typography is reduced locally to preserve its geometry. */
+  font-size: 5px;
+  min-height: 25px;
+  padding: 1px;
 }
 @media (max-width: 420px) {
   .vt-studio-publishing-card { gap: 4px; }
