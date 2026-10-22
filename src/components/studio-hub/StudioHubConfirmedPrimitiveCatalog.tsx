@@ -17,6 +17,7 @@ import {
   StudioLeftCounter,
   StudioSplitLeftButton,
   StudioSplitRailAccordion,
+  StudioPanelAccordion,
   StudioSplitLeftBadge,
   StudioSplitRightBadge,
   StudioDoubleSplitBadge,
@@ -483,6 +484,29 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
           { accessibleLabel: "Left option compact", icon: <Check aria-hidden="true" />, content: "LEFT" },
           { accessibleLabel: "Middle option compact", icon: <Settings2 aria-hidden="true" />, content: "MIDDLE" },
           { accessibleLabel: "Right option compact", icon: <Sparkles aria-hidden="true" />, content: "RIGHT" },
+        ]} />
+      </div>
+    </Family>
+
+    <Family title="Panel Accordion · New Primitive · 44px + 28px" nonDefaultSettings={[
+      "Independent implementation; does not reuse the legacy split-rail accordion.",
+      "Square rail faces are derived from shell height minus both outer strokes: 38px standard / 24px compact.",
+      "Shell owns perimeter edges; internal dividers are single shared strokes. Labels are revealed by clipping rather than text-position animation.",
+    ]} provenance={<Provenance primitive="StudioPanelAccordion" tsx="src/studio-ui/primitives/StudioPanelAccordion.tsx" css="src/styles/studio-panel-accordion.css" tokens="Independent panel accordion; 44px/3px standard, 28px/2px compact; fixed square rails and clipped stationary labels." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>44px standard · right panel opens by default</span>
+        <StudioPanelAccordion items={[
+          { label: "Left panel", icon: <Check aria-hidden="true" />, content: "LEFT PANEL" },
+          { label: "Middle panel", icon: <Settings2 aria-hidden="true" />, content: "MIDDLE PANEL" },
+          { label: "Right panel", icon: <Sparkles aria-hidden="true" />, content: "RIGHT PANEL" },
+        ]} />
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px compact · middle panel initially selected</span>
+        <StudioPanelAccordion size="compact" defaultActiveIndex={1} items={[
+          { label: "Left panel compact", icon: <Check aria-hidden="true" />, content: "LEFT" },
+          { label: "Middle panel compact", icon: <Settings2 aria-hidden="true" />, content: "MIDDLE" },
+          { label: "Right panel compact", icon: <Sparkles aria-hidden="true" />, content: "RIGHT" },
         ]} />
       </div>
     </Family>
