@@ -4,6 +4,7 @@ import { buildBrainEvaluationInbox, type BrainEvaluationInboxItem } from "../../
 import { ALGORITHM_INTELLIGENCE_EVENT_CHANGED } from "../../services/brain/AlgorithmIntelligenceEventLedger"
 import { BRAIN_OUTCOME_EVENT } from "../../services/brain/BrainOutcomeLedger"
 import { reviewAlgorithmLearningCandidate } from "../../services/brain/AlgorithmLearningGovernance"
+import { describeBrainLearningReview } from "../../services/brain/BrainEvaluationInboxPresentation"
 import { captureCanonicalLifecycleObservations } from "../../services/brain/AlgorithmLifecycleObservationStore"
 import { backfillLocalBrainIntelligence } from "../../services/brain/BrainIntelligenceBackfill"
 import { hydrateBrainIntelligenceFromPersistence } from "../../services/brain/BrainIntelligencePersistence"
@@ -35,6 +36,8 @@ export const BrainEvaluationInboxPanel: React.FC<{ channelId: string | null; max
  const [syncingHistory, setSyncingHistory] = useState(false)
  const [historySyncStatus, setHistorySyncStatus] = useState<string | null>(null)
  const [promotingCandidateId, setPromotingCandidateId] = useState<string | null>(null)
+ const [reviewingCandidateId, setReviewingCandidateId] = useState<string | null>(null)
+ const [reviewStatus, setReviewStatus] = useState<{ label: string; message: string; eventId: string | null } | null>(null)
 
  useEffect(() => {
   if (typeof window === "undefined") return
@@ -84,11 +87,21 @@ export const BrainEvaluationInboxPanel: React.FC<{ channelId: string | null; max
  const items = inbox?.items.slice(0, maximumItems) || []
 
  const review = (item: BrainEvaluationInboxItem, decision: "hold" | "reject" | "approve_for_profile_review") => {
-  if (!channelId || item.kind !== "learning_review") return
+  if (!channelId || item.kind !== "learning_review" || reviewingCandidateId) return
   const candidate = item.metadata?.candidate as { id?: string } | undefined
   if (!candidate?.id) return
-  reviewAlgorithmLearningCandidate({ channelId, candidateId: candidate.id, decision })
-  setRevision((value) => value + 1)
+  setReviewingCandidateId(candidate.id)
+  setReviewStatus(null)
+  try {
+   const result = reviewAlgorithmLearningCandidate({ channelId, candidateId: candidate.id, decision })
+   const feedback = describeBrainLearningReview(result.review.decision, result.event.id)
+   setReviewStatus({ label: feedback.label, message: feedback.message, eventId: feedback.eventId })
+   setRevision((value) => value + 1)
+  } catch (error) {
+   setReviewStatus({ label: "Review not saved", message: error instanceof Error ? error.message : "The learning decision could not be saved. No channel profile change was made.", eventId: null })
+  } finally {
+   setReviewingCandidateId(null)
+  }
  }
 
  const promote = async (item: BrainEvaluationInboxItem) => {
@@ -149,7 +162,14 @@ export const BrainEvaluationInboxPanel: React.FC<{ channelId: string | null; max
       <button type="button" title="Refresh evaluation inbox" aria-label="Refresh evaluation inbox" onClick={() => setRevision((value) => value + 1)} className="grid h-7 w-7 place-items-center rounded-[6px] border-[2px] border-black bg-white hover:bg-[#36E0F6]"><RefreshCw size={12} /></button>
      </div>
     </div>
-    {historySyncStatus ? <p className="border-b-[2px] border-black bg-[#f7f7f4] px-3 py-1.5 text-[9px] font-bold leading-3 text-black/65">{historySyncStatus}</p> : null}
+    {historySyncStatus ? <p role="status" aria-live="polite" className="border-b-[2px] border-black bg-[#f7f7f4] px-3 py-1.5 text-[9px] font-bold leading-3 text-black/65">{historySyncStatus}</p> : null}
+    {reviewStatus ? (
+     <div role={reviewStatus.label === "Review not saved" ? "alert" : "status"} aria-live="polite" data-vt-brain-part="learning-review-status" className="grid gap-1 border-b-[2px] border-black bg-[#f7f7f4] px-3 py-2">
+      <p className="text-[9px] font-[1000] uppercase">{reviewStatus.label}</p>
+      <p className="text-[10px] font-bold leading-4">{reviewStatus.message}</p>
+      {reviewStatus.eventId ? <p className="break-all text-[9px] font-bold text-black/60">Review event: {reviewStatus.eventId}</p> : null}
+     </div>
+    ) : null}
     <div className="grid gap-1.5 p-2">
      {!items.length ? <p className="rounded-[7px] border-[2px] border-black/20 bg-[#f7f7f4] p-2 text-[10px] font-bold leading-4 text-black/55">No evaluation work is waiting right now.</p> : items.map((item) => (
       <article key={item.id} className="overflow-hidden rounded-[8px] border-[2px] border-black bg-white">
@@ -158,7 +178,16 @@ export const BrainEvaluationInboxPanel: React.FC<{ channelId: string | null; max
         <p className="line-clamp-3 text-[10px] font-bold leading-[14px] text-black/70">{item.summary}</p>
         {item.requiredMetrics.length ? <div className="flex flex-wrap gap-1">{item.requiredMetrics.slice(0, 4).map((metric) => <span key={metric} className="rounded-[4px] border border-black px-1 py-0.5 text-[7px] font-black uppercase">{metric}</span>)}</div> : null}
         <button type="button" onClick={() => setSelectedEventId(item.sourceEventId)} className="flex items-center justify-center gap-1 rounded-[5px] border-[2px] border-black bg-white px-1 py-1 text-[7px] font-black uppercase hover:bg-[#36E0F6]"><GitBranch size={9} /> Trace evidence</button>
-        {item.kind === "learning_review" ? <div className="grid grid-cols-3 gap-1 pt-1"><button type="button" onClick={() => review(item, "hold")} className="rounded-[5px] border-[2px] border-black bg-white px-1 py-1 text-[7px] font-black uppercase hover:bg-[#FFDA47]">Hold</button><button type="button" onClick={() => review(item, "reject")} className="rounded-[5px] border-[2px] border-black bg-white px-1 py-1 text-[7px] font-black uppercase hover:bg-[#FF6B6B]">Reject</button><button type="button" onClick={() => review(item, "approve_for_profile_review")} className="rounded-[5px] border-[2px] border-black bg-[#3FEE56] px-1 py-1 text-[7px] font-black uppercase">Review</button></div> : null}
+        {item.kind === "learning_review" ? (
+         <div className="grid gap-1 pt-1">
+          <p className="text-[9px] font-semibold leading-3 text-black/60">Approve only makes this candidate eligible for a separate profile-promotion step.</p>
+          <div className="grid grid-cols-3 gap-1">
+           <button type="button" disabled={Boolean(reviewingCandidateId)} aria-label={"Hold learning candidate " + ((item.metadata?.candidate as { id?: string } | undefined)?.id || item.id)} onClick={() => review(item, "hold")} className="min-h-8 rounded-[5px] border-[2px] border-black bg-white px-1 py-1 text-[8px] font-black uppercase hover:bg-[#FFDA47] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-50">{reviewingCandidateId === (item.metadata?.candidate as { id?: string } | undefined)?.id ? "Saving…" : "Hold"}</button>
+           <button type="button" disabled={Boolean(reviewingCandidateId)} aria-label={"Reject learning candidate " + ((item.metadata?.candidate as { id?: string } | undefined)?.id || item.id)} onClick={() => review(item, "reject")} className="min-h-8 rounded-[5px] border-[2px] border-black bg-white px-1 py-1 text-[8px] font-black uppercase hover:bg-[#FF6B6B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-50">Reject</button>
+           <button type="button" disabled={Boolean(reviewingCandidateId)} title="Approve for profile review only; does not change the channel profile." aria-label={"Approve learning candidate " + ((item.metadata?.candidate as { id?: string } | undefined)?.id || item.id) + " for profile review only"} onClick={() => review(item, "approve_for_profile_review")} className="min-h-8 rounded-[5px] border-[2px] border-black bg-[#3FEE56] px-1 py-1 text-[8px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-50">Approve</button>
+          </div>
+         </div>
+        ) : null}
         {item.kind === "learning_promotion" ? <button type="button" disabled={Boolean(promotingCandidateId)} onClick={() => void promote(item)} className="rounded-[5px] border-[2px] border-black bg-[#3FEE56] px-2 py-1 text-[8px] font-black uppercase disabled:opacity-50">{promotingCandidateId === (item.metadata?.candidate as { id?: string } | undefined)?.id ? "Promoting…" : "Promote to channel profile"}</button> : null}
        </div>
       </article>
