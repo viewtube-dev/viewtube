@@ -1093,14 +1093,21 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
       >
         <span data-vt-studio-button-face>
           {visibleIcon !== undefined && <span data-vt-studio-button-icon>{visibleIcon}</span>}
-          <span data-vt-studio-button-label>
-            {textLayout === "two-line" ? (
-              <>
-                <span data-vt-studio-button-line="first">{firstLine}</span>
-                <span data-vt-studio-button-line="second">{secondLine}</span>
-              </>
-            ) : visibleChildren}
-          </span>
+          {visibleIcon !== undefined ? (
+            <span data-vt-studio-button-label>
+              {textLayout === "two-line" ? (
+                <>
+                  <span data-vt-studio-button-line="first">{firstLine}</span>
+                  <span data-vt-studio-button-line="second">{secondLine}</span>
+                </>
+              ) : visibleChildren}
+            </span>
+          ) : textLayout === "two-line" ? (
+            <>
+              <span data-vt-studio-button-line="first">{firstLine}</span>
+              <span data-vt-studio-button-line="second">{secondLine}</span>
+            </>
+          ) : visibleChildren}
         </span>
       </button>
     )
