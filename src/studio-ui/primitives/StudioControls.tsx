@@ -998,7 +998,19 @@ export const StudioSelect = React.forwardRef<
 ))
 StudioSelect.displayName = "StudioSelect"
 
+export type StudioButtonVariant = "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7"
+
 export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Global visual/interaction variant shared by all StudioButton consumers. */
+  variant?: StudioButtonVariant
+  /** Alternate label/content for V5 and V6 when toggled on. */
+  activeChildren?: React.ReactNode
+  /** Optional leading icon; activeIcon replaces it when V5/V6 is toggled on. */
+  icon?: React.ReactNode
+  activeIcon?: React.ReactNode
+  /** Initial local toggle state for V3, V5 and V6; every instance owns independent state. */
+  defaultOn?: boolean
+  onVariantChange?: (on: boolean) => void
   /** StudioButton also supports the canonical 12px Micro tier for dense UI surfaces. */
   sizeVariant?: StudioControlSize
   tone?: StudioControlTone
@@ -1017,6 +1029,13 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
   (
     {
+      variant = "v1",
+      activeChildren,
+      icon,
+      activeIcon,
+      defaultOn = false,
+      onVariantChange,
+      onClick,
       sizeVariant,
       tone = "accent",
       loading = false,
@@ -1032,12 +1051,28 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
     },
     ref,
   ) => {
+    const [localOn, setLocalOn] = React.useState(defaultOn)
+    const isToggleVariant = variant === "v3" || variant === "v5" || variant === "v6"
+    const isOn = isToggleVariant && localOn
     // Height is the authoritative geometry when supplied. This prevents a 28px
-    // control from accidentally inheriting standard border/radius/shadow tokens.
+    // control from accidentally inheriting standard border/radius tokens.
     const resolvedSize = heightVariant
       ? heightVariant === "28" ? "compact" : heightVariant === "60" ? "supreme" : "standard"
       : sizeVariant ?? "standard"
     const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : resolvedSize === "micro" ? "12" : "44")
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+      onClick?.(event)
+      if (event.defaultPrevented || event.currentTarget.disabled || !isToggleVariant) return
+      const next = !localOn
+      setLocalOn(next)
+      onVariantChange?.(next)
+    }
+    const visibleChildren = (variant === "v5" || variant === "v6") && isOn && activeChildren !== undefined
+      ? activeChildren
+      : children
+    const visibleIcon = (variant === "v5" || variant === "v6") && isOn && activeIcon !== undefined
+      ? activeIcon
+      : icon
 
     return (
       <button
@@ -1046,20 +1081,26 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
         {...props}
         {...withStudioAttrs(resolvedSize, tone)}
         data-vt-studio-button="true"
+        data-vt-studio-button-variant={variant}
+        data-vt-studio-button-on={isOn ? "true" : "false"}
         data-vt-studio-button-lines={textLayout === "two-line" ? "two" : undefined}
         data-height-variant={resolvedHeight}
         data-selected={selected || undefined}
-        aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
+        aria-pressed={props["aria-pressed"] ?? (isToggleVariant ? isOn : selected || undefined)}
         aria-busy={loading || undefined}
         disabled={disabled || loading}
+        onClick={handleClick}
       >
         <span data-vt-studio-button-face>
-          {textLayout === "two-line" ? (
-            <>
-              <span data-vt-studio-button-line="first">{firstLine}</span>
-              <span data-vt-studio-button-line="second">{secondLine}</span>
-            </>
-          ) : children}
+          {visibleIcon !== undefined && <span data-vt-studio-button-icon>{visibleIcon}</span>}
+          <span data-vt-studio-button-label>
+            {textLayout === "two-line" ? (
+              <>
+                <span data-vt-studio-button-line="first">{firstLine}</span>
+                <span data-vt-studio-button-line="second">{secondLine}</span>
+              </>
+            ) : visibleChildren}
+          </span>
         </span>
       </button>
     )
