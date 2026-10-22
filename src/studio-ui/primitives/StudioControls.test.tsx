@@ -1133,9 +1133,9 @@ describe("global StudioButton variants and containment contract", () => {
   it("defines compact button specimens for full, half, and quarter rows in the original button grid", () => {
     const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
     expect(catalog).toContain('...buildStudioButtonRows("compact")');
-    expect(catalog).toContain('row("full-v1-v2"');
+    expect(catalog).toContain('row("half-v1-v2"');
     expect(catalog).toContain('row("quarter-v1-v4"');
-    expect(catalog).toContain('tier: "compact" as const');
-    expect(catalog).toContain('data-vt-studio-button-variant');
+    expect(catalog).toContain('heightVariant={tier === "standard" ? "44" : "28"}');
+    expect(catalog).toContain('variant={`v${variant}`');
   });
 });
