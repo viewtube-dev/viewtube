@@ -76,3 +76,90 @@
   min-width: 0;
   max-width: 100%;
 }
+
+
+/* Canonical button module: ordered, proportional rows span the entire module. */
+.vt-specimen-layout-rows {
+  display: grid;
+  gap: var(--vt-specimen-gap);
+  width: 100%;
+  min-width: 0;
+}
+.vt-specimen-layout-row {
+  display: grid;
+  grid-template-columns: repeat(144, minmax(0, 1fr));
+  gap: var(--vt-specimen-gap);
+  align-items: start;
+  min-width: 0;
+  width: 100%;
+}
+.vt-specimen-layout-row--panels {
+  align-items: start;
+}
+.vt-specimen-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  align-self: stretch;
+}
+.vt-specimen-panel-rows {
+  display: grid;
+  gap: var(--vt-specimen-gap);
+  min-width: 0;
+  align-content: start;
+}
+.vt-specimen-panel .vt-specimen-layout-row {
+  width: 100%;
+}
+.vt-specimen-layout-row .vt-specimen-slot {
+  min-width: 0;
+  width: 100%;
+}
+.vt-specimen-layout-row .vt-specimen-slot > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.vt-specimen-row--proportional {
+  display: grid;
+  grid-template-columns: repeat(144, minmax(0, 1fr));
+  gap: var(--vt-specimen-gap);
+  min-width: 0;
+  align-items: start;
+}
+.vt-specimen-row--proportional > .vt-specimen-slot {
+  min-width: 0;
+  width: 100%;
+}
+.vt-specimen-row--proportional > .vt-specimen-slot > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+
+/* A 144-track proportional row must not insert a 4px gap between every
+   fractional track. Apply the 4px rhythm only at actual specimen boundaries. */
+.vt-specimen-layout-row,
+.vt-specimen-row--proportional {
+  column-gap: 0;
+}
+.vt-specimen-layout-row:not(.vt-specimen-layout-row--panels) > .vt-specimen-slot,
+.vt-specimen-row--proportional > .vt-specimen-slot {
+  box-sizing: border-box;
+  padding-right: var(--vt-specimen-gap);
+}
+.vt-specimen-layout-row:not(.vt-specimen-layout-row--panels) > .vt-specimen-slot:last-child,
+.vt-specimen-row--proportional > .vt-specimen-slot:last-child {
+  padding-right: 0;
+}
+.vt-specimen-layout-row--panels {
+  column-gap: 0;
+}
+.vt-specimen-layout-row--panels > .vt-specimen-panel {
+  box-sizing: border-box;
+  padding-right: var(--vt-specimen-gap);
+}
+.vt-specimen-layout-row--panels > .vt-specimen-panel:last-child {
+  padding-right: 0;
+}
