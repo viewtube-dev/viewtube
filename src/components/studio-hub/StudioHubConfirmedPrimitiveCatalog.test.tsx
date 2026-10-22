@@ -405,4 +405,24 @@ describe("responsive Studio upload frame", () => {
     expect(controls).toContain("inputRef.current?.click()");
   });
 });
+
+  it("registers the Arrow, Side, Double Side, and Bar Toggle production specimens", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain('data-vt-library-component="StudioArrowToggle"')
+    expect(html).toContain('data-vt-studio-value-toggle="arrow"')
+    expect(html).toContain('data-vt-studio-value-toggle="side"')
+    expect(html).toContain('data-vt-studio-value-toggle="double"')
+    expect(html).toContain('data-vt-studio-value-toggle="bar"')
+    for (const variant of ["default", "v2", "v3", "v4"]) expect(html).toContain(`data-variant="${variant}"`)
+    expect(html).toContain('aria-valuenow="50"')
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioValueToggles.tsx"), "utf8")
+    const css = readStudioControlCss()
+    expect(source).toContain("StudioArrowToggle")
+    expect(source).toContain("StudioSideToggle")
+    expect(source).toContain("StudioDoubleSideToggle")
+    expect(source).toContain("StudioBarToggle")
+    expect(css).toContain(".vt-studio-value-toggle__bar")
+    expect(css).toContain("flex: 0 0 18px")
+  })
+
 });
