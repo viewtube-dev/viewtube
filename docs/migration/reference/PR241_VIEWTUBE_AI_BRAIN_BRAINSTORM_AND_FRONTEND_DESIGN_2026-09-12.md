@@ -836,3 +836,12 @@ Start with **UI-1 + UI-2**, not a visual redesign. Reuse the current `AIBrainCom
 - Full keyboard, screen-reader, mobile, and reduced-motion verification.
 
 Do not mark these complete until source tracing, executable tests, or documented accessibility checks provide evidence.
+
+
+### Implementation record — governed context correction flow (2026-10-22)
+
+The AI Brain page's existing **Propose correction** action now opens a dedicated accessible dialog showing the current statement, source ID, knowledge class, lifecycle, and confirmation state. A creator can edit the replacement statement and submit it through the canonical learning/governance service.
+
+Active memory claims use the explicit teaching path and are only reported as applied after the replacement claim is resolvable. Model hypotheses and learning candidates are recorded as unconfirmed correction proposals because no generic source-specific update contract exists for them; their original records remain unchanged. The dialog supports Escape dismissal, focus restoration/trapping, visible result/error messaging, and a next-turn verification prompt after a governed claim update.
+
+Regression tests cover claim routing, channel isolation, empty input, proposal-only sources, dialog semantics, and explicit-vs-inferred status. **Verification status:** CI and live keyboard/screen-reader/mobile checks are pending. No local execution or accessibility certification is claimed.
