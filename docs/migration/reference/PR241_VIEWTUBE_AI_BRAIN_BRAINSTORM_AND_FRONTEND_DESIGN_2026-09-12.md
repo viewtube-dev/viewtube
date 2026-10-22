@@ -836,3 +836,12 @@ Start with **UI-1 + UI-2**, not a visual redesign. Reuse the current `AIBrainCom
 - Full keyboard, screen-reader, mobile, and reduced-motion verification.
 
 Do not mark these complete until source tracing, executable tests, or documented accessibility checks provide evidence.
+
+
+### Follow-through — scoped Brain output navigation to Vault (2026-10-22)
+
+The Brain runtime output card links each verified output asset to `/vault` with both `assetId` and `contentBuildId`. The Vault page validates the requested ID against the canonical Vault inventory and matching ContentBuild before selecting the asset. It opens the Inspector, preserves existing library filters, and announces success through a status region. Invalid IDs, unavailable builds, and scope mismatches produce an alert and do not select the asset.
+
+This reuses existing Vault and ContentBuild owners; it introduces no alternate asset store or routing registry. Tests cover scoped URL encoding, asset/build resolution, mismatched scope, and the Brain card's rendered-link contract.
+
+**Verification status:** source and tests are committed on the implementation branch; CI and browser-level accessibility verification are pending. No local test execution or screen-reader certification is claimed. Next: connect “Propose correction” to the canonical learning/governance path and verify the next turn reflects the governed result or exposes an unresolved conflict.
