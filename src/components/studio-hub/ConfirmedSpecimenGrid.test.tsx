@@ -102,6 +102,42 @@ describe("ConfirmedSpecimenGrid", () => {
     expect(container.querySelectorAll(".vt-specimen-tier-column")).toHaveLength(4)
   })
 
+  it("renders authored full-module proportional rows and the paired compact/micro half panels", () => {
+    const renderSpecimen = ({ id, tier }: { id: string; tier: string }) => <output data-specimen-id={id} data-tier={tier}>{tier}</output>
+    const layoutRows = [
+      { id: "1-supreme-full", tier: "supreme" as const, specimens: [{ id: "s-full", label: "BUTTON", span: 144 }] },
+      { id: "2-supreme-half", tier: "supreme" as const, specimens: [{ id: "s-half-a", label: "BUTTON", span: 72 }, { id: "s-half-b", label: "BUTTON", span: 72 }] },
+      { id: "5-standard-fractions", tier: "standard" as const, specimens: [
+        { id: "std-third", label: "BUTTON", span: 48 }, { id: "std-quarter", label: "BUTTON", span: 36 },
+        { id: "std-sixth", label: "BUTTON", span: 24 }, { id: "std-eighth-a", label: "BUTTON", span: 18 },
+        { id: "std-eighth-b", label: "BUTTON", span: 18 },
+      ] },
+      { id: "7-panels", panels: [
+        { id: "compact-half", tier: "compact" as const, span: 72, rows: [{ id: "compact-row", tier: "compact" as const, specimens: [
+          { id: "c-8a", label: "BUTTON", span: 36 }, { id: "c-8b", label: "BUTTON", span: 36 },
+          { id: "c-8c", label: "BUTTON", span: 36 }, { id: "c-16a", label: "BUTTON", span: 18 },
+          { id: "c-16b", label: "BUTTON", span: 18 },
+        ] }] },
+        { id: "micro-half", tier: "micro" as const, span: 72, rows: [
+          { id: "micro-a", tier: "micro" as const, specimens: [{ id: "m-quarter-a", label: "BUTTON", span: 72 }, { id: "m-quarter-b", label: "BUTTON", span: 72 }] },
+          { id: "micro-b", tier: "micro" as const, specimens: [
+            { id: "m-eighth-a", label: "BUTTON", span: 36 }, { id: "m-eighth-b", label: "BUTTON", span: 36 },
+            { id: "m-sixteenth-a", label: "BUTTON", span: 18 }, { id: "m-sixteenth-b", label: "BUTTON", span: 18 },
+            { id: "m-sixteenth-c", label: "BUTTON", span: 18 }, { id: "m-sixteenth-d", label: "BUTTON", span: 18 },
+          ] },
+        ] },
+      ] },
+    ]
+    const container = render(<ConfirmedSpecimenGrid familyName="Proportional Button Grid" renderSpecimen={renderSpecimen} layoutRows={layoutRows} />)
+    const rows = container.querySelectorAll("[data-vt-layout-row]")
+    expect(rows).toHaveLength(4)
+    expect(container.querySelector('[data-vt-layout-row="1-supreme-full"] .vt-specimen-slot')?.getAttribute("data-vt-specimen-span")).toBe("144")
+    expect(container.querySelectorAll('[data-vt-layout-row="2-supreme-half"] .vt-specimen-slot')).toHaveLength(2)
+    expect(container.querySelector('[data-vt-specimen-panel="compact-half"]')?.getAttribute("style")).toContain("span 72")
+    expect(container.querySelector('[data-vt-specimen-panel="micro-half"]')?.getAttribute("style")).toContain("span 72")
+    expect(container.querySelectorAll('[data-specimen-id^="m-sixteenth"]')).toHaveLength(4)
+  })
+
   it("keeps the requested two-column composition without a stacking breakpoint", () => {
     const css = readFileSync(resolve(process.cwd(), "src/components/studio-hub/ConfirmedSpecimenGrid.css"), "utf8")
     expect(css).toContain("grid-template-columns: repeat(2, minmax(0, 1fr))")
