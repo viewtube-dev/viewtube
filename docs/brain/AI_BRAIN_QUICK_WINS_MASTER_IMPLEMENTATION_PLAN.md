@@ -395,3 +395,8 @@ The [PR241 Brain brainstorm/front-end design reference, Part 5.9–5.10](../migr
 6. Run restoration, routing, governance, evidence-golden and accessibility checks; report command/CI evidence rather than treating source presence or a successful build as behavioral proof.
 
 **UI acceptance:** every claim has resolvable evidence or an explicit limitation; every result status is backed by canonical records; every action exposes permission/approval boundaries; and keyboard, screen-reader, narrow-layout, zoom and reduced-motion behavior are verified. No parallel evidence store, profile, receipt ledger, or Brain-only component system is introduced.
+
+
+## AI Brain page build sequence — 2026-10-22
+
+The companion [AI Brain page evidence-first implementation plan](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md#511-ai-brain-page--evidence-first-implementation-plan-2026-10-22) defines the page information architecture, canonical-owner boundaries, accessibility contract and phased vertical slices. It complements the backend/evidence quick wins: build the typed turn presentation projection first, then prove one claim-to-source path before expanding to receipt-backed outputs, context corrections, and governed learning. It is a plan, not evidence of shipped UI or passing tests.
