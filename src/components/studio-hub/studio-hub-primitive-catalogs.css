@@ -244,7 +244,7 @@
 .vt-complete-catalog .vt-catalog-demo.is-l0{--fs:24px}
 .vt-complete-catalog .vt-catalog-demo.is-l1{--fs:18px}
 .vt-complete-catalog .vt-catalog-demo.is-l2{--fs:12px}
-.vt-complete-catalog .vt-catalog-demo :is(.vt-catalog-split-primitive,.vt-subtoolbox-split-dropdown){font-size:var(--fs)!important;line-height:.86!important;letter-spacing:-.055em!important;font-weight:1000!important}
+.vt-complete-catalog .vt-catalog-demo :is(.vt-catalog-split-primitive,.vt-subtoolbox-split-dropdown){font-size:var(--fs)!important;line-height:1!important;letter-spacing:-.055em!important;font-weight:1000!important}
 .vt-complete-catalog .vt-catalog-demo :is(.vt-catalog-split-primitive,.vt-subtoolbox-split-dropdown)>:first-child{box-sizing:border-box;width:var(--h)!important;min-width:var(--h)!important;max-width:var(--h)!important;flex:0 0 var(--h)!important;padding:0!important}
 
 /* Every split-left rail is a literal 1:1 square. Remove inherited padding/gap that widens icon bays. */
@@ -297,7 +297,7 @@
 
 /* Dropdown/select labels are centered while the chevron retains its square tail zone. */
 .vt-complete-catalog .vt-catalog-menu .menu-label{position:relative;display:flex!important;align-items:center!important;justify-content:center!important;padding-inline:var(--h)!important}
-.vt-complete-catalog .vt-catalog-menu .menu-label>b{padding:0!important;text-align:center!important;font-size:var(--fs)!important;line-height:.86!important}
+.vt-complete-catalog .vt-catalog-menu .menu-label>b{padding:0!important;text-align:center!important;font-size:var(--fs)!important;line-height:1!important}
 .vt-complete-catalog .vt-catalog-menu .menu-label>svg{position:absolute;right:0;top:50%;transform:translateY(-50%);width:var(--h)!important;height:46%!important;padding-inline:calc(var(--h)*.28);box-sizing:border-box}
 
 /* KPI type scales with its structural level and uses the available card area. */
@@ -2172,7 +2172,7 @@
   border-radius: var(--radius) !important;
   font-size: var(--fs) !important;
   font-weight: 1000 !important;
-  line-height: .86 !important;
+  line-height: 1 !important;
   letter-spacing: -.055em !important;
   overflow: hidden !important;
 }

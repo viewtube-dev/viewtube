@@ -53,6 +53,10 @@ test("StudioTextInput catalog includes simple, floating-label, and fixed-label v
   assert.ok(catalog.includes('aria-label="Studio plain text input compact"'));
   assert.ok(catalog.includes('aria-label="Studio floating-label input standard A"'));
   assert.ok(catalog.includes('aria-label="Studio floating-label input compact B reverse colors"'));
+  assert.ok(catalog.includes('aria-label="Studio floating-label textarea compact A"'));
+  assert.ok(catalog.includes('aria-label="Studio floating-label textarea compact B reverse colors"'));
+  assert.ok(catalog.includes('aria-label="Studio fixed-label textarea compact A"'));
+  assert.ok(catalog.includes('aria-label="Studio fixed-label textarea compact B reverse colors"'));
   assert.ok(catalog.includes('aria-label="Studio fixed-label input standard A"'));
   assert.ok(catalog.includes('aria-label="Studio fixed-label input compact B reverse colors"'));
   assert.match(catalog, /Studio Text Input · Standalone \+ Simple \+ Floating \+ Fixed Label/);
@@ -64,23 +68,24 @@ test("global defaults distinguish the secondary focus outline from field text st
   assert.doesNotMatch(controls, /computed CSS outline itself measured 1px/);
 });
 
-test("floating labels use balanced box spacing, 48% border alignment, and 80% floated typography", () => {
-  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-standard-height,\s*32px\)/);
-  assert.match(fieldCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-compact-height,\s*21px\)/);
-  assert.match(fieldCss, /--vt-studio-control-floating-label-offset-ratio:\s*var\(--vt-studio-floating-label-offset-ratio,\s*1\.2\)/);
-  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*var\(--vt-studio-control-floating-label-height\)/);
+test("floating labels follow primitive resting typography and share one 18px raised rule", () => {
+  const fieldCss = readFileSync("src/styles/studio-control-fields.css", "utf8");
+  const systemCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-standard-font-size,\s*38px\)/);
+  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-compact-font-size,\s*24px\)/);
+  assert.match(fieldCss, /textarea\[data-size="standard"\] \+ \.vt-studio-floating-field-label\s*\{[^}]*font-size: var\(--vt-studio-textarea-standard-font-size, 18px\)/s);
+  assert.match(fieldCss, /textarea\[data-size="compact"\] \+ \.vt-studio-floating-field-label\s*\{[^}]*font-size: var\(--vt-studio-textarea-compact-font-size, 14px\)/s);
+  assert.match(fieldCss, /input\[data-size="standard"\] \+ \.vt-studio-floating-field-label\s*\{[^}]*font-size: var\(--vt-studio-44-font-size, 38px\)/s);
+  assert.match(fieldCss, /input\[data-size="compact"\] \+ \.vt-studio-floating-field-label\s*\{[^}]*font-size: var\(--vt-studio-28-font-size, 24px\)/s);
+  assert.match(systemCss, /:is\(input, textarea\):focus \+ \.vt-studio-floating-field-label,[\s\S]*?font-size: 18px;/);
+  assert.doesNotMatch(systemCss, /\.vt-studio-floating-field:not\(\.is-textarea\)\s*>\s*:is\(input, textarea\):focus \+ \.vt-studio-floating-field-label/);
   assert.match(fieldCss, /padding:\s*2\.25px 4\.5px/);
-  assert.match(fieldCss, /translateY\(calc\(-40% \* var\(--vt-studio-control-floating-label-offset-ratio, 1\.2\)\)\)/);
-  assert.match(fieldCss, /font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
-  assert.doesNotMatch(fieldCss, /\.vt-studio-floating-field\.is-textarea\s*\{[^}]*--vt-studio-floating-label-size/s);
-  assert.doesNotMatch(fieldCss, /\.vt-studio-floating-field-label\s*\{[^}]*transition:/s);
-  assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
+  assert.match(fieldCss, /-webkit-text-fill-color: #000;/);
+  assert.match(fieldCss, /-webkit-text-stroke-color: #000;/);
   assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\+\s*\.vt-studio-floating-field-label\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
 });
-
 test("circle icon buttons scale the rendered SVG to 80% of the canonical icon preset", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\[data-size="standard"\]\s*\{[^}]*--vt-studio-control-icon-size:\s*38px/s);

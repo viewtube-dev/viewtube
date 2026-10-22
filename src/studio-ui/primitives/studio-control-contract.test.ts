@@ -26,7 +26,7 @@ describe("Studio control global contract", () => {
 
   it("defines canonical Supreme/standard/compact/Micro geometry without an internal gap token", () => {
     const css = read("src/styles/studio-control-vars.generated.css");
-    for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-micro-stroke: 1px", "--vt-studio-micro-radius: 2px", "--vt-studio-micro-font-size: 10px", "--vt-studio-textarea-standard-font-size: 18px", "--vt-studio-textarea-compact-font-size: 14px", "--vt-studio-textarea-standard-text-stroke: 0.5px", "--vt-studio-textarea-compact-text-stroke: 0.35px", "--vt-studio-textarea-min-height: 92px", "--vt-studio-textarea-line-height: 0.75"]) expect(css).toContain(token);
+    for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-micro-stroke: 1px", "--vt-studio-micro-radius: 2px", "--vt-studio-micro-font-size: 10px", "--vt-studio-textarea-standard-font-size: 18px", "--vt-studio-textarea-compact-font-size: 14px", "--vt-studio-textarea-standard-text-stroke: 0.5px", "--vt-studio-textarea-compact-text-stroke: 0.35px", "--vt-studio-textarea-min-height: 92px", "--vt-studio-textarea-line-height: 1"]) expect(css).toContain(token);
     expect(css).toContain("--vt-studio-supreme-height: 60px");
     expect(css).not.toContain("--vt-studio-14-height");
     expect(css).not.toContain("--vt-studio-control-gap");
@@ -97,6 +97,8 @@ describe("Studio control global contract", () => {
     expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
     expect(css).toContain("--vt-studio-textarea-compact-text-stroke, 0.35px");
     expect(css).toContain('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible)');
+    expect(css).toContain("-webkit-text-fill-color: #000;");
+    expect(css).toContain("-webkit-text-stroke-color: #000;");
     expect(css).not.toContain("-webkit-text-stroke: var(--vt-field-stroke) var(--vt-field-primary)");
     const start = css.indexOf("/* Canonical Studio Controls field contract.");
     const end = css.indexOf("/* 2. Canonical 44px selection-control geometry.", start);

@@ -150,7 +150,7 @@ These rules apply to the Component Library presentation layer and do **not** cha
 ### Floating-label fields
 - Labeled Input and Labeled Textarea are compound Studio controls built directly on `StudioTextInput` and `StudioTextArea`.
 - The label begins inside the empty field and rises to the top edge on focus or when a value is present.
-- Both field types use the same label typography, independent of the underlying input/textarea text size.
+- Raised floating labels share one fixed 18px typography rule. Resting labels match the underlying field primitive and size: input 38px / 24px; textarea 18px / 14px.
 - The underlying Studio primitive owns field geometry, border, inset stroke, focus treatment, and text typography.
 - Floating-label wrappers own only label positioning, shared label typography, and label transitions.
 - The Confirmed Primitive Library renders these production components rather than parallel SubToolbox implementations.
