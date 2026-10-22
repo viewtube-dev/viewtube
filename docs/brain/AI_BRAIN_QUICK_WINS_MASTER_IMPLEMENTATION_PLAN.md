@@ -432,3 +432,12 @@ The Vault route resolves the request against both canonical owners before select
 This is navigation only. It does not mutate assets, grant publish approval, or claim an output is saved beyond the existing receipt contract. Pure resolver and UI tests cover scoped URL encoding, canonical asset/build resolution, scope mismatch, missing IDs, and the rendered Brain link.
 
 **Verification status:** source and regression tests are committed on the implementation branch; CI and browser/mobile/screen-reader verification are pending. No local test execution or accessibility certification is claimed. Next: connect context correction to the canonical learning/governance path, then verify the following turn reflects the governed change or exposes the conflict.
+
+
+## Implementation progress — governed context corrections (2026-10-22)
+
+The next AI Brain page slice turns the existing **Propose correction** affordance into an accessible correction dialog backed by the existing learning-governance owners. Corrections to an active canonical Brain memory claim are submitted through explicit teaching, and the UI reports success only after the new active claim resolves and the previous claim is superseded. Stale, inactive, missing, or cross-channel claims are rejected rather than overwritten.
+
+Channel Knowledge Model hypotheses and learning candidates do not share that claim-update contract. Those corrections are recorded as unconfirmed proposals and explicitly remain unapplied; the UI does not misrepresent a proposal as a changed profile. The next-turn verification prompt is offered only after an applied correction.
+
+Regression tests cover governance routing, channel scope, empty corrections, proposal-only behavior for non-claim sources, accessible dialog semantics, and the distinction between explicit confirmation and inference. **Verification status:** CI and browser keyboard/focus checks are pending; no local test execution is claimed.
