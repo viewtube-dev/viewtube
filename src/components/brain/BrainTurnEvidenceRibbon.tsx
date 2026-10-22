@@ -44,7 +44,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
   ? formatEvidenceRequestSpec(evidencePack.requestSpec)
   : null
  const requestSummary = requestConstraints
-  ? requestConstraints.slice(0, 4).map((item) => item.value).join(" · ")
+  ? requestConstraints.map((item) => item.value).join(" · ")
   : "Selection constraints were not recorded for this saved turn."
  const statusLabel = evidencePack.dataStatus === "missing"
   ? "Missing evidence"
