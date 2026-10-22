@@ -177,7 +177,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
                 <div className="vt-studio-split-accordion__content-inner">{item.content}</div>
                 {item.trailing ? <div className="vt-studio-split-accordion__trailing">{item.trailing}</div> : null}
               </div>
-              {layout === "double" ? (
+              {layout === "double" && active ? (
                 <div className="vt-studio-split-accordion__face vt-studio-split-accordion__face--trailing" data-vt-studio-split-accordion-face="trailing" aria-hidden="true">{item.icon}</div>
               ) : null}
             </div>
