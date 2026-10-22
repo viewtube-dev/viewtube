@@ -38,6 +38,32 @@ describe("ConfirmedSpecimenGrid", () => {
     expect(document.querySelectorAll(".vt-specimen-row--4")).toHaveLength(1)
   })
 
+  it("renders Supreme and Micro comparison rows side-by-side in independent stacks", () => {
+    const renderSpecimen = ({ id, tier }: { id: string; tier: string }) => (
+      <output data-specimen-id={id} data-tier={tier}>{tier}</output>
+    )
+    render(
+      <ConfirmedSpecimenGrid
+        familyName="Button"
+        renderSpecimen={renderSpecimen}
+        specimenRows={[
+          { id: "supreme-a", tier: "supreme", comparisonGroup: "supreme", specimens: [{ id: "s1", label: "BUTTON" }] },
+          { id: "supreme-b", tier: "supreme", comparisonGroup: "supreme", specimens: [{ id: "s2", label: "BUTTON" }, { id: "s3", label: "BUTTON" }] },
+          { id: "micro-a", tier: "micro", comparisonGroup: "micro", specimens: [{ id: "m1", label: "BUTTON" }] },
+          { id: "micro-b", tier: "micro", comparisonGroup: "micro", specimens: [{ id: "m2", label: "BUTTON" }, { id: "m3", label: "BUTTON" }] },
+          { id: "micro-c", tier: "micro", comparisonGroup: "micro", specimens: [{ id: "m4", label: "BUTTON" }, { id: "m5", label: "BUTTON" }, { id: "m6", label: "BUTTON" }] },
+          { id: "micro-d", tier: "micro", comparisonGroup: "micro", specimens: [{ id: "m7", label: "BUTTON" }, { id: "m8", label: "BUTTON" }, { id: "m9", label: "BUTTON" }, { id: "m10", label: "BUTTON" }] },
+        ]}
+      />,
+    )
+    const comparison = document.querySelector(".vt-specimen-size-comparison")
+    expect(comparison).toBeTruthy()
+    expect(comparison?.querySelectorAll(".vt-specimen-comparison-column--supreme .vt-specimen-row")).toHaveLength(2)
+    expect(comparison?.querySelectorAll(".vt-specimen-comparison-column--micro .vt-specimen-row")).toHaveLength(4)
+    expect(comparison?.querySelectorAll('[data-specimen-id^="s"]')).toHaveLength(3)
+    expect(comparison?.querySelectorAll('[data-specimen-id^="m"]')).toHaveLength(10)
+  })
+
   it("keeps the requested two-column composition without a stacking breakpoint", () => {
     const css = readFileSync(resolve(process.cwd(), "src/components/studio-hub/ConfirmedSpecimenGrid.css"), "utf8")
     expect(css).toContain("grid-template-columns: repeat(2, minmax(0, 1fr))")
