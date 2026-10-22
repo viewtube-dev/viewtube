@@ -38,6 +38,13 @@ const evidencePack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvid
  evidenceIds: ["video:abc"],
  transcriptRouteRequired: false,
  ...overrides,
+ it("gives the full evidence disclosure a large, visible keyboard focus target", () => {
+  const html = render()
+  expect(html).toContain("min-h-11")
+  expect(html).toContain("focus-visible:outline-2")
+  expect(html).toContain("focus-visible:outline-offset-2")
+ })
+
 })
 
 const render = (pack = evidencePack()) => renderToStaticMarkup(
