@@ -45,7 +45,7 @@ textarea[data-vt-studio-control="true"]:focus-visible,
    line-height is specialized to reduce spacing between description lines. */
 html body textarea[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] textarea {
-  line-height: 0.75;
+  line-height: 1;
   min-height: var(--vt-studio-textarea-min-height, 92px);
   resize: vertical;
 }
@@ -174,4 +174,38 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
 html body :is(input, textarea, select)[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] :is(input, textarea, select) {
   transition: none;
+}
+
+
+/* Final shared field focus contract: every editable field uses black filled text.
+   Floating-label resting typography follows its own primitive family and size;
+   raised labels share one 18px rule across input/textarea and standard/compact. */
+html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+  caret-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
+  background-color: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent);
+}
+.vt-studio-floating-field > textarea[data-size="standard"] + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="compact"] + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="standard"] + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-44-font-size, 38px);
+  -webkit-text-stroke: var(--vt-studio-44-text-stroke, 1px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="compact"] + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-28-font-size, 24px);
+  -webkit-text-stroke: var(--vt-studio-28-text-stroke, 0.5px) currentColor;
+}
+.vt-studio-floating-field > :is(input, textarea):is(:focus, :focus-visible) + .vt-studio-floating-field-label,
+.vt-studio-floating-field > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
+  font-size: 18px !important;
+  line-height: 1;
 }
