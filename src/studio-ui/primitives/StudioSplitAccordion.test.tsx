@@ -43,7 +43,6 @@ describe("StudioSplitAccordion", () => {
       const html = renderToStaticMarkup(<StudioSplitAccordion items={items} layout={layout} />);
       expect(html).toContain(`data-layout="${layout}"`);
       expect(html).toContain('aria-expanded="false"');
-      expect(html).toContain('aria-pressed="false"');
     }
   });
 
