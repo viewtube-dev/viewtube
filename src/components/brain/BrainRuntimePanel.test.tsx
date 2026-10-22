@@ -2,7 +2,7 @@ import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 
-import { BrainRuntimePanel } from "./BrainRuntimePanel"
+import { BrainRuntimePanel, resolveBrainOutputReceiptState } from "./BrainRuntimePanel"
 
 describe("BrainRuntimePanel", () => {
  it("renders the live backend pipeline without turning it into a developer-only dump", () => {
@@ -15,6 +15,7 @@ describe("BrainRuntimePanel", () => {
       stage: "package",
       revision: 7,
       assetCount: 8,
+      assetIds: ["asset-title-1", "asset-title-2"],
       versionCount: 6,
       variantGroupCount: 1,
       relationCount: 3,
@@ -173,6 +174,31 @@ describe("BrainRuntimePanel", () => {
   expect(html).toContain("trace-1")
   expect(html).toContain("generation-record-1")
   expect(html).toContain("Evidence IDs")
+ })
+
+
+ it("shows a receipt-backed output only when the receipt IDs resolve in the same ContentBuild", () => {
+  const chain = {
+   receiptId: "tool_receipt_1",
+   contentBuildId: "cb:project:project-2",
+   outputAssetIds: ["asset-title-1", "asset-title-2"],
+   versionIds: ["version-1", "version-2"],
+   unresolved: [],
+  } as any
+  const build = { id: "cb:project:project-2", assetIds: ["asset-title-1", "asset-title-2"] }
+
+  expect(resolveBrainOutputReceiptState(chain, build)).toMatchObject({
+   status: "verified",
+   receiptId: "tool_receipt_1",
+   outputAssetIds: ["asset-title-1", "asset-title-2"],
+  })
+  expect(resolveBrainOutputReceiptState({ ...chain, outputAssetIds: ["deleted-asset"] }, build)).toMatchObject({
+   status: "unresolved",
+   receiptId: "tool_receipt_1",
+   unresolvedAssetIds: ["deleted-asset"],
+  })
+  expect(resolveBrainOutputReceiptState({ ...chain, receiptId: null }, build).status).toBe("unavailable")
+  expect(resolveBrainOutputReceiptState({ ...chain, outputAssetIds: [] }, build).status).toBe("empty")
  })
 
  it("supports the flat embedded composition used by the Brain Hub mobile surface", () => {
