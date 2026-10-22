@@ -371,3 +371,27 @@ A green build alone is not proof of correctness. A UI that looks complete but la
 ## Front-end integration reference — 2026-10-19
 
 The shared evidence-to-UI contract and accessibility guidance now live in [Part 5 of the PR241 Brain brainstorm/front-end design reference](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md#part-5--evidence-first-ui-integration-addendum-2026-10-19). Treat that addendum as the companion UI integration design—not as proof that the proposed components have shipped. The core release gate remains exact parity between the turn's graded evidence records and evidence shown in the UI.
+
+
+## Front-end integration and audit follow-up — 2026-10-22
+
+The [PR241 Brain brainstorm/front-end design reference, Part 5.9–5.10](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md#59-audit-driven-ui-integration-backlog--2026-10-22) now maps the evidence, context, capability, trace, receipt and learning work to accessible product surfaces. It is an implementation guide, not a claim that every surface is complete.
+
+### Source-grounded findings
+
+- `BrainCapabilityBrowser.tsx` already consumes `BrainCapabilityRegistry`, exposes availability reasons, uses semantic labels/live status and visible keyboard focus. Extend this source of truth; do not create another capability catalog. Dispatch must still re-check requirements.
+- `BrainRuntimeSnapshot.ts` contains projections that join requests, ToolReceipts, traces and generation records. Verify each user-facing card consumes these joins and renders canonical IDs; service availability alone does not prove UI wiring.
+- `BrainTrace.ts` has the fields needed for user-safe provenance, including evidence returned/missing, output reference and requested/served model identity. Do not imply durable server-side audit retention unless the active sink confirms it.
+- `BrainWorkflowRunPanel.tsx` manages workflow step state, but its step status must not be treated as proof of a saved output, ToolReceipt, or publication readiness.
+- The latest audit scorecard was static code review. Restore filters, truthful empty states, full capability-bypass coverage, stale-readiness presentation, provenance allowlisting/canonical-ID resolution, receipt-backed result cards and full accessibility walkthroughs remain unverified until tests and/or manual checks provide evidence.
+
+### Next UI delivery gate
+
+1. Add a typed, read-only turn presentation projection from canonical turn/evidence/grade/trace/receipt/output owners.
+2. Prove exact ordered evidence parity from model input to each claim ribbon/drawer, including filters, missingness, changed values and unresolved IDs.
+3. Ship one accessible analytics claim-to-source vertical slice before applying it across the product.
+4. Ship one receipt-backed generation result with truthful proposed/started/saved/failed states.
+5. Connect context corrections to the canonical governance path and verify the next-turn result.
+6. Run restoration, routing, governance, evidence-golden and accessibility checks; report command/CI evidence rather than treating source presence or a successful build as behavioral proof.
+
+**UI acceptance:** every claim has resolvable evidence or an explicit limitation; every result status is backed by canonical records; every action exposes permission/approval boundaries; and keyboard, screen-reader, narrow-layout, zoom and reduced-motion behavior are verified. No parallel evidence store, profile, receipt ledger, or Brain-only component system is introduced.
