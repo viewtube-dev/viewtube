@@ -84,7 +84,7 @@ export function StudioArrowToggle(props: StudioArrowToggleProps) {
     shellProps={{ "data-vt-studio-value-toggle": "arrow", style: appearanceStyle(appearance) }}
     leftRailContent={left ? arrowRail(props, -1, "left") : undefined}
     rightRailContent={right ? arrowRail(props, 1, "right") : undefined}>
-    <span className="vt-studio-value-toggle__face" data-content-width={reserveLabel ? "true" : undefined} aria-live="polite" aria-label={ariaLabel} title={current}><span>{current}</span>{reserveLabel && <span className="vt-studio-value-toggle__measure" aria-hidden="true">{reserveLabel}</span>}</span>
+    <span className="vt-studio-value-toggle__face" aria-live="polite" aria-label={ariaLabel} title={current}>{current}</span>
   </StudioSplitShell>;
 }
 
