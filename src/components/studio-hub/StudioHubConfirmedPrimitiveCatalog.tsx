@@ -309,14 +309,17 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 const ConfirmedStudioButtonFamily: React.FC = () => {
   const [toggleStates, setToggleStates] = React.useState<Record<string, boolean>>({})
 
-  const variantsForTier = (tier: "supreme" | "standard" | "compact" | "micro") => [
+  const rowsForTier = (tier: "standard" | "micro") => [
     { id: `${tier}-row-1`, tier, specimens: [{ id: `${tier}-v1`, label: "V1" }] },
     { id: `${tier}-row-2`, tier, specimens: [{ id: `${tier}-v2`, label: "V2" }, { id: `${tier}-v3`, label: "V3" }] },
     { id: `${tier}-row-3`, tier, specimens: [{ id: `${tier}-v4`, label: "V4" }, { id: `${tier}-v5`, label: "V5" }, { id: `${tier}-v6`, label: "V6" }] },
     { id: `${tier}-row-4`, tier, specimens: [{ id: `${tier}-v7`, label: "V7" }, { id: `${tier}-v1-repeat`, label: "V1" }, { id: `${tier}-v2-repeat`, label: "V2" }, { id: `${tier}-v3-repeat`, label: "V3" }] },
   ]
-
-  const specimenRows = (["supreme", "standard", "compact", "micro"] as const).flatMap(variantsForTier)
+  const specimenRows = [
+    { id: "supreme-row-4", tier: "supreme" as const, specimens: [1, 2, 3, 4].map(variant => ({ id: `supreme-v${variant}`, label: `V${variant}` })) },
+    ...rowsForTier("standard"),
+    ...rowsForTier("micro"),
+  ]
 
   return (
     <Family title="Button" nonDefaultSettings={[
@@ -324,7 +327,7 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
       "V1 primary fill; V2 secondary fill; V3 toggles primary/secondary fill and its button text names the current fill.",
       "V4 black fill with primary text; V5 toggles primary/secondary with ON/OFF text; V6 toggles primary/black with YES!/NO! text; V7 uses white text.",
       "The grid controls arrangement only. All visible specimens remain real StudioButton instances using supported production size APIs.",
-    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="60px Supreme · 44px Standard · 28px Compact · 12px Micro; 4px layout rhythm." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
+    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="60px Supreme (V1–V4) · 44px Standard (V1–V7) · 12px Micro (V1–V7); 4px layout rhythm." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-button-gallery">
         <ConfirmedSpecimenGrid
           familyName="Original StudioButton variants"
