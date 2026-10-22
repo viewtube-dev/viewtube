@@ -250,6 +250,7 @@ const assetIcon = (asset: VaultAsset) => {
 
 const CreatorVaultOS: React.FC = () => {
  const navigate = useNavigate()
+ const location = useLocation()
  const { brain, addProject, updateProject, setActiveProject, channelIdentity } = useBrain()
  const initialWorkspace = useMemo(() => readVaultWorkspaceState(), [])
  const [refreshTick, setRefreshTick] = useState(0)
@@ -1788,7 +1789,17 @@ const CreatorVaultOS: React.FC = () => {
         persistenceId="vault-workspace-layout"
        >
         <div className="flex flex-col gap-3">
-         <div className="flex justify-end">
+         {deepLinkNotice ? (
+      <div
+       data-vt-vault-deep-link-status={deepLinkNotice.tone}
+       role={deepLinkNotice.tone === "alert" ? "alert" : "status"}
+       className={`mb-3 flex min-w-0 flex-wrap items-start gap-2 border-2 border-black p-3 text-xs font-bold leading-5 ${deepLinkNotice.tone === "alert" ? "bg-[#FF7AC8]" : "bg-[#C0F240]"}`}
+      >
+       <span className="min-w-0 flex-1 break-words">{deepLinkNotice.message}</span>
+       <button type="button" className="min-h-11 border-2 border-black bg-white px-3 text-[10px] font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black" onClick={() => setDeepLinkNotice(null)}>Dismiss</button>
+      </div>
+     ) : null}
+     <div className="flex justify-end">
           <button
            type="button"
            className="min-h-8 rounded-md border-2 border-[var(--vt-ink,#16161d)] px-3 text-xs font-black uppercase"
