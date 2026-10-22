@@ -38,7 +38,7 @@ describe("formatEvidenceRequestSpec", () => {
    { id: "count", label: "Requested count", value: "Default cohort size" },
    { id: "formats", label: "Formats", value: "Any available format" },
    { id: "date", label: "Date window", value: "All available dates" },
-   { id: "ranking", label: "Ranked by", value: "Default performance ranking" },
+   { id: "ranking", label: "Ranked by", value: "Performance score" },
    { id: "filters", label: "Text filters", value: "None recorded" },
    { id: "selection", label: "Cohort selection", value: "Top-ranked and recent videos" },
   ])
