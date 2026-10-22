@@ -152,8 +152,8 @@ describe("BrainRuntimePanel", () => {
       },
      },
     }}
-   />,
-    </MemoryRouter>
+   />
+    </MemoryRouter>,
   )
 
   expect(html).toContain("LIVE BRAIN RUNTIME")
