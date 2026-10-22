@@ -34,8 +34,7 @@ export const BrainEvidenceHandoff: React.FC<BrainEvidenceHandoffProps> = ({ sear
  return (
   <section
    aria-labelledby="brain-evidence-handoff-title"
-   aria-live="polite"
-   role="status"
+   role="region"
    data-vt-analytics-brain-evidence-handoff="true"
    className="grid min-w-0 gap-2 border-[2px] border-black bg-[#E7FAFF] p-3"
   >
