@@ -33,6 +33,7 @@ import {
 } from "../gemini"
 import { defaultBrainModelGateway, type BrainModelGateway } from "./runtime/BrainModelGateway"
 import { buildBrainContextPack } from "./BrainContextBroker"
+import { brainKnowledgeStatusFromConfirmation } from "./BrainContextPresentation"
 import { beginBrainTrace } from "./BrainTrace"
 import {
  inferBrainIntent,
@@ -480,7 +481,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     source: record.source,
     sourceId: record.sourceId,
     evidenceRefs: record.evidenceRefs,
-    status: record.confirmationState === "confirmed" ? "confirmed" : "inferred",
+    status: brainKnowledgeStatusFromConfirmation(record.confirmationState),
    })),
    conflictIds: (creatorContext?.channelKnowledge?.contradictions || []).map((record) => record.id).slice(0, 10),
    evidenceRefs: creatorContext?.evidenceRefs || [],
