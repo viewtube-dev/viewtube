@@ -44,9 +44,9 @@ const missingRecord: EvidenceRecord = {
  provenance: { evidenceIds: ["source-missing-1"] },
 }
 
-const render = (evidenceRecords?: EvidenceRecord[], evidencePack: AIBrainEvidencePack = pack) => renderToStaticMarkup(
+const render = (evidenceRecords?: EvidenceRecord[], evidencePack: AIBrainEvidencePack = pack, evidenceIntegrityStatus: "verified" | "unavailable" | "mismatch" = evidenceRecords === undefined ? "unavailable" : "verified") => renderToStaticMarkup(
  <MemoryRouter>
-  <BrainTurnEvidenceRibbon turnId="turn-1" evidencePack={evidencePack} evidenceRecords={evidenceRecords} />
+  <BrainTurnEvidenceRibbon turnId="turn-1" evidencePack={evidencePack} evidenceRecords={evidenceRecords} evidenceIntegrityStatus={evidenceIntegrityStatus} />
  </MemoryRouter>,
 )
 
@@ -71,6 +71,30 @@ describe("BrainTurnEvidenceRibbon", () => {
 
   expect(html).toContain("Record-level provenance is unavailable for this saved turn")
  })
+
+ it("warns when prompt evidence record identity cannot be verified", () => {
+  const html = render([record], pack, "mismatch")
+
+  expect(html).toContain("Evidence identity could not be verified")
+  expect(html).toContain("The saved record IDs do not match the prompt evidence manifest")
+  expect(html).toContain('role="alert"')
+  expect(html).not.toContain("Evidence identity verified")
+ })
+
+ it("marks exact prompt evidence identity as verified only when the caller has validated it", () => {
+  const html = render([record], pack, "verified")
+
+  expect(html).toContain("Evidence identity verified")
+  expect(html).toContain('role="status"')
+ })
+
+ it("does not call legacy turns a mismatch when no prompt manifest was saved", () => {
+  const html = render(undefined, pack, "unavailable")
+
+  expect(html).toContain("Prompt evidence identity unavailable")
+  expect(html).not.toContain("Evidence identity could not be verified")
+ })
+
 })
 
 
