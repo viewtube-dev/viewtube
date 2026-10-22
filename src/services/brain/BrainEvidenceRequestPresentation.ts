@@ -7,7 +7,7 @@ export interface EvidenceRequestConstraint {
 }
 
 const rankingLabels: Record<EvidenceRequestSpec["rankBy"], string> = {
- performance: "Default performance ranking",
+ performance: "Performance score",
  views: "Views",
  watchTime: "Watch time",
  subscribers: "Subscribers",
