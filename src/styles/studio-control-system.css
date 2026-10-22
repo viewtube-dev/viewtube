@@ -5102,40 +5102,40 @@ button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studi
 
 /* V1: primary face / black text. */
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v1"] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #000 !important;
 }
 /* V2: secondary face / black text. */
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v2"] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  background: var(--pair-b, #ff7f6b) !important;
   color: #000 !important;
 }
 /* V3: independent V1 <-> V2 color toggle. */
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v3"][data-vt-studio-button-on="false"] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #000 !important;
 }
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v3"][data-vt-studio-button-on="true"] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  background: var(--pair-b, #ff7f6b) !important;
   color: #000 !important;
 }
 /* V4: black face / primary text. */
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v4"] {
   background: #000 !important;
-  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: var(--pair-a, #36e0f6) !important;
 }
 /* V5: V1 initially, then V2; caller may replace the text and/or icon. */
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v5"][data-vt-studio-button-on="false"] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #000 !important;
 }
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v5"][data-vt-studio-button-on="true"] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  background: var(--pair-b, #ff7f6b) !important;
   color: #000 !important;
 }
 /* V6: V1 initially, then black face / white text; caller may replace text/icons. */
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v6"][data-vt-studio-button-on="false"] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #000 !important;
 }
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v6"][data-vt-studio-button-on="true"] {
@@ -5144,14 +5144,14 @@ html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v6
 }
 /* V7: primary face / white text; split icon rails are secondary with white glyphs. */
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--pair-a, #36e0f6) !important;
   color: #fff !important;
 }
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] [data-vt-studio-split-rail],
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] .vt-studio-split-left-badge__rail,
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] .vt-studio-split-right-badge__rail,
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] .vt-studio-double-split-badge__rail {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  background: var(--pair-b, #ff7f6b) !important;
   color: #fff !important;
 }
 html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] [data-vt-studio-split-rail] svg {
