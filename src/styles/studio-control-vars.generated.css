@@ -51,7 +51,7 @@
   --vt-studio-textarea-micro-text-stroke: 0.25px;
   --vt-studio-textarea-font-weight: 1000;
   --vt-studio-textarea-min-height: 92px;
-  --vt-studio-textarea-line-height: 0.75;
+  --vt-studio-textarea-line-height: 1;
   /* Compatibility aliases: old numbered names resolve to the canonical tier tokens. */
   --vt-studio-60-height: var(--vt-studio-supreme-height);
   --vt-studio-60-stroke: var(--vt-studio-supreme-stroke);
