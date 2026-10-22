@@ -78,3 +78,24 @@
   grid-column: 1 / -1;
   justify-self: stretch;
 }
+
+/* Global single-panel text policy: center on the outer control box and clip,
+   never ellipsize. Size tiers may alter dimensions, not alignment/overflow. */
+[data-vt-studio-control="true"] :is(
+  [data-vt-studio-button-face], [data-vt-studio-split-label],
+  .vt-studio-value-toggle__face, .vt-studio-badge__label,
+  [data-vt-studio-control-face], [data-vt-studio-dropdown-trigger]
+),
+[data-vt-studio-control="true"]:is(
+  [data-vt-studio-button-face], [data-vt-studio-split-label],
+  .vt-studio-value-toggle__face, .vt-studio-badge__label,
+  [data-vt-studio-control-face], [data-vt-studio-dropdown-trigger]
+) {
+  box-sizing: border-box;
+  align-items: center;
+  padding-block: 0;
+  line-height: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}

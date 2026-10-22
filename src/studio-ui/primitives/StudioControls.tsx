@@ -99,7 +99,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   globalSizeLattice: "supreme 60px / 4.09px border / 8.18px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
-  textContainment: "Global rule for all text-bearing Studio primitives: labels stay within their assigned face/rail section; shrink within available grid/flex space; use single-line ellipsis for button and split-badge labels; never overlap adjacent controls or cross a split divider.",
+  textContainment: "Global rule for all single-line text-bearing Studio primitives: labels stay within their assigned face/rail section; center against the outer border box; use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls or cross a split divider. Multiline textareas are excluded.",
   buttonVariantContract: {
     v1: "primary fill / black text",
     v2: "secondary fill / black text",
@@ -158,7 +158,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
     },
     motion: "Outer shell geometry stays stationary and flat; approved inner indicators, labels, and icons may animate through studio-control-motion.css and must honor reduced-motion preferences.",
   },
-  focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline at 100% of the selected border width; focus is communicated by outline, not box-shadow.",
+  focusOutline: "Text inputs and text areas use a zero-offset secondary-color outline at 65% of the selected border width; focused text and glyph stroke are black, focus fill is primary at 15%, and focus is communicated by outline, not box-shadow.",
   textFieldDefaults: {
     typography: {
       standardInputFontSize: "38px",

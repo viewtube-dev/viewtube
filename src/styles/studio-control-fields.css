@@ -208,3 +208,24 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
   font-size: 18px;
   line-height: 1;
 }
+
+/* Final shared input/textarea parity contract: same 50% resting fill, 15% focus
+   fill, black focused glyph fill/stroke, and a zero-offset secondary outline. */
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body textarea[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body [data-vt-studio-control="true"] textarea {
+  background-color: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+}
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+  background-color: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 15%, transparent) !important;
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+}
