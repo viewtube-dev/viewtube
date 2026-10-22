@@ -314,40 +314,75 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 const buttonVariantNumbers = [1, 2, 3, 4, 5, 6, 7] as const
 type StudioButtonGridTier = "supreme" | "standard" | "compact" | "micro"
 
-const buildStudioButtonRows = (tier: StudioButtonGridTier) => {
-  const row = (id: string, variants: number[]) => ({
-    id: `${tier}-${id}`,
-    tier,
-    specimens: variants.map((variant, index) => ({
-      id: `${tier}-${id}-v${variant}${variant === 1 && index > 0 ? "-repeat" : ""}`,
-      label: variant === 4 ? "BLACK" : variant === 5 ? "OFF" : variant === 6 ? "NO" : variant === 7 ? "WHITE" : "BUTTON",
-    })),
-  })
-  return [
-    ...buttonVariantNumbers.map(variant => row(`full-v${variant}`, [variant])),
-    row("half-v1-v2", [1, 2]),
-    row("half-v3-v4", [3, 4]),
-    row("half-v5-v6", [5, 6]),
-    row("half-v7-v1", [7, 1]),
-    row("quarter-v1-v4", [1, 2, 3, 4]),
-    row("quarter-v5-v7", [5, 6, 7, 1]),
-  ]
-}
+const buttonCell = (tier: StudioButtonGridTier, id: string, variant: number, span: number) => ({
+  id: `${tier}-${id}-v${variant}`,
+  label: variant === 4 ? "BLACK" : variant === 5 ? "OFF" : variant === 6 ? "NO" : variant === 7 ? "WHITE" : "BUTTON",
+  span,
+})
 
 const ConfirmedStudioButtonFamily: React.FC = () => {
-  const specimenRows = (["supreme", "standard", "compact", "micro"] as const).flatMap(buildStudioButtonRows)
+  const layoutRows = [
+    { id: "1-supreme-full", tier: "supreme" as const, specimens: [buttonCell("supreme", "row-1", 1, 144)] },
+    { id: "2-supreme-halves", tier: "supreme" as const, specimens: [buttonCell("supreme", "row-2a", 1, 72), buttonCell("supreme", "row-2b", 2, 72)] },
+    { id: "3-standard-full", tier: "standard" as const, specimens: [buttonCell("standard", "row-3", 1, 144)] },
+    { id: "4-standard-halves", tier: "standard" as const, specimens: [buttonCell("standard", "row-4a", 1, 72), buttonCell("standard", "row-4b", 2, 72)] },
+    { id: "5-standard-fractions", tier: "standard" as const, specimens: [
+      buttonCell("standard", "row-5-third", 3, 48),
+      buttonCell("standard", "row-5-quarter", 4, 36),
+      buttonCell("standard", "row-5-sixth", 5, 24),
+      buttonCell("standard", "row-5-eighth-a", 6, 18),
+      buttonCell("standard", "row-5-eighth-b", 7, 18),
+    ] },
+    { id: "6-compact-fractions", tier: "compact" as const, specimens: [
+      buttonCell("compact", "row-6-third", 1, 48),
+      buttonCell("compact", "row-6-quarter", 2, 36),
+      buttonCell("compact", "row-6-two-ninths", 3, 32),
+      buttonCell("compact", "row-6-ninth", 4, 16),
+      buttonCell("compact", "row-6-twelfth", 5, 12),
+    ] },
+    {
+      id: "7-compact-and-micro",
+      panels: [
+        { id: "7 compact · half module", tier: "compact" as const, span: 72, rows: [{
+          id: "7-compact-row",
+          tier: "compact" as const,
+          specimens: [
+            buttonCell("compact", "row-7-eighth-a", 3, 18),
+            buttonCell("compact", "row-7-eighth-b", 4, 18),
+            buttonCell("compact", "row-7-eighth-c", 5, 18),
+            buttonCell("compact", "row-7-sixteenth-a", 6, 9),
+            buttonCell("compact", "row-7-sixteenth-b", 7, 9),
+          ],
+        }] },
+        { id: "7A–7B micro · half module", tier: "micro" as const, span: 72, rows: [
+          { id: "7A-micro-quarters", tier: "micro" as const, specimens: [
+            buttonCell("micro", "row-7a-quarter-a", 1, 36),
+            buttonCell("micro", "row-7a-quarter-b", 2, 36),
+          ] },
+          { id: "7B-micro-eighths-sixteenths", tier: "micro" as const, specimens: [
+            buttonCell("micro", "row-7b-eighth-a", 3, 18),
+            buttonCell("micro", "row-7b-eighth-b", 4, 18),
+            buttonCell("micro", "row-7b-sixteenth-a", 5, 9),
+            buttonCell("micro", "row-7b-sixteenth-b", 6, 9),
+            buttonCell("micro", "row-7b-sixteenth-c", 7, 9),
+            buttonCell("micro", "row-7b-sixteenth-d", 1, 9),
+          ] },
+        ] },
+      ],
+    },
+  ]
 
   return (
-    <Family title="Button · V1–V7 · Supreme + Standard + Compact + Micro" nonDefaultSettings={[
-      "The original StudioButton family uses the PR #756 ConfirmedSpecimenGrid at every canonical tier: Supreme 60px, Standard 44px, Compact 28px, and Micro 12px.",
-      "Each tier contains every production variant in full-width rows, paired half-width rows, and four-column quarter-width rows. No badge substitutes for a button specimen.",
+    <Family title="Button · V1–V7 · Proportional size grid" nonDefaultSettings={[
+      "Full-module width layout with the exact seven-row PR #756 composition: Supreme full and half rows; Standard full, half, and 1/3 + 1/4 + 1/6 + 2×1/8 row; Compact 1/3 + 1/4 + 2/9 + 1/9 + 1/12 row; then a split half-module Compact/Micro row.",
+      "Row 7 keeps five compact specimens in the left half (3×1/8 + 2×1/16 of module width) and the Micro rows in the right half: 7A has 2×1/4; 7B has 2×1/8 + 4×1/16.",
       "V1 primary/black; V2 secondary/black; V3 independently toggles V1 and V2; V4 black/primary; V5 toggles V1/V2 with OFF/ON text; V6 toggles V1/black with NO/YES text; V7 primary/white.",
-      "Button geometry, fill, label state and icon behavior belong to StudioButton. The grid controls arrangement only; labels stay inside their assigned cells and ellipsize rather than spill.",
-    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + ConfirmedSpecimenGrid.css" tokens="60px Supreme · 44px Standard · 28px Compact · 12px Micro · 4px grid rhythm" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
+      "Each specimen is a real StudioButton. The grid controls arrangement only; production primitive owns size geometry, face styling, toggle state, accessibility, and ellipsis behavior.",
+    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + ConfirmedSpecimenGrid.css" tokens="60px Supreme · 44px Standard · 28px Compact · 12px Micro · proportional 144-unit grid · 4px gap" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-button-gallery">
         <ConfirmedSpecimenGrid
           familyName="Original StudioButton variants"
-          specimenRows={specimenRows}
+          layoutRows={layoutRows}
           renderSpecimen={({ id, tier, label }) => {
             const variant = Number(id.match(/-v(\d+)(?:-repeat)?$/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
             const activeChildren = variant === 5 ? "ON" : variant === 6 ? "YES" : undefined
