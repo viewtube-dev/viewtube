@@ -57,4 +57,14 @@ describe("Studio value toggle primitives", () => {
     expect(shell?.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(10);
   });
 
+
+  it("reserves each side's longest word in Double Side Toggle content-width variants", () => {
+    const { container } = render(<StudioDoubleSideToggle variant="v3"
+      left={{ options: ["A", "SOURCE NAME"], value: "A", onValueChange: () => {} }}
+      right={{ options: ["X", "DESTINATION"], value: "X", onValueChange: () => {} }} />);
+    expect(container.querySelectorAll('.vt-studio-value-toggle__face[data-content-width="true"]')).toHaveLength(2);
+    expect(container.querySelector(".vt-studio-value-toggle__measure")?.textContent).toBe("SOURCE");
+    expect(container.querySelectorAll(".vt-studio-value-toggle__measure")).toHaveLength(2);
+  });
+
 });
