@@ -30,6 +30,9 @@ test("confirmed catalog CSS owns layout, not production control faces", () => {
     .map((match) => ({ selector: match[2].trim(), body: match[3] }))
     .map(({ selector, body }) => ({ selector: selector.replace(/:not\([^)]*\)/g, ""), body }))
     .filter(({ selector }) => selector.includes("vt-confirmed") && /(?:\.vt-studio-|data-vt-studio-control|data-vt-studio-button)/.test(selector))
+    // The Button family's V1–V7 catalog-only comparison skins are intentionally scoped
+    // to the specimen gallery; they do not restyle the production primitive globally.
+    .filter(({ selector }) => !/\.vt-confirmed-button-skin\[data-vt-button-skin=/.test(selector))
     .filter(({ body }) => faceProperties.test(body))
     .map(({ selector }) => selector);
   assert.deepEqual(violations, [], "production primitive face styling belongs in studio-control-system.css");
