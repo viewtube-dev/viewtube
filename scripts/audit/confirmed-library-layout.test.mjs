@@ -535,3 +535,25 @@ test("V3 button toggle changes both the visible state label and primary/secondar
   assert.match(catalog, /data-vt-button-on=\{toggle && isOn \? "true" : "false"\}/);
   assert.match(catalog, /onClick=\{onClick\}/);
 });
+
+
+test("original StudioButton family reapplies PR #756 grid tiers and uses button-face labels", () => {
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?export const StudioHubConfirmedPrimitiveCatalog/)?.[0] ?? "";
+  assert.match(buttonFamily, /rowsForTier\("standard"\)[\s\S]*?rowsForTier\("compact"\)[\s\S]*?rowsForTier\("micro"\)/);
+  for (const label of ["PRIMARY", "SECONDARY", "BLACK", "WHITE TEXT"]) {
+    assert.ok(buttonFamily.includes(`label: "${label}"`) || buttonFamily.includes(`? "${label}"`), `button specimens use visible ${label} text`);
+  }
+  assert.match(buttonFamily, /const label = variant === 1 \? "PRIMARY" : variant === 2 \? "SECONDARY"/);
+  assert.match(buttonFamily, /aria-pressed=\{toggle \? isOn : undefined\}/);
+  assert.match(buttonFamily, /onClick=\{onClick\}/);
+});
+
+test("button gallery state skins outrank generic pressed-to-secondary styling", () => {
+  const gallery = styles.slice(styles.lastIndexOf("/* Button gallery face-state contract."));
+  assert.match(gallery, /html body button\.vt-confirmed-button-skin\[data-vt-button-skin="v1"\][\s\S]*?background:\s*var\(--pair-a,/);
+  assert.match(gallery, /html body button\.vt-confirmed-button-skin\[data-vt-button-skin="v3"\]\[data-vt-button-on="false"\][\s\S]*?background:\s*var\(--pair-a,/);
+  assert.match(gallery, /html body button\.vt-confirmed-button-skin\[data-vt-button-skin="v3"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*var\(--pair-b,/);
+  assert.match(gallery, /data-vt-button-skin="v5"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*var\(--pair-a,/);
+  assert.match(gallery, /data-vt-button-skin="v5"\]\[data-vt-button-on="false"\][\s\S]*?background:\s*var\(--pair-b,/);
+  assert.match(gallery, /data-vt-button-skin="v6"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*#000/);
+});
