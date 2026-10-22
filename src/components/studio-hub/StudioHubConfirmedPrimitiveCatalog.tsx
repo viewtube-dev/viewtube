@@ -1,4 +1,5 @@
 import React from "react"
+import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
 import { Check, Settings2, Sparkles } from "lucide-react"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
@@ -928,6 +929,30 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <StudioSplitLeftDropdown aria-label="Compact split-left dropdown example" sizeVariant="compact" defaultValue="three" options={[{ value: "one", label: "One set" }, { value: "three", label: "Three sets" }, { value: "five", label: "Five sets" }]} />
         <span>Simple dropdown · fixed trailing chevron</span>
         <StudioSimpleDropdown aria-label="Fixed trailing chevron example" sizeVariant="compact" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }, { value: "focused", label: "Focused" }]} />
+      </div>
+    </Family>
+    <Family
+      title="Publishing Card · 5:7 Compound Composition"
+      nonDefaultSettings={[
+        "Composition built from canonical Studio Controls primitives; it is a composition, not a new primitive family.",
+        "Outer shell maintains a 5:7 ratio with a black 3px border, 6px radius, and 25% secondary-pair fill.",
+        "Includes fixed-label title and description, a 16:9 image upload frame, removable tags, and Playlist / Category / Location / Publish Date multi-select controls.",
+        "Uses active primary/secondary pair styling and canonical upload and tag components; composition-specific responsive layout is owned by studio-publishing-card.css.",
+      ]}
+      provenance={<Provenance primitive="StudioPublishingCard composition" tsx="src/studio-ui/compositions/StudioPublishingCard.tsx" css="src/styles/studio-publishing-card.css" tokens="5:7 shell · 16:9 thumbnail · standard controls · black 3px border · 25% secondary fill · primary inset + secondary outline" imports={["src/studio-ui/compositions/StudioPublishingCard.tsx", "src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioPublishingCard">
+        <span>Standard · publishing composition</span>
+        <div style={{ width: "min(100%, 360px)", marginInline: "auto" }}>
+          <StudioPublishingCard
+            title="NEW VIDEO"
+            description="A short description of the video and what viewers can expect."
+            playlistOptions={[{ value: "featured", label: "FEATURED" }, { value: "gameplay", label: "GAMEPLAY" }, { value: "tutorial", label: "TUTORIAL" }]}
+            categoryOptions={[{ value: "gaming", label: "GAMING" }, { value: "education", label: "EDUCATION" }, { value: "entertainment", label: "ENTERTAINMENT" }]}
+            locationOptions={[{ value: "youtube", label: "YOUTUBE" }, { value: "shorts", label: "SHORTS" }, { value: "community", label: "COMMUNITY" }]}
+            publishDateOptions={[{ value: "2026-10-21", label: "10/21/2026" }, { value: "2026-10-22", label: "10/22/2026" }]}
+          />
+        </div>
       </div>
     </Family>
     <ConfirmedStudioInlineStepperFamily />
