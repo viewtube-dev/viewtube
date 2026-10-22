@@ -29,6 +29,7 @@ export const BrainContextCorrectionDialog: React.FC<{
  const [result, setResult] = useState<BrainContextCorrectionResult | null>(null)
  const [error, setError] = useState<string | null>(null)
  const valueRef = useRef<HTMLTextAreaElement | null>(null)
+ const dialogRef = useRef<HTMLElement | null>(null)
 
  busyRef.current = busy
 
@@ -39,6 +40,26 @@ export const BrainContextCorrectionDialog: React.FC<{
    if (event.key === "Escape" && !busyRef.current) {
     event.preventDefault()
     onClose()
+    return
+   }
+   if (event.key === "Tab") {
+    const focusable = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>(
+     'button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+    ) || []).filter((element) => element.getAttribute("aria-hidden") !== "true")
+    if (!focusable.length) {
+     event.preventDefault()
+     return
+    }
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    const active = document.activeElement
+    if (event.shiftKey && (active === first || !dialogRef.current?.contains(active))) {
+     event.preventDefault()
+     last.focus()
+    } else if (!event.shiftKey && (active === last || !dialogRef.current?.contains(active))) {
+     event.preventDefault()
+     first.focus()
+    }
    }
   }
   document.addEventListener("keydown", handleKeyDown)
@@ -74,6 +95,7 @@ export const BrainContextCorrectionDialog: React.FC<{
  return (
   <div className="fixed inset-0 z-[100] grid place-items-center bg-black/55 p-3" data-vt-brain-context-correction-backdrop>
    <section
+    ref={dialogRef}
     role="dialog"
     aria-modal="true"
     aria-labelledby="brain-context-correction-title"
