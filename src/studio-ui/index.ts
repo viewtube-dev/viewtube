@@ -117,4 +117,4 @@ export type {
 export { StudioHubCertification } from "./StudioHubCertification"
 
 export { StudioPublishingCard } from "./compositions/StudioPublishingCard"
-export type { StudioPublishingCardProps, StudioPublishingCardMetadata, StudioPublishingCardOption } from "./compositions/StudioPublishingCard"
+export type { StudioPublishingCardProps, StudioPublishingCardMetadata, StudioPublishingCardOption, StudioPublishingCardSize } from "./compositions/StudioPublishingCard"
