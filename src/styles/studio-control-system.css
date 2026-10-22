@@ -5165,3 +5165,16 @@ html body button[data-vt-studio-button="true"][data-vt-studio-button-variant^="v
   max-width: 100%;
   overflow: hidden;
 }
+
+[data-vt-studio-button-lines="two"] > [data-vt-studio-button-face] {
+  flex-direction: column;
+  gap: 0;
+}
+[data-vt-studio-button-lines="two"] [data-vt-studio-button-line] {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
