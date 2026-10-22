@@ -414,3 +414,10 @@ See the [frontend design reference implementation record](../migration/reference
 PR [#785](https://github.com/viewtube-dev/viewtube/pull/785) merged the accessible journal modal and canonical prompt-evidence details into the target branch. In the observed CI run, `production-build` and `local-smoke` passed; `brain-quality-loop`, `static-quality` and `focused-contracts` failed on existing/other failing contracts. The UI regression tests have been added, but this is not a green full-suite result. Vercel deployment previews were rate-limited, so there is no deployed screenshot/browser verification.
 
 Next delivery gate: verify the metadata guard and tests, then connect one generation result card to the canonical operation/ToolReceipt/output asset and add proposed/started/saved/failed contract tests. Do not display a saved badge without a resolvable canonical output.
+
+
+### Follow-through — receipt-backed result state (2026-10-22)
+
+The next vertical slice adds a receipt-backed output card to the existing Brain runtime panel. It requires a recorded ToolReceipt, output asset IDs, and a match against the asset IDs in the current ContentBuild snapshot before showing a verified output card. Missing receipts, empty output lists, mismatched build scope and stale/missing assets receive explicit withheld/unavailable states; a workflow step marked complete is not treated as a saved result.
+
+Regression tests cover both the pure resolution contract and the rendered card. CI is pending. The next gate remains connecting the result to exact user-facing asset navigation only after the canonical route is verified, then context corrections and learning governance.
