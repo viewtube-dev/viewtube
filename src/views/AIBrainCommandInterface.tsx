@@ -973,7 +973,6 @@ const AIBrainCommandInterface: React.FC = () => {
  const [projectContextCleared, setProjectContextCleared] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
  const composerRef = useRef<HTMLTextAreaElement | null>(null)
- const journalLauncherRef = useRef<HTMLButtonElement | null>(null)
  const promptLauncherRef = useRef<HTMLButtonElement | null>(null)
  const contextLauncherRef = useRef<HTMLButtonElement | null>(null)
  const promptCloseRef = useRef<HTMLButtonElement | null>(null)
@@ -1776,7 +1775,7 @@ const AIBrainCommandInterface: React.FC = () => {
            <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="standard" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
           </div>
           <div data-vt-brain-part="composer-controls" className="flex min-w-0 items-stretch gap-1">
-           <StudioSquareIconButton ref={journalLauncherRef} sizeVariant="standard" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
+           <StudioSquareIconButton sizeVariant="standard" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
            <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
            <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span data-vt-brain-part="composer-status" className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
