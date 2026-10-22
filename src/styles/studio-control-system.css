@@ -12,8 +12,8 @@
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-text-transform: uppercase;
   --vt-studio-control-letter-spacing: -.02em;
-  --vt-studio-control-line-height: .86;
-  --vt-studio-textarea-line-height: .75;
+  --vt-studio-control-line-height: 1;
+  --vt-studio-textarea-line-height: 1;
   
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
@@ -115,7 +115,7 @@ button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
-  line-height: .86;
+  line-height: 1;
   letter-spacing: -.02em;
   -webkit-text-stroke: 1px currentColor;
   padding: 0 1em;
@@ -244,7 +244,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
   letter-spacing: -.02em;
-  line-height: .86;
+  line-height: 1;
   padding: 0 8px;
   text-align: left;
   text-transform: uppercase;
@@ -559,7 +559,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   height: var(--vt-legend-height); min-height: var(--vt-legend-height);
   padding: 0 8px 0 12px; border: var(--vt-legend-stroke) solid #000;
   border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000; 
-  cursor: pointer; font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.02em; text-transform: uppercase; transform: none; 
+  cursor: pointer; font-size: 38px; font-weight: 1000; line-height: 1; letter-spacing: -.02em; text-transform: uppercase; transform: none; 
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { font-size: 24px; }
 .vt-studio-legend-trigger:hover, .vt-studio-legend-trigger:focus, .vt-studio-legend-trigger:focus-visible, .vt-studio-legend-trigger:active {  transform: none;  }
@@ -592,7 +592,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   margin-bottom: 3px; padding: 2px 8px; border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius);
   /* Open panel is primary-filled; option rows are white until selected. */
   background: #fff; color: #000; cursor: pointer; text-align: left;
-  font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.02em; text-transform: uppercase;
+  font-size: 38px; font-weight: 1000; line-height: 1; letter-spacing: -.02em; text-transform: uppercase;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option { font-size: 24px; margin-bottom: 2px; padding-inline: 6px; }
 .vt-studio-legend-option:last-child { border-bottom: 0; }
@@ -617,7 +617,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-legend-clear {
   display: block; box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height); margin-top: 3px; padding: 2px 8px;
   border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius); background: var(--vt-legend-b); color: #000; cursor: pointer;
-  font-size: 38px; font-weight: 1000; line-height: .86; letter-spacing: -.02em; text-transform: uppercase; text-align: center;
+  font-size: 38px; font-weight: 1000; line-height: 1; letter-spacing: -.02em; text-transform: uppercase; text-align: center;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear { font-size: 24px; margin-top: 2px; padding-inline: 6px; }
 .vt-studio-legend-clear:disabled { cursor: not-allowed; opacity: .45; }
@@ -634,7 +634,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
    
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
-  --vt-studio-control-letter-spacing: -.02em; --vt-studio-control-line-height: .86;
+  --vt-studio-control-letter-spacing: -.02em; --vt-studio-control-line-height: 1;
   --vt-studio-control-height: var(--vt-studio-44-height);
   --vt-studio-control-stroke: var(--vt-studio-44-stroke);
   --vt-studio-control-radius: var(--vt-studio-44-radius);
@@ -670,7 +670,7 @@ select[data-vt-studio-control="true"] {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
-  line-height: .86;
+  line-height: 1;
   letter-spacing: -.02em;
   text-transform: uppercase;
   padding-left: 14px;
@@ -722,7 +722,7 @@ select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .
 .vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-white-indicator .vt-studio-44-dot{background:#fff;}
 .vt-studio-44-switch.is-solid:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-choice.is-solid:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-switch.is-white-indicator:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-choice.is-white-indicator:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-switch.is-black-indicator:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-choice.is-black-indicator:is(.is-on, .is-checked, [aria-checked="true"]){background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
 .vt-studio-44-switch:focus-visible,.vt-studio-44-choice:focus-visible,.vt-studio-44-word-toggle button:focus-visible{outline:3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));outline-offset:3px}
-.vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:38px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:3px solid #000;background:color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000;letter-spacing:-.02em;line-height:.86}
+.vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:38px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:3px solid #000;background:color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000;letter-spacing:-.02em;line-height:1}
 .vt-studio-44-word-toggle.is-size-28{--vt-word-height:28px;--vt-word-font-size:24px;--vt-word-radius:4px;border-width:2px}
 .vt-studio-44-word-handle{position:absolute;top:2.75px;bottom:2.75px;left:var(--vt-word-toggle-handle-left, 2.75px);width:var(--vt-word-toggle-handle-width, calc(50% - 5.5px));border-radius:calc(var(--vt-word-radius)*.5);background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));pointer-events:none;overflow:hidden;z-index:0}\n.vt-studio-44-word-handle-color{position:absolute;inset:0;display:none;border-radius:inherit;pointer-events:none;clip-path:inset(0 0 0 100%)}
 .vt-studio-44-word-toggle.is-size-28 .vt-studio-44-word-handle{top:2px;bottom:2px;left:var(--vt-word-toggle-handle-left, 2px);width:var(--vt-word-toggle-handle-width, calc(50% - 4px));border-radius:2.3px}
@@ -898,7 +898,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
   font-size: var(--vt-dropdown-font-size) !important;
   font-weight: 1000 !important;
-  line-height: .86 !important;
+  line-height: 1 !important;
   letter-spacing: -.02em !important;
   -webkit-text-stroke: .5px currentColor;
   padding: 0 !important;
@@ -937,7 +937,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
   font-size: var(--vt-dropdown-font-size, 38px) !important;
   font-weight: 1000 !important;
-  line-height: .86 !important;
+  line-height: 1 !important;
   letter-spacing: -.02em !important;
   -webkit-text-stroke: .5px currentColor;
   text-transform: uppercase !important;
@@ -951,7 +951,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
   font-size: 24px !important;
   font-weight: 1000 !important;
-  line-height: .86 !important;
+  line-height: 1 !important;
   letter-spacing: -.02em !important;
   padding: 2px 6px !important;
 }
@@ -970,7 +970,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
   font-size: var(--vt-studio-44-font-size, 38px) !important;
   font-weight: 1000 !important;
-  line-height: .86 !important;
+  line-height: 1 !important;
   letter-spacing: -.02em !important;
   text-transform: uppercase !important;
   margin-top: 3px !important;
@@ -978,7 +978,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
   font-size: var(--vt-studio-28-font-size, 24px) !important;
   font-weight: 1000 !important;
-  line-height: .86 !important;
+  line-height: 1 !important;
   letter-spacing: -.02em !important;
 }
 
@@ -1019,14 +1019,14 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   border-width: 2px !important;
   border-radius: 4px !important;
   align-items: center;
-  line-height: .86 !important;
+  line-height: 1 !important;
 }
 .vt-studio-dropdown[data-size="compact"] [data-vt-studio-dropdown-value] {
   display: flex;
   min-width: 0;
   align-items: center;
   align-self: stretch;
-  line-height: .86;
+  line-height: 1;
 }
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-menu {
   border-width: 2px !important;
@@ -1041,7 +1041,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   padding: 2px 6px !important;
   font-size: 24px !important;
   font-weight: 1000 !important;
-  line-height: .86 !important;
+  line-height: 1 !important;
   letter-spacing: -.02em !important;
 }
 /* Canonical Studio Controls field contract.
@@ -1332,7 +1332,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
   border: var(--vt-studio-control-stroke, 4.09px) solid #000; border-radius: var(--vt-studio-control-radius, 8.18px);
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));  color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: var(--vt-studio-control-font-size, 51.82px); font-weight: 1000; line-height: .86; letter-spacing: -.02em;
+  font-size: var(--vt-studio-control-font-size, 51.82px); font-weight: 1000; line-height: 1; letter-spacing: -.02em;
   text-transform: uppercase; -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px) currentColor;
   
 }
@@ -1391,7 +1391,7 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"] [data-vt
   padding: 0;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-weight: 1000;
-  line-height: .86;
+  line-height: 1;
   letter-spacing: -.02em;
   text-transform: uppercase;
   color: #000;
@@ -3036,7 +3036,7 @@ button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studi
   margin: 0;
   border: 0;
   border-radius: 0;
-  line-height: .86;
+  line-height: 1;
   color: #000;
   -webkit-text-stroke-color: #000;
 }
@@ -3374,7 +3374,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
-  line-height: .86;
+  line-height: 1;
   letter-spacing: -.02em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
@@ -4599,7 +4599,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   font-variation-settings: "wght" 1000;
   font-synthesis: none;
   letter-spacing: -.02em;
-  line-height: .86;
+  line-height: 1;
   text-transform: uppercase;
   cursor: pointer;
   touch-action: manipulation;
@@ -4643,7 +4643,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   font-weight: 1000;
   font-variation-settings: "wght" 1000;
   font-synthesis: none;
-  line-height: .86;
+  line-height: 1;
   letter-spacing: -.02em;
   text-transform: uppercase;
   white-space: nowrap;
