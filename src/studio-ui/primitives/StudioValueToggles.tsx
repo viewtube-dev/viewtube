@@ -123,6 +123,8 @@ export function StudioBarToggle({
 }: StudioBarToggleProps) {
   const repeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const repeatActive = useRef(false);
+  const valueRef = useRef(value);
+  valueRef.current = value;
   const stopRepeat = useCallback(() => {
     repeatActive.current = false;
     if (repeatTimer.current !== null) clearTimeout(repeatTimer.current);
@@ -132,7 +134,10 @@ export function StudioBarToggle({
 
   const step = useCallback((direction: -1 | 1) => {
     if (disabled) return;
-    onValueChange(Math.max(0, Math.min(100, Math.round(Math.max(0, Math.min(100, value)) / 10) * 10 + direction * 10)));
+    const current = Math.max(0, Math.min(100, valueRef.current));
+    const next = Math.max(0, Math.min(100, Math.round(current / 10) * 10 + direction * 10));
+    valueRef.current = next;
+    onValueChange(next);
   }, [disabled, onValueChange, value]);
 
   const startRepeat = (direction: -1 | 1) => {
@@ -150,14 +155,14 @@ export function StudioBarToggle({
   return <div className={["vt-studio-value-toggle", "vt-studio-value-toggle--bar", className].filter(Boolean).join(" ")}
     data-vt-studio-control="true" data-vt-studio-value-toggle="bar" data-size={size} style={appearanceStyle(appearance)}>
     <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Decrease level" disabled={disabled || value <= 0}
-      onPointerDown={() => startRepeat(-1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") step(-1); }}>
+      onPointerDown={() => startRepeat(-1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(-1); } }}>
       <ChevronLeft aria-hidden="true" />
     </button>
     <div className="vt-studio-value-toggle__bars" role="meter" aria-label={ariaLabel} aria-valuemin={0} aria-valuemax={100} aria-valuenow={bars * 10}>
       {Array.from({ length: 10 }, (_, index) => <span key={index} className="vt-studio-value-toggle__bar" data-active={index < bars ? "true" : "false"} />)}
     </div>
     <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Increase level" disabled={disabled || value >= 100}
-      onPointerDown={() => startRepeat(1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") step(1); }}>
+      onPointerDown={() => startRepeat(1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(1); } }}>
       <ChevronRight aria-hidden="true" />
     </button>
   </div>;
