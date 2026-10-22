@@ -441,3 +441,16 @@ The next AI Brain page slice turns the existing **Propose correction** affordanc
 Channel Knowledge Model hypotheses and learning candidates do not share that claim-update contract. Those corrections are recorded as unconfirmed proposals and explicitly remain unapplied; the UI does not misrepresent a proposal as a changed profile. The next-turn verification prompt is offered only after an applied correction.
 
 Regression tests cover governance routing, channel scope, empty corrections, proposal-only behavior for non-claim sources, accessible dialog semantics, and the distinction between explicit confirmation and inference. **Verification status:** CI and browser keyboard/focus checks are pending; no local test execution is claimed.
+
+
+## Implementation progress — prompt evidence integrity in the AI Brain UI (2026-10-22)
+
+**Scope:** UI-1 first slice from the front-end integration bridge.
+
+- Added an explicit per-turn prompt-evidence identity status: **verified**, **unavailable** (legacy/no manifest), or **mismatch** (manifest exists but its record contract is invalid).
+- The Brain conversation restores and refreshes this status alongside the exact typed evidence records; retries refresh the status from the new turn metadata.
+- The evidence disclosure distinguishes a legacy turn with no recorded manifest from an integrity mismatch. On mismatch it announces an alert and withholds detailed records rather than displaying a different evidence set as if it were the model input.
+- Verified status is rendered only when typed records pass validation and their ordered IDs exactly match the stored prompt manifest. This does not claim that all evidence-pack/video IDs share the same ID namespace.
+- Added regression coverage for verified, unavailable, and mismatched manifests, plus the corresponding creator-facing disclosure states.
+
+**Verification status:** tests have been added but not executed locally. CI is the next validation step. UI-2 still needs broader empty/partial/stale/unavailable/contradictory evidence-state coverage, and the full mobile/keyboard/screen-reader audit remains open.
