@@ -44,9 +44,9 @@ const missingRecord: EvidenceRecord = {
  provenance: { evidenceIds: ["source-missing-1"] },
 }
 
-const render = (evidenceRecords?: EvidenceRecord[]) => renderToStaticMarkup(
+const render = (evidenceRecords?: EvidenceRecord[], evidencePack: AIBrainEvidencePack = pack) => renderToStaticMarkup(
  <MemoryRouter>
-  <BrainTurnEvidenceRibbon turnId="turn-1" evidencePack={pack} evidenceRecords={evidenceRecords} />
+  <BrainTurnEvidenceRibbon turnId="turn-1" evidencePack={evidencePack} evidenceRecords={evidenceRecords} />
  </MemoryRouter>,
 )
 
@@ -70,5 +70,40 @@ describe("BrainTurnEvidenceRibbon", () => {
   const html = render(undefined)
 
   expect(html).toContain("Record-level provenance is unavailable for this saved turn")
+ })
+})
+
+
+describe("BrainTurnEvidenceRibbon selection request", () => {
+ it("renders stored count, format, date, ranking, text-filter, and cohort constraints", () => {
+  const requestPack = {
+   ...pack,
+   requestSpec: {
+    count: 10,
+    formats: ["long", "live"],
+    since: "2025-10-22",
+    until: "2026-10-22",
+    rankBy: "views",
+    filters: ["tutorial", "beginner"],
+    selectionMode: "top",
+   },
+  } as unknown as AIBrainEvidencePack
+  const html = render([], requestPack)
+
+  expect(html).toContain('data-vt-brain-part="evidence-request-constraints"')
+  expect(html).toContain("Selection request")
+  expect(html).toContain("10 items")
+  expect(html).toContain("Long-form, Live")
+  expect(html).toContain("2025-10-22 – 2026-10-22")
+  expect(html).toContain("tutorial, beginner")
+  expect(html).toContain("All selection constraints")
+ })
+
+ it("explains when a legacy saved turn did not retain request constraints", () => {
+  const legacyPack = { ...pack, requestSpec: undefined } as unknown as AIBrainEvidencePack
+  const html = render([], legacyPack)
+
+  expect(html).toContain("Selection constraints were not recorded for this saved turn.")
+  expect(html).toContain("cannot be reconstructed safely")
  })
 })

@@ -4,6 +4,7 @@ import type { AIBrainEvidencePack } from "../../types"
 import type { EvidenceRecord } from "../../services/brain/EvidenceRecord"
 import { StudioSplitLeftBadge } from "../../studio-ui"
 import { BrainClaimEvidence } from "./BrainClaimEvidence"
+import { formatEvidenceRequestSpec } from "../../services/brain/BrainEvidenceRequestPresentation"
 
 export type BrainTurnEvidenceRibbonProps = {
  turnId: string
@@ -39,6 +40,12 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
  const captureLabel = capturedAt && Number.isFinite(Date.parse(capturedAt))
   ? new Date(capturedAt).toLocaleString()
   : "Capture time unavailable"
+ const requestConstraints = evidencePack.requestSpec && typeof evidencePack.requestSpec === "object"
+  ? formatEvidenceRequestSpec(evidencePack.requestSpec)
+  : null
+ const requestSummary = requestConstraints
+  ? requestConstraints.map((item) => item.value).join(" · ")
+  : "Selection constraints were not recorded for this saved turn."
  const statusLabel = evidencePack.dataStatus === "missing"
   ? "Missing evidence"
   : evidencePack.dataStatus === "partial"
@@ -67,6 +74,28 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
     ) : null}
    </div>
    <p className="break-words text-[10px] font-bold leading-4 text-black/65">Captured: {captureLabel}</p>
+   <section data-vt-brain-part="evidence-request-constraints" aria-label="Evidence selection request" className="grid min-w-0 gap-1 border-t border-black/20 pt-1.5">
+    <div className="grid gap-0.5">
+     <h4 className="text-[10px] font-[1000] uppercase tracking-[0.06em]">Selection request</h4>
+     <p className="break-words text-xs font-bold leading-5 text-black/70">{requestSummary}</p>
+    </div>
+    {requestConstraints ? (
+     <details className="min-w-0">
+      <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-xs font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">
+       <span>All selection constraints</span>
+       <span className="ml-auto">{requestConstraints.length}</span>
+      </summary>
+      <dl className="grid min-w-0 grid-cols-1 gap-1 py-1 sm:grid-cols-2">
+       {requestConstraints.map((constraint) => (
+        <div key={constraint.id} className="min-w-0 border border-black/30 bg-[#f8f8f4] p-1.5">
+         <dt className="text-[9px] font-[1000] uppercase text-black/55">{constraint.label}</dt>
+         <dd className="break-words text-xs font-bold leading-5">{constraint.value}</dd>
+        </div>
+       ))}
+      </dl>
+     </details>
+    ) : <p role="note" className="break-words text-[10px] font-bold leading-4 text-black/60">This is a legacy evidence snapshot. Its original count, format, date, ranking, and text-filter settings cannot be reconstructed safely.</p>}
+   </section>
    {evidencePack.missingInputs.length ? (
     <div className="grid gap-0.5">
      <h4 className="text-[9px] font-[1000] uppercase tracking-[0.06em]">Missing inputs</h4>
