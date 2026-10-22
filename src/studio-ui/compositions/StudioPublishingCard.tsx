@@ -1,9 +1,10 @@
 import React from "react"
 import { StudioCloseableBadge, StudioLegendMultiDropdown, StudioUploadFrame } from "./StudioControls"
-import type { StudioLegendMultiDropdownOption } from "./StudioControls"
 import { StudioTextInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import "../../styles/studio-publishing-card.css"
+
+export type StudioPublishingCardOption = { value: string; label: string; disabled?: boolean }
 
 export type StudioPublishingCardMetadata = {
   playlist: string[]
@@ -23,7 +24,7 @@ export type StudioPublishingCardProps = {
   onTagsChange?: (tags: string[]) => void
   metadata?: Partial<StudioPublishingCardMetadata>
   onMetadataChange?: (metadata: StudioPublishingCardMetadata) => void
-  playlistOptions?: StudioLegendMultiDropdownOption[]
+  playlistOptions?: StudioPublishingCardOption[]
   categoryOptions?: StudioLegendMultiDropdownOption[]
   locationOptions?: StudioLegendMultiDropdownOption[]
   publishDateOptions?: StudioLegendMultiDropdownOption[]
