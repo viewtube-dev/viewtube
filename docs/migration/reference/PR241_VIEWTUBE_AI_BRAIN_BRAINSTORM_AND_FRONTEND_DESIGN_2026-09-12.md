@@ -624,3 +624,88 @@ Use the existing page as the shared workspace, with a stable conversation center
 6. **Accessibility and reliability certification:** keyboard/mobile/screen-reader checks plus a full lifecycle acceptance scenario from question → evidence → operation → receipt → publication → analytics → evaluation → learning.
 
 For each delivery, report the requirement-to-commit mapping, canonical owners reused, tests actually executed, CI result, known failures, and deferred gaps. Static source inspection is not runtime verification, and pre-existing CI debt must be reported separately from failures introduced by a change.
+
+
+## 5.11 AI Brain page — evidence-first implementation plan (2026-10-22)
+
+**Purpose:** make the existing AI Brain page the usable front door to the new evidence, context, orchestration, capability, receipt, outcome and learning contracts. This is a build plan, not a claim that these surfaces are already connected. The 2026-09-12 sections remain historical; current ownership and status must be checked against `master/consolidated-feature-integration`.
+
+### Page structure: one workspace, progressive disclosure
+
+1. **Workspace header and context bar**
+   - Persistent scope: active channel, project, ContentBuild/revision, selected asset or analytics surface.
+   - Explicit unset/cleared states; changing scope must visibly affect subsequent requests.
+   - Preserve scope and evidence filters on thread restore, navigation, retry and deep links.
+   - Do not write transient UI selections into durable creator memory without the existing governed action.
+
+2. **Conversation center**
+   - Preserve raw creator message text in storage and learning capture; sanitization is display-only.
+   - Each turn has a clear state: answering, needs evidence, proposed action, awaiting approval, running, saved, blocked or failed.
+   - Make “Discuss”, “Prepare” and “Execute” distinct interaction intents. Execute must invoke the real approval/capability contract, never infer approval from a chat response.
+   - Restore only actual conversation turns to model history, while preserving original turn identity and scope.
+
+3. **Claim and evidence inspection**
+   - Reuse `BrainConfidenceChip` and `BrainEvidenceDrawer`; extend them rather than creating parallel trust controls.
+   - The turn's typed evidence records and grade/fingerprint are the source of truth. The claim ribbon, drawer, trace and model input must reference the same ordered IDs and values.
+   - Every numeric/analytics claim links to the exact metric, unit, entity, time window, filters and calculation/source records.
+   - Show observed/derived/creator-provided/inferred/hypothesis/estimate/conflicting/missing states only when the canonical evidence contract supports them. Never upgrade unknown data into a fact.
+   - Empty states must distinguish “searched, no result”, “not queried”, “filtered out”, “missing data”, “stale”, “permission blocked” and “source unavailable”.
+
+4. **Context used and correction flow**
+   - A per-turn “Context used” disclosure lists only the actual envelope entries supplied, with source and scope.
+   - Corrections target an identified fact and call the canonical context/profile governance API. Show pending versus confirmed outcomes; verify the next turn or expose a conflict.
+   - Until the resolver provides structured confirmed/inferred/temporary status, do not fabricate those badges from prompt prose.
+
+5. **Capability and action tray**
+   - Derive actions from `BrainCapabilityRegistry`, its evidence requirements, user controls and runtime permission checks.
+   - Every blocked action explains the unmet requirement in text and is revalidated at dispatch.
+   - A persistent work tray tracks proposed → prepared → awaiting approval → started → completed/failed. Navigation or opening a toolbox is not an operation receipt.
+   - Retries link to the original operation and must not repeat irreversible external side effects.
+
+6. **Receipt-backed output cards**
+   - Reuse `BrainWorkflowRunPanel` for workflow steps, but do not treat step completion as proof of a saved asset or publish readiness.
+   - Each generation/result card resolves to its canonical output asset, ToolReceipt, operation/turn and trace where available.
+   - Render “saved” only when the output owner confirms the saved state; unresolved IDs and missing receipts remain explicit.
+   - Publishing approval/readiness is read from the publishing owner, not inferred from generated text or workflow color.
+
+7. **Learning and activity**
+   - Show preference learning separately from performance learning.
+   - Keep recommendation, prediction, intervention, measured outcome, learning candidate, review decision and promotion as linked but separate states.
+   - Capture accept/reject/correction reasons structurally where the canonical API supports them; only governance can promote durable knowledge.
+   - Creator activity shows confirmed actions and outcomes. Operator trace details remain role-appropriate and exclude chain-of-thought.
+
+### Shared UI contract
+
+- Use the existing Studio Controls design system for geometry, typography, focus and sizing; use existing Brain components as compositions of canonical data.
+- Every control has a semantic name, keyboard support, visible focus, logical focus return, and a text explanation for disabled states.
+- Status is expressed through text/icon as well as color. Loading, partial, stale, missing, blocked, failed and saved are distinct.
+- Drawers and disclosures preserve scroll, filters and selected entity; mobile and high zoom must retain the evidence/source action.
+- Respect reduced motion; no hover-only evidence, status or controls.
+- Do not show private reasoning, internal scratchpads, unsupported confidence, guessed model identity, simulated receipts or decorative readiness scores.
+
+### Phased build order
+
+| Phase | Build slice | Required regression proof | Exit gate |
+|---|---|---|---|
+| 0. Audit inventory | Map current AI Brain page route, components, state sources and action dispatches. Mark each surface verified / partial / proposed. | Source inventory links every control to its owner and test; no assumed routes. | Agree on the exact existing page footholds before editing. |
+| 1. Turn presentation contract | Add a typed, read-only projection over the existing turn, evidence pack/grade, trace, operation, receipt and output records. | Missing/unresolved IDs remain explicit; projection creates no parallel persistence. | All displayed state is derived from canonical records. |
+| 2. Evidence-first claim | Wire one analytics claim end-to-end into a shared claim block and evidence drawer. | Ordered IDs and values match model-supplied and graded evidence; stale/mutated/unresolved evidence fails closed. | One vertical slice proves claim-to-source navigation and filter preservation. |
+| 3. Context and restore | Show turn scope/context used; preserve raw text, turn ID, cohort and evidence filters through restore. | Round-trip tests plus correction propagation test. | Restored turns retain original scope; corrected facts reflect governed state or explicit conflict. |
+| 4. Capability and receipt | Connect one generation action and result card to registry, operation, ToolReceipt, output asset and trace. | Proposed/started/saved/failed state tests; retries do not duplicate side effects. | No “saved” state without authoritative output and resolvable identity. |
+| 5. Outcome and learning | Link recommendation → prediction → measured outcome → candidate review → governed promotion. | State-machine and lineage tests; insufficient data remains explicit. | No implicit promotion and no conflation of preference with performance learning. |
+| 6. Expand and certify | Apply the proven patterns to contextual sidecar, analytics “Why?”, creator profile, publishing and operator surfaces. | Golden evidence cases, routing/governance tests, keyboard/screen-reader/mobile/zoom/reduced-motion checks. | End-to-end acceptance and CI evidence are reported; unrelated existing failures are separated. |
+
+### First implementation targets and boundaries
+
+Start with `src/views/AIBrainCommandInterface.tsx` and its existing turn/render/action owners; inspect actual call sites before choosing seams. Reuse `BrainRuntimePanel`, `BrainEvidenceDrawer`, `BrainConfidenceChip`, `BrainCapabilityBrowser`, `BrainWorkflowRunPanel`, `GlobalBrainSidecar`, `BrainTrace`, `BrainRuntimeSnapshot`, conversation storage and learning governance. Do not introduce a second conversation store, evidence pack, creator profile, receipt ledger, action engine or UI primitive family.
+
+The first code PR should be one vertical slice, not a page-wide redesign: typed presentation contract + evidence parity test + one claim-to-source UI connection. Only then expand to receipts and context corrections.
+
+### Definition of done
+
+- Every shown claim uses the evidence actually supplied and graded for that turn, or clearly says it is ungrounded/limited.
+- Every visible action and result state is backed by a canonical capability/operation/receipt/output owner.
+- Scope, filters and IDs survive restore, retry and navigation.
+- Corrections and learning use existing governance.
+- Keyboard, screen-reader, narrow-screen, zoom and reduced-motion checks have execution evidence.
+- Final report lists requirement-to-commit mapping, files changed, tests actually run, CI results, known unrelated failures and rollback path.
