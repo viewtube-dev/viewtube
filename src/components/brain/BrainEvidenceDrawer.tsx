@@ -50,8 +50,7 @@ export const BrainEvidenceDrawer: React.FC<{
  const visibleEvidenceItems = evidenceItems.slice(0, 5)
  const sourceCount = evidenceItems.length
  const provenanceCount = evidenceChips.length
- const hasAnything = sourceCount || missing.length || caveats.length || provenanceCount
- const hasNoEvidenceDetails = !hasAnything
+ const hasNoEvidenceDetails = sourceCount === 0
 
  const evidenceHref = (item: AIBrainEvidencePack["items"][number]): string => {
   const params = new URLSearchParams()
