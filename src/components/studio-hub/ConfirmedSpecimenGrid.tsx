@@ -13,17 +13,19 @@ export interface SpecimenGridRow {
   id: string
   tier: SpecimenTier
   specimens: Array<{ id: string; label: string }>
-  /** Rows with the same group render side-by-side as independent size stacks. */
+  /** Optional paired size stacks for dedicated Supreme/Micro comparisons. */
   comparisonGroup?: "supreme" | "micro"
 }
 
 export interface ConfirmedSpecimenGridProps {
   familyName: string
   renderSpecimen: (request: SpecimenRequest) => React.ReactNode
-  /** Optional authored rows let a component family reuse the grid without changing its own specimen semantics. */
+  /** Authored rows are grouped into parallel size columns, never one long size-by-size stack. */
   specimenRows?: SpecimenGridRow[]
   documentation?: React.ReactNode
 }
+
+const SPECIMEN_TIERS = ["supreme", "standard", "compact", "micro"] as const
 
 /**
  * Catalog arrangement only. renderSpecimen must render the real production
@@ -65,7 +67,24 @@ export function ConfirmedSpecimenGrid({
     </div>
   )
 
-  const authoredRows = specimenRows?.filter((item) => !item.comparisonGroup).map(renderAuthoredRow)
+  const authoredTierGrid = specimenRows?.some((item) => !item.comparisonGroup)
+    ? (
+      <div className="vt-specimen-tier-grid" aria-label="Button size tiers">
+        {SPECIMEN_TIERS.map((tier) => {
+          const tierRows = (specimenRows ?? []).filter((item) => item.tier === tier && !item.comparisonGroup)
+          return (
+            <section className={`vt-specimen-tier-column vt-specimen-tier-column--${tier}`} key={tier} aria-label={`${tier} specimens`} data-vt-specimen-tier-column={tier}>
+              <h4 className="vt-specimen-tier-heading">{tier.toUpperCase()}</h4>
+              <div className="vt-specimen-stack">
+                {tierRows.map(renderAuthoredRow)}
+              </div>
+            </section>
+          )
+        })}
+      </div>
+    )
+    : null
+
   const comparisonGroups = specimenRows?.some((item) => item.comparisonGroup)
     ? (
       <div className="vt-specimen-size-comparison" aria-label="Supreme and Micro size comparison">
@@ -98,15 +117,15 @@ export function ConfirmedSpecimenGrid({
       </div>
 
       <div id={contentId} className="vt-specimen-layout">
-        <div className="vt-specimen-stack">
-          {specimenRows
-            ? <>{authoredRows}{comparisonGroups}</>
-            : (["supreme", "standard", "compact", "micro"] as const).flatMap((tier) =>
+        {specimenRows
+          ? <>{authoredTierGrid}{comparisonGroups}</>
+          : <div className="vt-specimen-stack">
+              {SPECIMEN_TIERS.flatMap((tier) =>
                 [1, 2, 3, 4].map((count) =>
                   row(`${viewPrefix}-${tier}-${count}`, tier, count, tier.toUpperCase()),
                 ),
               )}
-        </div>
+            </div>}
       </div>
 
       {!clean && documentation ? (
