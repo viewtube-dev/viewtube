@@ -36,8 +36,8 @@ describe("submitBrainContextCorrection", () => {
   }, {
    getClaim: vi.fn(async () => claim),
    listActiveClaims: vi.fn(async () => [correctedClaim]),
-   teachExplicitly,
-   captureProposal: vi.fn(),
+   teachExplicitly: teachExplicitly as never,
+   captureProposal: vi.fn() as never,
   })
 
   expect(teachExplicitly).toHaveBeenCalledWith(expect.objectContaining({
@@ -63,8 +63,8 @@ describe("submitBrainContextCorrection", () => {
   }, {
    getClaim: vi.fn(),
    listActiveClaims: vi.fn(),
-   teachExplicitly,
-   captureProposal,
+   teachExplicitly: teachExplicitly as never,
+   captureProposal: captureProposal as never,
   })
 
   expect(captureProposal).toHaveBeenCalledWith(expect.objectContaining({
@@ -91,8 +91,8 @@ describe("submitBrainContextCorrection", () => {
   }, {
    getClaim: vi.fn(async () => claim),
    listActiveClaims: vi.fn(),
-   teachExplicitly,
-   captureProposal: vi.fn(),
+   teachExplicitly: teachExplicitly as never,
+   captureProposal: vi.fn() as never,
   })).rejects.toThrow(/does not belong to the active channel/i)
   expect(teachExplicitly).not.toHaveBeenCalled()
  })
@@ -107,8 +107,8 @@ describe("submitBrainContextCorrection", () => {
   }, {
    getClaim: vi.fn(async () => claim),
    listActiveClaims: vi.fn(),
-   teachExplicitly: vi.fn(),
-   captureProposal: vi.fn(),
+   teachExplicitly: vi.fn() as never,
+   captureProposal: vi.fn() as never,
   })).rejects.toThrow(/enter a correction/i)
  })
 })
