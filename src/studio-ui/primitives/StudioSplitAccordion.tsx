@@ -1,8 +1,8 @@
 import React from "react";
-import type { StudioControlSize } from "../tokens";
 import "../../styles/studio-split-accordion.css";
 
 export type StudioSplitAccordionLayout = "left" | "right" | "double";
+export type StudioSplitAccordionSize = "standard" | "compact" | "micro";
 
 export interface StudioSplitAccordionItem {
   /** Stable identity; recommended when items can be reordered. */
@@ -17,7 +17,7 @@ export interface StudioSplitAccordionItem {
 
 export interface StudioSplitAccordionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   items: readonly StudioSplitAccordionItem[];
-  sizeVariant?: StudioControlSize;
+  sizeVariant?: StudioSplitAccordionSize;
   layout?: StudioSplitAccordionLayout;
   /** Zero-based active item. Supplying this prop makes the accordion controlled. */
   activeIndex?: number;
