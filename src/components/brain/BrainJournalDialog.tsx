@@ -17,8 +17,9 @@ export const BrainJournalDialog: React.FC<BrainJournalDialogProps> = ({
  onSave,
 }) => {
  const dialogRef = useRef<HTMLDivElement | null>(null)
- const closeRef = useRef<HTMLButtonElement | null>(null)
  const inputRef = useRef<HTMLTextAreaElement | null>(null)
+ const onCloseRef = useRef(onClose)
+ onCloseRef.current = onClose
 
  useEffect(() => {
   const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null
@@ -27,7 +28,7 @@ export const BrainJournalDialog: React.FC<BrainJournalDialogProps> = ({
   const onKeyDown = (event: KeyboardEvent) => {
    if (event.key === "Escape") {
     event.preventDefault()
-    onClose()
+    onCloseRef.current()
     return
    }
    if (event.key !== "Tab") return
@@ -40,7 +41,10 @@ export const BrainJournalDialog: React.FC<BrainJournalDialogProps> = ({
    if (!focusable.length) return
    const first = focusable[0]
    const last = focusable[focusable.length - 1]
-   if (event.shiftKey && document.activeElement === first) {
+   if (!dialogRef.current?.contains(document.activeElement)) {
+    event.preventDefault()
+    first.focus()
+   } else if (event.shiftKey && document.activeElement === first) {
     event.preventDefault()
     last.focus()
    } else if (!event.shiftKey && document.activeElement === last) {
@@ -54,7 +58,7 @@ export const BrainJournalDialog: React.FC<BrainJournalDialogProps> = ({
    document.removeEventListener("keydown", onKeyDown)
    previouslyFocused?.focus()
   }
- }, [onClose])
+ }, [])
 
  return (
   <div className="absolute inset-0 z-50 grid place-items-center bg-black/40 p-4">
@@ -68,7 +72,7 @@ export const BrainJournalDialog: React.FC<BrainJournalDialogProps> = ({
    >
     <div className="flex items-center justify-between gap-3 border-b-[2px] border-black bg-[#36E0F6] px-4 py-3">
      <h2 id="brain-journal-dialog-title" className="text-xl font-[1000] uppercase">Save To AI Journal</h2>
-     <StudioButton ref={closeRef} sizeVariant="compact" tone="neutral" type="button" onClick={onClose} aria-label="Close AI Journal dialog">
+     <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={onClose} aria-label="Close AI Journal dialog">
       <X size={14} aria-hidden="true" /> Close
      </StudioButton>
     </div>
