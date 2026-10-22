@@ -34,7 +34,7 @@ import type { Project } from "../../types"
 import ProjectCreationDialog from "./ProjectCreationDialog"
 import { syncProjectToContentBuild } from "../../services/asset-engine/ProjectContentBuildBridge"
 import { useProjectsWorkspace } from "./ProjectsWorkspaceContext"
-import { StudioSplitLeftInput } from "../../studio-ui/primitives/StudioControls"
+import { StudioTextInput } from "../../studio-ui/primitives/StudioControls"
 import {
  SubToolboxButton,
  SubToolboxSelect,
@@ -322,9 +322,8 @@ const ProjectKanbanWorkspace: React.FC<{ embedded?: boolean }> = ({ embedded = f
    )}
 
    <div className="grid gap-2 border-b-[3px] border-black bg-white p-2 md:grid-cols-[minmax(180px,1fr)_140px_150px_auto]">
-    <StudioSplitLeftInput
+    <StudioTextInput
      sizeVariant="compact"
-     icon={<Search size={14} aria-hidden="true" />}
      value={workspace.query}
      onChange={(event)=>setWorkspace((state)=>({...state,query:event.currentTarget.value}))}
      placeholder="Search projects"
