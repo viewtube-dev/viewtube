@@ -603,7 +603,7 @@ const PrimitiveMigrationControl: React.FC<{
   if (name === "20 Plain Input") return <StudioInput sizeVariant="standard" defaultValue="TEXT INPUT" />
   if (name === "21 Plain Text Area") return <StudioTextArea sizeVariant="compact" defaultValue="TEXT AREA" />
   if (name === "137 Floating Label Input") return <StudioTextInput variant="floating-label" sizeVariant="standard" label="TITLE" aria-label="Title" />
-  if (name === "138 Floating Label Text Area") return <StudioTextArea variant="floating-label" sizeVariant="compact" label="DESCRIPTION" aria-label="Description" />
+  if (name === "138 Floating Label Text Area") return <div className="vt-catalog-field-pair"><StudioTextArea variant="floating-label" sizeVariant="compact" floatingLabelVariant="a" label="DESCRIPTION A" aria-label="Description A" /><StudioTextArea variant="floating-label" sizeVariant="compact" floatingLabelVariant="b" label="DESCRIPTION B" aria-label="Description B" /></div>
   if (name === "Number Field") {
     return <StudioNumberInput sizeVariant={level === "l2" ? "compact" : "standard"} defaultValue={25} aria-label="Number field primitive" />
   }
@@ -1026,7 +1026,7 @@ const PrimitiveMigrationControl: React.FC<{
     return <StudioTextInput variant="floating-label" level={level} sizeVariant="standard" label="TITLE" aria-label="Title" autoComplete="off" />
   }
   if (name === "Labeled Textarea") {
-    return <StudioTextArea variant="floating-label" level={level} sizeVariant="standard" label="DESCRIPTION" defaultValue="A long-form video description demonstrates the raised label while preserving the larger writing area." aria-label="Description" />
+    return <div className="vt-catalog-field-pair"><StudioTextArea variant="fixed-label" sizeVariant="compact" label="DESCRIPTION A" aria-label="Fixed description A" /><StudioTextArea variant="fixed-label" sizeVariant="compact" label="DESCRIPTION B" aria-label="Fixed description B" /></div>
   }
   if (name === "Video Selector") {
     return <SubToolboxVideoSelector
