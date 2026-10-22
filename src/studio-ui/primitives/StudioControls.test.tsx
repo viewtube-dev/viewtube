@@ -1142,7 +1142,8 @@ describe("global StudioButton variants and containment contract", () => {
     expect(catalog).toContain('...buildStudioButtonRows("compact")');
     expect(catalog).toContain('row("half-v1-v2"');
     expect(catalog).toContain('row("quarter-v1-v4"');
-    expect(catalog).toContain('heightVariant={tier === "standard" ? "44" : "28"}');
+    expect(catalog).toContain('sizeVariant={tier}');
+    expect(catalog).not.toContain('heightVariant={tier === "standard" ? "44" : "28"}');
     expect(catalog).toContain('variant={`v${variant}`');
   });
 });
