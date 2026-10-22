@@ -346,7 +346,7 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
           familyName="Original StudioButton variants"
           specimenRows={specimenRows}
           renderSpecimen={({ id, tier }) => {
-            const variant = Number(id.match(/-v(\\d+)(?:-repeat)?$/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
+            const variant = Number(id.match(/-v(\d+)(?:-repeat)?$/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
             const label = variant === 4 ? "BLACK" : variant === 5 ? "OFF" : variant === 6 ? "NO" : variant === 7 ? "WHITE" : "BUTTON"
             const activeChildren = variant === 5 ? "ON" : variant === 6 ? "YES" : undefined
             return (
