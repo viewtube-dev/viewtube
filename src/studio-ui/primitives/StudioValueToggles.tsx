@@ -27,6 +27,8 @@ export type StudioArrowToggleProps = CommonProps & {
 
 export type StudioSideToggleProps = CommonProps & {
   arrowSide?: "left" | "right";
+  /** Reserved label width for Double Side Toggle content-width variants. */
+  reserveLabel?: string;
 };
 
 export type StudioDoubleSideToggleProps = {
@@ -82,12 +84,12 @@ export function StudioArrowToggle(props: StudioArrowToggleProps) {
     shellProps={{ "data-vt-studio-value-toggle": "arrow", style: appearanceStyle(appearance) }}
     leftRailContent={left ? arrowRail(props, -1, "left") : undefined}
     rightRailContent={right ? arrowRail(props, 1, "right") : undefined}>
-    <span className="vt-studio-value-toggle__face" aria-live="polite" aria-label={ariaLabel} title={current}>{current}</span>
+    <span className="vt-studio-value-toggle__face" data-content-width={reserveLabel ? "true" : undefined} aria-live="polite" aria-label={ariaLabel} title={current}><span>{current}</span>{reserveLabel && <span className="vt-studio-value-toggle__measure" aria-hidden="true">{reserveLabel}</span>}</span>
   </StudioSplitShell>;
 }
 
 export function StudioSideToggle(props: StudioSideToggleProps) {
-  const { options, value, arrowSide = "right", size = "standard", ariaLabel = "Choose value", className } = props;
+  const { options, value, arrowSide = "right", size = "standard", ariaLabel = "Choose value", className, reserveLabel } = props;
   const index = options.indexOf(value);
   const current = options[index < 0 ? 0 : index] ?? value;
   const arrows = <div className="vt-studio-value-toggle__arrow-stack">
@@ -106,14 +108,15 @@ export function StudioSideToggle(props: StudioSideToggleProps) {
 export function StudioDoubleSideToggle({ left, right, variant = "default", size = "standard", className }: StudioDoubleSideToggleProps) {
   const noDivider = variant === "v2" || variant === "v4";
   const contentWidth = variant === "v3" || variant === "v4";
+  const longestWord = (options: readonly string[]) => options.flatMap(option => option.split(/\\s+/)).reduce((longest, word) => word.length > longest.length ? word : longest, "");
   return <div className={["vt-studio-value-toggle", "vt-studio-value-toggle--double", className].filter(Boolean).join(" ")}
     data-vt-studio-control="true" data-vt-studio-value-toggle="double" data-variant={variant} data-size={size}>
     <div className="vt-studio-value-toggle__double-side" data-content-width={contentWidth ? "true" : undefined}>
-      <StudioSideToggle {...left} size={size} arrowSide="left" className="vt-studio-value-toggle--nested" />
+      <StudioSideToggle {...left} size={size} arrowSide="left" reserveLabel={contentWidth ? longestWord(left.options) : undefined} className="vt-studio-value-toggle--nested" />
     </div>
     {!noDivider && <span className="vt-studio-value-toggle__divider" aria-hidden="true" />}
     <div className="vt-studio-value-toggle__double-side" data-content-width={contentWidth ? "true" : undefined}>
-      <StudioSideToggle {...right} size={size} arrowSide="right" className="vt-studio-value-toggle--nested" />
+      <StudioSideToggle {...right} size={size} arrowSide="right" reserveLabel={contentWidth ? longestWord(right.options) : undefined} className="vt-studio-value-toggle--nested" />
     </div>
   </div>;
 }
