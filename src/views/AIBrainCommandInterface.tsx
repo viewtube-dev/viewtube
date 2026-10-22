@@ -1173,6 +1173,7 @@ const AIBrainCommandInterface: React.FC = () => {
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
      evidenceRecords: readPromptEvidenceRecords(turn.metadata),
+     evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(turn.metadata),
      readiness: turn.metadata?.dataReadinessSnapshot && typeof turn.metadata.dataReadinessSnapshot === "object"
       ? turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness
       : undefined,
@@ -1462,6 +1463,8 @@ const AIBrainCommandInterface: React.FC = () => {
        turnStatus: result.turn.status,
        originalUserText: result.turn.rawUserMessage ?? userText,
        evidencePack: turnSnapshot.evidencePack,
+       evidenceRecords: readPromptEvidenceRecords(result.turn.metadata),
+       evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata),
        readiness: readinessForSnapshot(turnSnapshot),
        contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined,
        contextMayBeStale: false,
