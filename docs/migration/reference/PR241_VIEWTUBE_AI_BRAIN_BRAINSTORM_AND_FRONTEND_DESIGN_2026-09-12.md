@@ -445,3 +445,132 @@ Each component consumes typed canonical records or IDs that resolve through the 
 ## 5.8 Status discipline
 
 This is integration guidance, not a claim that every proposed destination/component has shipped. Track each surface as **implemented and verified**, **implemented but not verified**, **partial**, or **proposed** against the current code and test evidence. The old Part 4 approval questions and approval gate remain a record of the original brainstorm date; current implementation authority comes from the integration branch, the Quick Wins plan, current architecture contracts and merged PRs—not from the historical status banner.
+
+
+## 5.9 Audit-driven UI integration backlog — 2026-10-22
+
+This section connects the evidence, orchestration, context, capability, receipt and learning work to the surfaces a creator or operator actually uses. It supplements the historical brainstorm without rewriting its dated findings. The current implementation plan is [AI Brain Quick Wins — Master Implementation, Evidence & UX Plan](../../../brain/AI_BRAIN_QUICK_WINS_MASTER_IMPLEMENTATION_PLAN.md).
+
+### Current code footholds confirmed by source inspection
+
+| UI / service foothold | What is present in source | What the UI must not assume |
+|---|---|---|
+| `BrainCapabilityBrowser.tsx` | Capability registry and evidence requirements are consumed; availability has explicit ready/needs-data/blocked states; disabled actions have reasons, live status text, labels and visible focus styling. | Do not rebuild a second capability list or claim “ready” means a request has already passed runtime evidence/permission checks. Preserve the reason and re-check at dispatch. |
+| `BrainRuntimeSnapshot.ts` | Snapshot projections join requests, ToolReceipts, traces and generation records and expose IDs, evidence, served-model status and output references. | A join being available in the service does not mean every result card displays it or that every ID resolves in the UI. |
+| `BrainTrace.ts` | Trace contract includes requested/returned/missing evidence, output reference and requested-versus-served model identity. | Never show requested model as the served model; never label an output saved without a canonical output reference and authoritative status. The current default trace sink is not itself proof of durable server-side audit storage. |
+| `BrainEvidenceQuality.ts` + `BrainContextBroker.ts` | Evidence quality is based on typed `EvidenceRecord` values and the prompt path has a fail-closed parity contract. | Do not create a UI-only evidence summary or recompute a friendlier grade. Render the same ordered record IDs that were graded for the turn. |
+| `BrainWorkflowRunPanel.tsx` | Workflow recommendations, step statuses and user-operated start/complete/block actions are rendered. | The panel's workflow step state is not a substitute for a ToolReceipt, generation record or publication-owner status. Receipt-backed result cards remain a separate integration check. |
+
+These are source-level observations, not claims that end-to-end behavior or accessibility has passed automated and manual verification.
+
+### 5.9.1 One presentation projection; canonical data stays canonical
+
+Add a typed, read-only **Brain Turn Presentation** projection assembled from the existing conversation turn, turn-bound evidence envelope, quality report, BrainTrace, runtime snapshot, ToolReceipt and output asset references. This is a view model, not a new database, evidence store, profile, trace, or lifecycle owner.
+
+The projection should expose only fields needed by the UI:
+
+- turn and operation IDs, current status, and retry relationship;
+- the exact ordered evidence IDs and typed records supplied to the model, plus the grade/fingerprint that approved them;
+- requested, returned, missing, stale, partial and unavailable evidence as distinct states;
+- prompt family/version, capability IDs, and model identity only when the runtime marks the served identity as known;
+- receipt ID, output asset/generation record ID, trace ID, and authoritative operation status when each exists;
+- context entries with source/scope and confirmed, inferred, or temporary status only where the canonical owner actually provides that status;
+- correction/review actions backed by their existing governance APIs.
+
+Every displayed link/action must carry canonical IDs and scope. If an ID cannot resolve, render an explicit unavailable/unresolved state and do not silently substitute a similarly named record. A missing field is “not recorded” or “unknown,” not a guessed value.
+
+### 5.9.2 Shared components that make the new backend features usable
+
+Extend existing Studio Controls and Brain components rather than creating a parallel design system.
+
+| Shared component / pattern | Contract and UI behavior | Reuse across |
+|---|---|---|
+| **ClaimBlock** | One claim, its epistemic label, source-backed numeric values, freshness and claim-specific evidence action. Confidence is omitted when unsupported; colour is never the only signal. | Chat answers, analytics insights, reports, generated assets and recommendations. |
+| **EvidenceRibbon + EvidenceDrawer** | Ribbon shows the exact record IDs behind a claim; drawer inspects owner/source, metric, value/unit, scope/window, observation/update times, freshness, availability, confidence, limitations and provenance. Show missing records explicitly. | Chat, chart “Why?”, result cards, creator profile and operator trace. |
+| **EvidenceGapCard** | States whether data is missing, stale, partial, permission-blocked, not checked, or searched with no result. Offers only a real permitted recovery action; reports success only after the service confirms it. | Analytics readiness, capability browser, empty search states and setup flows. |
+| **ContextUsedDrawer** | Shows the actual context envelope used on this turn, with source and scope; provides correction/confirm actions through canonical governance. Distinguishes durable profile facts from turn-local or inferred context. | Chat, Creator Profile/Channel Mind and generated content review. |
+| **Receipt-backed ResultCard** | Separate proposed, started, blocked, saved and failed states. “Open output” requires a resolvable canonical asset/output ID; show receipt and originating turn/operation IDs. | Workflow panel, generation results, handoff destinations and activity feed. |
+| **TraceTimeline** | User-safe event sequence: request → context/evidence → capability/tool → receipt/output → evaluation/outcome. Explain status and IDs without exposing private chain-of-thought or hidden deliberation. | Creator answer details and operator diagnostics, with role-appropriate fields. |
+| **LearningReviewCard** | Candidate, review decision and promotion are separate states. Accept/reject reason is captured structurally; durable knowledge changes only after the authoritative governance response. | Learning inbox, correction receipts and creator profile. |
+| **Action/ApprovalControl** | States exactly what will happen, which data/context is in scope, whether an external side effect occurs, and which approval tier is required. Navigation or “prepare” never implies publish approval. | Capability shortcuts, workflows, publishing packages and autonomy settings. |
+
+Use existing Studio Controls for geometry, typography, focus and responsive behavior. The Brain layer should compose these primitives and supply semantic data; it must not create shadow systems of custom inputs, badges, or status tokens.
+
+### 5.9.3 Connect each capability to a visible product surface
+
+1. **Conversation and restoration**
+   - Keep raw creator text immutable in storage/learning paths; display sanitization remains presentation-only.
+   - Preserve turn IDs, evidence filters, resolved cohort and source scope on restore and retry.
+   - Make “original context” versus “refresh evidence” an explicit choice when data may have changed.
+   - Keep non-conversation records out of model history. The transcript must not quietly absorb meeting notes, journal entries, intake forms, or system events.
+
+2. **Evidence selection and analytics**
+   - Render the evidence pack recorded for that turn, not a fresh search or a prose reconstruction.
+   - Keep count, format, date window, ranking metric and filters attached to the pack and to navigation.
+   - Claim-level citations open the exact source/calculation; chart context includes the dataset, selected entity, time window, filters and selected datum.
+   - Staleness, partial coverage, missing inputs and “not checked” must downgrade the visible readiness state and be explained in text. Do not present a green/complete state if the quality/readiness owner did not produce one.
+
+3. **Creator context and corrections**
+   - Provide a visible context strip for Channel → Project → ContentBuild → selected asset, with explicit no-selection states.
+   - Show which profile facts were actually used in an answer. Mark confirmed/inferred/temporary only when the canonical resolver exposes that distinction; until then, show source and uncertainty without inventing a structured status.
+   - A correction should identify the target fact, scope, source turn and proposed change. The next turn should either reflect the authoritative change or show the unresolved inconsistency.
+
+4. **Capabilities, workflows and handoffs**
+   - Derive available actions from `BrainCapabilityRegistry` and current availability/permission checks. Explain blocked actions beside the control.
+   - Distinguish selecting/editing a prompt from submitting it; distinguish navigation from starting work; distinguish a started operation from a completed side effect.
+   - A retry must be idempotent with respect to external actions. Link attempts to the original turn and receipt rather than replaying publication or another irreversible action.
+
+5. **Generation, publishing and learning**
+   - Result cards link to canonical output assets and ToolReceipts. A workflow step being “complete” is not proof that a package is saved or publish-ready.
+   - Publishing readiness comes from the publishing owner. Show blockers and approval state from that owner; never infer publish approval from generated content or a green workflow step.
+   - Show recommendation → prediction → intervention → measured outcome → candidate → governed promotion as separate linked states. A creator correction is not automatically durable learning.
+
+6. **Operator inspection**
+   - Offer a detailed trace view for evidence IDs/omissions, prompt version, known served-model identity, receipt/output refs, evaluation and failure status.
+   - Keep operational diagnostics separate from creator-facing explanations. Neither surface displays private chain-of-thought.
+   - Show cost/latency only when measured values are available; do not render placeholders as metrics.
+
+### 5.9.4 Audit gaps to close before broad UI rollout
+
+The latest source review answered several questions at code level, but it did not execute tests or certify end-to-end behavior. Prioritize these unresolved items:
+
+| Priority | Gap requiring verification | Required test or proof |
+|---|---|---|
+| P0 | Restored conversations retain the evidence filters, cohort and turn identity used originally. | Round-trip test: create turn → persist → restore → assert raw text, turn ID, filters and evidence IDs match exactly. |
+| P0 | Evidence shown in every surface equals evidence graded and supplied for that turn. | Shared contract test covering ordered IDs, values/fingerprint, missingness, expansion and navigation; changed or unresolved evidence must fail closed. |
+| P0 | Result cards are backed by canonical ToolReceipts and output asset IDs. | Exercise proposed → started → saved/failed; assert receipt/output references and prevent “saved” without authoritative output. |
+| P1 | Empty search and unavailable evidence states are truthful. | Distinguish no result, not queried, permission denied, stale source and source unavailable; verify each recovery action is real. |
+| P1 | Stale/partial analytics readiness reaches creator-facing UI. | Remove or stale one required dataset; assert visible state, claim wording and input-level explanation downgrade. |
+| P1 | Capability routing has no registry bypass. | Enumerate all capability/tool dispatch call sites; test each route against registry requirements and receipt production. |
+| P1 | Provenance payloads use a safe allowlist and IDs resolve. | Serialization denylist/allowlist test plus canonical-ID resolver test; requested model is never presented as served model. |
+| P1 | Corrections reconcile context, profile and saved answers. | Apply a correction; assert next-turn envelope and profile reflect the governed result or surface a conflict. |
+| P1 | Workflow, chat and evidence controls are accessible on keyboard/mobile/screen readers. | Automated semantic/axe-style checks where available plus manual keyboard, focus-return, screen-reader, zoom/reflow and reduced-motion walkthroughs. |
+| P2 | Fake states, dead links and lost filters are absent across the whole Brain UI. | Route/state inventory with canonical owner, empty/loading/error/success state, deep-link resolution and back/restore coverage. |
+
+**Test execution honesty:** static source inspection is not a passing test. Record exact command, environment, exit status and CI run for every reported test. If dependencies are unavailable, mark the behavior “implemented but not verified” or “not verified”; do not infer a green result from code presence.
+
+### 5.9.5 Accessible UI acceptance checklist
+
+- Every control has a semantic name, keyboard operation, visible focus and predictable focus return after drawers/dialogs.
+- Dynamic status changes use appropriate live regions without announcing entire panels repeatedly.
+- Disabled actions explain the unmet permission/evidence/context requirement in text and remain disabled at dispatch if the requirement is still unmet.
+- Evidence state uses text/icons as well as colour; chart/tooltips have equivalent text or tabular access.
+- Narrow layouts and zoom preserve source identity, uncertainty, status and the evidence-inspection action.
+- Motion respects reduced-motion preferences; loading/success/failure is not communicated only through animation.
+- Standard/compact/micro Studio Controls retain their established sizing and visual contracts; no one-off Brain-only primitive family is introduced.
+- Creator-facing trace summaries exclude chain-of-thought, hidden deliberation and internal-only scoring.
+- No state is shown as saved, reviewed, approved, published or learned until the canonical owner confirms it.
+
+## 5.10 Recommended delivery sequence — 2026-10-22
+
+Deliver a thin vertical slice before broad UI expansion:
+
+1. **Turn contract:** one canonical presentation projection joins turn, evidence pack, quality grade, trace and IDs; add parity and unresolved-ID tests.
+2. **Claim-to-source slice:** take one Analytics claim from typed evidence through the prompt/grade contract into a ClaimBlock and EvidenceDrawer, preserving filters and source IDs.
+3. **Receipt-backed result slice:** connect one generation/workflow result to its ToolReceipt, output asset and trace; prove each visible status against canonical records.
+4. **Context/correction slice:** display the actual envelope used, propose a correction, and verify the governed result on the next turn.
+5. **Learning/outcome slice:** link recommendation and prediction to measured outcome, review candidate and promotion event without skipping governance.
+6. **Expand across surfaces:** apply the same components to the Brain destination, contextual chat, analytics “Why?”, Creator Profile, publishing package and operator activity view.
+7. **Certify accessibility and regressions:** run restore/routing/governance tests, evidence golden cases, responsive/keyboard/screen-reader checks and the deliberate grounding-regression baseline before declaring the rollout complete.
+
+Each delivery should identify the canonical owner, source files, regression test, relevant PR/commit, rollback, and status (**implemented and verified**, **implemented but not verified**, **partial**, **proposed**). Do not mark the UI integration complete just because a component renders or a build succeeds.
