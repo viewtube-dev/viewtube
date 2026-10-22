@@ -5031,3 +5031,137 @@ button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studi
     opacity: 0;
   }
 }
+
+
+/* Global Studio Controls label containment and V1–V7 button variant contract.
+   This is primitive-owned behavior; specimen/catalog styles may arrange examples
+   but must never supply the actual variant faces or toggle state. */
+[data-vt-studio-button-face],
+[data-vt-studio-button-label],
+[data-vt-studio-split-label],
+[data-vt-studio-split-field],
+.vt-studio-split-shell > [data-vt-studio-split-label],
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+[data-vt-studio-button-face] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--vt-studio-space-unit, 4px);
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+[data-vt-studio-button-label] {
+  display: block;
+  flex: 0 1 auto;
+  width: auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+[data-vt-studio-button-icon] {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  max-width: 100%;
+  overflow: hidden;
+}
+[data-vt-studio-button-icon] > svg {
+  display: block;
+  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  flex: 0 0 auto;
+}
+.vt-studio-split-shell,
+.vt-studio-split-shell > [data-vt-studio-split-label],
+.vt-studio-split-shell > [data-vt-studio-split-field],
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  min-width: 0;
+  max-width: 100%;
+}
+.vt-studio-split-shell > [data-vt-studio-split-label],
+.vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge__label {
+  flex: 1 1 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* V1: primary face / black text. */
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v1"] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #000 !important;
+}
+/* V2: secondary face / black text. */
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v2"] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
+/* V3: independent V1 <-> V2 color toggle. */
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v3"][data-vt-studio-button-on="false"] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #000 !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v3"][data-vt-studio-button-on="true"] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
+/* V4: black face / primary text. */
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v4"] {
+  background: #000 !important;
+  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+}
+/* V5: V1 initially, then V2; caller may replace the text and/or icon. */
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v5"][data-vt-studio-button-on="false"] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #000 !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v5"][data-vt-studio-button-on="true"] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
+/* V6: V1 initially, then black face / white text; caller may replace text/icons. */
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v6"][data-vt-studio-button-on="false"] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #000 !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v6"][data-vt-studio-button-on="true"] {
+  background: #000 !important;
+  color: #fff !important;
+}
+/* V7: primary face / white text; split icon rails are secondary with white glyphs. */
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #fff !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] [data-vt-studio-split-rail],
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] .vt-studio-split-left-badge__rail,
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] .vt-studio-split-right-badge__rail,
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] .vt-studio-double-split-badge__rail {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  color: #fff !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] [data-vt-studio-split-rail] svg {
+  color: #fff !important;
+  stroke: #fff !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant^="v"] > [data-vt-studio-button-face] {
+  background: transparent !important;
+  color: inherit !important;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
