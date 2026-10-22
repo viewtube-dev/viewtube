@@ -46,6 +46,7 @@ export interface BrainRuntimeBuildSummary {
  stage: string
  revision: number
  assetCount: number
+ assetIds: string[]
  versionCount: number
  variantGroupCount: number
  relationCount: number
