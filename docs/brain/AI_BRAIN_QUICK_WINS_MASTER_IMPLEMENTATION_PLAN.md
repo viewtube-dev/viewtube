@@ -407,3 +407,10 @@ The companion [AI Brain page evidence-first implementation plan](../migration/re
 **In progress:** the existing AI Journal overlay on `src/views/AIBrainCommandInterface.tsx` is being moved into a reusable, accessible dialog component at `src/components/brain/BrainJournalDialog.tsx`. It reuses the existing journal save callback, adds semantic dialog/label relationships, keyboard dismissal and focus management, and prevents empty saves. It does not add a second store or silently promote notes to confirmed knowledge.
 
 See the [frontend design reference implementation record](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md#implementation-record--accessible-ai-journal-capture-2026-10-22). The focused test is added; CI verification is pending. The next vertical slice remains evidence-to-claim provenance parity, then canonical receipt-backed result cards and governed context corrections.
+
+
+### Follow-through — turn-bound prompt evidence UI (2026-10-22)
+
+The implementation branch extends the accessibility slice to the higher-priority evidence contract: response cards restore the typed `EvidenceRecord[]` and ordered `promptEvidenceRecordIds` from canonical turn metadata; a runtime guard refuses to render the detailed list when the record array is malformed or IDs differ. The existing evidence ribbon now expands to show exact prompt records, missingness, freshness, epistemic state, timestamps, source evidence IDs and a safe source-surface link where available. Legacy turns clearly state that record-level provenance is unavailable.
+
+Tests were added for record validation, saved-ID parity and the UI’s missing/legacy states. CI has not yet certified this branch, and keyboard/screen-reader/browser checks remain a release gate. This does not complete receipt-backed result cards or the full AI Brain page audit.
