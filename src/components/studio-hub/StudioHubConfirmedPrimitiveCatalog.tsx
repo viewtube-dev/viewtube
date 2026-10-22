@@ -308,9 +308,10 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 /** Certified StudioButton examples arranged by the reusable PR #756 specimen grid. */
 const buttonVariantNumbers = [1, 2, 3, 4, 5, 6, 7] as const
+type StudioButtonGridTier = "supreme" | "standard" | "compact" | "micro"
 
-const buildStudioButtonRows = (tier: "standard" | "compact") => {
-    const row = (id: string, variants: number[]) => ({
+const buildStudioButtonRows = (tier: StudioButtonGridTier) => {
+  const row = (id: string, variants: number[]) => ({
     id: `${tier}-${id}`,
     tier,
     specimens: variants.map((variant, index) => ({
@@ -330,24 +331,21 @@ const buildStudioButtonRows = (tier: "standard" | "compact") => {
 }
 
 const ConfirmedStudioButtonFamily: React.FC = () => {
-  const specimenRows = [
-    ...buildStudioButtonRows("standard"),
-    ...buildStudioButtonRows("compact"),
-  ]
+  const specimenRows = (["supreme", "standard", "compact", "micro"] as const).flatMap(buildStudioButtonRows)
 
   return (
-    <Family title="Button · V1–V7 · Standard + Compact" nonDefaultSettings={[
-      "Every production variant is shown at standard 44px and compact 28px in full-width, half-width and four-column quarter-width arrangements.",
-      "V1 primary/black; V2 secondary/black; V3 independently toggles V1 and V2; V4 black/primary; V5 toggles V1/V2 with configurable alternate text/icon; V6 toggles V1/black with white text and configurable alternate text/icon; V7 primary/white.",
-      "Button geometry, fill, label state and icon behavior belong to StudioButton. The PR #756 grid controls arrangement only. Labels are single-line and ellipsized inside their assigned cells.",
-    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + studio-hub-primitive-catalogs.css" tokens="44px Standard · 28px Compact · 4px layout rhythm" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
+    <Family title="Button · V1–V7 · Supreme + Standard + Compact + Micro" nonDefaultSettings={[
+      "The original StudioButton family uses the PR #756 ConfirmedSpecimenGrid at every canonical tier: Supreme 60px, Standard 44px, Compact 28px, and Micro 12px.",
+      "Each tier contains every production variant in full-width rows, paired half-width rows, and four-column quarter-width rows. No badge substitutes for a button specimen.",
+      "V1 primary/black; V2 secondary/black; V3 independently toggles V1 and V2; V4 black/primary; V5 toggles V1/V2 with OFF/ON text; V6 toggles V1/black with NO/YES text; V7 primary/white.",
+      "Button geometry, fill, label state and icon behavior belong to StudioButton. The grid controls arrangement only; labels stay inside their assigned cells and ellipsize rather than spill.",
+    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + ConfirmedSpecimenGrid.css" tokens="60px Supreme · 44px Standard · 28px Compact · 12px Micro · 4px grid rhythm" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-button-gallery">
         <ConfirmedSpecimenGrid
           familyName="Original StudioButton variants"
           specimenRows={specimenRows}
-          renderSpecimen={({ id, tier }) => {
+          renderSpecimen={({ id, tier, label }) => {
             const variant = Number(id.match(/-v(\d+)(?:-repeat)?$/)?.[1] ?? 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7
-            const label = variant === 4 ? "BLACK" : variant === 5 ? "OFF" : variant === 6 ? "NO" : variant === 7 ? "WHITE" : "BUTTON"
             const activeChildren = variant === 5 ? "ON" : variant === 6 ? "YES" : undefined
             return (
               <StudioButton
@@ -355,9 +353,8 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
                 variant={`v${variant}` as "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7"}
                 activeChildren={activeChildren}
                 sizeVariant={tier}
-                heightVariant={tier === "standard" ? "44" : "28"}
                 data-vt-library-component="StudioButton"
-                aria-label={variant === 3 ? "Button primary/secondary color toggle" : variant === 5 ? "Button ON/OFF toggle" : variant === 6 ? "Button NO/YES toggle" : variant === 4 ? "Black button" : variant === 7 ? "White button" : `Button variant ${variant}`}
+                aria-label={variant === 3 ? "Button primary/secondary color toggle" : variant === 5 ? "Button OFF/ON toggle" : variant === 6 ? "Button NO/YES toggle" : variant === 4 ? "Black button" : variant === 7 ? "White button" : `Button variant ${variant}`}
               >
                 {label}
               </StudioButton>

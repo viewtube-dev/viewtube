@@ -5194,3 +5194,61 @@ html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7
   align-content: center;
   width: 100%;
 }
+
+
+/* StudioButton V1–V7 authoritative face colors.
+ * Apply color to the visible face, not only the button wrapper: generic pressed
+ * state rules must never turn a primary variant into the secondary palette.
+ */
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v1"] > [data-vt-studio-button-face],
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v3"][data-vt-studio-button-on="false"] > [data-vt-studio-button-face],
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v5"][data-vt-studio-button-on="false"] > [data-vt-studio-button-face],
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v6"][data-vt-studio-button-on="false"] > [data-vt-studio-button-face],
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] > [data-vt-studio-button-face] {
+  background: var(--pair-a, #36e0f6) !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v2"] > [data-vt-studio-button-face],
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v3"][data-vt-studio-button-on="true"] > [data-vt-studio-button-face],
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v5"][data-vt-studio-button-on="true"] > [data-vt-studio-button-face] {
+  background: var(--pair-b, #ff7f6b) !important;
+  color: #000 !important;
+}
+html body button[data-vt-studio-control="true"][data-vt-studio-button="true"][data-vt-studio-button-variant="v1"] > [data-vt-studio-button-face],
+html body button[data-vt-studio-control="true"][data-vt-studio-button="true"][data-vt-studio-button-variant="v2"] > [data-vt-studio-button-face],
+html body button[data-vt-studio-control="true"][data-vt-studio-button="true"][data-vt-studio-button-variant="v3"] > [data-vt-studio-button-face],
+html body button[data-vt-studio-control="true"][data-vt-studio-button="true"][data-vt-studio-button-variant="v5"] > [data-vt-studio-button-face] {
+  color: #000 !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v4"] > [data-vt-studio-button-face] {
+  background: #000 !important;
+  color: var(--pair-a, #36e0f6) !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v6"][data-vt-studio-button-on="true"] > [data-vt-studio-button-face] {
+  background: #000 !important;
+  color: #fff !important;
+}
+html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7"] > [data-vt-studio-button-face] {
+  color: #fff !important;
+  -webkit-text-stroke-color: #fff !important;
+}
+/* Micro is a supported button tier, not a catalog badge substitute. */
+button[data-vt-studio-button="true"][data-size="micro"] {
+  --vt-studio-control-height: 12px;
+  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-radius: 2px;
+  --vt-studio-control-font-size: 10px;
+  --vt-studio-control-text-stroke: .25px;
+  height: 12px;
+  min-height: 12px;
+  max-height: 12px;
+}
+button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button-face] {
+  height: 12px;
+  min-height: 12px;
+  max-height: 12px;
+  padding-inline: 2px;
+  border-width: 1px;
+  border-radius: 2px;
+  font-size: 10px;
+  -webkit-text-stroke-width: .25px;
+}
