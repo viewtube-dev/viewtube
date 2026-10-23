@@ -159,7 +159,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
    ) : null}
    <BrainClaimEvidence evidencePack={evidencePack} compact label="Inspect evidence" />
    <details data-vt-brain-part="prompt-evidence-records" className="min-w-0 border-t border-black/20 pt-1.5">
-    <summary data-vt-studio-disclosure-summary="true" data-size="standard" className="vt-studio-disclosure-summary">
+    <StudioDisclosureSummary sizeVariant="standard">
      <span>Prompt evidence records</span>
      <span className="shrink-0">{evidenceIntegrityStatus === "mismatch" ? "Mismatch" : evidenceRecords === undefined ? "Unavailable" : evidenceRecords.length}</span>
     </StudioDisclosureSummary>
