@@ -120,7 +120,7 @@ export const BrainWorkflowRunPanel: React.FC<Props> = ({ recommendation, onStart
   try {
    const updated = await requestWorkflowStepApproval({ chain, stepId, onApprovalRequested })
    if (!updated) {
-    setApprovalNotice("Approval was not granted. This step remains pending.")
+    setApprovalNotice("Approval was not confirmed in the tracker. This step remains pending here.")
     return
    }
    setTick((value) => value + 1)
