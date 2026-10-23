@@ -7,6 +7,7 @@ import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
   StudioButton,
+  StudioTwoLineButton,
   StudioActionButton,
   StudioRadio,
   StudioCheckbox,
@@ -21,6 +22,8 @@ import {
   StudioSplitRightBadge,
   StudioDoubleSplitBadge,
   StudioSquareIconButton,
+  StudioSquareIconButtonGroup,
+  StudioTopSplitModule,
   StudioPlayPauseButton,
   StudioCircleIconButton,
   StudioSwitch,
@@ -624,6 +627,69 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
       </div>
 
+    </Family>
+    <Family
+      title="Square Icon Button Groups · Standard + Compact"
+      nonDefaultSettings={[
+        "Groups are rendered by the canonical StudioSquareIconButtonGroup primitive and contain real StudioSquareIconButton children.",
+        "The joined rail sizes to its content and does not stretch to fill the catalog row.",
+        "Use the compact joined rail for dense toolbars such as Brain answer feedback; use standard when the surrounding action density allows it.",
+      ]}
+      provenance={<Provenance primitive="StudioSquareIconButtonGroup / StudioSquareIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · intrinsic content width · one shared shell border with joined square faces" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSquareIconButtonGroup" style={{ display: "grid", gap: 8, justifyItems: "start", minWidth: 0 }}>
+        <span>STANDARD · JOINED ICON ACTIONS</span>
+        <StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Standard joined icon actions">
+          <StudioSquareIconButton icon={<Home aria-hidden="true" />} label="Home" sizeVariant="standard" />
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Settings" sizeVariant="standard" />
+          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Enhance" sizeVariant="standard" />
+        </StudioSquareIconButtonGroup>
+        <span>COMPACT · CONTENT-WIDTH RAIL</span>
+        <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Compact joined icon actions">
+          <StudioSquareIconButton icon={<Check aria-hidden="true" />} label="Helpful" sizeVariant="compact" />
+          <StudioSquareIconButton icon={<Info aria-hidden="true" />} label="Not useful" sizeVariant="compact" />
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="More options" sizeVariant="compact" />
+        </StudioSquareIconButtonGroup>
+      </div>
+    </Family>
+    <Family
+      title="Two-Line Button · Standard + Compact"
+      nonDefaultSettings={[
+        "Uses StudioTwoLineButton, the canonical StudioButton two-line text-layout wrapper; it is not a separately styled button implementation.",
+        "Both lines remain inside the same face and inherit the global button stroke, fill, focus, disabled, and clipping rules.",
+      ]}
+      provenance={<Provenance primitive="StudioTwoLineButton → StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · canonical button face and typography" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineButton" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 4, minWidth: 0 }}>
+        <StudioTwoLineButton firstLine="CONFIRM" secondLine="DIRECTION" sizeVariant="standard" aria-label="Confirm direction" />
+        <StudioTwoLineButton firstLine="OPEN" secondLine="PROMPT LIBRARY" sizeVariant="standard" aria-label="Open prompt library" />
+        <StudioTwoLineButton firstLine="SAVE" secondLine="DRAFT" sizeVariant="compact" aria-label="Save draft" />
+        <StudioTwoLineButton firstLine="REVIEW" secondLine="RESPONSE" sizeVariant="compact" aria-label="Review response" />
+      </div>
+    </Family>
+    <Family
+      title="Top Split Module · Left / Right / Double / None"
+      nonDefaultSettings={[
+        "The canonical module composes a split-control header with a white content body; it does not replace the retired split-rail accordion.",
+        "Header rails use the secondary pair color and remain square; the body is a separate white content region.",
+        "Examples cover all four header layouts at standard and compact sizes; accent tone is shown separately.",
+      ]}
+      provenance={<Provenance primitive="StudioTopSplitModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · left/right/double/none header rails · default/accent tone · white body" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTopSplitModule" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 8, minWidth: 0 }}>
+        <StudioTopSplitModule title="LEFT RAIL" split="left" startIcon={<Home size={18} aria-hidden="true" />} sizeVariant="standard">
+          <p style={{ margin: 0, padding: 8 }}>Header rail at start; content stays white.</p>
+        </StudioTopSplitModule>
+        <StudioTopSplitModule title="RIGHT RAIL" split="right" endIcon={<Settings2 size={18} aria-hidden="true" />} sizeVariant="standard">
+          <p style={{ margin: 0, padding: 8 }}>Header rail at end; content stays white.</p>
+        </StudioTopSplitModule>
+        <StudioTopSplitModule title="DOUBLE RAIL" split="double" startIcon={<Home size={16} aria-hidden="true" />} endIcon={<Settings2 size={16} aria-hidden="true" />} sizeVariant="compact">
+          <p style={{ margin: 0, padding: 8 }}>Paired secondary rails around the title.</p>
+        </StudioTopSplitModule>
+        <StudioTopSplitModule title="NO RAILS" split="none" sizeVariant="compact" tone="accent">
+          <p style={{ margin: 0, padding: 8 }}>Compact accent header with no side rails.</p>
+        </StudioTopSplitModule>
+      </div>
     </Family>
     <Family
       title="Split-left Button · Standard + Compact"
