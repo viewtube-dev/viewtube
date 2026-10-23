@@ -1,5 +1,7 @@
+import React from "react"
+import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { buildBrainSparklineSegments } from "./BrainAnswerModules"
+import { buildBrainSparklineSegments, BrainQuickActionCard } from "./BrainAnswerModules"
 
 describe("buildBrainSparklineSegments", () => {
  it("keeps a measured zero as a real data point", () => {
@@ -26,9 +28,6 @@ describe("buildBrainSparklineSegments", () => {
 })
 
 
-import React from "react"
-import { renderToStaticMarkup } from "react-dom/server"
-import { BrainQuickActionCard } from "./BrainAnswerModules"
 
 describe("BrainQuickActionCard Studio contract", () => {
  const action = { id: "action-1", title: "Improve the opening", body: "Make the viewer promise clear.", effort: 2, reward: 4, routeLabel: "Open plan" }
