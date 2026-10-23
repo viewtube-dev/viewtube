@@ -540,11 +540,19 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
 
 const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const nodes = React.Children.toArray(children)
+  const standalone: React.ReactNode[] = []
   const defaults: React.ReactNode[] = []
   const grouped = new Map<ConfirmedCatalogFamilyName, React.ReactNode[]>(
     CONFIRMED_CATALOG_FAMILIES.map((family) => [family, []]),
   )
   for (const node of nodes) {
+    // The direct-import specimen module is a full-width catalog section, not a
+    // member of any family column. Keep it out of classifyConfirmedCatalogItem's
+    // default "Controls" bucket so it cannot become trapped in the left column.
+    if (React.isValidElement(node) && node.type === ConfirmedDirectPrimitiveRows) {
+      standalone.push(node)
+      continue
+    }
     if (React.isValidElement(node) && (node.props as { "data-vt-confirmed-family"?: string })["data-vt-confirmed-family"] === "defaults") {
       defaults.push(node)
       continue
@@ -553,6 +561,7 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
   }
   return (
     <div className="vt-confirmed-catalog">
+      {standalone}
       {defaults}
       <div className="vt-confirmed-family-grid">
         {CONFIRMED_CATALOG_FAMILIES.map((family) => (
