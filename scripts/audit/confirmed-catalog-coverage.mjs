@@ -20,7 +20,8 @@ const moduleFile = read("src/components/studio-hub/ConfirmedCatalogModules.tsx")
 const catalogStyles = read("src/styles/studio-confirmed-catalog-modules.css")
 const brain = read("src/views/AIBrainCommandInterface.tsx")
 
-const focusRules = overrides.slice(overrides.indexOf(":focus, :focus-visible)"))
+const focusSelectorStart = overrides.indexOf(":is(:focus, :focus-visible)")
+const focusRules = focusSelectorStart >= 0 ? overrides.slice(focusSelectorStart) : ""
 const checks = [
   ["distill overrides imported after field/parity styles", entry.indexOf('./studio-control-distill-overrides.css') > entry.indexOf('./studio-field-parity.css')],
   ["focused field text is black", focusRules.includes("color: #000 !important") && focusRules.includes("-webkit-text-fill-color: #000 !important")],
