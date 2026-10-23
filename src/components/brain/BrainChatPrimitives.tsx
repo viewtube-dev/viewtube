@@ -186,7 +186,7 @@ export const ChatConversationViewport: React.FC<{
   <div
     ref={viewportRef}
     onScroll={onScroll}
-    className={`brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain overflow-y-auto ${className}`}
+    className={`brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain overflow-y-auto touch-pan-y ${className}`}
     aria-label="Brain conversation"
     aria-live="polite"
     role="log"
