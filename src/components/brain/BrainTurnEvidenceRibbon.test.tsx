@@ -192,7 +192,7 @@ describe("BrainTurnEvidenceRibbon", () => {
    evidenceRecords: [record({ id: "record-views", metric: "views" })],
    claimEvidence: [{ claim: linkedClaim, evidenceIds: ["record-views"] }],
   })
-  expect(html).toContain("Answer claims linked to this record")
+  expect(html).toContain("Claim text with matching recorded value")
   expect(html).toContain(linkedClaim)
  })
 
