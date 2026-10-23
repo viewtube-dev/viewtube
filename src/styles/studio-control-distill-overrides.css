@@ -26,7 +26,7 @@ html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"]:
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:is(:focus, :focus-visible) {
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
   background-color: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 15%, transparent) !important;
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
   outline-offset: 0 !important;

@@ -46,6 +46,8 @@ import {
   StudioBarToggle,
 } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-catalogs.css"
+import "../../styles/studio-confirmed-catalog-modules.css"
+import { ConfirmedFamilyModule } from "./ConfirmedCatalogModules"
 
 type Size = "44px" | "28px"
 
@@ -70,8 +72,6 @@ const VERTICAL_WORD_TOGGLE_VARIANTS = [
 const CanonicalControlFamilies: React.FC = () => {
   const [switches, setSwitches] = React.useState<boolean[]>(Array(8).fill(false))
   const [choices, setChoices] = React.useState<boolean[]>(Array(12).fill(false))
-  const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
-  const [verticalWords, setVerticalWords] = React.useState<boolean[]>(Array(12).fill(false))
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
     <Family title="Switches, Radios & Checkboxes" nonDefaultSettings={[
@@ -92,54 +92,14 @@ const CanonicalControlFamilies: React.FC = () => {
         </div>
       </div>
     </Family>
-    <Family title="Word Toggles · Standard + Compact + Vertical" nonDefaultSettings={[
-        "Horizontal and vertical word toggles share this module; switches, radios, and checkboxes remain in their own control family.",
-        "Each toggle specimen remains independently interactive.",
-        "Vertical toggle width follows the longest word plus the original horizontal padding; height remains content-driven.",
-      ]} provenance={<Provenance primitive="StudioWordToggle / StudioVerticalWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px typography tiers; vertical toggle total height remains content-driven." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-    <div className="vt-confirmed-toggle-subfamily">
-      <strong>WORD TOGGLE · STANDARD + COMPACT</strong>
-      <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">
-        <div className="vt-confirmed-control-row">
-          <strong>WORD TOGGLE · STANDARD</strong>
-          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-standard" data-control-size="44">{WORD_TOGGLE_SKINS.map((skin,col) => <div key={skin.skin}><StudioWordToggle size="44" skin={skin.skin} value={words[col]} words={col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, col, value)} aria-label={"Standard word toggle variant " + (col + 1)} /></div>)}</div>
-        </div>
-        <div className="vt-confirmed-control-row">
-          <strong>WORD TOGGLE · COMPACT</strong>
-          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={"Compact word toggle variant " + (col + 1)} /></div> })}</div>
-        </div>
-      </div>
-    </div>
-    <div className="vt-confirmed-toggle-subfamily">
-      <strong>VERTICAL WORD TOGGLE · STANDARD + COMPACT + MICRO</strong>
-      <div className="vt-confirmed-vertical-word-toggle-family">
-        <div className="vt-confirmed-vertical-word-toggle-size-row">
-          <strong>STANDARD · SINGLE COLUMN</strong>
-          <div className="vt-confirmed-vertical-word-toggle-standard">
-            {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
-              <small>{item.label}</small>
-              <StudioVerticalWordToggle sizeVariant="standard" variant={item.variant} value={verticalWords[index]} onValueChange={value => flip(setVerticalWords, index, value)} words={index === 0 ? ["WRITE", "CREATE"] : ["OFF", "ON"]} aria-label={"Standard vertical word toggle " + item.label} />
-            </div>)}
-          </div>
-        </div>
-        <div className="vt-confirmed-vertical-word-toggle-size-row">
-          <strong>COMPACT · SINGLE COLUMN + MICRO MATRIX</strong>
-          <div className="vt-confirmed-vertical-word-toggle-compact">
-            {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
-              <small>{item.label}</small>
-              <StudioVerticalWordToggle sizeVariant="compact" variant={item.variant} value={verticalWords[4 + index]} onValueChange={value => flip(setVerticalWords, 4 + index, value)} words={index === 0 ? ["WRITE", "CREATE"] : ["OFF", "ON"]} aria-label={"Compact vertical word toggle " + item.label} />
-            </div>)}
-            <div className="vt-confirmed-vertical-word-toggle-micro" aria-label="Micro vertical word toggle variants">
-              {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
-                <small>{item.label}</small>
-                <StudioVerticalWordToggle sizeVariant="micro" variant={item.variant} value={verticalWords[8 + index]} onValueChange={value => flip(setVerticalWords, 8 + index, value)} words={["OFF", "ON"]} aria-label={"Micro vertical word toggle " + item.label} />
-              </div>)}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </Family>
+
+
+  </>
+}
+
+
+const CanonicalSplitBadgeFamily: React.FC = () => (
+  <>
     <Family
       title="Split-left Badge · Standard + Compact + Micro"
       nonDefaultSettings={[
@@ -193,8 +153,65 @@ const CanonicalControlFamilies: React.FC = () => {
       </div>
     </Family>
   </>
-}
+)
 
+const CanonicalWordToggleFamily: React.FC = () => {
+  const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
+  const [verticalWords, setVerticalWords] = React.useState<boolean[]>(Array(12).fill(false))
+  const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
+  return (
+    <>
+    <Family title="Word Toggles · Standard + Compact + Vertical" nonDefaultSettings={[
+        "Horizontal and vertical word toggles share this module; switches, radios, and checkboxes remain in their own control family.",
+        "Each toggle specimen remains independently interactive.",
+        "Vertical toggle width follows the longest word plus the original horizontal padding; height remains content-driven.",
+      ]} provenance={<Provenance primitive="StudioWordToggle / StudioVerticalWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px typography tiers; vertical toggle total height remains content-driven." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <div className="vt-confirmed-toggle-subfamily">
+      <strong>WORD TOGGLE · STANDARD + COMPACT</strong>
+      <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · STANDARD</strong>
+          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-standard" data-control-size="44">{WORD_TOGGLE_SKINS.map((skin,col) => <div key={skin.skin}><StudioWordToggle size="44" skin={skin.skin} value={words[col]} words={col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, col, value)} aria-label={"Standard word toggle variant " + (col + 1)} /></div>)}</div>
+        </div>
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · COMPACT</strong>
+          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={"Compact word toggle variant " + (col + 1)} /></div> })}</div>
+        </div>
+      </div>
+    </div>
+    <div className="vt-confirmed-toggle-subfamily">
+      <strong>VERTICAL WORD TOGGLE · STANDARD + COMPACT + MICRO</strong>
+      <div className="vt-confirmed-vertical-word-toggle-family">
+        <div className="vt-confirmed-vertical-word-toggle-size-row">
+          <strong>STANDARD · SINGLE COLUMN</strong>
+          <div className="vt-confirmed-vertical-word-toggle-standard">
+            {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
+              <small>{item.label}</small>
+              <StudioVerticalWordToggle sizeVariant="standard" variant={item.variant} value={verticalWords[index]} onValueChange={value => flip(setVerticalWords, index, value)} words={index === 0 ? ["WRITE", "CREATE"] : ["OFF", "ON"]} aria-label={"Standard vertical word toggle " + item.label} />
+            </div>)}
+          </div>
+        </div>
+        <div className="vt-confirmed-vertical-word-toggle-size-row">
+          <strong>COMPACT · SINGLE COLUMN + MICRO MATRIX</strong>
+          <div className="vt-confirmed-vertical-word-toggle-compact">
+            {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
+              <small>{item.label}</small>
+              <StudioVerticalWordToggle sizeVariant="compact" variant={item.variant} value={verticalWords[4 + index]} onValueChange={value => flip(setVerticalWords, 4 + index, value)} words={index === 0 ? ["WRITE", "CREATE"] : ["OFF", "ON"]} aria-label={"Compact vertical word toggle " + item.label} />
+            </div>)}
+            <div className="vt-confirmed-vertical-word-toggle-micro" aria-label="Micro vertical word toggle variants">
+              {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
+                <small>{item.label}</small>
+                <StudioVerticalWordToggle sizeVariant="micro" variant={item.variant} value={verticalWords[8 + index]} onValueChange={value => flip(setVerticalWords, 8 + index, value)} words={["OFF", "ON"]} aria-label={"Micro vertical word toggle " + item.label} />
+              </div>)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </Family>
+    </>
+  )
+}
 
 const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens: string; imports: string[] }> = ({ primitive, tsx, css, tokens, imports }) => (
   <div className="vt-confirmed-provenance">
@@ -207,22 +224,30 @@ const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens
 )
 
 const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[] }> = ({ title, children, provenance, nonDefaultSettings = [] }) => (
-  <section className={`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`}>
-    <h3 title={title}>{title}</h3>
-    <div className="vt-confirmed-variants">{children}</div>
-    {(nonDefaultSettings.length > 0 || provenance) && (
-      <details className="vt-confirmed-source-details">
-        <summary>Settings + source</summary>
-        {nonDefaultSettings.length > 0 && (
-          <section className="vt-confirmed-nondefault-settings" aria-label={`${title} settings`}>
-            <strong>NON-DEFAULT SETTINGS</strong>
-            <ul>{nonDefaultSettings.map((setting) => <li key={setting}>{setting}</li>)}</ul>
-          </section>
-        )}
-        {provenance}
-      </details>
-    )}
-  </section>
+  <details
+    className={`vt-confirmed-family vt-confirmed-primitive-module ${/Button|Split-left/.test(title) ? "vt-confirmed-button-family" : ""}`}
+    data-vt-confirmed-primitive="true"
+    data-vt-primitive-title={title}
+  >
+    <summary className="vt-confirmed-primitive-summary">
+      <h3 title={title}>{title}</h3>
+    </summary>
+    <div className="vt-confirmed-primitive-body">
+      <div className="vt-confirmed-variants">{children}</div>
+      {(nonDefaultSettings.length > 0 || provenance) && (
+        <details className="vt-confirmed-source-details">
+          <summary>Settings + source</summary>
+          {nonDefaultSettings.length > 0 && (
+            <section className="vt-confirmed-nondefault-settings" aria-label={`${title} settings`}>
+              <strong>NON-DEFAULT SETTINGS</strong>
+              <ul>{nonDefaultSettings.map((setting) => <li key={setting}>{setting}</li>)}</ul>
+            </section>
+          )}
+          {provenance}
+        </details>
+      )}
+    </div>
+  </details>
 )
 
 const ConfirmedStudioCounterFamily: React.FC = () => {
@@ -408,10 +433,71 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
   )
 }
 
+type ConfirmedCatalogFamilyName =
+  | "Text Fields"
+  | "Buttons"
+  | "Modules & Frames"
+  | "Dropdowns"
+  | "Controls"
+  | "Text Controls"
+  | "Compounds"
+  | "Compositions"
+
+const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
+  "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
+  "Controls", "Text Controls", "Compounds", "Compositions",
+]
+
+const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
+  if (!React.isValidElement(node)) return "Controls"
+  const props = node.props as { title?: unknown }
+  const title = typeof props.title === "string" ? props.title : ""
+  const componentType = node.type as { displayName?: string; name?: string }
+  const componentName = typeof node.type === "function"
+    ? (componentType.displayName || componentType.name || "")
+    : ""
+  if (/Studio Text Input|Studio Text Area|Studio Text Box/.test(title)) return "Text Fields"
+  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Split-left Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
+  if (/Top Split Module|Upload Frame/.test(title)) return "Modules & Frames"
+  if (/Dropdown/.test(title)) return "Dropdowns"
+  if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily") return "Controls"
+  if (/Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
+  if (/Split Accordion/.test(title)) return "Compounds"
+  if (/Publishing Card|Brain Status LED Badges/.test(title)) return "Compositions"
+  return "Controls"
+}
+
+const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const nodes = React.Children.toArray(children)
+  const defaults: React.ReactNode[] = []
+  const grouped = new Map<ConfirmedCatalogFamilyName, React.ReactNode[]>(
+    CONFIRMED_CATALOG_FAMILIES.map((family) => [family, []]),
+  )
+  for (const node of nodes) {
+    if (React.isValidElement(node) && (node.props as { "data-vt-confirmed-family"?: string })["data-vt-confirmed-family"] === "defaults") {
+      defaults.push(node)
+      continue
+    }
+    grouped.get(classifyConfirmedCatalogItem(node))?.push(node)
+  }
+  return (
+    <div className="vt-confirmed-catalog">
+      {defaults}
+      <div className="vt-confirmed-family-grid">
+        {CONFIRMED_CATALOG_FAMILIES.map((family) => (
+          <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group">
+            {grouped.get(family)}
+          </ConfirmedFamilyModule>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
-  <div className="vt-confirmed-catalog">
-    <section className="vt-confirmed-family vt-confirmed-defaults-combined" aria-labelledby="vt-confirmed-global-defaults-title">
-      <h3 id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</h3>
+  <ConfirmedCatalogFamilyGroups>
+    <details className="vt-confirmed-family vt-confirmed-defaults-combined" data-vt-confirmed-family="defaults">
+      <summary className="vt-confirmed-defaults-heading" id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</summary>
       <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 12px micro · 4.09px / 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <p><a href="https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults, exception index, and certification rules ↗</a></p>
       <details className="vt-confirmed-defaults-details">
@@ -454,7 +540,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </ul>
       <p><strong>Audit status:</strong> this library records the canonical global defaults. A primitive is not certified until its production rendering, tokens, effective CSS, and responsive/accessibility behavior agree with this contract.</p>
       </details>
-    </section>
+    </details>
     <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Single-line input typography remains 38px standard / 24px compact / 10px micro across all label variants.",
         "Floating labels raise to 80% of the input font size; fixed label boxes match StudioLegendMultiDropdown.",
@@ -500,8 +586,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>MICRO · 10PX</span><StudioTextBox size="micro" aria-label="Studio text box micro" data-vt-library-component="StudioTextBox">Micro display text.</StudioTextBox></div>
     </Family>
     <CanonicalControlFamilies />
+    <CanonicalWordToggleFamily />
     <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
     <ConfirmedStudioButtonFamily />
+    <CanonicalSplitBadgeFamily />
 
 
     <Family title="Prominent Action · 60px Supreme" nonDefaultSettings={[
@@ -1063,7 +1151,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
       </div>
     </Family>
-  </div>
+  </ConfirmedCatalogFamilyGroups>
 )
 
 
