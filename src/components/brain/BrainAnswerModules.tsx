@@ -306,6 +306,7 @@ export const BrainQuickActionCard: React.FC<{
     type="button"
     sizeVariant="standard"
     tone="neutral"
+    disabled={!onAccept}
     onClick={() => onAccept?.(action)}
     className="group w-full text-left"
    >
