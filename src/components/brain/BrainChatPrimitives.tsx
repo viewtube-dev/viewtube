@@ -67,7 +67,8 @@ export const BrainResponseLayout: React.FC<{
   className?: string
   headerClassName?: string
   bodyClassName?: string
-}> = ({ title, children, header, attribution, status, headerMetadata, actions, footer, className = "", headerClassName = "", bodyClassName = "" }) => (
+  actionsClassName?: string
+}> = ({ title, children, header, attribution, status, headerMetadata, actions, footer, className = "", headerClassName = "", bodyClassName = "", actionsClassName = "" }) => (
   <article
     data-vt-brain-component="BrainResponseLayout"
     aria-label={title}
@@ -90,7 +91,7 @@ export const BrainResponseLayout: React.FC<{
     <div data-vt-brain-part="response-layout-body" className={`flex min-w-0 flex-col gap-2.5 p-3 [overflow-wrap:anywhere] ${bodyClassName}`}>
       {children}
     </div>
-    {actions ? <div data-vt-brain-part="response-layout-actions" className="flex min-w-0 shrink-0 flex-wrap items-center gap-1 border-t-2 border-black px-3 py-1">{actions}</div> : null}
+    {actions ? <div data-vt-brain-part="response-layout-actions" className={`flex min-w-0 shrink-0 flex-wrap items-center gap-1 border-t-2 border-black px-3 py-1 ${actionsClassName}`}>{actions}</div> : null}
     {footer}
   </article>
 )
