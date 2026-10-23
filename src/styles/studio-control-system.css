@@ -3,7 +3,8 @@
    CSS cannot redefine Studio Hub fields and Studio Hub rules cannot leak back. */
 
 [data-vt-studio-control] {
-  --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);\n  /* Canonical editable-field text/fill/caret tokens. Glyph stroke always follows text. */
+  --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);
+  /* Canonical editable-field text/fill/caret tokens. Glyph stroke always follows text. */
   --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-field-text: var(--vt-field-primary);
   --vt-field-text-stroke: var(--vt-field-text);
