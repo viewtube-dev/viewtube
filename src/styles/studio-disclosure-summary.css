@@ -48,3 +48,17 @@ details[open] > .vt-studio-disclosure-summary::after { content: "−"; }
   outline: var(--vt-studio-control-focus-outline-width, 1.3px) solid var(--pair-b, #ff7f6b);
   outline-offset: 0;
 }
+
+/* Structured response-module header: same native primitive, grid layout remains consumer-owned. */
+.vt-studio-disclosure-summary[data-appearance="structured"] {
+  display: grid;
+  min-height: 36px;
+  border: 0;
+  border-bottom: 2px solid #000;
+  border-radius: 0;
+  padding: 0;
+}
+.vt-studio-disclosure-summary[data-appearance="structured"]::after {
+  display: none;
+  content: none;
+}
