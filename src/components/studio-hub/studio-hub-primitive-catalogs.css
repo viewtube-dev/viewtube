@@ -2043,6 +2043,21 @@
   }
 }
 
+/* Split Accordion is a single continuous train, not one item in the generic two-column specimen grid. */
+.vt-confirmed-family:has([data-vt-confirmed-primitive="StudioSplitAccordion"]) > .vt-confirmed-primitive-body > .vt-confirmed-variants {
+  display: block;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-family:has([data-vt-confirmed-primitive="StudioSplitAccordion"]) > .vt-confirmed-primitive-body > .vt-confirmed-variants > [data-vt-confirmed-primitive="StudioSplitAccordion"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
 /* Confirmed Primitive Library: control families use the full module width.
    Remove the generic two-column specimen wrapper that left-pinned these families. */
 .vt-confirmed-family:has(.vt-confirmed-control-family) > .vt-confirmed-variants {
