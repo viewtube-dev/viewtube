@@ -25,7 +25,9 @@ const pack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvidencePack
  evidenceIds: ["video:abc"],
  transcriptRouteRequired: false,
  ...overrides,
+})
 
+describe("BrainTurnEvidenceRibbon", () => {
  it("links each verified prompt record by canonical ID and preserves the requested analytics scope", () => {
   const html = render({
    evidencePack: pack({
