@@ -221,4 +221,16 @@ describe("Studio textarea typography token ownership", () => {
     expect(distill).toContain("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)");
     expect(distill).not.toMatch(/:focus[^\\{]*\\{[^}]*-webkit-text-stroke-color:\\s*var\\(--vt-field-primary/);
   });
+
+  it("keeps focused editable field glyph stroke black and removes contradictory primary-focus rules", () => {
+    const fields = read("src/styles/studio-control-fields.css");
+    const system = read("src/styles/studio-control-system.css");
+    const distill = read("src/styles/studio-control-distill-overrides.css");
+    expect(system).not.toContain('1px);\\n  /* Canonical editable-field');
+    expect(fields).not.toContain("primary glyph stroke at rest and focus");
+    expect(fields).not.toContain("-webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary");
+    expect(fields).not.toContain("-webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary");
+    expect(fields).toContain("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)");
+    expect(distill).toContain("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)");
+  });
 });
