@@ -2,7 +2,7 @@ import React from "react"
 import { Info, ArrowUpRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import type { AIBrainEvidencePack } from "../../types"
-import { StudioSplitLeftBadge } from "../../studio-ui"
+import { StudioSplitLeftBadge, StudioDisclosureSummary } from "../../studio-ui"
 
 /**
  * Creator-facing "Why this recommendation?" surface.
@@ -100,7 +100,7 @@ export const BrainEvidenceDrawer: React.FC<{
      <Info size={13} aria-hidden="true" />
      <span>{summaryLabel}</span>
      {sourceCount ? <EvidenceBadge label={String(sourceCount)} tone="#36E0F6" /> : null}
-    </summary>
+    </StudioDisclosureSummary>
    ) : (
     <summary className="flex min-h-11 cursor-pointer list-none items-center border-b-[2px] border-black bg-[#f8f8f4] px-3 py-2 hover:bg-[#FFDA47] focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
      <span className="flex flex-wrap items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.08em]">
@@ -110,7 +110,7 @@ export const BrainEvidenceDrawer: React.FC<{
       {confidenceText ? <EvidenceBadge label={confidenceText} tone="#C0F240" /> : null}
       <EvidenceBadge label={inference ? "inference" : "measured"} tone="#FFDA47" />
      </span>
-    </summary>
+    </StudioDisclosureSummary>
    )}
    <div
     className={`grid gap-3 ${
@@ -173,9 +173,9 @@ export const BrainEvidenceDrawer: React.FC<{
       </ul>
       {evidenceItems.length > visibleEvidenceItems.length ? (
        <details className="mt-2">
-        <summary className="min-h-11 cursor-pointer content-center text-[10px] font-black uppercase underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">
+        <StudioDisclosureSummary sizeVariant="standard">
          Show all {evidenceItems.length} references
-        </summary>
+        </StudioDisclosureSummary>
         <ul className="mt-1 grid gap-1">
          {evidenceItems.slice(5).map((item) => (
           <li key={item.id} className="overflow-hidden rounded-[7px] border-[1.5px] border-black/20 bg-[#f8f8f4]">
