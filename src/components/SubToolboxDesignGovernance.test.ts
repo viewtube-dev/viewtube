@@ -229,26 +229,23 @@ describe("subtoolbox design governance", () => {
   expect(service).toContain("duration?: string")
  })
 
- it("locks paint-safe shell edges and mobile keyboard-safe editing", () => {
+ it("keeps mobile fields browser-safe without forced focus/blur scrolling", () => {
   const toolboxCss = source("src/styles/toolbox-system.css")
   const systemCss = source("src/styles/subtoolbox-system.css")
-  const keyboardHook = source("src/hooks/useRestoreKeyboardPosition.ts")
+  const appShell = source("src/app/AppShell.tsx")
+  const preferences = source("src/services/workspaceUxPreferences.ts")
 
   expect(toolboxCss).toContain("--vt-toolbox-header-edge-clearance:8px")
   expect(toolboxCss).toContain("--vt-toolbox-header-edge-clearance:7px")
   expect(toolboxCss).toContain("padding:var(--vt-toolbox-header-edge-clearance) var(--vt-toolbox-shell-gutter) var(--vt-toolbox-shell-gutter)!important")
-  expect(toolboxCss).toContain("--vt-keyboard-occlusion:0px")
   expect(systemCss).toContain("Mobile editable-control contract — 2026-09-25")
   expect(systemCss).toContain("font-size:16px!important")
   expect(systemCss).toContain(':not([data-vt-studio-control="true"]):not([data-studioinput="true"]):not(.vt-studio-text-input):not(.vt-studio-input)')
   expect(systemCss).toContain('.vt-subtoolbox-labeled-control:not([data-vt-studio-control="true"])')
-  expect(systemCss).toContain("scroll-margin-block:12px calc(var(--vt-keyboard-occlusion,0px) + 20px)")
-
-  expect(keyboardHook).toContain('window.visualViewport?.addEventListener("resize", onVisualViewportChange)')
-  expect(keyboardHook).toContain('window.visualViewport?.addEventListener("scroll", onVisualViewportChange)')
-  expect(keyboardHook).toContain('document.documentElement.style.setProperty("--vt-keyboard-occlusion"')
-  expect(keyboardHook).toContain('document.documentElement.dataset.vtMobileEditing = "true"')
-  expect(keyboardHook).toContain('main.scrollBy({ top: delta, behavior: "auto" })')
+  expect(systemCss).not.toContain("scroll-margin-block:12px calc(var(--vt-keyboard-occlusion,0px) + 20px)")
+  expect(toolboxCss).not.toContain("--vt-keyboard-occlusion:0px")
+  expect(appShell).not.toContain("useRestoreKeyboardPosition")
+  expect(preferences).not.toContain("keyboardPositionRestore")
  })
 
  it("keeps Toolbox header controls isolated, square, and mobile-safe", () => {
