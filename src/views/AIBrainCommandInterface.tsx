@@ -682,7 +682,7 @@ const BrainLearningReceiptCard: React.FC<{
  if (!receipt) return null
  const dismissed = receipt.status === "dismissed"
  return (
-  <section data-vt-brain-part="learning-receipt-content" aria-label="Learning receipt" className="grid gap-2 border-t-[2px] border-black bg-[#FFF8D6] p-3">
+  <section data-vt-brain-part="learning-receipt-content" aria-label="Learning receipt" className="grid gap-2 bg-[#FFF8D6] p-3">
    <div className="flex flex-wrap items-center justify-between gap-2">
     <h4 data-vt-brain-part="learning-receipt-heading" className="text-[10px] font-black uppercase tracking-[0.12em]">Learning receipt</h4>
     <StudioSplitLeftBadge sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} role="status">Receipt · {receipt.status}</StudioSplitLeftBadge>
