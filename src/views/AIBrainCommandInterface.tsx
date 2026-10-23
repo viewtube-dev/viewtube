@@ -558,41 +558,63 @@ export const BrainPromptLibrary: React.FC<{
            const isSelected = card.id === selectedId
            return (
             <li key={card.id} className="min-w-0">
-             {!isSelected ? (
-              <BrainPromptLibraryItem
+             <div data-vt-brain-part="prompt-collapsible-module" className="min-w-0 overflow-hidden">
+              <StudioTopSplitModule
+               as="div"
+               sizeVariant="compact"
+               split="double"
+               startIcon={<LayoutGrid aria-hidden="true" />}
+               endIcon={<span aria-hidden="true" className="text-base font-black leading-none">{isSelected ? "−" : "+"}</span>}
                title={card.label}
-               description={promptCardSummary(card)}
-               promptTitle={card.prompt}
-               selected={false}
-               disabled={busy}
-               onSelect={() => setSelectedId(card.id)}
-              />
-             ) : (
-              <div data-vt-brain-part="prompt-inline-module" className="min-w-0 overflow-hidden rounded-[var(--vt-studio-28-radius,4px)] border-[2px] border-black">
-               <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_7.5rem]">
-                <button
-                 type="button"
-                 className="flex min-h-[28px] min-w-0 items-center gap-1 border-0 border-r-[2px] border-black px-2 text-left"
-                 style={{ backgroundColor: card.color || "var(--pair-a, #36e0f6)" }}
-                 aria-expanded="true"
-                 aria-label={`Close ${card.label} prompt`}
-                 onClick={() => setSelectedId(null)}
-                >
-                 <span className="grid h-6 w-6 shrink-0 place-items-center border-r border-black/30 bg-[var(--pair-b,#ff7f6b)]">
-                  <LayoutGrid className="h-3.5 w-3.5" aria-hidden="true" />
-                 </span>
-                 <span className="min-w-0 truncate text-[12px] font-[1000] uppercase tracking-[-0.02em]">{card.label}</span>
-                </button>
-                <div className="flex min-w-0 flex-col bg-white">
-                 <StudioSplitLeftButton sizeVariant="compact" icon={<Send aria-hidden="true" />} disabled={busy} className="w-full !rounded-none border-0 border-b-[2px] border-black" onClick={() => { onPrompt(card.prompt); setSelectedId(null) }}>Send to chat</StudioSplitLeftButton>
-                 {onEdit ? <StudioSplitLeftButton sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} className="w-full !rounded-none border-0" onClick={() => { onEdit(card.prompt); setSelectedId(null) }}>Edit first</StudioSplitLeftButton> : null}
+               className="cursor-pointer overflow-hidden"
+               role="button"
+               tabIndex={0}
+               aria-expanded={isSelected}
+               aria-label={`${isSelected ? "Collapse" : "Expand"} ${card.label} prompt`}
+               onClick={() => setSelectedId(isSelected ? null : card.id)}
+               onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                 event.preventDefault()
+                 setSelectedId(isSelected ? null : card.id)
+                }
+               }}
+              >
+               {isSelected ? (
+                <div className="grid min-w-0 gap-2 bg-white p-2">
+                 <p className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
+                 <div className="flex min-w-0 flex-col gap-1 sm:flex-row">
+                  <StudioSplitLeftButton
+                   sizeVariant="compact"
+                   icon={<Send aria-hidden="true" />}
+                   disabled={busy}
+                   className="min-w-0 w-full sm:w-auto"
+                   onClick={(event) => {
+                    event.stopPropagation()
+                    onPrompt(card.prompt)
+                    setSelectedId(null)
+                   }}
+                  >
+                   SEND TO CHAT
+                  </StudioSplitLeftButton>
+                  {onEdit ? (
+                   <StudioSplitLeftButton
+                    sizeVariant="compact"
+                    icon={<ArrowRight aria-hidden="true" />}
+                    className="min-w-0 w-full sm:w-auto"
+                    onClick={(event) => {
+                     event.stopPropagation()
+                     onEdit(card.prompt)
+                     setSelectedId(null)
+                    }}
+                   >
+                    EDIT FIRST
+                   </StudioSplitLeftButton>
+                  ) : null}
+                 </div>
                 </div>
-               </div>
-               <div className="border-t-[2px] border-black bg-white p-2">
-                <p className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
-               </div>
-              </div>
-             )}
+               ) : null}
+              </StudioTopSplitModule>
+             </div>
             </li>
            )
           })}
