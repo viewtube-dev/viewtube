@@ -998,6 +998,8 @@ The following follow-up work is now merged into `master/consolidated-feature-int
 - [#846 — evidence and context provenance restore coverage](https://github.com/viewtube-dev/viewtube/pull/846): adds round-trip assertions for request constraints, prompt evidence IDs/records, context revision and creator-context snapshot.
 - [#848 — remaining Studio control migration](https://github.com/viewtube-dev/viewtube/pull/848): migrates quick-action cards, profile coverage actions and the context-correction dialog to canonical Studio controls.
 
-The current open follow-up is [#849 — standardize workflow and learning inbox controls](https://github.com/viewtube-dev/viewtube/pull/849), which migrates workflow actions, live handoff actions, evidence-tracing controls and governed learning review/promotion actions.
+**Open follow-ups:**
+- [#849 — standardize workflow and learning inbox controls](https://github.com/viewtube-dev/viewtube/pull/849): migrates workflow actions, live handoff actions, evidence-tracing controls and governed learning review/promotion actions.
+- [#851 — standardize user and settings controls](https://github.com/viewtube-dev/viewtube/pull/851): migrates Brain user-policy checkboxes, settings switches, and panel actions to canonical Studio controls. A shared range-slider primitive remains a system-level gap.
 
 **Verification caveat remains:** merges are not a substitute for green CI or browser certification. The latest observed runs still reported shared Studio Controls export/type failures and a source-governance assertion; production build, local smoke and Brain quality-loop passed on the recent control-sweep run, while full-suite was still running at the last check. Re-check the current run before treating any gate as resolved. Keyboard/screen-reader behavior, mobile virtual-keyboard/scroll behavior and the end-to-end turn lineage still require explicit certification.
