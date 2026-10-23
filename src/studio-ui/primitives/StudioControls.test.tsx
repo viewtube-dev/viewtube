@@ -1203,6 +1203,7 @@ describe("Studio field focus, floating labels, and toggle regressions", () => {
     expect(source).toContain("onPointerCancel={stopRepeat}");
     expect(source).toContain("onLostPointerCapture={stopRepeat}");
     expect(css).toContain("40%, #fff");
+    expect(css).toMatch(/\.vt-studio-value-toggle__bars\s*\{[^}]*display:\s*flex/s);
     expect(css).toContain('data-active="true"');
     expect(css).toContain("pointer-events: auto;");
   });
