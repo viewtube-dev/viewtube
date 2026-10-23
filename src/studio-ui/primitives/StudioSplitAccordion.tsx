@@ -63,6 +63,7 @@ export function openPanelWidth(innerWidth: number, itemCount: number, face: numb
   return Math.max(face, innerWidth - itemCount * face - dividerWidth);
 }
 
+// Only the selected/opening panel shows its label; all other expanded transit bands keep their panel fill.
 type FrameState = { widths: number[]; scrollLeft: number; labelVisible: boolean[] };
 
 export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplitAccordionProps>(
