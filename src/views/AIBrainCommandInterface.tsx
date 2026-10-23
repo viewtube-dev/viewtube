@@ -805,6 +805,7 @@ const CreatorResponseCard: React.FC<{
     <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
    ) : null}
   </BrainResponseLayout>
+ )
 }
 
 const readinessForSnapshot = (snapshot: AIBrainContextSnapshot): AIBrainTurnReadiness => ({
