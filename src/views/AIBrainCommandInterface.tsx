@@ -377,6 +377,22 @@ const PROMPT_CARD_SUMMARIES: Record<string, string> = {
 export const promptCardSummary = (card: CreatorBrainPromptCard): string =>
  PROMPT_CARD_SUMMARIES[card.id] || card.prompt
 
+/** Canonical 12-step Studio spectrum pair cycle for individual prompt modules. */
+const PROMPT_MODULE_COLOR_PAIRS = [
+ ["#FF7F6B", "#36E0F6"], // Coral / Cyan
+ ["#FFA85C", "#528FFA"], // Orange / Royal blue
+ ["#FFDA47", "#A467F4"], // Yellow / Purple
+ ["#C0F240", "#F55EFC"], // Lime / Magenta
+ ["#3FEE56", "#FA618A"], // Green / Rose
+ ["#4EE4BE", "#FF7AC8"], // Teal / Pink
+ ["#36E0F6", "#FF7F6B"], // Cyan / Coral
+ ["#528FFA", "#FFA85C"], // Royal blue / Orange
+ ["#A467F4", "#FFDA47"], // Purple / Yellow
+ ["#F55EFC", "#C0F240"], // Magenta / Lime
+ ["#FA618A", "#3FEE56"], // Rose / Green
+ ["#FF7AC8", "#4EE4BE"], // Pink / Teal
+] as const
+
 export const filterCreatorBrainPromptCards = (
  cards: CreatorBrainPromptCard[],
  query: string,
@@ -556,6 +572,8 @@ export const BrainPromptLibrary: React.FC<{
          <ul className="grid min-w-0 grid-cols-1 gap-1 p-2">
           {groupCards.map((card) => {
            const isSelected = card.id === selectedId
+           const promptIndex = cards.findIndex((item) => item.id === card.id)
+           const colorPair = PROMPT_MODULE_COLOR_PAIRS[Math.max(promptIndex, 0) % PROMPT_MODULE_COLOR_PAIRS.length]
            return (
             <li key={card.id} className="min-w-0">
              <div data-vt-brain-part="prompt-collapsible-module" className="min-w-0 overflow-hidden">
@@ -566,6 +584,10 @@ export const BrainPromptLibrary: React.FC<{
                startIcon={<LayoutGrid aria-hidden="true" />}
                endIcon={<span aria-hidden="true" className="text-base font-black leading-none">{isSelected ? "−" : "+"}</span>}
                title={card.label}
+               style={{
+                "--vt-studio-control-accent": colorPair[0],
+                "--vt-studio-control-secondary": colorPair[1],
+               } as React.CSSProperties}
                className="cursor-pointer overflow-hidden"
                role="button"
                tabIndex={0}
@@ -582,12 +604,12 @@ export const BrainPromptLibrary: React.FC<{
                {isSelected ? (
                 <div className="grid min-w-0 gap-2 bg-white p-2">
                  <p className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
-                 <div className="flex min-w-0 flex-col gap-1 sm:flex-row">
+                 <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-2 gap-1">
                   <StudioSplitLeftButton
                    sizeVariant="compact"
                    icon={<Send aria-hidden="true" />}
                    disabled={busy}
-                   className="min-w-0 w-full sm:w-auto"
+                   className="min-w-0 w-full"
                    onClick={(event) => {
                     event.stopPropagation()
                     onPrompt(card.prompt)
@@ -600,7 +622,7 @@ export const BrainPromptLibrary: React.FC<{
                    <StudioSplitLeftButton
                     sizeVariant="compact"
                     icon={<ArrowRight aria-hidden="true" />}
-                    className="min-w-0 w-full sm:w-auto"
+                    className="min-w-0 w-full"
                     onClick={(event) => {
                      event.stopPropagation()
                      onEdit(card.prompt)
