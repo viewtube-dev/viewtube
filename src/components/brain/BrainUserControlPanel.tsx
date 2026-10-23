@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Settings2, ShieldCheck, X } from "lucide-react"
+import { StudioButton, StudioCheckbox, StudioSquareIconButton } from "../../studio-ui"
 import {
  DEFAULT_BRAIN_USER_CONTROLS,
  clearBrainUserControlOverride,
@@ -13,20 +14,23 @@ const Row: React.FC<{
  detail: string
  value: boolean
  onChange: (value: boolean) => void
-}> = ({ label, detail, value, onChange }) => (
- <label className="flex items-center justify-between gap-3 border-b-[2px] border-black/10 py-2 last:border-b-0">
-  <span className="min-w-0">
-   <span className="block text-[10px] font-[1000] uppercase tracking-tight">{label}</span>
-   <span className="block text-[9px] font-bold leading-4 text-black/50">{detail}</span>
-  </span>
-  <input
-   type="checkbox"
-   checked={value}
-   onChange={(event) => onChange(event.target.checked)}
-   className="h-5 w-5 shrink-0 accent-black"
-  />
- </label>
-)
+}> = ({ label, detail, value, onChange }) => {
+ const id = React.useId()
+ return (
+  <div className="flex items-center justify-between gap-3 border-b-[2px] border-black/10 py-2 last:border-b-0">
+   <span className="min-w-0">
+    <span id={`${id}-label`} className="block text-[10px] font-[1000] uppercase tracking-tight">{label}</span>
+    <span id={`${id}-detail`} className="block text-[9px] font-bold leading-4 text-black/50">{detail}</span>
+   </span>
+   <StudioCheckbox
+    checked={value}
+    onClick={() => onChange(!value)}
+    aria-labelledby={`${id}-label`}
+    aria-describedby={`${id}-detail`}
+   />
+  </div>
+ )
+}
 
 export const BrainUserControlPanel: React.FC<{
  open: boolean
@@ -66,7 +70,7 @@ export const BrainUserControlPanel: React.FC<{
       {channelId ? `Channel profile · ${channelId}` : "Global defaults"} · creator rules override Brain defaults
      </p>
     </div>
-    <button type="button" onClick={onClose} className="grid h-8 w-8 place-items-center rounded-[7px] border-[2px] border-black bg-white" aria-label="Close Brain controls"><X size={15} /></button>
+    <StudioSquareIconButton sizeVariant="compact" tone="neutral" label="Close Brain controls" icon={<X size={15} aria-hidden="true" />} onClick={onClose} />
    </header>
 
    <div className="min-h-0 flex-1 overflow-y-auto p-3">
@@ -85,8 +89,8 @@ export const BrainUserControlPanel: React.FC<{
    </div>
 
    <footer className="grid grid-cols-2 gap-2 border-t-[3px] border-black bg-[#f7f7f3] p-2">
-    <button type="button" onClick={reset} className="rounded-[8px] border-[2px] border-black bg-white px-2 py-2 text-[9px] font-[1000] uppercase">{channelId ? "Use global defaults" : "Reset defaults"}</button>
-    <button type="button" onClick={onClose} className="inline-flex items-center justify-center gap-1 rounded-[8px] border-[2px] border-black bg-[#3FEE56] px-2 py-2 text-[9px] font-[1000] uppercase"><Settings2 size={12} />Done</button>
+    <StudioButton type="button" sizeVariant="compact" tone="neutral" onClick={reset}>{channelId ? "Use global defaults" : "Reset defaults"}</StudioButton>
+    <StudioButton type="button" sizeVariant="compact" tone="success" icon={<Settings2 size={12} aria-hidden="true" />} onClick={onClose}>Done</StudioButton>
    </footer>
   </div>
  )
