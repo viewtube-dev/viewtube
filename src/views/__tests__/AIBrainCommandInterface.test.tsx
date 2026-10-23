@@ -183,16 +183,20 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("10 Video Ideas")
   expect(html).toContain("Shorts Funnel Plan")
   expect(html).toContain("sm:grid-cols-2")
-  expect(html).toContain("xl:grid-cols-3")
+  expect(html).toContain("xl:grid-cols-1")
   expect(html).toContain("line-clamp-2")
   expect(html).toContain("border-b-[2px]")
-  // Cards are selectable (aria-pressed) and preview before sending, not instant-send.
+  // Cards remain selectable within their collapsed category module and preview before sending, not instant-send.
   expect(html).toContain('aria-pressed="false"')
-  expect(html).toContain("Tap a prompt above to preview it before sending.")
+  expect(html).toContain("Choose a prompt to preview and send it here.")
+  expect(html).toContain("data-vt-brain-component=\"BrainPromptLibraryModule\"")
+  expect(html).toContain("data-prompt-category=")
+  expect(html).toContain("prompt-module-body")
+  expect(html).toContain("Open a task module to browse its related prompts.")
   // Card bodies show the short summary (the full prompt lives in the title tooltip
   // and the preview panel, not dumped into the card body).
   expect(html).toContain("A fresh, on-brand thumbnail concept for your next video.")
-  // One button per card (nothing selected, so no preview action buttons yet).
+  // One prompt-selection button per card (no preview action buttons until a prompt is selected).
   expect((html.match(/type="button"/g) || [])).toHaveLength(cards.length)
   expect(promptCardSummary(cards[0])).toBe("Find your niche and fuzzy edges.")
   expect(html).toContain("Find your niche and fuzzy edges.")
