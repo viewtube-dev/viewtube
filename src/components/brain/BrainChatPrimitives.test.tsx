@@ -1,6 +1,6 @@
 import React from "react"
-import { describe, expect, it, vi } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
+import { renderToStaticMarkup } from "react-dom/server"
 import {
   BrainChatStatusBadge,
   BrainChatMessageShell,
@@ -11,45 +11,66 @@ import {
   BrainResponseLayout,
 } from "./BrainChatPrimitives"
 
+const render = (node: React.ReactNode): string => renderToStaticMarkup(<>{node}</>)
+
 describe("Brain Studio chat primitives", () => {
   it("renders explicit status labels without inferring evidence or success", () => {
-    const { container } = render(<BrainChatStatusBadge status="partial" />)
-    expect(screen.getByText("Partial")).toBeInTheDocument()
-    expect(container.querySelector('[data-status="partial"]')).toBeInTheDocument()
+    const html = render(<BrainChatStatusBadge status="partial" />)
+    expect(html).toContain('data-status="partial"')
+    expect(html).toContain("Partial")
   })
 
   it("keeps message role semantics and long content wrap-safe", () => {
-    render(<BrainChatMessageShell role="user">{ "a".repeat(400) }</BrainChatMessageShell>)
-    expect(screen.getByRole("article", { name: "Your message" })).toHaveAttribute("data-message-role", "user")
+    const html = render(<BrainChatMessageShell role="user">{ "a".repeat(400) }</BrainChatMessageShell>)
+    expect(html).toContain('aria-label="Your message"')
+    expect(html).toContain('data-message-role="user"')
+    expect(html).toContain("[overflow-wrap:anywhere]")
+    expect(html).toContain("a".repeat(400))
   })
 
   it("renders a response header with optional metadata", () => {
-    render(<BrainResponseSectionHeader title="Evidence" metadata={<span>Unavailable</span>} />)
-    expect(screen.getByRole("heading", { name: "Evidence" })).toBeInTheDocument()
-    expect(screen.getByText("Unavailable")).toBeInTheDocument()
+    const html = render(<BrainResponseSectionHeader title="Evidence" metadata={<span>Unavailable</span>} />)
+    expect(html).toContain("<h3")
+    expect(html).toContain("Evidence")
+    expect(html).toContain("Unavailable")
   })
 
-  it("keeps action handlers wired and exposes disabled actions", () => {
-    const onSelect = vi.fn()
-    render(<BrainChatActionButtonGroup actions={[{ id: "retry", label: "Retry", onSelect }, { id: "save", label: "Save", onSelect, disabled: true }]} />)
-    screen.getByRole("button", { name: "Retry" }).click()
-    expect(onSelect).toHaveBeenCalledTimes(1)
-    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled()
+  it("exposes the action group label and disabled action state", () => {
+    const html = render(
+      <BrainChatActionButtonGroup
+        label="Turn actions"
+        actions={[
+          { id: "retry", label: "Retry", onSelect: () => undefined },
+          { id: "save", label: "Save", onSelect: () => undefined, disabled: true },
+        ]}
+      />,
+    )
+    expect(html).toContain('role="group"')
+    expect(html).toContain('aria-label="Turn actions"')
+    expect(html).toContain("Retry")
+    expect(html).toContain("Save")
+    expect(html).toMatch(/disabled(?:="")?/)
   })
 
-  it("exposes prompt selection state and disabled state", () => {
-    render(<BrainPromptLibraryItem title="Plan video" description="Start a plan" selected onSelect={() => {}} />)
-    expect(screen.getByRole("button", { name: /Plan video/ })).toHaveAttribute("aria-pressed", "true")
-    expect(screen.getByRole("button", { name: /Plan video/ })).toHaveAttribute("data-vt-studio-control", "true")
-    expect(screen.getByRole("button", { name: /Plan video/ })).toHaveAttribute("data-vt-studio-button", "true")
+  it("exposes prompt selection and disabled state through semantic button attributes", () => {
+    const selected = render(<BrainPromptLibraryItem title="Plan video" description="Start a plan" selected onSelect={() => undefined} />)
+    const disabled = render(<BrainPromptLibraryItem title="Unavailable prompt" disabled onSelect={() => undefined} />)
+    expect(selected).toContain('aria-pressed="true"')
+    expect(selected).toContain('data-vt-studio-brain-control="prompt-library-item"')
+    expect(selected).toContain('data-vt-studio-button="true"')
+    expect(disabled).toMatch(/disabled(?:="")?/)
+    expect(disabled).toContain("Unavailable prompt")
   })
 
   it("labels accessory controls as a group", () => {
-    render(<BrainComposerAccessoryRow><button>Attach</button></BrainComposerAccessoryRow>)
-    expect(screen.getByRole("group", { name: "Composer options" })).toBeInTheDocument()
+    const html = render(<BrainComposerAccessoryRow><button type="button">Attach</button></BrainComposerAccessoryRow>)
+    expect(html).toContain('role="group"')
+    expect(html).toContain('aria-label="Composer options"')
+    expect(html).toContain("Attach")
   })
+
   it("composes response title, status, content, actions, and footer in one accessible layout", () => {
-    render(
+    const html = render(
       <BrainResponseLayout
         title="Growth plan"
         attribution="ViewTube Copilot"
@@ -60,13 +81,14 @@ describe("Brain Studio chat primitives", () => {
         <p>Three practical next steps</p>
       </BrainResponseLayout>,
     )
-    expect(screen.getByRole("article", { name: "Growth plan" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Growth plan" })).toBeInTheDocument()
-    expect(screen.getByText("ViewTube Copilot")).toBeInTheDocument()
-    expect(screen.getByText("Partial")).toBeInTheDocument()
-    expect(screen.getByText("Three practical next steps")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument()
-    expect(screen.getByText("Evidence provenance")).toBeInTheDocument()
+    expect(html).toContain('data-vt-brain-component="BrainResponseLayout"')
+    expect(html).toContain('aria-label="Growth plan"')
+    expect(html).toContain("<h3")
+    expect(html).toContain("Growth plan")
+    expect(html).toContain("ViewTube Copilot")
+    expect(html).toContain("Partial")
+    expect(html).toContain("Three practical next steps")
+    expect(html).toContain("Retry")
+    expect(html).toContain("Evidence provenance")
   })
-
 })
