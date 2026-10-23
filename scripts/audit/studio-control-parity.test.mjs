@@ -72,8 +72,8 @@ test("bar toggle has pointer capture and visible inactive segments", () => {
   assert.match(css, /\.vt-studio-value-toggle__bar\[data-active="true"\][\s\S]*?background:\s*#000/);
 });
 
-test("multi-select closed trigger combines selection count into the label only", () => {
-  assert.match(controls, /\$\{selectedLabels\[0\]\} \+\$\{selectedLabels\.length - 1\}/);
-  assert.match(controls, /className="vt-studio-legend-trigger-text"\>\{triggerLabel\}/);
-  assert.doesNotMatch(controls, /vt-studio-legend-count/);
+test("multi-select closed trigger renders a separate black count badge inside trigger text", () => {
+  assert.match(controls, /const extra = selectedLabels.length - 1/);
+  assert.match(controls, /className="vt-studio-legend-trigger-text"[\s\S]*?vt-studio-legend-count-badge/);
+  assert.doesNotMatch(controls, /\$\{selectedLabels\[0\]\} \+\$\{selectedLabels\.length - 1\}/);
 });
