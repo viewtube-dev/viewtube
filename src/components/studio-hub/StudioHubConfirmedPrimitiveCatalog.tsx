@@ -41,7 +41,6 @@ import {
   StudioDoubleSideToggle,
   StudioBarToggle,
 } from "../../studio-ui/primitives/StudioControls"
-import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import "./studio-hub-primitive-catalogs.css"
 
 type Size = "44px" | "28px"
@@ -407,33 +406,6 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
-    <Family
-      title="Confirmed Specimen Grid · Layout Contract"
-      nonDefaultSettings={[
-        "This is the reusable arrangement component from PR #756, integrated with real production Studio Controls.",
-        "This general layout-contract preview uses a status badge for its informational micro sample; the original Button family below separately exercises the established Supreme, Standard, and Micro button variants.",
-        "The grid controls catalog arrangement only. It does not override primitive faces, sizing tokens, focus, or interaction behavior.",
-      ]}
-      provenance={<Provenance primitive="ConfirmedSpecimenGrid + StudioButton + StudioBrainStatusBadge" tsx="src/components/studio-hub/ConfirmedSpecimenGrid.tsx" css="src/components/studio-hub/ConfirmedSpecimenGrid.css" tokens="4px layout rhythm; tier availability remains component-specific." imports={["src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
-      <ConfirmedSpecimenGrid
-        familyName="Studio control tier and layout reference"
-        documentation={<p>Use this reusable grid as the migration target for catalog families. Do not map unsupported size tiers onto a primitive.</p>}
-        renderSpecimen={({ id, tier }) => (
-          <div className="vt-confirmed-variant" data-vt-specimen-id={id} data-vt-specimen-tier={tier} aria-label={`${tier} specimen`}>
-            {tier === "supreme" ? (
-              <StudioButton heightVariant="60">SUPREME</StudioButton>
-            ) : tier === "standard" ? (
-              <StudioButton heightVariant="44">STANDARD</StudioButton>
-            ) : tier === "compact" ? (
-              <StudioButton heightVariant="28">COMPACT</StudioButton>
-            ) : (
-              <StudioBrainStatusBadge label="MICRO" tone="cyan" appearance="tinted" sizeVariant="micro" />
-            )}
-          </div>
-        )}
-      />
-    </Family>
     <section className="vt-confirmed-family vt-confirmed-defaults-combined" aria-labelledby="vt-confirmed-global-defaults-title">
       <h3 id="vt-confirmed-global-defaults-title">Global Defaults · Current Source Contract</h3>
       <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 12px micro · 4.09px / 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
@@ -1029,11 +1001,15 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
 
 
 const ConfirmedStudioValueToggleFamily: React.FC = () => {
-  const [arrow, setArrow] = React.useState("ONE")
-  const [side, setSide] = React.useState("LOW")
-  const [left, setLeft] = React.useState("SOURCE")
-  const [right, setRight] = React.useState("TARGET")
-  const [level, setLevel] = React.useState(50)
+  const [arrowStd, setArrowStd] = React.useState("ONE")
+  const [arrowCmp, setArrowCmp] = React.useState("ONE")
+  const [sideStd, setSideStd] = React.useState("LOW")
+  const [sideLeftCmp, setSideLeftCmp] = React.useState("LOW")
+  const [sideCmp, setSideCmp] = React.useState("LOW")
+  const [leftValues, setLeftValues] = React.useState(["SOURCE", "SOURCE", "SOURCE", "SOURCE"])
+  const [rightValues, setRightValues] = React.useState(["TARGET", "TARGET", "TARGET", "TARGET"])
+  const [levelStd, setLevelStd] = React.useState(50)
+  const [levelCmp, setLevelCmp] = React.useState(50)
   const options = ["ONE", "TWO", "THREE"] as const
   return (
     <Family title="Arrow / Side / Double Side / Bar Toggles" nonDefaultSettings={[
@@ -1045,25 +1021,25 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
     ]} provenance={<Provenance primitive="StudioArrowToggle · StudioSideToggle · StudioDoubleSideToggle · StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="Studio size lattice · semantic primary/secondary colors · ten 18×38px standard bars" imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/styles/studio-control-system.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle">
         <span>ARROW TOGGLE · STANDARD</span>
-        <StudioArrowToggle value={arrow} options={options} onValueChange={setArrow} ariaLabel="Arrow toggle specimen" appearance={{ fillColor: "color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent)", textColor: "#000", iconColor: "#000", iconFillColor: "transparent" }} />
+        <StudioArrowToggle value={arrowStd} options={options} onValueChange={setArrowStd} ariaLabel="Arrow toggle specimen" />
         <span>SIDE TOGGLE · DEFAULT RIGHT / V2 LEFT</span>
         <div style={{ display: "grid", gap: 4 }}>
-          <StudioSideToggle value={side} options={["LOW", "MID", "HIGH"]} onValueChange={setSide} />
-          <StudioSideToggle value={side} options={["LOW", "MID", "HIGH"]} onValueChange={setSide} arrowSide="left" size="compact" />
+          <StudioSideToggle value={sideStd} options={["LOW", "MID", "HIGH"]} onValueChange={setSideStd} />
+          <StudioSideToggle value={sideLeftCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideLeftCmp} arrowSide="left" size="compact" />
         </div>
         <span>DOUBLE SIDE TOGGLE · V1–V4</span>
         <div style={{ display: "grid", gap: 4 }}>
-          {(["default", "v2", "v3", "v4"] as const).map(variant => <StudioDoubleSideToggle key={variant} variant={variant}
-            left={{ value: left, options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: setLeft, ariaLabel: "Left side selection" }}
-            right={{ value: right, options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: setRight, ariaLabel: "Right side selection" }} />)}
+          {(["default", "v2", "v3", "v4"] as const).map((variant, index) => <StudioDoubleSideToggle key={variant} variant={variant}
+            left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => setLeftValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Left side selection " + variant }}
+            right={{ value: rightValues[index], options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: value => setRightValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Right side selection " + variant }} />)}
         </div>
         <span>BAR TOGGLE · {level}%</span>
-        <StudioBarToggle value={level} onValueChange={setLevel} ariaLabel="Bar toggle specimen" />
+        <StudioBarToggle value={levelStd} onValueChange={setLevelStd} ariaLabel="Bar toggle specimen" />
         <span>COMPACT SPECIMENS</span>
         <div style={{ display: "grid", gap: 4 }}>
-          <StudioArrowToggle size="compact" value={arrow} options={options} onValueChange={setArrow} />
-          <StudioSideToggle size="compact" value={side} options={["LOW", "MID", "HIGH"]} onValueChange={setSide} />
-          <StudioBarToggle size="compact" value={level} onValueChange={setLevel} />
+          <StudioArrowToggle size="compact" value={arrowCmp} options={options} onValueChange={setArrowCmp} />
+          <StudioSideToggle size="compact" value={sideCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideCmp} />
+          <StudioBarToggle size="compact" value={levelCmp} onValueChange={setLevelCmp} />
         </div>
       </div>
     </Family>
