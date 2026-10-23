@@ -1144,7 +1144,7 @@ export const StudioTwoLineButton = React.forwardRef<HTMLButtonElement, StudioTwo
 StudioTwoLineButton.displayName = "StudioTwoLineButton"
 
 /** Split-left action button with a stacked two-line label inside the flexible face. */
-export interface StudioSplitTwoLineButtonProps extends Omit<StudioButtonProps, "children" | "faceLayout" | "textLayout" | "firstLine" | "secondLine" | "icon"> {
+export interface StudioSplitTwoLineButtonProps extends Omit<StudioButtonProps, "children" | "faceLayout" | "textLayout" | "firstLine" | "secondLine" | "icon" | "sizeVariant"> {
   icon: React.ReactNode
   firstLine: React.ReactNode
   secondLine: React.ReactNode
