@@ -93,6 +93,13 @@ const CanonicalControlFamilies: React.FC = () => {
       </div>
     </Family>
 
+
+  </>
+}
+
+
+const CanonicalSplitBadgeFamily: React.FC = () => (
+  <>
     <Family
       title="Split-left Badge · Standard + Compact + Micro"
       nonDefaultSettings={[
@@ -146,8 +153,7 @@ const CanonicalControlFamilies: React.FC = () => {
       </div>
     </Family>
   </>
-}
-
+)
 
 const CanonicalWordToggleFamily: React.FC = () => {
   const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
@@ -450,7 +456,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     ? (node.type.displayName || node.type.name || "")
     : ""
   if (/Studio Text Input|Studio Text Area|Studio Text Box/.test(title)) return "Text Fields"
-  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Split-left Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily") return "Buttons"
+  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Split-left Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
   if (/Top Split Module|Upload Frame/.test(title)) return "Modules & Frames"
   if (/Dropdown/.test(title)) return "Dropdowns"
   if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily") return "Controls"
@@ -582,6 +588,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <CanonicalWordToggleFamily />
     <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
     <ConfirmedStudioButtonFamily />
+    <CanonicalSplitBadgeFamily />
 
 
     <Family title="Prominent Action · 60px Supreme" nonDefaultSettings={[
