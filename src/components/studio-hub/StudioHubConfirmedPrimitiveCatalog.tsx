@@ -407,11 +407,12 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
     <section className="vt-confirmed-family vt-confirmed-defaults-combined" aria-labelledby="vt-confirmed-global-defaults-title">
-      <h3 id="vt-confirmed-global-defaults-title">Global Defaults · Current Source Contract</h3>
+      <h3 id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</h3>
       <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 12px micro · 4.09px / 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <p><a href="https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults, exception index, and certification rules ↗</a></p>
       <details className="vt-confirmed-defaults-details">
-        <summary>Show current defaults, effective CSS behavior, and exceptions</summary>
+        <summary>Show defaults, effective CSS behavior, and exceptions</summary>
+        <div className="vt-confirmed-defaults-dense">
         <div className="vt-confirmed-size-grid">
           <div className="vt-confirmed-size-card"><strong>44PX STANDARD</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontWeight}</span><span>Flat default: no shadow, hover offset, or press offset · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconStroke}</span></div>
           <div className="vt-confirmed-size-card"><strong>28PX COMPACT</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontWeight}</span><span>Flat default: no shadow, hover offset, or press offset · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconStroke}</span></div>
@@ -423,15 +424,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-defaults-explainer">
           <strong>HOW TO READ THE CURRENT CONTRACT</strong>
           <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and default line-height (1) unless a family exception is documented.</p>
-          <p><b>Field colors:</b> At rest, value, placeholder, and caret use primary (--pair-a); fill uses primary at 50% opacity, the outer border is black, and the inline primary text stroke matches the selected border width. Focus uses primary fill at 15%, black text and inline stroke, plus a secondary-color outline at 65% of the selected border width with 0px offset.</p>
+          <p><b>Field colors:</b> At rest, value, placeholder, caret, and inline text stroke use primary (--pair-a); fill uses primary at 50% opacity and the outer border is black. Focus uses primary fill at 15%, black text fill with primary inline stroke, plus a secondary-color outline at 65% of border width with 0px offset.</p>
           <p><b>Global interaction defaults:</b> primitive shells are flat and stationary. No shell shadow, hover/press movement, or transition is part of the default contract; explicitly registered inner-icon effects must remain isolated and honor reduced motion.</p>
           <p><b>Icon presets:</b> the default production preset is 38px / 1.9 stroke standard and 24px / 2.0 compact. Current (28px / 18px) and moderate (34px / 22px) presets are opt-in. Circle icon buttons scale the large preset to 80%.</p>
           <p><b>Certification boundary:</b> This section describes the intended canonical contract. Focus, responsive layout, accessibility, and any explicitly registered inner-icon effect require browser verification before certification; primitive shells remain flat and stationary.</p>
         </div>
-      </details>
-    </section>
-    <section className="vt-confirmed-family vt-confirmed-exception-index" aria-labelledby="vt-confirmed-exception-index-title">
-      <h3 id="vt-confirmed-exception-index-title">Global Exceptions · Current Implementation + Verification Boundary</h3>
+      <h4 className="vt-confirmed-exceptions-heading" id="vt-confirmed-exception-index-title">Global Exceptions · Current Implementation + Verification Boundary</h4>
       <p>Canonical sources: <code>src/studio-ui/primitives/StudioControls.tsx</code>, <code>src/studio-ui/tokens.ts</code>, and <code>src/styles/studio-control-system.css</code>. Named size exceptions are registered in <code>STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS</code>; effective CSS can diverge from token metadata.</p>
       <ul>
         <li><strong>BASE SIZE LATTICE:</strong> standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
@@ -450,6 +448,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <li><strong>VERIFICATION BOUNDARY:</strong> source text and source tests do not certify the live deployment. Verify standard/compact dimensions, effective shadows/transforms, selected/disabled/loading states, keyboard focus, dropdown stacking, narrow layouts, and reduced motion in a browser.</li>
       </ul>
       <p><strong>Audit status:</strong> this library records the canonical global defaults. A primitive is not certified until its production rendering, tokens, effective CSS, and responsive/accessibility behavior agree with this contract.</p>
+      </details>
     </section>
     <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Single-line input typography remains 38px standard / 24px compact / 10px micro across all label variants.",
