@@ -1621,6 +1621,63 @@ export const StudioTopSplitModule: React.FC<StudioTopSplitModuleProps> = ({
 }
 StudioTopSplitModule.displayName = "StudioTopSplitModule"
 
+/** Collapsible counterpart to StudioTopSplitModule; native details/summary keeps keyboard behavior. */
+export interface StudioCollapsingSplitModuleProps extends Omit<React.HTMLAttributes<HTMLDetailsElement>, "title" | "onToggle"> {
+  title: React.ReactNode
+  children?: React.ReactNode
+  split?: StudioTopSplitModuleSplit
+  startIcon?: React.ReactNode
+  endIcon?: React.ReactNode
+  sizeVariant?: StudioTopSplitModuleSize
+  tone?: "default" | "accent"
+  defaultOpen?: boolean
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+}
+
+export const StudioCollapsingSplitModule: React.FC<StudioCollapsingSplitModuleProps> = ({
+  title, children, split = "double", startIcon, endIcon, sizeVariant = "compact",
+  tone = "default", defaultOpen = false, open, onOpenChange, className, ...rest
+}) => {
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen)
+  const isOpen = open ?? internalOpen
+  const headSplit = split === "none" ? "none" : split
+  return (
+    <details
+      {...rest}
+      open={isOpen}
+      data-vt-studio-control="true"
+      data-vt-studio-collapsing-split-module="true"
+      data-size={sizeVariant}
+      data-tone={tone}
+      className={studioClasses("vt-studio-top-split-module", "vt-studio-collapsing-split-module", className)}
+      onToggle={event => {
+        const nextOpen = event.currentTarget.open
+        if (open === undefined) setInternalOpen(nextOpen)
+        onOpenChange?.(nextOpen)
+      }}
+    >
+      <summary
+        className="vt-studio-top-split-module__head vt-studio-collapsing-split-module__head"
+        data-split={headSplit}
+      >
+        {(split === "left" || split === "double") ? (
+          <span className="vt-studio-top-split-module__rail" data-rail="start" aria-hidden="true">{startIcon}</span>
+        ) : null}
+        <span className="vt-studio-top-split-module__title">{title}</span>
+        {(split === "right" || split === "double") ? (
+          <span className="vt-studio-top-split-module__rail" data-rail="end" aria-hidden="true">{endIcon ?? <ChevronDown aria-hidden="true" />}</span>
+        ) : (
+          <span className="vt-studio-collapsing-split-module__disclosure" aria-hidden="true"><ChevronDown /></span>
+        )}
+      </summary>
+      {children != null && isOpen ? <div className="vt-studio-top-split-module__body">{children}</div> : null}
+    </details>
+  )
+}
+StudioCollapsingSplitModule.displayName = "StudioCollapsingSplitModule"
+
+
 
 
 StudioCircleIconButton.displayName = "StudioCircleIconButton"
