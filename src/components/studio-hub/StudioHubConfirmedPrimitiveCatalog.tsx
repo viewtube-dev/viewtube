@@ -47,6 +47,7 @@ import {
 } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-catalogs.css"
 import "../../styles/studio-confirmed-catalog-modules.css"
+import { ConfirmedFamilyModule } from "./ConfirmedCatalogModules"
 
 type Size = "44px" | "28px"
 
@@ -417,8 +418,68 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
   )
 }
 
+type ConfirmedCatalogFamilyName =
+  | "Text Fields"
+  | "Buttons"
+  | "Modules & Frames"
+  | "Dropdowns"
+  | "Controls"
+  | "Text Controls"
+  | "Compounds"
+  | "Compositions"
+
+const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
+  "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
+  "Controls", "Text Controls", "Compounds", "Compositions",
+]
+
+const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
+  if (!React.isValidElement(node)) return "Controls"
+  const props = node.props as { title?: unknown }
+  const title = typeof props.title === "string" ? props.title : ""
+  const componentName = typeof node.type === "function"
+    ? (node.type.displayName || node.type.name || "")
+    : ""
+  if (/Studio Text Input|Studio Text Area|Studio Text Box/.test(title)) return "Text Fields"
+  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Split-left Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily") return "Buttons"
+  if (/Top Split Module|Upload Frame/.test(title)) return "Modules & Frames"
+  if (/Dropdown/.test(title)) return "Dropdowns"
+  if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily") return "Controls"
+  if (/Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily") return "Text Controls"
+  if (/Split Accordion/.test(title)) return "Compounds"
+  if (/Publishing Card|Brain Status LED Badges/.test(title)) return "Compositions"
+  return "Controls"
+}
+
+const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const nodes = React.Children.toArray(children)
+  const defaults: React.ReactNode[] = []
+  const grouped = new Map<ConfirmedCatalogFamilyName, React.ReactNode[]>(
+    CONFIRMED_CATALOG_FAMILIES.map((family) => [family, []]),
+  )
+  for (const node of nodes) {
+    if (React.isValidElement(node) && (node.props as { "data-vt-confirmed-family"?: string })["data-vt-confirmed-family"] === "defaults") {
+      defaults.push(node)
+      continue
+    }
+    grouped.get(classifyConfirmedCatalogItem(node))?.push(node)
+  }
+  return (
+    <div className="vt-confirmed-catalog">
+      {defaults}
+      <div className="vt-confirmed-family-grid">
+        {CONFIRMED_CATALOG_FAMILIES.map((family) => (
+          <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group">
+            {grouped.get(family)}
+          </ConfirmedFamilyModule>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
-  <div className="vt-confirmed-catalog">
+  <ConfirmedCatalogFamilyGroups>
     <details className="vt-confirmed-family vt-confirmed-defaults-combined" data-vt-confirmed-family="defaults">
       <summary className="vt-confirmed-defaults-heading" id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</summary>
       <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 12px micro · 4.09px / 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
@@ -1072,7 +1133,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
       </div>
     </Family>
-  </div>
+  </ConfirmedCatalogFamilyGroups>
 )
 
 
