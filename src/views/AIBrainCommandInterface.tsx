@@ -1788,6 +1788,7 @@ const AIBrainCommandInterface: React.FC = () => {
             }}
             placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
             className="max-h-36 min-h-[56px] min-w-0 flex-1 resize-y"
+            style={{ minHeight: 56 }}
             aria-label="Ask ViewTube Brain"
             aria-describedby="brain-composer-help"
            />
