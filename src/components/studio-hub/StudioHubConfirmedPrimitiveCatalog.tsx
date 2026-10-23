@@ -2,6 +2,7 @@ import React from "react"
 import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
 import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
+import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
