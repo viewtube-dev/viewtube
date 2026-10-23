@@ -34,7 +34,8 @@ export type StudioSideToggleProps = CommonProps & {
 export type StudioDoubleSideToggleProps = {
   left: CommonProps;
   right: CommonProps;
-  variant?: "default" | "v2" | "v3" | "v4";
+  variant?: "v1" | "v2";
+  rightAppearance?: "primary" | "secondary" | "black-primary-text";
   size?: StudioControlSize;
   className?: string;
 };
@@ -105,18 +106,21 @@ export function StudioSideToggle(props: StudioSideToggleProps) {
   </StudioSplitShell>;
 }
 
-export function StudioDoubleSideToggle({ left, right, variant = "default", size = "standard", className }: StudioDoubleSideToggleProps) {
-  const noDivider = variant === "v2" || variant === "v4";
-  const contentWidth = variant === "v3" || variant === "v4";
-  const longestWord = (options: readonly string[]) => options.flatMap(option => option.split(/\s+/)).reduce((longest, word) => word.length > longest.length ? word : longest, "");
+export function StudioDoubleSideToggle({ left, right, variant = "v1", rightAppearance = "primary", size = "standard", className }: StudioDoubleSideToggleProps) {
+  const noDivider = variant === "v2";
+  const rightAppearanceStyle: StudioToggleAppearance = rightAppearance === "secondary"
+    ? { fillColor: "var(--pair-b, #ff7f6b)", textColor: "#000" }
+    : rightAppearance === "black-primary-text"
+      ? { fillColor: "#000", textColor: "var(--pair-a, #36e0f6)" }
+      : { fillColor: "var(--pair-a, #36e0f6)", textColor: "#000" };
   return <div className={["vt-studio-value-toggle", "vt-studio-value-toggle--double", className].filter(Boolean).join(" ")}
-    data-vt-studio-control="true" data-vt-studio-value-toggle="double" data-variant={variant} data-size={size}>
-    <div className="vt-studio-value-toggle__double-side" data-content-width={contentWidth ? "true" : undefined}>
-      <StudioSideToggle {...left} size={size} arrowSide="left" reserveLabel={contentWidth ? longestWord(left.options) : undefined} className="vt-studio-value-toggle--nested" />
+    data-vt-studio-control="true" data-vt-studio-value-toggle="double" data-variant={variant} data-right-appearance={rightAppearance} data-size={size}>
+    <div className="vt-studio-value-toggle__double-side">
+      <StudioSideToggle {...left} size={size} arrowSide="left" className="vt-studio-value-toggle--nested" />
     </div>
     {!noDivider && <span className="vt-studio-value-toggle__divider" aria-hidden="true" />}
-    <div className="vt-studio-value-toggle__double-side" data-content-width={contentWidth ? "true" : undefined}>
-      <StudioSideToggle {...right} size={size} arrowSide="right" reserveLabel={contentWidth ? longestWord(right.options) : undefined} className="vt-studio-value-toggle--nested" />
+    <div className="vt-studio-value-toggle__double-side">
+      <StudioSideToggle {...right} appearance={{ ...right.appearance, ...rightAppearanceStyle }} size={size} arrowSide="right" className="vt-studio-value-toggle--nested" />
     </div>
   </div>;
 }
@@ -227,4 +231,4 @@ export function StudioBarToggle({
   </StudioSplitShell>;
 }
 
-export const STUDIO_VALUE_TOGGLE_VARIANTS = ["default", "v2", "v3", "v4"] as const;
+export const STUDIO_VALUE_TOGGLE_VARIANTS = ["v1", "v2"] as const;
