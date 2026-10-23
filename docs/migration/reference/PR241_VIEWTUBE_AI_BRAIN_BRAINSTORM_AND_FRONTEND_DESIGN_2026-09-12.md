@@ -985,3 +985,19 @@ Work in small PRs against `master/consolidated-feature-integration`; do not mark
 As of this addendum, source review confirms that the shared chat compounds and turn-evidence disclosures are present in the integration branch. It does **not** establish full behavior or visual certification. Recent CI for the Brain UI follow-up had the Brain quality-loop, production build and local-smoke jobs passing, while source-governance and focused-contract jobs failed and static-quality reported test/dependency/type errors. The precise failures must be rechecked against the current run before being called fixed; some failures originate in the shared Studio Controls contract and should not be disguised as Brain regressions.
 
 The current execution plan remains [AI Brain Chat — Studio Primitive Build Plan](../../brain/AI_BRAIN_CHAT_STUDIO_PRIMITIVES_BUILD_PLAN_2026-10-23.md) and [AI Brain Toolbox + Chat Overhaul](../../brain/AI_BRAIN_TOOLBOX_CHAT_REDESIGN_AND_IMPLEMENTATION_PLAN_2026-10-19.md). This addendum connects their current implementation to PR #241 without treating the historical donor as live source authority.
+
+
+---
+
+## Implementation status update — 2026-10-23
+
+The following follow-up work is now merged into `master/consolidated-feature-integration`:
+
+- [#844 — PR241 design-to-implementation bridge](https://github.com/viewtube-dev/viewtube/pull/844): connects historical product ideas to current AI Brain source owners and records the next implementation gates.
+- [#845 — chat primitive test dependency fix](https://github.com/viewtube-dev/viewtube/pull/845): removes the unsupported DOM-testing dependency from chat primitive render-contract tests.
+- [#846 — evidence and context provenance restore coverage](https://github.com/viewtube-dev/viewtube/pull/846): adds round-trip assertions for request constraints, prompt evidence IDs/records, context revision and creator-context snapshot.
+- [#848 — remaining Studio control migration](https://github.com/viewtube-dev/viewtube/pull/848): migrates quick-action cards, profile coverage actions and the context-correction dialog to canonical Studio controls.
+
+The current open follow-up is [#849 — standardize workflow and learning inbox controls](https://github.com/viewtube-dev/viewtube/pull/849), which migrates workflow actions, live handoff actions, evidence-tracing controls and governed learning review/promotion actions.
+
+**Verification caveat remains:** merges are not a substitute for green CI or browser certification. The latest observed runs still reported shared Studio Controls export/type failures and a source-governance assertion; production build, local smoke and Brain quality-loop passed on the recent control-sweep run, while full-suite was still running at the last check. Re-check the current run before treating any gate as resolved. Keyboard/screen-reader behavior, mobile virtual-keyboard/scroll behavior and the end-to-end turn lineage still require explicit certification.
