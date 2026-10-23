@@ -34,7 +34,7 @@ function SpecimenRow({ title, count, size }: {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const items = React.useMemo(() => makeItems(count), [count]);
   return (
-    <div className="vt-confirmed-accordion-specimen" data-size={size} data-count={count} style={{ display: "grid", gap: 4, marginBlock: 4 }}>
+    <div className="vt-confirmed-accordion-specimen" data-size={size} data-count={count} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 4, marginBlock: 4, width: "100%", minWidth: 0 }}>
       <small style={{ display: "block", fontWeight: 1000, fontSize: 11, textTransform: "uppercase" }}>{title}</small>
       <StudioSplitAccordion
         sizeVariant={size}
@@ -48,7 +48,7 @@ function SpecimenRow({ title, count, size }: {
 }
 
 export const StudioSplitAccordionCatalogSpecimens: React.FC = () => (
-  <div data-vt-confirmed-primitive="StudioSplitAccordion" className="grid gap-1">
+  <div data-vt-confirmed-primitive="StudioSplitAccordion" className="grid w-full min-w-0 max-w-none gap-1" style={{ gridTemplateColumns: "minmax(0, 1fr)", width: "100%", minWidth: 0, maxWidth: "none" }}>
     <SpecimenRow title="44px Standard · 3 sections" count={3} size="standard" />
     <SpecimenRow title="44px Standard · 4 sections" count={4} size="standard" />
     <SpecimenRow title="44px Standard · 5 sections" count={5} size="standard" />

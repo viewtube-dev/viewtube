@@ -56,9 +56,11 @@ export function easeTrainInverse(y: number): number {
   return (low + high) / 2;
 }
 
-export function openPanelWidth(innerWidth: number, itemCount: number, face: number): number {
+export function openPanelWidth(innerWidth: number, itemCount: number, face: number, stroke = 0): number {
   if (itemCount <= 0) return 0;
-  return Math.max(face * 2, innerWidth - itemCount * face);
+  // Inter-section dividers live in the track gap, outside each square cell width.
+  const dividerWidth = Math.max(0, itemCount - 1) * Math.max(0, stroke);
+  return Math.max(face, innerWidth - itemCount * face - dividerWidth);
 }
 
 type FrameState = { widths: number[]; scrollLeft: number; labelVisible: boolean[] };
@@ -118,7 +120,11 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
         if (content) content.dataset.labelVisible = frame.labelVisible[index] ? "true" : "false";
       });
       const track = trackRef.current;
-      if (track) track.style.width = `${frame.widths.reduce((sum, width) => sum + width, 0)}px`;
+      if (track) {
+        const styles = rootRef.current ? window.getComputedStyle(rootRef.current) : null;
+        const stroke = parseFloat(styles?.getPropertyValue("--vt-sa-stroke") ?? "") || 0;
+        track.style.width = `${frame.widths.reduce((sum, width) => sum + width, 0) + Math.max(0, frame.widths.length - 1) * stroke}px`;
+      }
       const viewport = viewportRef.current;
       if (viewport) viewport.scrollLeft = frame.scrollLeft;
     }, [items]);
@@ -127,10 +133,12 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
       const { face, inner } = measure();
       const count = items.length;
       if (count === 0) return { widths: [], scrollLeft: 0, labelVisible: [] };
-      const panel = openPanelWidth(inner, count, face);
+      const styles = rootRef.current ? window.getComputedStyle(rootRef.current) : null;
+      const stroke = parseFloat(styles?.getPropertyValue("--vt-sa-stroke") ?? "") || 0;
+      const panel = openPanelWidth(inner, count, face, stroke);
       const widths = items.map((_, i) => face + (i === index ? panel : 0));
-      const total = widths.reduce((sum, width) => sum + width, 0);
-      const center = widths.slice(0, index).reduce((sum, width) => sum + width, 0) + (widths[index] ?? face) / 2;
+      const total = widths.reduce((sum, width) => sum + width, 0) + Math.max(0, count - 1) * stroke;
+      const center = widths.slice(0, index).reduce((sum, width) => sum + width, 0) + index * stroke + (widths[index] ?? face) / 2;
       const scrollLeft = total <= inner ? 0 : Math.max(0, Math.min(total - inner, center - inner / 2));
       return { widths, scrollLeft, labelVisible: items.map((_, i) => i === index) };
     }, [items, measure]);
@@ -151,7 +159,9 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
 
       const { face, inner } = measure();
       const count = items.length;
-      const panel = openPanelWidth(inner, count, face);
+      const styles = rootRef.current ? window.getComputedStyle(rootRef.current) : null;
+      const stroke = parseFloat(styles?.getPropertyValue("--vt-sa-stroke") ?? "") || 0;
+      const panel = openPanelWidth(inner, count, face, stroke);
       const canonicalFromWidths = items.map((_, i) => face + (i === previous ? panel : 0));
       const savedWidths = currentWidthsRef.current;
       const fromWidths = savedWidths.length === count
