@@ -29,9 +29,9 @@ describe("StudioDisclosureSummary", () => {
 
 describe("Brain disclosure consumers", () => {
   it("uses the shared summary primitive for runtime and evidence disclosures", () => {
-    expect((runtimePanel.match(/<StudioDisclosureSummary\\b/g) || []).length).toBe(3)
+    expect((runtimePanel.match(/<StudioDisclosureSummary\b/g) || []).length).toBe(3)
     expect(runtimePanel).not.toContain("<summary")
-    expect((evidenceDrawer.match(/<StudioDisclosureSummary\\b/g) || []).length).toBe(3)
+    expect((evidenceDrawer.match(/<StudioDisclosureSummary\b/g) || []).length).toBe(3)
     expect(evidenceDrawer).not.toContain("<summary")
   })
 })
