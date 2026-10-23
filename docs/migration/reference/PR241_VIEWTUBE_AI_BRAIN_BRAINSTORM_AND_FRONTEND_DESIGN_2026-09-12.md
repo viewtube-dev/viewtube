@@ -891,3 +891,97 @@ Regression tests cover recent-chain projection and verified output navigation. *
 Static review found a UI truthfulness defect: the readiness badge selected its green state from `dataStatus === ready` even when the same diagnostic snapshot reported stale or missing datasets. The page now uses a small pure presentation resolver so stale data becomes a warning, missing inputs prevent a green state, and fully synced/complete data is green only when stale and missing counts are both zero.
 
 Regression tests cover stale-ready, missing-ready, clean-ready, partial, and unavailable states. This is a readiness-label correction, not a claim that model confidence is automatically calibrated or downgraded; that requires an evidence-backed confidence contract. CI and live accessibility checks remain pending.
+
+---
+
+# Current implementation bridge — AI Brain UI integration (2026-10-23)
+
+> **Purpose:** Connect the historical PR #241 product ideas to the current integration-branch implementation and identify the next UI work that is still justified by source. This addendum does not rewrite the historical audit above. Old maturity percentages, “current state” claims, and donor branch assumptions remain historical only.
+
+## 1. Current implementation anchors
+
+The AI Brain page should remain one creator workspace over canonical Brain services and Studio Controls. It must not grow a parallel chat runtime, prompt catalog, evidence store, profile store, or custom design system.
+
+| User-facing capability | Current source owner | Integration rule |
+|---|---|---|
+| Main conversation, raw prompt, restore, retry, feedback and learning capture | `src/views/AIBrainCommandInterface.tsx`, `src/services/aiBrainConversationStore.ts`, `src/services/brain/BrainConversationController.ts` | Preserve raw user text and stable turn IDs. Render-safe copy is a presentation derivative only. |
+| Shared chat states and response composition | `src/components/brain/BrainChatPrimitives.tsx` | Reuse `BrainChatMessageShell`, `BrainResponseSectionHeader`, `BrainChatActionButtonGroup`, `BrainPromptLibraryItem`, `BrainComposerAccessoryRow`, and `BrainResponseLayout`. These are Brain compositions, not replacements for Studio primitives. |
+| Prompt and capability discovery | `src/components/brain/BrainCapabilityBrowser.tsx`, `src/services/brain/BrainCapabilityRegistry.ts`, existing prompt-card builders/registry | Availability and evidence requirements must come from the registry and current controls. Selecting a prompt uses the existing handler; opening a capability is not publication approval. |
+| Evidence shown for a particular turn | `src/components/brain/BrainTurnEvidenceRibbon.tsx`, `src/components/brain/BrainClaimEvidence.tsx`, `src/services/brain/EvidenceRecord.ts` | Keep prepared, cited, unresolved, missing, stale, partial, and conflicting evidence distinct. Only verified prompt records may be presented as the exact evidence supplied to the model. |
+| Data readiness and missing analytics inputs | `BrainDataReadiness` in `src/views/AIBrainCommandInterface.tsx`, `src/views/brainDataReadiness.ts`, canonical analytics/VT-SYNC diagnostics | Render real missing-input and freshness states; never infer “ready” from absent diagnostics or convert missing metrics to zero. |
+| Context used and creator corrections | `BrainContextUsedDrawer` in `src/views/AIBrainCommandInterface.tsx`, `src/components/brain/BrainContextRail.tsx`, `src/components/brain/BrainContextCorrectionDialog.tsx`, `src/services/brain/CreatorContextResolver.ts` | “Available context” and “context used this turn” must remain separate. Corrections are proposals routed through the existing governance path, not silent profile mutation. |
+| Runtime and output provenance | `src/components/brain/BrainRuntimePanel.tsx`, `src/services/brain/BrainRuntimeSnapshot.ts`, `src/services/brain/BrainTrace.ts`, canonical ToolReceipt/ContentBuild owners | Show a saved-output card only when its receipt and referenced asset resolve. A request, tool handoff, or generation start is not proof of a saved result. |
+| Learning receipt and review | Learning receipt card in `src/views/AIBrainCommandInterface.tsx`, existing Brain learning governance services | A visible receipt must identify the canonical entry and status. Review/correction/rejection is not durable promotion unless the governance owner confirms promotion. |
+| Global control visuals and interaction semantics | `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/index.ts`, `src/studio-ui/tokens.ts`, `src/styles/studio-control-system.css` | Use real exported controls, registered token exceptions and confirmed-library specimens. Do not create Brain-only button, input, badge, spacing or focus implementations. |
+
+## 2. Implementation already landed — do not rebuild
+
+The following merged PRs provide the present foundation and should be treated as source history, not as proof of full browser certification:
+
+- [#618](https://github.com/viewtube-dev/viewtube/pull/618) — context and evidence provenance UI.
+- [#621](https://github.com/viewtube-dev/viewtube/pull/621) — accessible controls and registry-backed capability launcher.
+- [#649](https://github.com/viewtube-dev/viewtube/pull/649) and [#667](https://github.com/viewtube-dev/viewtube/pull/667) — prompt evidence identity and rich evidence provenance.
+- [#674](https://github.com/viewtube-dev/viewtube/pull/674) — provider-neutral model gateway boundary.
+- [#828](https://github.com/viewtube-dev/viewtube/pull/828) and [#829](https://github.com/viewtube-dev/viewtube/pull/829) — shared chat compositions, prompt-library items, action groups and conversation follow behavior.
+- [#831](https://github.com/viewtube-dev/viewtube/pull/831) — defined conversation viewport/follow refs.
+- [#833](https://github.com/viewtube-dev/viewtube/pull/833) and [#835](https://github.com/viewtube-dev/viewtube/pull/835) — shared assistant response layout and TSX correction.
+- [#836](https://github.com/viewtube-dev/viewtube/pull/836) and [#838](https://github.com/viewtube-dev/viewtube/pull/838) — further Studio control alignment across the Brain shell.
+
+These changes do not by themselves establish that restore filters survive, every output card resolves to a receipt, every interaction works at mobile widths, or keyboard/screen-reader behavior has been certified.
+
+## 3. Front-end integration principles
+
+### A. Make the conversation the stable center
+
+- Keep one conversation viewport and one composer. The viewport owns vertical scrolling; the composer remains available without covering the final turn, navigation, or mobile keyboard.
+- Auto-follow only when the creator is already near the bottom, on a new submitted prompt, or when the creator explicitly returns to latest. Do not pull the viewport away from older messages during passive updates.
+- Keep the raw submitted text immutable in storage. Any sanitization or shortening belongs to display-only copy and must not change learning, evidence selection, or restored conversation content.
+- Give every turn a stable ID and make its evidence, context, receipt, and learning disclosures refer to that same ID.
+
+### B. Use one evidence grammar across all AI surfaces
+
+- Use the same evidence vocabulary in chat responses, analytics answers, generated assets, runtime panels and follow-up tools: **prepared**, **cited**, **unresolved**, **missing**, **stale**, **partial**, **conflicting**, and **identity unverified**.
+- Keep “evidence available to the system” separate from “evidence supplied to this model call,” and keep both separate from “evidence cited by the answer.”
+- Every evidence link should carry canonical evidence ID, source/snapshot ID, metric, window, channel/project scope and recorded selection constraints where available. Opening the destination must not silently discard filters.
+- A missing or empty selection should explain exactly what is unknown: “no items selected” is not the same as “the source contains no records.” An invalid manifest must withhold record-level details rather than showing a substitute evidence set.
+- Use claim-level evidence only where the claim is actually backed by the referenced records. Avoid duplicating a large evidence panel under every paragraph; show a compact answer-level summary with expandable claim-level detail.
+
+### C. Make context and correction explainable
+
+- Provide two clear views: **context available** (profile/project/selection data that could be used) and **context used for this turn** (the exact recorded envelope or its canonical references).
+- Label each context entry as creator-confirmed, inferred, temporary, or unavailable only when that state exists in the canonical record. Do not infer the label from prose or UI color.
+- Corrections should preview the old value and proposed value, explain the scope, and show pending/accepted/rejected status from the governance response. A correction must not appear as a saved fact before the canonical owner confirms it.
+- Preserve context revision, channel/project/content-build IDs and turn ID across corrections and restored sessions so stale context is detectable.
+
+### D. Treat actions and results as an auditable state machine
+
+- Keep action states explicit: **available → prepared → running → completed/failed → saved/unsaved → reviewed/approved** as supported by the canonical owner. Do not collapse these into a green badge.
+- Every generated output card must resolve to a canonical output asset/version and ToolReceipt. If the receipt is absent, unresolved or points to missing assets, show a truthful blocked/unverified state rather than a success card.
+- Retry may repeat generation but must not repeat an external side effect unless the canonical operation contract explicitly permits it.
+- A tool handoff is review-only by default. Publishing approval, scheduling and durable learning promotion remain distinct governed actions.
+- Learning UI should separate feedback on one answer, a proposed learning candidate, review status and promoted durable knowledge.
+
+### E. Accessibility is a behavior contract
+
+- Use native buttons, inputs, disclosure semantics and headings wherever possible. Every icon-only action needs a stable accessible name; selected states use `aria-pressed` or an equivalent semantic state, and disabled actions expose a readable reason nearby.
+- Ensure focus remains predictable when drawers/dialogs open and close; restore focus to the triggering control. Escape closes transient surfaces where appropriate, without losing unsaved creator input.
+- Announce only meaningful turn/status changes through a polite live region; do not repeatedly announce the entire transcript. Streaming text must not trap keyboard focus.
+- Support keyboard-only use, mobile touch targets, narrow widths, landscape, zoom/reflow, reduced motion and safe-area/virtual-keyboard layouts.
+- Keep color supplemental: labels and text must communicate partial, stale, unavailable, error and success states without relying on color alone.
+
+## 4. Next implementation and verification phases
+
+Work in small PRs against `master/consolidated-feature-integration`; do not mark a phase complete from a merged PR alone.
+
+1. **CI and test-contract repair.** Make the new chat composition tests use dependencies actually installed by this repository, or add and lock the required test dependencies intentionally. Do not suppress typecheck errors. Separate known Studio-control contract failures from Brain-specific failures.
+2. **Conversation restore contract.** Add a regression test proving raw text, evidence manifest IDs, evidence selection constraints, and context revision survive save → restore → next turn. If filters are not currently persisted, add them to the existing turn metadata owner rather than a new store.
+3. **Output-card lineage.** Audit each visible “saved/generated” result path against ToolReceipt, output asset/version and ContentBuild IDs. Add a canonical link or explicit unresolved state; do not invent receipts.
+4. **Truthful states and action feedback.** Verify empty, unavailable, stale, partial, mismatched, interrupted, retrying, completed-but-unsaved, and rejected-learning states. All states must use canonical status sources.
+5. **Accessibility and responsive certification.** Run focused tests, typecheck, production build, keyboard-only flows, screen-reader semantics, reduced-motion checks, mobile viewport/virtual keyboard and scroll-follow tests, and console/network inspection. Capture screenshots at representative mobile and desktop widths.
+6. **Final cross-system acceptance.** Follow one real turn from raw prompt through prompt evidence manifest, response citations, context snapshot, action receipt/output reference, creator feedback and learning governance. Record IDs at every step and report any unresolved edge explicitly.
+
+## 5. Current verification caveat
+
+As of this addendum, source review confirms that the shared chat compounds and turn-evidence disclosures are present in the integration branch. It does **not** establish full behavior or visual certification. Recent CI for the Brain UI follow-up had the Brain quality-loop, production build and local-smoke jobs passing, while source-governance and focused-contract jobs failed and static-quality reported test/dependency/type errors. The precise failures must be rechecked against the current run before being called fixed; some failures originate in the shared Studio Controls contract and should not be disguised as Brain regressions.
+
+The current execution plan remains [AI Brain Chat — Studio Primitive Build Plan](../../brain/AI_BRAIN_CHAT_STUDIO_PRIMITIVES_BUILD_PLAN_2026-10-23.md) and [AI Brain Toolbox + Chat Overhaul](../../brain/AI_BRAIN_TOOLBOX_CHAT_REDESIGN_AND_IMPLEMENTATION_PLAN_2026-10-19.md). This addendum connects their current implementation to PR #241 without treating the historical donor as live source authority.
