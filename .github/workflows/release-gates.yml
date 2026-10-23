@@ -34,6 +34,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run audit:confirmed-catalog
       - run: npm run check:src-governance
       - run: npm run test:confirmed-library-layout
       - run: node --test scripts/audit/studio-control-motion.test.mjs
