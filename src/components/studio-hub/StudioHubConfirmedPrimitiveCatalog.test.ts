@@ -111,7 +111,7 @@ describe("confirmed Studio disclosure summary primitive", () => {
     const index = read("src/studio-ui/index.ts")
     expect(index).toContain("StudioDisclosureSummary")
     expect(catalog).toContain("StudioDisclosureSummary")
-    expect(catalog).toContain('title="Disclosure Summary · Standard + Compact"')
+    expect(catalog).toContain('title="Disclosure Summary · Standard + Compact + Structured"')
     expect(catalog).toContain('data-vt-library-component="StudioDisclosureSummary"')
     expect(catalog).toContain('appearanceVariant="structured"')
   })
