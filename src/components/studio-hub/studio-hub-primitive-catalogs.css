@@ -3327,3 +3327,17 @@
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
 }
+
+
+/* Dense, collapsed Global Defaults + Exceptions disclosure. */
+.vt-confirmed-defaults-details > summary {
+  cursor: pointer; font-size: 12px; font-weight: 1000; text-transform: uppercase;
+}
+.vt-confirmed-defaults-dense { font-size: 11px; line-height: 1.25; }
+.vt-confirmed-defaults-dense li,
+.vt-confirmed-defaults-dense span,
+.vt-confirmed-defaults-dense p { font-size: 11px; line-height: 1.25; }
+.vt-confirmed-defaults-dense .vt-confirmed-size-card { gap: 2px; padding: 4px; }
+.vt-confirmed-defaults-dense .vt-confirmed-global-grid { gap: 4px; }
+.vt-confirmed-vertical-word-toggle-pair-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.vt-confirmed-vertical-word-toggle-pair-row > .vt-confirmed-vertical-word-toggle-specimen { flex: 1 1 0; min-width: 0; }
