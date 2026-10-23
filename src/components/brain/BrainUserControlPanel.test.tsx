@@ -8,6 +8,7 @@ describe("BrainUserControlPanel Studio controls", () => {
   const html = renderToStaticMarkup(
    <BrainUserControlPanel open channelId="channel-1" onClose={() => undefined} />,
   )
+  expect(html).toContain('role="region" aria-label="Brain user controls"')
   expect(html).toContain('role="checkbox"')
   expect(html).toContain('data-vt-studio-control="true"')
   expect(html).toContain('aria-labelledby=')
