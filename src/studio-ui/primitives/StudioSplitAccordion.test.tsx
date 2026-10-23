@@ -69,7 +69,9 @@ describe("StudioSplitAccordion", () => {
 
   it("keeps a minimum open panel and uses CSS-measured Studio sizing", () => {
     expect(openPanelWidth(600, 3, 44)).toBe(468);
-    expect(openPanelWidth(240, 10, 44)).toBe(88);
+    expect(openPanelWidth(240, 10, 44)).toBe(44);
+    expect(openPanelWidth(600, 3, 44, 3)).toBe(462);
+    expect(openPanelWidth(120, 10, 10, 1)).toBe(10);
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-split-accordion.css"), "utf8");
     expect(css).toContain("--vt-sa-height: 44px");
     expect(css).toContain("--vt-sa-height: 28px");
@@ -84,6 +86,11 @@ describe("StudioSplitAccordion", () => {
     expect(css).toContain("var(--vt-studio-control-accent, var(--pair-a, #36e0f6))");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(css).toContain("transition: opacity 140ms linear");
+    expect(css).toContain("gap: var(--vt-sa-stroke); background: #000;");
+    expect(css).toContain("border-left: var(--vt-sa-stroke) solid #000;");
+    expect(css).toContain("flex: 0 0 var(--vt-sa-face)");
+    expect(css).toContain("overflow-x: auto; overflow-y: hidden;");
+    expect(css).not.toContain("border-left: var(--vt-sa-stroke) solid #000;\n}");
     expect(css).toContain(".vt-studio-split-accordion__content-inner { transition: none; }");
     expect(css).not.toContain("box-shadow:");
     const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitAccordion.tsx"), "utf8");
