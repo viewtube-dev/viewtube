@@ -1,9 +1,11 @@
 import React, { useMemo, useState } from "react"
-import { ArrowRight, Search, ShieldCheck, Sparkles } from "lucide-react"
+import { ShieldCheck, Sparkles } from "lucide-react"
 import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS, BRAIN_CAPABILITY_REGISTRY } from "../../services/brain/BrainCapabilityRegistry"
 import type { BrainCapabilityDefinition } from "../../types"
 import type { BrainUserControls } from "../../services/brain/BrainUserControls"
+import { StudioTextInput, StudioSplitLeftButton, StudioButton } from "../../studio-ui"
+import { BrainChatStatusBadge } from "./BrainChatPrimitives"
 
 export type BrainCapabilityAvailability = {
  status: "ready" | "needs-channel-data" | "needs-project-context" | "blocked"
@@ -77,19 +79,9 @@ export const BrainCapabilityBrowser: React.FC<{
     <h2 id={headingId} className="text-[12px] font-[1000] uppercase leading-4 tracking-[0.08em]">Capability Browser</h2>
     <p className="mt-1 text-[10px] font-bold leading-4 text-black/70">Find a Brain capability and prepare a guided request. Launching a prompt does not bypass evidence checks or permissions.</p>
    </div>
-   <label className="m-2 flex min-h-11 items-center gap-2 rounded-[7px] border-[2px] border-black bg-white px-2 focus-within:ring-[3px] focus-within:ring-black">
-    <Search size={15} aria-hidden="true" />
-    <span className="sr-only">Search Brain capabilities</span>
-    <input
-     type="search"
-     value={query}
-     onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }}
-     placeholder="Search capabilities, topics, or intent…"
-     className="min-w-0 flex-1 bg-transparent py-2 text-xs font-bold text-black outline-none"
-     aria-label="Search Brain capabilities"
-     aria-controls={`${headingId}-results`}
-    />
-   </label>
+   <div className="p-2">
+    <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search capabilities, topics, or intent…" className="w-full min-w-0" aria-label="Search Brain capabilities" aria-controls={`${headingId}-results`} />
+   </div>
    <p className="px-3 pb-1 text-[10px] font-bold text-black/60" role="status" aria-live="polite">
     {capabilities.length} of {BRAIN_CAPABILITY_REGISTRY.length} capabilities
    </p>
@@ -99,21 +91,11 @@ export const BrainCapabilityBrowser: React.FC<{
      const isSelected = selectedId === capability.id
      return (
       <li key={capability.id}>
-       <button
-        type="button"
-        disabled={busy}
-        aria-pressed={isSelected}
-        onClick={() => setSelectedId(isSelected ? null : capability.id)}
-        className={`flex min-h-11 w-full items-start gap-2 rounded-[7px] border-[2px] border-black p-2 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:opacity-50 ${isSelected ? "bg-[#FFDA47]" : "bg-white hover:bg-[#36E0F6]/20"}`}
-       >
-        <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-[5px] border border-black bg-white" aria-hidden="true"><Sparkles size={14} /></span>
-        <span className="min-w-0 flex-1">
-         <span className="block text-xs font-[1000] uppercase leading-4">{capability.label}</span>
-         <span className="mt-0.5 block text-xs font-bold leading-4 text-black/65">{capability.description}</span>
-         <span className={`mt-1 inline-flex rounded-[4px] border border-black px-1.5 py-0.5 text-[9px] font-black uppercase ${availability.status === "ready" ? "bg-[#C0F240]" : availability.status === "blocked" ? "bg-[#FA618A]" : "bg-[#FFDA47]"}`}>{availability.label}</span>
-        </span>
-        <ArrowRight size={14} className="mt-1 shrink-0" aria-hidden="true" />
-       </button>
+       <div className="grid min-w-0 gap-1">
+        <StudioSplitLeftButton sizeVariant="compact" icon={<Sparkles aria-hidden="true" />} disabled={busy} selected={isSelected} aria-pressed={isSelected} onClick={() => setSelectedId(isSelected ? null : capability.id)} className="w-full min-w-0" title={capability.label}>{capability.label}</StudioSplitLeftButton>
+        <p className="px-1 text-xs font-bold leading-4 text-black/70">{capability.description}</p>
+        <div className="px-1"><BrainChatStatusBadge status={availability.status === "ready" ? "ready" : availability.status === "blocked" ? "error" : "warning"} label={availability.label} /></div>
+       </div>
       </li>
      )
     })}
@@ -125,13 +107,8 @@ export const BrainCapabilityBrowser: React.FC<{
      <p className="mt-1 text-[10px] font-bold leading-4 text-black/70">{getBrainCapabilityAvailability(selected, controls, snapshot).reason}</p>
      <p className="mt-1 text-[9px] font-bold leading-4 text-black/50">Evidence sections: {(BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS[selected.id] || []).join(", ") || "requirements not listed"}</p>
      <div className="mt-2 flex flex-wrap gap-2">
-      <button
-       type="button"
-       onClick={() => { onPrompt(capabilityPromptFor(selected)); setSelectedId(null) }}
-       disabled={busy || getBrainCapabilityAvailability(selected, controls, snapshot).status === "blocked"}
-       className="inline-flex min-h-11 items-center gap-2 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-not-allowed disabled:opacity-50"
-      ><ShieldCheck size={14} aria-hidden="true" /> Ask Brain</button>
-      {onEdit ? <button type="button" onClick={() => { onEdit(capabilityPromptFor(selected)); setSelectedId(null) }} className="min-h-11 rounded-[7px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black">Edit prompt first</button> : null}
+      <StudioSplitLeftButton sizeVariant="compact" icon={<ShieldCheck aria-hidden="true" />} onClick={() => { onPrompt(capabilityPromptFor(selected)); setSelectedId(null) }} disabled={busy || getBrainCapabilityAvailability(selected, controls, snapshot).status === "blocked"}>Ask Brain</StudioSplitLeftButton>
+      {onEdit ? <StudioButton sizeVariant="compact" tone="neutral" onClick={() => { onEdit(capabilityPromptFor(selected)); setSelectedId(null) }}>Edit prompt first</StudioButton> : null}
      </div>
     </div>
    ) : <p className="shrink-0 border-t-[2px] border-black bg-[#f8f8f4] px-3 py-2 text-[10px] font-bold text-black/55">Choose a capability to see its prerequisites and launch a request.</p>}
