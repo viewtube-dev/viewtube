@@ -1016,3 +1016,14 @@ The next UI slice now connects the structured model response to typed prompt evi
 - Regression tests were added for ID filtering, exact claim-text matching, numeric-value mismatch, verified rendering and mismatched-manifest withholding.
 
 This is a bounded first step toward claim-level citations, not a semantic verifier for causal claims, derived percentages, or qualitative statements. Those require deterministic calculations or an explicit calculation/evaluation contract. Test execution, typecheck, build and browser accessibility certification must be confirmed by CI; the existence of these tests is not evidence that they have passed.
+
+
+## Implementation status update — 2026-10-23 (action-plan tracker)
+
+The response card now has a collapsed **Track next actions** entry point backed by the existing `BrainWorkflowRunPanel` and `buildWorkflowRecommendationFromBrainResponse` rather than a duplicate workflow component.
+
+- The recommendation uses the actual response headline and key insight for its title and goal.
+- The panel is explicitly a browser-local progress tracker. It does not execute tools, publish content, or assert canonical output records.
+- Risky steps remain pending unless an authoritative `onApprovalRequested` governance callback is connected and returns approval. With no handler connected, the approval control is disabled and explains why.
+- The progress bar exposes a label, current value, and text alternative; controls use existing Studio primitives; the tracker is collapsed by default to preserve chat space.
+- The current tracker is not yet a durable shared work tray. Next, connect it to canonical workflow/ToolReceipt state and make status transitions reflect authoritative operation results rather than browser-local tracking.
