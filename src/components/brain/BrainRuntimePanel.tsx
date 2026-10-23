@@ -1,4 +1,5 @@
 import React from "react"
+import { StudioDisclosureSummary } from "../../studio-ui"
 import { Link } from "react-router-dom"
 import { buildVaultAssetHref } from "../../services/vaultAssetDeepLink"
 import {
@@ -143,9 +144,9 @@ const BrainRecentWorkTray: React.FC<{
  build: Pick<NonNullable<BrainRuntimeSnapshot["build"]>, "id" | "assetIds"> | null
 }> = ({ chains, build }) => (
  <details data-vt-brain-part="recent-work-tray" className="mt-1 rounded-[6px] border border-black/30 bg-white px-2 py-1">
-  <summary className="flex min-h-11 cursor-pointer flex-wrap items-center gap-2 text-[9px] font-[1000] uppercase underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
+  <StudioDisclosureSummary sizeVariant="standard" className="flex-wrap">
    <Workflow size={12} aria-hidden="true" /> Recent work · {chains.length}
-  </summary>
+  </StudioDisclosureSummary>
   {chains.length ? (
    <ol className="grid gap-1 py-1">
     {chains.map((chain) => {
@@ -339,9 +340,9 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
      <RuntimePill label="Unresolved chains" value={snapshot.provenance.unresolvedChainCount} />
     </div>
     <details className="mt-1 rounded-[5px] border border-black/30 bg-white px-2 py-1" data-vt-brain-part="embedded-evidence-lineage">
-     <summary className="min-h-8 cursor-pointer content-center text-[9px] font-[1000] uppercase underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+     <StudioDisclosureSummary sizeVariant="compact">
       Evidence lineage · {snapshot.provenance.unresolvedChainCount} unresolved
-     </summary>
+     </StudioDisclosureSummary>
      {snapshot.provenance.latestChain ? (
       <dl className="grid gap-1 py-1 text-[9px] leading-4 sm:grid-cols-2">
        {([
@@ -485,9 +486,9 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
      </p>
     </div>
     <details className="min-w-0 rounded-[6px] border px-2 py-1.5" style={{ borderColor: `${INK}44` }}>
-     <summary className="min-h-8 cursor-pointer content-center text-[10px] font-[1000] underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+     <StudioDisclosureSummary sizeVariant="compact">
       Inspect latest lineage
-     </summary>
+     </StudioDisclosureSummary>
      {snapshot.provenance.latestChain ? (
       <dl className="mt-2 grid gap-1 text-[10px] leading-4 sm:grid-cols-2">
        {([
