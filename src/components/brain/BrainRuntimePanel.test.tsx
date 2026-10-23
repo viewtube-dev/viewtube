@@ -249,6 +249,7 @@ describe("BrainRuntimePanel", () => {
    receiptId: "receipt-tray-1",
    traceId: "trace-tray-1",
    contentBuildId: "build-tray-1",
+   evidenceIds: [],
    outputAssetIds: ["asset-tray-1"],
    versionIds: [],
    unresolved: [],
