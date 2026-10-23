@@ -256,6 +256,7 @@ describe("AIBrainCommandInterface", () => {
   const html = renderHub()
 
   expect(html).toContain("brain-chat-scrollbar")
+  expect(html).toContain("touch-pan-y")
   expect(html).toContain('aria-label="Brain conversation"')
   expect(html).toContain('aria-label="Prompt library"')
   expect(html).toContain('aria-label="Channel context"')
@@ -266,7 +267,7 @@ describe("AIBrainCommandInterface", () => {
   const html = renderHub()
 
   expect(html).not.toContain("grid min-h-0 flex-1 gap-2 bg-white p-2")
-  expect(html).toContain("grid min-h-0 flex-1 bg-white")
+  expect(html).toContain("flex min-h-0 flex-1 flex-col overflow-hidden bg-white")
   expect(html).toContain("xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)]")
   expect(html).toContain("xl:pt-3")
   expect(html).toContain("brain-chat-scrollbar")
