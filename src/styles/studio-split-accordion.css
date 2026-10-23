@@ -8,7 +8,7 @@
   --vt-sa-font: var(--vt-studio-control-font-size, 38px);
   --vt-sa-text-stroke: var(--vt-studio-control-text-stroke, 1px);
   --vt-sa-icon: var(--vt-studio-control-icon-size, 38px);
-  --vt-sa-face: var(--vt-sa-height);
+  --vt-sa-face: calc(var(--vt-sa-height) - (2 * var(--vt-sa-stroke)));
   box-sizing: border-box;
   display: block;
   width: 100%;
@@ -22,15 +22,15 @@
 }
 .vt-studio-split-accordion[data-size="standard"] {
   --vt-sa-height: 44px; --vt-sa-stroke: 3px; --vt-sa-radius: 6px;
-  --vt-sa-font: 38px; --vt-sa-text-stroke: 1px; --vt-sa-icon: 38px; --vt-sa-face: 44px;
+  --vt-sa-font: 38px; --vt-sa-text-stroke: 1px; --vt-sa-icon: 38px; --vt-sa-face: 38px;
 }
 .vt-studio-split-accordion[data-size="compact"] {
   --vt-sa-height: 28px; --vt-sa-stroke: 2px; --vt-sa-radius: 4px;
-  --vt-sa-font: 24px; --vt-sa-text-stroke: .5px; --vt-sa-icon: 24px; --vt-sa-face: 28px;
+  --vt-sa-font: 24px; --vt-sa-text-stroke: .5px; --vt-sa-icon: 24px; --vt-sa-face: 24px;
 }
 .vt-studio-split-accordion[data-size="micro"] {
   --vt-sa-height: 12px; --vt-sa-stroke: 1px; --vt-sa-radius: 2px;
-  --vt-sa-font: 10px; --vt-sa-text-stroke: .25px; --vt-sa-icon: 10px; --vt-sa-face: 12px;
+  --vt-sa-font: 10px; --vt-sa-text-stroke: .25px; --vt-sa-icon: 10px; --vt-sa-face: 10px;
 }
 .vt-studio-split-accordion__viewport {
   width: 100%; height: 100%; overflow: hidden; touch-action: pan-y;
