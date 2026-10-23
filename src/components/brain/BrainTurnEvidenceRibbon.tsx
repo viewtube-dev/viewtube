@@ -193,13 +193,16 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
         if (record.videoId) params.set("videoId", record.videoId)
         const channelId = record.channelId || evidencePack.channelId
         if (channelId) params.set("channelId", channelId)
-        if (evidencePack.requestSpec.count !== null) params.set("count", String(evidencePack.requestSpec.count))
-        if (evidencePack.requestSpec.since) params.set("since", evidencePack.requestSpec.since)
-        if (evidencePack.requestSpec.until) params.set("until", evidencePack.requestSpec.until)
-        evidencePack.requestSpec.formats.forEach((format) => params.append("format", format))
-        params.set("rankBy", evidencePack.requestSpec.rankBy)
-        params.set("selectionMode", evidencePack.requestSpec.selectionMode)
-        evidencePack.requestSpec.filters.forEach((filter) => params.append("filter", filter))
+        const requestSpec = evidencePack.requestSpec && typeof evidencePack.requestSpec === "object" ? evidencePack.requestSpec : null
+        if (requestSpec) {
+         if (typeof requestSpec.count === "number") params.set("count", String(requestSpec.count))
+         if (typeof requestSpec.since === "string" && requestSpec.since) params.set("since", requestSpec.since)
+         if (typeof requestSpec.until === "string" && requestSpec.until) params.set("until", requestSpec.until)
+         if (Array.isArray(requestSpec.formats)) requestSpec.formats.forEach((format) => params.append("format", format))
+         if (typeof requestSpec.rankBy === "string" && requestSpec.rankBy) params.set("rankBy", requestSpec.rankBy)
+         if (typeof requestSpec.selectionMode === "string" && requestSpec.selectionMode) params.set("selectionMode", requestSpec.selectionMode)
+         if (Array.isArray(requestSpec.filters)) requestSpec.filters.forEach((filter) => params.append("filter", filter))
+        }
         return `${baseRoute}${baseRoute.includes("?") ? "&" : "?"}${params.toString()}`
        })()
        const coverageLabel = typeof record.coverage === "number" && record.coverage < 1
