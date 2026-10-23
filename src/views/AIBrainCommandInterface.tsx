@@ -523,12 +523,13 @@ export const BrainPromptLibrary: React.FC<{
    aria-busy={busy || undefined}
    className="flex min-w-0 flex-col"
   >
-   <StudioTopSplitModule
+   <StudioInterModule
     sizeVariant="compact"
-    split="left"
     startIcon={<LayoutGrid aria-hidden="true" />}
     title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
     className="overflow-hidden"
+    collapsible={false}
+    headStyle={{ background: "#FF7AC8", "--vt-studio-control-accent": "#FF7AC8", "--vt-studio-control-secondary": "#36E0F6" } as React.CSSProperties}
    >
     <p data-vt-brain-part="prompt-library-description" className="mb-2 border-b border-black/20 pb-2 text-[10px] font-bold leading-4 text-black/65">
      Open a task module to browse related prompts. Select a prompt to expand it in place, then send it or edit it.
@@ -607,7 +608,7 @@ export const BrainPromptLibrary: React.FC<{
       )
      })}
     </div>
-   </StudioTopSplitModule>
+   </StudioInterModule>
    {!filteredCards.length ? <p className="border-x-[2px] border-b-[2px] border-black bg-white p-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
   </section>
  )
@@ -727,30 +728,51 @@ const CreatorResponseCard: React.FC<{
   { key: "projects" as const, label: "Review in Projects", matches: /project|publish|package|content build|workflow|content plan/ },
  ].filter((option) => option.matches.test(handoffContext))
  if (!response && message.learningReceipt) {
-  return <article data-vt-brain-component="BrainLearningReceiptCard" className={assistantCardFrame}><BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /></article>
+  return (
+   <StudioInterModule
+    data-vt-brain-component="BrainLearningReceiptEntry"
+    title="LEARNING RECEIPT"
+    startIcon={<BookOpen aria-hidden="true" />}
+    sizeVariant="compact"
+    defaultOpen
+    className="shrink-0"
+    headStyle={{ background: "#FFF8D6", "--vt-studio-control-accent": "#FFF8D6", "--vt-studio-control-secondary": "#FFDA47" } as React.CSSProperties}
+   >
+    <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} />
+   </StudioInterModule>
+  )
  }
  if (!response) {
   const canRetry = message.turnStatus === "interrupted" && Boolean(message.originalUserText)
   return (
-   <article data-vt-brain-component="BrainInterruptedResponseCard" className={`${assistantCardFrame} p-4`}>
-    <div data-vt-brain-part="interrupted-response-attribution" className="mb-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/45">ViewTube Copilot</div>
-    <p data-vt-brain-part="interrupted-response-copy" className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
-    {canRetry ? (
-     <div className="mt-3 grid gap-2">
-      {message.contextMayBeStale ? (
-       <p role="status" className="text-xs font-bold leading-5 text-black/70">The channel data has changed since this attempt. Choose whether to keep the original evidence or refresh it for the retry.</p>
-      ) : null}
-      <div className="flex flex-wrap gap-2">
-       <StudioSplitLeftButton data-vt-brain-part="retry-response-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, false)}>
-        {message.contextMayBeStale ? "Retry with saved evidence" : "Retry this response"}
-       </StudioSplitLeftButton>
+   <StudioInterModule
+    data-vt-brain-component="BrainInterruptedResponseEntry"
+    title="VIEWTUBE COPILOT"
+    startIcon={<Brain aria-hidden="true" />}
+    sizeVariant="compact"
+    defaultOpen
+    className="shrink-0"
+    headStyle={{ background: "#36E0F6", "--vt-studio-control-accent": "#36E0F6", "--vt-studio-control-secondary": "#FF7AC8" } as React.CSSProperties}
+   >
+    <article data-vt-brain-component="BrainInterruptedResponseCard" className="min-w-0 p-3">
+     <p data-vt-brain-part="interrupted-response-copy" className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
+     {canRetry ? (
+      <div className="mt-3 grid gap-2">
        {message.contextMayBeStale ? (
-        <StudioSplitLeftButton data-vt-brain-part="retry-refresh-evidence-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, true)}>Refresh evidence & retry</StudioSplitLeftButton>
+        <p role="status" className="text-xs font-bold leading-5 text-black/70">The channel data has changed since this attempt. Choose whether to keep the original evidence or refresh it for the retry.</p>
        ) : null}
+       <div className="flex flex-wrap gap-2">
+        <StudioSplitLeftButton data-vt-brain-part="retry-response-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, false)}>
+         {message.contextMayBeStale ? "Retry with saved evidence" : "Retry this response"}
+        </StudioSplitLeftButton>
+        {message.contextMayBeStale ? (
+         <StudioSplitLeftButton data-vt-brain-part="retry-refresh-evidence-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, true)}>Refresh evidence & retry</StudioSplitLeftButton>
+        ) : null}
+       </div>
       </div>
-     </div>
-    ) : null}
-   </article>
+     ) : null}
+    </article>
+   </StudioInterModule>
   )
  }
  const rawModules: AIBrainAnswerModule[] = response.modules?.length
@@ -778,9 +800,18 @@ const CreatorResponseCard: React.FC<{
  )
 
  return (
+  <StudioInterModule
+   data-vt-brain-component="BrainAssistantChatEntry"
+   title="VIEWTUBE COPILOT"
+   startIcon={<Brain aria-hidden="true" />}
+   sizeVariant="compact"
+   defaultOpen
+   className="shrink-0"
+   headStyle={{ background: TOOLBOX_PALETTE[5], "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": "#FF7AC8" } as React.CSSProperties}
+  >
   <BrainResponseLayout
    title={sanitizeCreatorFacingBrainCopy(response.headline)}
-   className={assistantCardFrame}
+   className="w-full max-w-none shrink-0 border-0 bg-white"
    header={
     <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
      <div className="flex flex-wrap items-start justify-between gap-1.5">
@@ -843,6 +874,7 @@ const CreatorResponseCard: React.FC<{
     <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
    ) : null}
   </BrainResponseLayout>
+  </StudioInterModule>
  )
 }
 
@@ -927,14 +959,21 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
 }
 
 export const UserMessage: React.FC<{ text: string }> = ({ text }) => (
- <BrainChatMessageShell role="user" label="Your message" className="grid min-h-[68px] shrink-0 grid-cols-[84px_minmax(0,1fr)] overflow-hidden border-y-[2px] border-black bg-[#36E0F6]" >
-  <div className="flex items-center border-r-[2px] border-black bg-[#24C8E2] px-3 text-[14px] font-[1000] uppercase tracking-[0.06em]">
-   You:
-  </div>
-  <p className="flex min-w-0 items-center whitespace-pre-wrap px-4 py-3 text-sm font-bold leading-6 [overflow-wrap:anywhere]">
-   {sanitizeCreatorFacingBrainCopy(text)}
-  </p>
- </BrainChatMessageShell>
+ <StudioInterModule
+  data-vt-brain-component="BrainUserChatEntry"
+  title="YOU"
+  startIcon={<MessageSquare aria-hidden="true" />}
+  sizeVariant="compact"
+  collapsible={false}
+  className="shrink-0"
+  headStyle={{ background: "#36E0F6", "--vt-studio-control-accent": "#36E0F6", "--vt-studio-control-secondary": "#24C8E2" } as React.CSSProperties}
+ >
+  <BrainChatMessageShell role="user" label="Your message" className="min-w-0 bg-[#36E0F6]">
+   <p className="whitespace-pre-wrap px-3 py-2 text-sm font-bold leading-6 [overflow-wrap:anywhere]">
+    {sanitizeCreatorFacingBrainCopy(text)}
+   </p>
+  </BrainChatMessageShell>
+ </StudioInterModule>
 )
 
 const CreatorIntakeWizard: React.FC<{
