@@ -131,3 +131,15 @@ The primitive/compound foundation is already present in the target branch; conti
 - [ ] Browser-certify module focus behavior, message expansion/collapse, nested prompt selection, mobile edge alignment, long-message wrapping, and composer/viewport geometry.
 
 This update records source changes only. It does not claim that the focused test, typecheck, build, or browser certification passed.
+
+
+## Follow-up implementation update — prompt modules, spectrum order, and mobile composer (2026-10-23)
+
+- [x] Individual prompt rows inside category groups use the existing compact `StudioCollapsingSplitModule`, not `StudioInterModule`. Category groups remain grouped and collapsible; only one prompt detail stays open at a time.
+- [x] Prompt categories follow their first appearance in the canonical prompt registry rather than alphabetical sorting; prompts within each category preserve registry order.
+- [x] Category and prompt modules use the 12-stop `TOOLBOX_PALETTE` cycle with the matching sub-toolbox pair at offset +4.
+- [x] `SEND TO CHAT` and `EDIT FIRST` now use compact `StudioSplitTwoLineButton` controls, with opposite color-pair orientation for visual distinction.
+- [x] Mobile chat workspace is bounded to the viewport; the central conversation column uses a single vertical scroll owner with `touch-pan-y`, while the bottom composer remains in the flex layout.
+- [x] Prompt Library / Channel Context launchers and the bottom send action use compact split two-line controls; the composer textarea grows programmatically and no longer exposes a manual resize handle.
+- [x] Extended the runtime surface contract test to cover compact prompt modules, split two-line actions, spectrum pairing, registry ordering, and touch scrolling.
+- [ ] Run Vitest, typecheck, production build, and browser verification. Source checks alone do not certify layout or interactions.
