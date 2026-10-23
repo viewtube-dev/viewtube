@@ -259,7 +259,7 @@ export const fromStructuredOutput = (
   const evidenceIds = Array.from(new Set(candidateEvidenceIds.filter(
    (id): id is string => typeof id === "string" && allowedEvidence.has(id),
   ))).slice(0, 8)
-  const numericTokens = claim.match(/-?\\d[\\d,]*(?:\\.\\d+)?\\s?[KkMmBb]?%?/g) || []
+  const numericTokens = claim.match(/-?\d[\d,]*(?:\.\d+)?\s?[KkMmBb]?%?/g) || []
   const numericClaims = numericTokens.map((raw) => {
    const token = raw.trim()
    const sign = token.startsWith("-") ? -1 : 1
