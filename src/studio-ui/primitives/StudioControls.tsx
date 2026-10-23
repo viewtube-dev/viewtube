@@ -1477,6 +1477,43 @@ export const StudioCircleIconButton = React.forwardRef<HTMLButtonElement, Studio
     />
   ),
 )
+/** Shared-shell horizontal rail for joined square icon actions. */
+export type StudioSquareIconButtonGroupSize = StudioControlInteractiveSize
+
+export interface StudioSquareIconButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Two or more square icon button faces, preferably StudioSquareIconButton. */
+  children: React.ReactNode
+  sizeVariant?: StudioSquareIconButtonGroupSize
+  /** Accessible name for the action toolbar. */
+  "aria-label"?: string
+}
+
+export const StudioSquareIconButtonGroup = React.forwardRef<HTMLDivElement, StudioSquareIconButtonGroupProps>(
+  ({ children, sizeVariant = "compact", className, "aria-label": ariaLabel = "Actions", ...rest }, ref) => {
+    const items = React.Children.toArray(children).filter(Boolean)
+    if (process.env.NODE_ENV !== "production" && items.length < 2) {
+      console.warn("[StudioSquareIconButtonGroup] expects 2 or more children; got", items.length)
+    }
+
+    return (
+      <div
+        {...rest}
+        ref={ref}
+        role="toolbar"
+        aria-label={ariaLabel}
+        data-vt-studio-control="true"
+        data-vt-studio-icon-button-group="true"
+        data-size={sizeVariant}
+        className={studioClasses("vt-studio-square-icon-button-group", className)}
+      >
+        {items}
+      </div>
+    )
+  },
+)
+StudioSquareIconButtonGroup.displayName = "StudioSquareIconButtonGroup"
+
+
 StudioCircleIconButton.displayName = "StudioCircleIconButton"
 
 
