@@ -250,9 +250,9 @@ const BrainContextUsedDrawer: React.FC<{
  })
  return (
   <details data-vt-brain-component="BrainContextUsedDrawer" data-vt-brain-turn-id={turnId} className="w-full rounded-[7px] border-[2px] border-black bg-white">
-   <summary data-vt-brain-part="context-used-trigger" className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
+   <summary data-vt-brain-part="context-used-trigger" data-vt-studio-disclosure-summary="true" data-size="compact" className="vt-studio-disclosure-summary">
     <PanelRight size={12} aria-hidden="true" /> Context used
-    <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1">{items.length + contextUsed.knowledgeItems.length}</span>
+    <span data-vt-disclosure-count="true">{items.length + contextUsed.knowledgeItems.length}</span>
    </summary>
    <div className="grid gap-2 border-t-[2px] border-black p-2">
     <ul className="grid gap-1">
@@ -802,7 +802,7 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
 
  return (
   <details data-vt-brain-component="BrainEvidenceReadiness" className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
-   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1.5 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
+   <summary data-vt-brain-part="evidence-readiness-trigger" data-vt-studio-disclosure-summary="true" data-size="standard" className="vt-studio-disclosure-summary">
     <span data-vt-brain-part="evidence-readiness-status"><BrainChatStatusBadge status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label="Data readiness" /></span>
     <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
    </summary>

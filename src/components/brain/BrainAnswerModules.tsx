@@ -177,12 +177,9 @@ export const BrainKpiModule: React.FC<{
  return (
   <article className={`${cardShell} ${className}`}>
    <details open>
-    <summary
-     className="grid min-h-[36px] cursor-pointer list-none grid-cols-[34px_minmax(0,1fr)_auto_28px] items-stretch border-b-[2px] border-black"
-     style={{ backgroundColor: accent }}
-    >
-     <span className="grid place-items-center border-r-[2px] border-black bg-white">{icon}</span>
-     <h4 className="min-w-0 self-center truncate px-2.5 py-1.5 text-[11px] font-[1000] uppercase leading-4 tracking-[0.04em]">
+    <summary data-vt-studio-disclosure-summary="true" data-size="compact" data-layout="module" className="vt-studio-disclosure-summary">
+     <span className="grid place-items-center border-r-[2px] border-black bg-[var(--pair-b)]">{icon}</span>
+     <h4 className="min-w-0 self-center overflow-hidden whitespace-nowrap text-clip px-2.5 py-1.5 text-[11px] font-[1000] uppercase leading-4 tracking-[0.04em]">
       {sanitizeCreatorFacingBrainCopy(module.title)}
      </h4>
      {module.code ? (
@@ -192,7 +189,7 @@ export const BrainKpiModule: React.FC<{
      ) : (
       <span />
      )}
-     <span className="grid place-items-center border-l-[2px] border-black bg-white/30">
+     <span className="grid place-items-center border-l-[2px] border-black bg-[var(--pair-b)]">
       <ChevronDown size={14} />
      </span>
     </summary>
