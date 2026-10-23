@@ -7,6 +7,7 @@ import {
  updateWorkflowStep,
 } from "../../services/workflowEngine"
 import type { SuperToolId, SuperToolSurface, WorkflowChain, WorkflowStepStatus } from "../../types"
+import { StudioButton, StudioSquareIconButton } from "../../studio-ui"
 
 export type BrainWorkflowRecommendationStep = {
  title: string
@@ -151,11 +152,11 @@ export const BrainWorkflowRunPanel: React.FC<Props> = ({ recommendation, onStart
            </button>
           ) : step.status === "active" ? (
            <>
-            <button type="button" disabled={busy} onClick={() => setStepStatus(step.id, "complete")} aria-label={`Complete ${step.title}`} className="grid h-7 w-7 place-items-center rounded-[6px] border-[2px] border-black bg-[#3FEE56] disabled:opacity-50"><Check size={13} strokeWidth={4} /></button>
-            <button type="button" disabled={busy} onClick={() => setStepStatus(step.id, "blocked")} aria-label={`Block ${step.title}`} className="grid h-7 w-7 place-items-center rounded-[6px] border-[2px] border-black bg-[#FA618A] disabled:opacity-50"><Pause size={12} /></button>
+            <StudioSquareIconButton sizeVariant="compact" tone="success" icon={<Check size={13} strokeWidth={4} aria-hidden="true" />} label={`Complete ${step.title}`} disabled={busy} onClick={() => setStepStatus(step.id, "complete")} />
+            <StudioSquareIconButton sizeVariant="compact" tone="danger" icon={<Pause size={12} aria-hidden="true" />} label={`Block ${step.title}`} disabled={busy} onClick={() => setStepStatus(step.id, "blocked")} />
            </>
           ) : step.status === "pending" ? (
-           <button type="button" disabled={busy} onClick={() => setStepStatus(step.id, "active")} aria-label={`Start ${step.title}`} className="grid h-7 w-7 place-items-center rounded-[6px] border-[2px] border-black bg-[#36E0F6] disabled:opacity-50"><Play size={12} fill="currentColor" /></button>
+           <StudioSquareIconButton sizeVariant="compact" tone="accent" icon={<Play size={12} fill="currentColor" aria-hidden="true" />} label={`Start ${step.title}`} disabled={busy} onClick={() => setStepStatus(step.id, "active")} />
           ) : null}
           <ChevronRight size={14} className="text-black/35" />
          </div>
@@ -167,9 +168,7 @@ export const BrainWorkflowRunPanel: React.FC<Props> = ({ recommendation, onStart
    ) : (
     <div className="p-3">
      <p className="mb-3 text-[11px] font-bold leading-4 text-black/65">{recommendation.goal}</p>
-     <button type="button" disabled={busy} onClick={start} className="inline-flex items-center gap-2 rounded-[8px] border-[2px] border-black bg-[#3FEE56] px-4 py-2 text-[10px] font-black uppercase tracking-[0.08em] shadow-[3px_3px_0_0_#000] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50">
-      {busy ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} fill="currentColor" />} Start workflow
-     </button>
+     <StudioButton type="button" sizeVariant="standard" tone="success" disabled={busy} loading={busy} onClick={start} icon={busy ? <Loader2 size={14} aria-hidden="true" /> : <Play size={14} fill="currentColor" aria-hidden="true" />}>Start workflow</StudioButton>
     </div>
    )}
   </section>
