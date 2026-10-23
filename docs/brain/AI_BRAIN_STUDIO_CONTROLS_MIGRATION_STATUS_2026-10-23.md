@@ -54,3 +54,6 @@ No pull request has been opened for this working branch because previous Brain-s
 - Extended the shared primitive with a `structured` appearance for data-rich answer-module headers, preserving the module's grid content and per-module accent while centralizing native disclosure semantics and focus styling.
 - Migrated `BrainAnswerModules.tsx` as well; the audited Brain chat/evidence/runtime/disclosure consumers in this change set now contain no raw `<summary>` elements.
 - Latest target comparison shows the target branch advanced after this branch was created; the changed-file audit found no independent target edits in the touched consumer files. Recheck branch ancestry and mergeability before opening a PR.
+
+- At the latest comparison, this branch is **30 commits ahead and 6 behind** the target. The target advanced after the branch was created; the changed-file audit found the target copies of the touched consumer files still match the original pre-change source, but ancestry/mergeability must be rechecked before PR creation.
+- No GitHub Actions workflow runs are associated with the latest branch commits. Automated tests and build have not run, and no PR is open for this follow-up.
