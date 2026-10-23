@@ -3410,7 +3410,6 @@
     select
   ):not([data-vt-studio-control="true"]):not([data-studioinput="true"]):not(.vt-studio-text-input):not(.vt-studio-input) {
     font-size:16px!important;
-    scroll-margin-block:12px calc(var(--vt-keyboard-occlusion,0px) + 20px);
   }
 
   .vt-subtoolbox-input:not([data-vt-studio-control="true"]):not([data-studioinput="true"]):not(.vt-studio-text-input):not(.vt-studio-input),
