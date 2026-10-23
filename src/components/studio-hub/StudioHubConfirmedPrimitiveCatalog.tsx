@@ -1246,8 +1246,8 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
   const [sideStd, setSideStd] = React.useState("LOW")
   const [sideLeftCmp, setSideLeftCmp] = React.useState("LOW")
   const [sideCmp, setSideCmp] = React.useState("LOW")
-  const [leftValues, setLeftValues] = React.useState(["SOURCE", "SOURCE", "SOURCE", "SOURCE"])
-  const [rightValues, setRightValues] = React.useState(["TARGET", "TARGET", "TARGET", "TARGET"])
+  const [leftValues, setLeftValues] = React.useState(["SOURCE", "SOURCE", "SOURCE", "SOURCE", "SOURCE", "SOURCE"])
+  const [rightValues, setRightValues] = React.useState(["TARGET", "TARGET", "TARGET", "TARGET", "TARGET", "TARGET"])
   const [levelStd, setLevelStd] = React.useState(50)
   const [levelCmp, setLevelCmp] = React.useState(50)
   const options = ["ONE", "TWO", "THREE"] as const
@@ -1256,7 +1256,7 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
       "Four production primitives share Studio Controls tokens and controlled selection/value APIs.",
       "Arrow Toggle supports configurable text, fill, text color, icon color, and icon fill.",
       "Side Toggle defaults to right-side up/down arrows; its left-side variant is also shown.",
-      "Double Side Toggle demonstrates independent left/right values and the V1–V4 divider/width variants.",
+      "Double Side Toggle has V1/V2 divider variants; each demonstrates primary, secondary, and black/primary-text right-face appearances.",
       "Bar Toggle uses ten fixed-width bars, each representing 10 percentage points, with press-and-hold arrow controls.",
     ]} provenance={<Provenance primitive="StudioArrowToggle · StudioSideToggle · StudioDoubleSideToggle · StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="Studio size lattice · semantic primary/secondary colors · ten 18×38px standard bars" imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/styles/studio-control-system.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle">
@@ -1267,12 +1267,22 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
           <StudioSideToggle value={sideStd} options={["LOW", "MID", "HIGH"]} onValueChange={setSideStd} />
           <StudioSideToggle value={sideLeftCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideLeftCmp} arrowSide="left" size="compact" />
         </div>
-        <span>DOUBLE SIDE TOGGLE · V1–V4</span>
+        <span>DOUBLE SIDE TOGGLE · V1 / V2 × THREE RIGHT-FACE APPEARANCES</span>
         <div style={{ display: "grid", gap: 4 }}>
-          {(["default", "v2", "v3", "v4"] as const).map((variant, index) => <StudioDoubleSideToggle key={variant} variant={variant}
-            size={index === 1 || index === 3 ? "compact" : "standard"}
-            left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => setLeftValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Left side selection " + variant }}
-            right={{ value: rightValues[index], options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: value => setRightValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Right side selection " + variant }} />)}
+          {([
+            { variant: "v1", appearance: "primary", label: "V1 · PRIMARY RIGHT" },
+            { variant: "v1", appearance: "secondary", label: "V1 · SECONDARY RIGHT" },
+            { variant: "v1", appearance: "black-primary-text", label: "V1 · BLACK / PRIMARY TEXT RIGHT" },
+            { variant: "v2", appearance: "primary", label: "V2 · PRIMARY RIGHT" },
+            { variant: "v2", appearance: "secondary", label: "V2 · SECONDARY RIGHT" },
+            { variant: "v2", appearance: "black-primary-text", label: "V2 · BLACK / PRIMARY TEXT RIGHT" },
+          ] as const).map(({ variant, appearance, label }, index) => <div key={variant + "-" + appearance} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 2 }}>
+            <small>{label}</small>
+            <StudioDoubleSideToggle variant={variant} rightAppearance={appearance}
+              size={index >= 3 ? "compact" : "standard"}
+              left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => setLeftValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Left side selection " + label }}
+              right={{ value: rightValues[index], options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: value => setRightValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Right side selection " + label }} />
+          </div>)}
         </div>
         <span>BAR TOGGLE · {levelStd}%</span>
         <StudioBarToggle value={levelStd} onValueChange={setLevelStd} ariaLabel="Bar toggle specimen" />
