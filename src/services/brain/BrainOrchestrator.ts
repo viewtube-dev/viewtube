@@ -250,11 +250,13 @@ export const fromStructuredOutput = (
  ].join("\n")
  const normalizedResponseCorpus = normalizeClaim(responseClaimCorpus)
  const allowedEvidence = new Map(allowedEvidenceRecords.map((record) => [record.id, record]))
- const claimEvidence = (output.claimEvidence || []).slice(0, 12).flatMap((item) => {
-  const claim = sanitizeCreatorFacingBrainCopy(item?.claim || "").trim()
+ const claimCandidates = Array.isArray(output.claimEvidence) ? output.claimEvidence.slice(0, 12) : []
+ const claimEvidence = claimCandidates.flatMap((item) => {
+  const claim = sanitizeCreatorFacingBrainCopy(typeof item?.claim === "string" ? item.claim : "").trim()
   const normalizedClaim = normalizeClaim(claim)
   if (!claim || claim.length > 320 || !normalizedClaim || !normalizedResponseCorpus.includes(normalizedClaim)) return []
-  const evidenceIds = Array.from(new Set((item.evidenceIds || []).filter(
+  const candidateEvidenceIds = Array.isArray(item?.evidenceIds) ? item.evidenceIds : []
+  const evidenceIds = Array.from(new Set(candidateEvidenceIds.filter(
    (id): id is string => typeof id === "string" && allowedEvidence.has(id),
   ))).slice(0, 8)
   const numericTokens = claim.match(/\d[\d,]*(?:\.\d+)?\s?[KkMmBb]?%?/g) || []
