@@ -6,7 +6,6 @@ export type WorkspaceUxToggleKey =
   | "stickyModuleHeaders"
   | "edgeSwipeNavigation"
   | "thumbZoneShortcuts"
-  | "keyboardPositionRestore"
   | "restoreLastWorkspace"
   | "rememberToolboxState"
   | "desktopKeyboardNavigation"
@@ -22,7 +21,6 @@ export interface WorkspaceUxPreferences {
   stickyModuleHeaders: boolean
   edgeSwipeNavigation: boolean
   thumbZoneShortcuts: boolean
-  keyboardPositionRestore: boolean
   restoreLastWorkspace: boolean
   rememberToolboxState: boolean
   desktopKeyboardNavigation: boolean
@@ -43,7 +41,6 @@ export const DEFAULT_WORKSPACE_UX_PREFERENCES: WorkspaceUxPreferences = {
   stickyModuleHeaders: false,
   edgeSwipeNavigation: false,
   thumbZoneShortcuts: false,
-  keyboardPositionRestore: true,
   restoreLastWorkspace: false,
   rememberToolboxState: true,
   desktopKeyboardNavigation: false,
@@ -65,7 +62,6 @@ const sanitizePreferences = (raw: Partial<WorkspaceUxPreferences> | null | undef
   stickyModuleHeaders: Boolean(raw?.stickyModuleHeaders),
   edgeSwipeNavigation: Boolean(raw?.edgeSwipeNavigation),
   thumbZoneShortcuts: Boolean(raw?.thumbZoneShortcuts),
-  keyboardPositionRestore: raw?.keyboardPositionRestore !== false,
   restoreLastWorkspace: Boolean(raw?.restoreLastWorkspace),
   rememberToolboxState: raw?.rememberToolboxState !== false,
   desktopKeyboardNavigation: Boolean(raw?.desktopKeyboardNavigation),
