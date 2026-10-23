@@ -985,3 +985,12 @@ Work in small PRs against `master/consolidated-feature-integration`; do not mark
 As of this addendum, source review confirms that the shared chat compounds and turn-evidence disclosures are present in the integration branch. It does **not** establish full behavior or visual certification. Recent CI for the Brain UI follow-up had the Brain quality-loop, production build and local-smoke jobs passing, while source-governance and focused-contract jobs failed and static-quality reported test/dependency/type errors. The precise failures must be rechecked against the current run before being called fixed; some failures originate in the shared Studio Controls contract and should not be disguised as Brain regressions.
 
 The current execution plan remains [AI Brain Chat — Studio Primitive Build Plan](../../brain/AI_BRAIN_CHAT_STUDIO_PRIMITIVES_BUILD_PLAN_2026-10-23.md) and [AI Brain Toolbox + Chat Overhaul](../../brain/AI_BRAIN_TOOLBOX_CHAT_REDESIGN_AND_IMPLEMENTATION_PLAN_2026-10-19.md). This addendum connects their current implementation to PR #241 without treating the historical donor as live source authority.
+
+
+### Active follow-up PRs (2026-10-23)
+
+- [#845 — remove missing DOM test dependencies from chat primitive tests](https://github.com/viewtube-dev/viewtube/pull/845): keeps rendering contracts aligned with installed test tooling.
+- [#846 — preserve evidence and context provenance on restore](https://github.com/viewtube-dev/viewtube/pull/846): extends save/restore coverage for the evidence manifest, request constraints, context revision and creator-context snapshot.
+- [#848 — finish remaining Studio control migration](https://github.com/viewtube-dev/viewtube/pull/848): migrates quick-action cards, profile coverage actions and the context correction dialog to canonical Studio controls.
+
+These are open follow-ups, not merged work. Their CI is not yet green; the integration branch currently has unrelated Studio export/type failures and source-governance assertions that must remain visible as blockers rather than being called Brain UI regressions or silently waived.
