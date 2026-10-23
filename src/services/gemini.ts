@@ -1829,7 +1829,7 @@ export const generateStructuredBrainResponse = async (input: {
      },
      claimEvidence: {
       type: Type.ARRAY,
-      description: "Optional claim-level grounding map. For each numeric or channel-specific claim, quote the exact claim text from headline, keyInsight, body, module text, or actions and list only canonical EvidenceRecord IDs present in the supplied prompt evidence. Never invent IDs. Omit unsupported or uncertain claims rather than attaching unrelated evidence.",
+      description: "Optional claim-level grounding map. For each numeric claim whose displayed value is directly present in the supplied evidence, quote the exact claim text from headline, keyInsight, body, module text, or actions and list only canonical EvidenceRecord IDs present in the supplied prompt evidence. Never invent IDs. Omit unsupported or uncertain claims rather than attaching unrelated evidence.",
       items: {
        type: Type.OBJECT,
        properties: {
