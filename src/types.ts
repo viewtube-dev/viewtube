@@ -1460,8 +1460,10 @@ export interface BrainQuickAction {
 export interface BrainClaimEvidenceLink {
  /** Exact, creator-visible claim text copied from the response. */
  claim: string
- /** Canonical EvidenceRecord IDs that were included in the prompt manifest. */
+ /** Canonical EvidenceRecord IDs whose stored values directly match numeric tokens in this claim. */
  evidenceIds: string[]
+ /** Direct numeric match only; does not certify causal or trend wording. */
+ verification: "direct_value_match"
 }
 
 export interface CreatorBrainResponse {
