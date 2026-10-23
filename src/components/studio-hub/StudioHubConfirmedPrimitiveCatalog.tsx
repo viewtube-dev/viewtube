@@ -46,6 +46,7 @@ import {
   StudioBarToggle,
 } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-catalogs.css"
+import "../../styles/studio-confirmed-catalog-modules.css"
 
 type Size = "44px" | "28px"
 
