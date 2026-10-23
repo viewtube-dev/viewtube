@@ -520,7 +520,7 @@ export const BrainPromptLibrary: React.FC<{
     sizeVariant="compact"
     startIcon={<LayoutGrid aria-hidden="true" />}
     title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
-    className="overflow-hidden"
+    className="overflow-hidden brain-prompt-library-shell"
     collapsible={false}
     headStyle={{ background: TOOLBOX_PALETTE[11], "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
    >
