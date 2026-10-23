@@ -15,7 +15,7 @@ import { BrainScopeSummary } from "./BrainScopeSummary"
 import { BrainPromptPolicyPanel } from "./BrainPromptPolicyPanel"
 import { BrainOutcomeLearningCard } from "./BrainOutcomeLearningCard"
 import { BrainStatusIndicatorShowcase } from "./BrainStatusIndicatorShowcase"
-import { StudioSplitLeftBadge, StudioSplitLeftButton, StudioTwoLineButton } from "../../studio-ui"
+import { StudioSplitLeftBadge, StudioSplitLeftButton, StudioSquareIconButton, StudioTwoLineButton } from "../../studio-ui"
 
 const Panel: React.FC<{ title: string; children: React.ReactNode }> = ({
  title,
@@ -105,9 +105,11 @@ export const BrainContextRail: React.FC<{
         <span className="block break-words text-black/60">{item.detail || "Not confirmed yet"}</span>
        </span>
        {!item.complete && onEditPrompt ? (
-        <StudioSplitLeftButton
+        <StudioSquareIconButton
          sizeVariant="compact"
          icon={<ArrowRight aria-hidden="true" />}
+         label={item.label === "Goals" ? "Confirm goal" : item.label === "Style preferences" ? "Add style examples" : item.label === "Channel focus" ? "Review channel focus" : "Inspect video analysis"}
+         title={item.label === "Goals" ? "Confirm goal" : item.label === "Style preferences" ? "Add style examples" : item.label === "Channel focus" ? "Review channel focus" : "Inspect video analysis"}
          onClick={() => onEditPrompt(item.label === "Goals"
           ? "Help me confirm and save my main YouTube goal. Ask one question at a time."
           : item.label === "Style preferences"
@@ -117,9 +119,7 @@ export const BrainContextRail: React.FC<{
             : "Help me review which videos have been analyzed and what evidence is still missing.")
          }
          className="shrink-0"
-        >
-         {item.label === "Goals" ? "Confirm" : item.label === "Style preferences" ? "Add examples" : item.label === "Channel focus" ? "Review" : "Inspect"}
-        </StudioSplitLeftButton>
+        />
        ) : null}
       </li>
      ))}
