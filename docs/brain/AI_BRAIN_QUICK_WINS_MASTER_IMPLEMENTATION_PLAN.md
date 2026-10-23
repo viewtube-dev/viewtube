@@ -477,3 +477,8 @@ The next UI-3 slice extends the existing BrainRuntimeSnapshot projection with th
 - No new store or workflow owner is introduced. The tray projects existing provenance data and reuses the canonical Vault deep link.
 
 Regression coverage checks the snapshot exposes recent chains and the tray links only receipt-verified outputs. **Verification status:** CI pending; no local test execution or live keyboard/mobile/screen-reader audit is claimed. Remaining UI-3 work includes wider historical/workflow coverage, explicit canonical states for proposed/started/failed actions where their owners expose them, and end-to-end restoration/accessibility verification.
+### Readiness correction — stale data is never green (2026-10-22)
+
+Static review found a UI truthfulness defect: the readiness badge selected its green state from `dataStatus === ready` even when the same diagnostic snapshot reported stale or missing datasets. The page now uses a small pure presentation resolver so stale data becomes a warning, missing inputs prevent a green state, and fully synced/complete data is green only when stale and missing counts are both zero.
+
+Regression tests cover stale-ready, missing-ready, clean-ready, partial, and unavailable states. This is a readiness-label correction, not a claim that model confidence is automatically calibrated or downgraded; that requires an evidence-backed confidence contract. CI and live accessibility checks remain pending.
