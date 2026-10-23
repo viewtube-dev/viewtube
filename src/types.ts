@@ -1457,11 +1457,20 @@ export interface BrainQuickAction {
  routeLabel?: string
 }
 
+export interface BrainClaimEvidenceLink {
+ /** Exact, creator-visible claim text copied from the response. */
+ claim: string
+ /** Canonical EvidenceRecord IDs that were included in the prompt manifest. */
+ evidenceIds: string[]
+}
+
 export interface CreatorBrainResponse {
  id: string
  mode: AIBrainConversationDigest["answerMode"]
  body: string
  evidenceIds: string[]
+ /** Optional per-claim evidence mapping; only verified prompt-manifest IDs may survive normalization. */
+ claimEvidence?: BrainClaimEvidenceLink[]
  nextAction?: string
  headline: string
  keyInsight: string
