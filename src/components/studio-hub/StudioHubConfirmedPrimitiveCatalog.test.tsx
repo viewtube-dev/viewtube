@@ -26,6 +26,11 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain("44px Standard · 10 sections");
     expect(html).toContain("28px Compact · 10 sections");
     expect(html).toContain("12px Micro · 10 sections");
+    const specimenSource = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioSplitAccordionCatalogSpecimens.tsx"), "utf8");
+    const catalogSource = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(specimenSource).toContain('gridTemplateColumns: "minmax(0, 1fr)"');
+    expect(specimenSource).toContain('width: "100%"');
+    expect(catalogSource).toContain('<div className="w-full min-w-0 max-w-none"');
   });
 
   it("registers StudioTextBox in standard, compact, and micro sizes using shared field geometry and 0.75 line height", () => {
