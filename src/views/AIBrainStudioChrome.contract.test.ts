@@ -11,7 +11,7 @@ describe("AI Brain Studio status and evidence chrome", () => {
 
     expect(source).toContain("StudioSplitLeftBadge")
     expect(contextStrip.match(/<StudioSplitLeftBadge\b/g)).toHaveLength(4)
-    expect(contextStrip).toContain('sizeVariant="compact"')
+    expect(contextStrip).toContain('sizeVariant="micro"')
     expect(contextStrip).not.toContain('rounded-[4px] border border-black bg-[#36E0F6]')
     expect(contextStrip).not.toContain('rounded-[4px] border border-black bg-[#3FEE56]')
   })
