@@ -32,7 +32,7 @@ test("Studio button labels use the shared clipped-text default, never ellipsis",
 
 test("StudioTextBox uses primary ink for its inline text stroke", () => {
   const textBox = blockFor(systemCss, '.vt-studio-text-box[data-vt-studio-control="true"]')
-  assert.match(textBox, /-webkit-text-stroke:\s*var\(--studio-text-box-text-stroke-width\)\s*var\(--vt-field-primary/)
+  assert.match(textBox, /-webkit-text-stroke:\s*var\(--studio-text-box-text-stroke-width\)\s*var\(--vt-field-primary/)\n  assert.match(textBox, /box-shadow:\s*none/)\n  assert.match(systemCss, /\.vt-studio-text-box\[data-vt-studio-control="true"\]::before[\\s\\S]*?border:\\s*var\\(--studio-text-box-stroke-width\\) solid var\\(--vt-field-primary/)
   assert.doesNotMatch(textBox, /-webkit-text-stroke:\s*var\(--studio-text-box-text-stroke-width\)\s*#000/i)
 })
 
@@ -47,5 +47,5 @@ test("focused textarea keeps a secondary outline without a primary focus text st
 test("Confirmed Primitive Library documents the canonical text box stroke contract", () => {
   assert.match(catalog, /StudioTextBox/)
   assert.match(catalog, /primary inline stroke/i)
-  assert.match(catalog, /secondary focus outline/i)
+  assert.match(catalog, /secondary focus(?:\/outer)? outline/i)
 })
