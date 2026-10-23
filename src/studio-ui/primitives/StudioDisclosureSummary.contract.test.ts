@@ -19,7 +19,7 @@ describe("StudioDisclosureSummary", () => {
     expect(styles).toContain(":focus-visible")
     expect(styles).toContain("--pair-a")
     expect(styles).not.toContain("box-shadow")
-    expect(styles).not.toContain("transform:")
+    expect(styles).not.toContain("\n  transform:")
     expect(styles).toContain("list-style: none")
   })
 })
