@@ -2,7 +2,7 @@ import React from "react"
 import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
 import { MemoryRouter } from "react-router-dom"
-import type { AIBrainEvidencePack } from "../../types"
+import type { AIBrainEvidencePack, BrainClaimEvidenceLink } from "../../types"
 import type { EvidenceRecord } from "../../services/brain/EvidenceRecord"
 import { BrainTurnEvidenceRibbon } from "./BrainTurnEvidenceRibbon"
 
@@ -95,6 +95,7 @@ const record = (overrides: Partial<EvidenceRecord> = {}): EvidenceRecord => ({
 const render = (options: {
  evidencePack?: AIBrainEvidencePack
  evidenceRecords?: EvidenceRecord[]
+ claimEvidence?: BrainClaimEvidenceLink[]
  evidenceIntegrityStatus?: "verified" | "unavailable" | "mismatch"
  citedEvidenceIds?: string[]
 } = {}) => renderToStaticMarkup(
@@ -103,6 +104,7 @@ const render = (options: {
    turnId="turn-test"
    evidencePack={options.evidencePack || pack()}
    evidenceRecords={options.evidenceRecords}
+   claimEvidence={options.claimEvidence}
    evidenceIntegrityStatus={options.evidenceIntegrityStatus}
    citedEvidenceIds={options.citedEvidenceIds}
   />
@@ -182,6 +184,28 @@ describe("BrainTurnEvidenceRibbon", () => {
   expect(html).toContain("Prompt evidence identity unavailable")
   expect(html).toContain("Record-level provenance is unavailable")
  })
+
+ it("shows claim-to-record mappings only for verified prompt evidence", () => {
+  const linkedClaim = "Views increased to 12,400 after the title change."
+  const html = render({
+   evidenceIntegrityStatus: "verified",
+   evidenceRecords: [record({ id: "record-views", metric: "views", value: 12400 })],
+   claimEvidence: [{ claim: linkedClaim, evidenceIds: ["record-views"], verification: "direct_value_match" }],
+  })
+  expect(html).toContain("Claim text with matching recorded value")
+  expect(html).toContain(linkedClaim)
+ })
+
+ it("withholds claim mappings when the saved prompt evidence identity is mismatched", () => {
+  const html = render({
+   evidenceIntegrityStatus: "mismatch",
+   evidenceRecords: [record({ id: "record-views" })],
+   claimEvidence: [{ claim: "Unverified claim text", evidenceIds: ["record-views"], verification: "direct_value_match" }],
+  })
+  expect(html).not.toContain("Claim text with matching recorded value")
+  expect(html).not.toContain("Unverified claim text")
+ })
+
  it("counts only citations that resolve to the prepared evidence list", () => {
   const html = render({
    evidencePack: pack(),

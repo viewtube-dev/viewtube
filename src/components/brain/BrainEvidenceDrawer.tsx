@@ -12,11 +12,17 @@ import { StudioSplitLeftBadge } from "../../studio-ui"
  * Optional confidence/inference metadata lets every Brain surface use the
  * same trust UI without changing the canonical evidence-pack schema.
  */
+const EVIDENCE_BADGE_TONE_CLASS: Record<string, string> = {
+ "#36E0F6": "bg-[#36E0F6]",
+ "#FFDA47": "bg-[#FFDA47]",
+ "#C0F240": "bg-[#C0F240]",
+}
+
 const EvidenceBadge: React.FC<{ label: string; tone: string }> = ({ label, tone }) => (
  <StudioSplitLeftBadge
   sizeVariant="micro"
   icon={<span aria-hidden="true" className="block h-1.5 w-1.5 rounded-full border border-black bg-black/70" />}
-  style={{ backgroundColor: tone, width: "max-content", maxWidth: "100%" }}
+  className={`w-max max-w-full ${EVIDENCE_BADGE_TONE_CLASS[tone] || "bg-white"}`}
  >
   {label}
  </StudioSplitLeftBadge>
@@ -57,13 +63,18 @@ export const BrainEvidenceDrawer: React.FC<{
   params.set("brainEvidenceId", item.id)
   params.set("brainEvidenceSource", item.source)
   params.set("brainEvidenceLabel", item.label)
-  params.set("rankBy", evidencePack.requestSpec.rankBy)
-  params.set("selectionMode", evidencePack.requestSpec.selectionMode)
-  if (evidencePack.requestSpec.count !== null) params.set("count", String(evidencePack.requestSpec.count))
-  if (evidencePack.requestSpec.since) params.set("since", evidencePack.requestSpec.since)
-  if (evidencePack.requestSpec.until) params.set("until", evidencePack.requestSpec.until)
-  evidencePack.requestSpec.formats.forEach((format) => params.append("format", format))
-  evidencePack.requestSpec.filters.forEach((filter) => params.append("filter", filter))
+  const requestSpec = evidencePack.requestSpec && typeof evidencePack.requestSpec === "object" ? evidencePack.requestSpec : null
+  if (requestSpec) {
+   params.set("rankBy", requestSpec.rankBy)
+   params.set("selectionMode", requestSpec.selectionMode)
+   if (typeof requestSpec.count === "number") params.set("count", String(requestSpec.count))
+   if (typeof requestSpec.since === "string" && requestSpec.since) params.set("since", requestSpec.since)
+   if (typeof requestSpec.until === "string" && requestSpec.until) params.set("until", requestSpec.until)
+   if (Array.isArray(requestSpec.formats)) requestSpec.formats.forEach((format) => params.append("format", format))
+   if (typeof requestSpec.rankBy === "string" && requestSpec.rankBy) params.set("rankBy", requestSpec.rankBy)
+   if (typeof requestSpec.selectionMode === "string" && requestSpec.selectionMode) params.set("selectionMode", requestSpec.selectionMode)
+   if (Array.isArray(requestSpec.filters)) requestSpec.filters.forEach((filter) => params.append("filter", filter))
+  }
   if (item.id.startsWith("video:")) params.set("videoId", item.id.slice("video:".length))
   if (item.source.toLowerCase().includes("search")) params.set("searchTerm", item.label)
   if (item.source.toLowerCase().includes("traffic")) params.set("trafficSource", item.label)

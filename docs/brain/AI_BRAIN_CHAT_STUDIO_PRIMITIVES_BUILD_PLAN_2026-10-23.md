@@ -95,3 +95,14 @@ Discover and use the repository's actual package scripts. Run focused tests, typ
 ## Delivery rule
 
 Work in small, reviewable commits on a branch based on `master/consolidated-feature-integration`. Do not merge automatically. First deliver the primitive/compound foundation and chat layout, then complete prompt library and response details, then run the full verification pass. Any feature that already exists should be reused and tested rather than rebuilt.
+
+
+## Implementation checkpoint — 2026-10-23
+
+The primitive/compound foundation is already present in the target branch; continue by closing behavior and evidence-contract gaps rather than creating duplicate controls.
+
+- **Merged foundation:** PRs [#828](https://github.com/viewtube-dev/viewtube/pull/828), [#829](https://github.com/viewtube-dev/viewtube/pull/829), [#831](https://github.com/viewtube-dev/viewtube/pull/831), [#833](https://github.com/viewtube-dev/viewtube/pull/833), [#835](https://github.com/viewtube-dev/viewtube/pull/835), [#836](https://github.com/viewtube-dev/viewtube/pull/836), [#838](https://github.com/viewtube-dev/viewtube/pull/838), [#848](https://github.com/viewtube-dev/viewtube/pull/848), [#849](https://github.com/viewtube-dev/viewtube/pull/849), and [#851](https://github.com/viewtube-dev/viewtube/pull/851) cover shared chat compositions, viewport behavior, response layout and Studio-control alignment.
+- **Evidence UI foundation:** [#779](https://github.com/viewtube-dev/viewtube/pull/779), [#802](https://github.com/viewtube-dev/viewtube/pull/802), [#818](https://github.com/viewtube-dev/viewtube/pull/818), and [#819](https://github.com/viewtube-dev/viewtube/pull/819) cover turn evidence lineage, restored selection constraints, truthful evidence quality and Analytics handoff.
+- **Current follow-up:** [#855](https://github.com/viewtube-dev/viewtube/pull/855) introduces optional claim-to-evidence mappings for numeric claims. The runtime filters links against the actual prompt records and direct value matches; the UI exposes them only under verified prompt identity and explicitly warns that value matching does not prove trend or causal wording.
+- **Next:** verify CI on the exact PR head; fix only evidenced Brain-specific failures without hiding existing Studio/source-governance debt; then continue output-card lineage, governed action feedback, and mobile/keyboard/screen-reader certification.
+- **Not certified:** no claim is made here that typecheck, full-suite, live browser, mobile virtual-keyboard, screen-reader, or end-to-end lineage checks have passed. See the PR241 bridge in [the historical design reference](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md).

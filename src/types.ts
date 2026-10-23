@@ -1457,11 +1457,22 @@ export interface BrainQuickAction {
  routeLabel?: string
 }
 
+export interface BrainClaimEvidenceLink {
+ /** Exact, creator-visible claim text copied from the response. */
+ claim: string
+ /** Canonical EvidenceRecord IDs whose stored values directly match numeric tokens in this claim. */
+ evidenceIds: string[]
+ /** Direct numeric match only; does not certify causal or trend wording. */
+ verification: "direct_value_match"
+}
+
 export interface CreatorBrainResponse {
  id: string
  mode: AIBrainConversationDigest["answerMode"]
  body: string
  evidenceIds: string[]
+ /** Optional per-claim evidence mapping; only verified prompt-manifest IDs may survive normalization. */
+ claimEvidence?: BrainClaimEvidenceLink[]
  nextAction?: string
  headline: string
  keyInsight: string

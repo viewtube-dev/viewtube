@@ -997,9 +997,22 @@ The following follow-up work is now merged into `master/consolidated-feature-int
 - [#845 — chat primitive test dependency fix](https://github.com/viewtube-dev/viewtube/pull/845): removes the unsupported DOM-testing dependency from chat primitive render-contract tests.
 - [#846 — evidence and context provenance restore coverage](https://github.com/viewtube-dev/viewtube/pull/846): adds round-trip assertions for request constraints, prompt evidence IDs/records, context revision and creator-context snapshot.
 - [#848 — remaining Studio control migration](https://github.com/viewtube-dev/viewtube/pull/848): migrates quick-action cards, profile coverage actions and the context-correction dialog to canonical Studio controls.
+- [#849 — workflow and learning inbox controls](https://github.com/viewtube-dev/viewtube/pull/849): migrates workflow actions, live handoff actions, evidence-tracing controls and governed learning review/promotion actions.
+- [#851 — user and settings controls](https://github.com/viewtube-dev/viewtube/pull/851): migrates Brain user-policy checkboxes, settings switches, and panel actions to canonical Studio controls. Both #849 and #851 are now merged; a shared range-slider primitive remains a system-level gap.
 
-**Open follow-ups:**
-- [#849 — standardize workflow and learning inbox controls](https://github.com/viewtube-dev/viewtube/pull/849): migrates workflow actions, live handoff actions, evidence-tracing controls and governed learning review/promotion actions.
-- [#851 — standardize user and settings controls](https://github.com/viewtube-dev/viewtube/pull/851): migrates Brain user-policy checkboxes, settings switches, and panel actions to canonical Studio controls. A shared range-slider primitive remains a system-level gap.
+**Next implementation slice:**
 
 **Verification caveat remains:** merges are not a substitute for green CI or browser certification. The latest observed runs still reported shared Studio Controls export/type failures and a source-governance assertion; production build, local smoke and Brain quality-loop passed on the recent control-sweep run, while full-suite was still running at the last check. Re-check the current run before treating any gate as resolved. Keyboard/screen-reader behavior, mobile virtual-keyboard/scroll behavior and the end-to-end turn lineage still require explicit certification.
+
+
+## Implementation status update — 2026-10-23 (claim-level evidence)
+
+The next UI slice now connects the structured model response to typed prompt evidence without treating a model-supplied ID as proof:
+
+- `CreatorBrainResponse.claimEvidence` carries exact claim text, canonical evidence IDs, and a verification label.
+- Structured model output may propose claim-to-record links, but the orchestrator drops any claim not found verbatim in the response, any ID absent from the exact prompt evidence records, and any numeric claim whose numbers do not directly match the values in its linked records.
+- `BrainTurnEvidenceRibbon` displays only verified-manifest links, beside the actual typed record. The label states the limit: a direct numeric value match does not independently verify causal or trend wording.
+- The mismatch state withholds claim links along with record-level provenance. Legacy turns remain unavailable rather than being retroactively represented as verified.
+- Regression tests were added for ID filtering, exact claim-text matching, numeric-value mismatch, verified rendering and mismatched-manifest withholding.
+
+This is a bounded first step toward claim-level citations, not a semantic verifier for causal claims, derived percentages, or qualitative statements. Those require deterministic calculations or an explicit calculation/evaluation contract. Test execution, typecheck, build and browser accessibility certification must be confirmed by CI; the existence of these tests is not evidence that they have passed.

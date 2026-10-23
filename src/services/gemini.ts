@@ -1736,6 +1736,8 @@ export interface StructuredBrainModelOutput {
   }
  }>
  actions: string[]
+ /** Claim-level citations must quote response text and reference only supplied canonical evidence IDs. */
+ claimEvidence?: Array<{ claim: string; evidenceIds: string[] }>
  question?: string
  modelIdentity?: { provider: "google-genai"; requestedModel: string; servedModel: string | null }
 }
@@ -1825,6 +1827,18 @@ export const generateStructuredBrainResponse = async (input: {
        required: ["title", "body", "tone", "kind"],
       },
      },
+     claimEvidence: {
+      type: Type.ARRAY,
+      description: "Optional claim-level grounding map. For each numeric claim whose displayed value is directly present in the supplied evidence, quote the exact claim text from headline, keyInsight, body, module text, or actions and list only canonical EvidenceRecord IDs present in the supplied prompt evidence. Never invent IDs. Omit unsupported or uncertain claims rather than attaching unrelated evidence.",
+      items: {
+       type: Type.OBJECT,
+       properties: {
+        claim: { type: Type.STRING, description: "Exact verbatim claim text copied from the response." },
+        evidenceIds: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Canonical EvidenceRecord IDs from the supplied prompt manifest that directly support this claim." },
+       },
+       required: ["claim", "evidenceIds"],
+      },
+     },
      actions: { type: Type.ARRAY, items: { type: Type.STRING } },
      question: { type: Type.STRING },
     },
@@ -1841,6 +1855,7 @@ export const generateStructuredBrainResponse = async (input: {
  }
  parsed.modules = (parsed.modules || []).slice(0, 4)
  parsed.actions = (parsed.actions || []).slice(0, 4)
+ parsed.claimEvidence = (parsed.claimEvidence || []).slice(0, 12)
  return parsed
 }
 
