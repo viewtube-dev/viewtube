@@ -40,3 +40,13 @@ This is a source audit only, not an executed test suite.
 5. Reconcile this branch with the latest target base before review. Do not treat source assertions as browser certification.
 
 No pull request has been opened for this working branch because previous Brain-shell PRs were automatically merged before their verification status was resolved.
+
+
+## Disclosure summary follow-up — rebased on latest target
+
+- Fresh branch: `feat/brain-studio-disclosure-summary-rebased-2026-10-23`.
+- Base commit observed at branch creation: `6c2a0a18a7718f31c513ee7a38fac413eb1fa3b7` on `master/consolidated-feature-integration`.
+- Adds exported `StudioDisclosureSummary`, shared stylesheet, contract tests, and standard/compact specimens in the Confirmed Primitive Library.
+- Migrates the two Brain context/readiness disclosures and the two evidence-ribbon disclosures to the shared primitive while preserving native `details/summary` semantics.
+- This branch was created fresh because the earlier follow-up branch had drifted 42 commits behind the moving target.
+- **Verification not yet executed:** Vitest, typecheck, production build, browser interaction, keyboard-only disclosure operation, and mobile viewport checks. Do not merge before these gates are completed.
