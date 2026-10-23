@@ -78,6 +78,37 @@ describe("structured model output -> CreatorBrainResponse", () => {
   )
  })
 
+
+ it("keeps claim-to-evidence links only when claims are verbatim and IDs belong to the supplied prompt manifest", () => {
+  const snapshot = buildGoldenChannelFixture(restorationRichSpec).snapshot
+  const output = baseOutput({
+   keyInsight: "Views increased to 12,400 after the title change.",
+   body: "The latest window supports a measured increase.",
+   claimEvidence: [
+    { claim: "Views increased to 12,400 after the title change.", evidenceIds: ["record-views", "not-in-prompt"] },
+    { claim: "This sentence is not in the response.", evidenceIds: ["record-views"] },
+    { claim: "The latest window supports a measured increase.", evidenceIds: ["record-window"] },
+   ],
+  } as Partial<StructuredBrainModelOutput>)
+
+  const response = fromStructuredOutput(output, snapshot, ["record-views", "record-window"])
+
+  expect(response.claimEvidence).toEqual([
+   { claim: "Views increased to 12,400 after the title change.", evidenceIds: ["record-views"] },
+   { claim: "The latest window supports a measured increase.", evidenceIds: ["record-window"] },
+  ])
+ })
+
+ it("drops claim links with no verified prompt evidence IDs", () => {
+  const snapshot = buildGoldenChannelFixture(restorationRichSpec).snapshot
+  const output = baseOutput({
+   claimEvidence: [{ claim: "The latest window supports a measured increase.", evidenceIds: ["invented-record"] }],
+  } as Partial<StructuredBrainModelOutput>)
+
+  const response = fromStructuredOutput(output, snapshot, ["record-views"])
+  expect(response.claimEvidence).toBeUndefined()
+ })
+
  it("rejects invented numbers inside structured data via the number guard", () => {
   const snapshot = buildGoldenChannelFixture(emptyChannelSpec).snapshot
   const output = baseOutput({
