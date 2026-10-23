@@ -300,7 +300,7 @@ const BrainContextUsedDrawer: React.FC<{
          <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(item.statement)}</p>
          <code className="block break-all text-[8px] text-black/55">{item.id}</code>
          {item.evidenceRefs.length ? <p className="break-all text-[8px] text-black/55">Evidence: {item.evidenceRefs.join(", ")}</p> : null}
-         {onCorrectItem ? <button type="button" onClick={() => onCorrectItem(item)} className="mt-1 min-h-9 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Propose correction</button> : null}
+         {onCorrectItem ? <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={() => onCorrectItem(item)} className="mt-1">Propose correction</StudioButton> : null}
         </li>
        ))}
       </ul>
@@ -911,25 +911,9 @@ const CreatorIntakeWizard: React.FC<{
      <p className="text-sm font-bold leading-6 text-black/70">
       Answer what you know now. You can skip and continue later.
      </p>
-     <button type="button" onClick={onDefer} className={`${kpiButton} justify-center`}>
-      Skip for now
-     </button>
-     <button
-      type="button"
-      onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))}
-      disabled={questionIndex === 0}
-      className={`${kpiButton} justify-center disabled:opacity-40`}
-     >
-      <ChevronLeft size={14} /> Previous
-     </button>
-     <button
-      type="button"
-      onClick={() => lastQuestion ? onSave() : setQuestionIndex((index) => Math.min(AI_BRAIN_INTAKE_QUESTIONS.length - 1, index + 1))}
-      className="inline-flex items-center justify-center gap-2 rounded-[10px] border-[2px] border-black bg-[#3FEE56] px-4 py-3 text-[11px] font-black uppercase tracking-[0.1em] shadow-[3px_3px_0_0_#000]"
-     >
-      {lastQuestion ? "Save Creator Profile" : "Next Question"}
-      <ArrowRight size={15} />
-     </button>
+     <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={onDefer}>Skip for now</StudioButton>
+     <StudioSplitLeftButton sizeVariant="compact" icon={<ChevronLeft aria-hidden="true" />} type="button" onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))} disabled={questionIndex === 0}>Previous</StudioSplitLeftButton>
+     <StudioSplitLeftButton sizeVariant="standard" icon={<ArrowRight aria-hidden="true" />} type="button" onClick={() => lastQuestion ? onSave() : setQuestionIndex((index) => Math.min(AI_BRAIN_INTAKE_QUESTIONS.length - 1, index + 1))}>{lastQuestion ? "Save Creator Profile" : "Next Question"}</StudioSplitLeftButton>
     </div>
    </div>
   </section>
@@ -1866,9 +1850,7 @@ const AIBrainCommandInterface: React.FC = () => {
         <div data-vt-brain-part="mobile-launcher-heading" className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
          <div className="flex items-center justify-between gap-2">
           <h2 data-vt-brain-part="launcher-drawer-heading" id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
-          <button ref={promptCloseRef} type="button" className={kpiButton} onClick={() => setPromptRailOpen(false)}>
-           <X size={14} aria-hidden="true" /> Close
-          </button>
+          <StudioSplitLeftButton ref={promptCloseRef} sizeVariant="compact" icon={<X aria-hidden="true" />} onClick={() => setPromptRailOpen(false)}>Close</StudioSplitLeftButton>
          </div>
          <div data-vt-brain-component="BrainLauncherModeSwitch" className="grid grid-cols-2 gap-1">
           <StudioSplitLeftButton sizeVariant="standard" icon={<LayoutGrid aria-hidden="true" />} aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className="min-w-0" style={{ backgroundColor: launcherMode === "prompts" ? "#FF7AC8" : "#ffffff" }}>Prompt Library</StudioSplitLeftButton>
