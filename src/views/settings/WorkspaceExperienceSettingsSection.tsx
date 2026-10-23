@@ -5,7 +5,6 @@ import {
   Command,
   Eraser,
   History,
-  Keyboard,
   LayoutPanelTop,
   Navigation,
   PanelLeft,
@@ -102,12 +101,6 @@ const CONTINUITY_ITEMS: PreferenceItem[] = [
     title: "Sticky module headers",
     description: "Keep toolbox headers reachable while long tools scroll.",
     icon: <StickyNote size={20} />,
-  },
-  {
-    key: "keyboardPositionRestore",
-    title: "Restore position after keyboard",
-    description: "Return mobile workspaces to their pre-keyboard position.",
-    icon: <Keyboard size={20} />,
   },
   {
     key: "rememberToolboxState",
