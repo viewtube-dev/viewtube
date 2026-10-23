@@ -535,7 +535,6 @@
      Thick shell dividers, component strokes and shadows need extra breathing
      room so the first control does not visually collide with a header. */
   --vt-toolbox-header-edge-clearance:10px;
-  --vt-keyboard-occlusion:0px;
 }
 [data-vt-toolbox][data-vt-toolbox-level="main"] .vt-main-toolbox-content{
   padding:var(--vt-toolbox-header-edge-clearance) var(--vt-toolbox-shell-gutter) var(--vt-toolbox-shell-gutter)!important;
