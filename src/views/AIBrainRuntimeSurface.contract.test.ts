@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 
 const source = readFileSync(new URL("./AIBrainCommandInterface.tsx", import.meta.url), "utf8")
 const panelSource = readFileSync(new URL("../components/brain/BrainRuntimePanel.tsx", import.meta.url), "utf8")
+const chatPrimitivesSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.tsx", import.meta.url), "utf8")
 
 describe("AI Brain runtime surface integration", () => {
  it("mounts the canonical backend runtime snapshot above the conversation workspace", () => {
@@ -41,7 +42,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(promptLibrary).toContain("secondLine=\"FIRST\"")
   expect(promptLibrary).toContain("TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length]")
   expect(promptLibrary).toContain("order.get(card.id)")
-  expect(source).toContain("touch-pan-y")
+  expect(chatPrimitivesSource).toContain("touch-pan-y")
   expect(source).toContain("max-xl:h-[100dvh]")
  })
 })
