@@ -9,6 +9,8 @@ import {
   BrainPromptLibraryItem,
   BrainComposerAccessoryRow,
   BrainResponseLayout,
+  BrainComposerShell,
+  ChatConversationViewport,
 } from "./BrainChatPrimitives"
 
 describe("Brain Studio chat primitives", () => {
