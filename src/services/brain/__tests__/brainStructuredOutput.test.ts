@@ -96,19 +96,21 @@ describe("structured model output -> CreatorBrainResponse", () => {
   const snapshot = buildGoldenChannelFixture(restorationRichSpec).snapshot
   const output = baseOutput({
    keyInsight: "Views increased to 12,400 after the title change.",
-   body: "CTR reached 6.8% in the latest window.",
+   body: "CTR reached 6.8% in the latest window. CTR fell by -12.4%.",
    claimEvidence: [
     { claim: "Views increased to 12,400 after the title change.", evidenceIds: ["record-views", "not-in-prompt"] },
     { claim: "This sentence is not in the response: 12,400.", evidenceIds: ["record-views"] },
     { claim: "CTR reached 6.8% in the latest window.", evidenceIds: ["record-window"] },
+    { claim: "CTR fell by -12.4%.", evidenceIds: ["record-negative"] },
    ],
   } as Partial<StructuredBrainModelOutput>)
 
-  const response = fromStructuredOutput(output, snapshot, [promptEvidenceRecord("record-views", 12400), promptEvidenceRecord("record-window", 6.8)])
+  const response = fromStructuredOutput(output, snapshot, [promptEvidenceRecord("record-views", 12400), promptEvidenceRecord("record-window", 6.8), promptEvidenceRecord("record-negative", -12.4)])
 
   expect(response.claimEvidence).toEqual([
    { claim: "Views increased to 12,400 after the title change.", evidenceIds: ["record-views"], verification: "direct_value_match" },
    { claim: "CTR reached 6.8% in the latest window.", evidenceIds: ["record-window"], verification: "direct_value_match" },
+   { claim: "CTR fell by -12.4%.", evidenceIds: ["record-negative"], verification: "direct_value_match" },
   ])
  })
 

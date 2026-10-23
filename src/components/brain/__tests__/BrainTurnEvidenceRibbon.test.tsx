@@ -63,7 +63,7 @@ describe("BrainTurnEvidenceRibbon", () => {
   expect(html).toContain("Unknown / missing")
   expect(html).toContain("MISSING")
   expect(html).toContain("No zero value is inferred")
-  expect(html).toContain('href="/analytics"')
+  expect(html).toContain('href="/analytics?brainEvidenceId=analytics%3Asnapshot-1%3Achannel_summary%3Aviews')
  })
 
  it("does not imply typed provenance exists for legacy turns without persisted records", () => {

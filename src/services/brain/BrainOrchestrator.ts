@@ -259,8 +259,13 @@ export const fromStructuredOutput = (
   const evidenceIds = Array.from(new Set(candidateEvidenceIds.filter(
    (id): id is string => typeof id === "string" && allowedEvidence.has(id),
   ))).slice(0, 8)
-  const numericTokens = claim.match(/\d[\d,]*(?:\.\d+)?\s?[KkMmBb]?%?/g) || []
-  const numericClaims = numericTokens.map(parseNumericToken).filter((token) => token !== null)
+  const numericTokens = claim.match(/-?\d[\d,]*(?:\.\d+)?\s?[KkMmBb]?%?/g) || []
+  const numericClaims = numericTokens.map((raw) => {
+   const token = raw.trim()
+   const sign = token.startsWith("-") ? -1 : 1
+   const parsed = parseNumericToken(token.replace(/^-/, ""))
+   return parsed ? { ...parsed, value: parsed.value * sign } : null
+  }).filter((token) => token !== null)
   if (!evidenceIds.length || !numericClaims.length) return []
   const directlyMatchingIds = evidenceIds.filter((id) => {
    const value = allowedEvidence.get(id)?.value
