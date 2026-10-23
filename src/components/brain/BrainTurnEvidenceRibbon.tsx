@@ -42,9 +42,8 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
  const captureLabel = capturedAt && Number.isFinite(Date.parse(capturedAt))
   ? new Date(capturedAt).toLocaleString()
   : "Capture time unavailable"
- const requestConstraints = evidencePack.requestSpec && typeof evidencePack.requestSpec === "object"
-  ? formatEvidenceRequestSpec(evidencePack.requestSpec)
-  : null
+ const requestSpec = evidencePack.requestSpec && typeof evidencePack.requestSpec === "object" ? evidencePack.requestSpec : null
+ const requestConstraints = requestSpec ? formatEvidenceRequestSpec(requestSpec) : null
  const requestSummary = requestConstraints
   ? requestConstraints.map((item) => item.value).join(" · ")
   : "Selection constraints were not recorded for this saved turn."
