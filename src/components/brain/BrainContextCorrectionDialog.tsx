@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
+import { StudioButton, StudioTextArea } from "../../studio-ui"
 import {
  submitBrainContextCorrection,
  type BrainContextCorrectionResult,
@@ -131,16 +132,18 @@ export const BrainContextCorrectionDialog: React.FC<{
     ) : (
      <form className="grid gap-2" onSubmit={submit}>
       <label htmlFor="brain-context-correction-value" className="text-[10px] font-[1000] uppercase">Corrected statement</label>
-      <textarea
+      <StudioTextArea
        ref={valueRef}
        id="brain-context-correction-value"
        name="correctedStatement"
+       sizeVariant="standard"
        required
        rows={4}
+       placeholder="Corrected statement"
        value={correctedStatement}
        onChange={(event) => setCorrectedStatement(event.target.value)}
        aria-describedby="brain-context-correction-hint"
-       className="min-h-24 w-full resize-y border-[2px] border-black bg-white p-2 text-sm font-semibold leading-5 outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
+       className="min-h-24 w-full resize-y"
       />
       <p id="brain-context-correction-hint" className="text-xs font-semibold leading-4 text-black/65">
        Nothing changes until you submit this correction. Hypotheses and learning candidates are recorded as proposals because they do not share the memory-claim update contract.
@@ -148,15 +151,15 @@ export const BrainContextCorrectionDialog: React.FC<{
       {error ? <p role="alert" className="border-2 border-black bg-[#FF7AC8] p-2 text-xs font-bold">{error}</p> : null}
       {!channelId ? <p role="alert" className="text-xs font-bold">An active channel is required to submit a correction.</p> : null}
       <div className="flex flex-wrap justify-end gap-2 border-t-2 border-black pt-2">
-       <button type="button" disabled={busy} onClick={onClose} className="min-h-11 border-2 border-black bg-white px-3 text-xs font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-50">Cancel</button>
-       <button type="submit" disabled={busy || !channelId} className="min-h-11 border-2 border-black bg-[#36E0F6] px-3 text-xs font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-50">{busy ? "Submitting…" : "Save correction"}</button>
+       <StudioButton type="button" sizeVariant="standard" tone="neutral" disabled={busy} onClick={onClose}>Cancel</StudioButton>
+       <StudioButton type="submit" sizeVariant="standard" tone="accent" disabled={busy || !channelId}>{busy ? "Submitting…" : "Save correction"}</StudioButton>
       </div>
      </form>
     )}
     {result ? (
      <div className="flex flex-wrap justify-end gap-2 border-t-2 border-black pt-2">
-      <button type="button" onClick={onClose} className="min-h-11 border-2 border-black bg-white px-3 text-xs font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Close</button>
-      {applied ? <button type="button" onClick={() => { onApplied(); onClose() }} className="min-h-11 border-2 border-black bg-[#3FEE56] px-3 text-xs font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Close and verify next turn</button> : null}
+      <StudioButton type="button" sizeVariant="standard" tone="neutral" onClick={onClose}>Close</StudioButton>
+      {applied ? <StudioButton type="button" sizeVariant="standard" tone="success" onClick={() => { onApplied(); onClose() }}>Close and verify next turn</StudioButton> : null}
      </div>
     ) : null}
    </section>
