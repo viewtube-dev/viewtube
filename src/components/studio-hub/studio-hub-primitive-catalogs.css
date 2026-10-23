@@ -3341,3 +3341,27 @@
 .vt-confirmed-defaults-dense .vt-confirmed-global-grid { gap: 4px; }
 .vt-confirmed-vertical-word-toggle-pair-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .vt-confirmed-vertical-word-toggle-pair-row > .vt-confirmed-vertical-word-toggle-specimen { flex: 1 1 0; min-width: 0; }
+
+/* Keep black-fill + white-fill vertical word toggle specimens on the same row. */
+.vt-confirmed-vertical-word-toggle-standard,
+.vt-confirmed-vertical-word-toggle-compact {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.vt-confirmed-vertical-word-toggle-standard > .vt-confirmed-vertical-word-toggle-specimen:nth-child(2),
+.vt-confirmed-vertical-word-toggle-compact > .vt-confirmed-vertical-word-toggle-specimen:nth-child(2) {
+  grid-column: 1; grid-row: 1;
+}
+.vt-confirmed-vertical-word-toggle-standard > .vt-confirmed-vertical-word-toggle-specimen:nth-child(4),
+.vt-confirmed-vertical-word-toggle-compact > .vt-confirmed-vertical-word-toggle-specimen:nth-child(4) {
+  grid-column: 2; grid-row: 1;
+}
+.vt-confirmed-vertical-word-toggle-standard > .vt-confirmed-vertical-word-toggle-specimen:nth-child(1),
+.vt-confirmed-vertical-word-toggle-compact > .vt-confirmed-vertical-word-toggle-specimen:nth-child(1) {
+  grid-column: 1; grid-row: 2;
+}
+.vt-confirmed-vertical-word-toggle-standard > .vt-confirmed-vertical-word-toggle-specimen:nth-child(3),
+.vt-confirmed-vertical-word-toggle-compact > .vt-confirmed-vertical-word-toggle-specimen:nth-child(3) {
+  grid-column: 2; grid-row: 2;
+}
