@@ -215,7 +215,40 @@ describe("aiBrainConversationStore", () => {
   const pending = await beginAIBrainTurn({
    channelId: "channel-evidence-restore",
    userText: "Show 10 long-form and live videos from the last year about tutorials, ranked by views.",
-   metadata: { evidencePackSnapshot: { evidenceIds: ["video:abc"], requestSpec } },
+   metadata: {
+   evidencePackSnapshot: { evidenceIds: ["video:abc"], requestSpec },
+   promptEvidenceRecordIds: ["analytics:snapshot-restore:channel_summary:views"],
+   evidenceRecords: [{
+    id: "analytics:snapshot-restore:channel_summary:views",
+    owner: "analytics-canon",
+    sourceRef: "channel_summary",
+    sourceSnapshotId: "snapshot-restore",
+    channelId: "channel-evidence-restore",
+    metric: "views",
+    value: 2800,
+    unit: "count",
+    observedAt: null,
+    updatedAt: "2026-10-22T10:00:00.000Z",
+    freshness: "fresh",
+    epistemicState: "OBSERVED",
+    availability: "available",
+    provenance: { evidenceIds: ["source-evidence-1"], sourceRoute: "/analytics", sourceVersion: "canon-v1" },
+   }],
+   contextRevision: 7,
+   creatorContextSnapshot: {
+    version: "creator-context-v1",
+    channelId: "channel-evidence-restore",
+    project: null,
+    selection: null,
+    profileLoadedAt: null,
+    styleProfileAvailable: false,
+    styleProfile: null,
+    knowledgeItems: [],
+    conflictIds: [],
+    evidenceRefs: ["source-evidence-1"],
+    projectSource: null,
+   },
+  },
   })
   await completeAIBrainTurn({
    turnId: pending.id,
@@ -230,6 +263,21 @@ describe("aiBrainConversationStore", () => {
   expect(restored.turns[0]?.metadata?.evidencePackSnapshot).toMatchObject({
    evidenceIds: ["video:abc"],
    requestSpec,
+  })
+  expect(restored.turns[0]?.metadata?.promptEvidenceRecordIds).toEqual(["analytics:snapshot-restore:channel_summary:views"])
+  expect(restored.turns[0]?.metadata?.evidenceRecords).toMatchObject([{
+   id: "analytics:snapshot-restore:channel_summary:views",
+   owner: "analytics-canon",
+   sourceSnapshotId: "snapshot-restore",
+   observedAt: null,
+   updatedAt: "2026-10-22T10:00:00.000Z",
+   provenance: { evidenceIds: ["source-evidence-1"], sourceVersion: "canon-v1" },
+  }])
+  expect(restored.turns[0]?.metadata?.contextRevision).toBe(7)
+  expect(restored.turns[0]?.metadata?.creatorContextSnapshot).toMatchObject({
+   version: "creator-context-v1",
+   channelId: "channel-evidence-restore",
+   evidenceRefs: ["source-evidence-1"],
   })
  })
  it("does not suppress a question when its saved answer is marked outdated", () => {
