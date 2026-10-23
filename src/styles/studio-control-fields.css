@@ -64,7 +64,7 @@ textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 }
 [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible) {
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
 }
 
 
@@ -109,7 +109,7 @@ html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type=
 html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible) {
-  -webkit-text-stroke-color: #000;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
 }
 
 
@@ -162,7 +162,7 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
 }
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible) {
-  -webkit-text-stroke-color: #000;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
 }
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="compact"]:is(:focus, :focus-visible) {
@@ -183,7 +183,7 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible) {
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke-color: #000;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
   caret-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
   background-color: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent);
 }
@@ -228,4 +228,39 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
   outline-offset: 0 !important;
   box-shadow: none !important;
+}
+
+
+/* Text input, textarea and textbox share primary inline stroke at rest and focus. */
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body textarea[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body [data-vt-studio-control="true"] textarea,
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"],
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"] {
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:is(:focus, :focus-visible) {
+  color: #000 !important; -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  background-color: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 15%, transparent) !important;
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline-offset: 0 !important; box-shadow: none !important;
+}
+
+/* Textbox wrappers use the textarea field contract, including a primary inline stroke. */
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"],
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"] {
+  -webkit-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+}
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:is(:focus, :focus-visible) {
+  -webkit-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
 }

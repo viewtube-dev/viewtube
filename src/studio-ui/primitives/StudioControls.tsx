@@ -1611,7 +1611,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
     }
   }, [open])
   const selectedLabels = options.filter(option => selected.includes(option.value)).map(option => option.label)
-  const triggerLabel = selectedLabels.length ? selectedLabels.join(", ") : placeholder
+  const triggerLabel = selectedLabels.length === 0 ? placeholder : selectedLabels.length === 1 ? selectedLabels[0] : `${selectedLabels[0]} +${selectedLabels.length - 1}`
   const menuAccessibleLabel = accessibleLabel ?? (typeof label === "string" || typeof label === "number" ? String(label) : "Filter options")
   return (
     <div

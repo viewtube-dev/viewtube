@@ -41,7 +41,6 @@ import {
   StudioDoubleSideToggle,
   StudioBarToggle,
 } from "../../studio-ui/primitives/StudioControls"
-import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import "./studio-hub-primitive-catalogs.css"
 
 type Size = "44px" | "28px"
@@ -407,39 +406,13 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
-    <Family
-      title="Confirmed Specimen Grid · Layout Contract"
-      nonDefaultSettings={[
-        "This is the reusable arrangement component from PR #756, integrated with real production Studio Controls.",
-        "This general layout-contract preview uses a status badge for its informational micro sample; the original Button family below separately exercises the established Supreme, Standard, and Micro button variants.",
-        "The grid controls catalog arrangement only. It does not override primitive faces, sizing tokens, focus, or interaction behavior.",
-      ]}
-      provenance={<Provenance primitive="ConfirmedSpecimenGrid + StudioButton + StudioBrainStatusBadge" tsx="src/components/studio-hub/ConfirmedSpecimenGrid.tsx" css="src/components/studio-hub/ConfirmedSpecimenGrid.css" tokens="4px layout rhythm; tier availability remains component-specific." imports={["src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
-      <ConfirmedSpecimenGrid
-        familyName="Studio control tier and layout reference"
-        documentation={<p>Use this reusable grid as the migration target for catalog families. Do not map unsupported size tiers onto a primitive.</p>}
-        renderSpecimen={({ id, tier }) => (
-          <div className="vt-confirmed-variant" data-vt-specimen-id={id} data-vt-specimen-tier={tier} aria-label={`${tier} specimen`}>
-            {tier === "supreme" ? (
-              <StudioButton heightVariant="60">SUPREME</StudioButton>
-            ) : tier === "standard" ? (
-              <StudioButton heightVariant="44">STANDARD</StudioButton>
-            ) : tier === "compact" ? (
-              <StudioButton heightVariant="28">COMPACT</StudioButton>
-            ) : (
-              <StudioBrainStatusBadge label="MICRO" tone="cyan" appearance="tinted" sizeVariant="micro" />
-            )}
-          </div>
-        )}
-      />
-    </Family>
     <section className="vt-confirmed-family vt-confirmed-defaults-combined" aria-labelledby="vt-confirmed-global-defaults-title">
-      <h3 id="vt-confirmed-global-defaults-title">Global Defaults · Current Source Contract</h3>
+      <h3 id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</h3>
       <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 12px micro · 4.09px / 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <p><a href="https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults, exception index, and certification rules ↗</a></p>
       <details className="vt-confirmed-defaults-details">
-        <summary>Show current defaults, effective CSS behavior, and exceptions</summary>
+        <summary>Show defaults, effective CSS behavior, and exceptions</summary>
+        <div className="vt-confirmed-defaults-dense">
         <div className="vt-confirmed-size-grid">
           <div className="vt-confirmed-size-card"><strong>44PX STANDARD</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontWeight}</span><span>Flat default: no shadow, hover offset, or press offset · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconStroke}</span></div>
           <div className="vt-confirmed-size-card"><strong>28PX COMPACT</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontWeight}</span><span>Flat default: no shadow, hover offset, or press offset · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconStroke}</span></div>
@@ -451,15 +424,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-defaults-explainer">
           <strong>HOW TO READ THE CURRENT CONTRACT</strong>
           <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and default line-height (1) unless a family exception is documented.</p>
-          <p><b>Field colors:</b> At rest, value, placeholder, and caret use primary (--pair-a); fill uses primary at 50% opacity, the outer border is black, and the inline primary text stroke matches the selected border width. Focus uses primary fill at 15%, black text and inline stroke, plus a secondary-color outline at 65% of the selected border width with 0px offset.</p>
+          <p><b>Field colors:</b> At rest, value, placeholder, caret, and inline text stroke use primary (--pair-a); fill uses primary at 50% opacity and the outer border is black. Focus uses primary fill at 15%, black text fill with primary inline stroke, plus a secondary-color outline at 65% of border width with 0px offset.</p>
           <p><b>Global interaction defaults:</b> primitive shells are flat and stationary. No shell shadow, hover/press movement, or transition is part of the default contract; explicitly registered inner-icon effects must remain isolated and honor reduced motion.</p>
           <p><b>Icon presets:</b> the default production preset is 38px / 1.9 stroke standard and 24px / 2.0 compact. Current (28px / 18px) and moderate (34px / 22px) presets are opt-in. Circle icon buttons scale the large preset to 80%.</p>
           <p><b>Certification boundary:</b> This section describes the intended canonical contract. Focus, responsive layout, accessibility, and any explicitly registered inner-icon effect require browser verification before certification; primitive shells remain flat and stationary.</p>
         </div>
-      </details>
-    </section>
-    <section className="vt-confirmed-family vt-confirmed-exception-index" aria-labelledby="vt-confirmed-exception-index-title">
-      <h3 id="vt-confirmed-exception-index-title">Global Exceptions · Current Implementation + Verification Boundary</h3>
+      <h4 className="vt-confirmed-exceptions-heading" id="vt-confirmed-exception-index-title">Global Exceptions · Current Implementation + Verification Boundary</h4>
       <p>Canonical sources: <code>src/studio-ui/primitives/StudioControls.tsx</code>, <code>src/studio-ui/tokens.ts</code>, and <code>src/styles/studio-control-system.css</code>. Named size exceptions are registered in <code>STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS</code>; effective CSS can diverge from token metadata.</p>
       <ul>
         <li><strong>BASE SIZE LATTICE:</strong> standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
@@ -478,6 +448,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <li><strong>VERIFICATION BOUNDARY:</strong> source text and source tests do not certify the live deployment. Verify standard/compact dimensions, effective shadows/transforms, selected/disabled/loading states, keyboard focus, dropdown stacking, narrow layouts, and reduced motion in a browser.</li>
       </ul>
       <p><strong>Audit status:</strong> this library records the canonical global defaults. A primitive is not certified until its production rendering, tokens, effective CSS, and responsive/accessibility behavior agree with this contract.</p>
+      </details>
     </section>
     <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Single-line input typography remains 38px standard / 24px compact / 10px micro across all label variants.",
@@ -1029,11 +1000,15 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
 
 
 const ConfirmedStudioValueToggleFamily: React.FC = () => {
-  const [arrow, setArrow] = React.useState("ONE")
-  const [side, setSide] = React.useState("LOW")
-  const [left, setLeft] = React.useState("SOURCE")
-  const [right, setRight] = React.useState("TARGET")
-  const [level, setLevel] = React.useState(50)
+  const [arrowStd, setArrowStd] = React.useState("ONE")
+  const [arrowCmp, setArrowCmp] = React.useState("ONE")
+  const [sideStd, setSideStd] = React.useState("LOW")
+  const [sideLeftCmp, setSideLeftCmp] = React.useState("LOW")
+  const [sideCmp, setSideCmp] = React.useState("LOW")
+  const [leftValues, setLeftValues] = React.useState(["SOURCE", "SOURCE", "SOURCE", "SOURCE"])
+  const [rightValues, setRightValues] = React.useState(["TARGET", "TARGET", "TARGET", "TARGET"])
+  const [levelStd, setLevelStd] = React.useState(50)
+  const [levelCmp, setLevelCmp] = React.useState(50)
   const options = ["ONE", "TWO", "THREE"] as const
   return (
     <Family title="Arrow / Side / Double Side / Bar Toggles" nonDefaultSettings={[
@@ -1045,25 +1020,25 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
     ]} provenance={<Provenance primitive="StudioArrowToggle · StudioSideToggle · StudioDoubleSideToggle · StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="Studio size lattice · semantic primary/secondary colors · ten 18×38px standard bars" imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/styles/studio-control-system.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle">
         <span>ARROW TOGGLE · STANDARD</span>
-        <StudioArrowToggle value={arrow} options={options} onValueChange={setArrow} ariaLabel="Arrow toggle specimen" appearance={{ fillColor: "color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent)", textColor: "#000", iconColor: "#000", iconFillColor: "transparent" }} />
+        <StudioArrowToggle value={arrowStd} options={options} onValueChange={setArrowStd} ariaLabel="Arrow toggle specimen" />
         <span>SIDE TOGGLE · DEFAULT RIGHT / V2 LEFT</span>
         <div style={{ display: "grid", gap: 4 }}>
-          <StudioSideToggle value={side} options={["LOW", "MID", "HIGH"]} onValueChange={setSide} />
-          <StudioSideToggle value={side} options={["LOW", "MID", "HIGH"]} onValueChange={setSide} arrowSide="left" size="compact" />
+          <StudioSideToggle value={sideStd} options={["LOW", "MID", "HIGH"]} onValueChange={setSideStd} />
+          <StudioSideToggle value={sideLeftCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideLeftCmp} arrowSide="left" size="compact" />
         </div>
         <span>DOUBLE SIDE TOGGLE · V1–V4</span>
         <div style={{ display: "grid", gap: 4 }}>
-          {(["default", "v2", "v3", "v4"] as const).map(variant => <StudioDoubleSideToggle key={variant} variant={variant}
-            left={{ value: left, options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: setLeft, ariaLabel: "Left side selection" }}
-            right={{ value: right, options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: setRight, ariaLabel: "Right side selection" }} />)}
+          {(["default", "v2", "v3", "v4"] as const).map((variant, index) => <StudioDoubleSideToggle key={variant} variant={variant}
+            left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => setLeftValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Left side selection " + variant }}
+            right={{ value: rightValues[index], options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: value => setRightValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Right side selection " + variant }} />)}
         </div>
-        <span>BAR TOGGLE · {level}%</span>
-        <StudioBarToggle value={level} onValueChange={setLevel} ariaLabel="Bar toggle specimen" />
+        <span>BAR TOGGLE · {levelStd}%</span>
+        <StudioBarToggle value={levelStd} onValueChange={setLevelStd} ariaLabel="Bar toggle specimen" />
         <span>COMPACT SPECIMENS</span>
         <div style={{ display: "grid", gap: 4 }}>
-          <StudioArrowToggle size="compact" value={arrow} options={options} onValueChange={setArrow} />
-          <StudioSideToggle size="compact" value={side} options={["LOW", "MID", "HIGH"]} onValueChange={setSide} />
-          <StudioBarToggle size="compact" value={level} onValueChange={setLevel} />
+          <StudioArrowToggle size="compact" value={arrowCmp} options={options} onValueChange={setArrowCmp} />
+          <StudioSideToggle size="compact" value={sideCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideCmp} />
+          <StudioBarToggle size="compact" value={levelCmp} onValueChange={setLevelCmp} />
         </div>
       </div>
     </Family>
