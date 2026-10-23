@@ -25,7 +25,7 @@ export const StudioInterModule: React.FC<StudioInterModuleProps> = ({
 }) => {
   const controlled = openProp !== undefined
   const [uncontrolled, setUncontrolled] = React.useState(defaultOpen)
-  const open = controlled ? Boolean(openProp) : uncontrolled
+  const open = !collapsible ? true : controlled ? Boolean(openProp) : uncontrolled
   const hasBody = children !== null && children !== undefined && children !== false
 
   const toggle = () => {
