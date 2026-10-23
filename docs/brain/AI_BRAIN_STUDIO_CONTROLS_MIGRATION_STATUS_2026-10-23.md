@@ -50,3 +50,7 @@ No pull request has been opened for this working branch because previous Brain-s
 - Migrates the two Brain context/readiness disclosures and the two evidence-ribbon disclosures to the shared primitive while preserving native `details/summary` semantics.
 - This branch was created fresh because the earlier follow-up branch had drifted 42 commits behind the moving target.
 - **Verification not yet executed:** Vitest, typecheck, production build, browser interaction, keyboard-only disclosure operation, and mobile viewport checks. Do not merge before these gates are completed.
+
+- Extended the shared primitive with a `structured` appearance for data-rich answer-module headers, preserving the module's grid content and per-module accent while centralizing native disclosure semantics and focus styling.
+- Migrated `BrainAnswerModules.tsx` as well; the audited Brain chat/evidence/runtime/disclosure consumers in this change set now contain no raw `<summary>` elements.
+- Latest target comparison shows the target branch advanced after this branch was created; the changed-file audit found no independent target edits in the touched consumer files. Recheck branch ancestry and mergeability before opening a PR.
