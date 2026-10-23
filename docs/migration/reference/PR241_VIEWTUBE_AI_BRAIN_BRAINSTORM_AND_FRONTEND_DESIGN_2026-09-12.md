@@ -886,3 +886,8 @@ The embedded Brain runtime panel now exposes a collapsible **Recent work** tray 
 The UI deliberately uses conservative state labels. A missing receipt is not called a failure or a completed action; a recorded receipt without resolvable output is not called saved; a verified output does not imply publication. Empty history is scoped to the active ContentBuild. This is a first UI-3 slice, not a complete work tray: proposed/started/failed action states require canonical owner records, and broader history, restoration, keyboard/mobile/screen-reader checks remain open.
 
 Regression tests cover recent-chain projection and verified output navigation. **Verification status:** CI pending; no local test execution or accessibility certification is claimed.
+### Readiness correction — stale data is never green (2026-10-22)
+
+Static review found a UI truthfulness defect: the readiness badge selected its green state from `dataStatus === ready` even when the same diagnostic snapshot reported stale or missing datasets. The page now uses a small pure presentation resolver so stale data becomes a warning, missing inputs prevent a green state, and fully synced/complete data is green only when stale and missing counts are both zero.
+
+Regression tests cover stale-ready, missing-ready, clean-ready, partial, and unavailable states. This is a readiness-label correction, not a claim that model confidence is automatically calibrated or downgraded; that requires an evidence-backed confidence contract. CI and live accessibility checks remain pending.
