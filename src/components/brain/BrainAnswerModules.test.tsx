@@ -41,6 +41,11 @@ describe("BrainQuickActionCard Studio contract", () => {
   expect(html).toContain("Strong payoff")
  })
 
+ it("does not present a compact action as available when no handler exists", () => {
+  const html = renderToStaticMarkup(<BrainQuickActionCard action={action} compact />)
+  expect(html).toMatch(/disabled(?:="")?/)
+ })
+
  it("uses the shared Studio button for the full card action", () => {
   const html = renderToStaticMarkup(<BrainQuickActionCard action={action} onAccept={() => undefined} />)
   expect(html).toContain('data-vt-studio-button="true"')
