@@ -9,6 +9,8 @@ import {
   BrainPromptLibraryItem,
   BrainComposerAccessoryRow,
   BrainResponseLayout,
+  BrainComposerShell,
+  ChatConversationViewport,
 } from "./BrainChatPrimitives"
 
 const render = (node: React.ReactNode): string => renderToStaticMarkup(<>{node}</>)
@@ -91,4 +93,25 @@ describe("Brain Studio chat primitives", () => {
     expect(html).toContain("Retry")
     expect(html).toContain("Evidence provenance")
   })
+
+  it("provides a named composer shell with safe-area padding", () => {
+    const html = render(<BrainComposerShell><button type="button">Send prompt</button></BrainComposerShell>)
+    expect(html).toContain('data-vt-brain-component="BrainComposer"')
+    expect(html).toContain('aria-label="Brain composer"')
+    expect(html).toContain("env(safe-area-inset-bottom)")
+    expect(html).toContain("Send prompt")
+  })
+
+  it("provides one labelled conversation log with a bottom sentinel", () => {
+    const html = render(
+      <ChatConversationViewport viewportRef={React.createRef<HTMLDivElement>()} bottomRef={React.createRef<HTMLDivElement>()}>
+        <p>Newest turn</p>
+      </ChatConversationViewport>,
+    )
+    expect(html).toContain('role="log"')
+    expect(html).toContain('aria-label="Brain conversation"')
+    expect(html).toContain("Newest turn")
+    expect(html).toContain('aria-hidden="true"')
+  })
+
 })
