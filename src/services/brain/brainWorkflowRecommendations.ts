@@ -21,8 +21,8 @@ const clean = (value: unknown) => String(value || "").replace(/\s+/g, " ").trim(
 /**
  * Converts an ordinary Brain answer into a conservative, user-started workflow.
  * It deliberately does not execute anything automatically: the recommendation is
- * a visible plan until the creator presses Start, and risky/final actions remain
- * approval-gated in the run panel.
+ * a local progress tracker only. It never dispatches a tool or publishes content;
+ * risky/final steps stay blocked until a governance approval callback is connected.
  */
 export const buildWorkflowRecommendationFromBrainResponse = (
  response: CreatorBrainResponse,
@@ -61,9 +61,9 @@ export const buildWorkflowRecommendationFromBrainResponse = (
 
  return {
   id: `${seed}-${Date.now()}`,
-  title: clean(raw.title) || "Brain Action Plan",
-  goal: clean(raw.summary) || clean(raw.answer) || "Turn this Brain recommendation into an inspectable, resumable workflow.",
-  reason: "These are the concrete next actions already present in the Brain answer. Nothing runs until you start the workflow.",
+  title: clean(raw.title) || clean(response.headline) || "Brain Action Plan",
+  goal: clean(raw.summary) || clean(response.keyInsight) || clean(response.body) || "Turn this Brain recommendation into an inspectable, resumable action plan.",
+  reason: "These are the concrete next actions already present in the Brain answer. Tracking records local progress only; it does not execute tools or publish content.",
   confidence: "medium",
   steps,
  }
