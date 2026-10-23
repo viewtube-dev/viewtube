@@ -466,7 +466,9 @@ const OpeningBriefing: React.FC<{
 }
 
 /** Persistent task discovery. Kept outside the empty-chat branch so prior turns
- * never hide a Brain capability from returning creators. */
+ * never hide a Brain capability from returning creators. Prompt categories are
+ * compact, collapsed Studio modules; prompt selection and dispatch remain owned
+ * by the existing registry-backed page handlers. */
 export const BrainPromptLibrary: React.FC<{
  cards: CreatorBrainPromptCard[]
  busy?: boolean
@@ -477,77 +479,123 @@ export const BrainPromptLibrary: React.FC<{
  const [selectedId, setSelectedId] = useState<string | null>(null)
  const [query, setQuery] = useState("")
  const [category, setCategory] = useState("all")
+ const [openCategories, setOpenCategories] = useState<string[]>([])
  const filteredCards = useMemo(() => filterCreatorBrainPromptCards(cards, query, category), [cards, query, category])
- const selected = filteredCards.find((card) => card.id === selectedId) || null
+ const groupedCards = useMemo(() => {
+  const groups = new Map<string, CreatorBrainPromptCard[]>()
+  filteredCards.forEach((card) => {
+   const key = card.category || "general"
+   groups.set(key, [...(groups.get(key) || []), card])
+  })
+  return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b))
+ }, [filteredCards])
 
  return (
-  <StudioTopSplitModule
+  <section
    data-vt-brain-component="BrainPromptLibrary"
    aria-label="Prompt library"
    aria-labelledby={headingId}
    aria-busy={busy || undefined}
-   sizeVariant="compact"
-   split="left"
-   startIcon={<LayoutGrid aria-hidden="true" />}
-   title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
-   className="overflow-hidden"
+   className="flex min-w-0 flex-col gap-2"
   >
-   <p data-vt-brain-part="prompt-library-description" className="mb-2 border-b border-black/20 pb-2 text-[10px] font-bold leading-4 text-black/65">
-    Search by task or topic, preview the prompt, then send it or edit it first.
-   </p>
-   <div className="grid gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
-    <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
-    <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: item.replace(/_/g, " ") }))]} />
-   </div>
-   <p className="px-3 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
-   <ul className="grid grid-cols-1 gap-1.5 p-2 sm:grid-cols-2 xl:grid-cols-3">
-    {filteredCards.map((card) => {
-     const isSelected = card.id === selectedId
+   <StudioTopSplitModule
+    sizeVariant="compact"
+    split="left"
+    startIcon={<LayoutGrid aria-hidden="true" />}
+    title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
+    className="overflow-hidden"
+   >
+    <p data-vt-brain-part="prompt-library-description" className="mb-2 border-b border-black/20 pb-2 text-[10px] font-bold leading-4 text-black/65">
+     Open a task module to browse its related prompts. Choose a prompt to preview it and send it from inside that module.
+    </p>
+    <div className="grid gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
+     <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
+     <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: item.replace(/_/g, " ") }))]} />
+    </div>
+    <p className="px-3 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
+   </StudioTopSplitModule>
+
+   <div className="grid min-w-0 gap-1.5">
+    {groupedCards.map(([groupCategory, groupCards]) => {
+     const isOpen = openCategories.includes(groupCategory)
+     const selected = groupCards.find((card) => card.id === selectedId) || null
+     const toggleGroup = () => setOpenCategories((current) => current.includes(groupCategory) ? current.filter((item) => item !== groupCategory) : [...current, groupCategory])
      return (
-      <li key={card.id}>
-       <BrainPromptLibraryItem
-        title={card.label}
-        description={promptCardSummary(card)}
-        promptTitle={card.prompt}
-        selected={isSelected}
-        disabled={busy}
-        onSelect={() => setSelectedId(isSelected ? null : card.id)}
-       />
-      </li>
+      <details
+       key={groupCategory}
+       open={isOpen}
+       onToggle={(event) => {
+        const nextOpen = event.currentTarget.open
+        setOpenCategories((current) => nextOpen
+         ? (current.includes(groupCategory) ? current : [...current, groupCategory])
+         : current.filter((item) => item !== groupCategory))
+       }}
+       data-vt-brain-component="BrainPromptLibraryModule"
+       data-prompt-category={groupCategory}
+       className="min-w-0 overflow-hidden"
+      >
+       <summary
+        onClick={(event) => { event.preventDefault(); toggleGroup() }}
+        className="list-none cursor-pointer [&::-webkit-details-marker]:hidden"
+        aria-label={`${groupCategory.replace(/_/g, " ")} prompts, ${groupCards.length} items`}
+       >
+        <StudioTopSplitModule
+         as="div"
+         sizeVariant="compact"
+         split="double"
+         startIcon={<LayoutGrid aria-hidden="true" />}
+         endIcon={<span aria-hidden="true" className="text-base font-black leading-none">{isOpen ? "−" : "+"}</span>}
+         title={<span className="flex min-w-0 items-center justify-between gap-2"><span className="truncate">{groupCategory.replace(/_/g, " ")}</span><span className="shrink-0 text-[10px] font-black">{groupCards.length}</span></span>}
+         className="overflow-hidden"
+        />
+       </summary>
+
+       {isOpen ? (
+        <div data-vt-brain-part="prompt-module-body" className="min-w-0 border-x-[2px] border-b-[2px] border-black bg-white">
+         <ul className="grid min-w-0 grid-cols-1 gap-1 p-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
+          {groupCards.map((card) => {
+           const isSelected = card.id === selectedId
+           return (
+            <li key={card.id} className="min-w-0">
+             <BrainPromptLibraryItem
+              title={card.label}
+              description={promptCardSummary(card)}
+              promptTitle={card.prompt}
+              selected={isSelected}
+              disabled={busy}
+              onSelect={() => setSelectedId(isSelected ? null : card.id)}
+             />
+            </li>
+           )
+          })}
+         </ul>
+         {selected ? (
+          <div className="border-t-[2px] border-black bg-[#f8f8f4] p-2">
+           <div className="min-w-0 overflow-hidden border-[2px] border-black bg-white">
+            <div className="flex min-w-0 items-center justify-between gap-2 border-b-[2px] border-black px-2 py-1" style={{ backgroundColor: selected.color }}>
+             <span className="min-w-0 truncate text-[10px] font-[1000] uppercase tracking-[0.04em]">Prompt preview · {selected.label}</span>
+             <StudioSquareIconButton sizeVariant="compact" icon={<X aria-hidden="true" />} label="Close prompt preview" title="Close prompt preview" onClick={() => setSelectedId(null)} className="shrink-0" />
+            </div>
+            <div className="grid min-w-0 gap-2 p-2">
+             <p className="min-w-0 whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{selected.prompt}</p>
+             <div className="flex min-w-0 flex-wrap gap-1">
+              <StudioSplitLeftButton sizeVariant="compact" icon={<Send aria-hidden="true" />} disabled={busy} onClick={() => { onPrompt(selected.prompt); setSelectedId(null) }}>Send to chat</StudioSplitLeftButton>
+              {onEdit ? <StudioSplitLeftButton sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => { onEdit(selected.prompt); setSelectedId(null) }}>Edit first</StudioSplitLeftButton> : null}
+             </div>
+            </div>
+           </div>
+          </div>
+         ) : (
+          <p className="border-t border-black/20 px-3 py-2 text-[10px] font-bold uppercase leading-4 tracking-[0.04em] text-black/50">Choose a prompt to preview and send it here.</p>
+         )}
+        </div>
+       ) : null}
+      </details>
      )
     })}
-   </ul>
-   {!filteredCards.length ? <p className="px-3 pb-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
-
-   <div className="border-t-[2px] border-black bg-[#f8f8f4] p-2">
-    {selected ? (
-     <div className="overflow-hidden rounded-[8px] border-[2px] border-black bg-white shadow-[3px_3px_0_0_#000]">
-      <div
-       className="flex items-center justify-between gap-2 border-b-[2px] border-black px-2.5 py-1"
-       style={{ backgroundColor: selected.color }}
-      >
-       <span className="truncate text-xs font-[1000] uppercase tracking-[0.08em]">
-        Preview · {selected.label}
-       </span>
-       <StudioSquareIconButton sizeVariant="compact" icon={<X aria-hidden="true" />} label="Close preview" title="Close preview" onClick={() => setSelectedId(null)} className="shrink-0" />
-      </div>
-      <div className="grid gap-2 p-2.5">
-       <p className="text-sm font-bold leading-5 text-black/80">{selected.prompt}</p>
-       <div className="flex flex-wrap gap-1.5">
-        <StudioSplitLeftButton sizeVariant="compact" icon={<Send aria-hidden="true" />} disabled={busy} onClick={() => { onPrompt(selected.prompt); setSelectedId(null) }}>Send to chat</StudioSplitLeftButton>
-        {onEdit ? (
-         <StudioSplitLeftButton sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => { onEdit(selected.prompt); setSelectedId(null) }}>Edit first</StudioSplitLeftButton>
-        ) : null}
-       </div>
-      </div>
-     </div>
-    ) : (
-     <p className="px-1 py-0.5 text-[10px] font-bold uppercase leading-4 tracking-[0.08em] text-black/45">
-      Tap a prompt above to preview it before sending.
-     </p>
-    )}
    </div>
-  </StudioTopSplitModule>
+   {!filteredCards.length ? <p className="border-[2px] border-black p-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
+  </section>
  )
 }
 
