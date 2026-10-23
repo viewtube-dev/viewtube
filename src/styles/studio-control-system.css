@@ -5388,7 +5388,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
     solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
-.vt-studio-value-toggle--double .vt-studio-value-toggle__arrow:focus-visible {
+.vt-studio-value-toggle--double .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow:focus-visible {
   outline: none;
 }
 
