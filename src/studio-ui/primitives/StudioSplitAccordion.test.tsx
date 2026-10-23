@@ -85,7 +85,11 @@ describe("StudioSplitAccordion", () => {
     expect(css).toContain("var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))");
     expect(css).toContain("var(--vt-studio-control-accent, var(--pair-a, #36e0f6))");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(css).toContain("transition: opacity 140ms linear");
+    expect(css).toContain("visibility: hidden;");
+    expect(css).toContain("width: max-content; min-width: max-content; max-width: none;");
+    expect(css).toContain("justify-content: center;");
+    expect(css).not.toContain("@media (max-width: 420px)");
+    expect(css).not.toContain("font-size: min(var(--vt-sa-font), 5vw)");
     expect(css).toContain("gap: var(--vt-sa-stroke); background: #000;");
     expect(css).toContain("border-left: var(--vt-sa-stroke) solid #000;");
     expect(css).toContain("flex: 0 0 var(--vt-sa-face)");
