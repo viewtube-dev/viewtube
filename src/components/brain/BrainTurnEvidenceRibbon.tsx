@@ -16,12 +16,6 @@ export type BrainTurnEvidenceRibbonProps = {
  className?: string
 }
 
-const statusTone: Record<AIBrainEvidencePack["dataStatus"], string> = {
- ready: "#C0F240",
- partial: "#FFDA47",
- missing: "#FF7AC8",
-}
-
 /**
  * Turn-scoped provenance summary. The evidence pack represents prepared evidence;
  * only response evidence IDs count as cited. Capture time is displayed as supplied,
@@ -60,9 +54,6 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
    : noPreparedEvidence
     ? "No evidence selected"
     : "Evidence ready"
- const statusColor = evidencePack.dataStatus === "missing" || noPreparedEvidence
-  ? statusTone.missing
-  : statusTone[evidencePack.dataStatus]
  const verifiedRecords = evidenceIntegrityStatus === "verified" ? evidenceRecords : undefined
  const staleCount = verifiedRecords?.filter((record) => record.freshness === "stale" || record.epistemicState === "STALE").length ?? 0
  const missingCount = verifiedRecords?.filter((record) => record.epistemicState === "MISSING" || record.availability === "unavailable").length ?? 0
@@ -78,20 +69,20 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
   >
    <div className="flex min-w-0 flex-wrap items-center gap-1.5">
     <span className="min-w-0 flex-1 text-[9px] font-[1000] uppercase tracking-[0.08em]">Evidence snapshot</span>
-    <StudioSplitLeftBadge sizeVariant="micro" style={{ backgroundColor: statusColor, width: "max-content" }}>
+    <StudioSplitLeftBadge sizeVariant="micro" className="w-max">
      {statusLabel}
     </StudioSplitLeftBadge>
    </div>
    <div className="flex flex-wrap items-center gap-1">
-    <StudioSplitLeftBadge sizeVariant="micro" style={{ width: "max-content" }}>{preparedCount} prepared</StudioSplitLeftBadge>
-    <StudioSplitLeftBadge sizeVariant="micro" style={{ width: "max-content" }}>{citedCount} cited</StudioSplitLeftBadge>
+    <StudioSplitLeftBadge sizeVariant="micro" className="w-max">{preparedCount} prepared</StudioSplitLeftBadge>
+    <StudioSplitLeftBadge sizeVariant="micro" className="w-max">{citedCount} cited</StudioSplitLeftBadge>
     {unresolvedCitationCount ? (
-     <StudioSplitLeftBadge sizeVariant="micro" style={{ backgroundColor: "#FF7AC8", width: "max-content" }}>
+     <StudioSplitLeftBadge sizeVariant="micro" className="w-max">
       {unresolvedCitationCount} unresolved citation{unresolvedCitationCount === 1 ? "" : "s"}
      </StudioSplitLeftBadge>
     ) : null}
     {evidencePack.missingInputs.length ? (
-     <StudioSplitLeftBadge sizeVariant="micro" style={{ backgroundColor: "#FFDA47", width: "max-content" }}>
+     <StudioSplitLeftBadge sizeVariant="micro" className="w-max">
       {evidencePack.missingInputs.length} gaps
      </StudioSplitLeftBadge>
     ) : null}
@@ -111,12 +102,12 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
     <section data-vt-brain-part="evidence-condition-summary" aria-label="Evidence condition summary" className="grid min-w-0 gap-1 border-t border-black/20 pt-1.5">
      <h4 className="text-[9px] font-[1000] uppercase tracking-[0.06em]">Evidence conditions</h4>
      <div className="flex min-w-0 flex-wrap gap-1">
-      {hasPartialCoverage ? <span className="border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-[1000] uppercase">Partial coverage</span> : null}
-      {staleCount ? <span className="border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-[1000] uppercase">{staleCount} stale</span> : null}
-      {missingCount ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-1 text-[9px] font-[1000] uppercase">{missingCount} missing</span> : null}
-      {conflictingCount ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-1 text-[9px] font-[1000] uppercase">{conflictingCount} conflicting</span> : null}
+      {hasPartialCoverage ? <StudioSplitLeftBadge sizeVariant="micro">Partial coverage</StudioSplitLeftBadge> : null}
+      {staleCount ? <StudioSplitLeftBadge sizeVariant="micro">{staleCount} stale</StudioSplitLeftBadge> : null}
+      {missingCount ? <StudioSplitLeftBadge sizeVariant="micro">{missingCount} missing</StudioSplitLeftBadge> : null}
+      {conflictingCount ? <StudioSplitLeftBadge sizeVariant="micro">{conflictingCount} conflicting</StudioSplitLeftBadge> : null}
       {!hasPartialCoverage && staleCount === 0 && missingCount === 0 && conflictingCount === 0 ? (
-       <span className="border border-black bg-[#C0F240] px-1.5 py-1 text-[9px] font-[1000] uppercase">No recorded quality flags</span>
+       <StudioSplitLeftBadge sizeVariant="micro">No recorded quality flags</StudioSplitLeftBadge>
       ) : null}
      </div>
      <p className="break-words text-[10px] font-bold leading-4 text-black/65">Conditions are calculated from the verified prompt records and this turn's selection status. They describe recorded evidence quality, not a guarantee that every claim is correct.</p>
@@ -222,14 +213,14 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
         <li key={record.id} data-vt-evidence-record-id={record.id} className="grid min-w-0 gap-1 border-[1.5px] border-black/40 bg-[#f8f8f4] p-2">
          <div className="flex min-w-0 flex-wrap items-start justify-between gap-1.5">
           <strong className="min-w-0 break-words text-[10px] font-[1000]">{record.metric || "Evidence record"}: {displayValue}</strong>
-          <span className="shrink-0 border border-black px-1 py-0.5 text-[8px] font-black uppercase">{record.freshness}</span>
+          <StudioSplitLeftBadge sizeVariant="micro" className="shrink-0">{record.freshness}</StudioSplitLeftBadge>
          </div>
          <div className="flex min-w-0 flex-wrap gap-1" aria-label="Record readiness">
-          {availabilityLabel ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">{availabilityLabel}</span> : null}
-          {coverageLabel ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">{coverageLabel}</span> : null}
-          {record.epistemicState === "STALE" ? <span className="border border-black bg-[#FFDA47] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Stale observation</span> : null}
-          {record.epistemicState === "MISSING" ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Missing value</span> : null}
-          {record.epistemicState === "CONFLICTING" ? <span className="border border-black bg-[#FF7AC8] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">Conflicting values</span> : null}
+          {availabilityLabel ? <StudioSplitLeftBadge sizeVariant="micro">{availabilityLabel}</StudioSplitLeftBadge> : null}
+          {coverageLabel ? <StudioSplitLeftBadge sizeVariant="micro">{coverageLabel}</StudioSplitLeftBadge> : null}
+          {record.epistemicState === "STALE" ? <StudioSplitLeftBadge sizeVariant="micro">Stale observation</StudioSplitLeftBadge> : null}
+          {record.epistemicState === "MISSING" ? <StudioSplitLeftBadge sizeVariant="micro">Missing value</StudioSplitLeftBadge> : null}
+          {record.epistemicState === "CONFLICTING" ? <StudioSplitLeftBadge sizeVariant="micro">Conflicting values</StudioSplitLeftBadge> : null}
          </div>
          <p className="break-all text-[9px] font-bold leading-4 text-black/65">{record.id}</p>
          <dl className="grid min-w-0 grid-cols-2 gap-x-2 gap-y-1 text-[9px] leading-4 sm:grid-cols-3">
