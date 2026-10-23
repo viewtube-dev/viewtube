@@ -467,3 +467,11 @@ The chat composition layer also exports `ChatConversationViewport` and `BrainCom
 - The AI Brain Prompt Library composes category modules containing nested prompt modules; prompt actions remain inside the expanded prompt body, including Send to Chat and Edit First. Prompt filtering and registry-backed content remain owned by the Brain page.
 - The Confirmed Primitive Library demonstrates nested edge-flush composition at all three sizes; specimens are production imports, not catalog-only redraws.
 - Contract tests: `src/studio-ui/primitives/StudioInterModule.test.tsx`. Source registration is not browser certification; run the focused test suite, typecheck/build, and responsive browser checks before marking visual behavior certified.
+
+## Double Side Toggle — V1/V2 appearance matrix (2026-10-23)
+
+The confirmed Double Side Toggle now supports only **V1** (visible center divider) and **V2** (no center divider). The corrupted V3/V4 width/divider variants are retired. The right face has an independent `rightAppearance` axis with three choices: `primary`, `secondary`, and `black-primary-text`. The Confirmed Primitive Library demonstrates all six V1/V2 × right-face combinations using the production `StudioDoubleSideToggle` primitive.
+
+- Keyboard focus is represented by one outline around the outer component perimeter. Nested arrow controls do not draw focus outlines across the center divider.
+- `StudioInterModule` Standard, Compact, and Micro specimens must fill the parent shell's available width. The parent body must not retain horizontal padding that prevents Compact/Micro headers and rails from meeting the same inner edges as Standard.
+- Focused regression assertions are in `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.test.tsx`. Run the tests and a browser keyboard/visual check before certifying the focus geometry and responsive widths.
