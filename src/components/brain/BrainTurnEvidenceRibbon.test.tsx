@@ -189,8 +189,8 @@ describe("BrainTurnEvidenceRibbon", () => {
   const linkedClaim = "Views increased to 12,400 after the title change."
   const html = render({
    evidenceIntegrityStatus: "verified",
-   evidenceRecords: [record({ id: "record-views", metric: "views" })],
-   claimEvidence: [{ claim: linkedClaim, evidenceIds: ["record-views"] }],
+   evidenceRecords: [record({ id: "record-views", metric: "views", value: 12400 })],
+   claimEvidence: [{ claim: linkedClaim, evidenceIds: ["record-views"], verification: "direct_value_match" }],
   })
   expect(html).toContain("Claim text with matching recorded value")
   expect(html).toContain(linkedClaim)
@@ -200,9 +200,9 @@ describe("BrainTurnEvidenceRibbon", () => {
   const html = render({
    evidenceIntegrityStatus: "mismatch",
    evidenceRecords: [record({ id: "record-views" })],
-   claimEvidence: [{ claim: "Unverified claim text", evidenceIds: ["record-views"] }],
+   claimEvidence: [{ claim: "Unverified claim text", evidenceIds: ["record-views"], verification: "direct_value_match" }],
   })
-  expect(html).not.toContain("Answer claims linked to this record")
+  expect(html).not.toContain("Claim text with matching recorded value")
   expect(html).not.toContain("Unverified claim text")
  })
 
