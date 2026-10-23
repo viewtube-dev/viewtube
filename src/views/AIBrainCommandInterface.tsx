@@ -21,7 +21,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
-import { StudioButton, StudioSplitLeftButton, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -484,22 +484,20 @@ export const BrainPromptLibrary: React.FC<{
  const selected = filteredCards.find((card) => card.id === selectedId) || null
 
  return (
-  <section
+  <StudioTopSplitModule
    data-vt-brain-component="BrainPromptLibrary"
    aria-label="Prompt library"
    aria-labelledby={headingId}
    aria-busy={busy || undefined}
-   className="overflow-hidden rounded-[10px] border-[2px] border-black bg-white"
+   sizeVariant="compact"
+   split="left"
+   startIcon={<LayoutGrid aria-hidden="true" />}
+   title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
+   className="overflow-hidden"
   >
-   <div data-vt-brain-part="prompt-library-heading" className="border-b-[2px] border-black bg-[#FF7AC8] px-3 py-2">
-    <h2 data-vt-brain-part="prompt-library-title" id={headingId} className="text-[12px] font-[1000] uppercase leading-4 tracking-[0.08em]">
-     Prompt Library
-    </h2>
-    <p data-vt-brain-part="prompt-library-description" className="mt-0.5 text-[10px] font-bold leading-4 text-black/65">
-     Search by task or topic, preview the prompt, then send it or edit it first.
-    </p>
-   </div>
-
+   <p data-vt-brain-part="prompt-library-description" className="mb-2 border-b border-black/20 pb-2 text-[10px] font-bold leading-4 text-black/65">
+    Search by task or topic, preview the prompt, then send it or edit it first.
+   </p>
    <div className="grid gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
     <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
     <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: item.replace(/_/g, " ") }))]} />
@@ -552,7 +550,7 @@ export const BrainPromptLibrary: React.FC<{
      </p>
     )}
    </div>
-  </section>
+  </StudioTopSplitModule>
  )
 }
 
@@ -1763,20 +1761,20 @@ const AIBrainCommandInterface: React.FC = () => {
          <div className="mx-auto w-full max-w-[880px]">
           <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1.5 xl:hidden">
            <div className="grid w-full grid-cols-2 gap-1">
-           <StudioSplitLeftButton ref={promptLauncherRef} sizeVariant="standard" icon={<LayoutGrid aria-hidden="true" />} onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="min-w-0 xl:hidden" style={{ backgroundColor: "#FF7AC8" }}>Prompt Library</StudioSplitLeftButton>
-           <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="standard" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
+           <StudioSplitLeftButton ref={promptLauncherRef} sizeVariant="compact" icon={<LayoutGrid aria-hidden="true" />} onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="min-w-0 xl:hidden" style={{ backgroundColor: "#FF7AC8" }}>Prompt Library</StudioSplitLeftButton>
+           <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="compact" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
            </div>
           </BrainComposerAccessoryRow>
           <div data-vt-brain-part="composer-controls" className="flex min-w-0 items-stretch gap-1">
-           <StudioSquareIconButton sizeVariant="standard" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
+           <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
            <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
            <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span data-vt-brain-part="composer-status" className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
            <StudioTextArea
             ref={composerRef}
             id="brain-composer"
-            sizeVariant="standard"
-            rows={1}
+            sizeVariant="compact"
+            rows={2}
             value={input}
             onChange={(event) => {
              event.currentTarget.style.height = "auto"
@@ -1789,11 +1787,12 @@ const AIBrainCommandInterface: React.FC = () => {
              void handleSend()
             }}
             placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-            className="max-h-36 min-h-[92px] min-w-0 flex-1 resize-y"
+            className="max-h-36 min-h-[56px] min-w-0 flex-1 resize-y"
+            style={{ minHeight: 56 }}
             aria-label="Ask ViewTube Brain"
             aria-describedby="brain-composer-help"
            />
-           <StudioSplitLeftButton data-vt-brain-component="BrainComposerSendAction" sizeVariant="standard" icon={busy ? <Zap aria-hidden="true" className="animate-pulse" /> : <Send aria-hidden="true" />} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} onClick={() => void handleSend()} className="shrink-0">SEND</StudioSplitLeftButton>
+           <StudioSplitLeftButton data-vt-brain-component="BrainComposerSendAction" sizeVariant="compact" icon={busy ? <Zap aria-hidden="true" className="animate-pulse" /> : <Send aria-hidden="true" />} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} onClick={() => void handleSend()} className="shrink-0">SEND</StudioSplitLeftButton>
           </div>
          </div>
         </footer>

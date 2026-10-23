@@ -275,3 +275,45 @@ html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"]:
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:is(:focus, :focus-visible) {
   -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
 }
+
+
+/* Final clarified field contract: primary glyph stroke at rest; black glyph stroke on focus.
+   Focused fill stays at 15% primary and the secondary outline never changes geometry. */
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body textarea[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html body [data-vt-studio-control="true"] textarea {
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
+}
+
+/* Text fields and textarea wrappers: black fill/stroke on focus, secondary outline. */
+html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:is(:focus, :focus-visible) {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+  -webkit-text-stroke-width: var(--vt-studio-control-text-stroke, 1px) !important;
+  background-color: color-mix(
+    in srgb,
+    var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 15%,
+    transparent
+  ) !important;
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  caret-color: #000 !important;
+}
+
+/* Raised floating labels follow the focused field's black glyph treatment. */
+.vt-studio-floating-field > :is(input, textarea):is(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  color: #000;
+  -webkit-text-stroke-color: #000;
+}

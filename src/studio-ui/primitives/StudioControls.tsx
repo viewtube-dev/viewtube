@@ -1514,6 +1514,64 @@ export const StudioSquareIconButtonGroup = React.forwardRef<HTMLDivElement, Stud
 StudioSquareIconButtonGroup.displayName = "StudioSquareIconButtonGroup"
 
 
+export type StudioTopSplitModuleSplit = "left" | "right" | "double" | "none"
+export type StudioTopSplitModuleSize = "standard" | "compact"
+
+export interface StudioTopSplitModuleProps extends React.HTMLAttributes<HTMLElement> {
+  title: React.ReactNode
+  children?: React.ReactNode
+  split?: StudioTopSplitModuleSplit
+  startIcon?: React.ReactNode
+  endIcon?: React.ReactNode
+  sizeVariant?: StudioTopSplitModuleSize
+  tone?: "default" | "accent"
+  as?: "section" | "article" | "div"
+}
+
+/** A Studio split-control header joined to a white content body. */
+export const StudioTopSplitModule: React.FC<StudioTopSplitModuleProps> = ({
+  title,
+  children,
+  split = "none",
+  startIcon,
+  endIcon,
+  sizeVariant = "compact",
+  tone = "default",
+  as: Comp = "section",
+  className,
+  ...rest
+}) => {
+  const headSplit = split === "none" ? "none" : split
+  return (
+    <Comp
+      data-vt-studio-control="true"
+      data-vt-studio-top-split-module="true"
+      data-size={sizeVariant}
+      data-tone={tone}
+      className={studioClasses("vt-studio-top-split-module", className)}
+      {...rest}
+    >
+      <div
+        className="vt-studio-top-split-module__head"
+        data-split={headSplit}
+        style={split === "none" ? { display: "flex", alignItems: "center", paddingInline: 8 } : undefined}
+      >
+        {(split === "left" || split === "double") ? (
+          <span className="vt-studio-top-split-module__rail" data-rail="start" aria-hidden="true">{startIcon}</span>
+        ) : null}
+        <span className="vt-studio-top-split-module__title">{title}</span>
+        {(split === "right" || split === "double") ? (
+          <span className="vt-studio-top-split-module__rail" data-rail="end" aria-hidden="true">{endIcon}</span>
+        ) : null}
+      </div>
+      {children != null ? <div className="vt-studio-top-split-module__body">{children}</div> : null}
+    </Comp>
+  )
+}
+StudioTopSplitModule.displayName = "StudioTopSplitModule"
+
+
+
 StudioCircleIconButton.displayName = "StudioCircleIconButton"
 
 

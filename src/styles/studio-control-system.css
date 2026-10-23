@@ -5773,3 +5773,153 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+
+/* Final global single-line button-face contract: clip, never ellipsize. */
+[data-vt-studio-control]:not(input):not(textarea):not(select) :is(
+  [data-vt-studio-button-face],
+  [data-vt-studio-action-face],
+  [data-vt-studio-split-label]
+),
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  min-width: 0;
+  max-width: 100%;
+  padding-inline: 4px;
+}
+
+button[data-vt-studio-button="true"],
+button[data-vt-studio-action-button="true"] {
+  overflow: hidden;
+}
+
+/* Joined icon rail is always content-width; parent flex rows must not stretch it. */
+.vt-studio-square-icon-button-group {
+  display: inline-flex;
+  width: max-content;
+  max-width: 100%;
+  flex: 0 0 auto;
+  align-self: flex-start;
+}
+
+[data-vt-brain-component="BrainAnswerFeedback"] .vt-studio-square-icon-button-group {
+  display: inline-flex;
+  width: max-content;
+  flex: 0 0 auto;
+  align-self: flex-start;
+}
+
+/* =============================================================================
+   StudioTopSplitModule — split chrome above a white content body
+   ============================================================================= */
+.vt-studio-top-split-module {
+  --vt-top-split-size: var(--vt-studio-control-height, 44px);
+  --vt-top-split-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-top-split-radius: var(--vt-studio-control-radius, 6px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  border: var(--vt-top-split-stroke) solid #000;
+  border-radius: var(--vt-top-split-radius);
+  overflow: hidden;
+  background: #fff;
+}
+
+.vt-studio-top-split-module[data-size="compact"] {
+  --vt-top-split-size: var(--vt-studio-28-height, 28px);
+  --vt-top-split-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-top-split-radius: var(--vt-studio-28-radius, 4px);
+}
+
+.vt-studio-top-split-module__head {
+  box-sizing: border-box;
+  display: grid;
+  align-items: stretch;
+  min-width: 0;
+  min-height: var(--vt-top-split-size);
+  border-bottom: var(--vt-top-split-stroke) solid #000;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  color: #000;
+  font-family: var(--vt-studio-control-font-family, Inter, sans-serif);
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+
+.vt-studio-top-split-module[data-size="compact"] .vt-studio-top-split-module__head {
+  min-height: var(--vt-top-split-size);
+  font-size: var(--vt-studio-28-font-size, 24px);
+  -webkit-text-stroke-width: var(--vt-studio-28-text-stroke, 0.5px);
+}
+
+.vt-studio-top-split-module__head[data-split="left"] {
+  grid-template-columns: var(--vt-top-split-size) minmax(0, 1fr);
+}
+.vt-studio-top-split-module__head[data-split="right"] {
+  grid-template-columns: minmax(0, 1fr) var(--vt-top-split-size);
+}
+.vt-studio-top-split-module__head[data-split="double"] {
+  grid-template-columns: var(--vt-top-split-size) minmax(0, 1fr) var(--vt-top-split-size);
+}
+
+.vt-studio-top-split-module__rail {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  border-right: var(--vt-top-split-stroke) solid #000;
+  color: #000;
+  -webkit-text-stroke: 0;
+}
+.vt-studio-top-split-module__rail > svg {
+  width: calc(var(--vt-top-split-size) * 0.65);
+  height: calc(var(--vt-top-split-size) * 0.65);
+  stroke: currentColor;
+}
+.vt-studio-top-split-module__head[data-split="right"] .vt-studio-top-split-module__rail,
+.vt-studio-top-split-module__head[data-split="double"] .vt-studio-top-split-module__rail[data-rail="end"] {
+  border-right: 0;
+  border-left: var(--vt-top-split-stroke) solid #000;
+}
+.vt-studio-top-split-module__head[data-split="double"] .vt-studio-top-split-module__rail[data-rail="start"] {
+  border-right: var(--vt-top-split-stroke) solid #000;
+  border-left: 0;
+}
+
+.vt-studio-top-split-module__title {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+.vt-studio-top-split-module__body {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+  background: #fff;
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.vt-studio-top-split-module[data-size="compact"] .vt-studio-top-split-module__body {
+  padding: 6px;
+  font-size: 12px;
+}
+.vt-studio-top-split-module[data-tone="accent"] .vt-studio-top-split-module__head {
+  background: #ffda47;
+}
