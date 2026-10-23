@@ -13,6 +13,7 @@ import { resolveDueAlgorithmMonitoringCheckpoints } from "../../services/brain/A
 import { processResolvableFinalAlgorithmEvaluations } from "../../services/brain/AlgorithmFinalEvaluationResolver"
 import { BrainAttributionDetailPanel } from "./BrainAttributionDetailPanel"
 import { getVtSyncSnapshot, subscribeToVtSyncSnapshot } from "../../features/vt-sync-local/adapters/snapshot"
+import { StudioButton, StudioSquareIconButton } from "../../studio-ui"
 
 const toneFor = (item: BrainEvaluationInboxItem) => {
  if (item.priority === "critical") return "#FF6B6B"
@@ -158,8 +159,8 @@ export const BrainEvaluationInboxPanel: React.FC<{ channelId: string | null; max
      <div className="min-w-0"><h3 className="text-[10px] font-[1000] uppercase leading-4 tracking-[0.1em]">Evaluation Inbox</h3>{!compact ? <p className="text-[9px] font-bold leading-3 text-black/60">What worked, what is overdue, and what still needs evidence.</p> : null}</div>
      <div className="flex shrink-0 items-center gap-1">
       {inbox?.counts.critical ? <span className="rounded-[5px] border-[2px] border-black bg-[#FF6B6B] px-1.5 py-0.5 text-[8px] font-[1000] uppercase">{inbox.counts.critical} urgent</span> : null}
-      <button type="button" title="Sync local Phase 6 history to durable storage" aria-label="Sync local Phase 6 history to durable storage" disabled={syncingHistory} onClick={syncLocalHistory} className="grid h-7 w-7 place-items-center rounded-[6px] border-[2px] border-black bg-white hover:bg-[#3FEE56] disabled:opacity-50"><CloudUpload size={12} /></button>
-      <button type="button" title="Refresh evaluation inbox" aria-label="Refresh evaluation inbox" onClick={() => setRevision((value) => value + 1)} className="grid h-7 w-7 place-items-center rounded-[6px] border-[2px] border-black bg-white hover:bg-[#36E0F6]"><RefreshCw size={12} /></button>
+      <StudioSquareIconButton sizeVariant="compact" tone="neutral" title="Sync local Phase 6 history to durable storage" label="Sync local Phase 6 history to durable storage" icon={<CloudUpload size={12} aria-hidden="true" />} disabled={syncingHistory} onClick={syncLocalHistory} />
+      <StudioSquareIconButton sizeVariant="compact" tone="neutral" title="Refresh evaluation inbox" label="Refresh evaluation inbox" icon={<RefreshCw size={12} aria-hidden="true" />} onClick={() => setRevision((value) => value + 1)} />
      </div>
     </div>
     {historySyncStatus ? <p role="status" aria-live="polite" className="border-b-[2px] border-black bg-[#f7f7f4] px-3 py-1.5 text-[9px] font-bold leading-3 text-black/65">{historySyncStatus}</p> : null}
@@ -177,18 +178,18 @@ export const BrainEvaluationInboxPanel: React.FC<{ channelId: string | null; max
        <div className="grid gap-1.5 p-2">
         <p className="line-clamp-3 text-[10px] font-bold leading-[14px] text-black/70">{item.summary}</p>
         {item.requiredMetrics.length ? <div className="flex flex-wrap gap-1">{item.requiredMetrics.slice(0, 4).map((metric) => <span key={metric} className="rounded-[4px] border border-black px-1 py-0.5 text-[7px] font-black uppercase">{metric}</span>)}</div> : null}
-        <button type="button" onClick={() => setSelectedEventId(item.sourceEventId)} className="flex items-center justify-center gap-1 rounded-[5px] border-[2px] border-black bg-white px-1 py-1 text-[7px] font-black uppercase hover:bg-[#36E0F6]"><GitBranch size={9} /> Trace evidence</button>
+        <StudioButton type="button" sizeVariant="compact" tone="neutral" icon={<GitBranch size={9} aria-hidden="true" />} onClick={() => setSelectedEventId(item.sourceEventId)}>Trace evidence</StudioButton>
         {item.kind === "learning_review" ? (
          <div className="grid gap-1 pt-1">
           <p className="text-[9px] font-semibold leading-3 text-black/60">Approve only makes this candidate eligible for a separate profile-promotion step.</p>
           <div className="grid grid-cols-3 gap-1">
-           <button type="button" disabled={Boolean(reviewingCandidateId)} aria-label={"Hold learning candidate " + ((item.metadata?.candidate as { id?: string } | undefined)?.id || item.id)} onClick={() => review(item, "hold")} className="min-h-8 rounded-[5px] border-[2px] border-black bg-white px-1 py-1 text-[8px] font-black uppercase hover:bg-[#FFDA47] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-50">{reviewingCandidateId === (item.metadata?.candidate as { id?: string } | undefined)?.id ? "Saving…" : "Hold"}</button>
-           <button type="button" disabled={Boolean(reviewingCandidateId)} aria-label={"Reject learning candidate " + ((item.metadata?.candidate as { id?: string } | undefined)?.id || item.id)} onClick={() => review(item, "reject")} className="min-h-8 rounded-[5px] border-[2px] border-black bg-white px-1 py-1 text-[8px] font-black uppercase hover:bg-[#FF6B6B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-50">Reject</button>
-           <button type="button" disabled={Boolean(reviewingCandidateId)} title="Approve for profile review only; does not change the channel profile." aria-label={"Approve learning candidate " + ((item.metadata?.candidate as { id?: string } | undefined)?.id || item.id) + " for profile review only"} onClick={() => review(item, "approve_for_profile_review")} className="min-h-8 rounded-[5px] border-[2px] border-black bg-[#3FEE56] px-1 py-1 text-[8px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-50">Approve</button>
+           <StudioButton type="button" sizeVariant="compact" tone="neutral" disabled={Boolean(reviewingCandidateId)} aria-label={"Hold learning candidate " + ((item.metadata?.candidate as { id?: string } | undefined)?.id || item.id)} onClick={() => review(item, "hold")}>{reviewingCandidateId === (item.metadata?.candidate as { id?: string } | undefined)?.id ? "Saving…" : "Hold"}</StudioButton>
+           <StudioButton type="button" sizeVariant="compact" tone="danger" disabled={Boolean(reviewingCandidateId)} aria-label={"Reject learning candidate " + ((item.metadata?.candidate as { id?: string } | undefined)?.id || item.id)} onClick={() => review(item, "reject")}>Reject</StudioButton>
+           <StudioButton type="button" sizeVariant="compact" tone="success" disabled={Boolean(reviewingCandidateId)} title="Approve for profile review only; does not change the channel profile." aria-label={"Approve learning candidate " + ((item.metadata?.candidate as { id?: string } | undefined)?.id || item.id) + " for profile review only"} onClick={() => review(item, "approve_for_profile_review")}>Approve</StudioButton>
           </div>
          </div>
         ) : null}
-        {item.kind === "learning_promotion" ? <button type="button" disabled={Boolean(promotingCandidateId)} onClick={() => void promote(item)} className="rounded-[5px] border-[2px] border-black bg-[#3FEE56] px-2 py-1 text-[8px] font-black uppercase disabled:opacity-50">{promotingCandidateId === (item.metadata?.candidate as { id?: string } | undefined)?.id ? "Promoting…" : "Promote to channel profile"}</button> : null}
+        {item.kind === "learning_promotion" ? <StudioButton type="button" sizeVariant="compact" tone="success" disabled={Boolean(promotingCandidateId)} loading={Boolean(promotingCandidateId)} onClick={() => void promote(item)}>{promotingCandidateId === (item.metadata?.candidate as { id?: string } | undefined)?.id ? "Promoting…" : "Promote to channel profile"}</StudioButton> : null}
        </div>
       </article>
      ))}
