@@ -143,3 +143,7 @@ export type { StudioPublishingCardProps, StudioPublishingCardMetadata, StudioPub
 
 export { ConfirmedFamilyModule, ConfirmedPrimitiveModule, ConfirmedDefaultsModule } from "../components/studio-hub/ConfirmedCatalogModules"
 export type { ConfirmedModuleProps } from "../components/studio-hub/ConfirmedCatalogModules"
+
+
+export { StudioInterModule } from "./primitives/StudioInterModule"
+export type { StudioInterModuleProps, StudioInterModuleSize } from "./primitives/StudioInterModule"
