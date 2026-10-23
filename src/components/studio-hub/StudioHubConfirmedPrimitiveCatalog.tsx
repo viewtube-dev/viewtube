@@ -20,7 +20,6 @@ import {
   StudioLeftCounter,
   StudioSplitLeftButton,
   StudioDoubleSplitButton,
-  StudioSplitShell,
   StudioSplitLeftBadge,
   StudioSplitRightBadge,
   StudioDoubleSplitBadge,
