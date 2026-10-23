@@ -40,3 +40,15 @@ describe("AI Brain Studio status and evidence chrome", () => {
     expect(receipt).not.toContain('rounded-[5px] border-[1.5px] border-black bg-white')
   })
 })
+
+
+describe("AI Brain native disclosure trigger contract", () => {
+  it("keeps context/readiness disclosure semantics while using the shared Studio trigger skin", () => {
+    expect(source).toContain('data-vt-studio-disclosure-summary="true"')
+    expect(source).toContain('data-vt-brain-part="context-used-trigger"')
+    expect(source).toContain('data-vt-brain-part="evidence-readiness-trigger"')
+    expect(source).toContain('className="vt-studio-disclosure-summary"')
+    expect(source).not.toContain('hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black')
+    expect(source).not.toContain('hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black')
+  })
+})
