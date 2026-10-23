@@ -36,15 +36,12 @@
   width: 100%; height: 100%; overflow: hidden; touch-action: pan-y;
 }
 .vt-studio-split-accordion__track {
-  display: flex; flex-flow: row nowrap; align-items: stretch;
+  display: flex; flex-flow: row nowrap; align-items: stretch; gap: var(--vt-sa-stroke); background: #000;
   height: 100%; min-width: 100%; width: max-content; will-change: width;
 }
 .vt-studio-split-accordion__item {
-  box-sizing: border-box; display: flex; flex: 0 0 auto; align-items: stretch;
+  box-sizing: border-box; position: relative; display: flex; flex: 0 0 auto; flex-direction: row; align-items: stretch;
   height: 100%; min-width: 0; overflow: hidden; border: 0;
-}
-.vt-studio-split-accordion__item + .vt-studio-split-accordion__item {
-  border-left: var(--vt-sa-stroke) solid #000;
 }
 .vt-studio-split-accordion__trigger {
   box-sizing: border-box; display: grid; place-items: center;
@@ -70,8 +67,11 @@
 .vt-studio-split-accordion__face svg * { stroke: #000; }
 .vt-studio-split-accordion__content {
   box-sizing: border-box; display: flex; align-items: center; flex: 1 1 auto;
-  min-width: 0; height: 100%; overflow: hidden;
+  min-width: 0; height: 100%; overflow: hidden; border-left: var(--vt-sa-stroke) solid #000;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color: #000;
+}
+.vt-studio-split-accordion__item[data-active="false"] .vt-studio-split-accordion__content {
+  flex: 0 0 0; width: 0; min-width: 0; border-left-width: 0; padding: 0; overflow: hidden;
 }
 .vt-studio-split-accordion__content[data-label-visible="false"] .vt-studio-split-accordion__content-inner {
   opacity: 0; max-width: 0; overflow: hidden;
