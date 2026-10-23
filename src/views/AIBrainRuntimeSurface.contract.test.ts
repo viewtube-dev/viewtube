@@ -40,7 +40,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(promptLibrary).toContain("secondLine=\"CHAT\"")
   expect(promptLibrary).toContain("firstLine=\"EDIT\"")
   expect(promptLibrary).toContain("secondLine=\"FIRST\"")
-  expect(promptLibrary).toContain("TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length]")
+  expect(source).toContain("TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length]")
   expect(promptLibrary).toContain("order.get(card.id)")
   expect(chatPrimitivesSource).toContain("touch-pan-y")
   expect(source).toContain("max-xl:h-[100dvh]")
