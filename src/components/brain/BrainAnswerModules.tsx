@@ -12,7 +12,7 @@ import {
  Video,
 } from "lucide-react"
 import type { AIBrainAnswerModule, BrainQuickAction } from "../../types"
-import { StudioButton } from "../../studio-ui"
+import { StudioButton, StudioDisclosureSummary } from "../../studio-ui"
 import { sanitizeCreatorFacingBrainCopy } from "../../services/aiBrainConversationStore"
 
 export type { BrainQuickAction }
@@ -177,8 +177,9 @@ export const BrainKpiModule: React.FC<{
  return (
   <article className={`${cardShell} ${className}`}>
    <details open>
-    <summary
-     className="grid min-h-[36px] cursor-pointer list-none grid-cols-[34px_minmax(0,1fr)_auto_28px] items-stretch border-b-[2px] border-black"
+    <StudioDisclosureSummary
+     appearanceVariant="structured"
+     className="cursor-pointer list-none grid-cols-[34px_minmax(0,1fr)_auto_28px] items-stretch"
      style={{ backgroundColor: accent }}
     >
      <span className="grid place-items-center border-r-[2px] border-black bg-white">{icon}</span>
@@ -195,7 +196,7 @@ export const BrainKpiModule: React.FC<{
      <span className="grid place-items-center border-l-[2px] border-black bg-white/30">
       <ChevronDown size={14} />
      </span>
-    </summary>
+    </StudioDisclosureSummary>
 
     <div className={`grid ${compact ? "gap-2 p-3" : "gap-2.5 p-3.5"}`}>
      {metrics.length ? (
