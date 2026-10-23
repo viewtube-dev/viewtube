@@ -92,17 +92,13 @@ export const BrainEvidenceDrawer: React.FC<{
    className={`group ${compact ? "relative" : "overflow-hidden rounded-[10px] border-[2px] border-black bg-white"} ${className}`}
   >
    {compact ? (
-    <summary
-     className="inline-flex min-h-7 cursor-pointer list-none items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-white px-2 text-[9px] font-black uppercase tracking-[0.06em] hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black"
-     title={summaryLabel}
-     aria-label={`${summaryLabel}; ${sourceCount} evidence references`}
-    >
+    <StudioDisclosureSummary sizeVariant="compact" title={summaryLabel} aria-label={`${summaryLabel}; ${sourceCount} evidence references`} className="gap-1.5">
      <Info size={13} aria-hidden="true" />
      <span>{summaryLabel}</span>
      {sourceCount ? <EvidenceBadge label={String(sourceCount)} tone="#36E0F6" /> : null}
-    </summary>
+    </StudioDisclosureSummary>
    ) : (
-    <summary className="flex min-h-11 cursor-pointer list-none items-center border-b-[2px] border-black bg-[#f8f8f4] px-3 py-2 hover:bg-[#FFDA47] focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
+    <StudioDisclosureSummary sizeVariant="standard" className="gap-1.5">
      <span className="flex flex-wrap items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.08em]">
       <span>{summaryLabel}</span>
       {sourceCount ? <EvidenceBadge label={`${sourceCount} sources`} tone="#36E0F6" /> : null}
