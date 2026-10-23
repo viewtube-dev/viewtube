@@ -1170,3 +1170,52 @@ describe("Confirmed Primitive Library button tier grid regression", () => {
     expect(css).toMatch(/data-vt-studio-button-variant="v3"\]\[data-vt-studio-button-on="true"\][^{}]*>\s*\[data-vt-studio-button-face\][^{}]*background:\s*var\(--pair-b/);
   });
 });
+
+
+describe("Studio field focus, floating labels, and toggle regressions", () => {
+  it("keeps focused field glyph stroke primary and shares risen-label typography tokens", () => {
+    const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
+    const css = readStudioControlCss();
+    expect(fields).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
+    expect(fields).not.toContain("-webkit-text-stroke-color: #000 !important;");
+    expect(css).toContain("--vt-studio-floating-label-risen-font-size: 12px;");
+    expect(css).toContain("--vt-studio-floating-label-risen-text-stroke: 0.5px;");
+    expect(css).toContain("font-size: var(--vt-studio-floating-label-risen-font-size, 12px) !important;");
+    expect(css).toContain("-webkit-text-stroke-width: var(--vt-studio-floating-label-risen-text-stroke, 0.5px) !important;");
+    expect(css).toContain("vt-studio-textarea-compact-font-size, 14px");
+    expect(css).toContain("vt-studio-28-font-size, 24px");
+  });
+
+  it("centers the double-side divider and gives V2/V4 compact catalog specimens", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(css).toContain(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider");
+    expect(css).toContain("left: 50%;");
+    expect(css).toContain("transform: translateX(-50%);");
+    expect(catalog).toContain('size={index === 1 || index === 3 ? "compact" : "standard"}');
+  });
+
+  it("keeps bar-toggle arrows interactive and inactive bars visible", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioValueToggles.tsx"), "utf8");
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(source).toContain("event.currentTarget.setPointerCapture?.(event.pointerId)");
+    expect(source).toContain("onPointerCancel={stopRepeat}");
+    expect(source).toContain("onLostPointerCapture={stopRepeat}");
+    expect(css).toContain("40%, #fff");
+    expect(css).toContain('data-active="true"');
+    expect(css).toContain("pointer-events: auto;");
+  });
+
+  it("renders a single multi-select summary without a second numeric badge", () => {
+    const html = renderToStaticMarkup(
+      <StudioLegendMultiDropdown
+        label="Videos"
+        value={["videos", "shorts"]}
+        options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }]}
+      />
+    );
+    expect(html).toContain("VIDEOS +1");
+    expect(html).not.toContain("vt-studio-legend-count");
+    expect(html).not.toContain('aria-label="2 selected"');
+  });
+});
