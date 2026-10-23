@@ -129,6 +129,9 @@ export type {
 } from "./recipes"
 export { StudioHubCertification } from "./StudioHubCertification"
 
+export { StudioSplitAccordion } from "./primitives/StudioSplitAccordion"
+export type { StudioSplitAccordionItem, StudioSplitAccordionProps, StudioSplitAccordionLayout, StudioSplitAccordionSize } from "./primitives/StudioSplitAccordion"
+
 export { StudioPublishingCard } from "./compositions/StudioPublishingCard"
 export type { StudioPublishingCardProps, StudioPublishingCardMetadata, StudioPublishingCardOption, StudioPublishingCardSize } from "./compositions/StudioPublishingCard"
 
