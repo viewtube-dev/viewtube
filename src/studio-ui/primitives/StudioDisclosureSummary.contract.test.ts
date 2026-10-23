@@ -6,6 +6,7 @@ const styles = readFileSync(new URL("../../styles/studio-disclosure-summary.css"
 const exports = readFileSync(new URL("../index.ts", import.meta.url), "utf8")
 const runtimePanel = readFileSync(new URL("../../components/brain/BrainRuntimePanel.tsx", import.meta.url), "utf8")
 const evidenceDrawer = readFileSync(new URL("../../components/brain/BrainEvidenceDrawer.tsx", import.meta.url), "utf8")
+const answerModules = readFileSync(new URL("../../components/brain/BrainAnswerModules.tsx", import.meta.url), "utf8")
 
 describe("StudioDisclosureSummary", () => {
   it("exports a native summary primitive with explicit Studio size semantics", () => {
@@ -13,6 +14,7 @@ describe("StudioDisclosureSummary", () => {
     expect(component).toContain('data-vt-studio-disclosure-summary="true"')
     expect(component).toContain('data-vt-studio-control="true"')
     expect(component).toContain('sizeVariant?: "compact" | "standard"')
+    expect(component).toContain('appearanceVariant?: "control" | "structured"')
     expect(exports).toContain("StudioDisclosureSummary")
   })
 
@@ -23,6 +25,7 @@ describe("StudioDisclosureSummary", () => {
     expect(styles).not.toContain("box-shadow")
     expect(styles).not.toContain("\n  transform:")
     expect(styles).toContain("list-style: none")
+    expect(styles).toContain('[data-appearance="structured"]')
   })
 })
 
@@ -33,5 +36,8 @@ describe("Brain disclosure consumers", () => {
     expect(runtimePanel).not.toContain("<summary")
     expect((evidenceDrawer.match(/<StudioDisclosureSummary\b/g) || []).length).toBe(3)
     expect(evidenceDrawer).not.toContain("<summary")
+    expect((answerModules.match(/<StudioDisclosureSummary\\b/g) || []).length).toBe(1)
+    expect(answerModules).toContain('appearanceVariant="structured"')
+    expect(answerModules).not.toContain("<summary")
   })
 })
