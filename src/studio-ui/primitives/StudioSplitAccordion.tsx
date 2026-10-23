@@ -309,7 +309,6 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
                     data-label-visible={selected ? "true" : "false"}
                     role="tabpanel"
                     aria-hidden={!selected}
-                    hidden={!selected}
                   >
                     <div className="vt-studio-split-accordion__content-inner">{item.content}</div>
                     {item.trailing ? <div className="vt-studio-split-accordion__trailing">{item.trailing}</div> : null}
