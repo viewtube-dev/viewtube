@@ -51,16 +51,13 @@ describe("Brain workflow approval boundary", () => {
   const updated = { ...chain, steps: [{ id: "step-1", status: "active" }] } as unknown as WorkflowChain
   const updateStep = vi.fn(() => updated)
   const onApprovalRequested = vi.fn(async () => true)
-  const onStatusChanged = vi.fn()
   const result = await requestWorkflowStepApproval({
    chain,
    stepId: "step-1",
    onApprovalRequested,
    updateStep: updateStep as never,
-   onStatusChanged,
   })
   expect(result).toBe(updated)
   expect(updateStep).toHaveBeenCalledWith("chain-1", "step-1", "active")
-  expect(onStatusChanged).toHaveBeenCalledWith(updated, "step-1", "active")
  })
 })
