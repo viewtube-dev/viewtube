@@ -211,6 +211,9 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
         : record.availability === "unavailable"
          ? "Unavailable"
          : null
+       const linkedClaims = evidenceIntegrityStatus === "verified" && evidenceRecords
+        ? claimEvidence.filter((item) => item.verification === "direct_value_match" && item.evidenceIds.includes(record.id))
+        : []
        return (
         <li key={record.id} data-vt-evidence-record-id={record.id} className="grid min-w-0 gap-1 border-[1.5px] border-black/40 bg-[#f8f8f4] p-2">
          <div className="flex min-w-0 flex-wrap items-start justify-between gap-1.5">
@@ -236,6 +239,17 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
          {record.missingness?.length ? <p className="break-words text-[9px] font-bold leading-4">Missing: {record.missingness.join(", ")}</p> : null}
          {record.limitations?.length ? <ul className="grid gap-0.5">{record.limitations.map((limitation) => <li key={limitation} className="break-words text-[9px] font-bold leading-4">Limitation: {limitation}</li>)}</ul> : null}
          {record.provenance.evidenceIds.length ? <p className="break-words text-[9px] font-bold leading-4">Source evidence IDs: {record.provenance.evidenceIds.join(", ")}</p> : null}
+         {linkedClaims.length ? (
+          <section data-vt-brain-part="claim-evidence-links" aria-label="Claim text with matching recorded value" className="grid min-w-0 gap-1 border-t border-black/20 pt-1.5">
+           <h5 className="text-[9px] font-[1000] uppercase tracking-[0.06em]">Claim text with matching recorded value</h5>
+           <p className="break-words text-[9px] font-bold leading-4 text-black/60">A direct numeric value match is shown here; it does not independently verify causal or trend wording.</p>
+           <ul className="grid min-w-0 gap-1">
+            {linkedClaims.map((item, index) => (
+             <li key={`${record.id}:${index}`} className="break-words border-l-2 border-black pl-2 text-[10px] font-bold leading-4">{item.claim}</li>
+            ))}
+           </ul>
+          </section>
+         ) : null}
          {recordHref ? <Link to={recordHref} className="inline-flex min-h-11 max-w-full items-center gap-1 break-words border-[1.5px] border-black bg-white px-2 py-1 text-[9px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">{record.owner === "analytics-canon" ? "Open Analytics with evidence context" : "Open source with evidence context"}</Link> : <p className="text-[9px] font-bold text-black/60">Source link unavailable for this record.</p>}
         </li>
        )
