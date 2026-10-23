@@ -41,14 +41,12 @@ export const requestWorkflowStepApproval = async (input: {
  stepId: string
  onApprovalRequested?: BrainWorkflowApprovalRequest
  updateStep?: typeof updateWorkflowStep
- onStatusChanged?: Props["onStatusChanged"]
 }): Promise<WorkflowChain | null> => {
  if (!input.onApprovalRequested) return null
  const approved = await input.onApprovalRequested(input.chain, input.stepId)
  if (!approved) return null
  const updated = (input.updateStep || updateWorkflowStep)(input.chain.id, input.stepId, "active")
  if (!updated) return null
- await input.onStatusChanged?.(updated, input.stepId, "active")
  return updated
 }
 
@@ -120,12 +118,17 @@ export const BrainWorkflowRunPanel: React.FC<Props> = ({ recommendation, onStart
   setBusy(true)
   setApprovalNotice(null)
   try {
-   const updated = await requestWorkflowStepApproval({ chain, stepId, onApprovalRequested, onStatusChanged })
+   const updated = await requestWorkflowStepApproval({ chain, stepId, onApprovalRequested })
    if (!updated) {
     setApprovalNotice("Approval was not granted. This step remains pending.")
     return
    }
    setTick((value) => value + 1)
+   try {
+    await onStatusChanged?.(updated, stepId, "active")
+   } catch {
+    setApprovalNotice("Approval was confirmed, but the tracker notification could not be saved.")
+   }
   } catch {
    setApprovalNotice("Approval could not be confirmed. This step remains pending.")
   } finally {
