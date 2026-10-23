@@ -64,6 +64,17 @@ describe("BrainEvidenceDrawer", () => {
   expect(html).toContain("filter=language%3Aen")
  })
 
+
+ it("keeps legacy evidence links usable without inventing unrecorded selection constraints", () => {
+  const html = render(evidencePack({
+   requestSpec: undefined as unknown as AIBrainEvidencePack["requestSpec"],
+  }))
+  expect(html).toContain('href="/analytics?')
+  expect(html).toContain("brainEvidenceId=video%3Aabc")
+  expect(html).not.toContain("rankBy=")
+  expect(html).not.toContain("count=")
+ })
+
  it("does not present an empty filtered result as proof that no source data exists", () => {
   const html = render(evidencePack({ items: [], evidenceIds: [], missingInputs: [], dataStatus: "ready" }))
   expect(html).toContain("No evidence references were attached to this answer")
