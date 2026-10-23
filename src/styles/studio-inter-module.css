@@ -190,3 +190,11 @@
   line-height: 1;
   -webkit-text-stroke: 0;
 }
+
+
+/* Bleed through the existing 8px parent-body inset so rails and rules meet the shell's inner edges. */
+.vt-studio-inter-host--bleed {
+  width: calc(100% + 16px);
+  max-width: none;
+  margin-inline: -8px;
+}
