@@ -54,6 +54,48 @@ export const BrainChatMessageShell: React.FC<{
   </article>
 )
 
+/** Shared response composition shell; response/evidence/learning data remains owned by existing Brain modules. */
+export const BrainResponseLayout: React.FC<{
+  title: string
+  children: React.ReactNode
+  header?: React.ReactNode
+  attribution?: React.ReactNode
+  status?: React.ReactNode
+  headerMetadata?: React.ReactNode
+  actions?: React.ReactNode
+  footer?: React.ReactNode
+  className?: string
+  headerClassName?: string
+  bodyClassName?: string
+  actionsClassName?: string
+}> = ({ title, children, header, attribution, status, headerMetadata, actions, footer, className = "", headerClassName = "", bodyClassName = "", actionsClassName = "" }) => (
+  <article
+    data-vt-brain-component="BrainResponseLayout"
+    aria-label={title}
+    className={`flex min-w-0 flex-col overflow-hidden ${className}`}
+  >
+    {header ?? (
+      <div className={`shrink-0 border-b-2 border-black px-3 py-2 ${headerClassName}`}>
+        {attribution || status || headerMetadata ? (
+          <div className="mb-1 flex min-w-0 flex-wrap items-center justify-between gap-1.5">
+            {attribution ? <div className="min-w-0">{attribution}</div> : <span />}
+            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+              {status}
+              {headerMetadata}
+            </div>
+          </div>
+        ) : null}
+        <BrainResponseSectionHeader title={title} />
+      </div>
+    )}
+    <div data-vt-brain-part="response-layout-body" className={`flex min-w-0 flex-col gap-2.5 p-3 [overflow-wrap:anywhere] ${bodyClassName}`}>
+      {children}
+    </div>
+    {actions ? <div data-vt-brain-part="response-layout-actions" className={`flex min-w-0 shrink-0 flex-wrap items-center gap-1 border-t-2 border-black px-3 py-1 ${actionsClassName}`}>{actions}</div> : null}
+    {footer}
+  </article>
+)
+
 export const BrainResponseSectionHeader: React.FC<{
   title: string
   metadata?: React.ReactNode

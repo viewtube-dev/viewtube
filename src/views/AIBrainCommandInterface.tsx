@@ -73,7 +73,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
-import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainComposerAccessoryRow } from "../components/brain/BrainChatPrimitives"
+import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
@@ -751,29 +751,24 @@ const CreatorResponseCard: React.FC<{
  )
 
  return (
-  <article data-vt-brain-component="BrainResponseCard" className={`${assistantCardFrame} flex flex-col overflow-hidden`}>
-   <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
-    <div className="flex flex-wrap items-start justify-between gap-1.5">
-     <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
-     {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
+  <BrainResponseLayout
+   title={sanitizeCreatorFacingBrainCopy(response.headline)}
+   className={assistantCardFrame}
+   header={
+    <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
+     <div className="flex flex-wrap items-start justify-between gap-1.5">
+      <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
+      {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
+     </div>
+     <BrainResponseSectionHeader
+      title={sanitizeCreatorFacingBrainCopy(response.headline)}
+      className="text-lg font-[1000] uppercase leading-none sm:text-xl"
+     />
     </div>
-    <BrainResponseSectionHeader
-     title={sanitizeCreatorFacingBrainCopy(response.headline)}
-     className="text-lg font-[1000] uppercase leading-none sm:text-xl"
-    />
-   </div>
-   <div className="flex flex-col gap-2.5 p-3">
-    {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
-     <BrainDataReadiness readiness={message.readiness} />
-    ) : null}
-    <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
-    <BrainAnswerModuleGrid modules={modules} compact />
-    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} evidenceIntegrityStatus={message.evidenceIntegrityStatus || "unavailable"} compact /> : null}
-    {openQuestions[0] ? (
-     <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
-    ) : null}
-   </div>
-   <div className="flex min-h-9 shrink-0 flex-wrap items-center gap-1 border-t-[2px] border-black bg-[#f8f8f4] px-3 py-1">
+   }
+   actionsClassName="min-h-9 bg-[#f8f8f4]"
+   actions={
+    <>
      <BrainFeedbackControls message={message} onFeedback={onFeedback} />
      <BrainChatActionButtonGroup
       label="Review handoff actions"
@@ -796,10 +791,20 @@ const CreatorResponseCard: React.FC<{
        <ArrowRight size={13} />
       </Link>
      ) : null}
-   </div>
-   {message.learningReceipt ? <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /> : null}
-  </article>
- )
+    </>
+   }
+   footer={message.learningReceipt ? <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /> : null}
+  >
+   {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
+    <BrainDataReadiness readiness={message.readiness} />
+   ) : null}
+   <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
+   <BrainAnswerModuleGrid modules={modules} compact />
+   {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} evidenceIntegrityStatus={message.evidenceIntegrityStatus || "unavailable"} compact /> : null}
+   {openQuestions[0] ? (
+    <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
+   ) : null}
+  </BrainResponseLayout>
 }
 
 const readinessForSnapshot = (snapshot: AIBrainContextSnapshot): AIBrainTurnReadiness => ({

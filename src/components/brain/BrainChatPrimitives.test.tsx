@@ -8,6 +8,7 @@ import {
   BrainChatActionButtonGroup,
   BrainPromptLibraryItem,
   BrainComposerAccessoryRow,
+  BrainResponseLayout,
 } from "./BrainChatPrimitives"
 
 describe("Brain Studio chat primitives", () => {
@@ -45,4 +46,25 @@ describe("Brain Studio chat primitives", () => {
     render(<BrainComposerAccessoryRow><button>Attach</button></BrainComposerAccessoryRow>)
     expect(screen.getByRole("group", { name: "Composer options" })).toBeInTheDocument()
   })
+  it("composes response title, status, content, actions, and footer in one accessible layout", () => {
+    render(
+      <BrainResponseLayout
+        title="Growth plan"
+        attribution="ViewTube Copilot"
+        status={<span>Partial</span>}
+        actions={<button type="button">Retry</button>}
+        footer={<p>Evidence provenance</p>}
+      >
+        <p>Three practical next steps</p>
+      </BrainResponseLayout>,
+    )
+    expect(screen.getByRole("article", { name: "Growth plan" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Growth plan" })).toBeInTheDocument()
+    expect(screen.getByText("ViewTube Copilot")).toBeInTheDocument()
+    expect(screen.getByText("Partial")).toBeInTheDocument()
+    expect(screen.getByText("Three practical next steps")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument()
+    expect(screen.getByText("Evidence provenance")).toBeInTheDocument()
+  })
+
 })
