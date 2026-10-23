@@ -1,5 +1,5 @@
 import React from "react"
-import { ArrowRight } from "lucide-react"
+import { AlertTriangle, ArrowRight, Check } from "lucide-react"
 import type {
  BrainQuickAction,
  CreatorBrainLearningQuestion,
@@ -15,16 +15,16 @@ import { BrainScopeSummary } from "./BrainScopeSummary"
 import { BrainPromptPolicyPanel } from "./BrainPromptPolicyPanel"
 import { BrainOutcomeLearningCard } from "./BrainOutcomeLearningCard"
 import { BrainStatusIndicatorShowcase } from "./BrainStatusIndicatorShowcase"
+import { StudioSplitLeftBadge, StudioSplitLeftButton, StudioTwoLineButton } from "../../studio-ui"
 
-const Panel: React.FC<{ title: string; tone: string; children: React.ReactNode }> = ({
+const Panel: React.FC<{ title: string; children: React.ReactNode }> = ({
  title,
- tone,
  children,
 }) => (
  <section className="overflow-hidden rounded-[10px] border-[2px] border-black bg-white">
   <h3
    className="border-b-[2px] border-black px-3 py-1.5 text-[10px] font-[1000] uppercase leading-4 tracking-[0.1em]"
-   style={{ backgroundColor: tone }}
+   style={{ backgroundColor: "var(--pair-a, #36e0f6)" }}
   >
    {title}
   </h3>
@@ -93,20 +93,21 @@ export const BrainContextRail: React.FC<{
   >
    <div className="col-span-full"><BrainScopeSummary channelId={channelId} /></div>
    <div className="col-span-full"><BrainPromptPolicyPanel channelId={channelId} snapshot={snapshot} onEditPrompt={onEditPrompt} /></div>
-   <Panel title="Profile coverage" tone="#36E0F6">
+   <Panel title="Profile coverage">
     <ul className="grid gap-1.5">
      {profileChecks.map((item) => (
       <li key={item.label} className="flex min-w-0 items-start gap-2 text-[10px] leading-4">
-       <span aria-label={item.complete ? "Complete" : "Needs attention"} className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-[3px] border border-black font-black ${item.complete ? "bg-[#3FEE56]" : "bg-[#FFDA47]"}`}>
-        {item.complete ? "✓" : "!"}
-       </span>
+       <StudioSplitLeftBadge sizeVariant="micro" role="status" icon={item.complete ? <Check aria-hidden="true" /> : <AlertTriangle aria-hidden="true" />}>
+        {item.complete ? "Complete" : "Needs attention"}
+       </StudioSplitLeftBadge>
        <span className="min-w-0 flex-1">
         <span className="block font-black uppercase">{item.label}</span>
         <span className="block break-words text-black/60">{item.detail || "Not confirmed yet"}</span>
        </span>
        {!item.complete && onEditPrompt ? (
-        <button
-         type="button"
+        <StudioSplitLeftButton
+         sizeVariant="compact"
+         icon={<ArrowRight aria-hidden="true" />}
          onClick={() => onEditPrompt(item.label === "Goals"
           ? "Help me confirm and save my main YouTube goal. Ask one question at a time."
           : item.label === "Style preferences"
@@ -115,26 +116,21 @@ export const BrainContextRail: React.FC<{
             ? "Help me confirm my channel focus and niche using my existing evidence, then ask me to confirm or correct it."
             : "Help me review which videos have been analyzed and what evidence is still missing.")
          }
-         className="min-h-9 shrink-0 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase underline underline-offset-2 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black"
+         className="shrink-0"
         >
          {item.label === "Goals" ? "Confirm" : item.label === "Style preferences" ? "Add examples" : item.label === "Channel focus" ? "Review" : "Inspect"}
-        </button>
+        </StudioSplitLeftButton>
        ) : null}
       </li>
      ))}
     </ul>
    </Panel>
 
-   <Panel title="Your channel" tone="#3FEE56">
+   <Panel title="Your channel">
     {clusters.length ? (
      <ul className="flex flex-wrap gap-1">
       {clusters.map((cluster) => (
-       <li
-        key={cluster}
-        className="rounded-[7px] border-[2px] border-black bg-[#36E0F6] px-1.5 py-0.5 text-[9px] font-black uppercase"
-       >
-        {cluster}
-       </li>
+       <li key={cluster}><StudioSplitLeftBadge sizeVariant="micro">{cluster}</StudioSplitLeftBadge></li>
       ))}
      </ul>
     ) : (
@@ -154,10 +150,10 @@ export const BrainContextRail: React.FC<{
     compact={compactGrid}
    />
    <div className="col-span-full"><BrainOutcomeLearningCard channelId={channelId} maximumItems={compactGrid ? 2 : 4} /></div>
-   <div className="col-span-full"><Panel title="Status indicator primitives" tone="#BCE742"><BrainStatusIndicatorShowcase /></Panel></div>
+   <div className="col-span-full"><Panel title="Status indicator primitives"><BrainStatusIndicatorShowcase /></Panel></div>
 
    {quickActions.length ? (
-    <Panel title="Do this next" tone="#C0F240">
+    <Panel title="Do this next">
      {quickActions.slice(0, 1).map((action) => (
       <BrainQuickActionCard
        key={action.id}
@@ -170,22 +166,17 @@ export const BrainContextRail: React.FC<{
    ) : null}
 
    {!topQuestion && insights.length ? (
-    <Panel title="Worth a look" tone="#FF7AC8">
+    <Panel title="Worth a look">
      {insights.slice(0, 1).map((insight) => (
-      <button
+      <StudioTwoLineButton
        key={insight.id}
-       type="button"
+       sizeVariant="compact"
+       icon={<ArrowRight aria-hidden="true" />}
+       firstLine={insight.title}
+       secondLine={sanitizeCreatorFacingBrainCopy(insight.modules[0]?.body || insight.reason)}
        onClick={() => onAskInsight(insight)}
-       className="group flex items-start justify-between gap-2 rounded-[8px] border-[2px] border-black bg-white px-2.5 py-2 text-left transition hover:bg-[#FFDA47]"
-      >
-       <span className="min-w-0">
-        <span className="block text-[10px] font-[1000] uppercase leading-4">{insight.title}</span>
-        <span className="mt-0.5 line-clamp-2 block text-[11px] font-bold leading-4 text-black/60">
-         {sanitizeCreatorFacingBrainCopy(insight.modules[0]?.body || insight.reason)}
-        </span>
-       </span>
-       <ArrowRight size={13} className="mt-0.5 shrink-0 transition group-hover:translate-x-0.5" />
-      </button>
+       className="w-full min-w-0 text-left"
+      />
      ))}
     </Panel>
    ) : null}
