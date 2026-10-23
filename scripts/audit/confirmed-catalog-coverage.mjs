@@ -37,6 +37,12 @@ const checks = [
   ["global defaults is collapsed by default", catalog.includes('data-vt-confirmed-family="defaults"') && !/data-vt-confirmed-family="defaults"[^>]*\bopen=/.test(catalog)],
   ["catalog imports disclosure styles", catalog.includes('import "../../styles/studio-confirmed-catalog-modules.css"') && catalogStyles.includes(".vt-confirmed-primitive-summary")],
   ["module components are exported", moduleFile.includes("ConfirmedFamilyModule") && moduleFile.includes("ConfirmedPrimitiveModule") && index.includes("ConfirmedDefaultsModule")],
+  ["all eight requested family groups are declared", [
+    "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
+    "Controls", "Text Controls", "Compounds", "Compositions",
+  ].every((family) => catalog.includes(`"${family}"`)) && catalog.includes("CONFIRMED_CATALOG_FAMILIES")],
+  ["global defaults render before the eight family groups", catalog.indexOf("{defaults}") >= 0 && catalog.indexOf("{defaults}") < catalog.indexOf("vt-confirmed-family-grid")],
+
   ["retired CLEAN COMPOSITION specimen is absent from confirmed catalog", !/CLEAN COMPOSITION|Confirmed Specimen Grid\s*[·-]\s*Layout Contract/i.test(catalog)],
 ]
 
