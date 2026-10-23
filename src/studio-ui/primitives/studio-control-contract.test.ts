@@ -205,4 +205,20 @@ describe("Studio textarea typography token ownership", () => {
     expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.compactTextStroke).toBe(0.35);
     expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.microTextStroke).toBe(0.25);
   });
+
+  it("pairs editable-field text and glyph stroke through state tokens without important overrides", () => {
+    const fields = read("src/styles/studio-control-fields.css");
+    const system = read("src/styles/studio-control-system.css");
+    const distill = read("src/styles/studio-control-distill-overrides.css");
+
+    expect(system).toContain("--vt-field-text-focus: #000");
+    expect(system).toContain("--vt-field-text-stroke-focus: var(--vt-field-text-focus)");
+    expect(system).toContain("--vt-field-caret-focus: var(--vt-field-primary)");
+    expect(fields).toContain("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)");
+    expect(fields).toContain("caret-color: var(--vt-field-caret-focus)");
+    expect(fields).not.toMatch(/:focus[^\\{]*\\{[^}]*-webkit-text-stroke-color:\\s*var\\(--vt-field-primary/);
+    expect(fields).not.toMatch(/:focus[^\\{]*\\{[^}]*-webkit-text-stroke-color:[^;]*!important/);
+    expect(distill).toContain("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)");
+    expect(distill).not.toMatch(/:focus[^\\{]*\\{[^}]*-webkit-text-stroke-color:\\s*var\\(--vt-field-primary/);
+  });
 });
