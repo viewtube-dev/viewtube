@@ -61,7 +61,7 @@
   border-radius: 0;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   color: #000;
-  cursor: pointer;
+  cursor: default;
   user-select: none;
   font-family: var(--vt-studio-control-font-family, Inter, sans-serif);
 }
@@ -69,6 +69,10 @@
 [data-vt-studio-inter-host="true"] > .vt-studio-inter-module + .vt-studio-inter-module > .vt-studio-inter-module__head,
 .vt-studio-inter-module__body > .vt-studio-inter-module + .vt-studio-inter-module > .vt-studio-inter-module__head {
   border-top: 0;
+}
+
+.vt-studio-inter-module__head[role="button"] {
+  cursor: pointer;
 }
 
 .vt-studio-inter-module__head[role="button"]:focus-visible {
