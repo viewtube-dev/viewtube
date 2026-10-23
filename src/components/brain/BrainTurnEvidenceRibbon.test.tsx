@@ -195,3 +195,20 @@ describe("BrainTurnEvidenceRibbon", () => {
  })
 
 })
+
+
+describe("BrainTurnEvidenceRibbon Studio disclosure triggers", () => {
+ it("keeps native details semantics and renders shared Studio summary controls", () => {
+  const html = render({
+   evidencePack: pack({ requestSpec: { count: 10, formats: ["long"], since: null, until: null, rankBy: "views", filters: [], selectionMode: "top" } }),
+   evidenceIntegrityStatus: "verified",
+   evidenceRecords: [record()],
+  })
+  expect(html).toContain("<details")
+  expect(html).toContain("data-vt-studio-disclosure-summary=\\"true\\"")
+  expect(html).toContain("data-vt-studio-control=\\"true\\"")
+  expect(html).toContain("class=\\"vt-studio-disclosure-summary\\"")
+  expect(html).toContain("All selection constraints")
+  expect(html).toContain("Prompt evidence records")
+ })
+})
