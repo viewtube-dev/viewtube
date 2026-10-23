@@ -132,7 +132,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
     </div>
     {requestConstraints ? (
      <details className="min-w-0">
-      <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-xs font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">
+      <summary data-vt-studio-disclosure-summary="true" data-size="standard" className="vt-studio-disclosure-summary">
        <span>All selection constraints</span>
        <span className="ml-auto">{requestConstraints.length}</span>
       </summary>
@@ -159,7 +159,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
    ) : null}
    <BrainClaimEvidence evidencePack={evidencePack} compact label="Inspect evidence" />
    <details data-vt-brain-part="prompt-evidence-records" className="min-w-0 border-t border-black/20 pt-1.5">
-    <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 text-[10px] font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">
+    <summary data-vt-studio-disclosure-summary="true" data-size="standard" data-justify="between" className="vt-studio-disclosure-summary">
      <span>Prompt evidence records</span>
      <span className="shrink-0">{evidenceIntegrityStatus === "mismatch" ? "Mismatch" : evidenceRecords === undefined ? "Unavailable" : evidenceRecords.length}</span>
     </summary>

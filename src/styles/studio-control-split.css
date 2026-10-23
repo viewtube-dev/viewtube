@@ -342,3 +342,73 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
   outline-offset: -2px;
   z-index: 1;
 }
+
+
+/* Native disclosure triggers share Studio's compact/standard geometry and active color pair. */
+.vt-studio-disclosure-summary {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  padding: 4px 8px;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  color: #000;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-weight: var(--vt-studio-control-font-weight, 1000);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
+  text-transform: uppercase;
+  cursor: pointer;
+  list-style: none;
+}
+.vt-studio-disclosure-summary::-webkit-details-marker { display: none; }
+.vt-studio-disclosure-summary[data-size="compact"] { min-height: var(--vt-studio-28-height, 28px); }
+.vt-studio-disclosure-summary[data-size="standard"] {
+  min-height: var(--vt-studio-control-height, 44px);
+  font-size: 10px;
+}
+.vt-studio-disclosure-summary:hover { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+.vt-studio-disclosure-summary:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+.vt-studio-disclosure-summary > * { min-width: 0; }
+.vt-studio-disclosure-summary [data-vt-disclosure-count] {
+  margin-left: auto;
+  border: 1px solid #000;
+  border-radius: 2px;
+  padding: 1px 4px;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  font-size: 9px;
+  line-height: 1;
+}
+
+.vt-studio-disclosure-summary[data-layout="inline"] {
+  width: max-content;
+  max-width: 100%;
+}
+
+.vt-studio-disclosure-summary[data-frame="true"] {
+  border: var(--vt-studio-28-stroke, 2px) solid #000;
+  border-radius: var(--vt-studio-28-radius, 4px);
+}
+.vt-studio-disclosure-summary[data-divider="true"] {
+  border-bottom: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+
+.vt-studio-disclosure-summary[data-justify="between"] { justify-content: space-between; }
+
+.vt-studio-disclosure-summary[data-layout="module"] {
+  display: grid;
+  grid-template-columns: var(--vt-studio-28-height, 28px) minmax(0, 1fr) auto var(--vt-studio-28-height, 28px);
+  gap: 0;
+  min-height: var(--vt-studio-28-height, 28px);
+  padding: 0;
+  border-bottom: var(--vt-studio-28-stroke, 2px) solid #000;
+}

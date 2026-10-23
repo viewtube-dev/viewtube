@@ -12,7 +12,6 @@ import {
  Video,
 } from "lucide-react"
 import type { AIBrainAnswerModule, BrainQuickAction } from "../../types"
-import { StudioButton } from "../../studio-ui"
 import { sanitizeCreatorFacingBrainCopy } from "../../services/aiBrainConversationStore"
 
 export type { BrainQuickAction }
@@ -177,12 +176,9 @@ export const BrainKpiModule: React.FC<{
  return (
   <article className={`${cardShell} ${className}`}>
    <details open>
-    <summary
-     className="grid min-h-[36px] cursor-pointer list-none grid-cols-[34px_minmax(0,1fr)_auto_28px] items-stretch border-b-[2px] border-black"
-     style={{ backgroundColor: accent }}
-    >
-     <span className="grid place-items-center border-r-[2px] border-black bg-white">{icon}</span>
-     <h4 className="min-w-0 self-center truncate px-2.5 py-1.5 text-[11px] font-[1000] uppercase leading-4 tracking-[0.04em]">
+    <summary data-vt-studio-disclosure-summary="true" data-size="compact" data-layout="module" className="vt-studio-disclosure-summary">
+     <span className="grid place-items-center border-r-[2px] border-black bg-[var(--pair-b)]">{icon}</span>
+     <h4 className="min-w-0 self-center overflow-hidden whitespace-nowrap text-clip px-2.5 py-1.5 text-[11px] font-[1000] uppercase leading-4 tracking-[0.04em]">
       {sanitizeCreatorFacingBrainCopy(module.title)}
      </h4>
      {module.code ? (
@@ -192,7 +188,7 @@ export const BrainKpiModule: React.FC<{
      ) : (
       <span />
      )}
-     <span className="grid place-items-center border-l-[2px] border-black bg-white/30">
+     <span className="grid place-items-center border-l-[2px] border-black bg-[var(--pair-b)]">
       <ChevronDown size={14} />
      </span>
     </summary>
@@ -302,29 +298,24 @@ export const BrainQuickActionCard: React.FC<{
 
  if (compact) {
   return (
-   <StudioButton
+   <button
     type="button"
-    sizeVariant="standard"
-    tone="neutral"
-    disabled={!onAccept}
     onClick={() => onAccept?.(action)}
-    className="group w-full text-left"
+    className="group grid w-full grid-cols-[minmax(0,1fr)_13px] items-start gap-2 rounded-[8px] border-[2px] border-black bg-white px-2.5 py-2 text-left transition hover:bg-[#FFDA47]"
    >
-    <span className="grid w-full grid-cols-[minmax(0,1fr)_13px] items-start gap-2">
-     <span className="min-w-0">
-      <span className="block text-[10px] font-[1000] uppercase leading-4">
-       {sanitizeCreatorFacingBrainCopy(action.title)}
-      </span>
-      <span className="mt-1 block line-clamp-2 text-[11px] font-bold leading-4 text-black/65">
-       {sanitizeCreatorFacingBrainCopy(action.body)}
-      </span>
-      <span className="mt-1 block text-[9px] font-black uppercase tracking-[0.06em] text-black/45">
-       {EFFORT_TEXT[effort]} · {REWARD_TEXT[reward]} payoff
-      </span>
+    <span className="min-w-0">
+     <span className="block text-[10px] font-[1000] uppercase leading-4">
+      {sanitizeCreatorFacingBrainCopy(action.title)}
      </span>
-     <ArrowRight size={13} className="mt-0.5 shrink-0" aria-hidden="true" />
+     <span className="mt-1 block line-clamp-2 text-[11px] font-bold leading-4 text-black/65">
+      {sanitizeCreatorFacingBrainCopy(action.body)}
+     </span>
+     <span className="mt-1 block text-[9px] font-black uppercase tracking-[0.06em] text-black/45">
+      {EFFORT_TEXT[effort]} · {REWARD_TEXT[reward]} payoff
+     </span>
     </span>
-   </StudioButton>
+    <ArrowRight size={13} className="mt-0.5 shrink-0 transition group-hover:translate-x-0.5" />
+   </button>
   )
  }
 
@@ -346,12 +337,14 @@ export const BrainQuickActionCard: React.FC<{
      </span>
     </div>
     {onAccept ? (
-     <StudioButton type="button" sizeVariant="compact" tone="success" onClick={() => onAccept(action)} className="w-fit">
-      <span className="inline-flex items-center gap-1.5">
-       {action.routeLabel || "Start this"}
-       <ArrowRight size={12} aria-hidden="true" />
-      </span>
-     </StudioButton>
+     <button
+      type="button"
+      onClick={() => onAccept(action)}
+      className="inline-flex w-fit items-center gap-1.5 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.06em] hover:bg-[#FFDA47]"
+     >
+      {action.routeLabel || "Start this"}
+      <ArrowRight size={12} />
+     </button>
     ) : null}
    </div>
   </article>

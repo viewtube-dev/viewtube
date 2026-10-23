@@ -143,7 +143,7 @@ const BrainRecentWorkTray: React.FC<{
  build: Pick<NonNullable<BrainRuntimeSnapshot["build"]>, "id" | "assetIds"> | null
 }> = ({ chains, build }) => (
  <details data-vt-brain-part="recent-work-tray" className="mt-1 rounded-[6px] border border-black/30 bg-white px-2 py-1">
-  <summary className="flex min-h-11 cursor-pointer flex-wrap items-center gap-2 text-[9px] font-[1000] uppercase underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
+  <summary data-vt-studio-disclosure-summary="true" data-size="standard" className="vt-studio-disclosure-summary">
    <Workflow size={12} aria-hidden="true" /> Recent work · {chains.length}
   </summary>
   {chains.length ? (
@@ -339,7 +339,7 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
      <RuntimePill label="Unresolved chains" value={snapshot.provenance.unresolvedChainCount} />
     </div>
     <details className="mt-1 rounded-[5px] border border-black/30 bg-white px-2 py-1" data-vt-brain-part="embedded-evidence-lineage">
-     <summary className="min-h-8 cursor-pointer content-center text-[9px] font-[1000] uppercase underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+     <summary data-vt-studio-disclosure-summary="true" data-size="compact" className="vt-studio-disclosure-summary">
       Evidence lineage · {snapshot.provenance.unresolvedChainCount} unresolved
      </summary>
      {snapshot.provenance.latestChain ? (
@@ -485,7 +485,7 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
      </p>
     </div>
     <details className="min-w-0 rounded-[6px] border px-2 py-1.5" style={{ borderColor: `${INK}44` }}>
-     <summary className="min-h-8 cursor-pointer content-center text-[10px] font-[1000] underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+     <summary data-vt-studio-disclosure-summary="true" data-size="compact" className="vt-studio-disclosure-summary">
       Inspect latest lineage
      </summary>
      {snapshot.provenance.latestChain ? (
