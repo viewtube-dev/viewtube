@@ -21,7 +21,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
-import { StudioButton, StudioSplitLeftButton, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -73,7 +73,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
-import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow } from "../components/brain/BrainChatPrimitives"
+import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow, BrainChatStatusBadge } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
@@ -324,16 +324,16 @@ const BrainContextStrip: React.FC<{
  onClearProject: () => void
 }> = ({ channelLabel, projectLabel, contentBuildId, selection, onClearSelection, onToggleLock, onClearProject }) => (
  <section data-vt-brain-component="BrainContextStrip" aria-label="Active creator context" className="sticky top-0 z-10 grid gap-1 rounded-[7px] border-[2px] border-black bg-white p-2">
-  <div data-vt-brain-part="active-context-badges" className="flex flex-wrap items-center gap-1">
-   <span data-vt-brain-context="channel" className="rounded-[4px] border border-black bg-[#36E0F6] px-1.5 py-1 text-[9px] font-black uppercase">Channel · {channelLabel}</span>
-   <span data-vt-brain-context="project" className="rounded-[4px] border border-black bg-[#3FEE56] px-1.5 py-1 text-[9px] font-black uppercase">Project · {projectLabel}</span>
-   <span data-vt-brain-context="content-build" className="rounded-[4px] border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-black uppercase">ContentBuild · {contentBuildId || "none"}</span>
-   <span data-vt-brain-context="selection" className="min-w-0 rounded-[4px] border border-black bg-[#f8f8f4] px-1.5 py-1 text-[9px] font-black uppercase">Selected · {selection?.label || "none"}</span>
+  <div data-vt-brain-part="active-context-badges" className="grid min-w-0 grid-cols-2 gap-1 sm:grid-cols-4">
+   <StudioSplitLeftBadge data-vt-brain-context="channel" sizeVariant="micro" icon={<MessageSquare aria-hidden="true" />} title={`Channel · ${channelLabel}`} aria-label={`Channel · ${channelLabel}`} className="min-w-0 max-w-full">Channel · {channelLabel}</StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="project" sizeVariant="micro" icon={<LayoutGrid aria-hidden="true" />} title={`Project · ${projectLabel}`} aria-label={`Project · ${projectLabel}`} className="min-w-0 max-w-full">Project · {projectLabel}</StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="content-build" sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} title={`ContentBuild · ${contentBuildId || "none"}`} aria-label={`ContentBuild · ${contentBuildId || "none"}`} className="min-w-0 max-w-full">Build · {contentBuildId ? contentBuildId.slice(0, 8) : "none"}</StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="selection" sizeVariant="micro" icon={<Lock aria-hidden="true" />} title={`Selected · ${selection?.label || "none"}`} aria-label={`Selected · ${selection?.label || "none"}`} className="min-w-0 max-w-full">Selected · {selection?.label || "none"}</StudioSplitLeftBadge>
   </div>
   <div className="grid grid-cols-3 gap-1">
-   <StudioSplitLeftButton sizeVariant="standard" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} onClick={onToggleLock} className="min-w-0" style={{ backgroundColor: "#ffffff" }}>{selection?.locked ? "Unlock selection" : "Lock selection"}</StudioSplitLeftButton>
-   <StudioSplitLeftButton sizeVariant="standard" icon={<XCircle aria-hidden="true" />} disabled={!selection} onClick={onClearSelection} className="min-w-0" style={{ backgroundColor: "#ffffff" }}>Clear selection</StudioSplitLeftButton>
-   <StudioSplitLeftButton sizeVariant="standard" icon={<Trash2 aria-hidden="true" />} disabled={projectLabel === "none"} onClick={onClearProject} className="min-w-0" style={{ backgroundColor: "#ffffff" }}>Clear project</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} aria-label={selection?.locked ? "Unlock selection" : "Lock selection"} title={selection?.locked ? "Unlock selection" : "Lock selection"} onClick={onToggleLock} className="min-w-0">{selection?.locked ? "Unlock" : "Lock"}</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<XCircle aria-hidden="true" />} aria-label="Clear selection" title="Clear selection" disabled={!selection} onClick={onClearSelection} className="min-w-0">Selection</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<Trash2 aria-hidden="true" />} aria-label="Clear project" title="Clear project" disabled={projectLabel === "none"} onClick={onClearProject} className="min-w-0">Project</StudioSplitLeftButton>
   </div>
  </section>
 )
@@ -389,10 +389,10 @@ export const filterCreatorBrainPromptCards = (
  })
 }
 
-const GENERATION_BADGES: Record<BrainGenerationPath, { label: string; color: string; description: string }> = {
- model: { label: "Full Brain", color: "#00FF00", description: "This response was prepared with the full Brain." },
- repaired_model: { label: "Refined Answer", color: "#36E0F6", description: "This response was prepared with an additional quality pass." },
- basic_guidance: { label: "Basic Guidance", color: "#FFDA47", description: "This response was prepared from available channel evidence while full generation was unavailable." },
+const GENERATION_BADGES: Record<BrainGenerationPath, { label: string; description: string; status: "ready" | "partial" | "warning" }> = {
+ model: { label: "Full Brain", description: "This response was prepared with the full Brain.", status: "ready" },
+ repaired_model: { label: "Refined Answer", description: "This response was prepared with an additional quality pass.", status: "partial" },
+ basic_guidance: { label: "Basic Guidance", description: "This response was prepared from available channel evidence while full generation was unavailable.", status: "warning" },
 }
 
 export const BrainGenerationBadge: React.FC<{ path: BrainGenerationPath }> = ({ path }) => {
@@ -400,14 +400,11 @@ export const BrainGenerationBadge: React.FC<{ path: BrainGenerationPath }> = ({ 
  return (
   <span
    data-vt-brain-component="BrainGenerationBadge"
-   role="status"
-   tabIndex={0}
-   aria-label={`${badge.label} response status`}
    title={badge.description}
-   className="max-w-full whitespace-normal break-words rounded-[6px] border-[2px] border-black px-2 py-0.5 text-center text-[8px] font-black uppercase leading-3 tracking-[0.1em] outline-none focus-visible:ring-[3px] focus-visible:ring-black"
-   style={{ backgroundColor: badge.color }}
+   className="max-w-full min-w-0"
+   aria-label={`${badge.label} response status`}
   >
-   {badge.label}
+   <BrainChatStatusBadge status={badge.status} label={badge.label} />
   </span>
  )
 }
@@ -625,7 +622,7 @@ const BrainLearningReceiptCard: React.FC<{
   <section data-vt-brain-part="learning-receipt-content" aria-label="Learning receipt" className="grid gap-2 border-t-[2px] border-black bg-[#FFF8D6] p-3">
    <div className="flex flex-wrap items-center justify-between gap-2">
     <h4 data-vt-brain-part="learning-receipt-heading" className="text-[10px] font-black uppercase tracking-[0.12em]">Learning receipt</h4>
-    <span role="status" className="rounded-[5px] border-[1.5px] border-black bg-white px-2 py-0.5 text-[9px] font-black uppercase">{receipt.status}</span>
+    <StudioSplitLeftBadge sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} role="status">Receipt · {receipt.status}</StudioSplitLeftBadge>
    </div>
    <p data-vt-brain-part="learning-receipt-summary" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(receipt.summary)}</p>
    {receipt.detail ? <p className="text-xs font-bold leading-5 text-black/70">{sanitizeCreatorFacingBrainCopy(receipt.detail)}</p> : null}
@@ -806,7 +803,7 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
  return (
   <details data-vt-brain-component="BrainEvidenceReadiness" className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
    <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1.5 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
-    <span data-vt-brain-part="evidence-readiness-status" className={`rounded-[4px] border-[1.5px] border-black px-1.5 py-0.5 ${presentation.tone === "ready" ? "bg-[#3FEE56]" : presentation.tone === "warning" ? "bg-[#FFDA47]" : "bg-[#FF7497]"}`}>Data readiness</span>
+    <span data-vt-brain-part="evidence-readiness-status"><BrainChatStatusBadge status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label="Data readiness" /></span>
     <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
    </summary>
    <div data-vt-brain-part="evidence-diagnostics" className="grid gap-2 border-t-[2px] border-black p-2.5">
