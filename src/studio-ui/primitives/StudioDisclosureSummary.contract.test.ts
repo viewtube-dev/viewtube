@@ -36,7 +36,7 @@ describe("Brain disclosure consumers", () => {
     expect(runtimePanel).not.toContain("<summary")
     expect((evidenceDrawer.match(/<StudioDisclosureSummary\b/g) || []).length).toBe(3)
     expect(evidenceDrawer).not.toContain("<summary")
-    expect((answerModules.match(/<StudioDisclosureSummary\\b/g) || []).length).toBe(1)
+    expect((answerModules.match(/<StudioDisclosureSummary\b/g) || []).length).toBe(1)
     expect(answerModules).toContain('appearanceVariant="structured"')
     expect(answerModules).not.toContain("<summary")
   })
