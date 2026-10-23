@@ -114,11 +114,18 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
 
     const applyFrame = React.useCallback((frame: FrameState) => {
       currentWidthsRef.current = [...frame.widths];
+      const rootStyles = rootRef.current ? window.getComputedStyle(rootRef.current) : null;
+      const face = parseFloat(rootStyles?.getPropertyValue("--vt-sa-face") ?? "") || 44;
       items.forEach((_, index) => {
+        const width = Math.max(0, frame.widths[index] ?? 0);
         const item = itemRefs.current[index];
-        if (item) item.style.width = `${Math.max(0, frame.widths[index] ?? 0)}px`;
+        if (item) item.style.width = `${width}px`;
         const content = item?.querySelector<HTMLElement>("[data-vt-studio-split-accordion-content]");
-        if (content) content.dataset.labelVisible = frame.labelVisible[index] ? "true" : "false";
+        if (content) {
+          content.dataset.labelVisible = frame.labelVisible[index] ? "true" : "false";
+          // Keep the coloured band visible as soon as the item's width grows beyond its icon face.
+          content.dataset.panelVisible = width > face + 0.5 ? "true" : "false";
+        }
       });
       const track = trackRef.current;
       if (track) {
@@ -326,6 +333,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
                     data-vt-studio-split-accordion-content="true"
                     data-active={selected ? "true" : "false"}
                     data-label-visible={selected ? "true" : "false"}
+                    data-panel-visible={selected ? "true" : "false"}
                     role="tabpanel"
                     aria-hidden={!selected}
                   >
