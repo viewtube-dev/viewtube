@@ -270,4 +270,30 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(gridContract).not.toContain("gap: 10px")
   })
 
+  it("lists one standard-size live production primitive per confirmed-catalog row", () => {
+    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+    const controls = read("src/studio-ui/primitives/StudioControls.tsx")
+    const publicIndex = read("src/studio-ui/index.ts")
+    const expectedRows = [
+      "StudioButton", "StudioSplitLeftButton", "StudioDoubleSplitButton",
+      "StudioTwoLineButton", "StudioSplitTwoLineButton", "StudioSimpleDropdown",
+      "StudioLegendMultiDropdown", "StudioSplitLeftDropdown", "StudioArrowToggle",
+      "StudioBarToggle", "StudioWordToggle", "StudioTextInput", "StudioTextArea",
+      "StudioTextBox", "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter",
+      "StudioSideCounter", "StudioDoubleSplitSlider", "StudioSplitAccordion",
+    ]
+    expect(catalog).toContain('title="Direct Imported Primitive Representatives · Standard"')
+    for (const primitive of expectedRows) {
+      expect(catalog).toContain(`data-vt-library-component="${primitive}"`)
+    }
+    expect(controls).toContain("export const StudioDoubleSplitButton")
+    expect(controls).toContain('data-vt-library-component="StudioDoubleSplitButton"')
+    expect(publicIndex).toContain("  StudioDoubleSplitButton,")
+    expect(publicIndex).toContain("  StudioDoubleSplitButtonProps,")
+    expect(catalog).toContain('accessibleLabel="Three section split accordion standard specimen"')
+    expect(catalog).toContain('id: "overview"')
+    expect(catalog).toContain('id: "settings"')
+    expect(catalog).toContain('id: "details"')
+  })
+
 })
