@@ -31,6 +31,9 @@ describe("confirmed composite primitive catalog", () => {
     expect(specimenSource).toContain('gridTemplateColumns: "minmax(0, 1fr)"');
     expect(specimenSource).toContain('width: "100%"');
     expect(catalogSource).toContain('<div className="w-full min-w-0 max-w-none"');
+    const catalogCss = readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8");
+    expect(catalogCss).toContain('.vt-confirmed-family:has([data-vt-confirmed-primitive="StudioSplitAccordion"]) > .vt-confirmed-primitive-body > .vt-confirmed-variants');
+    expect(catalogCss).toContain('display: block;\n  grid-template-columns: minmax(0, 1fr);\n  width: 100%;');
   });
 
   it("registers StudioTextBox in standard, compact, and micro sizes using shared field geometry and 0.75 line height", () => {
