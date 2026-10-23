@@ -8,6 +8,7 @@ import {
   STUDIO_COMPONENT_SIZE_DEFAULTS,
   StudioButton,
   StudioTwoLineButton,
+  StudioSplitTwoLineButton,
   StudioActionButton,
   StudioRadio,
   StudioCheckbox,
@@ -753,6 +754,21 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <StudioTwoLineButton firstLine="OPEN" secondLine="PROMPT LIBRARY" sizeVariant="standard" aria-label="Open prompt library" />
         <StudioTwoLineButton firstLine="SAVE" secondLine="DRAFT" sizeVariant="compact" aria-label="Save draft" />
         <StudioTwoLineButton firstLine="REVIEW" secondLine="RESPONSE" sizeVariant="compact" aria-label="Review response" />
+      </div>
+    </Family>
+    <Family
+      title="Split Two-Line Button · Standard + Compact"
+      nonDefaultSettings={[
+        "Canonical split-left action rail with a stacked two-line label; the rail remains square and the label occupies the remaining face.",
+        "Uses StudioButton state, palette, focus, disabled, clipping, and size tokens; the second line does not create a second control.",
+      ]}
+      provenance={<Provenance primitive="StudioSplitTwoLineButton → StudioButton + StudioSplitShell" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · 18px / 12px stacked label lines · secondary square rail" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTwoLineButton" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 4, minWidth: 0 }}>
+        <StudioSplitTwoLineButton icon={<Settings2 aria-hidden="true" />} firstLine="EDIT" secondLine="PROMPT" sizeVariant="standard" aria-label="Edit prompt" />
+        <StudioSplitTwoLineButton icon={<Sparkles aria-hidden="true" />} firstLine="SEND" secondLine="TO CHAT" sizeVariant="standard" aria-label="Send to chat" />
+        <StudioSplitTwoLineButton icon={<Settings2 aria-hidden="true" />} firstLine="EDIT" secondLine="PROMPT" sizeVariant="compact" aria-label="Edit prompt compact" />
+        <StudioSplitTwoLineButton icon={<Sparkles aria-hidden="true" />} firstLine="SEND" secondLine="TO CHAT" sizeVariant="compact" aria-label="Send to chat compact" />
       </div>
     </Family>
     <Family

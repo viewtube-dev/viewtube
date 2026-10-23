@@ -1143,6 +1143,41 @@ export const StudioTwoLineButton = React.forwardRef<HTMLButtonElement, StudioTwo
 )
 StudioTwoLineButton.displayName = "StudioTwoLineButton"
 
+/** Split-left action button with a stacked two-line label inside the flexible face. */
+export interface StudioSplitTwoLineButtonProps extends Omit<StudioButtonProps, "children" | "faceLayout" | "textLayout" | "firstLine" | "secondLine" | "icon" | "sizeVariant"> {
+  icon: React.ReactNode
+  firstLine: React.ReactNode
+  secondLine: React.ReactNode
+  /** Split rail icon sizing uses the shared Studio size-tier presets. */
+  iconSizeVariant?: StudioIconSizeVariant
+  sizeVariant?: Extract<StudioControlSize, "standard" | "compact">
+}
+
+export const StudioSplitTwoLineButton = React.forwardRef<HTMLButtonElement, StudioSplitTwoLineButtonProps>(
+  ({ icon, firstLine, secondLine, sizeVariant = "standard", iconSizeVariant = "large", className, ...props }, ref) => (
+    <StudioButton
+      {...props}
+      ref={ref}
+      className={studioClasses("vt-studio-split-two-line-button", className)}
+      sizeVariant={sizeVariant}
+      faceLayout="split"
+      textLayout="two-line"
+      data-vt-studio-split="left"
+      data-split-left="true"
+      data-icon-size-variant={iconSizeVariant}
+      data-vt-library-component="StudioSplitTwoLineButton"
+    >
+      <StudioSplitShell layout="left" sizeVariant={sizeVariant} iconLeft={icon} faceOnly>
+        <span data-vt-studio-button-label>
+          <span data-vt-studio-button-line="first">{firstLine}</span>
+          <span data-vt-studio-button-line="second">{secondLine}</span>
+        </span>
+      </StudioSplitShell>
+    </StudioButton>
+  ),
+)
+StudioSplitTwoLineButton.displayName = "StudioSplitTwoLineButton"
+
 
 /**
  * Prominent workflow action button defaults to Supreme and supports Standard and Compact variants.

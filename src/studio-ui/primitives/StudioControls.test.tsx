@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -1279,5 +1279,33 @@ describe("StudioTopSplitModule", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
     expect(css).toContain(".vt-studio-top-split-module__head[data-split=\"left\"]");
     expect(css).toContain(".vt-studio-top-split-module__body");
+  });
+});
+
+
+describe("StudioSplitTwoLineButton", () => {
+  it("renders a canonical split-left rail with two-line label at standard and compact sizes", () => {
+    const standard = renderToStaticMarkup(
+      <StudioSplitTwoLineButton icon={<span aria-hidden="true">✎</span>} firstLine="EDIT" secondLine="PROMPT" sizeVariant="standard" aria-label="Edit prompt" />,
+    );
+    const compact = renderToStaticMarkup(
+      <StudioSplitTwoLineButton icon={<span aria-hidden="true">✎</span>} firstLine="SEND" secondLine="TO CHAT" sizeVariant="compact" aria-label="Send to chat" />,
+    );
+    expect(standard).toContain('data-vt-library-component="StudioSplitTwoLineButton"');
+    expect(standard).toContain('data-vt-studio-split="left"');
+    expect(standard).toContain('data-vt-studio-button-lines="two"');
+    expect(standard).toContain('data-size="standard"');
+    expect(standard).toContain('data-vt-studio-button-line="first">EDIT</span>');
+    expect(standard).toContain('data-vt-studio-button-line="second">PROMPT</span>');
+    expect(standard).toContain('aria-label="Edit prompt"');
+    expect(compact).toContain('data-size="compact"');
+    expect(compact).toContain('data-vt-studio-button-line="first">SEND</span>');
+    expect(compact).toContain('data-vt-studio-button-line="second">TO CHAT</span>');
+
+    const catalog = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    expect(catalog).toContain("Split Two-Line Button");
+    expect(catalog).toContain('data-vt-library-component="StudioSplitTwoLineButton"');
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(css).toContain('[data-vt-studio-button-lines="two"][data-vt-studio-split="left"] [data-vt-studio-split-label]');
   });
 });

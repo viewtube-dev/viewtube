@@ -5957,3 +5957,31 @@ button[data-vt-studio-action-button="true"] {
 .vt-studio-top-split-module[data-tone="accent"] .vt-studio-top-split-module__head {
   background: #ffda47;
 }
+
+
+/* Split two-line button: preserve the canonical left split rail while stacking
+   both label rows inside the flexible face. Typography still comes from the
+   existing standard (18px) / compact (12px) two-line button rules above. */
+button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-studio-split="left"] [data-vt-studio-split-label] {
+  white-space: normal;
+  padding-inline: 4px;
+  overflow: hidden;
+}
+button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-studio-split="left"] [data-vt-studio-button-label] {
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  align-content: center;
+  align-items: center;
+  justify-items: center;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+}
+button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-studio-split="left"] [data-vt-studio-button-line] {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  line-height: 1;
+}
