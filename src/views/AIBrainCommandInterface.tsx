@@ -83,6 +83,8 @@ import { BrainTurnEvidenceRibbon } from "../components/brain/BrainTurnEvidenceRi
 import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavigation"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
+import { BrainWorkflowRunPanel } from "../components/brain/BrainWorkflowRunPanel"
+import { buildWorkflowRecommendationFromBrainResponse } from "../services/brain/brainWorkflowRecommendations"
 import { resolveBrainDataReadinessPresentation } from "./brainDataReadiness"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
@@ -653,6 +655,10 @@ const CreatorResponseCard: React.FC<{
  onCorrectContextItem: (item: BrainCreatorContextSnapshot["knowledgeItems"][number]) => void
 }> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry, onCorrectReceipt, onRejectReceipt, onCorrectContextItem }) => {
  const response = message.response
+ const workflowRecommendation = useMemo(
+  () => response ? buildWorkflowRecommendationFromBrainResponse(response, message.id) : null,
+  [response, message.id],
+ )
  const turnEvidencePack = message.evidencePack
  const handoffContext = `${message.originalUserText || ""} ${response?.headline || ""} ${response?.keyInsight || ""}`.toLowerCase()
  const handoffOptions = [
@@ -761,6 +767,17 @@ const CreatorResponseCard: React.FC<{
    ) : null}
    <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
    <BrainAnswerModuleGrid modules={modules} compact />
+   {workflowRecommendation ? (
+    <details data-vt-brain-part="action-plan-tracker-disclosure" className="min-w-0 border-[1.5px] border-black/35 bg-white">
+     <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 bg-[#f8f8f4] px-2.5 py-2 text-[10px] font-[1000] uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2">
+      <span>Track next actions</span>
+      <StudioSplitLeftBadge sizeVariant="micro" className="shrink-0">{workflowRecommendation.steps.length} steps</StudioSplitLeftBadge>
+     </summary>
+     <div className="border-t border-black/20 p-2">
+      <BrainWorkflowRunPanel recommendation={workflowRecommendation} />
+     </div>
+    </details>
+   ) : null}
    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} claimEvidence={response.claimEvidence} evidenceIntegrityStatus={message.evidenceIntegrityStatus || "unavailable"} compact /> : null}
    {openQuestions[0] ? (
     <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
