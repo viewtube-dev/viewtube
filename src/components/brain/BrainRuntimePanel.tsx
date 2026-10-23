@@ -124,6 +124,68 @@ export const BrainReceiptBackedOutputCard: React.FC<{
  )
 }
 
+const workStatusLabel = (
+ chain: BrainRuntimeSnapshot["provenance"]["latestChain"],
+ build: Pick<NonNullable<BrainRuntimeSnapshot["build"]>, "id" | "assetIds"> | null,
+): string => {
+ if (!chain) return "Status unavailable"
+ if (chain.operationIdentityMismatch) return "Lineage mismatch"
+ const output = resolveBrainOutputReceiptState(chain, build)
+ if (output.status === "verified") return chain.unresolved.length ? "Output verified · lineage incomplete" : "Output verified"
+ if (output.status === "unresolved") return "Output unresolved"
+ if (output.status === "empty") return "Receipt recorded · no output IDs"
+ if (output.status === "unverified") return "Receipt recorded · build unavailable"
+ return "Request recorded · no completed receipt linked"
+}
+
+const BrainRecentWorkTray: React.FC<{
+ chains: BrainRuntimeSnapshot["provenance"]["recentChains"]
+ build: Pick<NonNullable<BrainRuntimeSnapshot["build"]>, "id" | "assetIds"> | null
+}> = ({ chains, build }) => (
+ <details data-vt-brain-part="recent-work-tray" className="mt-1 rounded-[6px] border border-black/30 bg-white px-2 py-1">
+  <summary className="flex min-h-11 cursor-pointer flex-wrap items-center gap-2 text-[9px] font-[1000] uppercase underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
+   <Workflow size={12} aria-hidden="true" /> Recent work · {chains.length}
+  </summary>
+  {chains.length ? (
+   <ol className="grid gap-1 py-1">
+    {chains.map((chain) => {
+     const status = workStatusLabel(chain, build)
+     const output = resolveBrainOutputReceiptState(chain, build)
+     return (
+      <li key={chain.requestId} data-vt-brain-work-request-id={chain.requestId} className="grid min-w-0 gap-1 border-t border-black/15 py-2 text-[9px] leading-4">
+       <div className="flex min-w-0 flex-wrap items-start justify-between gap-2">
+        <span className="min-w-0 break-words font-[1000]">{titleCase(chain.generationModel || chain.generationProvider || "Generation request")}</span>
+        <span role="status" className="shrink-0 border border-black/30 bg-[#f8f8f4] px-1.5 py-0.5 font-[1000]">{status}</span>
+       </div>
+       <dl className="grid min-w-0 gap-x-3 sm:grid-cols-2">
+        <div className="min-w-0"><dt className="font-[1000] uppercase opacity-60">Request</dt><dd className="break-all">{chain.requestId}</dd></div>
+        <div className="min-w-0"><dt className="font-[1000] uppercase opacity-60">Receipt</dt><dd className="break-all">{chain.receiptId || "Not linked"}</dd></div>
+        <div className="min-w-0"><dt className="font-[1000] uppercase opacity-60">ContentBuild</dt><dd className="break-all">{chain.contentBuildId}</dd></div>
+        <div className="min-w-0"><dt className="font-[1000] uppercase opacity-60">Trace</dt><dd className="break-all">{chain.traceId || "Not linked"}</dd></div>
+       </dl>
+       {chain.operationIdentityMismatch || chain.unresolved.length ? (
+        <p role="status" className="break-words bg-[#FFDA47]/30 p-1">Lineage limitations: {[...(chain.operationIdentityMismatch ? ["operation/workflow identity mismatch"] : []), ...chain.unresolved].join(", ") || "Not recorded"}</p>
+       ) : null}
+       {output.status === "verified" ? (
+        <div className="grid gap-1">
+         <span className="font-[1000] uppercase">Verified output assets</span>
+         {output.outputAssetIds.map((assetId) => (
+          <Link key={assetId} to={buildVaultAssetHref(assetId, output.contentBuildId)} className="inline-flex min-h-11 min-w-0 items-center justify-between gap-2 border-2 border-black bg-[#36E0F6] px-2 py-1 font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
+           <span className="min-w-0 break-all">{assetId}</span><span className="shrink-0">Open in Vault</span>
+          </Link>
+         ))}
+        </div>
+       ) : null}
+      </li>
+     )
+    })}
+   </ol>
+  ) : (
+   <p role="status" className="py-2 text-[10px] font-bold leading-4">No generation request is recorded in the active ContentBuild yet. This is an empty history, not proof that no work was attempted elsewhere.</p>
+  )}
+ </details>
+)
+
 const formatLatency = (latencyMs: number | null): string => {
  if (latencyMs === null) return "—"
  if (latencyMs < 1000) return `${latencyMs}ms`
@@ -311,6 +373,7 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
      )}
     </details>
      <BrainReceiptBackedOutputCard chain={snapshot.provenance.latestChain} build={build ? { id: build.id, assetIds: build.assetIds } : null} />
+    <BrainRecentWorkTray chains={snapshot.provenance.recentChains} build={build ? { id: build.id, assetIds: build.assetIds } : null} />
    </section>
   )
  }

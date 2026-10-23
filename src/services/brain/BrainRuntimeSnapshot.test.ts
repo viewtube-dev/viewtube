@@ -525,6 +525,8 @@ it("projects an explicit provenance chain without fuzzy attribution", () => {
  )
 
  expect(snapshot.provenance.chainCount).toBe(1)
+  expect(snapshot.provenance.recentChains).toHaveLength(1)
+  expect(snapshot.provenance.recentChains[0]?.requestId).toBe("generation_request_1")
  expect(snapshot.provenance.latestChain).toMatchObject({
   requestId: "generation_request_1",
   contextManifestId: "context-1",

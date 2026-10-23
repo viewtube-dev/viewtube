@@ -465,3 +465,15 @@ The AI Brain turn evidence panel now distinguishes an empty prepared selection f
 - The condition summary includes a limitation that these are recorded evidence-quality signals, not a guarantee that every claim is correct.
 
 Focused regression cases cover empty selection, partial coverage, stale/missing/conflicting records, legacy record absence, and evidence navigation preserving count/date/format/ranking/filter constraints. The typed prompt-record list now displays record-level availability and coverage, labels stale/missing/conflicting states, and links each verified canonical record with owner, source reference, snapshot, metric, window, channel scope, and request constraints, and the Analytics page renders an accessible handoff panel. The panel explicitly states that request constraints are not automatically applied as filters and that the current live row is not yet verified as the same historical record. This is a targeted UI slice, not a completed accessibility audit; CI and keyboard-only, narrow viewport/zoom, screen-reader announcement, reduced-motion, and mounted-page restore checks remain outstanding. Per-sentence numeric citations remain deferred until the response contract can carry an explicit claim-to-evidence mapping; a generic turn-level evidence list must not be presented as proof for every number.
+
+### Implementation progress — canonical recent-work tray (2026-10-22)
+
+The next UI-3 slice extends the existing BrainRuntimeSnapshot projection with the five most recent request-attributed provenance chains and renders them in the existing embedded BrainRuntimePanel as a native, keyboard-operable **Recent work** disclosure.
+
+- Each entry shows its canonical request, receipt, ContentBuild and trace references, plus lineage limitations when present.
+- Output asset links are rendered only when the existing receipt resolver verifies the receipt and every asset ID against the same current ContentBuild snapshot.
+- Status copy is intentionally evidence-bounded: “Output verified”, “Output unresolved”, “Receipt recorded · no output IDs”, “Receipt recorded · build unavailable”, or “Request recorded · no completed receipt linked”. It does not infer “started”, “saved”, “published” or “failed” from absence of a receipt.
+- The empty state says no request is recorded in the active ContentBuild; it does not claim no work occurred elsewhere.
+- No new store or workflow owner is introduced. The tray projects existing provenance data and reuses the canonical Vault deep link.
+
+Regression coverage checks the snapshot exposes recent chains and the tray links only receipt-verified outputs. **Verification status:** CI pending; no local test execution or live keyboard/mobile/screen-reader audit is claimed. Remaining UI-3 work includes wider historical/workflow coverage, explicit canonical states for proposed/started/failed actions where their owners expose them, and end-to-end restoration/accessibility verification.

@@ -143,6 +143,8 @@ export interface BrainRuntimeProvenanceSummary {
  evaluatedChainCount: number
  learningChainCount: number
  latestChain: BrainRuntimeProvenanceChain | null
+ /** Most recent request-attributed chains for the creator-facing work tray. */
+ recentChains: BrainRuntimeProvenanceChain[]
 }
 
 export interface BrainRuntimeLifecycleSummary {
@@ -576,6 +578,7 @@ const buildProvenanceSummary = (input: {
    || chain.learningPromotionEventIds.length > 0
   ).length,
   latestChain: chains[0] || null,
+  recentChains: chains.slice(0, 5),
  }
 }
 
