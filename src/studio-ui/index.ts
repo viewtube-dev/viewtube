@@ -131,3 +131,6 @@ export { StudioHubCertification } from "./StudioHubCertification"
 
 export { StudioPublishingCard } from "./compositions/StudioPublishingCard"
 export type { StudioPublishingCardProps, StudioPublishingCardMetadata, StudioPublishingCardOption, StudioPublishingCardSize } from "./compositions/StudioPublishingCard"
+
+export { ConfirmedFamilyModule, ConfirmedPrimitiveModule, ConfirmedDefaultsModule } from "../components/studio-hub/ConfirmedCatalogModules"
+export type { ConfirmedModuleProps } from "../components/studio-hub/ConfirmedCatalogModules"
