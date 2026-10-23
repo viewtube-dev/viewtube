@@ -1,4 +1,5 @@
 import React from "react"
+import { StudioSwitch } from "../../studio-ui"
 
 export const brainSettingsButtonClass = "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-black px-3 py-2 text-sm font-bold focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-50"
 
@@ -6,7 +7,7 @@ export const BrainSettingsSwitch = ({ checked, onChange, label, detail }: { chec
   const id = React.useId()
   return <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-black/20 py-3 last:border-0">
     <div><strong id={`${id}-label`} className="block text-sm font-bold">{label}</strong><p id={`${id}-detail`} className="mt-1 text-sm leading-5 text-black/75">{detail}</p></div>
-    <button type="button" role="switch" aria-checked={checked} aria-labelledby={`${id}-label`} aria-describedby={`${id}-detail`} onClick={() => onChange(!checked)} className={`${brainSettingsButtonClass} min-w-16 ${checked ? "bg-[#34cdea]" : "bg-white"}`}><span aria-hidden="true">{checked ? "On" : "Off"}</span></button>
+    <StudioSwitch checked={checked} aria-labelledby={`${id}-label`} aria-describedby={`${id}-detail`} onClick={() => onChange(!checked)} />
   </div>
 }
 
