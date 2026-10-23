@@ -115,6 +115,7 @@ describe("BrainRuntimePanel", () => {
        traceOutputMatchesGenerationRecord: true,
        unresolved: [],
       },
+      recentChains: [],
      },
      outcomes: {
       total: 8,
