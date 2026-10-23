@@ -19,6 +19,7 @@ import {
   StudioSideCounter,
   StudioLeftCounter,
   StudioSplitLeftButton,
+  StudioDoubleSplitButton,
   StudioSplitLeftBadge,
   StudioSplitRightBadge,
   StudioDoubleSplitBadge,
@@ -46,6 +47,7 @@ import {
   StudioDoubleSideToggle,
   StudioBarToggle,
 } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
 import "./studio-hub-primitive-catalogs.css"
 import "../../styles/studio-confirmed-catalog-modules.css"
 import { ConfirmedFamilyModule } from "./ConfirmedCatalogModules"
@@ -250,6 +252,74 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
     </div>
   </details>
 )
+
+
+/**
+ * Compact source-of-truth specimen ledger: exactly one live, production-exported
+ * primitive per standard-size row. Keep the samples intentionally unadorned so
+ * the component under test—not a catalog lookalike—owns its rendering.
+ */
+const ConfirmedDirectPrimitiveRows: React.FC = () => {
+  const [arrowValue, setArrowValue] = React.useState("ONE")
+  const [barValue, setBarValue] = React.useState(40)
+  const [wordValue, setWordValue] = React.useState(false)
+  const [sideValue, setSideValue] = React.useState("LOW")
+  const [doubleLeft, setDoubleLeft] = React.useState("SOURCE")
+  const [doubleRight, setDoubleRight] = React.useState("TARGET")
+  const [counterValue, setCounterValue] = React.useState(24)
+  const [sideCounterValue, setSideCounterValue] = React.useState(36)
+  const [sliderValue, setSliderValue] = React.useState(58)
+  const options = ["ONE", "TWO", "THREE"] as const
+  const dropdownOptions = [
+    { value: "balanced", label: "BALANCED" },
+    { value: "focused", label: "FOCUSED" },
+    { value: "expanded", label: "EXPANDED" },
+  ]
+  const rowStyle: React.CSSProperties = { display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 4, minWidth: 0 }
+  return (
+    <Family
+      title="Direct Imported Primitive Representatives · Standard"
+      nonDefaultSettings={[
+        "Each row contains one live production primitive at its standard size; examples are imported from their production owners rather than recreated as catalog-only lookalikes.",
+        "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell; the three-section accordion uses StudioSplitAccordion with exactly three items.",
+      ]}
+      provenance={<Provenance
+        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioSimpleDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider · StudioSplitAccordion"
+        tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioValueToggles.tsx + src/studio-ui/primitives/StudioSplitAccordion.tsx"
+        css="src/styles/studio-control-system.css + src/styles/studio-split-accordion.css"
+        tokens="44px standard geometry; component-specific native input/textarea exceptions retained"
+        imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioValueToggles.tsx", "src/studio-ui/primitives/StudioSplitAccordion.tsx"]}
+      />}
+    >
+      <div className="vt-confirmed-direct-primitive-rows" style={rowStyle}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioButton"><span>Studio Button · STANDARD</span><StudioButton sizeVariant="standard" aria-label="Studio button standard specimen">STUDIO BUTTON</StudioButton></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftButton"><span>Split Left Button · STANDARD</span><StudioSplitLeftButton sizeVariant="standard" icon={<Check aria-hidden="true" />} aria-label="Split left button standard specimen">SPLIT LEFT</StudioSplitLeftButton></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton"><span>Double Split Button · STANDARD</span><StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Double split button standard specimen">DOUBLE SPLIT</StudioDoubleSplitButton></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineButton"><span>Two Lines Button · STANDARD</span><StudioTwoLineButton sizeVariant="standard" firstLine="TWO LINE" secondLine="BUTTON" aria-label="Two lines button standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTwoLineButton"><span>Two Lines Split Button · STANDARD</span><StudioSplitTwoLineButton sizeVariant="standard" icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label="Two lines split button standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSimpleDropdown"><span>Simple Dropdown · STANDARD</span><StudioSimpleDropdown sizeVariant="standard" aria-label="Simple dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown"><span>Multi Dropdown · STANDARD</span><StudioLegendMultiDropdown sizeVariant="standard" label="FORMAT" defaultValue={["videos"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }, { value: "live", label: "LIVE" }]} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftDropdown"><span>Split Left Dropdown · STANDARD</span><StudioSplitLeftDropdown sizeVariant="standard" aria-label="Split left dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle"><span>Arrow Toggle · STANDARD</span><StudioArrowToggle size="standard" value={arrowValue} options={options} onValueChange={setArrowValue} ariaLabel="Arrow toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>Bar Toggle · STANDARD</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} ariaLabel="Bar toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioWordToggle"><span>Word Toggle · STANDARD</span><StudioWordToggle size="44" skin="solid" value={wordValue} words={["OFF", "ON"]} onValueChange={setWordValue} aria-label="Word toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInput"><span>Text Input · STANDARD</span><StudioTextInput sizeVariant="standard" aria-label="Text input standard specimen" placeholder="TYPE HERE" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextArea"><span>Text Area · STANDARD</span><StudioTextArea sizeVariant="standard" rows={3} aria-label="Text area standard specimen" placeholder="TYPE HERE" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextBox"><span>Text Box · STANDARD</span><StudioTextBox size="standard" aria-label="Text box standard specimen">Read-only text rendered by the production StudioTextBox primitive.</StudioTextBox></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideToggle"><span>Side Toggle · STANDARD</span><StudioSideToggle size="standard" value={sideValue} options={["LOW", "MID", "HIGH"]} onValueChange={setSideValue} ariaLabel="Side toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSideToggle"><span>Double Side Toggle · STANDARD</span><StudioDoubleSideToggle size="standard" left={{ value: doubleLeft, options: ["SOURCE", "INPUT"], onValueChange: setDoubleLeft, ariaLabel: "Double side toggle left specimen" }} right={{ value: doubleRight, options: ["TARGET", "OUTPUT"], onValueChange: setDoubleRight, ariaLabel: "Double side toggle right specimen" }} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCounter"><span>Studio Counter · STANDARD</span><StudioCounter size="standard" value={counterValue} onValueChange={setCounterValue} min={0} max={100} ariaLabel="Studio counter standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideCounter"><span>Side Counter · STANDARD</span><StudioSideCounter size="standard" value={sideCounterValue} onValueChange={setSideCounterValue} min={0} max={100} ariaLabel="Side counter standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitSlider"><span>Double Split Slider · STANDARD</span><StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Double split slider standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion"><span>Three Section Split Accordion · STANDARD</span><StudioSplitAccordion sizeVariant="standard" accessibleLabel="Three section split accordion standard specimen" defaultActiveIndex={0} items={[
+          { id: "overview", accessibleLabel: "Overview section", icon: <Home aria-hidden="true" />, content: <span>OVERVIEW · PRODUCTION CONTENT</span> },
+          { id: "settings", accessibleLabel: "Settings section", icon: <Settings2 aria-hidden="true" />, content: <span>SETTINGS · PRODUCTION CONTENT</span> },
+          { id: "details", accessibleLabel: "Details section", icon: <Info aria-hidden="true" />, content: <span>DETAILS · PRODUCTION CONTENT</span> },
+        ]} /></div>
+      </div>
+    </Family>
+  )
+}
 
 const ConfirmedStudioCounterFamily: React.FC = () => {
   const [standardPrimary, setStandardPrimary] = React.useState(22)
@@ -497,6 +567,7 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
 
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <ConfirmedCatalogFamilyGroups>
+    <ConfirmedDirectPrimitiveRows />
     <details className="vt-confirmed-family vt-confirmed-defaults-combined" data-vt-confirmed-family="defaults">
       <summary className="vt-confirmed-defaults-heading" id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</summary>
       <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 12px micro · 4.09px / 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
