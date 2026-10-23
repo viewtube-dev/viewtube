@@ -73,7 +73,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
-import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader } from "../components/brain/BrainChatPrimitives"
+import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainComposerAccessoryRow } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
@@ -522,6 +522,7 @@ export const BrainPromptLibrary: React.FC<{
        <BrainPromptLibraryItem
         title={card.label}
         description={promptCardSummary(card)}
+        promptTitle={card.prompt}
         selected={isSelected}
         disabled={busy}
         onSelect={() => setSelectedId(isSelected ? null : card.id)}
@@ -1280,6 +1281,7 @@ const AIBrainCommandInterface: React.FC = () => {
    setIntakeOpen(true)
    return
   }
+  shouldFollowConversationRef.current = true
   setInput("")
   if (composerRef.current) composerRef.current.style.height = "52px"
   setBusy(true)
@@ -1800,10 +1802,12 @@ const AIBrainCommandInterface: React.FC = () => {
 
         <footer data-vt-brain-component="BrainComposer" className="shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
          <div className="mx-auto w-full max-w-[880px]">
-          <div className="mb-1.5 grid grid-cols-2 gap-1 xl:hidden">
+          <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1.5 xl:hidden">
+           <div className="grid w-full grid-cols-2 gap-1">
            <StudioSplitLeftButton ref={promptLauncherRef} sizeVariant="standard" icon={<LayoutGrid aria-hidden="true" />} onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="min-w-0 xl:hidden" style={{ backgroundColor: "#FF7AC8" }}>Prompt Library</StudioSplitLeftButton>
            <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="standard" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
-          </div>
+           </div>
+          </BrainComposerAccessoryRow>
           <div data-vt-brain-part="composer-controls" className="flex min-w-0 items-stretch gap-1">
            <StudioSquareIconButton sizeVariant="standard" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
            <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>

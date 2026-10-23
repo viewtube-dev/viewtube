@@ -12,8 +12,9 @@ import {
 
 describe("Brain Studio chat primitives", () => {
   it("renders explicit status labels without inferring evidence or success", () => {
-    render(<BrainChatStatusBadge status="partial" />)
-    expect(screen.getByText("Partial")).toHaveAttribute("data-status", "partial")
+    const { container } = render(<BrainChatStatusBadge status="partial" />)
+    expect(screen.getByText("Partial")).toBeInTheDocument()
+    expect(container.querySelector('[data-status="partial"]')).toBeInTheDocument()
   })
 
   it("keeps message role semantics and long content wrap-safe", () => {

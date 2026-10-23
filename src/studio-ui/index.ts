@@ -51,6 +51,7 @@ export {
   StudioCheckbox,
   StudioXCheckbox,
   StudioUploadFrame,
+  StudioBrainStatusBadge,
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
@@ -83,6 +84,10 @@ export type {
   StudioTextBoxSize,
   StudioSimpleDropdownProps,
   StudioUploadFrameProps,
+  StudioBrainStatusBadgeProps,
+  StudioBrainStatusBadgeTone,
+  StudioBrainStatusAppearance,
+  StudioBrainStatusBadgeSize,
 } from "./primitives/StudioControls"
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
