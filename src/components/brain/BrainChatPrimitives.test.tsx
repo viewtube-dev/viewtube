@@ -40,6 +40,8 @@ describe("Brain Studio chat primitives", () => {
   it("exposes prompt selection state and disabled state", () => {
     render(<BrainPromptLibraryItem title="Plan video" description="Start a plan" selected onSelect={() => {}} />)
     expect(screen.getByRole("button", { name: /Plan video/ })).toHaveAttribute("aria-pressed", "true")
+    expect(screen.getByRole("button", { name: /Plan video/ })).toHaveAttribute("data-vt-studio-control", "true")
+    expect(screen.getByRole("button", { name: /Plan video/ })).toHaveAttribute("data-vt-studio-button", "true")
   })
 
   it("labels accessory controls as a group", () => {

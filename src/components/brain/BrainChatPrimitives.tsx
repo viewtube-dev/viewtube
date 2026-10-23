@@ -155,19 +155,9 @@ export const BrainPromptLibraryItem: React.FC<{
   disabled?: boolean
   onSelect: () => void
 }> = ({ title, description, promptTitle, selected = false, disabled = false, onSelect }) => (
-  <button
-    type="button"
-    data-vt-studio-brain-primitive="PromptLibraryItem"
-    aria-pressed={selected}
-    disabled={disabled}
-    title={promptTitle}
-    onClick={onSelect}
-    className="flex min-h-11 min-w-0 w-full flex-col items-start gap-0.5 border-2 border-black px-2 py-1.5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-50 data-[selected=true]:bg-[var(--vt-studio-control-accent)]"
-    data-selected={selected ? "true" : "false"}
-  >
-    <span className="w-full [overflow-wrap:anywhere] text-[10px] font-black uppercase">{title}</span>
-    {description ? <span className="w-full [overflow-wrap:anywhere] text-xs leading-4">{description}</span> : null}
-  </button>
+  <div data-vt-studio-brain-primitive="PromptLibraryItem" className="min-w-0 w-full">
+    <StudioButton type="button" data-vt-studio-brain-control="prompt-library-item" sizeVariant="compact" textLayout="two-line" firstLine={title} secondLine={description || "Select prompt"} selected={selected} aria-pressed={selected} disabled={disabled} title={promptTitle || title} onClick={onSelect} className="w-full min-w-0 text-left" />
+  </div>
 )
 
 export const BrainComposerAccessoryRow: React.FC<{

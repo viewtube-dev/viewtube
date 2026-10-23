@@ -21,7 +21,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
-import { StudioButton, StudioSplitLeftButton, StudioSquareIconButton, StudioTextArea } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSquareIconButton, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -500,18 +500,9 @@ export const BrainPromptLibrary: React.FC<{
     </p>
    </div>
 
-   <div className="grid gap-2 border-b-[2px] border-black bg-[#fff7fc] p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
-    <label className="flex min-h-11 items-center gap-2 rounded-[7px] border-[2px] border-black bg-white px-2 focus-within:ring-[3px] focus-within:ring-black">
-     <span className="sr-only">Search prompts</span>
-     <input type="search" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 flex-1 bg-transparent py-2 text-xs font-bold outline-none" />
-    </label>
-    <label className="flex min-h-11 items-center gap-2 rounded-[7px] border-[2px] border-black bg-white px-2 focus-within:ring-[3px] focus-within:ring-black">
-     <span className="sr-only">Filter prompts by category</span>
-     <select aria-label="Filter prompts by category" value={category} onChange={(event) => { setCategory(event.target.value); setSelectedId(null) }} className="min-w-0 flex-1 bg-transparent py-2 text-xs font-bold outline-none">
-      <option value="all">All categories</option>
-      {Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => <option key={item} value={item}>{item.replace(/_/g, " ")}</option>)}
-     </select>
-    </label>
+   <div className="grid gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
+    <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
+    <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: item.replace(/_/g, " ") }))]} />
    </div>
    <p className="px-3 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
    <ul className="grid grid-cols-1 gap-1.5 p-2 sm:grid-cols-2 xl:grid-cols-3">
@@ -543,40 +534,14 @@ export const BrainPromptLibrary: React.FC<{
        <span className="truncate text-xs font-[1000] uppercase tracking-[0.08em]">
         Preview · {selected.label}
        </span>
-       <button
-        type="button"
-        aria-label="Close preview"
-        onClick={() => setSelectedId(null)}
-        className="grid min-h-11 min-w-11 shrink-0 place-items-center rounded-[5px] border-[2px] border-black bg-white/80 outline-none focus-visible:ring-[3px] focus-visible:ring-black hover:bg-white"
-       >
-        <X size={11} />
-       </button>
+       <StudioSquareIconButton sizeVariant="compact" icon={<X aria-hidden="true" />} label="Close preview" title="Close preview" onClick={() => setSelectedId(null)} className="shrink-0" />
       </div>
       <div className="grid gap-2 p-2.5">
        <p className="text-sm font-bold leading-5 text-black/80">{selected.prompt}</p>
        <div className="flex flex-wrap gap-1.5">
-        <button
-         type="button"
-         disabled={busy}
-         onClick={() => {
-          onPrompt(selected.prompt)
-          setSelectedId(null)
-         }}
-         className="inline-flex min-h-11 items-center gap-1.5 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase tracking-[0.06em] outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-50"
-        >
-         <Send size={12} /> Send to chat
-        </button>
+        <StudioSplitLeftButton sizeVariant="compact" icon={<Send aria-hidden="true" />} disabled={busy} onClick={() => { onPrompt(selected.prompt); setSelectedId(null) }}>Send to chat</StudioSplitLeftButton>
         {onEdit ? (
-         <button
-          type="button"
-          onClick={() => {
-           onEdit(selected.prompt)
-           setSelectedId(null)
-          }}
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-[7px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[0.06em] outline-none focus-visible:ring-[3px] focus-visible:ring-black hover:bg-[#FFDA47]"
-         >
-          Edit first <ArrowRight size={11} />
-         </button>
+         <StudioSplitLeftButton sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => { onEdit(selected.prompt); setSelectedId(null) }}>Edit first</StudioSplitLeftButton>
         ) : null}
        </div>
       </div>
@@ -669,9 +634,9 @@ const BrainLearningReceiptCard: React.FC<{
     <div><dt className="inline font-black uppercase">Receipt ID · </dt><dd className="break-all font-mono">{receipt.entryId}</dd></div>
    </dl>
    {!dismissed ? (
-    <div className="flex flex-wrap gap-2">
-     <button type="button" onClick={() => onCorrect(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">Correct</button>
-     <button type="button" onClick={() => onReject(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FF7497] px-3 py-2 text-[10px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Reject</button>
+    <div className="flex flex-wrap gap-1">
+     <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={() => onCorrect(message)}>Correct</StudioButton>
+     <StudioButton sizeVariant="compact" type="button" onClick={() => onReject(message)}>Reject</StudioButton>
     </div>
    ) : <p role="status" className="text-xs font-bold">This learning entry was rejected and will not be promoted.</p>}
   </section>
@@ -712,13 +677,11 @@ const CreatorResponseCard: React.FC<{
        <p role="status" className="text-xs font-bold leading-5 text-black/70">The channel data has changed since this attempt. Choose whether to keep the original evidence or refresh it for the retry.</p>
       ) : null}
       <div className="flex flex-wrap gap-2">
-       <button data-vt-brain-part="retry-response-action" type="button" onClick={() => onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+       <StudioSplitLeftButton data-vt-brain-part="retry-response-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, false)}>
         {message.contextMayBeStale ? "Retry with saved evidence" : "Retry this response"}
-       </button>
+       </StudioSplitLeftButton>
        {message.contextMayBeStale ? (
-        <button data-vt-brain-part="retry-refresh-evidence-action" type="button" onClick={() => onRetry(message, true)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
-         Refresh evidence & retry
-        </button>
+        <StudioSplitLeftButton data-vt-brain-part="retry-refresh-evidence-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, true)}>Refresh evidence & retry</StudioSplitLeftButton>
        ) : null}
       </div>
      </div>
@@ -1843,9 +1806,7 @@ const AIBrainCommandInterface: React.FC = () => {
             aria-label="Ask ViewTube Brain"
             aria-describedby="brain-composer-help"
            />
-           <button data-vt-brain-component="BrainComposerSendAction" type="button" onClick={() => void handleSend()} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} className="inline-flex min-h-[52px] w-[74px] shrink-0 items-center justify-center gap-1 rounded-[9px] border-[2px] border-black bg-[#3FEE56] text-xs font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:opacity-50">
-            {busy ? <Zap className="animate-pulse" size={16} /> : <Send size={16} />} Send
-           </button>
+           <StudioSplitLeftButton data-vt-brain-component="BrainComposerSendAction" sizeVariant="standard" icon={busy ? <Zap aria-hidden="true" className="animate-pulse" /> : <Send aria-hidden="true" />} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} onClick={() => void handleSend()} className="shrink-0">SEND</StudioSplitLeftButton>
           </div>
          </div>
         </footer>
