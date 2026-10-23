@@ -74,6 +74,9 @@ describe("StudioSplitAccordion", () => {
     expect(css).toContain("--vt-sa-height: 44px");
     expect(css).toContain("--vt-sa-height: 28px");
     expect(css).toContain("--vt-sa-height: 12px");
+    expect(css).toContain("--vt-sa-face: 38px");
+    expect(css).toContain("--vt-sa-face: 24px");
+    expect(css).toContain("--vt-sa-face: 10px");
     expect(css).toContain("text-overflow: clip");
     expect(css).not.toContain("text-overflow: ellipsis");
     expect(css).not.toContain("transition: flex-grow");
