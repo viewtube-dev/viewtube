@@ -252,3 +252,15 @@ html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:i
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
   outline-offset: 0 !important; box-shadow: none !important;
 }
+
+/* Textbox wrappers use the textarea field contract, including a primary inline stroke. */
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"],
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"] {
+  -webkit-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+}
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:is(:focus, :focus-visible) {
+  -webkit-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
+}
