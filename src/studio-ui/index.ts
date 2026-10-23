@@ -1,5 +1,6 @@
 import "../styles/toolbox-entry.css"
 import "../styles/studio-control-entry.css"
+import "../styles/studio-disclosure-summary.css"
 
 export { STUDIO_TOKENS } from "./tokens"
 export type { StudioControlSize, StudioHierarchyLevel } from "./tokens"
@@ -96,6 +97,8 @@ export type {
   StudioBrainStatusAppearance,
   StudioBrainStatusBadgeSize,
 } from "./primitives/StudioControls"
+export { StudioDisclosureSummary } from "./primitives/StudioDisclosureSummary"
+export type { StudioDisclosureSummaryProps } from "./primitives/StudioDisclosureSummary"
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
 export {
