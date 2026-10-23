@@ -550,7 +550,7 @@ export const BrainPromptLibrary: React.FC<{
         />
        </summary>
 
-       {isOpen ? (
+       (
         <div data-vt-brain-part="prompt-module-body" className="min-w-0 border-x-[2px] border-b-[2px] border-black bg-white">
          <ul className="grid min-w-0 grid-cols-1 gap-1 p-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
           {groupCards.map((card) => {
@@ -589,7 +589,7 @@ export const BrainPromptLibrary: React.FC<{
           <p className="border-t border-black/20 px-3 py-2 text-[10px] font-bold uppercase leading-4 tracking-[0.04em] text-black/50">Choose a prompt to preview and send it here.</p>
          )}
         </div>
-       ) : null}
+       )
       </details>
      )
     })}
