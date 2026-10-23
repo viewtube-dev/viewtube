@@ -1129,7 +1129,7 @@ describe("global StudioButton variants and containment contract", () => {
     expect(controls).toContain("activeIcon");
     expect(css).toContain("[data-vt-studio-button-face]");
     expect(css).toContain("[data-vt-studio-split-label]");
-    expect(css).toContain("text-overflow: ellipsis");
+    expect(css).toContain("text-overflow: clip");
     expect(css).toContain("min-width: 0");
     expect(css).toContain("overflow: hidden");
     expect(css).toContain("white-space: nowrap");
@@ -1173,11 +1173,12 @@ describe("Confirmed Primitive Library button tier grid regression", () => {
 
 
 describe("Studio field focus, floating labels, and toggle regressions", () => {
-  it("keeps focused field glyph stroke primary and shares risen-label typography tokens", () => {
+  it("keeps resting field glyph stroke primary, focused glyph stroke black, and shares risen-label typography tokens", () => {
     const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
     const css = readStudioControlCss();
-    expect(fields).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
-    expect(fields).not.toContain("-webkit-text-stroke-color: #000 !important;");
+    const finalFieldContract = fields.slice(fields.lastIndexOf("/* Final clarified field contract"));
+    expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));");
+    expect(finalFieldContract).toContain("-webkit-text-stroke-color: #000 !important;");
     expect(css).toContain("--vt-studio-floating-label-risen-font-size: 12px;");
     expect(css).toContain("--vt-studio-floating-label-risen-text-stroke: 0.5px;");
     expect(css).toContain("font-size: var(--vt-studio-floating-label-risen-font-size, 12px) !important;");
@@ -1238,5 +1239,30 @@ describe("StudioSquareIconButtonGroup joined rail", () => {
     expect(css).toContain(".vt-studio-square-icon-button-group");
     expect(css).toContain("border-right: var(--vt-icon-group-stroke) solid #000 !important;");
     expect(css).toContain("border-radius: 0 !important;");
+  });
+});
+
+
+describe("StudioTopSplitModule", () => {
+  it("renders an accessible compact split header and white content body", () => {
+    const html = renderToStaticMarkup(
+      <StudioTopSplitModule
+        title="Prompt Library"
+        split="left"
+        sizeVariant="compact"
+        startIcon={<span aria-hidden="true">P</span>}
+        aria-label="Prompt library"
+      >
+        <p>Search prompts</p>
+      </StudioTopSplitModule>,
+    );
+    expect(html).toContain('data-vt-studio-top-split-module="true"');
+    expect(html).toContain('data-size="compact"');
+    expect(html).toContain('data-split="left"');
+    expect(html).toContain('aria-label="Prompt library"');
+    expect(html).toContain('class="vt-studio-top-split-module__body"');
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(css).toContain(".vt-studio-top-split-module__head[data-split=\"left\"]");
+    expect(css).toContain(".vt-studio-top-split-module__body");
   });
 });
