@@ -3,7 +3,7 @@
 **Date:** 2026-10-23  
 **Target base:** `master/consolidated-feature-integration`  
 **Working branch:** `feat/brain-status-evidence-studio-followup-2026-10-23`  
-**Status:** Implemented source changes; automated tests and visual certification pending.
+**Status:** Draft PR #840 opened; automated tests and visual certification pending.
 
 ## Already merged
 
@@ -39,13 +39,13 @@ This is a source audit only, not an executed test suite.
 4. Capture and inspect the Brain page at ~390px mobile width and desktop width; verify badge labels, the three context actions, evidence disclosure, keyboard focus, and console output.
 5. Reconcile this branch with the latest target base before review. Do not treat source assertions as browser certification.
 
-No pull request has been opened for this working branch because previous Brain-shell PRs were automatically merged before their verification status was resolved.
+Draft PR [#840](https://github.com/viewtube-dev/viewtube/pull/840) is open. It must remain unmerged until automated tests, typecheck/build, and browser verification are complete.
 
 
 ## Follow-up: native disclosure triggers
 
-- Added a shared Studio-owned disclosure-trigger skin in `src/styles/studio-control-split.css`, imported through the existing Studio control entrypoint.
+- Added and exported the reusable `StudioDisclosureSummary` native-summary primitive in `src/studio-ui/primitives/StudioDisclosureSummary.tsx`, with shared styling in `src/styles/studio-disclosure-summary.css` imported by the Studio entrypoint.
 - Migrated the context-used drawer and data-readiness disclosure in `AIBrainCommandInterface.tsx`, plus selection-constraints and prompt-evidence disclosures in `BrainTurnEvidenceRibbon.tsx`.
-- Triggers remain native `<summary>` elements inside `<details>`; no nested interactive buttons were introduced. The trigger uses the active primary/secondary pair, compact label typography, token-backed outline geometry, and no motion/shadow.
-- Added contract coverage for the page and evidence-ribbon disclosure markup.
+- Triggers remain native `<summary>` elements inside `<details>`; no nested interactive buttons were introduced. The shared primitive uses the active primary/secondary pair, compact/standard token-backed size tiers, keyboard focus outline, and no shadow or movement.
+- Added contract coverage for the primitive export/styling and updated page/evidence-ribbon disclosure assertions.
 - This is source-level implementation only. Tests, typecheck/build, keyboard/browser checks, mobile viewport checks, and screenshots still need to be executed before the PR is ready.
