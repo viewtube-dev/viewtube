@@ -1,5 +1,6 @@
 import React from "react"
 import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
+import { StudioDisclosureSummary } from "../../studio-ui/primitives/StudioDisclosureSummary"
 import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
@@ -1027,6 +1028,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
             />
           </div>
         ))}
+      </div>
+    </Family>
+    <Family title="Disclosure Summary · Standard + Compact" nonDefaultSettings={["Native details/summary semantics.", "Shared Studio pair, size tiers, and visible keyboard focus.", "No nested interactive controls, shell movement, or shadow."]} provenance={<Provenance primitive="StudioDisclosureSummary" tsx="src/studio-ui/primitives/StudioDisclosureSummary.tsx" css="src/styles/studio-disclosure-summary.css" tokens="44px standard / 28px compact" imports={["src/studio-ui/primitives/StudioDisclosureSummary.tsx", "src/styles/studio-disclosure-summary.css"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDisclosureSummary" style={{ display: "grid", gap: 8 }}>
+        <details><StudioDisclosureSummary sizeVariant="standard">Standard disclosure</StudioDisclosureSummary><p className="p-2 text-xs font-bold">Native disclosure content.</p></details>
+        <details open><StudioDisclosureSummary sizeVariant="compact">Compact disclosure</StudioDisclosureSummary><p className="p-2 text-xs font-bold">The same native disclosure in compact size.</p></details>
       </div>
     </Family>
     <Family
