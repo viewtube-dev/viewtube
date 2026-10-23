@@ -508,7 +508,7 @@ export const BrainPromptLibrary: React.FC<{
     className="overflow-hidden"
    >
     <p data-vt-brain-part="prompt-library-description" className="mb-2 border-b border-black/20 pb-2 text-[10px] font-bold leading-4 text-black/65">
-     Open a task module to browse its related prompts. Choose a prompt to preview it and send it from inside that module.
+     Open a task module to browse related prompts. Select a prompt to expand it in place, then send it or edit it.
     </p>
     <div className="grid gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
      <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
@@ -553,42 +553,50 @@ export const BrainPromptLibrary: React.FC<{
        </summary>
 
        <div data-vt-brain-part="prompt-module-body" className="min-w-0 border-x-[2px] border-b-[2px] border-black bg-white">
-         <ul className="grid min-w-0 grid-cols-1 gap-1 p-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
+         <ul className="grid min-w-0 grid-cols-1 gap-1 p-2">
           {groupCards.map((card) => {
            const isSelected = card.id === selectedId
            return (
             <li key={card.id} className="min-w-0">
-             <BrainPromptLibraryItem
-              title={card.label}
-              description={promptCardSummary(card)}
-              promptTitle={card.prompt}
-              selected={isSelected}
-              disabled={busy}
-              onSelect={() => setSelectedId(isSelected ? null : card.id)}
-             />
+             {!isSelected ? (
+              <BrainPromptLibraryItem
+               title={card.label}
+               description={promptCardSummary(card)}
+               promptTitle={card.prompt}
+               selected={false}
+               disabled={busy}
+               onSelect={() => setSelectedId(card.id)}
+              />
+             ) : (
+              <div data-vt-brain-part="prompt-inline-module" className="min-w-0 overflow-hidden rounded-[var(--vt-studio-28-radius,4px)] border-[2px] border-black">
+               <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_7.5rem]">
+                <button
+                 type="button"
+                 className="flex min-h-[28px] min-w-0 items-center gap-1 border-0 border-r-[2px] border-black px-2 text-left"
+                 style={{ backgroundColor: card.color || "var(--pair-a, #36e0f6)" }}
+                 aria-expanded="true"
+                 aria-label={`Close ${card.label} prompt`}
+                 onClick={() => setSelectedId(null)}
+                >
+                 <span className="grid h-6 w-6 shrink-0 place-items-center border-r border-black/30 bg-[var(--pair-b,#ff7f6b)]">
+                  <LayoutGrid className="h-3.5 w-3.5" aria-hidden="true" />
+                 </span>
+                 <span className="min-w-0 truncate text-[12px] font-[1000] uppercase tracking-[-0.02em]">{card.label}</span>
+                </button>
+                <div className="flex min-w-0 flex-col bg-white">
+                 <StudioSplitLeftButton sizeVariant="compact" icon={<Send aria-hidden="true" />} disabled={busy} className="w-full !rounded-none border-0 border-b-[2px] border-black" onClick={() => { onPrompt(card.prompt); setSelectedId(null) }}>Send to chat</StudioSplitLeftButton>
+                 {onEdit ? <StudioSplitLeftButton sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} className="w-full !rounded-none border-0" onClick={() => { onEdit(card.prompt); setSelectedId(null) }}>Edit first</StudioSplitLeftButton> : null}
+                </div>
+               </div>
+               <div className="border-t-[2px] border-black bg-white p-2">
+                <p className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
+               </div>
+              </div>
+             )}
             </li>
            )
           })}
          </ul>
-         {selected ? (
-          <div className="border-t-[2px] border-black bg-[#f8f8f4] p-2">
-           <div className="min-w-0 overflow-hidden border-[2px] border-black bg-white">
-            <div className="flex min-w-0 items-center justify-between gap-2 border-b-[2px] border-black px-2 py-1" style={{ backgroundColor: selected.color }}>
-             <span className="min-w-0 truncate text-[10px] font-[1000] uppercase tracking-[0.04em]">Prompt preview · {selected.label}</span>
-             <StudioSquareIconButton sizeVariant="compact" icon={<X aria-hidden="true" />} label="Close prompt preview" title="Close prompt preview" onClick={() => setSelectedId(null)} className="shrink-0" />
-            </div>
-            <div className="grid min-w-0 gap-2 p-2">
-             <p className="min-w-0 whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{selected.prompt}</p>
-             <div className="flex min-w-0 flex-wrap gap-1">
-              <StudioSplitLeftButton sizeVariant="compact" icon={<Send aria-hidden="true" />} disabled={busy} onClick={() => { onPrompt(selected.prompt); setSelectedId(null) }}>Send to chat</StudioSplitLeftButton>
-              {onEdit ? <StudioSplitLeftButton sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => { onEdit(selected.prompt); setSelectedId(null) }}>Edit first</StudioSplitLeftButton> : null}
-             </div>
-            </div>
-           </div>
-          </div>
-         ) : (
-          <p className="border-t border-black/20 px-3 py-2 text-[10px] font-bold uppercase leading-4 tracking-[0.04em] text-black/50">Choose a prompt to preview and send it here.</p>
-         )}
         </div>
       </details>
      )
@@ -1820,8 +1828,8 @@ const AIBrainCommandInterface: React.FC = () => {
          <div className="mx-auto w-full max-w-[880px]">
           <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1.5 xl:hidden">
            <div className="grid w-full grid-cols-2 gap-1">
-           <StudioSplitLeftButton ref={promptLauncherRef} sizeVariant="compact" icon={<LayoutGrid aria-hidden="true" />} onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="min-w-0 xl:hidden" style={{ backgroundColor: "#FF7AC8" }}>Prompt Library</StudioSplitLeftButton>
-           <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="compact" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
+           <StudioSplitLeftButton ref={promptLauncherRef} sizeVariant="compact" icon={<LayoutGrid aria-hidden="true" />} onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="min-w-0 whitespace-normal [overflow-wrap:normal] text-[10px] xl:hidden" style={{ backgroundColor: "#FF7AC8" }}>Prompt Library</StudioSplitLeftButton>
+           <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="compact" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 whitespace-normal [overflow-wrap:normal] text-[10px] xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
            </div>
           </BrainComposerAccessoryRow>
           <div data-vt-brain-part="composer-controls" className="flex min-w-0 items-stretch gap-1">
