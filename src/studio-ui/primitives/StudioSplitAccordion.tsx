@@ -32,7 +32,10 @@ const itemKey = (item: StudioSplitAccordionItem, index: number) => item.id ?? `$
 
 function initialIndex(items: readonly StudioSplitAccordionItem[], requested?: number) {
   if (requested !== undefined && items[requested] && !items[requested].disabled) return requested;
-  return items.findIndex((item) => !item.disabled);
+  for (let index = items.length - 1; index >= 0; index -= 1) {
+    if (!items[index].disabled) return index;
+  }
+  return -1;
 }
 
 /** buildTri easing: 1 - (1 - t^1.8)^4 */
@@ -289,6 +292,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
                     className="vt-studio-split-accordion__trigger"
                     data-vt-studio-split-accordion-trigger="true"
                     aria-selected={selected}
+                    aria-expanded={selected}
                     aria-controls={panelId}
                     aria-label={item.accessibleLabel}
                     disabled={disabled || item.disabled}
@@ -305,6 +309,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
                     data-label-visible={selected ? "true" : "false"}
                     role="tabpanel"
                     aria-hidden={!selected}
+                    hidden={!selected}
                   >
                     <div className="vt-studio-split-accordion__content-inner">{item.content}</div>
                     {item.trailing ? <div className="vt-studio-split-accordion__trailing">{item.trailing}</div> : null}
