@@ -40,3 +40,16 @@ describe("AI Brain Studio status and evidence chrome", () => {
     expect(receipt).not.toContain('rounded-[5px] border-[1.5px] border-black bg-white')
   })
 })
+
+
+describe("AI Brain Studio disclosure triggers", () => {
+  it("preserves native summary semantics while delegating styling to Studio", () => {
+    expect(source).toContain("StudioDisclosureSummary")
+    expect(source).toContain('data-vt-brain-part="context-used-trigger"')
+    expect(source).toContain('data-vt-brain-part="evidence-readiness-trigger"')
+    expect(source).toContain('sizeVariant="compact"')
+    expect(source).toContain('sizeVariant="standard"')
+    expect(source).not.toContain("hover:bg-[#36E0F6]")
+    expect(source).not.toContain("hover:bg-[#FFDA47]")
+  })
+})
