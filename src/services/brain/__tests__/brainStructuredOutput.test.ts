@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { buildGoldenChannelFixture, restorationRichSpec, emptyChannelSpec } from "../fixtures"
 import { fromStructuredOutput, validateBrainResponse } from "../BrainOrchestrator"
 import type { StructuredBrainModelOutput } from "../../gemini"
+import type { EvidenceRecord } from "../EvidenceRecord"
 
 const createStorage = () => {
  const store = new Map<string, string>()
@@ -27,6 +28,18 @@ const baseOutput = (overrides: Partial<StructuredBrainModelOutput> = {}): Struct
  modules: [],
  actions: ["Rewrite one title"],
  ...overrides,
+})
+
+
+const promptEvidenceRecord = (id: string, value: number): EvidenceRecord => ({
+ id,
+ owner: "analytics-canon",
+ sourceRef: "channel_summary",
+ metric: id === "record-views" ? "views" : "clickThroughRate",
+ value,
+ freshness: "fresh",
+ epistemicState: "OBSERVED",
+ provenance: { evidenceIds: ["source-1"] },
 })
 
 describe("structured model output -> CreatorBrainResponse", () => {
@@ -83,29 +96,29 @@ describe("structured model output -> CreatorBrainResponse", () => {
   const snapshot = buildGoldenChannelFixture(restorationRichSpec).snapshot
   const output = baseOutput({
    keyInsight: "Views increased to 12,400 after the title change.",
-   body: "The latest window supports a measured increase.",
+   body: "CTR reached 6.8% in the latest window.",
    claimEvidence: [
     { claim: "Views increased to 12,400 after the title change.", evidenceIds: ["record-views", "not-in-prompt"] },
-    { claim: "This sentence is not in the response.", evidenceIds: ["record-views"] },
-    { claim: "The latest window supports a measured increase.", evidenceIds: ["record-window"] },
+    { claim: "This sentence is not in the response: 12,400.", evidenceIds: ["record-views"] },
+    { claim: "CTR reached 6.8% in the latest window.", evidenceIds: ["record-window"] },
    ],
   } as Partial<StructuredBrainModelOutput>)
 
-  const response = fromStructuredOutput(output, snapshot, ["record-views", "record-window"])
+  const response = fromStructuredOutput(output, snapshot, [promptEvidenceRecord("record-views", 12400), promptEvidenceRecord("record-window", 6.8)])
 
   expect(response.claimEvidence).toEqual([
-   { claim: "Views increased to 12,400 after the title change.", evidenceIds: ["record-views"] },
-   { claim: "The latest window supports a measured increase.", evidenceIds: ["record-window"] },
+   { claim: "Views increased to 12,400 after the title change.", evidenceIds: ["record-views"], verification: "direct_value_match" },
+   { claim: "CTR reached 6.8% in the latest window.", evidenceIds: ["record-window"], verification: "direct_value_match" },
   ])
  })
 
  it("drops claim links with no verified prompt evidence IDs", () => {
   const snapshot = buildGoldenChannelFixture(restorationRichSpec).snapshot
   const output = baseOutput({
-   claimEvidence: [{ claim: "The latest window supports a measured increase.", evidenceIds: ["invented-record"] }],
+   claimEvidence: [{ claim: "Views reached 9,999.", evidenceIds: ["record-views"] }],
   } as Partial<StructuredBrainModelOutput>)
 
-  const response = fromStructuredOutput(output, snapshot, ["record-views"])
+  const response = fromStructuredOutput(output, snapshot, [promptEvidenceRecord("record-views", 12400)])
   expect(response.claimEvidence).toBeUndefined()
  })
 
