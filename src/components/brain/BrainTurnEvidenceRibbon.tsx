@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import type { AIBrainEvidencePack } from "../../types"
+import type { AIBrainEvidencePack, BrainClaimEvidenceLink } from "../../types"
 import type { EvidenceRecord } from "../../services/brain/EvidenceRecord"
 import { StudioSplitLeftBadge } from "../../studio-ui"
 import { BrainClaimEvidence } from "./BrainClaimEvidence"
@@ -11,6 +11,7 @@ export type BrainTurnEvidenceRibbonProps = {
  evidencePack: AIBrainEvidencePack
  citedEvidenceIds?: string[]
  evidenceRecords?: EvidenceRecord[]
+ claimEvidence?: BrainClaimEvidenceLink[]
  evidenceIntegrityStatus?: "verified" | "unavailable" | "mismatch"
  compact?: boolean
  className?: string
@@ -26,6 +27,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
  evidencePack,
  citedEvidenceIds = [],
  evidenceRecords,
+ claimEvidence = [],
  evidenceIntegrityStatus = "unavailable",
  compact = false,
  className = "",
