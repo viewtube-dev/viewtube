@@ -3,7 +3,18 @@
    CSS cannot redefine Studio Hub fields and Studio Hub rules cannot leak back. */
 
 [data-vt-studio-control] {
-  --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);
+  --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);\n  /* Canonical editable-field text/fill/caret tokens. Glyph stroke always follows text. */
+  --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-field-text: var(--vt-field-primary);
+  --vt-field-text-stroke: var(--vt-field-text);
+  --vt-field-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
+  --vt-field-text-focus: #000;
+  --vt-field-text-stroke-focus: var(--vt-field-text-focus);
+  --vt-field-caret-focus: var(--vt-field-primary);
+  --vt-field-fill-rest: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+  --vt-field-fill-focus: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);
+  --vt-field-focus-outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+
   --vt-studio-control-height: var(--vt-studio-44-height, 44px);
   --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px);
   --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
@@ -44,7 +55,7 @@
 [data-vt-studio-control][data-size="supreme"] .vt-studio-dropdown-chevron { width: var(--vt-studio-dropdown-supreme-rail-size, 60px); min-width: var(--vt-studio-dropdown-supreme-rail-size, 60px); }
 [data-vt-studio-control][data-size="supreme"] .vt-studio-dropdown-chevron svg { width: var(--vt-studio-dropdown-supreme-chevron-size, 38px); height: var(--vt-studio-dropdown-supreme-chevron-size, 38px); }
 
-[data-vt-studio-control][data-size="compact"] {
+[data-vt-studio-control][data-size="compact"] {\n  --vt-field-text-stroke-width: var(--vt-studio-28-text-stroke, 0.5px);
   --vt-studio-control-text-stroke: var(--vt-studio-28-text-stroke, .5px);
   --vt-studio-control-height: var(--vt-studio-28-height, 28px);
   --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px);
@@ -74,7 +85,7 @@
   --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
   --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
 }
-[data-vt-studio-control][data-size="micro"] {
+[data-vt-studio-control][data-size="micro"] {\n  --vt-field-text-stroke-width: var(--vt-studio-micro-text-stroke, 0.25px);
   --vt-studio-control-focus-outline-width: .65px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: .65px;
