@@ -22,7 +22,7 @@ const brain = read("src/views/AIBrainCommandInterface.tsx")
 
 const checks = [
   ["distill overrides imported after field/parity styles", entry.indexOf('./studio-control-distill-overrides.css') > entry.indexOf('./studio-field-parity.css')],
-  ["field focus defines black text and glyph stroke", /:focus[^{]*\{[\s\S]*?-webkit-text-stroke-color:\s*#000\s*!important/.test(overrides)],
+  ["field focus defines black text and glyph stroke", /:focus[^{]*["field focus uses black text while preserving primary inline text stroke", /:focus[^{]*\\{[\\s\\S]*?color:\\s*#000\\s*!important[\\s\\S]*?-webkit-text-stroke-color:\\s*var\\(--vt-field-primary/.test(overrides)],{[\s\S]*?-webkit-text-stroke-color:\s*#000\s*!important/.test(overrides)],
   ["single-line labels clip instead of ellipsis", /text-overflow:\s*clip/.test(overrides) && !/text-overflow:\s*ellipsis/.test(overrides)],
   ["square icon group uses content width", /\.vt-studio-square-icon-button-group[\s\S]*?width:\s*max-content/.test(overrides)],
   ["bar toggle retains visible individual bars", /\.vt-studio-value-toggle__bar[\s\S]*?border:\s*1px solid #000/.test(overrides)],
