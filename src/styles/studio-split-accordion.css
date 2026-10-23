@@ -72,7 +72,7 @@
   min-width: 0; height: 100%; overflow: hidden; border-left: var(--vt-sa-stroke) solid #000;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); color: #000;
 }
-.vt-studio-split-accordion__item[data-active="false"] .vt-studio-split-accordion__content {
+.vt-studio-split-accordion__content[data-panel-visible="false"] {
   flex: 0 0 0; width: 0; min-width: 0; border-left-width: 0; padding: 0; overflow: hidden;
 }
 .vt-studio-split-accordion__content[data-label-visible="false"] .vt-studio-split-accordion__content-inner {
