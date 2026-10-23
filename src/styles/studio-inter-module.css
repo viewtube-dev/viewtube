@@ -156,3 +156,37 @@
     animation: none !important;
   }
 }
+
+
+/* Catalog host uses the module body as the exact edge-to-edge intermodule viewport. */
+.vt-confirmed-intermodule-host > .vt-studio-top-split-module__body {
+  padding-left: 0;
+  padding-right: 0;
+}
+.vt-confirmed-intermodule-list {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+.vt-confirmed-intermodule-prompt {
+  margin: 0 0 8px;
+  padding: 0 4px;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.vt-confirmed-intermodule-list small {
+  display: inline-block;
+  min-width: 1.5em;
+  margin-left: 4px;
+  padding: 1px 3px;
+  border: 1px solid #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  text-align: center;
+  font-size: .5em;
+  line-height: 1;
+  -webkit-text-stroke: 0;
+}
