@@ -82,6 +82,7 @@ import { BrainTurnEvidenceRibbon } from "../components/brain/BrainTurnEvidenceRi
 import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavigation"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
+import { resolveBrainDataReadinessPresentation } from "./brainDataReadiness"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
@@ -828,13 +829,13 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
  const staleCount = readiness.diagnostics.coverage.staleDatasets
  const missingCount = readiness.diagnostics.coverage.missingDatasets
  const revenueUnavailable = !readiness.availableMetrics.includes("revenue")
- const statusLabel = readiness.dataStatus === "ready"
-  ? "Channel data synced"
-  : readiness.dataStatus === "partial"
-   ? "Partial channel data"
-   : "Channel data unavailable"
+ const presentation = resolveBrainDataReadinessPresentation({
+  dataStatus: readiness.dataStatus,
+  staleDatasets: staleCount,
+  missingDatasets: missingCount,
+ })
  const summary = [
-  statusLabel,
+  presentation.label,
   revenueUnavailable ? "Revenue unavailable" : "",
   staleCount > 0 ? `${staleCount} stale datasets` : "",
   missingCount > 0 ? `${missingCount} missing datasets` : "",
@@ -844,7 +845,7 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
  return (
   <details data-vt-brain-component="BrainEvidenceReadiness" className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
    <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1.5 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
-    <span data-vt-brain-part="evidence-readiness-status" className={`rounded-[4px] border-[1.5px] border-black px-1.5 py-0.5 ${readiness.dataStatus === "ready" ? "bg-[#3FEE56]" : readiness.dataStatus === "partial" ? "bg-[#FFDA47]" : "bg-[#FF7497]"}`}>Data readiness</span>
+    <span data-vt-brain-part="evidence-readiness-status" className={`rounded-[4px] border-[1.5px] border-black px-1.5 py-0.5 ${presentation.tone === "ready" ? "bg-[#3FEE56]" : presentation.tone === "warning" ? "bg-[#FFDA47]" : "bg-[#FF7497]"}`}>Data readiness</span>
     <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
    </summary>
    <div data-vt-brain-part="evidence-diagnostics" className="grid gap-2 border-t-[2px] border-black p-2.5">
