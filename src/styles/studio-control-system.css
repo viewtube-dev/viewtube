@@ -5637,6 +5637,25 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   pointer-events: none;
 }
 
+/* Lay out all ten level bars horizontally inside the split face. */
+.vt-studio-value-toggle__bars {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 2px;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+.vt-studio-value-toggle__bars > .vt-studio-value-toggle__bar {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 18px;
+}
+
 /* Single bar definition: inactive bars remain legible over the primary face. */
 .vt-studio-value-toggle__bar,
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
