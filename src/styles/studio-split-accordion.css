@@ -8,7 +8,7 @@
   --vt-sa-font: var(--vt-studio-control-font-size, 38px);
   --vt-sa-text-stroke: var(--vt-studio-control-text-stroke, 1px);
   --vt-sa-icon: var(--vt-studio-control-icon-size, 38px);
-  --vt-sa-face: calc(var(--vt-sa-height) - (2 * var(--vt-sa-stroke)));
+  --vt-sa-face: calc(var(--vt-sa-height) - var(--vt-sa-stroke) - var(--vt-sa-stroke));
   box-sizing: border-box;
   display: block;
   width: 100%;
