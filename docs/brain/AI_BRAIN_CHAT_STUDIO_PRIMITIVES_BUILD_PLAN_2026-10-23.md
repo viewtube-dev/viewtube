@@ -107,3 +107,14 @@ The primitive/compound foundation is already present in the target branch; conti
 - **Current follow-up:** the active claim-to-evidence implementation branch introduces optional mappings for numeric claims. The runtime filters links against the actual prompt records and direct value matches; the UI exposes them only under verified prompt identity and explicitly warns that value matching does not prove trend or causal wording.
 - **Next:** verify CI on the exact PR head; fix only evidenced Brain-specific failures without hiding existing Studio/source-governance debt; then continue output-card lineage, governed action feedback, and mobile/keyboard/screen-reader certification.
 - **Not certified:** no claim is made here that typecheck, full-suite, live browser, mobile virtual-keyboard, screen-reader, or end-to-end lineage checks have passed. See the PR241 bridge in [the historical design reference](../migration/reference/PR241_VIEWTUBE_AI_BRAIN_BRAINSTORM_AND_FRONTEND_DESIGN_2026-09-12.md).
+
+
+## Implementation checkpoint — 2026-10-23 (action-plan tracker)
+
+- Connected response action recommendations to a collapsed **Track next actions** disclosure in the AI Brain answer card.
+- Reused the existing workflow recommendation and tracking components; no parallel action-plan card system was introduced.
+- Reworded the UI to distinguish browser-local tracking from real tool execution and canonical saved outputs.
+- Approval-gated steps cannot be activated by a local button press. The tracker requires a governance callback that explicitly confirms approval; no such callback is currently connected from the AI Brain page, so those steps remain gated.
+- Added tests for response-to-plan mapping, empty action lists, approval rejection/absence, approval success, and honest tracker labels.
+- Next: replace local-only progress with canonical workflow receipts and operation status, then certify keyboard, screen-reader, mobile viewport and virtual-keyboard behavior.
+- Test execution and accessibility certification remain pending CI/browser evidence; added tests are not evidence of passing tests.
