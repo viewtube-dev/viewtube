@@ -73,7 +73,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
-import { BrainChatMessageShell } from "../components/brain/BrainChatPrimitives"
+import { BrainChatMessageShell, BrainResponseSectionHeader } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
@@ -767,9 +767,10 @@ const CreatorResponseCard: React.FC<{
      <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
      {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
     </div>
-    <h3 data-vt-brain-part="response-headline" className="text-lg font-[1000] uppercase leading-none sm:text-xl">
-     {sanitizeCreatorFacingBrainCopy(response.headline)}
-    </h3>
+    <BrainResponseSectionHeader
+     title={sanitizeCreatorFacingBrainCopy(response.headline)}
+     className="text-lg font-[1000] uppercase leading-none sm:text-xl"
+    />
    </div>
    <div className="flex flex-col gap-2.5 p-3">
     {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
