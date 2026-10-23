@@ -1,8 +1,9 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 
-const read = (path) => readFileSync(new URL(path, `file://${process.cwd()}/`), "utf8")
+const read = (path) => readFileSync(resolve(process.cwd(), path), "utf8")
 
 const coreCss = read("src/styles/studio-control-core.css")
 const systemCss = read("src/styles/studio-control-system.css")
@@ -11,16 +12,16 @@ const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatal
 
 const blockFor = (source, selector) => {
   const start = source.indexOf(selector)
-  assert.notEqual(start, -1, `Expected selector: ${selector}`)
+  assert.notEqual(start, -1, "Expected selector: " + selector)
   const open = source.indexOf("{", start)
-  assert.notEqual(open, -1, `Expected opening brace for: ${selector}`)
+  assert.notEqual(open, -1, "Expected opening brace for: " + selector)
   let depth = 0
   for (let i = open; i < source.length; i += 1) {
     if (source[i] === "{") depth += 1
     if (source[i] === "}") depth -= 1
     if (depth === 0) return source.slice(open + 1, i)
   }
-  assert.fail(`Unclosed CSS block for: ${selector}`)
+  assert.fail("Unclosed CSS block for: " + selector)
 }
 
 test("Studio button labels use the shared clipped-text default, never ellipsis", () => {
@@ -30,10 +31,12 @@ test("Studio button labels use the shared clipped-text default, never ellipsis",
   assert.doesNotMatch(overridesCss, /text-overflow:\s*ellipsis/i)
 })
 
-test("StudioTextBox uses primary ink for its inline text stroke", () => {
+test("StudioTextBox uses primary ink for its inline text stroke without a shadow", () => {
   const textBox = blockFor(systemCss, '.vt-studio-text-box[data-vt-studio-control="true"]')
-  assert.match(textBox, /-webkit-text-stroke:\s*var\(--studio-text-box-text-stroke-width\)\s*var\(--vt-field-primary/)\n  assert.match(textBox, /box-shadow:\s*none/)\n  assert.match(systemCss, /\.vt-studio-text-box\[data-vt-studio-control="true"\]::before[\\s\\S]*?border:\\s*var\\(--studio-text-box-stroke-width\\) solid var\\(--vt-field-primary/)
+  assert.match(textBox, /-webkit-text-stroke:\s*var\(--studio-text-box-text-stroke-width\)\s*var\(--vt-field-primary/)
+  assert.match(textBox, /box-shadow:\s*none/)
   assert.doesNotMatch(textBox, /-webkit-text-stroke:\s*var\(--studio-text-box-text-stroke-width\)\s*#000/i)
+  assert.match(systemCss, /\.vt-studio-text-box\[data-vt-studio-control="true"\]::before[\s\S]*?border:\s*var\(--studio-text-box-stroke-width\) solid var\(--vt-field-primary/)
 })
 
 test("focused textarea keeps a secondary outline without a primary focus text stroke", () => {
