@@ -1773,7 +1773,7 @@ const AIBrainCommandInterface: React.FC = () => {
          ) : messages.length === 0 ? (
           <OpeningBriefing snapshot={snapshot} onPrompt={(prompt) => { void handleSend(prompt) }} />
          ) : (
-          <div className="brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain overflow-y-auto" aria-label="Brain conversation" aria-live="polite" role="log" tabIndex={0}>
+          <div ref={conversationViewportRef} onScroll={(event) => { const viewport = event.currentTarget; shouldFollowConversationRef.current = viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight <= 72 }} className="brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain overflow-y-auto" aria-label="Brain conversation" aria-live="polite" role="log" tabIndex={0}>
            {messages.map((message) => message.role === "user" ? (
             <UserMessage key={message.id} text={message.text} />
            ) : (
