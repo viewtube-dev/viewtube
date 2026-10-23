@@ -184,3 +184,39 @@ export const BrainComposerAccessoryRow: React.FC<{
     {children}
   </div>
 )
+
+/** Single scroll owner for the transcript; the page keeps scroll-follow policy. */
+export const ChatConversationViewport: React.FC<{
+  children: React.ReactNode
+  viewportRef: React.Ref<HTMLDivElement>
+  bottomRef?: React.Ref<HTMLDivElement>
+  onScroll?: React.UIEventHandler<HTMLDivElement>
+  className?: string
+}> = ({ children, viewportRef, bottomRef, onScroll, className = "" }) => (
+  <div
+    ref={viewportRef}
+    onScroll={onScroll}
+    className={`brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain overflow-y-auto ${className}`}
+    aria-label="Brain conversation"
+    aria-live="polite"
+    role="log"
+    tabIndex={0}
+  >
+    {children}
+    <div ref={bottomRef} aria-hidden="true" />
+  </div>
+)
+
+/** Anchored composer frame; input/send behavior remains owned by the Brain page. */
+export const BrainComposerShell: React.FC<{
+  children: React.ReactNode
+  className?: string
+}> = ({ children, className = "" }) => (
+  <footer
+    data-vt-brain-component="BrainComposer"
+    aria-label="Brain composer"
+    className={`shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] ${className}`}
+  >
+    {children}
+  </footer>
+)
