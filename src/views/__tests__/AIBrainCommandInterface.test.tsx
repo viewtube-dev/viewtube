@@ -12,6 +12,7 @@ import AIBrainCommandInterface, {
  readPromptEvidenceRecords,
  getPromptEvidenceIntegrityStatus,
  shouldSendBrainComposerKey,
+ shouldFollowBrainConversation,
  UserMessage,
 } from "../AIBrainCommandInterface"
 
@@ -216,6 +217,12 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("grid-cols-[84px_minmax(0,1fr)]")
   expect(html).toContain("text-[14px]")
   expect(html).toContain("You:")
+ })
+
+ it("follows new turns at the bottom but preserves scroll when reading history", () => {
+  expect(shouldFollowBrainConversation(1000, 900, 100)).toBe(true)
+  expect(shouldFollowBrainConversation(1000, 500, 100)).toBe(false)
+  expect(shouldFollowBrainConversation(1000, 828, 100)).toBe(true)
  })
 
  it("sends with Enter, preserves Shift+Enter newlines, and ignores IME composition", () => {
