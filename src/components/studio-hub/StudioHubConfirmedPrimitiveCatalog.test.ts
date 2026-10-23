@@ -104,3 +104,14 @@ describe("confirmed Studio button primitive library", () => {
   })
 
 })
+
+describe("confirmed Studio disclosure summary primitive", () => {
+  it("registers the exported native disclosure summary in the confirmed library", () => {
+    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+    const index = read("src/studio-ui/index.ts")
+    expect(index).toContain("StudioDisclosureSummary")
+    expect(catalog).toContain("StudioDisclosureSummary")
+    expect(catalog).toContain('title="Disclosure Summary · Standard + Compact"')
+    expect(catalog).toContain('data-vt-library-component="StudioDisclosureSummary"')
+  })
+})
