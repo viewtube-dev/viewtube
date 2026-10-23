@@ -67,11 +67,13 @@ export const BrainEvidenceDrawer: React.FC<{
   if (requestSpec) {
    params.set("rankBy", requestSpec.rankBy)
    params.set("selectionMode", requestSpec.selectionMode)
-   if (requestSpec.count !== null) params.set("count", String(requestSpec.count))
-   if (requestSpec.since) params.set("since", requestSpec.since)
-   if (requestSpec.until) params.set("until", requestSpec.until)
-   requestSpec.formats.forEach((format) => params.append("format", format))
-   requestSpec.filters.forEach((filter) => params.append("filter", filter))
+   if (typeof requestSpec.count === "number") params.set("count", String(requestSpec.count))
+   if (typeof requestSpec.since === "string" && requestSpec.since) params.set("since", requestSpec.since)
+   if (typeof requestSpec.until === "string" && requestSpec.until) params.set("until", requestSpec.until)
+   if (Array.isArray(requestSpec.formats)) requestSpec.formats.forEach((format) => params.append("format", format))
+   if (typeof requestSpec.rankBy === "string" && requestSpec.rankBy) params.set("rankBy", requestSpec.rankBy)
+   if (typeof requestSpec.selectionMode === "string" && requestSpec.selectionMode) params.set("selectionMode", requestSpec.selectionMode)
+   if (Array.isArray(requestSpec.filters)) requestSpec.filters.forEach((filter) => params.append("filter", filter))
   }
   if (item.id.startsWith("video:")) params.set("videoId", item.id.slice("video:".length))
   if (item.source.toLowerCase().includes("search")) params.set("searchTerm", item.label)
