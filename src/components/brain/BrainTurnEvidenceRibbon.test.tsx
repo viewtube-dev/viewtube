@@ -25,7 +25,40 @@ const pack = (overrides: Partial<AIBrainEvidencePack> = {}): AIBrainEvidencePack
  evidenceIds: ["video:abc"],
  transcriptRouteRequired: false,
  ...overrides,
+})
 
+const record = (overrides: Partial<EvidenceRecord> = {}): EvidenceRecord => ({
+ id: "analytics:snapshot-1:channel_summary:views",
+ owner: "analytics-canon",
+ sourceRef: "channel_summary",
+ sourceSnapshotId: "snapshot-1",
+ metric: "views",
+ value: 2800,
+ freshness: "fresh",
+ epistemicState: "OBSERVED",
+ availability: "available",
+ provenance: { evidenceIds: ["source-evidence-1"], sourceRoute: "/analytics" },
+ ...overrides,
+})
+
+const render = (options: {
+ evidencePack?: AIBrainEvidencePack
+ evidenceRecords?: EvidenceRecord[]
+ evidenceIntegrityStatus?: "verified" | "unavailable" | "mismatch"
+ citedEvidenceIds?: string[]
+} = {}) => renderToStaticMarkup(
+ <MemoryRouter>
+  <BrainTurnEvidenceRibbon
+   turnId="turn-test"
+   evidencePack={options.evidencePack || pack()}
+   evidenceRecords={options.evidenceRecords}
+   evidenceIntegrityStatus={options.evidenceIntegrityStatus}
+   citedEvidenceIds={options.citedEvidenceIds}
+  />
+ </MemoryRouter>,
+)
+
+describe("BrainTurnEvidenceRibbon", () => {
  it("links each verified prompt record by canonical ID and preserves the requested analytics scope", () => {
   const html = render({
    evidencePack: pack({
