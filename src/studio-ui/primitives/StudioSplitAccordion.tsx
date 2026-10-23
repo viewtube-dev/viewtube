@@ -70,6 +70,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     const viewportRef = React.useRef<HTMLDivElement | null>(null);
     const trackRef = React.useRef<HTMLDivElement | null>(null);
     const itemRefs = React.useRef<Array<HTMLDivElement | null>>([]);
+    const idPrefix = React.useId().replace(/:/g, "");
     const rafRef = React.useRef<number | null>(null);
     const openRef = React.useRef(0);
     const [uncontrolledIndex, setUncontrolledIndex] = React.useState(() => initialIndex(items, defaultActiveIndex));
@@ -78,8 +79,6 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     const openIndex = controlled
       ? (items[activeIndex as number] && !items[activeIndex as number].disabled ? activeIndex as number : initialIndex(items))
       : (items[uncontrolledIndex] && !items[uncontrolledIndex].disabled ? uncontrolledIndex : initialIndex(items));
-
-    openRef.current = openIndex;
 
     const setRootRef = React.useCallback((node: HTMLDivElement | null) => {
       rootRef.current = node;
@@ -198,13 +197,17 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
       if (disabled || index < 0 || index >= items.length || items[index]?.disabled) return;
       if (!controlled) setUncontrolledIndex(index);
       onActiveIndexChange?.(index);
-      openRef.current = index;
       animateTo(index);
+      openRef.current = index;
     }, [animateTo, controlled, disabled, items, onActiveIndexChange]);
 
     React.useLayoutEffect(() => {
-      snap(openIndex < 0 ? 0 : openIndex);
-    }, [items.length, sizeVariant, snap, openIndex]);
+      const target = openIndex < 0 ? 0 : openIndex;
+      openRef.current = target;
+      snap(target);
+      // Only reset on structural changes; selection changes are animated below.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [items.length, sizeVariant]);
 
     React.useEffect(() => {
       const root = rootRef.current;
@@ -269,7 +272,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
           <div className="vt-studio-split-accordion__track" ref={trackRef}>
             {items.map((item, index) => {
               const selected = index === openIndex;
-              const panelId = `vt-studio-split-accordion-panel-${React.useId ? "" : ""}${itemKey(item, index).replace(/[^a-zA-Z0-9_-]/g, "-")}`;
+              const panelId = `vt-studio-split-accordion-${idPrefix}-panel-${index}`;
               return (
                 <div
                   key={itemKey(item, index)}
