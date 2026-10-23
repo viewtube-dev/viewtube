@@ -97,3 +97,16 @@ assert.ok(!independentCss.includes('--vt-studio-control-text-stroke'));
 assert.ok(independentCss.includes('data-studioinput-size="standard"'));
 assert.ok(independentCss.includes('data-studioinput-size="compact"'));
 assert.ok(independentCss.includes('data-studioinput-size="micro"'));
+
+
+// Regression guard: focused text fields retain primary glyph stroke; risen labels share one token pair.
+const fieldStyles = readFileSync("src/styles/studio-control-fields.css", "utf8");
+const systemStyles = readFileSync("src/styles/studio-control-system.css", "utf8");
+assert.match(fieldStyles, /:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary, var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\)\)\s*!important/);
+assert.ok(systemStyles.includes("--vt-studio-floating-label-risen-font-size: 12px;"));
+assert.ok(systemStyles.includes("--vt-studio-floating-label-risen-text-stroke: 0.5px;"));
+assert.ok(systemStyles.includes("font-size: var(--vt-studio-floating-label-risen-font-size, 12px) !important;"));
+assert.ok(systemStyles.includes("-webkit-text-stroke-width: var(--vt-studio-floating-label-risen-text-stroke, 0.5px) !important;"));
+assert.ok(systemStyles.includes("color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 40%, #fff)"));
+assert.ok(systemStyles.includes("left: 50%;") && systemStyles.includes("transform: translateX(-50%);"));
+assert.ok(!controls.includes('className={["vt-studio-legend-count"'));

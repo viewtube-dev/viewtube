@@ -1639,7 +1639,6 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
           onClick={() => setOpen(current => !current)}
         >
           <span className="vt-studio-legend-trigger-text">{triggerLabel}</span>
-          <span className={["vt-studio-legend-count", selected.length ? "is-visible" : ""].filter(Boolean).join(" ")} aria-label={`${selected.length} selected`}>{selected.length}</span>
           <svg className="vt-studio-legend-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
         </button>
       </div>

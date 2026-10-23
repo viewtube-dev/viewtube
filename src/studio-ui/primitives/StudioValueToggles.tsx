@@ -165,13 +165,18 @@ export function StudioBarToggle({
     }, holdDelayMs);
   };
   const bars = Math.max(0, Math.min(10, Math.round(value / 10)));
+  const onPointerDown = (direction: -1 | 1) => (event: React.PointerEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    startRepeat(direction);
+  };
   const decrease = <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Decrease level" disabled={disabled || value <= 0}
-    onPointerDown={() => startRepeat(-1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onLostPointerCapture={stopRepeat}
+    onPointerDown={onPointerDown(-1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onLostPointerCapture={stopRepeat}
     onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(-1); } }}>
     <ChevronLeft aria-hidden="true" />
   </button>;
   const increase = <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Increase level" disabled={disabled || value >= 100}
-    onPointerDown={() => startRepeat(1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onLostPointerCapture={stopRepeat}
+    onPointerDown={onPointerDown(1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onLostPointerCapture={stopRepeat}
     onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(1); } }}>
     <ChevronRight aria-hidden="true" />
   </button>;

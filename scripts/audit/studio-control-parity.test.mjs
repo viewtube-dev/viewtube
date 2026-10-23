@@ -5,6 +5,9 @@ import { readFileSync } from "node:fs";
 const css = readFileSync("src/styles/studio-control-system.css", "utf8");
 const toggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8");
 const area = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
+const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
+const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 
 test("side-toggle stack uses a centered overlay divider, not a half-cell border", () => {
   assert.match(css, /\.vt-studio-value-toggle__arrow-stack::after[\s\S]*?top:\s*50%[\s\S]*?translateY\(-50%\)/);
@@ -31,4 +34,39 @@ test("single-line panels clip overflow without ellipses and exclude textareas", 
 
 test("click growth animation targets the SVG glyph only", () => {
   assert.match(css, /\.vt-studio-value-toggle__arrow:active svg\s*\{[^}]*animation:\s*vt-studio-value-toggle-grow/);
+});
+
+
+test("input and textarea focus retain the primary inline glyph stroke", () => {
+  assert.match(fields, /input\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
+  assert.match(fields, /textarea\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
+  assert.doesNotMatch(fields, /-webkit-text-stroke-color:\s*#000\s*!important/);
+});
+
+test("floating-label risen typography uses one shared token pair while rest labels retain field-size tokens", () => {
+  assert.match(css, /--vt-studio-floating-label-risen-font-size:\s*12px/);
+  assert.match(css, /--vt-studio-floating-label-risen-text-stroke:\s*0\.5px/);
+  assert.match(css, /font-size:\s*var\(--vt-studio-floating-label-risen-font-size, 12px\) !important/);
+  assert.match(css, /-webkit-text-stroke-width:\s*var\(--vt-studio-floating-label-risen-text-stroke, 0\.5px\) !important/);
+  assert.match(css, /textarea\[data-size="compact"\] \+ \.vt-studio-floating-field-label[\s\S]*?vt-studio-textarea-compact-font-size/);
+  assert.match(css, /input\[data-size="compact"\] \+ \.vt-studio-floating-field-label[\s\S]*?vt-studio-28-font-size/);
+  assert.doesNotMatch(css, /\.vt-studio-floating-field[^{}]*:focus[^{}]*\{[^}]*font-size:\s*18px/);
+});
+
+test("double-side divider is centered and the confirmed catalog mixes compact and standard variants", () => {
+  assert.match(css, /\.vt-studio-value-toggle--double \.vt-studio-value-toggle__divider\s*\{[^}]*left:\s*50%;[^}]*translateX\(-50%\)/s);
+  assert.match(catalog, /size=\{index === 1 \|\| index === 3 \? "compact" : "standard"\}/);
+});
+
+test("bar toggle has pointer capture and visible inactive segments", () => {
+  assert.match(toggles, /setPointerCapture\?\.\(event\.pointerId\)/);
+  assert.match(toggles, /onPointerUp=\{stopRepeat\}[\s\S]*?onPointerCancel=\{stopRepeat\}[\s\S]*?onLostPointerCapture=\{stopRepeat\}/);
+  assert.match(css, /\.vt-studio-value-toggle__bar[\s\S]*?40%, #fff/);
+  assert.match(css, /\.vt-studio-value-toggle__bar\[data-active="true"\][\s\S]*?background:\s*#000/);
+});
+
+test("multi-select closed trigger combines selection count into the label only", () => {
+  assert.match(controls, /\$\{selectedLabels\[0\]\} \+\$\{selectedLabels\.length - 1\}/);
+  assert.match(controls, /className="vt-studio-legend-trigger-text"\>\{triggerLabel\}/);
+  assert.doesNotMatch(controls, /vt-studio-legend-count/);
 });
