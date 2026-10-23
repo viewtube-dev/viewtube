@@ -162,23 +162,18 @@
 
 /* Catalog host uses the module body as the exact edge-to-edge intermodule viewport. */
 .vt-confirmed-intermodule-host > .vt-studio-top-split-module__body {
-  padding-inline: 0 !important;
+  padding: 0 !important;
   overflow: visible;
-}
-.vt-confirmed-intermodule-host[data-size="compact"] > .vt-studio-top-split-module__body,
-.vt-confirmed-intermodule-host[data-size="micro"] > .vt-studio-top-split-module__body {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
 }
 .vt-confirmed-intermodule-host[data-size="compact"] > .vt-studio-top-split-module__body > [data-vt-studio-inter-host="true"],
 .vt-confirmed-intermodule-host[data-size="micro"] > .vt-studio-top-split-module__body > [data-vt-studio-inter-host="true"] {
+  box-sizing: border-box;
+  display: block;
   width: 100%;
   max-width: none;
+  min-width: 0;
   margin-inline: 0;
-}
-.vt-confirmed-intermodule-host > .vt-studio-top-split-module__body {
-  padding-left: 0;
-  padding-right: 0;
+  padding-inline: 0;
 }
 .vt-confirmed-intermodule-list {
   display: block;
