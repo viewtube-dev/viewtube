@@ -110,6 +110,23 @@ const render = (options: {
 )
 
 describe("BrainTurnEvidenceRibbon", () => {
+ it("renders evidence state and quality chips with the canonical Studio badge primitive", () => {
+  const html = render({
+   evidencePack: pack({ dataStatus: "partial" }),
+   evidenceIntegrityStatus: "verified",
+   evidenceRecords: [
+    record({ id: "stale", freshness: "stale", epistemicState: "STALE" }),
+    record({ id: "missing", freshness: "unknown", epistemicState: "MISSING", value: null, availability: "unavailable" }),
+   ],
+   citedEvidenceIds: ["video:abc", "video:not-in-pack"],
+  })
+
+  expect(html).toContain('data-vt-studio-split-badge="left"')
+  expect(html).toContain('data-vt-library-component="StudioSplitLeftBadge"')
+  expect(html).not.toContain('style="background-color:')
+  expect(html).not.toContain('class="border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-[1000] uppercase"')
+ })
+
  it("distinguishes prepared evidence from sources actually cited in the answer", () => {
   const html = render({ citedEvidenceIds: ["video:abc"] })
   expect(html).toContain('data-vt-brain-turn-id="turn-test"')
