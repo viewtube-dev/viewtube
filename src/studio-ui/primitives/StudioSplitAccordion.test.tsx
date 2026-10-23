@@ -20,7 +20,7 @@ describe("StudioSplitAccordion", () => {
     expect(html).toContain("MIDDLE PANEL");
     expect(html).toContain("LEFT PANEL");
     expect(html).toContain('aria-expanded="false"');
-    expect(html).toContain("hidden=\"\"");
+    expect(html).toContain('aria-hidden="true"');
     expect(html).toContain('data-vt-library-component="StudioSplitAccordion"');
   });
 
