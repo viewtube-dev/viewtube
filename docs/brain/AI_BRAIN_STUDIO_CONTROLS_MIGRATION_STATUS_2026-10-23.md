@@ -40,3 +40,12 @@ This is a source audit only, not an executed test suite.
 5. Reconcile this branch with the latest target base before review. Do not treat source assertions as browser certification.
 
 No pull request has been opened for this working branch because previous Brain-shell PRs were automatically merged before their verification status was resolved.
+
+
+## Follow-up: native disclosure triggers
+
+- Added a shared Studio-owned disclosure-trigger skin in `src/styles/studio-control-split.css`, imported through the existing Studio control entrypoint.
+- Migrated the context-used drawer and data-readiness disclosure in `AIBrainCommandInterface.tsx`, plus selection-constraints and prompt-evidence disclosures in `BrainTurnEvidenceRibbon.tsx`.
+- Triggers remain native `<summary>` elements inside `<details>`; no nested interactive buttons were introduced. The trigger uses the active primary/secondary pair, compact label typography, token-backed outline geometry, and no motion/shadow.
+- Added contract coverage for the page and evidence-ribbon disclosure markup.
+- This is source-level implementation only. Tests, typecheck/build, keyboard/browser checks, mobile viewport checks, and screenshots still need to be executed before the PR is ready.
