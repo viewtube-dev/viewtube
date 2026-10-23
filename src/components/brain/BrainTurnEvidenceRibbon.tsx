@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import type { AIBrainEvidencePack } from "../../types"
 import type { EvidenceRecord } from "../../services/brain/EvidenceRecord"
-import { StudioSplitLeftBadge } from "../../studio-ui"
+import { StudioSplitLeftBadge, StudioDisclosureSummary } from "../../studio-ui"
 import { BrainClaimEvidence } from "./BrainClaimEvidence"
 import { formatEvidenceRequestSpec } from "../../services/brain/BrainEvidenceRequestPresentation"
 
@@ -132,10 +132,10 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
     </div>
     {requestConstraints ? (
      <details className="min-w-0">
-      <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-xs font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">
+      <StudioDisclosureSummary sizeVariant="standard">
        <span>All selection constraints</span>
        <span className="ml-auto">{requestConstraints.length}</span>
-      </summary>
+      </StudioDisclosureSummary>
       <dl className="grid min-w-0 grid-cols-1 gap-1 py-1 sm:grid-cols-2">
        {requestConstraints.map((constraint) => (
         <div key={constraint.id} className="min-w-0 border border-black/30 bg-[#f8f8f4] p-1.5">
@@ -159,10 +159,10 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
    ) : null}
    <BrainClaimEvidence evidencePack={evidencePack} compact label="Inspect evidence" />
    <details data-vt-brain-part="prompt-evidence-records" className="min-w-0 border-t border-black/20 pt-1.5">
-    <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 text-[10px] font-[1000] uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">
+    <StudioDisclosureSummary sizeVariant="standard">
      <span>Prompt evidence records</span>
      <span className="shrink-0">{evidenceIntegrityStatus === "mismatch" ? "Mismatch" : evidenceRecords === undefined ? "Unavailable" : evidenceRecords.length}</span>
-    </summary>
+    </StudioDisclosureSummary>
     {evidenceIntegrityStatus === "mismatch" ? (
      <p className="break-words py-1 text-[10px] font-bold leading-4 text-black/70">Record-level provenance is withheld because the prompt manifest and saved record IDs disagree.</p>
     ) : evidenceRecords === undefined ? (
