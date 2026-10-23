@@ -83,6 +83,13 @@ describe("StudioSplitAccordion", () => {
     expect(css).toContain("var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))");
     expect(css).toContain("var(--vt-studio-control-accent, var(--pair-a, #36e0f6))");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
+    expect(css).toContain("transition: opacity 140ms linear");
+    expect(css).toContain(".vt-studio-split-accordion__content-inner { transition: none; }");
     expect(css).not.toContain("box-shadow:");
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitAccordion.tsx"), "utf8");
+    expect(source).toContain("currentWidthsRef.current");
+    expect(source).toContain("const fromScrollLeft = viewportRef.current?.scrollLeft ?? 0;");
+    expect(source).toContain("fromScrollLeft + (targetScrollLeft - fromScrollLeft) * progress");
+    expect(source).not.toContain("const focusIndex = progress < .5 ? previous : next");
   });
 });
