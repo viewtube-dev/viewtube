@@ -22,6 +22,7 @@ import {
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
 import { StudioButton, StudioSplitLeftButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
+import { StudioInterModule } from "../studio-ui/primitives/StudioInterModule"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -508,13 +509,19 @@ export const BrainPromptLibrary: React.FC<{
   return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b))
  }, [filteredCards])
 
+ const setCategoryOpen = (groupCategory: string, nextOpen: boolean) => {
+  setOpenCategories((current) => nextOpen
+   ? (current.includes(groupCategory) ? current : [...current, groupCategory])
+   : current.filter((item) => item !== groupCategory))
+ }
+
  return (
   <section
    data-vt-brain-component="BrainPromptLibrary"
    aria-label="Prompt library"
    aria-labelledby={headingId}
    aria-busy={busy || undefined}
-   className="flex min-w-0 flex-col gap-2"
+   className="flex min-w-0 flex-col"
   >
    <StudioTopSplitModule
     sizeVariant="compact"
@@ -530,123 +537,78 @@ export const BrainPromptLibrary: React.FC<{
      <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
      <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: item.replace(/_/g, " ") }))]} />
     </div>
-    <p className="px-3 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
-   </StudioTopSplitModule>
+    <p className="px-1 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
-   <div className="grid min-w-0 gap-1.5">
-    {groupedCards.map(([groupCategory, groupCards]) => {
-     const isOpen = openCategories.includes(groupCategory)
-     const selected = groupCards.find((card) => card.id === selectedId) || null
-     const toggleGroup = () => setOpenCategories((current) => current.includes(groupCategory) ? current.filter((item) => item !== groupCategory) : [...current, groupCategory])
-     return (
-      <details
-       key={groupCategory}
-       open={isOpen}
-       onToggle={(event) => {
-        const nextOpen = event.currentTarget.open
-        setOpenCategories((current) => nextOpen
-         ? (current.includes(groupCategory) ? current : [...current, groupCategory])
-         : current.filter((item) => item !== groupCategory))
-       }}
-       data-vt-brain-component="BrainPromptLibraryModule"
-       data-prompt-category={groupCategory}
-       className="min-w-0 overflow-hidden"
-      >
-       <summary
-        onClick={(event) => { event.preventDefault(); toggleGroup() }}
-        className="list-none cursor-pointer [&::-webkit-details-marker]:hidden"
+    <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="vt-studio-inter-host--bleed min-w-0">
+     {groupedCards.map(([groupCategory, groupCards]) => {
+      const isOpen = openCategories.includes(groupCategory)
+      return (
+       <StudioInterModule
+        key={groupCategory}
+        data-vt-brain-component="BrainPromptLibraryModule"
+        data-prompt-category={groupCategory}
+        title={<><span>{groupCategory.replace(/_/g, " ")}</span><small>{groupCards.length}</small></>}
+        startIcon={<LayoutGrid aria-hidden="true" />}
+        sizeVariant="compact"
+        open={isOpen}
+        onOpenChange={(nextOpen) => setCategoryOpen(groupCategory, nextOpen)}
         aria-label={`${groupCategory.replace(/_/g, " ")} prompts, ${groupCards.length} items`}
        >
-        <StudioTopSplitModule
-         as="div"
-         sizeVariant="compact"
-         split="double"
-         startIcon={<LayoutGrid aria-hidden="true" />}
-         endIcon={<span aria-hidden="true" className="text-base font-black leading-none">{isOpen ? "−" : "+"}</span>}
-         title={<span className="flex min-w-0 items-center justify-between gap-2"><span className="truncate">{groupCategory.replace(/_/g, " ")}</span><span className="shrink-0 text-[10px] font-black">{groupCards.length}</span></span>}
-         className="overflow-hidden"
-        />
-       </summary>
-
-       <div data-vt-brain-part="prompt-module-body" className="min-w-0 border-x-[2px] border-b-[2px] border-black bg-white">
-         <ul className="grid min-w-0 grid-cols-1 gap-1 p-2">
-          {groupCards.map((card) => {
-           const isSelected = card.id === selectedId
-           const promptIndex = cards.findIndex((item) => item.id === card.id)
-           const colorPair = PROMPT_MODULE_COLOR_PAIRS[Math.max(promptIndex, 0) % PROMPT_MODULE_COLOR_PAIRS.length]
-           return (
-            <li key={card.id} className="min-w-0">
-             <div data-vt-brain-part="prompt-collapsible-module" className="min-w-0 overflow-hidden">
-              <StudioTopSplitModule
-               as="div"
+        {groupCards.map((card) => {
+         const isSelected = card.id === selectedId
+         const promptIndex = cards.findIndex((item) => item.id === card.id)
+         const colorPair = PROMPT_MODULE_COLOR_PAIRS[Math.max(promptIndex, 0) % PROMPT_MODULE_COLOR_PAIRS.length]
+         return (
+          <StudioInterModule
+           key={card.id}
+           data-vt-brain-part="prompt-collapsible-module"
+           data-prompt-id={card.id}
+           title={card.label}
+           startIcon={<LayoutGrid aria-hidden="true" />}
+           sizeVariant="compact"
+           headStyle={{
+            background: colorPair[0],
+            "--vt-studio-control-accent": colorPair[0],
+            "--vt-studio-control-secondary": colorPair[1],
+           } as React.CSSProperties}
+           open={isSelected}
+           onOpenChange={(nextOpen) => setSelectedId(nextOpen ? card.id : null)}
+           aria-label={`${isSelected ? "Collapse" : "Expand"} ${card.label} prompt`}
+           data-flush-body="true"
+          >
+           <div className="grid min-w-0 gap-2 bg-white px-2 py-2">
+            <p className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
+            <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-2 gap-1">
+             <StudioSplitLeftButton
+              sizeVariant="compact"
+              icon={<Send aria-hidden="true" />}
+              disabled={busy}
+              className="min-w-0 w-full"
+              onClick={() => { onPrompt(card.prompt); setSelectedId(null) }}
+             >
+              SEND TO CHAT
+             </StudioSplitLeftButton>
+             {onEdit ? (
+              <StudioSplitLeftButton
                sizeVariant="compact"
-               split="double"
-               startIcon={<LayoutGrid aria-hidden="true" />}
-               endIcon={<span aria-hidden="true" className="text-base font-black leading-none">{isSelected ? "−" : "+"}</span>}
-               title={card.label}
-               style={{
-                "--vt-studio-control-accent": colorPair[0],
-                "--vt-studio-control-secondary": colorPair[1],
-               } as React.CSSProperties}
-               className="cursor-pointer overflow-hidden"
-               role="button"
-               tabIndex={0}
-               aria-expanded={isSelected}
-               aria-label={`${isSelected ? "Collapse" : "Expand"} ${card.label} prompt`}
-               onClick={() => setSelectedId(isSelected ? null : card.id)}
-               onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                 event.preventDefault()
-                 setSelectedId(isSelected ? null : card.id)
-                }
-               }}
+               icon={<ArrowRight aria-hidden="true" />}
+               className="min-w-0 w-full"
+               onClick={() => { onEdit(card.prompt); setSelectedId(null) }}
               >
-               {isSelected ? (
-                <div className="grid min-w-0 gap-2 bg-white p-2">
-                 <p className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
-                 <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-2 gap-1">
-                  <StudioSplitLeftButton
-                   sizeVariant="compact"
-                   icon={<Send aria-hidden="true" />}
-                   disabled={busy}
-                   className="min-w-0 w-full"
-                   onClick={(event) => {
-                    event.stopPropagation()
-                    onPrompt(card.prompt)
-                    setSelectedId(null)
-                   }}
-                  >
-                   SEND TO CHAT
-                  </StudioSplitLeftButton>
-                  {onEdit ? (
-                   <StudioSplitLeftButton
-                    sizeVariant="compact"
-                    icon={<ArrowRight aria-hidden="true" />}
-                    className="min-w-0 w-full"
-                    onClick={(event) => {
-                     event.stopPropagation()
-                     onEdit(card.prompt)
-                     setSelectedId(null)
-                    }}
-                   >
-                    EDIT FIRST
-                   </StudioSplitLeftButton>
-                  ) : null}
-                 </div>
-                </div>
-               ) : null}
-              </StudioTopSplitModule>
-             </div>
-            </li>
-           )
-          })}
-         </ul>
-        </div>
-      </details>
-     )
-    })}
-   </div>
-   {!filteredCards.length ? <p className="border-[2px] border-black p-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
+               EDIT FIRST
+              </StudioSplitLeftButton>
+             ) : null}
+            </div>
+           </div>
+          </StudioInterModule>
+         )
+        })}
+       </StudioInterModule>
+      )
+     })}
+    </div>
+   </StudioTopSplitModule>
+   {!filteredCards.length ? <p className="border-x-[2px] border-b-[2px] border-black bg-white p-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
   </section>
  )
 }
