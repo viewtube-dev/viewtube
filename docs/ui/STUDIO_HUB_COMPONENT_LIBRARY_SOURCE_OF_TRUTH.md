@@ -437,3 +437,19 @@ The Confirmed Primitive Library uses a shared **4px spacing unit** for catalog l
 - Do not use catalog-only mock controls as proof of production support. Each size tier shown must be supported by the actual primitive API and verified render behavior.
 - Standard and compact comparison specimens may remain paired on narrow screens where the comparison itself is meaningful; grid containment is required even when columns are retained.
 - scripts/audit/confirmed-library-layout.test.mjs protects the shared spacing unit, responsive containment, production-source provenance, and the separation between catalog layout and control-face styling.
+
+## AI Brain chat compositions — 2026-10-23
+
+The AI Brain chat is a consumer of the Studio control system, not a second primitive library. The following Brain-owned compositions are implemented in `src/components/brain/BrainChatPrimitives.tsx` and are composed around canonical Studio controls where interactive controls are needed:
+
+- `BrainChatStatusBadge` — compact explicit status label; status is supplied by the canonical owner and is never inferred from missing data.
+- `BrainChatMessageShell` — role-labelled, width-safe shell for user or assistant content.
+- `BrainResponseSectionHeader` — compact wrap-safe response section heading with optional metadata.
+- `BrainChatActionButtonGroup` — compact action group that delegates behavior to existing Brain handlers and uses `StudioButton`.
+- `BrainPromptLibraryItem` — accessible selected/disabled prompt row for existing registry-backed prompt data; it does not own a prompt registry.
+- `BrainComposerAccessoryRow` — wrapping accessory group for existing composer controls.
+
+The main Brain page consumes the shared message shell for user posts and the shared response header for assistant responses. Existing answer modules, evidence ribbon, context disclosure, prompt registry, send handler, and learning/feedback owners remain authoritative. The composer stays within the chat workspace and reserves mobile safe-area padding; conversation history owns its vertical scrolling region.
+
+Focused tests live in `src/components/brain/BrainChatPrimitives.test.tsx`. This documentation records source composition, not browser certification. Typecheck, test execution, responsive screenshots, keyboard/scroll behavior, and console inspection must be recorded separately before marking the work visually certified.
+
