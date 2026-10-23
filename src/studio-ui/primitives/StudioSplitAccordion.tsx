@@ -176,7 +176,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     const openRef = React.useRef(0);
     // Keep the last rendered frame so interrupted transitions continue from the visible geometry.
     const currentWidthsRef = React.useRef<number[]>([]);
-    // Panels that are allowed to show their coloured label. Everything else in transit is open space.
+    // Only the selected/opening panel shows its label; all other expanded transit bands keep their panel fill.
     const labelSetRef = React.useRef<Set<number>>(new Set());
     const [uncontrolledIndex, setUncontrolledIndex] = React.useState(() => initialIndex(items, defaultActiveIndex));
     const [reducedMotion, setReducedMotion] = React.useState(false);
@@ -217,7 +217,11 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
         const item = itemRefs.current[index];
         if (item) item.style.width = `${Math.max(0, frame.widths[index] ?? 0)}px`;
         const content = item?.querySelector<HTMLElement>("[data-vt-studio-split-accordion-content]");
-        if (content) content.dataset.labelVisible = frame.labelVisible[index] ? "true" : "false";
+        if (content) {
+          content.dataset.labelVisible = frame.labelVisible[index] ? "true" : "false";
+          const face = measure().face;
+          content.dataset.panelVisible = (frame.widths[index] ?? 0) > face + 0.5 ? "true" : "false";
+        }
       });
       const track = trackRef.current;
       if (track) {
@@ -404,6 +408,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
                     className="vt-studio-split-accordion__content"
                     data-vt-studio-split-accordion-content="true"
                     data-active={selected ? "true" : "false"}
+                    data-panel-visible={selected ? "true" : "false"}
                     role="tabpanel"
                     aria-hidden={!selected}
                   >
