@@ -262,7 +262,9 @@ html body [data-vt-studio-control="true"] textarea {
   -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   -webkit-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
 }
-/* Canonical token-driven editable field defaults: one rest rule and one focus rule. */
+
+
+/* Canonical token-driven editable field defaults: text and glyph stroke always match. */
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 textarea[data-vt-studio-control="true"],
 [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
