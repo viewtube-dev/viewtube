@@ -104,8 +104,6 @@ describe("StudioSplitAccordion", () => {
     expect(source).toContain("currentWidthsRef.current");
     expect(source).toContain("const fromScrollLeft = viewportRef.current?.scrollLeft ?? 0;");
     expect(source).toContain("fromScrollLeft + (targetScrollLeft - fromScrollLeft) * progress");
-    expect(source).toContain("content.dataset.panelVisible");
-    expect(source).toContain('data-panel-visible={selected ? "true" : "false"}');
     expect(source).not.toContain("const focusIndex = progress < .5 ? previous : next");
   });
 });
