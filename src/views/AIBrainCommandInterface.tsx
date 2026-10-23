@@ -533,7 +533,7 @@ export const BrainPromptLibrary: React.FC<{
     </div>
     <p className="px-1 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
-    <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="vt-studio-inter-host--bleed min-w-0">
+    <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="block w-full min-w-0 m-0 px-0">
      {groupedCards.map(([groupCategory, groupCards], groupIndex) => {
       const isOpen = openCategories.includes(groupCategory)
       return (
@@ -1806,8 +1806,9 @@ const AIBrainCommandInterface: React.FC = () => {
     collapsible={false}
     indicator="none"
     embedded
-    outerClassName="min-h-full max-xl:!h-full xl:h-full"
-    contentClassName="min-h-0 overflow-visible bg-[#f3f4f6] max-xl:!h-full max-xl:overflow-hidden xl:overflow-hidden"
+    fillAvailable
+    outerClassName="h-full min-h-0 max-xl:!h-full xl:h-full"
+    contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:!h-full max-xl:overflow-hidden xl:overflow-hidden"
    >
     {intakeOpen ? (
      <CreatorIntakeWizard
@@ -1817,7 +1818,7 @@ const AIBrainCommandInterface: React.FC = () => {
       onDefer={handleDeferIntake}
      />
     ) : (
-     <section className="relative flex min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
+     <section className="relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
       <div className="shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
