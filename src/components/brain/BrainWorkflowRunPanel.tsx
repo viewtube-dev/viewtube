@@ -147,9 +147,7 @@ export const BrainWorkflowRunPanel: React.FC<Props> = ({ recommendation, onStart
          </div>
          <div className="flex items-center gap-1">
           {approvalPending ? (
-           <button type="button" disabled={busy} onClick={() => setStepStatus(step.id, "active")} className="inline-flex items-center gap-1 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-2 py-1 text-[9px] font-black uppercase disabled:opacity-50">
-            <ShieldCheck size={12} /> Approve
-           </button>
+           <StudioButton type="button" sizeVariant="compact" tone="success" disabled={busy} onClick={() => setStepStatus(step.id, "active")} icon={<ShieldCheck size={12} aria-hidden="true" />}>Approve</StudioButton>
           ) : step.status === "active" ? (
            <>
             <StudioSquareIconButton sizeVariant="compact" tone="success" icon={<Check size={13} strokeWidth={4} aria-hidden="true" />} label={`Complete ${step.title}`} disabled={busy} onClick={() => setStepStatus(step.id, "complete")} />
