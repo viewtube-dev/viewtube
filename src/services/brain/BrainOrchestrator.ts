@@ -45,7 +45,8 @@ import { BRAIN_CONTEXT_RESOLVER_VERSION } from "./BrainContextResolution"
 import type { CanonicalIntelligenceEvidenceBundle } from "../analytics-canon"
 import { resolveEvidenceIntelligence, type EvidenceIntelligenceEnvelope } from "./EvidenceIntelligenceResolver"
 import { buildBrainEvidenceRecordQuality } from "./BrainEvidenceQuality"
-import { selectEvidenceRecordsForPrompt } from "./EvidenceRecord"
+import { selectEvidenceRecordsForPrompt, type EvidenceRecord } from "./EvidenceRecord"
+import { collectKnownNumbers, parseNumericToken } from "./numericClaims"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
 import { readBrainEngineControls } from "./BrainEngineControls"
 import { resolveCreatorContext } from "./CreatorContextResolver"
@@ -233,7 +234,7 @@ const sanitizeModuleData = (
 export const fromStructuredOutput = (
  output: StructuredBrainModelOutput,
  snapshot: AIBrainContextSnapshot,
- allowedEvidenceIds: string[] = [],
+ allowedEvidenceRecords: EvidenceRecord[] = [],
 ): CreatorBrainResponse => {
  const normalizeClaim = (value: string): string =>
   sanitizeCreatorFacingBrainCopy(value).trim().replace(/\s+/g, " ").toLowerCase()
@@ -248,7 +249,7 @@ export const fromStructuredOutput = (
   ...(output.actions || []).slice(0, 4).map(sanitizeCreatorFacingBrainCopy),
  ].join("\n")
  const normalizedResponseCorpus = normalizeClaim(responseClaimCorpus)
- const allowedEvidence = new Set(allowedEvidenceIds)
+ const allowedEvidence = new Map(allowedEvidenceRecords.map((record) => [record.id, record]))
  const claimEvidence = (output.claimEvidence || []).slice(0, 12).flatMap((item) => {
   const claim = sanitizeCreatorFacingBrainCopy(item?.claim || "").trim()
   const normalizedClaim = normalizeClaim(claim)
@@ -256,7 +257,24 @@ export const fromStructuredOutput = (
   const evidenceIds = Array.from(new Set((item.evidenceIds || []).filter(
    (id): id is string => typeof id === "string" && allowedEvidence.has(id),
   ))).slice(0, 8)
-  return evidenceIds.length ? [{ claim, evidenceIds }] : []
+  const numericTokens = claim.match(/\\d[\\d,]*(?:\\.\\d+)?\\s?[KkMmBb]?%?/g) || []
+  const numericClaims = numericTokens.map(parseNumericToken).filter((token) => token !== null)
+  if (!evidenceIds.length || !numericClaims.length) return []
+  const directlyMatchingIds = evidenceIds.filter((id) => {
+   const value = allowedEvidence.get(id)?.value
+   const knownValues = collectKnownNumbers(value)
+   return knownValues.size > 0 && numericClaims.some((token) =>
+    Array.from(knownValues).some((known) => Math.abs(known - token!.value) <= token!.tolerance),
+   )
+  })
+  const everyNumberMatches = numericClaims.every((token) =>
+   directlyMatchingIds.some((id) => {
+    const knownValues = collectKnownNumbers(allowedEvidence.get(id)?.value)
+    return Array.from(knownValues).some((known) => Math.abs(known - token!.value) <= token!.tolerance)
+   }),
+  )
+  if (!everyNumberMatches) return []
+  return [{ claim, evidenceIds: directlyMatchingIds, verification: "direct_value_match" as const }]
  })
  const allowedModes: CreatorBrainResponse["mode"][] = [
   "strategy_brief", "analytics_diagnosis", "seo_keyword_plan", "video_idea_sprint",
@@ -641,7 +659,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
     questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
    }
-   response = fromStructuredOutput(output, input.snapshot, renderedEvidenceRecords.map((record) => record.id))
+   response = fromStructuredOutput(output, input.snapshot, renderedEvidenceRecords)
    response = { ...response, modules: formatCreatorGrowthModules(response, input.growthContext, input.userText) }
    status = "complete"
    generationPath = "model"
@@ -677,7 +695,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
      modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
      questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
     }
-    const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot, renderedEvidenceRecords.map((record) => record.id))
+    const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot, renderedEvidenceRecords)
     const repairedCandidate = {
      ...repairedResponse,
      modules: formatCreatorGrowthModules(repairedResponse, input.growthContext, input.userText),
