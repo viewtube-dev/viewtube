@@ -34,7 +34,7 @@ This is a source audit only, not an executed test suite.
 ## Required before review/merge
 
 1. Run focused tests:
-   `npx vitest run src/views/AIBrainStudioChrome.contract.test.ts src/components/brain/BrainContextRail.contract.test.ts src/components/brain/BrainTurnEvidenceRibbon.test.tsx`
+   `npx vitest run src/studio-ui/primitives/StudioDisclosureSummary.contract.test.ts src/views/AIBrainStudioChrome.contract.test.ts src/components/brain/BrainContextRail.contract.test.ts src/components/brain/BrainTurnEvidenceRibbon.test.tsx src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.test.ts`
 2. Run `npm run typecheck` and `npm run build`.
 3. Run relevant Brain and Studio control regression suites; distinguish pre-existing repository failures from regressions on this branch.
 4. Capture and inspect the Brain page at ~390px mobile width and desktop width; verify badge labels, the three context actions, evidence disclosure, keyboard focus, and console output.
@@ -47,6 +47,6 @@ PR [#840](https://github.com/viewtube-dev/viewtube/pull/840) was created as a dr
 
 - Added the reusable `StudioDisclosureSummary` primitive with native `<summary>` semantics and a shared Studio stylesheet.
 - Replaced local hover/focus skins in the Brain context-used and data-readiness disclosures and in evidence selection-constraint and prompt-record disclosures.
-- Added source contract tests for the primitive and its Brain consumers.
+- Added source contract tests for the primitive and its Brain consumers; added standard/compact specimens to the Confirmed Primitive Library and a catalog regression assertion.
 - Fresh branch is based on the latest observed target tip `d5bad6583687b44592288cf182f9f84bf406db1d`; this is a targeted follow-up, not a rebase of the older merged branch.
 - Test runner, typecheck, build, browser, keyboard, mobile viewport, and screenshot checks have **not** been executed in this environment.
