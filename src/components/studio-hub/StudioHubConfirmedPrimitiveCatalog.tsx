@@ -452,8 +452,9 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (!React.isValidElement(node)) return "Controls"
   const props = node.props as { title?: unknown }
   const title = typeof props.title === "string" ? props.title : ""
+  const componentType = node.type as { displayName?: string; name?: string }
   const componentName = typeof node.type === "function"
-    ? (node.type.displayName || node.type.name || "")
+    ? (componentType.displayName || componentType.name || "")
     : ""
   if (/Studio Text Input|Studio Text Area|Studio Text Box/.test(title)) return "Text Fields"
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Split-left Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
