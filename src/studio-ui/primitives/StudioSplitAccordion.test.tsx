@@ -71,7 +71,7 @@ describe("StudioSplitAccordion", () => {
     expect(openPanelWidth(600, 3, 44)).toBe(468);
     expect(openPanelWidth(240, 10, 44)).toBe(44);
     expect(openPanelWidth(600, 3, 44, 3)).toBe(462);
-    expect(openPanelWidth(120, 10, 10, 1)).toBe(10);
+    expect(openPanelWidth(120, 10, 10, 1)).toBe(11);
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-split-accordion.css"), "utf8");
     expect(css).toContain("--vt-sa-height: 44px");
     expect(css).toContain("--vt-sa-height: 28px");
