@@ -161,3 +161,24 @@
   .vt-confirmed-primitive-body { padding: 4px; }
   .vt-confirmed-primitive-summary { padding-inline: 6px; }
 }
+
+.vt-confirmed-family-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-family-group {
+  min-width: 0;
+}
+.vt-confirmed-family-group > .vt-confirmed-family-module__top {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+.vt-confirmed-family-group > .vt-confirmed-family-module__body {
+  min-width: 0;
+}
