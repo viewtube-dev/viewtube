@@ -1,31 +1,41 @@
 import React from "react"
-import { StudioButton } from "../../studio-ui"
+import { StudioBrainStatusBadge, StudioButton } from "../../studio-ui"
 
 export type BrainChatStatus = "ready" | "loading" | "partial" | "warning" | "error" | "unavailable"
 
-const STATUS_LABELS: Record<BrainChatStatus, string> = {
-  ready: "Ready",
-  loading: "Working",
-  partial: "Partial",
-  warning: "Needs attention",
-  error: "Error",
-  unavailable: "Unavailable",
+const STATUS_PRESENTATION: Record<BrainChatStatus, { label: string; tone: "green" | "cyan" | "yellow" | "red" | "blue"; active: boolean }> = {
+  ready: { label: "Ready", tone: "green", active: false },
+  loading: { label: "Working", tone: "cyan", active: true },
+  partial: { label: "Partial", tone: "yellow", active: false },
+  warning: { label: "Needs attention", tone: "yellow", active: false },
+  error: { label: "Error", tone: "red", active: false },
+  unavailable: { label: "Unavailable", tone: "blue", active: false },
 }
 
-/** A truthful, compact status primitive. It never infers status from missing data. */
+/** Adds chat-specific state semantics while delegating visuals to the canonical Studio Brain status badge. */
 export const BrainChatStatusBadge: React.FC<{
   status: BrainChatStatus
   label?: string
   className?: string
-}> = ({ status, label, className = "" }) => (
-  <span
-    data-vt-studio-brain-primitive="ChatStatusBadge"
-    data-status={status}
-    className={`inline-flex min-h-6 max-w-full items-center border border-black px-1.5 text-[9px] font-black uppercase leading-4 [overflow-wrap:anywhere] ${className}`}
-  >
-    {label || STATUS_LABELS[status]}
-  </span>
-)
+}> = ({ status, label, className = "" }) => {
+  const presentation = STATUS_PRESENTATION[status]
+  return (
+    <span
+      data-vt-studio-brain-primitive="ChatStatusBadge"
+      data-status={status}
+      className={`inline-flex min-w-0 max-w-full [overflow-wrap:anywhere] ${className}`}
+    >
+      <StudioBrainStatusBadge
+        label={label || presentation.label}
+        tone={presentation.tone}
+        active={presentation.active}
+        appearance="tinted"
+        className="max-w-full"
+        aria-label={label || presentation.label}
+      />
+    </span>
+  )
+}
 
 export const BrainChatMessageShell: React.FC<{
   role: "user" | "assistant"
