@@ -347,6 +347,9 @@ const kpiButton =
 export const shouldSendBrainComposerKey = ({ key, isComposing, shiftKey = false }: { key: string; isComposing: boolean; shiftKey?: boolean }) =>
  key === "Enter" && !isComposing && !shiftKey
 
+export const shouldFollowBrainConversation = (scrollHeight: number, scrollTop: number, clientHeight: number, threshold = 72) =>
+ scrollHeight - scrollTop - clientHeight <= threshold
+
 const PROMPT_CARD_SUMMARIES: Record<string, string> = {
  "analyze-channel-niche": "Find your niche and fuzzy edges.",
  "niche-growth-ideas": "Choose adjacent topics that still fit.",
@@ -1773,7 +1776,7 @@ const AIBrainCommandInterface: React.FC = () => {
          ) : messages.length === 0 ? (
           <OpeningBriefing snapshot={snapshot} onPrompt={(prompt) => { void handleSend(prompt) }} />
          ) : (
-          <div ref={conversationViewportRef} onScroll={(event) => { const viewport = event.currentTarget; shouldFollowConversationRef.current = viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight <= 72 }} className="brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain overflow-y-auto" aria-label="Brain conversation" aria-live="polite" role="log" tabIndex={0}>
+          <div ref={conversationViewportRef} onScroll={(event) => { const viewport = event.currentTarget; shouldFollowConversationRef.current = shouldFollowBrainConversation(viewport.scrollHeight, viewport.scrollTop, viewport.clientHeight) }} className="brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain overflow-y-auto" aria-label="Brain conversation" aria-live="polite" role="log" tabIndex={0}>
            {messages.map((message) => message.role === "user" ? (
             <UserMessage key={message.id} text={message.text} />
            ) : (
