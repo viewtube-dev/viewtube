@@ -207,22 +207,30 @@ const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens
 )
 
 const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[] }> = ({ title, children, provenance, nonDefaultSettings = [] }) => (
-  <section className={`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`}>
-    <h3 title={title}>{title}</h3>
-    <div className="vt-confirmed-variants">{children}</div>
-    {(nonDefaultSettings.length > 0 || provenance) && (
-      <details className="vt-confirmed-source-details">
-        <summary>Settings + source</summary>
-        {nonDefaultSettings.length > 0 && (
-          <section className="vt-confirmed-nondefault-settings" aria-label={`${title} settings`}>
-            <strong>NON-DEFAULT SETTINGS</strong>
-            <ul>{nonDefaultSettings.map((setting) => <li key={setting}>{setting}</li>)}</ul>
-          </section>
-        )}
-        {provenance}
-      </details>
-    )}
-  </section>
+  <details
+    className={`vt-confirmed-family vt-confirmed-primitive-module ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`}
+    data-vt-confirmed-primitive="true"
+    data-vt-primitive-title={title}
+  >
+    <summary className="vt-confirmed-primitive-summary">
+      <h3 title={title}>{title}</h3>
+    </summary>
+    <div className="vt-confirmed-primitive-body">
+      <div className="vt-confirmed-variants">{children}</div>
+      {(nonDefaultSettings.length > 0 || provenance) && (
+        <details className="vt-confirmed-source-details">
+          <summary>Settings + source</summary>
+          {nonDefaultSettings.length > 0 && (
+            <section className="vt-confirmed-nondefault-settings" aria-label={`${title} settings`}>
+              <strong>NON-DEFAULT SETTINGS</strong>
+              <ul>{nonDefaultSettings.map((setting) => <li key={setting}>{setting}</li>)}</ul>
+            </section>
+          )}
+          {provenance}
+        </details>
+      )}
+    </div>
+  </details>
 )
 
 const ConfirmedStudioCounterFamily: React.FC = () => {
@@ -410,8 +418,8 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
-    <section className="vt-confirmed-family vt-confirmed-defaults-combined" aria-labelledby="vt-confirmed-global-defaults-title">
-      <h3 id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</h3>
+    <details className="vt-confirmed-family vt-confirmed-defaults-combined" data-vt-confirmed-family="defaults">
+      <summary className="vt-confirmed-defaults-heading" id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</summary>
       <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 12px micro · 4.09px / 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <p><a href="https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults, exception index, and certification rules ↗</a></p>
       <details className="vt-confirmed-defaults-details">
@@ -454,7 +462,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </ul>
       <p><strong>Audit status:</strong> this library records the canonical global defaults. A primitive is not certified until its production rendering, tokens, effective CSS, and responsive/accessibility behavior agree with this contract.</p>
       </details>
-    </section>
+    </details>
     <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Single-line input typography remains 38px standard / 24px compact / 10px micro across all label variants.",
         "Floating labels raise to 80% of the input font size; fixed label boxes match StudioLegendMultiDropdown.",
