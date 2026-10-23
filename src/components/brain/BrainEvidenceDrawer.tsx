@@ -106,7 +106,7 @@ export const BrainEvidenceDrawer: React.FC<{
       {confidenceText ? <EvidenceBadge label={confidenceText} tone="#C0F240" /> : null}
       <EvidenceBadge label={inference ? "inference" : "measured"} tone="#FFDA47" />
      </span>
-    </summary>
+    </StudioDisclosureSummary>
    )}
    <div
     className={`grid gap-3 ${
