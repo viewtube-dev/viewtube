@@ -189,6 +189,7 @@ describe("AIBrainCommandInterface", () => {
   // Cards remain selectable within their collapsed category module and preview before sending, not instant-send.
   expect(html).toContain('aria-pressed="false"')
   expect(html).toContain("Choose a prompt to preview and send it here.")
+  expect(html).toContain("brain-prompt-library-shell")
   expect(html).toContain("data-vt-brain-component=\"BrainPromptLibraryModule\"")
   expect(html).toContain("data-prompt-category=")
   expect(html).toContain("prompt-module-body")
