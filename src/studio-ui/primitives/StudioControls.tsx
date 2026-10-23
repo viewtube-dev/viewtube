@@ -83,7 +83,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
 
 /** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
 export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
-  splitSegmentRatio: "icon rails are square (1:1) to the selected size tier; labels center in the remaining text region against the outer perimeter bounds",
+  splitSegmentRatio: "icon rails are square (1:1) to the selected size tier; split-left, split-right, and double-split labels share the full component outer-border centerline regardless of rail placement",
   fixedRatioDefaults: {
     toggles: "1:1 square track/face geometry at the selected size tier; thumb is centered on its axis",
     switches: "1:1 square control footprint at the selected size tier; thumb and glyph are centered",
@@ -99,7 +99,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   globalSizeLattice: "supreme 60px / 4.09px border / 8.18px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
-  textContainment: "Global rule for all single-line text-bearing Studio primitives: labels stay within their assigned face/rail section; center against the outer border box; use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls or cross a split divider. Multiline textareas are excluded.",
+  textContainment: "Global rule for all single-line text-bearing Studio primitives: split-left, split-right, and double-split labels center against the full component outer border box, independent of rail placement; use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls. Multiline textareas are excluded.",
   buttonVariantContract: {
     v1: "primary fill / black text",
     v2: "secondary fill / black text",
