@@ -193,7 +193,6 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
         if (record.videoId) params.set("videoId", record.videoId)
         const channelId = record.channelId || evidencePack.channelId
         if (channelId) params.set("channelId", channelId)
-        const requestSpec = evidencePack.requestSpec && typeof evidencePack.requestSpec === "object" ? evidencePack.requestSpec : null
         if (requestSpec) {
          if (typeof requestSpec.count === "number") params.set("count", String(requestSpec.count))
          if (typeof requestSpec.since === "string" && requestSpec.since) params.set("since", requestSpec.since)
