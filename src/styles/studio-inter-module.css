@@ -210,3 +210,10 @@
   max-width: none;
   margin-inline: -8px;
 }
+
+/* Compact StudioTopSplitModule bodies have 6px inset rather than the standard 8px. */
+.vt-studio-top-split-module[data-size="compact"] > .vt-studio-top-split-module__body > .vt-studio-inter-host--bleed {
+  width: calc(100% + 12px);
+  max-width: none;
+  margin-inline: -6px;
+}
