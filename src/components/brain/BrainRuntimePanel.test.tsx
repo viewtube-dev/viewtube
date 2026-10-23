@@ -238,6 +238,41 @@ describe("BrainRuntimePanel", () => {
   expect(html).not.toContain('data-vt-brain-output-asset-id=')
  })
 
+ it("shows a recent-work tray with only receipt-verified Vault links", () => {
+  const chain = {
+   requestId: "request-tray-1",
+   requestedAt: "2026-10-22T10:00:00.000Z",
+   generationModel: "gemini-2.5-pro",
+   generationProvider: "google",
+   operationIdentityMismatch: false,
+   receiptId: "receipt-tray-1",
+   traceId: "trace-tray-1",
+   contentBuildId: "build-tray-1",
+   outputAssetIds: ["asset-tray-1"],
+   versionIds: [],
+   unresolved: [],
+  } as any
+  const html = renderToStaticMarkup(
+   <MemoryRouter>
+    <BrainRuntimePanel embedded snapshot={{
+     project: null,
+     build: { id: "build-tray-1", stage: "package", revision: 1, assetCount: 1, assetIds: ["asset-tray-1"], versionCount: 0, variantGroupCount: 0, relationCount: 0, selectedSlotCount: 0, eventCount: 1, youtubeStatus: null, blockerCount: 0 },
+     generation: { requestCount: 1, receiptCount: 1, latestRequest: null, latestReceipt: null },
+     brain: { capabilityCount: 1, traceCount: 1, latestTrace: null },
+     outcomes: { total: 0, accepted: 0, negative: 0, acceptanceRate: 0, completed: 0, corrected: 0, rejected: 0, abandoned: 0 },
+     provenance: { chainCount: 1, unresolvedChainCount: 0, attributedOutcomeChainCount: 0, evaluatedChainCount: 0, learningChainCount: 0, latestChain: chain, recentChains: [chain] },
+     lifecycle: { latestEventType: null, latestEventAt: null, publishEventCount: 0, analyticsCheckpointCount: 0, commentEventCount: 0, experimentEventCount: 0, learningEventCount: 0 },
+     metadataIntelligence: { metadataVersionCount: 0, comparisonCount: 0, readyComparisonCount: 0, learningCandidateCount: 0, promotedKnowledgeCount: 0, latestComparison: null },
+    } as any} />
+   </MemoryRouter>,
+  )
+  expect(html).toContain('data-vt-brain-part="recent-work-tray"')
+  expect(html).toContain("Recent work · 1")
+  expect(html).toContain("Output verified")
+  expect(html).toContain('data-vt-brain-work-request-id="request-tray-1"')
+  expect(html).toContain('href="/vault?assetId=asset-tray-1&amp;contentBuildId=build-tray-1"')
+ })
+
  it("supports the flat embedded composition used by the Brain Hub mobile surface", () => {
   const html = renderToStaticMarkup(
    <BrainRuntimePanel
