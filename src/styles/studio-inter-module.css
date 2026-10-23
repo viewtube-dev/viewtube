@@ -1,0 +1,158 @@
+/* StudioInterModule shares its host's exterior; only horizontal rules and internal dividers draw chrome. */
+[data-vt-studio-inter-host="true"] {
+  --vt-inter-host-pad-x: 0px;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.vt-studio-inter-module {
+  --vt-im-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-im-face: var(--vt-studio-control-height, 44px);
+  --vt-im-font: var(--vt-studio-control-font-size, 38px);
+  --vt-im-text-stroke: var(--vt-studio-control-text-stroke, 1px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #000;
+}
+
+.vt-studio-inter-module[data-size="compact"] {
+  --vt-im-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-im-face: var(--vt-studio-28-height, 28px);
+  --vt-im-font: var(--vt-studio-28-font-size, 24px);
+  --vt-im-text-stroke: var(--vt-studio-28-text-stroke, 0.5px);
+}
+
+.vt-studio-inter-module[data-size="micro"] {
+  --vt-im-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-im-face: var(--vt-studio-micro-height, 12px);
+  --vt-im-font: var(--vt-studio-micro-font-size, 10px);
+  --vt-im-text-stroke: var(--vt-studio-micro-text-stroke, 0.25px);
+}
+
+.vt-studio-inter-module[data-tone="accent"] {
+  --vt-studio-control-accent: var(--pair-b, #ff7f6b);
+  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
+}
+
+.vt-studio-inter-module__head {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: var(--vt-im-face) minmax(0, 1fr) var(--vt-im-face);
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--vt-im-face);
+  margin: 0;
+  border: 0;
+  border-bottom: var(--vt-im-stroke) solid #000;
+  border-radius: 0;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  color: #000;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--vt-studio-control-font-family, Inter, sans-serif);
+}
+
+[data-vt-studio-inter-host="true"] > .vt-studio-inter-module:first-child > .vt-studio-inter-module__head {
+  border-top: var(--vt-im-stroke) solid #000;
+}
+
+.vt-studio-inter-module__head[role="button"]:focus-visible {
+  outline: var(--vt-studio-control-focus-outline-width, 1.95px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+
+.vt-studio-inter-module__rail {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: var(--vt-im-face);
+  min-width: var(--vt-im-face);
+  min-height: var(--vt-im-face);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  font-size: var(--vt-im-font);
+  font-weight: 1000;
+  line-height: 1;
+  -webkit-text-stroke: 0;
+}
+
+.vt-studio-inter-module__rail[data-rail="start"] {
+  border-right: var(--vt-im-stroke) solid #000;
+}
+
+.vt-studio-inter-module__rail[data-rail="end"] {
+  border-left: var(--vt-im-stroke) solid #000;
+}
+
+.vt-studio-inter-module__rail > svg {
+  display: block;
+  width: calc(var(--vt-im-face) * .58);
+  height: calc(var(--vt-im-face) * .58);
+  stroke: currentColor;
+}
+
+.vt-studio-inter-module__title {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  font-family: var(--vt-studio-control-font-family, Inter, sans-serif);
+  font-size: var(--vt-im-font);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  -webkit-text-stroke: var(--vt-im-text-stroke) currentColor;
+}
+
+.vt-studio-inter-module__body {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 8px 0;
+  border: 0;
+  background: #fff;
+  color: #000;
+}
+
+.vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.vt-studio-inter-module__body > .vt-studio-inter-module:first-child > .vt-studio-inter-module__head {
+  border-top: 0;
+}
+
+.vt-studio-inter-module[data-open="false"] > .vt-studio-inter-module__body {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-inter-module *,
+  .vt-studio-inter-module *::before,
+  .vt-studio-inter-module *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
