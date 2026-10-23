@@ -1,4 +1,5 @@
 import React from "react"
+import "../../styles/studio-confirmed-catalog-modules.css"
 
 export interface ConfirmedModuleProps {
   title: string
