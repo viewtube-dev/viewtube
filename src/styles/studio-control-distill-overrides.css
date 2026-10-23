@@ -46,33 +46,6 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   line-height: 1;
 }
 
-/* Single-line face labels clip rather than displaying an ellipsis. */
-[data-vt-studio-control]:not(input):not(textarea):not(select) :is(
-  [data-vt-studio-button-face],
-  [data-vt-studio-action-face],
-  [data-vt-studio-split-label],
-  .vt-studio-value-toggle__face,
-  .vt-studio-legend-trigger-text,
-  .vt-studio-control-label
-),
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
-button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
-  min-width: 0;
-  max-width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: clip;
-  line-height: 1;
-}
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
-button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
-  padding-inline: 4px;
-}
-button[data-vt-studio-button="true"],
-button[data-vt-studio-action-button="true"] {
-  overflow: hidden;
-}
-
 /* Group width is determined by its square cells, not the parent row. */
 .vt-studio-square-icon-button-group {
   display: inline-flex;
@@ -136,25 +109,6 @@ button[data-vt-studio-action-button="true"] {
   pointer-events: none;
 }
 
-
-/* ===== Studio Controls contract pack (2026-10-23) ===== */
-/* Global clip, no ellipsis */
-[data-vt-studio-control]:not(input):not(textarea):not(select) :is(
-  [data-vt-studio-button-face],
-  [data-vt-studio-action-face],
-  [data-vt-studio-split-label],
-  .vt-studio-value-toggle__face,
-  .vt-studio-legend-trigger-text,
-  .vt-studio-control-label
-),
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
-button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: clip !important;
-  min-width: 0;
-  max-width: 100%;
-}
 
 /* Icon groups size to their content instead of stretching across the row. */
 .vt-studio-square-icon-button-group {
