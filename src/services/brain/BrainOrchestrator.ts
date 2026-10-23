@@ -236,7 +236,7 @@ export const fromStructuredOutput = (
  allowedEvidenceIds: string[] = [],
 ): CreatorBrainResponse => {
  const normalizeClaim = (value: string): string =>
-  sanitizeCreatorFacingBrainCopy(value).trim().replace(/\\s+/g, " ").toLowerCase()
+  sanitizeCreatorFacingBrainCopy(value).trim().replace(/\s+/g, " ").toLowerCase()
  const responseClaimCorpus = [
   sanitizeCreatorFacingBrainCopy(output.headline || ""),
   sanitizeCreatorFacingBrainCopy(output.keyInsight || ""),
@@ -246,7 +246,7 @@ export const fromStructuredOutput = (
    sanitizeCreatorFacingBrainCopy(module.body || "").slice(0, 360),
   ]),
   ...(output.actions || []).slice(0, 4).map(sanitizeCreatorFacingBrainCopy),
- ].join("\\n")
+ ].join("\n")
  const normalizedResponseCorpus = normalizeClaim(responseClaimCorpus)
  const allowedEvidence = new Set(allowedEvidenceIds)
  const claimEvidence = (output.claimEvidence || []).slice(0, 12).flatMap((item) => {
