@@ -288,12 +288,8 @@ html body [data-vt-studio-control="true"] textarea {
 }
 
 /* Text fields and textarea wrappers: black fill/stroke on focus, secondary outline. */
-html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
-html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
-html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible),
-html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
-html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible),
-html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible),
+/* Read-only text-box display copy may use black focus glyphs. Editable input and
+   textarea fields keep the primary inline glyph stroke from their own focus rules. */
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:is(:focus, :focus-visible) {
   color: #000 !important;

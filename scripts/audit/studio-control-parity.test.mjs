@@ -40,7 +40,14 @@ test("click growth animation targets the SVG glyph only", () => {
 test("input and textarea focus retain the primary inline glyph stroke", () => {
   assert.match(fields, /input\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
   assert.match(fields, /textarea\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
-  assert.doesNotMatch(fields, /-webkit-text-stroke-color:\s*#000\s*!important/);
+  // A read-only StudioTextBox has its own display-copy focus rule; do not
+  // confuse that rule with the editable input/textarea focus contract.
+  const editableFocusRules = fields
+    .split("}")
+    .filter((rule) => /(?:input|textarea)\[data-vt-studio-control="true"\]/.test(rule) && /:focus/.test(rule))
+    .join("}");
+  assert.ok(editableFocusRules.length > 0, "editable field focus rules must be present");
+  assert.doesNotMatch(editableFocusRules, /-webkit-text-stroke-color:\s*#000\s*!important/);
 });
 
 test("floating-label risen typography uses one shared token pair while rest labels retain field-size tokens", () => {
