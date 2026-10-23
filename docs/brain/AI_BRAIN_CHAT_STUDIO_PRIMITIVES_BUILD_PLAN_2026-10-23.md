@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-23  
 **Target base:** `master/consolidated-feature-integration`  
-**Status:** Implementation plan; this document is not evidence that the listed components have been built or browser-certified.  
+**Status:** Implementation plan with partial source updates recorded below; full acceptance and browser certification remain open.  
 **Primary authority:** [AI Brain Toolbox + Chat Overhaul](./AI_BRAIN_TOOLBOX_CHAT_REDESIGN_AND_IMPLEMENTATION_PLAN_2026-10-19.md)
 
 ## Outcome
@@ -118,3 +118,16 @@ The primitive/compound foundation is already present in the target branch; conti
 - Added tests for response-to-plan mapping, empty action lists, approval rejection/absence, approval success, and honest tracker labels.
 - Next: replace local-only progress with canonical workflow receipts and operation status, then certify keyboard, screen-reader, mobile viewport and virtual-keyboard behavior.
 - Test execution and accessibility certification remain pending CI/browser evidence; added tests are not evidence of passing tests.
+
+
+## Implementation update — StudioInterModule integration (2026-10-23)
+
+- [x] The AI Brain Prompt Library outer shell now uses the real `StudioInterModule` primitive, containing the existing search/filter controls and nested category → prompt modules.
+- [x] User posts render inside a non-collapsible compact `StudioInterModule` entry.
+- [x] Assistant responses, interrupted turns, and learning receipts render inside expanded-by-default compact `StudioInterModule` entries. Existing response modules, feedback, handoffs, evidence ribbons, context disclosure, retry actions, and learning receipt actions remain the behavior owners.
+- [x] Module header color pairs reference the existing `TOOLBOX_PALETTE`; no new color-token system was introduced.
+- [x] Extended `src/views/AIBrainRuntimeSurface.contract.test.ts` to require the intermodule integration in user entries, assistant entries, and the registry-backed prompt library.
+- [ ] Run the focused Vitest contract, Studio Controls tests, typecheck, production build, and browser checks on this exact branch head. Static source checks were performed, but these commands were not run in this environment.
+- [ ] Browser-certify module focus behavior, message expansion/collapse, nested prompt selection, mobile edge alignment, long-message wrapping, and composer/viewport geometry.
+
+This update records source changes only. It does not claim that the focused test, typecheck, build, or browser certification passed.
