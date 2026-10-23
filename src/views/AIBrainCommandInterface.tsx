@@ -73,7 +73,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
-import { BrainChatMessageShell, BrainResponseSectionHeader } from "../components/brain/BrainChatPrimitives"
+import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
@@ -516,27 +516,13 @@ export const BrainPromptLibrary: React.FC<{
      const isSelected = card.id === selectedId
      return (
       <li key={card.id}>
-       <button
-        type="button"
+       <BrainPromptLibraryItem
+        title={card.label}
+        description={promptCardSummary(card)}
+        selected={isSelected}
         disabled={busy}
-        aria-pressed={isSelected}
-        title={card.prompt}
-        onClick={() => setSelectedId(isSelected ? null : card.id)}
-        className={`group flex h-full min-h-11 w-full flex-col items-stretch overflow-hidden rounded-[8px] border-[2px] border-black bg-white text-left outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-50 ${isSelected ? "bg-[#FFDA47]" : "hover:bg-[#36E0F6]/20"}`}
-       >
-        <span
-         className="flex shrink-0 items-center justify-between gap-1 border-b-[2px] border-black px-2 py-2 text-xs font-[1000] uppercase leading-4"
-         style={{ backgroundColor: card.color }}
-        >
-         <span className="truncate">{card.label}</span>
-         {isSelected ? <Check size={12} className="shrink-0" aria-hidden="true" /> : null}
-        </span>
-        <span className="flex min-h-0 flex-1 items-center px-2 py-1.5">
-         <span className="line-clamp-2 block overflow-hidden text-xs font-bold leading-4 text-black/70">
-          {promptCardSummary(card)}
-         </span>
-        </span>
-       </button>
+        onSelect={() => setSelectedId(isSelected ? null : card.id)}
+       />
       </li>
      )
     })}
@@ -785,17 +771,16 @@ const CreatorResponseCard: React.FC<{
    </div>
    <div className="flex min-h-9 shrink-0 flex-wrap items-center gap-1 border-t-[2px] border-black bg-[#f8f8f4] px-3 py-1">
      <BrainFeedbackControls message={message} onFeedback={onFeedback} />
-     {handoffOptions.map((option) => (
-      <button
-       key={option.key}
-       type="button"
-       onClick={() => onReviewHandoff(message, option.key)}
-       title={`Queue a review-only handoff to ${option.label}`}
-       className="min-h-9 rounded-[6px] border-[2px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black"
-      >
-       {option.label}
-      </button>
-     ))}
+     <BrainChatActionButtonGroup
+      label="Review handoff actions"
+      className="min-w-0"
+      actions={handoffOptions.map((option) => ({
+       id: option.key,
+       label: option.label,
+       title: `Queue a review-only handoff to ${option.label}`,
+       onSelect: () => onReviewHandoff(message, option.key),
+      }))}
+     />
      <BrainContextUsedDrawer contextUsed={message.contextUsed} turnId={message.id} onCorrectItem={onCorrectContextItem} />
      {message.handoff ? (
       <Link
