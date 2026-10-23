@@ -1006,6 +1006,8 @@ const AIBrainCommandInterface: React.FC = () => {
  const promptCloseRef = useRef<HTMLButtonElement | null>(null)
  const contextCloseRef = useRef<HTMLButtonElement | null>(null)
  const bottomRef = useRef<HTMLDivElement | null>(null)
+ const conversationViewportRef = useRef<HTMLDivElement | null>(null)
+ const shouldFollowConversationRef = useRef(true)
  const askSeededRef = useRef(false)
  const canUseGemini = hasGeminiKey()
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
@@ -1180,8 +1182,9 @@ const AIBrainCommandInterface: React.FC = () => {
   )
  }, [busy, visibleTurns])
 
- // Keep the newest exchange in view as the thread grows.
+ // Keep the newest exchange in view only while the reader is following the conversation.
  useEffect(() => {
+  if (!shouldFollowConversationRef.current) return
   bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
  }, [messages.length, busy])
 
