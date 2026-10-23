@@ -104,7 +104,6 @@ html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type
 }
 
 
-/* Focus changes only the glyph stroke to black; keep the secondary outline. */
 /* Unified text-field focus transition: retain the secondary outline while blur fades it away. */
 [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
@@ -164,9 +163,6 @@ html body [data-vt-studio-control="true"] :is(input, textarea, select) {
 }
 
 
-/* Final shared field focus contract: every editable field uses black filled text.
-   Floating-label resting typography follows its own primitive family and size;
-   raised labels share one 18px rule across input/textarea and standard/compact. */
 .vt-studio-floating-field > textarea[data-size="standard"] + .vt-studio-floating-field-label {
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
   -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) currentColor;
