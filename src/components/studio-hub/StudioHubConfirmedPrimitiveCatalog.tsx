@@ -1032,7 +1032,7 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
             left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => setLeftValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Left side selection " + variant }}
             right={{ value: rightValues[index], options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: value => setRightValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Right side selection " + variant }} />)}
         </div>
-        <span>BAR TOGGLE · {level}%</span>
+        <span>BAR TOGGLE · {levelStd}%</span>
         <StudioBarToggle value={levelStd} onValueChange={setLevelStd} ariaLabel="Bar toggle specimen" />
         <span>COMPACT SPECIMENS</span>
         <div style={{ display: "grid", gap: 4 }}>
