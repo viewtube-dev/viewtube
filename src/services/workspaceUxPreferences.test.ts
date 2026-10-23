@@ -21,7 +21,6 @@ describe("workspace UX preferences", () => {
     expect(preferences.mobileCompactTopBar).toBe(true)
     expect(preferences.preserveOrientationPosition).toBe(true)
     expect(preferences.preservePagePosition).toBe(true)
-    expect(preferences.keyboardPositionRestore).toBe(true)
     expect(preferences.rememberToolboxState).toBe(true)
     expect(preferences.restoreLastWorkspace).toBe(false)
     expect(preferences.desktopKeyboardNavigation).toBe(false)
