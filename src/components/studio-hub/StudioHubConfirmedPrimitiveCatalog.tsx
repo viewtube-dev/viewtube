@@ -1031,6 +1031,7 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
         <span>DOUBLE SIDE TOGGLE · V1–V4</span>
         <div style={{ display: "grid", gap: 4 }}>
           {(["default", "v2", "v3", "v4"] as const).map((variant, index) => <StudioDoubleSideToggle key={variant} variant={variant}
+            size={index === 1 || index === 3 ? "compact" : "standard"}
             left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => setLeftValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Left side selection " + variant }}
             right={{ value: rightValues[index], options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: value => setRightValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Right side selection " + variant }} />)}
         </div>
