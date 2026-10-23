@@ -1,4 +1,5 @@
 import React from "react"
+import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
 import { MemoryRouter } from "react-router-dom"
@@ -218,4 +219,15 @@ describe("BrainTurnEvidenceRibbon", () => {
   expect(html).toContain("not counted as cited")
  })
 
+})
+
+
+describe("BrainTurnEvidenceRibbon Studio disclosure triggers", () => {
+ it("uses the shared Studio summary primitive for native disclosures", () => {
+  const source = readFileSync(new URL("./BrainTurnEvidenceRibbon.tsx", import.meta.url), "utf8")
+  expect(source).toContain("StudioDisclosureSummary")
+  expect(source).toContain('sizeVariant="standard"')
+  expect(source).not.toContain("focus-visible:outline-2")
+  expect(source).not.toContain("<summary className=")
+ })
 })
