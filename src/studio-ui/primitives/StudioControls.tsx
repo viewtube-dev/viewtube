@@ -1706,7 +1706,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
     }
   }, [open])
   const selectedLabels = options.filter(option => selected.includes(option.value)).map(option => option.label)
-  const triggerLabel = selectedLabels.length === 0 ? placeholder : selectedLabels.length === 1 ? selectedLabels[0] : `${selectedLabels[0]} +${selectedLabels.length - 1}`
+  const extra = selectedLabels.length - 1
   const menuAccessibleLabel = accessibleLabel ?? (typeof label === "string" || typeof label === "number" ? String(label) : "Filter options")
   return (
     <div
@@ -1733,7 +1733,20 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
           disabled={disabled}
           onClick={() => setOpen(current => !current)}
         >
-          <span className="vt-studio-legend-trigger-text">{triggerLabel}</span>
+          <span className="vt-studio-legend-trigger-text">
+            {selectedLabels.length === 0 ? (
+              placeholder
+            ) : (
+              <>
+                <span className="vt-studio-legend-trigger-label">{selectedLabels[0]}</span>
+                {extra > 0 ? (
+                  <span className="vt-studio-legend-count-badge" aria-label={`${extra} more selected`}>
+                    +{extra}
+                  </span>
+                ) : null}
+              </>
+            )}
+          </span>
           <svg className="vt-studio-legend-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
         </button>
       </div>

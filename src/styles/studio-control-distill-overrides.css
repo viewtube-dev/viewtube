@@ -136,3 +136,136 @@ button[data-vt-studio-action-button="true"] {
   transform: translateY(-50%);
   pointer-events: none;
 }
+
+
+/* ===== Studio Controls contract pack (2026-10-23) ===== */
+/* Global clip, no ellipsis */
+[data-vt-studio-control]:not(input):not(textarea):not(select) :is(
+  [data-vt-studio-button-face],
+  [data-vt-studio-action-face],
+  [data-vt-studio-split-label],
+  .vt-studio-value-toggle__face,
+  .vt-studio-legend-trigger-text,
+  .vt-studio-control-label
+),
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip !important;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Icon groups size to their content instead of stretching across the row. */
+.vt-studio-square-icon-button-group {
+  display: inline-flex;
+  width: max-content;
+  max-width: 100%;
+  flex: 0 0 auto;
+  align-self: flex-start;
+}
+
+/* Value toggles use the secondary focus outline without changing geometry. */
+.vt-studio-value-toggle:focus-within,
+.vt-studio-split-shell.vt-studio-value-toggle:focus-within,
+[data-vt-studio-value-toggle]:focus-within {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+.vt-studio-value-toggle__arrow:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: calc(var(--vt-studio-control-stroke, 3px) * -1);
+  z-index: 5;
+}
+
+/* Multiselect count is a compact black badge inside the trigger text. */
+.vt-studio-legend-trigger-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+.vt-studio-legend-trigger-label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+.vt-studio-legend-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 1.25em;
+  height: 1.15em;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: #000;
+  color: #fff;
+  font-size: 0.55em;
+  font-weight: 1000;
+  line-height: 1;
+  -webkit-text-stroke: 0;
+  letter-spacing: 0;
+}
+
+/* Bar track: size tokens, 50% primary empty bars, active bars black, no borders. */
+.vt-studio-value-toggle__bars {
+  --vt-bar-gap: 3px;
+  --vt-bar-width: 10px;
+  --vt-bar-height: 28px;
+  --vt-bar-radius: 2px;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--vt-bar-gap);
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0 6px;
+  box-sizing: border-box;
+}
+.vt-studio-value-toggle[data-size="standard"] .vt-studio-value-toggle__bars,
+.vt-studio-value-toggle:not([data-size]) .vt-studio-value-toggle__bars {
+  --vt-bar-gap: 3px;
+  --vt-bar-width: 10px;
+  --vt-bar-height: 28px;
+  --vt-bar-radius: 2px;
+}
+.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars {
+  --vt-bar-gap: 2px;
+  --vt-bar-width: 6px;
+  --vt-bar-height: 16px;
+  --vt-bar-radius: 1.5px;
+}
+.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars {
+  --vt-bar-gap: 1px;
+  --vt-bar-width: 3px;
+  --vt-bar-height: 8px;
+  --vt-bar-radius: 1px;
+}
+.vt-studio-value-toggle__bar,
+.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
+  display: block;
+  flex: 0 0 var(--vt-bar-width);
+  width: var(--vt-bar-width);
+  min-width: var(--vt-bar-width);
+  max-width: var(--vt-bar-width);
+  height: var(--vt-bar-height);
+  align-self: center;
+  border: 0 !important;
+  border-radius: var(--vt-bar-radius);
+  box-sizing: border-box;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
+}
+.vt-studio-value-toggle__bar[data-active="true"],
+.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
+  background: #000 !important;
+}

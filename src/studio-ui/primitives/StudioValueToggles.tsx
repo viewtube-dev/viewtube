@@ -131,12 +131,46 @@ export type StudioBarToggleProps = {
   holdDelayMs?: number;
   repeatIntervalMs?: number;
   className?: string;
+  /** Optional fixed bar count; default measures the available track width. */
+  barCount?: number;
 };
+
+/** Bar geometry must remain aligned with --vt-bar-* in studio-control-distill-overrides.css. */
+const BAR_METRICS: Record<string, { bar: number; gap: number; pad: number }> = {
+  standard: { bar: 10, gap: 3, pad: 12 },
+  compact: { bar: 6, gap: 2, pad: 8 },
+  micro: { bar: 3, gap: 1, pad: 4 },
+};
+
+function barCountFromWidth(widthPx: number, size: string): number {
+  const metrics = BAR_METRICS[size] ?? BAR_METRICS.standard;
+  const inner = Math.max(0, widthPx - metrics.pad);
+  const count = Math.floor((inner + metrics.gap) / (metrics.bar + metrics.gap));
+  return Math.max(4, Math.min(40, count || 4));
+}
 
 export function StudioBarToggle({
   value, onValueChange, disabled = false, size = "standard", appearance, ariaLabel = "Level",
-  holdDelayMs = 350, repeatIntervalMs = 100, className,
+  holdDelayMs = 350, repeatIntervalMs = 100, className, barCount: barCountProp,
 }: StudioBarToggleProps) {
+  const barsRef = useRef<HTMLDivElement | null>(null);
+  const [measuredCount, setMeasuredCount] = React.useState(10);
+  useEffect(() => {
+    if (barCountProp != null) return;
+    const element = barsRef.current;
+    if (!element || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(entries => {
+      const width = entries[0]?.contentRect.width ?? element.clientWidth;
+      setMeasuredCount(barCountFromWidth(width, size));
+    });
+    observer.observe(element);
+    setMeasuredCount(barCountFromWidth(element.clientWidth, size));
+    return () => observer.disconnect();
+  }, [size, barCountProp]);
+
+  const barCount = barCountProp ?? measuredCount;
+  const stepSize = 100 / barCount;
+  const filled = Math.max(0, Math.min(barCount, Math.round((Math.max(0, Math.min(100, value)) / 100) * barCount)));
   const repeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const repeatActive = useRef(false);
   const valueRef = useRef(value);
@@ -150,10 +184,11 @@ export function StudioBarToggle({
   const step = useCallback((direction: -1 | 1) => {
     if (disabled) return;
     const current = Math.max(0, Math.min(100, valueRef.current));
-    const next = Math.max(0, Math.min(100, Math.round(current / 10) * 10 + direction * 10));
+    const at = Math.round(current / stepSize) * stepSize;
+    const next = Math.max(0, Math.min(100, at + direction * stepSize));
     valueRef.current = next;
     onValueChange(next);
-  }, [disabled, onValueChange]);
+  }, [disabled, onValueChange, stepSize]);
   const startRepeat = (direction: -1 | 1) => {
     stopRepeat();
     step(direction);
@@ -164,7 +199,6 @@ export function StudioBarToggle({
       repeatTimer.current = setTimeout(repeat, repeatIntervalMs);
     }, holdDelayMs);
   };
-  const bars = Math.max(0, Math.min(10, Math.round(value / 10)));
   const onPointerDown = (direction: -1 | 1) => (event: React.PointerEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.currentTarget.setPointerCapture?.(event.pointerId);
@@ -182,10 +216,13 @@ export function StudioBarToggle({
   </button>;
   return <StudioSplitShell layout="double" sizeVariant={size}
     className={["vt-studio-value-toggle", "vt-studio-value-toggle--bar", className].filter(Boolean).join(" ")}
-    shellProps={{ "data-vt-studio-value-toggle": "bar", style: appearanceStyle(appearance) }}
+    shellProps={{ "data-vt-studio-value-toggle": "bar", "data-size": size, style: appearanceStyle(appearance) }}
     leftRailContent={decrease} rightRailContent={increase}>
-    <div className="vt-studio-value-toggle__bars" role="meter" aria-label={ariaLabel} aria-valuemin={0} aria-valuemax={100} aria-valuenow={bars * 10}>
-      {Array.from({ length: 10 }, (_, index) => <span key={index} className="vt-studio-value-toggle__bar" data-active={index < bars ? "true" : "false"} />)}
+    <div ref={barsRef} className="vt-studio-value-toggle__bars" role="meter" aria-label={ariaLabel}
+      aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round((filled / barCount) * 100)} data-bar-count={barCount}>
+      {Array.from({ length: barCount }, (_, index) => (
+        <span key={index} className="vt-studio-value-toggle__bar" data-active={index < filled ? "true" : "false"} />
+      ))}
     </div>
   </StudioSplitShell>;
 }
