@@ -115,6 +115,7 @@ describe("structured model output -> CreatorBrainResponse", () => {
  it("drops claim links with no verified prompt evidence IDs", () => {
   const snapshot = buildGoldenChannelFixture(restorationRichSpec).snapshot
   const output = baseOutput({
+   keyInsight: "Views reached 9,999.",
    claimEvidence: [{ claim: "Views reached 9,999.", evidenceIds: ["record-views"] }],
   } as Partial<StructuredBrainModelOutput>)
 
