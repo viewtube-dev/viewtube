@@ -805,7 +805,7 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
  return (
   <details data-vt-brain-component="BrainEvidenceReadiness" className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
    <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1.5 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
-    <BrainChatStatusBadge data-vt-brain-part="evidence-readiness-status" status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label="Data readiness" />
+    <span data-vt-brain-part="evidence-readiness-status"><BrainChatStatusBadge status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label="Data readiness" /></span>
     <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
    </summary>
    <div data-vt-brain-part="evidence-diagnostics" className="grid gap-2 border-t-[2px] border-black p-2.5">
