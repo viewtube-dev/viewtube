@@ -24,3 +24,27 @@ describe("buildBrainSparklineSegments", () => {
   ])
  })
 })
+
+
+import React from "react"
+import { renderToStaticMarkup } from "react-dom/server"
+import { BrainQuickActionCard } from "./BrainAnswerModules"
+
+describe("BrainQuickActionCard Studio contract", () => {
+ const action = { id: "action-1", title: "Improve the opening", body: "Make the viewer promise clear.", effort: 2, reward: 4, routeLabel: "Open plan" }
+
+ it("uses the shared Studio button for the compact card action", () => {
+  const html = renderToStaticMarkup(<BrainQuickActionCard action={action} compact onAccept={() => undefined} />)
+  expect(html).toContain('data-vt-studio-button="true"')
+  expect(html).toContain("Improve the opening")
+  expect(html).toContain("Make the viewer promise clear.")
+  expect(html).toContain("20 minutes")
+  expect(html).toContain("Strong payoff")
+ })
+
+ it("uses the shared Studio button for the full card action", () => {
+  const html = renderToStaticMarkup(<BrainQuickActionCard action={action} onAccept={() => undefined} />)
+  expect(html).toContain('data-vt-studio-button="true"')
+  expect(html).toContain("Open plan")
+ })
+})
