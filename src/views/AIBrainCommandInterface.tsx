@@ -21,7 +21,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
-import { StudioButton, StudioSplitLeftButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioCollapsingSplitModule, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
 import { StudioInterModule } from "../studio-ui/primitives/StudioInterModule"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
@@ -379,20 +379,10 @@ export const promptCardSummary = (card: CreatorBrainPromptCard): string =>
  PROMPT_CARD_SUMMARIES[card.id] || card.prompt
 
 /** Canonical 12-step Studio spectrum pair cycle for individual prompt modules. */
-const PROMPT_MODULE_COLOR_PAIRS = [
- ["#FF7F6B", "#36E0F6"], // Coral / Cyan
- ["#FFA85C", "#528FFA"], // Orange / Royal blue
- ["#FFDA47", "#A467F4"], // Yellow / Purple
- ["#C0F240", "#F55EFC"], // Lime / Magenta
- ["#3FEE56", "#FA618A"], // Green / Rose
- ["#4EE4BE", "#FF7AC8"], // Teal / Pink
- ["#36E0F6", "#FF7F6B"], // Cyan / Coral
- ["#528FFA", "#FFA85C"], // Royal blue / Orange
- ["#A467F4", "#FFDA47"], // Purple / Yellow
- ["#F55EFC", "#C0F240"], // Magenta / Lime
- ["#FA618A", "#3FEE56"], // Rose / Green
- ["#FF7AC8", "#4EE4BE"], // Pink / Teal
-] as const
+const PROMPT_MODULE_COLOR_PAIRS = Array.from({ length: 12 }, (_, index) => [
+ TOOLBOX_PALETTE[index],
+ TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length],
+] as const)
 
 export const filterCreatorBrainPromptCards = (
  cards: CreatorBrainPromptCard[],
@@ -506,7 +496,10 @@ export const BrainPromptLibrary: React.FC<{
    const key = card.category || "general"
    groups.set(key, [...(groups.get(key) || []), card])
   })
-  return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b))
+  const order = new Map(cards.map((card, index) => [card.id, index]))
+  return Array.from(groups.entries())
+   .map(([key, items]) => [key, [...items].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))] as const)
+   .sort(([, left], [, right]) => Math.min(...left.map((card) => order.get(card.id) ?? 0)) - Math.min(...right.map((card) => order.get(card.id) ?? 0)))
  }, [filteredCards])
 
  const setCategoryOpen = (groupCategory: string, nextOpen: boolean) => {
@@ -541,7 +534,7 @@ export const BrainPromptLibrary: React.FC<{
     <p className="px-1 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
     <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="vt-studio-inter-host--bleed min-w-0">
-     {groupedCards.map(([groupCategory, groupCards]) => {
+     {groupedCards.map(([groupCategory, groupCards], groupIndex) => {
       const isOpen = openCategories.includes(groupCategory)
       return (
        <StudioInterModule
@@ -551,57 +544,55 @@ export const BrainPromptLibrary: React.FC<{
         title={<><span>{groupCategory.replace(/_/g, " ")}</span><small>{groupCards.length}</small></>}
         startIcon={<LayoutGrid aria-hidden="true" />}
         sizeVariant="compact"
+        headStyle={{ background: PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length][0], "--vt-studio-control-accent": PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length][0], "--vt-studio-control-secondary": PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length][1] } as React.CSSProperties}
         open={isOpen}
         onOpenChange={(nextOpen) => setCategoryOpen(groupCategory, nextOpen)}
         aria-label={`${groupCategory.replace(/_/g, " ")} prompts, ${groupCards.length} items`}
        >
-        {groupCards.map((card) => {
+        {groupCards.map((card, promptIndex) => {
          const isSelected = card.id === selectedId
-         const promptIndex = cards.findIndex((item) => item.id === card.id)
-         const colorPair = PROMPT_MODULE_COLOR_PAIRS[Math.max(promptIndex, 0) % PROMPT_MODULE_COLOR_PAIRS.length]
+         const colorPair = PROMPT_MODULE_COLOR_PAIRS[promptIndex % PROMPT_MODULE_COLOR_PAIRS.length]
          return (
-          <StudioInterModule
+          <StudioCollapsingSplitModule
            key={card.id}
            data-vt-brain-part="prompt-collapsible-module"
            data-prompt-id={card.id}
            title={card.label}
            startIcon={<LayoutGrid aria-hidden="true" />}
+           split="left"
            sizeVariant="compact"
-           headStyle={{
-            background: colorPair[0],
-            "--vt-studio-control-accent": colorPair[0],
-            "--vt-studio-control-secondary": colorPair[1],
-           } as React.CSSProperties}
+           style={{ "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
            open={isSelected}
            onOpenChange={(nextOpen) => setSelectedId(nextOpen ? card.id : null)}
            aria-label={`${isSelected ? "Collapse" : "Expand"} ${card.label} prompt`}
-           data-flush-body="true"
           >
            <div className="grid min-w-0 gap-2 bg-white px-2 py-2">
             <p className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
             <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-2 gap-1">
-             <StudioSplitLeftButton
+             <StudioSplitTwoLineButton
               sizeVariant="compact"
               icon={<Send aria-hidden="true" />}
+              firstLine="SEND TO"
+              secondLine="CHAT"
               disabled={busy}
               className="min-w-0 w-full"
+              style={{ "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
               onClick={() => { onPrompt(card.prompt); setSelectedId(null) }}
-             >
-              SEND TO CHAT
-             </StudioSplitLeftButton>
+             />
              {onEdit ? (
-              <StudioSplitLeftButton
+              <StudioSplitTwoLineButton
                sizeVariant="compact"
                icon={<ArrowRight aria-hidden="true" />}
+               firstLine="EDIT"
+               secondLine="FIRST"
                className="min-w-0 w-full"
+               style={{ "--vt-studio-control-accent": colorPair[1], "--vt-studio-control-secondary": colorPair[0] } as React.CSSProperties}
                onClick={() => { onEdit(card.prompt); setSelectedId(null) }}
-              >
-               EDIT FIRST
-              </StudioSplitLeftButton>
+              />
              ) : null}
             </div>
            </div>
-          </StudioInterModule>
+          </StudioCollapsingSplitModule>
          )
         })}
        </StudioInterModule>
@@ -1806,7 +1797,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  return (
-  <main className="h-full min-h-0 overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black xl:overflow-hidden">
+  <main className="h-full min-h-0 overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black max-xl:h-[100dvh] max-xl:overflow-hidden xl:overflow-hidden">
    <Toolbox
     title="ViewTube Brain Hub"
     subtitle="One assistant for channel strategy, analytics, goals, content planning, SEO, and publishing."
@@ -1815,8 +1806,8 @@ const AIBrainCommandInterface: React.FC = () => {
     collapsible={false}
     indicator="none"
     embedded
-    outerClassName="min-h-full max-xl:!h-auto xl:h-full"
-    contentClassName="min-h-0 overflow-visible bg-[#f3f4f6] max-xl:!h-auto xl:overflow-hidden"
+    outerClassName="min-h-full max-xl:!h-full xl:h-full"
+    contentClassName="min-h-0 overflow-visible bg-[#f3f4f6] max-xl:!h-full max-xl:overflow-hidden xl:overflow-hidden"
    >
     {intakeOpen ? (
      <CreatorIntakeWizard
@@ -1826,14 +1817,14 @@ const AIBrainCommandInterface: React.FC = () => {
       onDefer={handleDeferIntake}
      />
     ) : (
-     <section className="relative flex min-h-0 flex-col max-xl:h-auto max-xl:overflow-visible xl:h-full xl:overflow-hidden">
+     <section className="relative flex min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
       <div className="shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
-      <div className="grid min-h-0 gap-3 bg-[#f3f4f6] max-xl:min-h-[70dvh] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:flex-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
+      <div className="grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
        <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
-      <div className={`${innerCard} flex min-h-0 flex-col overflow-hidden max-xl:min-h-[70dvh] max-xl:overflow-visible max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
-        <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] bg-white max-xl:min-h-[420px]">
+      <div className={`${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
+        <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] bg-white">
          <BrainContextStrip
           channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
           projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
