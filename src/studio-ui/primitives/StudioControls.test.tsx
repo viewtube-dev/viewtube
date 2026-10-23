@@ -1204,6 +1204,8 @@ describe("Studio field focus, floating labels, and toggle regressions", () => {
     expect(css).toContain("40%, #fff");
     expect(css).toContain('data-active="true"');
     expect(css).toContain("pointer-events: auto;");
+    expect(css).toContain(".vt-studio-value-toggle__bars {\n  display: flex;");
+    expect(css).toContain("flex: 1 1 auto;");
   });
 
   it("renders a single multi-select summary without a second numeric badge", () => {
