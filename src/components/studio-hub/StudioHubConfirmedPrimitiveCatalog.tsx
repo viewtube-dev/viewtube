@@ -72,8 +72,6 @@ const VERTICAL_WORD_TOGGLE_VARIANTS = [
 const CanonicalControlFamilies: React.FC = () => {
   const [switches, setSwitches] = React.useState<boolean[]>(Array(8).fill(false))
   const [choices, setChoices] = React.useState<boolean[]>(Array(12).fill(false))
-  const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
-  const [verticalWords, setVerticalWords] = React.useState<boolean[]>(Array(12).fill(false))
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
     <Family title="Switches, Radios & Checkboxes" nonDefaultSettings={[
@@ -94,54 +92,7 @@ const CanonicalControlFamilies: React.FC = () => {
         </div>
       </div>
     </Family>
-    <Family title="Word Toggles · Standard + Compact + Vertical" nonDefaultSettings={[
-        "Horizontal and vertical word toggles share this module; switches, radios, and checkboxes remain in their own control family.",
-        "Each toggle specimen remains independently interactive.",
-        "Vertical toggle width follows the longest word plus the original horizontal padding; height remains content-driven.",
-      ]} provenance={<Provenance primitive="StudioWordToggle / StudioVerticalWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px typography tiers; vertical toggle total height remains content-driven." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-    <div className="vt-confirmed-toggle-subfamily">
-      <strong>WORD TOGGLE · STANDARD + COMPACT</strong>
-      <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">
-        <div className="vt-confirmed-control-row">
-          <strong>WORD TOGGLE · STANDARD</strong>
-          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-standard" data-control-size="44">{WORD_TOGGLE_SKINS.map((skin,col) => <div key={skin.skin}><StudioWordToggle size="44" skin={skin.skin} value={words[col]} words={col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, col, value)} aria-label={"Standard word toggle variant " + (col + 1)} /></div>)}</div>
-        </div>
-        <div className="vt-confirmed-control-row">
-          <strong>WORD TOGGLE · COMPACT</strong>
-          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={"Compact word toggle variant " + (col + 1)} /></div> })}</div>
-        </div>
-      </div>
-    </div>
-    <div className="vt-confirmed-toggle-subfamily">
-      <strong>VERTICAL WORD TOGGLE · STANDARD + COMPACT + MICRO</strong>
-      <div className="vt-confirmed-vertical-word-toggle-family">
-        <div className="vt-confirmed-vertical-word-toggle-size-row">
-          <strong>STANDARD · SINGLE COLUMN</strong>
-          <div className="vt-confirmed-vertical-word-toggle-standard">
-            {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
-              <small>{item.label}</small>
-              <StudioVerticalWordToggle sizeVariant="standard" variant={item.variant} value={verticalWords[index]} onValueChange={value => flip(setVerticalWords, index, value)} words={index === 0 ? ["WRITE", "CREATE"] : ["OFF", "ON"]} aria-label={"Standard vertical word toggle " + item.label} />
-            </div>)}
-          </div>
-        </div>
-        <div className="vt-confirmed-vertical-word-toggle-size-row">
-          <strong>COMPACT · SINGLE COLUMN + MICRO MATRIX</strong>
-          <div className="vt-confirmed-vertical-word-toggle-compact">
-            {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
-              <small>{item.label}</small>
-              <StudioVerticalWordToggle sizeVariant="compact" variant={item.variant} value={verticalWords[4 + index]} onValueChange={value => flip(setVerticalWords, 4 + index, value)} words={index === 0 ? ["WRITE", "CREATE"] : ["OFF", "ON"]} aria-label={"Compact vertical word toggle " + item.label} />
-            </div>)}
-            <div className="vt-confirmed-vertical-word-toggle-micro" aria-label="Micro vertical word toggle variants">
-              {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
-                <small>{item.label}</small>
-                <StudioVerticalWordToggle sizeVariant="micro" variant={item.variant} value={verticalWords[8 + index]} onValueChange={value => flip(setVerticalWords, 8 + index, value)} words={["OFF", "ON"]} aria-label={"Micro vertical word toggle " + item.label} />
-              </div>)}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </Family>
+
     <Family
       title="Split-left Badge · Standard + Compact + Micro"
       nonDefaultSettings={[
@@ -197,6 +148,64 @@ const CanonicalControlFamilies: React.FC = () => {
   </>
 }
 
+
+const CanonicalWordToggleFamily: React.FC = () => {
+  const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
+  const [verticalWords, setVerticalWords] = React.useState<boolean[]>(Array(12).fill(false))
+  const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
+  return (
+    <>
+    <Family title="Word Toggles · Standard + Compact + Vertical" nonDefaultSettings={[
+        "Horizontal and vertical word toggles share this module; switches, radios, and checkboxes remain in their own control family.",
+        "Each toggle specimen remains independently interactive.",
+        "Vertical toggle width follows the longest word plus the original horizontal padding; height remains content-driven.",
+      ]} provenance={<Provenance primitive="StudioWordToggle / StudioVerticalWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px typography tiers; vertical toggle total height remains content-driven." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <div className="vt-confirmed-toggle-subfamily">
+      <strong>WORD TOGGLE · STANDARD + COMPACT</strong>
+      <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · STANDARD</strong>
+          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-standard" data-control-size="44">{WORD_TOGGLE_SKINS.map((skin,col) => <div key={skin.skin}><StudioWordToggle size="44" skin={skin.skin} value={words[col]} words={col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, col, value)} aria-label={"Standard word toggle variant " + (col + 1)} /></div>)}</div>
+        </div>
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · COMPACT</strong>
+          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={"Compact word toggle variant " + (col + 1)} /></div> })}</div>
+        </div>
+      </div>
+    </div>
+    <div className="vt-confirmed-toggle-subfamily">
+      <strong>VERTICAL WORD TOGGLE · STANDARD + COMPACT + MICRO</strong>
+      <div className="vt-confirmed-vertical-word-toggle-family">
+        <div className="vt-confirmed-vertical-word-toggle-size-row">
+          <strong>STANDARD · SINGLE COLUMN</strong>
+          <div className="vt-confirmed-vertical-word-toggle-standard">
+            {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
+              <small>{item.label}</small>
+              <StudioVerticalWordToggle sizeVariant="standard" variant={item.variant} value={verticalWords[index]} onValueChange={value => flip(setVerticalWords, index, value)} words={index === 0 ? ["WRITE", "CREATE"] : ["OFF", "ON"]} aria-label={"Standard vertical word toggle " + item.label} />
+            </div>)}
+          </div>
+        </div>
+        <div className="vt-confirmed-vertical-word-toggle-size-row">
+          <strong>COMPACT · SINGLE COLUMN + MICRO MATRIX</strong>
+          <div className="vt-confirmed-vertical-word-toggle-compact">
+            {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
+              <small>{item.label}</small>
+              <StudioVerticalWordToggle sizeVariant="compact" variant={item.variant} value={verticalWords[4 + index]} onValueChange={value => flip(setVerticalWords, 4 + index, value)} words={index === 0 ? ["WRITE", "CREATE"] : ["OFF", "ON"]} aria-label={"Compact vertical word toggle " + item.label} />
+            </div>)}
+            <div className="vt-confirmed-vertical-word-toggle-micro" aria-label="Micro vertical word toggle variants">
+              {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, index) => <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
+                <small>{item.label}</small>
+                <StudioVerticalWordToggle sizeVariant="micro" variant={item.variant} value={verticalWords[8 + index]} onValueChange={value => flip(setVerticalWords, 8 + index, value)} words={["OFF", "ON"]} aria-label={"Micro vertical word toggle " + item.label} />
+              </div>)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </Family>
+    </>
+  )
+}
 
 const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens: string; imports: string[] }> = ({ primitive, tsx, css, tokens, imports }) => (
   <div className="vt-confirmed-provenance">
@@ -445,7 +454,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Top Split Module|Upload Frame/.test(title)) return "Modules & Frames"
   if (/Dropdown/.test(title)) return "Dropdowns"
   if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily") return "Controls"
-  if (/Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily") return "Text Controls"
+  if (/Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
   if (/Split Accordion/.test(title)) return "Compounds"
   if (/Publishing Card|Brain Status LED Badges/.test(title)) return "Compositions"
   return "Controls"
@@ -570,6 +579,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <div className="vt-confirmed-variant is-full-row"><span>MICRO · 10PX</span><StudioTextBox size="micro" aria-label="Studio text box micro" data-vt-library-component="StudioTextBox">Micro display text.</StudioTextBox></div>
     </Family>
     <CanonicalControlFamilies />
+    <CanonicalWordToggleFamily />
     <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
     <ConfirmedStudioButtonFamily />
 
