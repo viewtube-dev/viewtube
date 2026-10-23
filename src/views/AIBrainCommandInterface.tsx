@@ -1803,7 +1803,7 @@ const AIBrainCommandInterface: React.FC = () => {
              onCorrectContextItem={handleCorrectContextItem}
             />
            ))}
-          </div>
+          </ChatConversationViewport>
          )}
         </div>
 
