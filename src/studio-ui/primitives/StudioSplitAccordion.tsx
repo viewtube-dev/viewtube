@@ -76,6 +76,8 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     const idPrefix = React.useId().replace(/:/g, "");
     const rafRef = React.useRef<number | null>(null);
     const openRef = React.useRef(0);
+    // Keep the last rendered frame so interrupted transitions continue from the visible geometry.
+    const currentWidthsRef = React.useRef<number[]>([]);
     const [uncontrolledIndex, setUncontrolledIndex] = React.useState(() => initialIndex(items, defaultActiveIndex));
     const [reducedMotion, setReducedMotion] = React.useState(false);
     const controlled = activeIndex !== undefined;
@@ -108,6 +110,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     }, []);
 
     const applyFrame = React.useCallback((frame: FrameState) => {
+      currentWidthsRef.current = [...frame.widths];
       items.forEach((_, index) => {
         const item = itemRefs.current[index];
         if (item) item.style.width = `${Math.max(0, frame.widths[index] ?? 0)}px`;
@@ -149,8 +152,14 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
       const { face, inner } = measure();
       const count = items.length;
       const panel = openPanelWidth(inner, count, face);
-      const fromWidths = items.map((_, i) => face + (i === previous ? panel : 0));
+      const canonicalFromWidths = items.map((_, i) => face + (i === previous ? panel : 0));
+      const savedWidths = currentWidthsRef.current;
+      const fromWidths = savedWidths.length === count
+        ? savedWidths.map((width) => Math.max(0, width))
+        : canonicalFromWidths;
       const toWidths = items.map((_, i) => face + (i === next ? panel : 0));
+      const fromScrollLeft = viewportRef.current?.scrollLeft ?? 0;
+      const targetScrollLeft = layoutForOpen(next).scrollLeft;
       const delays = items.map(() => 0);
       const moving = items.map((_, i) => i).filter((i) => Math.abs(toWidths[i] - fromWidths[i]) > .5);
       const shrinking = moving.filter((i) => toWidths[i] < fromWidths[i]).sort((a, b) => a - b);
@@ -181,12 +190,11 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
           const t = Math.max(0, Math.min(1, (elapsed - delays[i]) / duration));
           return fromWidths[i] + (toWidths[i] - fromWidths[i]) * easeTrain(t);
         });
-        const totalWidth = widths.reduce((sum, width) => sum + width, 0);
         const progress = easeTrain(Math.min(1, elapsed / totalDuration));
-        const focusIndex = progress < .5 ? previous : next;
-        const center = widths.slice(0, focusIndex).reduce((sum, width) => sum + width, 0) + (widths[focusIndex] ?? face) / 2;
-        const scrollLeft = totalWidth <= inner ? 0 : Math.max(0, Math.min(totalWidth - inner, center - inner / 2));
-        applyFrame({ widths, scrollLeft, labelVisible: items.map((_, i) => i === previous || i === next) });
+        // Interpolate the viewport independently; switching the anchor at 50% caused a visible scroll snap.
+        const scrollLeft = fromScrollLeft + (targetScrollLeft - fromScrollLeft) * progress;
+        const labelVisible = items.map((_, i) => i === next || fromWidths[i] > face + 1);
+        applyFrame({ widths, scrollLeft, labelVisible });
         if (elapsed < totalDuration) rafRef.current = requestAnimationFrame(tick);
         else {
           rafRef.current = null;
