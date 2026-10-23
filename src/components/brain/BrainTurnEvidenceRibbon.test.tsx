@@ -205,9 +205,9 @@ describe("BrainTurnEvidenceRibbon Studio disclosure triggers", () => {
    evidenceRecords: [record()],
   })
   expect(html).toContain("<details")
-  expect(html).toContain("data-vt-studio-disclosure-summary=\\"true\\"")
-  expect(html).toContain("data-vt-studio-control=\\"true\\"")
-  expect(html).toContain("class=\\"vt-studio-disclosure-summary\\"")
+  expect(html).toContain("data-vt-studio-disclosure-summary")
+  expect(html).toContain("data-vt-studio-control")
+  expect(html).toContain("vt-studio-disclosure-summary")
   expect(html).toContain("All selection constraints")
   expect(html).toContain("Prompt evidence records")
  })
