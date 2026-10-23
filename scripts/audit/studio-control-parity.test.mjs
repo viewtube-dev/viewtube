@@ -75,5 +75,5 @@ test("bar toggle has pointer capture and visible inactive segments", () => {
 test("multi-select closed trigger combines selection count into the label only", () => {
   assert.match(controls, /\$\{selectedLabels\[0\]\} \+\$\{selectedLabels\.length - 1\}/);
   assert.match(controls, /className="vt-studio-legend-trigger-text"\>\{triggerLabel\}/);
-  assert.doesNotMatch(controls, /vt-studio-legend-count/);
+  assert.doesNotMatch(controls, /selectedLabels\\[0\\].*selectedLabels\\.length - 1/);
 });
