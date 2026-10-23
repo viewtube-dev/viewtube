@@ -100,7 +100,7 @@ export const BrainEvidenceDrawer: React.FC<{
      <Info size={13} aria-hidden="true" />
      <span>{summaryLabel}</span>
      {sourceCount ? <EvidenceBadge label={String(sourceCount)} tone="#36E0F6" /> : null}
-    </StudioDisclosureSummary>
+    </summary>
    ) : (
     <summary className="flex min-h-11 cursor-pointer list-none items-center border-b-[2px] border-black bg-[#f8f8f4] px-3 py-2 hover:bg-[#FFDA47] focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
      <span className="flex flex-wrap items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.08em]">
@@ -110,7 +110,7 @@ export const BrainEvidenceDrawer: React.FC<{
       {confidenceText ? <EvidenceBadge label={confidenceText} tone="#C0F240" /> : null}
       <EvidenceBadge label={inference ? "inference" : "measured"} tone="#FFDA47" />
      </span>
-    </StudioDisclosureSummary>
+    </summary>
    )}
    <div
     className={`grid gap-3 ${
