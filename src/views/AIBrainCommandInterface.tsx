@@ -1827,9 +1827,27 @@ const AIBrainCommandInterface: React.FC = () => {
         <BrainComposerShell>
          <div className="mx-auto w-full max-w-[880px]">
           <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1.5 xl:hidden">
-           <div className="grid w-full grid-cols-2 gap-1">
-           <StudioSplitLeftButton ref={promptLauncherRef} sizeVariant="compact" icon={<LayoutGrid aria-hidden="true" />} onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="min-w-0 whitespace-normal [overflow-wrap:normal] text-[10px] xl:hidden" style={{ backgroundColor: "#FF7AC8" }}>Prompt Library</StudioSplitLeftButton>
-           <StudioSplitLeftButton ref={contextLauncherRef} sizeVariant="compact" icon={<PanelRight aria-hidden="true" />} onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="min-w-0 whitespace-normal [overflow-wrap:normal] text-[10px] xl:hidden" style={{ backgroundColor: "#3FEE56" }}>Channel Context</StudioSplitLeftButton>
+           <div data-vt-brain-part="composer-launchers" className="grid w-full min-w-0 grid-cols-2 gap-1">
+            <StudioSplitLeftButton
+             ref={promptLauncherRef}
+             sizeVariant="compact"
+             icon={<LayoutGrid aria-hidden="true" />}
+             onClick={() => setPromptRailOpen(true)}
+             aria-label="Open prompt library"
+             aria-haspopup="dialog"
+             className="min-w-0 whitespace-normal break-words text-[10px] leading-tight xl:hidden [&_*]:min-w-0 [&_*]:whitespace-normal"
+             style={{ backgroundColor: "#FF7AC8" }}
+            >Prompt Library</StudioSplitLeftButton>
+            <StudioSplitLeftButton
+             ref={contextLauncherRef}
+             sizeVariant="compact"
+             icon={<PanelRight aria-hidden="true" />}
+             onClick={() => setContextRailOpen(true)}
+             aria-label="Open channel context"
+             aria-haspopup="dialog"
+             className="min-w-0 whitespace-normal break-words text-[10px] leading-tight xl:hidden [&_*]:min-w-0 [&_*]:whitespace-normal"
+             style={{ backgroundColor: "#3FEE56" }}
+            >Channel Context</StudioSplitLeftButton>
            </div>
           </BrainComposerAccessoryRow>
           <div data-vt-brain-part="composer-controls" className="flex min-w-0 items-stretch gap-1">
@@ -1854,12 +1872,12 @@ const AIBrainCommandInterface: React.FC = () => {
              void handleSend()
             }}
             placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-            className="max-h-36 min-h-[56px] min-w-0 flex-1 resize-y"
-            style={{ minHeight: 56 }}
+            className="max-h-36 min-h-[52px] min-w-0 flex-1 resize-y"
+            style={{ minHeight: 52 }}
             aria-label="Ask ViewTube Brain"
             aria-describedby="brain-composer-help"
            />
-           <StudioSplitLeftButton data-vt-brain-component="BrainComposerSendAction" sizeVariant="compact" icon={busy ? <Zap aria-hidden="true" className="animate-pulse" /> : <Send aria-hidden="true" />} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} onClick={() => void handleSend()} className="shrink-0">SEND</StudioSplitLeftButton>
+           <StudioSplitLeftButton data-vt-brain-component="BrainComposerSendAction" sizeVariant="compact" icon={busy ? <Zap aria-hidden="true" className="animate-pulse" /> : <Send aria-hidden="true" />} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} onClick={() => void handleSend()} className="shrink-0 min-w-[3.5rem]">SEND</StudioSplitLeftButton>
           </div>
          </div>
         </BrainComposerShell>
