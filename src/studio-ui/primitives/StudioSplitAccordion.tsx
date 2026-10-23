@@ -1,8 +1,24 @@
 import React from "react";
+
 import "../../styles/studio-split-accordion.css";
 
 export type StudioSplitAccordionLayout = "left" | "right" | "double";
+
 export type StudioSplitAccordionSize = "standard" | "compact" | "micro";
+
+/** Visual treatments ported from the navigation library (see studio-split-accordion.css). */
+export type StudioSplitAccordionVariant =
+  | "saturated"
+  | "inset"
+  | "black"
+  | "reversed"
+  | "glow"
+  | "soft"
+  | "blackInset"
+  | "tinted";
+
+/** Colour of the borders, dividers, gaps and the rail itself. */
+export type StudioSplitAccordionBorderTone = "black" | "white" | "transparent";
 
 export interface StudioSplitAccordionItem {
   id?: string;
@@ -19,12 +35,16 @@ export interface StudioSplitAccordionProps extends Omit<React.HTMLAttributes<HTM
   sizeVariant?: StudioSplitAccordionSize;
   /** Retained for API compatibility; the train is horizontal for every value. */
   layout?: StudioSplitAccordionLayout;
+  /** Fill, inset-line, outline and glow treatment. Defaults to "saturated". */
+  variant?: StudioSplitAccordionVariant;
+  /** Border / divider / gap colour. Defaults to "black". */
+  borderTone?: StudioSplitAccordionBorderTone;
   activeIndex?: number;
   defaultActiveIndex?: number;
   onActiveIndexChange?: (index: number) => void;
   disabled?: boolean;
   accessibleLabel?: string;
-  /** Duration of each train segment in milliseconds. Defaults to 1000ms. */
+  /** Duration of each icon's trip in milliseconds. Defaults to 1000ms. */
   motionDurationMs?: number;
 }
 
@@ -38,7 +58,7 @@ function initialIndex(items: readonly StudioSplitAccordionItem[], requested?: nu
   return -1;
 }
 
-/** buildTri easing: 1 - (1 - t^1.8)^4 */
+/** Train easing: 1 - (1 - t^1.8)^4. Slow start, fast middle, long drift. */
 export function easeTrain(t: number): number {
   const x = Math.max(0, Math.min(1, t));
   return 1 - Math.pow(1 - Math.pow(x, 1.8), 4);
@@ -63,14 +83,90 @@ export function openPanelWidth(innerWidth: number, itemCount: number, face: numb
   return Math.max(face, innerWidth - itemCount * face - dividerWidth);
 }
 
+/** Left edge of every icon for a given set of item widths (items are separated by `stroke`). */
+export function iconPositions(widths: readonly number[], stroke: number): number[] {
+  let cursor = 0;
+  return widths.map((width) => {
+    const x = cursor;
+    cursor += width + stroke;
+    return x;
+  });
+}
+
+export interface TrainPlan {
+  fromX: number[];
+  toX: number[];
+  /** Per-icon departure delay in ms. */
+  delays: number[];
+  /** Delay of the last follower plus one trip. */
+  totalDuration: number;
+}
+
+/**
+ * Compounding departure. Every icon that has to travel gets its own trip. The leader (the icon at the front of
+ * the direction of travel) leaves first; the next one leaves once the leader has gone about 2 icons, the next
+ * once the second has gone about 1 icon, then 1/2, 1/4 ... so the rest end up nearly connected.
+ * Icons moving left are led by the left-most mover; icons moving right by the right-most mover.
+ */
+export function planTrain(
+  fromWidths: readonly number[],
+  toWidths: readonly number[],
+  face: number,
+  stroke: number,
+  durationMs: number,
+): TrainPlan {
+  const fromX = iconPositions(fromWidths, stroke);
+  const toX = iconPositions(toWidths, stroke);
+  const delays = fromX.map(() => 0);
+  const moving = fromX.map((_, i) => i).filter((i) => Math.abs(toX[i] - fromX[i]) > 0.5);
+  const leftward = moving.filter((i) => toX[i] < fromX[i]).sort((a, b) => a - b);
+  const rightward = moving.filter((i) => toX[i] > fromX[i]).sort((a, b) => b - a);
+  [leftward, rightward].forEach((group) => {
+    if (!group.length) return;
+    const leadDistance = Math.abs(toX[group[0]] - fromX[group[0]]);
+    let cumulative = 0;
+    group.forEach((index, order) => {
+      if (order > 0) {
+        const relativeStep = Math.min(0.95, (2 * face * Math.pow(0.5, order - 1)) / Math.max(1, leadDistance));
+        cumulative += easeTrainInverse(relativeStep) * durationMs;
+      }
+      delays[index] = cumulative;
+    });
+  });
+  return { fromX, toX, delays, totalDuration: Math.max(...delays, 0) + Math.max(1, durationMs) };
+}
+
+/** Item widths at `elapsed` ms. Each width is the distance from its icon to the next icon, so gaps open as icons leave. */
+export function trainWidthsAt(
+  plan: TrainPlan,
+  elapsed: number,
+  durationMs: number,
+  face: number,
+  stroke: number,
+  trackWidth: number,
+): number[] {
+  const duration = Math.max(1, durationMs);
+  const x = plan.fromX.map((from, i) => {
+    const t = Math.max(0, Math.min(1, (elapsed - plan.delays[i]) / duration));
+    return from + (plan.toX[i] - from) * easeTrain(t);
+  });
+  return x.map((position, i) => {
+    const edge = i < x.length - 1 ? x[i + 1] - stroke : trackWidth;
+    return Math.max(face, edge - position);
+  });
+}
+
 type FrameState = { widths: number[]; scrollLeft: number; labelVisible: boolean[] };
 
 export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplitAccordionProps>(
-  ({
-    items, sizeVariant = "standard", layout = "left", activeIndex, defaultActiveIndex,
-    onActiveIndexChange, disabled = false, accessibleLabel = "Split accordion",
-    motionDurationMs = 1000, className, onKeyDown, ...props
-  }, forwardedRef) => {
+  (
+    {
+      items, sizeVariant = "standard", layout = "left", variant = "saturated", borderTone = "black",
+      activeIndex, defaultActiveIndex, onActiveIndexChange, disabled = false,
+      accessibleLabel = "Split accordion", motionDurationMs = 1000, className, onKeyDown, ...props
+    },
+    forwardedRef,
+  ) => {
     const rootRef = React.useRef<HTMLDivElement | null>(null);
     const viewportRef = React.useRef<HTMLDivElement | null>(null);
     const trackRef = React.useRef<HTMLDivElement | null>(null);
@@ -80,8 +176,11 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     const openRef = React.useRef(0);
     // Keep the last rendered frame so interrupted transitions continue from the visible geometry.
     const currentWidthsRef = React.useRef<number[]>([]);
+    // Panels that are allowed to show their coloured label. Everything else in transit is open space.
+    const labelSetRef = React.useRef<Set<number>>(new Set());
     const [uncontrolledIndex, setUncontrolledIndex] = React.useState(() => initialIndex(items, defaultActiveIndex));
     const [reducedMotion, setReducedMotion] = React.useState(false);
+
     const controlled = activeIndex !== undefined;
     const openIndex = controlled
       ? (items[activeIndex as number] && !items[activeIndex as number].disabled ? activeIndex as number : initialIndex(items))
@@ -104,11 +203,12 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
 
     const measure = React.useCallback(() => {
       const root = rootRef.current;
-      if (!root) return { face: 44, inner: 0 };
+      if (!root) return { face: 44, inner: 0, stroke: 0 };
       const styles = window.getComputedStyle(root);
       const face = parseFloat(styles.getPropertyValue("--vt-sa-face")) || 44;
+      const stroke = parseFloat(styles.getPropertyValue("--vt-sa-stroke")) || 0;
       // clientWidth excludes the shell border; do not subtract the border a second time.
-      return { face, inner: Math.max(0, root.clientWidth) };
+      return { face, inner: Math.max(0, root.clientWidth), stroke };
     }, []);
 
     const applyFrame = React.useCallback((frame: FrameState) => {
@@ -121,20 +221,17 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
       });
       const track = trackRef.current;
       if (track) {
-        const styles = rootRef.current ? window.getComputedStyle(rootRef.current) : null;
-        const stroke = parseFloat(styles?.getPropertyValue("--vt-sa-stroke") ?? "") || 0;
+        const { stroke } = measure();
         track.style.width = `${frame.widths.reduce((sum, width) => sum + width, 0) + Math.max(0, frame.widths.length - 1) * stroke}px`;
       }
       const viewport = viewportRef.current;
       if (viewport) viewport.scrollLeft = frame.scrollLeft;
-    }, [items]);
+    }, [items, measure]);
 
     const layoutForOpen = React.useCallback((index: number): FrameState => {
-      const { face, inner } = measure();
+      const { face, inner, stroke } = measure();
       const count = items.length;
       if (count === 0) return { widths: [], scrollLeft: 0, labelVisible: [] };
-      const styles = rootRef.current ? window.getComputedStyle(rootRef.current) : null;
-      const stroke = parseFloat(styles?.getPropertyValue("--vt-sa-stroke") ?? "") || 0;
       const panel = openPanelWidth(inner, count, face, stroke);
       const widths = items.map((_, i) => face + (i === index ? panel : 0));
       const total = widths.reduce((sum, width) => sum + width, 0) + Math.max(0, count - 1) * stroke;
@@ -146,7 +243,9 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     const snap = React.useCallback((index: number) => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
-      applyFrame(layoutForOpen(index));
+      const frame = layoutForOpen(index);
+      labelSetRef.current = new Set(frame.labelVisible.flatMap((visible, i) => (visible ? [i] : [])));
+      applyFrame(frame);
     }, [applyFrame, layoutForOpen]);
 
     const animateTo = React.useCallback((next: number) => {
@@ -157,58 +256,36 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
 
-      const { face, inner } = measure();
+      const { face, inner, stroke } = measure();
       const count = items.length;
-      const styles = rootRef.current ? window.getComputedStyle(rootRef.current) : null;
-      const stroke = parseFloat(styles?.getPropertyValue("--vt-sa-stroke") ?? "") || 0;
       const panel = openPanelWidth(inner, count, face, stroke);
       const canonicalFromWidths = items.map((_, i) => face + (i === previous ? panel : 0));
       const savedWidths = currentWidthsRef.current;
       const fromWidths = savedWidths.length === count
-        ? savedWidths.map((width) => Math.max(0, width))
+        ? savedWidths.map((width) => Math.max(face, width))
         : canonicalFromWidths;
       const toWidths = items.map((_, i) => face + (i === next ? panel : 0));
+      const trackWidth = toWidths.reduce((sum, width) => sum + width, 0) + Math.max(0, count - 1) * stroke;
+      const plan = planTrain(fromWidths, toWidths, face, stroke, motionDurationMs);
       const fromScrollLeft = viewportRef.current?.scrollLeft ?? 0;
       const targetScrollLeft = layoutForOpen(next).scrollLeft;
-      const delays = items.map(() => 0);
-      const moving = items.map((_, i) => i).filter((i) => Math.abs(toWidths[i] - fromWidths[i]) > .5);
-      const shrinking = moving.filter((i) => toWidths[i] < fromWidths[i]).sort((a, b) => a - b);
-      const growing = moving.filter((i) => toWidths[i] > fromWidths[i]).sort((a, b) => b - a);
-
-      const addStagger = (group: number[]) => {
-        if (!group.length) return;
-        const leadDistance = Math.abs(toWidths[group[0]] - fromWidths[group[0]]);
-        let cumulativeDelay = 0;
-        group.forEach((index, order) => {
-          if (order > 0) {
-            const relativeStep = Math.min(.95, (2 * face * Math.pow(.5, order - 1)) / Math.max(1, leadDistance));
-            cumulativeDelay += easeTrainInverse(relativeStep) * motionDurationMs;
-          }
-          delays[index] = cumulativeDelay;
-        });
-      };
-      addStagger(shrinking);
-      addStagger(growing);
-
-      const duration = Math.max(1, motionDurationMs);
-      const totalDuration = Math.max(...delays, 0) + duration;
+      const shown = new Set<number>(labelSetRef.current);
+      shown.add(previous);
+      shown.add(next);
+      labelSetRef.current = shown;
       const start = performance.now();
 
       const tick = (now: number) => {
         const elapsed = now - start;
-        const widths = items.map((_, i) => {
-          const t = Math.max(0, Math.min(1, (elapsed - delays[i]) / duration));
-          return fromWidths[i] + (toWidths[i] - fromWidths[i]) * easeTrain(t);
-        });
-        const progress = easeTrain(Math.min(1, elapsed / totalDuration));
+        const widths = trainWidthsAt(plan, elapsed, motionDurationMs, face, stroke, trackWidth);
+        const progress = easeTrain(Math.min(1, elapsed / plan.totalDuration));
         // Interpolate the viewport independently; switching the anchor at 50% caused a visible scroll snap.
         const scrollLeft = fromScrollLeft + (targetScrollLeft - fromScrollLeft) * progress;
-        const labelVisible = items.map((_, i) => i === next || fromWidths[i] > face + 1);
-        applyFrame({ widths, scrollLeft, labelVisible });
-        if (elapsed < totalDuration) rafRef.current = requestAnimationFrame(tick);
+        applyFrame({ widths, scrollLeft, labelVisible: items.map((_, i) => shown.has(i)) });
+        if (elapsed < plan.totalDuration) rafRef.current = requestAnimationFrame(tick);
         else {
           rafRef.current = null;
-          applyFrame(layoutForOpen(next));
+          snap(next);
         }
       };
       rafRef.current = requestAnimationFrame(tick);
@@ -228,7 +305,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
       snap(target);
       // Only reset on structural changes; selection changes are animated below.
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [items.length, sizeVariant]);
+    }, [items.length, sizeVariant, variant]);
 
     React.useEffect(() => {
       const root = rootRef.current;
@@ -285,6 +362,8 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
         data-vt-library-component="StudioSplitAccordion"
         data-size={sizeVariant}
         data-layout={layout}
+        data-variant={variant}
+        data-border={borderTone}
         data-active-index={openIndex}
         data-section-count={items.length}
         onKeyDown={handleKeyDown}
@@ -319,17 +398,19 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
                   >
                     <span className="vt-studio-split-accordion__face" aria-hidden="true">{item.icon}</span>
                   </button>
+                  {/* data-label-visible is written by applyFrame, not by React, so a click never flashes it. */}
                   <div
                     id={panelId}
                     className="vt-studio-split-accordion__content"
                     data-vt-studio-split-accordion-content="true"
                     data-active={selected ? "true" : "false"}
-                    data-label-visible={selected ? "true" : "false"}
                     role="tabpanel"
                     aria-hidden={!selected}
                   >
-                    <div className="vt-studio-split-accordion__content-inner">{item.content}</div>
-                    {item.trailing ? <div className="vt-studio-split-accordion__trailing">{item.trailing}</div> : null}
+                    <div className="vt-studio-split-accordion__panel">
+                      <div className="vt-studio-split-accordion__content-inner">{item.content}</div>
+                      {item.trailing ? <div className="vt-studio-split-accordion__trailing">{item.trailing}</div> : null}
+                    </div>
                   </div>
                 </div>
               );
@@ -340,5 +421,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     );
   },
 );
+
 StudioSplitAccordion.displayName = "StudioSplitAccordion";
+
 export default StudioSplitAccordion;
