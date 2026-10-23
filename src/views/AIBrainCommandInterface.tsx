@@ -634,9 +634,9 @@ const BrainLearningReceiptCard: React.FC<{
     <div><dt className="inline font-black uppercase">Receipt ID · </dt><dd className="break-all font-mono">{receipt.entryId}</dd></div>
    </dl>
    {!dismissed ? (
-    <div className="flex flex-wrap gap-2">
-     <button type="button" onClick={() => onCorrect(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">Correct</button>
-     <button type="button" onClick={() => onReject(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FF7497] px-3 py-2 text-[10px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Reject</button>
+    <div className="flex flex-wrap gap-1">
+     <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={() => onCorrect(message)}>Correct</StudioButton>
+     <StudioButton sizeVariant="compact" type="button" onClick={() => onReject(message)}>Reject</StudioButton>
     </div>
    ) : <p role="status" className="text-xs font-bold">This learning entry was rejected and will not be promoted.</p>}
   </section>
@@ -677,13 +677,11 @@ const CreatorResponseCard: React.FC<{
        <p role="status" className="text-xs font-bold leading-5 text-black/70">The channel data has changed since this attempt. Choose whether to keep the original evidence or refresh it for the retry.</p>
       ) : null}
       <div className="flex flex-wrap gap-2">
-       <button data-vt-brain-part="retry-response-action" type="button" onClick={() => onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
+       <StudioSplitLeftButton data-vt-brain-part="retry-response-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, false)}>
         {message.contextMayBeStale ? "Retry with saved evidence" : "Retry this response"}
-       </button>
+       </StudioSplitLeftButton>
        {message.contextMayBeStale ? (
-        <button data-vt-brain-part="retry-refresh-evidence-action" type="button" onClick={() => onRetry(message, true)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
-         Refresh evidence & retry
-        </button>
+        <StudioSplitLeftButton data-vt-brain-part="retry-refresh-evidence-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, true)}>Refresh evidence & retry</StudioSplitLeftButton>
        ) : null}
       </div>
      </div>
