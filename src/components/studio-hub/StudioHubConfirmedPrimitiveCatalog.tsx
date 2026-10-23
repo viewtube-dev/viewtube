@@ -1030,10 +1030,11 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         ))}
       </div>
     </Family>
-    <Family title="Disclosure Summary · Standard + Compact" nonDefaultSettings={["Native details/summary semantics.", "Shared Studio pair, size tiers, and visible keyboard focus.", "No nested interactive controls, shell movement, or shadow."]} provenance={<Provenance primitive="StudioDisclosureSummary" tsx="src/studio-ui/primitives/StudioDisclosureSummary.tsx" css="src/styles/studio-disclosure-summary.css" tokens="44px standard / 28px compact" imports={["src/studio-ui/primitives/StudioDisclosureSummary.tsx", "src/styles/studio-disclosure-summary.css"]} />}>
+    <Family title="Disclosure Summary · Standard + Compact" nonDefaultSettings={["Native details/summary semantics.", "Shared Studio pair, standard/compact sizing, structured response headers, and visible keyboard focus.", "No nested interactive controls, shell movement, or shadow."]} provenance={<Provenance primitive="StudioDisclosureSummary" tsx="src/studio-ui/primitives/StudioDisclosureSummary.tsx" css="src/styles/studio-disclosure-summary.css" tokens="44px standard / 28px compact" imports={["src/studio-ui/primitives/StudioDisclosureSummary.tsx", "src/styles/studio-disclosure-summary.css"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDisclosureSummary" style={{ display: "grid", gap: 8 }}>
         <details><StudioDisclosureSummary sizeVariant="standard">Standard disclosure</StudioDisclosureSummary><p className="p-2 text-xs font-bold">Native disclosure content.</p></details>
         <details open><StudioDisclosureSummary sizeVariant="compact">Compact disclosure</StudioDisclosureSummary><p className="p-2 text-xs font-bold">The same native disclosure in compact size.</p></details>
+        <details open><StudioDisclosureSummary appearanceVariant="structured" className="grid-cols-[34px_minmax(0,1fr)_auto_28px] items-stretch" style={{ backgroundColor: "var(--pair-a, #36e0f6)" }}><span className="grid place-items-center border-r-[2px] border-black bg-white"><Info aria-hidden="true" size={14} /></span><strong className="self-center px-2 text-[10px] uppercase">Structured answer header</strong><span className="grid place-items-center border-l-[2px] border-black bg-white/30">⌄</span></StudioDisclosureSummary><p className="p-2 text-xs font-bold">Structured response layout with the native disclosure trigger.</p></details>
       </div>
     </Family>
     <Family
