@@ -62,7 +62,7 @@ export const BrainUserControlPanel: React.FC<{
  }
 
  return (
-  <div className="absolute inset-0 z-30 flex flex-col bg-white" aria-label="Brain user controls">
+  <section className="absolute inset-0 z-30 flex flex-col bg-white" role="region" aria-label="Brain user controls">
    <header className="flex items-center justify-between border-b-[3px] border-black bg-[#FFDA47] px-3 py-2">
     <div className="min-w-0">
      <div className="flex items-center gap-2 text-[11px] font-[1000] uppercase"><ShieldCheck size={16} />Brain User Controls</div>
@@ -92,7 +92,7 @@ export const BrainUserControlPanel: React.FC<{
     <StudioButton type="button" sizeVariant="compact" tone="neutral" onClick={reset}>{channelId ? "Use global defaults" : "Reset defaults"}</StudioButton>
     <StudioButton type="button" sizeVariant="compact" tone="success" icon={<Settings2 size={12} aria-hidden="true" />} onClick={onClose}>Done</StudioButton>
    </footer>
-  </div>
+  </section>
  )
 }
 
