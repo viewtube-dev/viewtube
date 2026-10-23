@@ -67,7 +67,8 @@ test("double-side divider is centered and the confirmed catalog mixes compact an
 });
 
 test("bar toggle uses adaptive width counts, proportional fill, and size-specific borderless bars", () => {
-  assert.match(toggles, /barCountFromWidth\(widthPx, size\)/);
+  assert.match(toggles, /function barCountFromWidth\(widthPx, size: string\)/);
+  assert.match(toggles, /barCountFromWidth\(width, size\)/);
   assert.match(toggles, /Math\.floor\(\(inner \+ metrics\.gap\) \/ \(metrics\.bar \+ metrics\.gap\)\)/);
   assert.match(toggles, /Math\.max\(4, Math\.min\(40, count \|\| 4\)\)/);
   assert.match(toggles, /Math\.round\(\(Math\.max\(0, Math\.min\(100, value\)\) \/ 100\) \* barCount\)/);
