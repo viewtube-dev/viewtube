@@ -86,7 +86,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     const setRootRef = React.useCallback((node: HTMLDivElement | null) => {
       rootRef.current = node;
       if (typeof forwardedRef === "function") forwardedRef(node);
-      else if (forwardedRef) forwardedRef.current = node;
+      else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
     }, [forwardedRef]);
 
     React.useEffect(() => {
@@ -225,8 +225,8 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     React.useEffect(() => {
       if (controlled && activeIndex !== undefined && activeIndex !== openRef.current) {
         const validIndex = items[activeIndex] && !items[activeIndex].disabled ? activeIndex : initialIndex(items);
-        openRef.current = validIndex;
         animateTo(validIndex);
+        openRef.current = validIndex;
       }
     }, [activeIndex, animateTo, controlled, items]);
 
