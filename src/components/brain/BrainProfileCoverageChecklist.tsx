@@ -2,6 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 import { buildBrainProfileCoverageItems } from "../../services/brain/profileCoverage"
+import { StudioButton } from "../../studio-ui"
 
 export const BrainProfileCoverageChecklist: React.FC<{
  snapshot: AIBrainContextSnapshot
@@ -25,9 +26,9 @@ export const BrainProfileCoverageChecklist: React.FC<{
         {item.actionLabel}
        </Link>
       ) : (
-       <button type="button" onClick={() => item.actionPrompt && onPrompt(item.actionPrompt)} className="min-h-9 rounded-[5px] border-[2px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
+       <StudioButton type="button" sizeVariant="compact" tone="neutral" onClick={() => item.actionPrompt && onPrompt(item.actionPrompt)}>
         {item.actionLabel}
-       </button>
+       </StudioButton>
       ) : null}
      </li>
     ))}
