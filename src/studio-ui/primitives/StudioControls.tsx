@@ -1517,7 +1517,7 @@ StudioSquareIconButtonGroup.displayName = "StudioSquareIconButtonGroup"
 export type StudioTopSplitModuleSplit = "left" | "right" | "double" | "none"
 export type StudioTopSplitModuleSize = "standard" | "compact"
 
-export interface StudioTopSplitModuleProps extends React.HTMLAttributes<HTMLElement> {
+export interface StudioTopSplitModuleProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
   title: React.ReactNode
   children?: React.ReactNode
   split?: StudioTopSplitModuleSplit
