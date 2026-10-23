@@ -283,7 +283,7 @@ describe("BrainRuntimePanel", () => {
      generation: { requestCount: 0, receiptCount: 0, latestRequest: null, latestReceipt: null },
      brain: { capabilityCount: 14, traceCount: 0, latestTrace: null },
      outcomes: { total: 0, accepted: 0, negative: 0, acceptanceRate: 0, completed: 0, corrected: 0, rejected: 0, abandoned: 0 },
-     provenance: { chainCount: 0, unresolvedChainCount: 0, attributedOutcomeChainCount: 0, evaluatedChainCount: 0, learningChainCount: 0, latestChain: null },
+     provenance: { chainCount: 0, unresolvedChainCount: 0, attributedOutcomeChainCount: 0, evaluatedChainCount: 0, learningChainCount: 0, latestChain: null, recentChains: [] },
      lifecycle: { latestEventType: null, latestEventAt: null, publishEventCount: 0, analyticsCheckpointCount: 0, commentEventCount: 0, experimentEventCount: 0, learningEventCount: 0 },
      metadataIntelligence: { metadataVersionCount: 0, comparisonCount: 0, readyComparisonCount: 0, learningCandidateCount: 0, promotedKnowledgeCount: 0, latestComparison: null },
     }}
