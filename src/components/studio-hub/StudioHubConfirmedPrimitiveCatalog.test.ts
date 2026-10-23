@@ -113,5 +113,6 @@ describe("confirmed Studio disclosure summary primitive", () => {
     expect(catalog).toContain("StudioDisclosureSummary")
     expect(catalog).toContain('title="Disclosure Summary · Standard + Compact"')
     expect(catalog).toContain('data-vt-library-component="StudioDisclosureSummary"')
+    expect(catalog).toContain('appearanceVariant="structured"')
   })
 })
