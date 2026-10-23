@@ -69,4 +69,27 @@ describe("Brain Studio chat primitives", () => {
     expect(screen.getByText("Evidence provenance")).toBeInTheDocument()
   })
 
+
+  it("provides a named composer shell with safe-area padding and child content", () => {
+    render(<BrainComposerShell><button type="button">Send prompt</button></BrainComposerShell>)
+    const composer = screen.getByRole("contentinfo", { name: "Brain composer" })
+    expect(composer).toHaveAttribute("data-vt-brain-component", "BrainComposer")
+    expect(composer.className).toContain("env(safe-area-inset-bottom)")
+    expect(screen.getByRole("button", { name: "Send prompt" })).toBeInTheDocument()
+  })
+
+  it("provides one labelled conversation log and keeps the bottom sentinel inside it", () => {
+    const viewportRef = React.createRef<HTMLDivElement>()
+    const bottomRef = React.createRef<HTMLDivElement>()
+    render(
+      <ChatConversationViewport viewportRef={viewportRef} bottomRef={bottomRef}>
+        <p>Newest turn</p>
+      </ChatConversationViewport>,
+    )
+    const log = screen.getByRole("log", { name: "Brain conversation" })
+    expect(log).toContainElement(bottomRef.current)
+    expect(log).toContainElement(screen.getByText("Newest turn"))
+    expect(viewportRef.current).toBe(log)
+  })
+
 })
