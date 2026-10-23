@@ -233,7 +233,31 @@ const sanitizeModuleData = (
 export const fromStructuredOutput = (
  output: StructuredBrainModelOutput,
  snapshot: AIBrainContextSnapshot,
+ allowedEvidenceIds: string[] = [],
 ): CreatorBrainResponse => {
+ const normalizeClaim = (value: string): string =>
+  sanitizeCreatorFacingBrainCopy(value).trim().replace(/\\s+/g, " ").toLowerCase()
+ const responseClaimCorpus = [
+  sanitizeCreatorFacingBrainCopy(output.headline || ""),
+  sanitizeCreatorFacingBrainCopy(output.keyInsight || ""),
+  sanitizeCreatorFacingBrainCopy(output.body || "").slice(0, 1200),
+  ...(output.modules || []).slice(0, 4).flatMap((module) => [
+   sanitizeCreatorFacingBrainCopy(module.title || ""),
+   sanitizeCreatorFacingBrainCopy(module.body || "").slice(0, 360),
+  ]),
+  ...(output.actions || []).slice(0, 4).map(sanitizeCreatorFacingBrainCopy),
+ ].join("\\n")
+ const normalizedResponseCorpus = normalizeClaim(responseClaimCorpus)
+ const allowedEvidence = new Set(allowedEvidenceIds)
+ const claimEvidence = (output.claimEvidence || []).slice(0, 12).flatMap((item) => {
+  const claim = sanitizeCreatorFacingBrainCopy(item?.claim || "").trim()
+  const normalizedClaim = normalizeClaim(claim)
+  if (!claim || claim.length > 320 || !normalizedClaim || !normalizedResponseCorpus.includes(normalizedClaim)) return []
+  const evidenceIds = Array.from(new Set((item.evidenceIds || []).filter(
+   (id): id is string => typeof id === "string" && allowedEvidence.has(id),
+  ))).slice(0, 8)
+  return evidenceIds.length ? [{ claim, evidenceIds }] : []
+ })
  const allowedModes: CreatorBrainResponse["mode"][] = [
   "strategy_brief", "analytics_diagnosis", "seo_keyword_plan", "video_idea_sprint",
   "journal_reflection", "goal_coach", "publishing_checklist", "revenue_levers", "creator_asset_draft", "audience_insight",
@@ -260,6 +284,7 @@ export const fromStructuredOutput = (
   mode,
   body: sanitizeCreatorFacingBrainCopy(output.body).slice(0, 1200),
   evidenceIds: snapshot.evidencePack.evidenceIds.slice(0, 10),
+  ...(claimEvidence.length ? { claimEvidence } : {}),
   headline: sanitizeCreatorFacingBrainCopy(output.headline),
   keyInsight: sanitizeCreatorFacingBrainCopy(output.keyInsight),
   evidenceChips: [],
@@ -616,7 +641,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
     questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
    }
-   response = fromStructuredOutput(output, input.snapshot)
+   response = fromStructuredOutput(output, input.snapshot, renderedEvidenceRecords.map((record) => record.id))
    response = { ...response, modules: formatCreatorGrowthModules(response, input.growthContext, input.userText) }
    status = "complete"
    generationPath = "model"
@@ -652,7 +677,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
      modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
      questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
     }
-    const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot)
+    const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot, renderedEvidenceRecords.map((record) => record.id))
     const repairedCandidate = {
      ...repairedResponse,
      modules: formatCreatorGrowthModules(repairedResponse, input.growthContext, input.userText),
