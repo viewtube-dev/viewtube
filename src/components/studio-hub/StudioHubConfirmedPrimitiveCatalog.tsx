@@ -1,7 +1,7 @@
 import React from "react"
 import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
 import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
-import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
+import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
@@ -1091,31 +1091,16 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioSideCounterFamily />
     <Family
-      title="Split Accordion · Standard + Compact + Micro"
+      title="Split Accordion · Train Motion"
       nonDefaultSettings={[
-        "Independent primitive; it does not import or wrap the retired split-rail accordion.",
-        "Horizontal single-open panels with square icon faces and left, right, or double split layouts.",
-        "Defaults to the rightmost enabled item; supports keyboard navigation and a 280ms preview lock.",
-        "Flat Studio Control geometry and reduced-motion styling.",
+        "Independent single-open accordion with square secondary-color icon rails and primary-color content panels.",
+        "Uses buildTri-style staggered width animation with 1000ms segment duration and reduced-motion snapping.",
+        "Catalog rows are independently controlled: standard 3 / 4 / 5 / 10, compact 5 / 10, and micro 5 / 10 sections.",
+        "Labels clip without ellipsis; train motion is implemented in the primitive rather than a uniform CSS flex transition.",
       ]}
-      provenance={<Provenance primitive="StudioSplitAccordion" tsx="src/studio-ui/primitives/StudioSplitAccordion.tsx" css="src/styles/studio-split-accordion.css" tokens="44px / 28px / 12px · square faces · 280ms panel tween · left/right/double layouts" imports={["src/studio-ui/primitives/StudioSplitAccordion.tsx", "src/styles/studio-split-accordion.css"]} />}
+      provenance={<Provenance primitive="StudioSplitAccordion" tsx="src/studio-ui/primitives/StudioSplitAccordion.tsx" css="src/styles/studio-split-accordion.css" tokens="44px / 28px / 12px · secondary icon rails · primary content panels · buildTri staggered train" imports={["src/studio-ui/primitives/StudioSplitAccordion.tsx", "src/styles/studio-split-accordion.css", "src/components/studio-hub/StudioSplitAccordionCatalogSpecimens.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion">
-        {(["standard", "compact", "micro"] as const).map((size) => (
-          <div key={size} style={{ display: "grid", gap: 4, marginBlock: 4 }}>
-            <span>{size.toUpperCase()} · SPLIT ACCORDION</span>
-            <StudioSplitAccordion
-              sizeVariant={size}
-              accessibleLabel={`Confirmed primitive Split Accordion ${size}`}
-              items={[
-                { id: "overview", accessibleLabel: "Overview", icon: <Home aria-hidden="true" />, content: "OVERVIEW" },
-                { id: "details", accessibleLabel: "Details", icon: <Info aria-hidden="true" />, content: "DETAILS" },
-                { id: "settings", accessibleLabel: "Settings", icon: <Settings2 aria-hidden="true" />, content: "SETTINGS" },
-              ]}
-            />
-          </div>
-        ))}
-      </div>
+      <StudioSplitAccordionCatalogSpecimens />
     </Family>
     <Family
       title="Brain Status LED Badges"

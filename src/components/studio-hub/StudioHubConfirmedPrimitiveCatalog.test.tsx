@@ -15,13 +15,17 @@ const readStudioControlCss = () => [
 describe("confirmed composite primitive catalog", () => {
   it("registers the independent Split Accordion at standard, compact, and micro sizes", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
-    expect(html).toContain("Split Accordion · Standard + Compact + Micro");
+    expect(html).toContain("Split Accordion · Train Motion");
     expect(html).toContain('data-vt-studio-split-accordion="true"');
     expect(html).toContain('data-vt-library-component="StudioSplitAccordion"');
     expect(html).toContain('data-size="standard"');
     expect(html).toContain('data-size="compact"');
     expect(html).toContain('data-size="micro"');
-    expect(html).toContain('data-layout="double"');
+    expect(html).toContain('data-section-count="10"');
+    expect(html).toContain("44px Standard · 3 sections");
+    expect(html).toContain("44px Standard · 10 sections");
+    expect(html).toContain("28px Compact · 10 sections");
+    expect(html).toContain("12px Micro · 10 sections");
   });
 
   it("registers StudioTextBox in standard, compact, and micro sizes using shared field geometry and 0.75 line height", () => {

@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { StudioSplitAccordion } from "./StudioSplitAccordion";
+import { StudioSplitAccordion, easeTrain, easeTrainInverse, openPanelWidth } from "./StudioSplitAccordion";
 
 const items = [
   { id: "left", accessibleLabel: "Left", icon: <span>L</span>, content: "LEFT PANEL" },
@@ -12,14 +12,15 @@ const items = [
 ] as const;
 
 describe("StudioSplitAccordion", () => {
-  it("defaults to the rightmost enabled item and marks inactive panels hidden", () => {
+  it("defaults to the rightmost enabled item and keeps panel semantics", () => {
     const html = renderToStaticMarkup(<StudioSplitAccordion items={items} />);
     expect(html).toContain('data-vt-studio-split-accordion="true"');
     expect(html).toContain('data-active-index="2"');
     expect(html).toContain("RIGHT PANEL");
     expect(html).toContain("MIDDLE PANEL");
     expect(html).toContain("LEFT PANEL");
-    expect(html).toContain("hidden=\"\"");
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('aria-hidden="true"');
     expect(html).toContain('data-vt-library-component="StudioSplitAccordion"');
   });
 
@@ -32,41 +33,56 @@ describe("StudioSplitAccordion", () => {
     expect(micro).toContain('data-active-index="1"');
   });
 
-  it("chooses the last enabled item when the requested default is disabled", () => {
+  it("chooses the rightmost enabled item when the requested default is disabled", () => {
     const html = renderToStaticMarkup(<StudioSplitAccordion items={[{ ...items[0], disabled: true }, items[1], { ...items[2], disabled: true }]} />);
     expect(html).toContain('data-active-index="1"');
     expect(html).toContain("MIDDLE PANEL");
   });
 
-  it("exposes accessible expansion semantics for left, right, and double layouts", () => {
+  it("supports any section count and marks the selected tab", () => {
+    const tenItems = Array.from({ length: 10 }, (_, index) => ({
+      id: `item-${index}`, accessibleLabel: `Item ${index}`, icon: <span>{index}</span>, content: `Panel ${index}`,
+    }));
+    const html = renderToStaticMarkup(<StudioSplitAccordion items={tenItems} activeIndex={7} />);
+    expect(html).toContain('data-section-count="10"');
+    expect(html).toContain('data-active-index="7"');
+    expect(html).toContain('aria-selected="true"');
+    expect(html).toContain('aria-controls="vt-studio-split-accordion-');
+  });
+
+  it("retains the layout compatibility attribute for left, right, and double values", () => {
     for (const layout of ["left", "right", "double"] as const) {
       const html = renderToStaticMarkup(<StudioSplitAccordion items={items} layout={layout} />);
       expect(html).toContain(`data-layout="${layout}"`);
-      expect(html).toContain('aria-expanded="false"');
     }
   });
 
-  it("uses token-owned flat geometry, square faces, reduced motion, and a 280ms activation lock", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-split-accordion.css"), "utf8");
-    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitAccordion.tsx"), "utf8");
-    expect(css).toContain("var(--vt-studio-control-height, 44px)");
-    expect(css).toContain("width: var(--vt-studio-split-accordion-face, 38px)");
-    expect(css).toContain("height: var(--vt-studio-split-accordion-face, 38px)");
-    expect(css).not.toContain("box-shadow:");
-    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(source).toContain("const MOTION_LOCK_MS = 280");
+  it("implements buildTri easing and a bounded inverse", () => {
+    expect(easeTrain(0)).toBe(0);
+    expect(easeTrain(1)).toBe(1);
+    expect(easeTrain(-1)).toBe(0);
+    expect(easeTrain(2)).toBe(1);
+    for (const value of [0.1, 0.25, 0.5, 0.75, 0.9]) {
+      expect(easeTrain(easeTrainInverse(value))).toBeCloseTo(value, 5);
+    }
   });
 
-  it("locks the Studio Controls color and typography contract", () => {
+  it("keeps a minimum open panel and uses CSS-measured Studio sizing", () => {
+    expect(openPanelWidth(600, 3, 44)).toBe(468);
+    expect(openPanelWidth(240, 10, 44)).toBe(88);
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-split-accordion.css"), "utf8");
-    expect(css).toContain("background: transparent;");
-    expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
-    expect(css).toContain("background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));");
-    expect(css).not.toMatch(/color-mix\([^;]*accent/i);
-    expect(css).toContain('.vt-studio-split-accordion[data-size="standard"] .vt-studio-split-accordion__content-inner {\n  font-size: 38px;');
-    expect(css).toContain('.vt-studio-split-accordion[data-size="compact"] .vt-studio-split-accordion__content-inner {\n  font-size: 24px;');
-    expect(css).toContain('.vt-studio-split-accordion[data-size="micro"] .vt-studio-split-accordion__content-inner {\n  font-size: 10px;');
-    expect(css).toContain("width: min(var(--vt-studio-control-icon-size, 38px), 100%);");
+    expect(css).toContain("--vt-sa-height: 44px");
+    expect(css).toContain("--vt-sa-height: 28px");
+    expect(css).toContain("--vt-sa-height: 12px");
+    expect(css).toContain("--vt-sa-face: 38px");
+    expect(css).toContain("--vt-sa-face: 24px");
+    expect(css).toContain("--vt-sa-face: 10px");
+    expect(css).toContain("text-overflow: clip");
+    expect(css).not.toContain("text-overflow: ellipsis");
+    expect(css).not.toContain("transition: flex-grow");
+    expect(css).toContain("var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))");
+    expect(css).toContain("var(--vt-studio-control-accent, var(--pair-a, #36e0f6))");
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(css).not.toContain("box-shadow:");
   });
 });
