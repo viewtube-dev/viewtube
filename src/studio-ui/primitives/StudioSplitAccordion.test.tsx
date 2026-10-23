@@ -85,7 +85,14 @@ describe("StudioSplitAccordion", () => {
     expect(css).toContain("var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))");
     expect(css).toContain("var(--vt-studio-control-accent, var(--pair-a, #36e0f6))");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(css).toContain("transition: opacity 140ms linear");
+    expect(css).toContain('.vt-studio-split-accordion__content:not([data-label-visible="true"]) .vt-studio-split-accordion__content-inner { visibility: hidden; }');
+    expect(css).toContain("width: max-content; min-width: max-content; max-width: none;");
+    expect(css).toContain("justify-content: center;");
+    expect(css).toContain("overflow: hidden; white-space: nowrap; text-overflow: clip;");
+    expect(css).not.toContain("@media (max-width: 420px)");
+    expect(css).not.toContain("font-size: min(var(--vt-sa-font), 5vw)");
+    expect(css).toContain("display: flex; flex: none; align-items: center; justify-content: center;");
+    expect(css).toContain("visibility: hidden;");
     expect(css).toContain("gap: var(--vt-sa-stroke); background: #000;");
     expect(css).toContain("border-left: var(--vt-sa-stroke) solid #000;");
     expect(css).toContain("flex: 0 0 var(--vt-sa-face)");
@@ -97,6 +104,8 @@ describe("StudioSplitAccordion", () => {
     expect(source).toContain("currentWidthsRef.current");
     expect(source).toContain("const fromScrollLeft = viewportRef.current?.scrollLeft ?? 0;");
     expect(source).toContain("fromScrollLeft + (targetScrollLeft - fromScrollLeft) * progress");
+    expect(source).toContain("content.dataset.panelVisible");
+    expect(source).toContain('data-panel-visible={selected ? "true" : "false"}');
     expect(source).not.toContain("const focusIndex = progress < .5 ? previous : next");
   });
 });
