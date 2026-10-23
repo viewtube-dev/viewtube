@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioSquareIconButtonGroup, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -1217,5 +1217,26 @@ describe("Studio field focus, floating labels, and toggle regressions", () => {
     expect(html).toContain("VIDEOS +1");
     expect(html).not.toContain("vt-studio-legend-count");
     expect(html).not.toContain('aria-label="2 selected"');
+  });
+});
+
+
+describe("StudioSquareIconButtonGroup joined rail", () => {
+  it("renders one accessible toolbar shell around two or more square icon buttons", () => {
+    const html = renderToStaticMarkup(
+      <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Rate answer">
+        <StudioSquareIconButton icon={<span>+</span>} label="Helpful" sizeVariant="compact" />
+        <StudioSquareIconButton icon={<span>-</span>} label="Not useful" sizeVariant="compact" />
+      </StudioSquareIconButtonGroup>,
+    );
+    expect(html).toContain('role="toolbar"');
+    expect(html).toContain('aria-label="Rate answer"');
+    expect(html).toContain('data-vt-studio-icon-button-group="true"');
+    expect(html).toContain('data-size="compact"');
+    expect(html).toContain('data-vt-studio-icon-button="true"');
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(css).toContain(".vt-studio-square-icon-button-group");
+    expect(css).toContain("border-right: var(--vt-icon-group-stroke) solid #000 !important;");
+    expect(css).toContain("border-radius: 0 !important;");
   });
 });

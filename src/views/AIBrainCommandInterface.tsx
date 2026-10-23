@@ -21,7 +21,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
-import { StudioButton, StudioSplitLeftButton, StudioSquareIconButton, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -585,26 +585,29 @@ export const BrainFeedbackControls: React.FC<{
  }
 
  return (
-  <div data-vt-brain-component="BrainAnswerFeedback" className="flex min-w-0 flex-wrap items-center gap-1.5" aria-label="Rate this response">
-   {FEEDBACK_OPTIONS.map(([rating, Icon, label, color]) => {
-    const isSelected = selected === rating
-    return (
-     <StudioSquareIconButton
-      key={rating}
-      sizeVariant="compact"
-      iconSizeVariant="large"
-      variant={isSelected ? "v2" : "v1"}
-      icon={<Icon aria-hidden="true" />}
-      label={label}
-      title={label}
-      aria-pressed={isSelected}
-      disabled={status === "saving"}
-      onClick={() => void submitFeedback(rating)}
-      style={{ backgroundColor: isSelected ? color : "#ffffff" }}
-      className="cursor-pointer disabled:cursor-wait disabled:opacity-60"
-     />
-    )
-   })}
+  <div data-vt-brain-component="BrainAnswerFeedback" className="flex min-w-0 flex-wrap items-center gap-1.5">
+   <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Rate this response">
+    {FEEDBACK_OPTIONS.map(([rating, Icon, label, color]) => {
+     const isSelected = selected === rating
+     return (
+      <StudioSquareIconButton
+       key={rating}
+       sizeVariant="compact"
+       iconSizeVariant="large"
+       variant={isSelected ? "v2" : "v1"}
+       icon={<Icon aria-hidden="true" />}
+       label={label}
+       title={label}
+       aria-label={label}
+       aria-pressed={isSelected}
+       disabled={status === "saving"}
+       onClick={() => void submitFeedback(rating)}
+       style={{ backgroundColor: isSelected ? color : undefined }}
+       className="cursor-pointer disabled:cursor-wait"
+      />
+     )
+    })}
+   </StudioSquareIconButtonGroup>
    <span className="ml-1 text-[10px] font-black uppercase tracking-[0.06em]" aria-live="polite" role="status">
     {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Try again" : "Rate answer"}
    </span>

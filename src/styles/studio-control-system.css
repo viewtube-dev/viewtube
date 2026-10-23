@@ -5674,3 +5674,102 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   pointer-events: auto;
   touch-action: manipulation;
 }
+
+
+/* =============================================================================
+   StudioSquareIconButtonGroup — joined square icon rail
+   Outer shell owns border + radius. Faces share a single vertical divider.
+   ============================================================================= */
+
+.vt-studio-square-icon-button-group {
+  --vt-icon-group-size: var(--vt-studio-control-height, 44px);
+  --vt-icon-group-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-icon-group-radius: var(--vt-studio-control-radius, 6px);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: max-content;
+  max-width: 100%;
+  height: var(--vt-icon-group-size);
+  min-height: var(--vt-icon-group-size);
+  padding: 0;
+  margin: 0;
+  border: var(--vt-icon-group-stroke) solid #000;
+  border-radius: var(--vt-icon-group-radius);
+  overflow: hidden;
+  background: transparent;
+  isolation: isolate;
+}
+
+.vt-studio-square-icon-button-group[data-size="standard"] {
+  --vt-icon-group-size: var(--vt-studio-44-height, 44px);
+  --vt-icon-group-stroke: var(--vt-studio-44-stroke, 3px);
+  --vt-icon-group-radius: var(--vt-studio-44-radius, 6px);
+}
+
+.vt-studio-square-icon-button-group[data-size="compact"] {
+  --vt-icon-group-size: var(--vt-studio-28-height, 28px);
+  --vt-icon-group-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-icon-group-radius: var(--vt-studio-28-radius, 4px);
+}
+
+.vt-studio-square-icon-button-group[data-size="micro"] {
+  --vt-icon-group-size: var(--vt-studio-micro-height, 12px);
+  --vt-icon-group-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-icon-group-radius: var(--vt-studio-micro-radius, 2px);
+}
+
+.vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"],
+.vt-studio-square-icon-button-group > .vt-studio-square-icon-button,
+.vt-studio-square-icon-button-group > button {
+  box-sizing: border-box;
+  position: relative;
+  flex: 0 0 var(--vt-icon-group-size);
+  width: var(--vt-icon-group-size);
+  min-width: var(--vt-icon-group-size);
+  max-width: var(--vt-icon-group-size);
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border-right: var(--vt-icon-group-stroke) solid #000 !important;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+
+.vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"]:last-child,
+.vt-studio-square-icon-button-group > .vt-studio-square-icon-button:last-child,
+.vt-studio-square-icon-button-group > button:last-child {
+  border-right: 0 !important;
+}
+
+.vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"] > [data-vt-studio-button-face],
+.vt-studio-square-icon-button-group > .vt-studio-square-icon-button > [data-vt-studio-button-face] {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"]:focus-visible,
+.vt-studio-square-icon-button-group > .vt-studio-square-icon-button:focus-visible,
+.vt-studio-square-icon-button-group > button:focus-visible {
+  outline: calc(var(--vt-icon-group-stroke) * var(--vt-studio-focus-outline-width-ratio, 0.65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: calc(var(--vt-icon-group-stroke) * -1);
+  z-index: 1;
+}
+
+.vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"]:disabled,
+.vt-studio-square-icon-button-group > button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
