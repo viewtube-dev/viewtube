@@ -6,6 +6,7 @@ const css = readFileSync("src/styles/studio-control-system.css", "utf8");
 const toggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8");
 const area = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
 const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
+const overrides = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8");
 const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 
@@ -65,11 +66,18 @@ test("double-side divider is centered and the confirmed catalog mixes compact an
   assert.match(catalog, /size=\{index === 1 \|\| index === 3 \? "compact" : "standard"\}/);
 });
 
-test("bar toggle has pointer capture and visible inactive segments", () => {
+test("bar toggle uses adaptive width counts, proportional fill, and size-specific borderless bars", () => {
+  assert.match(toggles, /barCountFromWidth\(widthPx, size\)/);
+  assert.match(toggles, /Math\.floor\(\(inner \+ metrics\.gap\) \/ \(metrics\.bar \+ metrics\.gap\)\)/);
+  assert.match(toggles, /Math\.max\(4, Math\.min\(40, count \|\| 4\)\)/);
+  assert.match(toggles, /Math\.round\(\(Math\.max\(0, Math\.min\(100, value\)\) \/ 100\) \* barCount\)/);
   assert.match(toggles, /setPointerCapture\?\.\(event\.pointerId\)/);
   assert.match(toggles, /onPointerUp=\{stopRepeat\}[\s\S]*?onPointerCancel=\{stopRepeat\}[\s\S]*?onLostPointerCapture=\{stopRepeat\}/);
-  assert.match(css, /\.vt-studio-value-toggle__bar[\s\S]*?40%, #fff/);
-  assert.match(css, /\.vt-studio-value-toggle__bar\[data-active="true"\][\s\S]*?background:\s*#000/);
+  assert.match(overrides, /--vt-bar-width:\s*10px/);
+  assert.match(overrides, /--vt-bar-gap:\s*3px/);
+  assert.match(overrides, /border:\s*0\s*!important/);
+  assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
+  assert.match(overrides, /\.vt-studio-value-toggle__bar\[data-active="true"\][\s\S]*?background:\s*#000/);
 });
 
 test("multi-select closed trigger renders a separate black count badge inside trigger text", () => {
