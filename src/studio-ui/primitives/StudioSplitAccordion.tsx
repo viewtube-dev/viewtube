@@ -176,7 +176,7 @@ export const StudioSplitAccordion = React.forwardRef<HTMLDivElement, StudioSplit
     const openRef = React.useRef(0);
     // Keep the last rendered frame so interrupted transitions continue from the visible geometry.
     const currentWidthsRef = React.useRef<number[]>([]);
-    // Panels that are allowed to show their coloured label. Everything else in transit is open space.
+    // Only the selected/opening panel shows its label; all other expanded transit bands keep their panel fill.
     const labelSetRef = React.useRef<Set<number>>(new Set());
     const [uncontrolledIndex, setUncontrolledIndex] = React.useState(() => initialIndex(items, defaultActiveIndex));
     const [reducedMotion, setReducedMotion] = React.useState(false);

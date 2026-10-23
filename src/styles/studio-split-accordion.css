@@ -95,7 +95,8 @@
 .vt-studio-split-accordion__face svg * { stroke: currentColor; }
 
 /* The content region is the border colour. The coloured panel sits inside it after one stroke, so while the region
- * is narrower than a stroke you only see the divider growing, then the panel opens between two borders. */
+ * is narrower than a stroke you only see the divider growing, then the panel opens between two borders.
+ * Text keeps its full size and is clipped at the panel edges while the panel is narrow. */
 .vt-studio-split-accordion__content {
   box-sizing: border-box; display: flex; align-items: stretch; flex: 1 1 auto;
   min-width: 0; height: 100%; overflow: hidden;
@@ -103,21 +104,23 @@
 }
 
 .vt-studio-split-accordion__panel {
-  box-sizing: border-box; display: none; flex: none; align-items: center; justify-content: center;
+  box-sizing: border-box; display: flex; flex: none; align-items: center; justify-content: center;
   height: 100%; margin-left: var(--vt-sa-stroke);
   width: max(0px, calc(100% - var(--vt-sa-stroke)));
   overflow: hidden; background: var(--vt-sa-p); color: #000;
 }
 
-/* Written by StudioSplitAccordion.tsx while the train runs. Panels that are not opening or closing stay as open space. */
-.vt-studio-split-accordion__content[data-label-visible="true"] .vt-studio-split-accordion__panel { display: flex; }
+/* Transit bands keep their own panel colour; only the label is hidden until its panel is selected/opening. */
+.vt-studio-split-accordion__content:not([data-label-visible="true"]) .vt-studio-split-accordion__content-inner { visibility: hidden; }
 
 .vt-studio-split-accordion__content-inner {
-  box-sizing: border-box; display: flex; align-items: center; flex: none; min-width: 0;
-  height: 100%; padding: 0 4px; white-space: nowrap;
+  /* Keep the label at full intrinsic size; the parent panel clips it symmetrically while narrow. */
+  box-sizing: border-box; display: flex; flex: 0 0 auto; align-items: center; justify-content: center;
+  width: max-content; min-width: max-content; max-width: none;
+  height: 100%; padding: 0 4px; overflow: hidden; white-space: nowrap; text-overflow: clip;
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   font-size: var(--vt-sa-font); font-weight: 1000; line-height: 1; letter-spacing: -.02em;
-  text-transform: uppercase; -webkit-text-stroke: var(--vt-sa-text-stroke) currentColor;
+  text-align: center; text-transform: uppercase; -webkit-text-stroke: var(--vt-sa-text-stroke) currentColor;
 }
 
 .vt-studio-split-accordion__trailing { flex: 0 0 auto; padding-inline: 4px; }
@@ -175,10 +178,6 @@
   outline: calc(var(--vt-sa-stroke) * .7) solid var(--vt-sa-s);
   outline-offset: calc(var(--vt-sa-stroke) * .7);
   box-shadow: 0 0 calc(var(--vt-sa-height) * .32) calc(var(--vt-sa-stroke) * .4) var(--vt-sa-s);
-}
-
-@media (max-width: 420px) {
-  .vt-studio-split-accordion__content-inner { font-size: min(var(--vt-sa-font), 5vw); }
 }
 
 @media (prefers-reduced-motion: reduce) {
