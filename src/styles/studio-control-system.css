@@ -5994,6 +5994,9 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
   list-style: none;
   user-select: none;
 }
+.vt-studio-collapsing-split-module > .vt-studio-collapsing-split-module__head[data-split="left"] {
+  grid-template-columns: var(--vt-top-split-size, 44px) minmax(0, 1fr) var(--vt-top-split-size, 44px);
+}
 .vt-studio-collapsing-split-module > .vt-studio-collapsing-split-module__head::-webkit-details-marker {
   display: none;
 }
