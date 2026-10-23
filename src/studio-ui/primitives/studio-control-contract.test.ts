@@ -31,6 +31,14 @@ describe("Studio control global contract", () => {
     expect(css).not.toContain("--vt-studio-14-height");
     expect(css).not.toContain("--vt-studio-control-gap");
   });
+  it("centers all split labels against the full outer shell, independent of rail placement", () => {
+    const css = read("src/styles/studio-control-split.css");
+    expect(css).toContain('position: relative;\n  display: grid;');
+    expect(css).toContain('[data-vt-studio-control="true"][data-vt-studio-split] [data-vt-studio-split-label] {\n  position: absolute;\n  z-index: 0;\n  inset: 0;');
+    expect(css).toContain('[data-vt-studio-control="true"] [data-vt-studio-split-rail][data-rail="start"] {\n  grid-column: 1;');
+    expect(css).toContain('[data-vt-studio-control="true"] [data-vt-studio-split-rail][data-rail="end"] {\n  grid-column: -1;');
+    expect(css).toContain('[data-vt-studio-control="true"] [data-vt-studio-split-face] [data-vt-studio-split-label] {\n  position: absolute;');
+  });
   it("keeps split rails secondary and shells flat", () => {
     const css = read("src/styles/studio-control-split.css");
     expect(css).toContain('[data-vt-studio-split="double"]');
