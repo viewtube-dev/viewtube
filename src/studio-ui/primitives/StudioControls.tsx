@@ -8,7 +8,7 @@ import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Image as ImageIco
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
 /**
- * Explicit register of intentional departures from the global 44px / 28px
+ * Explicit register of intentional departures from the global five-tier Studio size ladder (60 / 44 / 28 / 20 / 12px).
  * Studio control lattice. Exceptions must remain named, source-backed, and
  * represented in the confirmed primitive library instead of being silently
  * normalized by generic control selectors.
@@ -42,7 +42,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     fill: "primary color pair",
     closeControl: "16px circular secondary-pair control with a primary-pair glyph",
     motion: "Close glyph swaps colors, then the badge fades out over 1000ms; reduced-motion disables visual animation",
-    rationale: "Historical closeable-tag exception: fixed 20px pill height, no border, 16px heavy type, content width, and explicit close feedback; it does not inherit the 44/28/14 control ladder.",
+    rationale: "Historical closeable-tag exception: fixed 20px pill height, no border, 16px heavy type, content width, and explicit close feedback; it does not inherit the five-tier control ladder.",
   },
   tagEditorAction: {
     owner: "StudioTagEditor",
@@ -65,10 +65,10 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
   verticalWordToggle: {
     owner: "StudioVerticalWordToggle",
     globalRuleException: true,
-    height: "content-driven two-word stack; intentionally not 44px / 28px / 12px",
+    height: "content-driven two-word stack; intentionally not fixed to the 60 / 44 / 28 / 20 / 12px control heights",
     typography: "inherits standard/compact/micro Studio text-size, weight, family, case, and letter-spacing tokens",
-    stroke: "standard 3px / compact 2px / micro 1px",
-    radius: "standard 6px / compact 4px / micro 2px",
+    stroke: "Supreme 4.09px / standard 3px / compact 2px / Mini 1.5px / micro 1px",
+    radius: "Supreme 8.18px / standard 6px / compact 4px / Mini 3px / micro 2px",
     motion: "vertical expand-and-release handle with a color wipe; word colors switch quickly at animation start; reduced-motion settles immediately",
     rationale: "Two stacked word faces need a content-driven vertical surface; only height departs from the global size lattice.",
   },
@@ -150,7 +150,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       sunMoon: "Persistent selected toggle crossfades and rotates between Sun and Moon.",
       lockUnlock: "Persistent selected toggle morphs between Lock and Unlock.",
       downloadSuccess: "Outcome-driven Download-to-Check state; set success only after the operation succeeds.",
-      rotatedToggle: "Opt-in inner-stage rotation; outer 44px/28px geometry and press transform remain unchanged.",
+      rotatedToggle: "Opt-in inner-stage rotation; outer geometry remains controlled by the selected Studio size tier.",
       flip: "Opt-in two-face 3D flip; provide activeIcon for a meaningful alternate face.",
       tooltip: "Opt-in contextual label revealed on hover/focus; accessible name remains label.",
       morph: "Opt-in icon crossfade/scale/rotation; provide activeIcon for the selected state.",
@@ -167,7 +167,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       compactTextAreaFontSize: "14px",
       rule: "Single-line inputs follow global 38px standard / 24px compact typography. Textareas alone use 18px standard / 14px compact, with multiline line-height, padding, and a 92px minimum writing surface.",
     },
-    sizeFamily: "Single-line inputs use global 38px standard / 24px compact typography and the shared default line-height. Textareas alone use 18px standard / 14px compact with multiline line-height, padding, and a 92px minimum surface. Size selects 44px/28px height, 3px/2px stroke, and 6px/4px radius for both families.",
+    sizeFamily: "Single-line inputs use 51.82px Supreme / 38px standard / 24px compact / 17.5px Mini / 10px Micro typography. Textareas use 24.55px Supreme / 18px standard / 14px compact / 17.5px Mini with multiline line-height, padding, and a 92px minimum surface. Size selects 60/44/28/20/12px geometry, 4.09/3/2/1.5/1px stroke, and 8.18/6/4/3/2px radius where the family supports each tier.",
     defaultMode: {
       textColor: "primary",
       textStrokeColor: "matches text color (primary)",
@@ -261,7 +261,7 @@ StudioTextBox.displayName = "StudioTextBox"
 
 
 const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
-/** Canonical Studio 44px / 28px switch, choice, and word-toggle primitives. */
+/** Canonical Studio switch, choice, and word-toggle primitives with token-driven size variants. */
 export type StudioControlSkin = "solid" | "color-swap" | "black-indicator" | "white-indicator";
 export interface StudioControlButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
   skin?: StudioControlSkin;
@@ -1027,7 +1027,7 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   /** Initial local toggle state for V3, V5 and V6; every instance owns independent state. */
   defaultOn?: boolean
   onVariantChange?: (on: boolean) => void
-  /** StudioButton also supports the canonical 12px Micro tier for dense UI surfaces. */
+  /** StudioButton supports all five canonical tiers where its content/layout variant permits them. */
   sizeVariant?: StudioControlSize
   tone?: StudioControlTone
   loading?: boolean
