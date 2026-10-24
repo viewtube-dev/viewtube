@@ -229,7 +229,8 @@ describe("StudioInterModule shared separator contract", () => {
     const css = read("src/styles/studio-inter-module.css");
     expect(css).toContain('.vt-studio-inter-module__body > .vt-studio-inter-module + .vt-studio-inter-module > .vt-studio-inter-module__head {\n  border-top: 0;');
     expect(css).toContain('.vt-studio-inter-module[data-open="true"] + .vt-studio-inter-module > .vt-studio-inter-module__head {\n  border-top-width: var(--vt-im-stroke, 2px);');
-    expect(css).toContain('.vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {\n  padding: 0;');
+    expect(css).toContain('.vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {\n  padding-left: 0;\n  padding-right: 0;');
+    expect(css).toContain(".vt-studio-inter-module.brain-prompt-library-category > .vt-studio-inter-module__body");
   });
 });
 
