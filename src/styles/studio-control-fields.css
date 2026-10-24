@@ -118,7 +118,7 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"] {
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
   font-weight: var(--vt-studio-textarea-font-weight, 1000);
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   min-height: var(--vt-studio-textarea-min-height, 92px);
   -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
