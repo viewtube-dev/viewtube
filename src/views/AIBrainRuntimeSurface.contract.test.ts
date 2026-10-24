@@ -33,6 +33,14 @@ describe("AI Brain runtime surface integration", () => {
   expect(toolboxSource).not.toContain('className={`min-h-0 ${fillAvailable ? \'flex-1\' : \'\'} bg-white vt-main-toolbox-content ${fillAvailable ? \'h-full\' : \'\'}')
  })
 
+ it("uses human-readable prompt category labels without changing registry keys", () => {
+  expect(source).toContain("export const formatPromptCategoryLabel")
+  expect(source).toContain("formatPromptCategoryLabel(item)")
+  expect(source).toContain("formatPromptCategoryLabel(groupCategory)")
+  expect(source).toContain("replace(/([a-z])([A-Z])/g, \"$1 $2\")")
+  expect(source).toContain("replace(/\\d+$/g, \"\")")
+ })
+
  it("uses StudioInterModule for chat entries and the registry-backed prompt library", () => {
   const userMessage = source.slice(source.indexOf('export const UserMessage:'), source.indexOf('const CreatorIntakeWizard:'))
   const responseCard = source.slice(source.indexOf('const CreatorResponseCard:'), source.indexOf('const readinessForSnapshot:'))
