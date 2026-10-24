@@ -11,6 +11,7 @@
 @import "./studio-control-motion.css";
 @import "./studio-field-parity.css";
 @import "./studio-control-distill-overrides.css";
+@import "./studio-control-recovery-overrides.css";
 
 /* Split text input keeps the shared shell as the sole border/divider owner. */
 .vt-studio-split-text-input{padding:0;background:var(--vt-field-fill-rest);box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary)}
@@ -18,5 +19,3 @@
 .vt-studio-split-text-input:focus-within{outline:var(--vt-field-focus-outline);outline-offset:0;background:var(--vt-field-fill-focus);box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary)}
 .vt-studio-split-text-input:focus-within .vt-studio-split-text-input__field{color:var(--vt-field-text-focus);-webkit-text-fill-color:var(--vt-field-text-focus);-webkit-text-stroke-color:var(--vt-field-text-stroke-focus);caret-color:var(--vt-field-caret-focus)}
 
-/* Recovery contract must load after all Studio family and parity layers. */
-@import "./studio-control-recovery-overrides.css";
