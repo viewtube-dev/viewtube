@@ -2017,9 +2017,9 @@ const AIBrainCommandInterface: React.FC = () => {
 
        <div className="hidden min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-3 overflow-hidden xl:grid">
         <div className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)] overflow-hidden" aria-label="Brain launchpad">
-         <div data-vt-brain-component="BrainLauncherModeSwitch" className="grid grid-cols-2 gap-1 border-[2px] border-black bg-[#f8f8f4] p-1">
-          <StudioSplitLeftButton sizeVariant="standard" icon={<LayoutGrid aria-hidden="true" />} aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className="min-w-0" style={{ backgroundColor: launcherMode === "prompts" ? "#FF7AC8" : "#ffffff" }}>Prompt Library</StudioSplitLeftButton>
-          <StudioSplitLeftButton sizeVariant="standard" icon={<Zap aria-hidden="true" />} aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className="min-w-0" style={{ backgroundColor: launcherMode === "capabilities" ? "#36E0F6" : "#ffffff" }}>Capabilities</StudioSplitLeftButton>
+         <div data-vt-brain-component="BrainLauncherModeSwitch" className="brain-launcher-mode-switch grid grid-cols-2 gap-1 border-[2px] border-black bg-[#f8f8f4] p-1">
+          <StudioSplitTwoLineButton sizeVariant="compact" icon={<LayoutGrid aria-hidden="true" />} firstLine="PROMPT" secondLine="LIBRARY" aria-label="Prompt Library" title="Prompt Library" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "prompts" ? "#FF7AC8" : "#ffffff" }} />
+          <StudioSplitTwoLineButton sizeVariant="compact" icon={<Zap aria-hidden="true" />} firstLine="CAPABILITIES" secondLine="BROWSER" aria-label="Capabilities" title="Capabilities" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "capabilities" ? "#36E0F6" : "#ffffff" }} />
          </div>
          <div className="min-h-0 overflow-y-auto pt-2">
           {launcherMode === "prompts" ? <BrainPromptLibrary
@@ -2068,9 +2068,9 @@ const AIBrainCommandInterface: React.FC = () => {
           <h2 data-vt-brain-part="launcher-drawer-heading" id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
           <StudioSplitLeftButton ref={promptCloseRef} sizeVariant="compact" icon={<X aria-hidden="true" />} onClick={() => setPromptRailOpen(false)}>Close</StudioSplitLeftButton>
          </div>
-         <div data-vt-brain-component="BrainLauncherModeSwitch" className="grid grid-cols-2 gap-1">
-          <StudioSplitLeftButton sizeVariant="standard" icon={<LayoutGrid aria-hidden="true" />} aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className="min-w-0" style={{ backgroundColor: launcherMode === "prompts" ? "#FF7AC8" : "#ffffff" }}>Prompt Library</StudioSplitLeftButton>
-          <StudioSplitLeftButton sizeVariant="standard" icon={<Zap aria-hidden="true" />} aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className="min-w-0" style={{ backgroundColor: launcherMode === "capabilities" ? "#36E0F6" : "#ffffff" }}>Capabilities</StudioSplitLeftButton>
+         <div data-vt-brain-component="BrainLauncherModeSwitch" className="brain-launcher-mode-switch grid grid-cols-2 gap-1">
+          <StudioSplitTwoLineButton sizeVariant="compact" icon={<LayoutGrid aria-hidden="true" />} firstLine="PROMPT" secondLine="LIBRARY" aria-label="Prompt Library" title="Prompt Library" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "prompts" ? "#FF7AC8" : "#ffffff" }} />
+          <StudioSplitTwoLineButton sizeVariant="compact" icon={<Zap aria-hidden="true" />} firstLine="CAPABILITIES" secondLine="BROWSER" aria-label="Capabilities" title="Capabilities" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "capabilities" ? "#36E0F6" : "#ffffff" }} />
          </div>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Brain launchpad content" tabIndex={0}>
