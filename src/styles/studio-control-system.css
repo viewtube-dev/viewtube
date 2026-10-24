@@ -3495,7 +3495,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg { width: 24px; height: 24px; stroke-width: 3; }
 .vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__actions button svg { width: 30px; height: 30px; stroke-width: 3; }
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 12px; height: 12px; stroke-width: 1.5; }
-.vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 2.25; }
+.vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 1.5; }
 .vt-studio-counter__button:active svg,
 .vt-studio-side-counter__actions button:active svg,
 .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button:active svg { animation: vt-studio-counter-pop 180ms cubic-bezier(.2,.8,.2,1); }
@@ -4237,7 +4237,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-double-split-slider.is-counter-controls[data-size="micro"] .vt-studio-double-split-slider__counter svg {
   width: min(15px, 90%);
   height: min(15px, 90%);
-  stroke-width: 2.25;
+  stroke-width: 1.5;
 }
 .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter button:disabled { opacity: .4; cursor: not-allowed; }
 
@@ -5263,7 +5263,7 @@ html body button[data-vt-studio-button="true"][data-vt-studio-button-variant="v7
 /* Micro is a supported button tier, not a catalog badge substitute. */
 button[data-vt-studio-button="true"][data-size="micro"] {
   --vt-studio-control-height: 12px;
-  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-stroke: 1.5px;
   --vt-studio-control-radius: 2px;
   --vt-studio-control-font-size: 10px;
   --vt-studio-control-text-stroke: .375px;
@@ -5312,7 +5312,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   width: min(30px, 100%); height: min(30px, 100%); stroke-width: 3;
 }
 .vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(15px, 100%); height: min(15px, 100%); stroke-width: 2.25;
+  width: min(15px, 100%); height: min(15px, 100%); stroke-width: 1.5;
 }
 .vt-studio-value-toggle__arrow:active:not(:disabled) svg,
 .vt-studio-value-toggle__arrow.is-holding svg { animation: vt-studio-counter-pop 180ms ease-out; }
