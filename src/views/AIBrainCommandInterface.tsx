@@ -89,6 +89,7 @@ import { BrainWorkflowRunPanel } from "../components/brain/BrainWorkflowRunPanel
 import { buildWorkflowRecommendationFromBrainResponse } from "../services/brain/brainWorkflowRecommendations"
 import { resolveBrainDataReadinessPresentation } from "./brainDataReadiness"
 import { shouldFollowBrainConversation } from "./brainConversationScroll"
+import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
@@ -782,16 +783,16 @@ const CreatorResponseCard: React.FC<{
      tone: section.tone,
      source: "growth" as const,
     }))
- // Drop prose modules that just restate the key insight (the common duplication),
- // and cap the count so every answer isn't the same tall stack.
- const keyNorm = sanitizeCreatorFacingBrainCopy(response.keyInsight).trim().toLowerCase()
- const filteredModules = rawModules
-  .filter((module) => {
-   if (module.data?.metrics?.length || module.data?.items?.length) return true
-   const body = sanitizeCreatorFacingBrainCopy(module.body || "").trim().toLowerCase()
-   if (!body || !keyNorm) return Boolean(body)
-   return !(body === keyNorm || body.startsWith(keyNorm.slice(0, 60)) || keyNorm.startsWith(body.slice(0, 60)))
-  })
+ // Remove exact duplicate prose only; prefix similarity can hide useful detail.
+ const normalizedModules = rawModules.map((module) => ({
+  ...module,
+  body: sanitizeCreatorFacingBrainCopy(module.body || ""),
+ }))
+ const filteredModules = selectBrainAnswerModules(
+  normalizedModules,
+  sanitizeCreatorFacingBrainCopy(response.keyInsight),
+ )
+ // Keep the answer compact while retaining every remaining module behind disclosure.
  const modules = filteredModules.slice(0, 3)
  const additionalModules = filteredModules.slice(3)
  const openQuestions = response.questions.filter(
