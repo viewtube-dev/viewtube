@@ -318,30 +318,27 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 
 
 /* Final regression-recovery contract: this file loads last in studio-control-entry.css. */
-/* Simple input intentionally retains primary inline stroke in rest and focus states. */
-html body input.vt-studio-text-input--simple[data-vt-studio-control="true"],
-html body input.vt-studio-text-input--simple[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
-  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-  -webkit-text-fill-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+/* All Studio text fields keep a primary inline glyph stroke in every state. */
+html body input[data-vt-studio-control="true"],
+html body textarea[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] textarea,
+html body .vt-studio-text-box[data-vt-studio-control="true"] {
   -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
   -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
 }
-/* Labelled text inputs and textareas must have black glyph strokes whenever focused. */
-html body input.vt-studio-text-input:not(.vt-studio-text-input--simple)[data-vt-studio-control="true"]:is(:focus, :focus-visible),
-html body input[data-vt-studio-field-kind="text-input"][data-vt-studio-control="true"]:is(:focus, :focus-visible):not(.vt-studio-text-input--simple),
-html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
-html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
+html body input[data-vt-studio-control="true"],
+html body textarea[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] textarea {
+  color: var(--vt-field-text, #000);
+  -webkit-text-fill-color: var(--vt-field-text, #000);
 }
-/* TextBox is a read-only textarea-display: black copy always has a black inline stroke. */
+/* TextBox keeps its black perimeter; only its inner glyph stroke is primary. */
 html body .vt-studio-text-box[data-vt-studio-control="true"],
 html body .vt-studio-text-box[data-vt-studio-control="true"][data-size] {
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
-  text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
 }
 /* Shared split rails stay square inside the outer border; their height cannot stretch. */
 html body [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
