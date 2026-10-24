@@ -280,16 +280,22 @@ describe("standalone Studio text fields", () => {
     expect(compact).toContain('data-size="compact"')
   })
 
-  it("renders StudioTextBox as non-editable standard, compact, and micro display surfaces", () => {
+  it("renders StudioTextBox as readonly display surfaces across the supported size tiers", () => {
     const standard = renderToStaticMarkup(<StudioTextBox aria-label="Standard summary">First row{"\n"}Second row</StudioTextBox>)
+    const supreme = renderToStaticMarkup(<StudioTextBox size="supreme" aria-label="Supreme summary">Supreme content</StudioTextBox>)
     const compact = renderToStaticMarkup(<StudioTextBox size="compact" aria-label="Compact summary">Compact content</StudioTextBox>)
+    const mini = renderToStaticMarkup(<StudioTextBox size="mini" aria-label="Mini summary">Mini content</StudioTextBox>)
     const micro = renderToStaticMarkup(<StudioTextBox size="micro" aria-label="Micro summary">Micro content</StudioTextBox>)
     expect(standard).toContain('data-vt-studio-field-kind="textarea-display"')
     expect(standard).toContain('data-size="standard"')
     expect(standard).toContain('First row')
     expect(standard).toContain('Second row')
     expect(standard).toContain('contenteditable="false"')
+    expect(standard).toContain('aria-readonly="true"')
+    expect(standard).toContain('data-vt-studio-text-box="true"')
+    expect(supreme).toContain('data-size="supreme"')
     expect(compact).toContain('data-size="compact"')
+    expect(mini).toContain('data-size="mini"')
     expect(micro).toContain('data-size="micro"')
   })
 
@@ -304,7 +310,7 @@ describe("standalone Studio text fields", () => {
     expect(block).toContain("color: #000;");
     expect(block).toContain("-webkit-text-fill-color: #000;");
     expect(block).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
-    expect(block).toContain("-webkit-text-stroke-color: var(--vt-field-primary");
+    expect(css).toContain("-webkit-text-stroke-color: var(--vt-field-primary");
     expect(css).not.toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
     expect(css).not.toContain("-webkit-text-stroke-color: var(--vt-field-text-focus, #000);");
   });
