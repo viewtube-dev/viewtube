@@ -81,4 +81,30 @@ describe("Brain outcome source-record replay identity", () => {
    assetId: "asset-restored",
   })
  })
+
+ it("merges additional canonical evidence and analytics checkpoints on replay", async () => {
+  const first = await recordBrainOutcome(input({
+   evidenceIds: ["evidence-1"],
+   analyticsCheckpointIds: ["checkpoint-1"],
+  }))
+  const replay = await recordBrainOutcome(input({
+   evidenceIds: ["evidence-1", "evidence-2"],
+   analyticsCheckpointIds: ["checkpoint-1", "checkpoint-2"],
+  }))
+
+  expect(replay.id).toBe(first.id)
+  expect(replay.evidenceIds).toEqual(["evidence-1", "evidence-2"])
+  expect(replay.analyticsCheckpointIds).toEqual(["checkpoint-1", "checkpoint-2"])
+  expect(listBrainOutcomes("channel-1")).toHaveLength(1)
+  expect(mocks.captureAIBrainLearningEvent).toHaveBeenCalledTimes(1)
+ })
+
+ it("fails closed when a replay changes the supporting outcome evidence", async () => {
+  await recordBrainOutcome(input())
+
+  await expect(recordBrainOutcome(input({ evidence: ["different support"] })))
+   .rejects.toThrow(/sourceRecordId action-packet-1 was reused with conflicting evidence/i)
+  expect(listBrainOutcomes("channel-1")).toHaveLength(1)
+ })
+
 })
