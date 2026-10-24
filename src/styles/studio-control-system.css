@@ -431,7 +431,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-floating-field > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
   top: 0;
   left: 10px;
-  padding: 2.375px 4.5px;
+  padding: 2.25px 4.5px;
   border-radius: 3px;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   color: #000;
