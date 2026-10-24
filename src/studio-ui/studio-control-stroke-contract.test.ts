@@ -23,6 +23,8 @@ describe("Studio global stroke-tier contract", () => {
 
   it("does not retain the retired Supreme/Micro stroke overrides in shared CSS", () => {
     const css = readFileSync("src/styles/studio-control-system.css", "utf8")
+    const fieldsCss = readFileSync("src/styles/studio-control-fields.css", "utf8")
+    const textInputCss = readFileSync("src/styles/studio-text-input.css", "utf8")
     const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
     const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
     const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
@@ -42,6 +44,9 @@ describe("Studio global stroke-tier contract", () => {
     expect(css).not.toContain("2.59")
     expect(css).not.toContain("micro-stroke, 1px")
     expect(css).not.toContain("micro-text-stroke, 0.25px")
+    expect(fieldsCss).not.toContain("--vt-studio-micro-text-stroke, .25px")
+    expect(fieldsCss).not.toContain("--vt-studio-textarea-micro-text-stroke, .25px")
+    expect(textInputCss).toContain("--vt-studio-micro-stroke, 1.5px")
     expect(css).toContain('data-size="micro"] { min-height: 12px; font-size: 10px; border-width: 1.5px; border-radius: 2px; }')
     expect(css).toContain("--vt-studio-control-stroke: 1.5px")
     expect(css).not.toContain("--vt-studio-control-stroke: 1px;")
