@@ -523,3 +523,10 @@ test("PR #756 row hierarchy uses the requested proportional sizes and compact/mi
   assert.match(buttonFamily, /7 compact · half module/);
   assert.match(buttonFamily, /7A–7B micro · half module/);
 });
+
+test("confirmed primitive families have no Compounds bucket and retain Compositions", () => {
+  const familyUnion = catalog.slice(catalog.indexOf("type ConfirmedCatalogFamilyName"), catalog.indexOf("const classifyConfirmedCatalogItem"));
+  assert.doesNotMatch(familyUnion, /"Compounds"/);
+  assert.match(familyUnion, /"Compositions"/);
+  assert.match(catalog, /if \/Publishing Card\|Brain Status LED Badges\/.test\(title\)\) return "Compositions"/);
+});

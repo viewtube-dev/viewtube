@@ -578,12 +578,11 @@ type ConfirmedCatalogFamilyName =
   | "Dropdowns"
   | "Controls"
   | "Text Controls"
-  | "Compounds"
   | "Compositions"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
   "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
-  "Controls", "Text Controls", "Compounds", "Compositions",
+  "Controls", "Text Controls", "Compositions",
 ]
 
 const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
