@@ -10,7 +10,7 @@ export const STUDIO_GLOBAL_DEFAULTS = {
   textTransform: "uppercase" as const,
   letterSpacing: -0.02,
   lineHeight: 1,
-  textareaLineHeight: 0.85,
+  textareaLineHeight: 1,
   fieldDefaultTextColor: "primary" as const,
   fieldDefaultGlyphStrokeColor: "primary" as const,
   textFieldDefaults: {
@@ -34,6 +34,7 @@ export const STUDIO_GLOBAL_DEFAULTS = {
   shellMovement: "none" as const,
   internalGap: 0,
   spacingUnit: 4, // external gaps only
+  textOverflow: "clip" as const, // never ellipsis on single-line controls
 } as const
 
 // ─── Color roles ─────────────────────────────────────────────────────────────
