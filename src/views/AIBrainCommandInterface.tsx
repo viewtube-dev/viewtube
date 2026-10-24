@@ -593,7 +593,7 @@ export const BrainPromptLibrary: React.FC<{
              ) : null}
             </div>
            </div>
-          </StudioCollapsingSplitModule>
+          </StudioCollapsingTwoLineModule>
          )
         })}
        </StudioInterModule>
@@ -1037,7 +1037,6 @@ const AIBrainCommandInterface: React.FC = () => {
   emitSignal,
  } = brainContext
  const [input, setInput] = useState("")
- const [mobileViewportHeight, setMobileViewportHeight] = useState<number | null>(null)
  const [journalInput, setJournalInput] = useState("")
  const [busy, setBusy] = useState(false)
  const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -1056,6 +1055,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
  const [contextRailOpen, setContextRailOpen] = useState(false)
+ const [mobileViewportHeight, setMobileViewportHeight] = useState<number | null>(null)
  const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
  const [projectContextCleared, setProjectContextCleared] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
@@ -1067,28 +1067,6 @@ const AIBrainCommandInterface: React.FC = () => {
  const contextCloseRef = useRef<HTMLButtonElement | null>(null)
  const bottomRef = useRef<HTMLDivElement | null>(null)
  const conversationViewportRef = useRef<HTMLDivElement | null>(null)
-
- // Mobile browsers may keep the layout viewport tall when the on-screen keyboard
- // opens. Follow the visual viewport so the anchored composer stays above it.
- useEffect(() => {
-  const visualViewport = window.visualViewport
-  const syncMobileViewport = () => {
-   if (window.matchMedia("(max-width: 1279px)").matches && visualViewport) {
-    setMobileViewportHeight(Math.max(1, Math.round(visualViewport.height)))
-   } else {
-    setMobileViewportHeight(null)
-   }
-  }
-  syncMobileViewport()
-  window.addEventListener("resize", syncMobileViewport)
-  window.addEventListener("orientationchange", syncMobileViewport)
-  visualViewport?.addEventListener("resize", syncMobileViewport)
-  return () => {
-   window.removeEventListener("resize", syncMobileViewport)
-   window.removeEventListener("orientationchange", syncMobileViewport)
-   visualViewport?.removeEventListener("resize", syncMobileViewport)
-  }
- }, [])
  const shouldFollowConversationRef = useRef(true)
  const askSeededRef = useRef(false)
  const canUseGemini = hasGeminiKey()
@@ -1263,6 +1241,29 @@ const AIBrainCommandInterface: React.FC = () => {
    ]),
   )
  }, [busy, visibleTurns])
+
+ // Track the visual viewport on mobile so the chat and composer resize above the on-screen keyboard.
+ useEffect(() => {
+  const visualViewport = window.visualViewport
+  const updateViewportHeight = () => {
+   if (!window.matchMedia("(max-width: 1279px)").matches) {
+    setMobileViewportHeight(null)
+    return
+   }
+   const height = visualViewport?.height ?? window.innerHeight
+   setMobileViewportHeight(Number.isFinite(height) && height > 0 ? Math.round(height) : null)
+  }
+
+  updateViewportHeight()
+  visualViewport?.addEventListener("resize", updateViewportHeight)
+  window.addEventListener("resize", updateViewportHeight)
+  window.addEventListener("orientationchange", updateViewportHeight)
+  return () => {
+   visualViewport?.removeEventListener("resize", updateViewportHeight)
+   window.removeEventListener("resize", updateViewportHeight)
+   window.removeEventListener("orientationchange", updateViewportHeight)
+  }
+ }, [])
 
  // Keep the newest exchange in view only while the reader is following the conversation.
  useEffect(() => {
@@ -1821,7 +1822,11 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  return (
-  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="h-full min-h-0 overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black max-xl:h-[100dvh] max-xl:overflow-hidden xl:overflow-hidden">
+  <main
+   data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined}
+   style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined}
+   className="h-full min-h-0 overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black max-xl:h-[100dvh] max-xl:overflow-hidden xl:overflow-hidden"
+  >
    <Toolbox
     title="ViewTube Brain Hub"
     subtitle="One assistant for channel strategy, analytics, goals, content planning, SEO, and publishing."
