@@ -222,3 +222,12 @@ describe("Studio textarea typography token ownership", () => {
     expect(distill).not.toMatch(/:focus[^\\{]*\\{[^}]*-webkit-text-stroke-color:\\s*var\\(--vt-field-primary/);
   });
 });
+
+
+describe("StudioInterModule shared separator contract", () => {
+  it("keeps one shared line between collapsed modules and restores it after an expanded body", () => {
+    const css = read("src/styles/studio-inter-module.css");
+    expect(css).toContain('.vt-studio-inter-module__body > .vt-studio-inter-module + .vt-studio-inter-module > .vt-studio-inter-module__head {\n  border-top: 0;');
+    expect(css).toContain('.vt-studio-inter-module[data-open="true"] + .vt-studio-inter-module > .vt-studio-inter-module__head {\n  border-top-width: var(--vt-im-stroke, 2px);');
+  });
+});
