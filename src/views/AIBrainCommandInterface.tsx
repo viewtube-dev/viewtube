@@ -87,6 +87,7 @@ import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
 import { BrainWorkflowRunPanel } from "../components/brain/BrainWorkflowRunPanel"
 import { buildWorkflowRecommendationFromBrainResponse } from "../services/brain/brainWorkflowRecommendations"
 import { resolveBrainDataReadinessPresentation } from "./brainDataReadiness"
+import { shouldFollowBrainConversation } from "./brainConversationScroll"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
@@ -349,9 +350,6 @@ const kpiButton =
 
 export const shouldSendBrainComposerKey = ({ key, isComposing, shiftKey = false }: { key: string; isComposing: boolean; shiftKey?: boolean }) =>
  key === "Enter" && !isComposing && !shiftKey
-
-export const shouldFollowBrainConversation = (scrollHeight: number, scrollTop: number, clientHeight: number, threshold = 72) =>
- scrollHeight - scrollTop - clientHeight <= threshold
 
 const PROMPT_CARD_SUMMARIES: Record<string, string> = {
  "analyze-channel-niche": "Find your niche and fuzzy edges.",
