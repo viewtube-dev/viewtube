@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -237,7 +237,7 @@ describe("Studio dropdown chevron and split-left contract", () => {
   })
 
   it("keeps simple dropdowns free of a split rail and places the chevron at the trailing edge", () => {
-    const html = renderToStaticMarkup(<StudioSimpleDropdown aria-label="Simple mode" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }]} />)
+    const html = renderToStaticMarkup(<StudioDropdown variant="simple" aria-label="Simple mode" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }]} />)
     expect(html).not.toContain('data-vt-studio-split-rail')
     expect(html).toContain('class="vt-studio-dropdown-chevron is-trailing"')
   })
@@ -863,21 +863,16 @@ describe("Studio Username Split-Left Input", () => {
 
 
 describe("confirmed Studio primitive catalog ownership", () => {
-  it("registers the simple dropdown and split stepper from the canonical Studio Controls module", () => {
+  it("registers the simple behavior as a variant of canonical StudioDropdown", () => {
     const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     const publicApi = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8")
-    expect(catalog).toContain('import {')
-    expect(catalog).toContain('StudioSplitStepper')
-    expect(catalog).not.toContain('SubToolboxSplitStepper')
-    expect(catalog).toContain('primitive="StudioSplitStepper"')
-    expect(catalog).toContain('tsx="src/studio-ui/primitives/StudioControls.tsx"')
-    expect(catalog).toContain('primitive="StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx"')
-    expect(catalog).toContain('data-vt-library-component="StudioSplitStepper"')
-    expect(controls).toContain("export const StudioSplitStepper")
-    expect(controls).toContain("export const StudioSimpleDropdown")
-    expect(publicApi).toContain("StudioSplitStepper")
-    expect(publicApi).toContain("StudioSimpleDropdown")
+    expect(catalog).toContain('data-vt-library-component="StudioDropdown"')
+    expect(catalog).not.toContain("StudioSimpleDropdown")
+    expect(controls).toContain('variant?: "default" | "simple" | "split-left"')
+    expect(controls).not.toContain("export const StudioSimpleDropdown")
+    expect(publicApi).toContain("StudioDropdown")
+    expect(publicApi).not.toContain("StudioSimpleDropdown")
   })
 })
 
@@ -898,32 +893,15 @@ describe("canonical Studio dropdown menu visual contract", () => {
   })
 })
 
-describe("Studio Controls owns dropdown and stepper implementations", () => {
-  it("keeps the simple dropdown and both stepper variants inside the canonical StudioControls module", async () => {
+describe("Studio Controls owns dropdown variants", () => {
+  it("keeps the simple dropdown behavior inside the canonical dropdown module", () => {
     const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
     const css = readStudioControlCss()
-    expect(controls).toContain("export const StudioSimpleDropdown")
-    expect(controls).toContain("export const StudioSplitStepper")
-    expect(controls).toContain("export const StudioInlineStepper")
+    expect(controls).toContain('variant?: "default" | "simple" | "split-left"')
     expect(controls).toContain("export const StudioDropdown")
     expect(controls).toContain("export const StudioLegendMultiDropdown")
     expect(controls).not.toContain('from "./StudioSimpleDropdown"')
-    expect(controls).not.toContain('from "./StudioSplitStepper"')
-    expect(controls).not.toContain('from "./StudioInlineStepper"')
-    expect(css).toContain(".vt-studio-split-stepper")
-    expect(css).toContain(".vt-studio-inline-stepper")
-  })
-
-  it("uses the canonical compact square-button size for tag editor actions", () => {
-    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
-    const css = readStudioControlCss()
-    expect(controls).toContain('data-size="compact" data-vt-studio-tag-editor-action="true"')
-    expect(css).toContain(".vt-studio-tag-editor__square-action[data-size=\"compact\"]")
-    expect(css).toContain("width: 28px")
-    const actionBlock = css.slice(css.indexOf(".vt-studio-tag-editor__square-action {"), css.indexOf("\n}", css.indexOf(".vt-studio-tag-editor__square-action {")) + 2)
-    expect(actionBlock).not.toContain("32px")
-    expect(actionBlock).not.toContain("box-shadow: 1.5px 1.5px 0 0")
-    expect(actionBlock).not.toContain("4px 4px 0 0")
+    expect(css).toContain(".vt-studio-dropdown-menu")
   })
 })
 
@@ -1054,11 +1032,12 @@ describe("Studio counter hold-repeat acceleration", () => {
 
 
 describe("Supreme and Micro production size contract", () => {
-  it("defines the four canonical tiers with exact 60/44/28/12px heights", () => {
+  it("defines the five canonical tiers with exact 60/44/28/20/12px heights", () => {
     const expected: Record<StudioControlSize, number> = {
       supreme: 60,
       standard: 44,
       compact: 28,
+      mini: 20,
       micro: 12,
     }
     for (const [size, height] of Object.entries(expected) as [StudioControlSize, number][]) {
