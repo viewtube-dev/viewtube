@@ -600,13 +600,16 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   const componentName = typeof node.type === "function"
     ? (componentType.displayName || componentType.name || "")
     : ""
-  if (/Studio Text Input|Studio Text Area|Studio Text Box|StudioInput|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
-  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
-  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame/.test(title)) return "Modules & Frames"
+  // Match both human-readable family titles and compact production export names.
+  // Composition rules precede the generic Badge rule so status/composition cards
+  // do not get misfiled under Buttons.
+  if (/Publishing ?Card|Brain ?Status ?LED ?Badges|BrainStatusBadge|ResponseMetaRow/.test(title)) return "Compositions"
+  if (/Text ?Input|Text ?Area|Text ?Box|StudioInput|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
+  if (/Button ?·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
+  if (/Top ?Split ?Module|Collapsing|Inter ?Module|Split ?Accordion|Upload ?Frame/.test(title)) return "Modules & Frames"
   if (/Dropdown|StudioSelect/.test(title)) return "Dropdowns"
   if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioChoice|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily") return "Controls"
   if (/Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|SpectrumTag|TagEditor|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
-  if (/Publishing Card|Brain Status LED Badges/.test(title)) return "Compositions"
   return "Controls"
 }
 
