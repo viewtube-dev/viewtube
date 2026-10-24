@@ -13,6 +13,7 @@ const readStudioControlCss = () => [
   "studio-control-core.css",
   "studio-control-split.css",
   "studio-control-fields.css",
+  "studio-control-distill-overrides.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
 
 const canonicalTail = (css: string) => {
@@ -1195,10 +1196,10 @@ describe("Confirmed Primitive Library button tier grid regression", () => {
 
 describe("Studio field focus, floating labels, and toggle regressions", () => {
   it("keeps resting field glyph stroke primary, focused glyph stroke black, and shares risen-label typography tokens", () => {
-    const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
+    const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-distill-overrides.css"), "utf8");
     const css = readStudioControlCss();
-    const finalFieldContract = fields.slice(fields.lastIndexOf("/* Final clarified field contract"));
-    expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));");
+    const finalFieldContract = fields.slice(fields.lastIndexOf("/* Final regression-recovery contract"));
+    expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
     expect(finalFieldContract).toContain("-webkit-text-stroke-color: #000 !important;");
     expect(css).toContain("--vt-studio-floating-label-risen-font-size: 12px;");
     expect(css).toContain("--vt-studio-floating-label-risen-text-stroke: 0.5px;");
