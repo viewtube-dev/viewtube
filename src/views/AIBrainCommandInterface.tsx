@@ -75,6 +75,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
+import { BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
 import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow, BrainChatStatusBadge, BrainComposerShell, ChatConversationViewport } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
@@ -1922,7 +1923,11 @@ const AIBrainCommandInterface: React.FC = () => {
        <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
       <div className={`${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
-         <BrainContextStrip
+         <BrainStatusStrip items={[
+          { id: "channel", label: "Channel", value: authState.channelName || authState.channelHandle || channelId || "Not connected", tone: channelId ? "ok" : "warn" },
+          { id: "project", label: "Project", value: projectContextCleared ? "None" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "None" },
+          { id: "mode", label: "Mode", value: busy ? "Working" : "Ready", tone: busy ? "ok" : "neutral" },
+         ]} details={<BrainContextStrip
           channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
           projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
           contentBuildId={projectContextCleared ? null : brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || brain.projects.find((project) => project.status === "active")?.contentBuildId || (typeof surfaceSelection?.context?.contentBuildId === "string" ? surfaceSelection.context.contentBuildId : null)}
@@ -1930,7 +1935,7 @@ const AIBrainCommandInterface: React.FC = () => {
           onClearSelection={handleClearSurfaceSelection}
           onToggleLock={handleToggleSurfaceSelectionLock}
           onClearProject={handleClearActiveProject}
-         />
+         />} />
          {!hydrated && messages.length === 0 ? (
           <div className="min-h-0 flex-1" aria-hidden="true" />
          ) : messages.length === 0 ? (
@@ -1957,69 +1962,24 @@ const AIBrainCommandInterface: React.FC = () => {
          )}
         </div>
 
-        <BrainComposerShell>
-         <div className="mx-auto w-full max-w-[880px]">
-          <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1 xl:hidden">
-           <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-stretch gap-1">
-            <div data-vt-brain-part="composer-launchers" className="vt-brain-composer-launchers min-w-0">
-             <StudioSplitTwoLineButton
-              ref={promptLauncherRef}
-              sizeVariant="compact"
-              icon={<LayoutGrid aria-hidden="true" />}
-              firstLine="PROMPT"
-              secondLine="LIBRARY"
-              onClick={() => setPromptRailOpen(true)}
-              aria-label="Open prompt library"
-              aria-haspopup="dialog"
-              className="min-w-0 w-full xl:hidden"
-              style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
-             />
-             <StudioSplitTwoLineButton
-              ref={contextLauncherRef}
-              sizeVariant="compact"
-              icon={<PanelRight aria-hidden="true" />}
-              firstLine="CHANNEL"
-              secondLine="CONTEXT"
-              onClick={() => setContextRailOpen(true)}
-              aria-label="Open channel context"
-              aria-haspopup="dialog"
-              className="min-w-0 w-full xl:hidden"
-              style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": TOOLBOX_PALETTE[9] } as React.CSSProperties}
-             />
-            </div>
-            <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0 self-start" style={{ backgroundColor: "#36E0F6" }} />
-           </div>
-          </BrainComposerAccessoryRow>
-          <div data-vt-brain-part="composer-controls" className="vt-brain-composer-controls w-full min-w-0">
-           <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
-           <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
-           <span data-vt-brain-part="composer-status" className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
-           <StudioTextArea
-            ref={composerRef}
-            id="brain-composer"
-            sizeVariant="compact"
-            rows={2}
-            value={input}
-            onChange={(event) => {
-             event.currentTarget.style.height = "auto"
-             event.currentTarget.style.height = `${Math.min(event.currentTarget.scrollHeight, 144)}px`
-             setInput(event.target.value)
-            }}
-            onKeyDown={(event) => {
-             if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
-             event.preventDefault()
-             void handleSend()
-            }}
-            placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-            className="w-full max-h-36 min-h-[44px] min-w-0 resize-none"
-            style={{ minHeight: 52 }}
-            aria-label="Ask ViewTube Brain"
-            aria-describedby="brain-composer-help"
-           />
-           <StudioSplitTwoLineButton data-vt-brain-component="BrainComposerSendAction" sizeVariant="compact" icon={busy ? <Zap aria-hidden="true" /> : <Send aria-hidden="true" />} firstLine={busy ? "BRAIN" : "SEND"} secondLine={busy ? "WORKING" : "MESSAGE"} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} onClick={() => void handleSend()} className="shrink-0 min-w-[4.5rem]" style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[5] } as React.CSSProperties} />
-          </div>
-         </div>
-        </BrainComposerShell>
+        <div className="shrink-0 border-t-[2px] border-black bg-white p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
+         <BrainComposerBar
+          value={input}
+          onChange={setInput}
+          onSend={() => void handleSend()}
+          busy={busy}
+          textareaRef={composerRef as React.RefObject<HTMLTextAreaElement | null>}
+          onKeyDown={(event) => {
+           if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
+           event.preventDefault()
+           void handleSend()
+          }}
+          onOpenPrompts={() => setPromptRailOpen(true)}
+          onOpenContext={() => setContextRailOpen(true)}
+          onOpenJournal={() => setJournalOpen(true)}
+          placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
+         />
+        </div>
        </div>
 
        <div className="hidden min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-3 overflow-hidden xl:grid">
