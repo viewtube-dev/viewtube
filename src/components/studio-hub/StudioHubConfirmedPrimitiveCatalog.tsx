@@ -60,6 +60,7 @@ import {
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
 import { StudioDropdown } from "../../studio-ui/primitives/StudioDropdown"
 import { StudioInterModule } from "../../studio-ui/primitives/StudioInterModule"
+import { StudioResponseMetaRow } from "../../studio-ui/primitives/StudioResponseMetaRow"
 import "./studio-hub-primitive-catalogs.css"
 import "../../styles/studio-confirmed-catalog-modules.css"
 import { ConfirmedFamilyModule } from "./ConfirmedCatalogModules"
@@ -1433,6 +1434,23 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
   const [doubleRight, setDoubleRight] = React.useState("TARGET")
   const [barValue, setBarValue] = React.useState(40)
   return <>
+    <Family title="StudioResponseMetaRow · Compact" nonDefaultSettings={[
+      "Compact response title and metadata composition with optional status, metadata, and trailing slots.",
+      "Wraps long labels on narrow widths and composes existing status/actions rather than implementing parallel controls.",
+      "Uses the Studio spacing rhythm and remains free of shadows and geometry movement.",
+    ]} provenance={<Provenance primitive="StudioResponseMetaRow" tsx="src/studio-ui/primitives/StudioResponseMetaRow.tsx" css="src/styles/studio-response-meta-row.css" tokens="44px standard / 28px compact / 12px micro · 4px rhythm" imports={["src/studio-ui/primitives/StudioResponseMetaRow.tsx", "src/styles/studio-response-meta-row.css"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioResponseMetaRow">
+        <span>COMPACT · TITLE + STATUS + METADATA + TRAILING SLOT</span>
+        <StudioResponseMetaRow
+          title="ANSWER SUMMARY"
+          status={<StudioBrainStatusBadge label="VERIFIED" tone="green" appearance="tinted" />}
+          metadata={<span>3 SOURCES</span>}
+          trailing={<span>OPEN DETAILS →</span>}
+        />
+        <span>MICRO · LONG LABEL WRAPS</span>
+        <StudioResponseMetaRow sizeVariant="micro" title="EVIDENCE PROVENANCE" metadata={<span>PARTIAL MATCH</span>} />
+      </div>
+    </Family>
     <Family title="StudioDoubleSplitButton · Standard" nonDefaultSettings={["Individual double-split button specimen using the production button and split-shell foundation."]} provenance={<Provenance primitive="StudioDoubleSplitButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · leading and trailing square rails" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton"><span>STANDARD · DOUBLE-SPLIT BUTTON</span><StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Standard double-split button specimen">DOUBLE SPLIT</StudioDoubleSplitButton></div>
     </Family>
