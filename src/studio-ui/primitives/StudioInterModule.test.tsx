@@ -63,4 +63,15 @@ describe("StudioInterModule", () => {
     expect(css).not.toMatch(/\.vt-studio-inter-module\s*\{[^}]*border-left:\s*[^0]/s)
     expect(css).not.toMatch(/\.vt-studio-inter-module\s*\{[^}]*border-right:\s*[^0]/s)
   })
+
+  it("keeps both intermodule rails square and the module full-width", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-inter-module.css"), "utf8");
+    const overrides = readFileSync(resolve(process.cwd(), "src/styles/studio-control-distill-overrides.css"), "utf8");
+    expect(css).toContain("width: 100%;");
+    expect(overrides).toContain("html body .vt-studio-inter-module__rail");
+    expect(overrides).toContain("height: var(--vt-im-rail-square);");
+    expect(overrides).toContain("width: var(--vt-im-rail-square);");
+    expect(overrides).toContain("grid-column: 1 / -1;");
+  });
+
 })

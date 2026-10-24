@@ -315,3 +315,94 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   outline-offset: 0;
   box-shadow: none;
 }
+
+
+/* Final regression-recovery contract: this file loads last in studio-control-entry.css. */
+/* All Studio text fields keep a primary inline glyph stroke in every state. */
+html body input[data-vt-studio-control="true"],
+html body textarea[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] textarea,
+html body .vt-studio-text-box[data-vt-studio-control="true"] {
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
+}
+html body input[data-vt-studio-control="true"],
+html body textarea[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] textarea {
+  color: var(--vt-field-text, #000);
+  -webkit-text-fill-color: var(--vt-field-text, #000);
+}
+/* TextBox keeps its black perimeter; only its inner glyph stroke is primary. */
+html body .vt-studio-text-box[data-vt-studio-control="true"],
+html body .vt-studio-text-box[data-vt-studio-control="true"][data-size] {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+}
+/* Shared split rails stay square inside the outer border; their height cannot stretch. */
+html body [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
+html body [data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
+html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail],
+html body .vt-studio-split-left-badge__rail,
+html body .vt-studio-split-right-badge__rail,
+html body .vt-studio-double-split-badge__rail,
+html body .vt-studio-side-counter__rail,
+html body .vt-studio-counter__rail,
+html body .vt-studio-top-split-module__rail {
+  box-sizing: border-box;
+  align-self: center;
+  height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
+  min-height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
+  max-height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
+  aspect-ratio: 1 / 1;
+}
+html body .vt-studio-split-left-badge__rail,
+html body .vt-studio-split-right-badge__rail,
+html body .vt-studio-double-split-badge__rail,
+html body .vt-studio-side-counter__rail,
+html body .vt-studio-counter__rail {
+  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+  width: var(--vt-studio-split-rail-size);
+  min-width: var(--vt-studio-split-rail-size);
+  max-width: var(--vt-studio-split-rail-size);
+}
+html body .vt-studio-top-split-module__head[data-split="left"] {
+  grid-template-columns: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px)) minmax(0, 1fr);
+}
+html body .vt-studio-top-split-module__head[data-split="right"] {
+  grid-template-columns: minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
+}
+html body .vt-studio-top-split-module__head[data-split="double"] {
+  grid-template-columns: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px)) minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
+}
+html body .vt-studio-top-split-module__rail {
+  width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
+  min-width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
+  max-width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
+}
+/* Intermodules are full-row sections, not narrow column specimens. */
+html body .vt-studio-inter-module,
+html body .vt-studio-intermodule,
+html body [data-vt-studio-intermodule="true"],
+html body [data-vt-studio-inter-module="true"] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  grid-column: 1 / -1;
+}
+
+/* InterModule rails are the exact square inner face, not a 100%-height stretch. */
+html body .vt-studio-inter-module__rail {
+  --vt-im-rail-square: calc(var(--vt-im-face, 44px) - 2 * var(--vt-im-stroke, 3px));
+  box-sizing: border-box;
+  width: var(--vt-im-rail-square);
+  min-width: var(--vt-im-rail-square);
+  max-width: var(--vt-im-rail-square);
+  height: var(--vt-im-rail-square);
+  min-height: var(--vt-im-rail-square);
+  max-height: var(--vt-im-rail-square);
+  flex: 0 0 var(--vt-im-rail-square);
+  aspect-ratio: 1 / 1;
+}
