@@ -150,10 +150,15 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
   -webkit-text-stroke-width: var(--vt-studio-textarea-compact-text-stroke, 0.35px);
 }
 
-/* Studio field shells are stationary; no focus-fade or geometry-transition layer. */
+/* Fields animate only color/focus paint; geometry and position remain stationary. */
 html body :is(input, textarea, select)[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] :is(input, textarea, select) {
-  transition: none;
+  transition:
+    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
 }
 
 
