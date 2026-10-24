@@ -14,7 +14,7 @@ import {
   SubToolboxSplitDropdown,
   type SubToolboxSplitDropdownOption,
 } from "../../components/subtoolbox/SubToolboxSplitPrimitives"
-import { StudioSearchInput } from "../../studio-ui"
+import { StudioTextInput } from "../../studio-ui"
 import {
   buildDefaultDashboardLayout,
   loadDashboardLayout,
@@ -114,7 +114,7 @@ export const DashboardWidgetsSettingsSection: React.FC = () => {
                 aria-hidden="true"
                 className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2"
               />
-              <StudioSearchInput
+              <StudioTextInput type="search"
                 sizeVariant="standard"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
