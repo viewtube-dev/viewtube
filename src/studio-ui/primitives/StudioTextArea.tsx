@@ -63,7 +63,7 @@ export type StudioTextAreaProps = StudioTextAreaSimpleProps | StudioTextAreaFloa
 /**
  * Canonical multiline Studio writing-surface family.
  * Simple and floating-label presentations are variants of this one primitive.
- * Textarea sizes exclude the 12px Micro tier because this family has a 92px minimum. Typography alone is 18px standard / 14px compact; the 92px minimum
+ * Textarea sizes exclude the 12px Micro tier because this family has a 92px minimum. Typography alone is 24.55px Supreme / 18px standard / 14px compact / 17.5px Mini; the 92px minimum
  * writing surface, multiline padding, and vertical resize remain shared by variants.
  */
 export const StudioTextArea = React.forwardRef<HTMLTextAreaElement, StudioTextAreaProps>(
