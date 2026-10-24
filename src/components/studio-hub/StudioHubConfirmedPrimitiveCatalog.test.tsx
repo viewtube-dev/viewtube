@@ -45,6 +45,12 @@ describe("confirmed composite primitive catalog", () => {
     expect(source).toContain('data-vt-library-component="StudioCollapsingTwoLineModule"')
     expect(source).toContain('title="InterModule · Standard"')
     expect(source).toContain('title="Split Accordion · Train Motion"')
+    const directPrimitiveNames = [...representative.matchAll(/data-vt-library-component="([^"]+)"/g)].map((match) => match[1])
+    expect(new Set(directPrimitiveNames).size).toBe(directPrimitiveNames.length)
+    for (const primitive of directPrimitiveNames) {
+      expect(source.match(new RegExp(`data-vt-library-component="${primitive}"`, "g"))?.length ?? 0).toBeGreaterThanOrEqual(2)
+    }
+
     for (const title of [
       "Double Split Button · Standard + Compact",
       "Legend Multi Dropdown · Standard + Compact",
