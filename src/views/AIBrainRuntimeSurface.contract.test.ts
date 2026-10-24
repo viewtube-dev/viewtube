@@ -72,7 +72,7 @@ describe("AI Brain runtime surface integration", () => {
  })
  
  it("preserves transcript position unless the creator is following or sends a new turn", () => {
-  expect(source).toMatch(/export const shouldFollowBrainConversation|import \\{ shouldFollowBrainConversation \\} from "\\.\\/brainConversationScroll"/)
+  expect(source.includes("export const shouldFollowBrainConversation") || source.includes('import { shouldFollowBrainConversation } from "./brainConversationScroll"')).toBe(true)
   expect(source).toContain("if (!shouldFollowConversationRef.current) return")
   expect(source).toContain("shouldFollowConversationRef.current = shouldFollowBrainConversation(viewport.scrollHeight, viewport.scrollTop, viewport.clientHeight)")
   const handleSend = source.slice(source.indexOf("const handleSend = async"), source.indexOf("const handleRetryInterruptedTurn"))
