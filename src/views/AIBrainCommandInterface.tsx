@@ -1268,9 +1268,12 @@ const AIBrainCommandInterface: React.FC = () => {
  }, [busy, visibleTurns])
 
  // Keep the newest exchange in view only while the reader is following the conversation.
+ // Scroll the transcript itself; scrollIntoView can also move page/toolbox ancestors.
  useEffect(() => {
   if (!shouldFollowConversationRef.current) return
-  bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+  const viewport = conversationViewportRef.current
+  if (!viewport) return
+  viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" })
  }, [messages.length, busy])
 
  useEffect(() => {

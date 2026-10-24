@@ -86,4 +86,22 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('className="w-full max-h-36 min-h-[44px] min-w-0 resize-none"')
  })
 
+
+ it("does not make the entire transcript a live log that re-announces the full conversation", () => {
+  const viewport = chatPrimitivesSource.slice(
+   chatPrimitivesSource.indexOf("export const ChatConversationViewport:"),
+   chatPrimitivesSource.indexOf("/** Anchored composer frame"),
+  )
+  expect(viewport).toContain('aria-label="Brain conversation"')
+  expect(viewport).toContain('role="region"')
+  expect(viewport).not.toContain('role="log"')
+  expect(viewport).not.toContain('aria-live="polite"')
+ })
+
+
+ it("keeps follow scrolling inside the conversation viewport instead of scrolling ancestor layout", () => {
+  expect(source).not.toContain('bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })')
+  expect(source).toContain('viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" })')
+ })
+
 })
