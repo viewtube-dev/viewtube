@@ -277,3 +277,21 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   outline-offset: 0;
   box-shadow: none;
 }
+
+
+/* Horizontal word toggle follows the same five-tier tokens; its measured handle remains content-sized. */
+.vt-studio-44-word-toggle[data-vt-word-toggle-size] {
+  box-sizing: border-box;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+}
+.vt-studio-44-word-toggle[data-vt-word-toggle-size] > button {
+  font-size: var(--vt-studio-control-font-size, 38px);
+  line-height: var(--vt-studio-control-line-height, 1);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+.vt-studio-44-word-toggle[data-vt-word-toggle-size] .vt-studio-44-word-handle {
+  top: var(--vt-word-toggle-handle-inset, 2.75px);
+  bottom: var(--vt-word-toggle-handle-inset, 2.75px);
+  border-radius: max(1px, calc(var(--vt-studio-control-height, 44px) * .1));
+}
