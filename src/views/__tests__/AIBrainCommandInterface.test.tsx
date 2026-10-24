@@ -95,6 +95,22 @@ describe("AIBrainCommandInterface", () => {
  })
 
 
+ it("renders the prompt library as a top split shell with nested intermodules", () => {
+  const html = renderToStaticMarkup(
+   <BrainPromptLibrary
+    cards={buildCreatorBrainPromptCards().slice(0, 1)}
+    onPrompt={vi.fn()}
+    onEdit={vi.fn()}
+   />,
+  )
+
+  expect(html).toContain('data-vt-studio-top-split-module="true"')
+  expect(html).toContain('data-vt-studio-inter-host="true"')
+  expect(html).toContain("vt-studio-inter-host--bleed")
+  expect(html).toContain('data-prompt-category="strategy"')
+  expect(html).toContain('data-vt-studio-inter-module="true"')
+ })
+
  it("restores only typed prompt evidence whose ordered IDs match the saved turn contract", () => {
   const record = {
    id: "analytics:snapshot-1:channel_summary:views",

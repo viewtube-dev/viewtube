@@ -71,6 +71,11 @@
   border-top: 0;
 }
 
+/* An expanded body needs the following header to restore the single shared separator. */
+.vt-studio-inter-module[data-open="true"] + .vt-studio-inter-module > .vt-studio-inter-module__head {
+  border-top-width: var(--vt-im-stroke, 2px);
+}
+
 .vt-studio-inter-module__head[role="button"] {
   cursor: pointer;
 }
@@ -142,8 +147,12 @@
 }
 
 .vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0;
+}
+
+/* Flush nested lists share the parent header edge instead of doubling the top rule. */
+.vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body > .vt-studio-inter-module:first-child > .vt-studio-inter-module__head {
+  border-top: 0;
 }
 
 .vt-studio-inter-module[data-open="false"] > .vt-studio-inter-module__body {
@@ -218,8 +227,3 @@
   margin-inline: -6px;
 }
 
-
-/* The Brain prompt library's category modules meet the outer module edges. */
-.vt-studio-inter-module.brain-prompt-library-shell > .vt-studio-inter-module__body {
-  padding: 0;
-}

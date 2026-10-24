@@ -143,3 +143,16 @@ This update records source changes only. It does not claim that the focused test
 - [x] Prompt Library / Channel Context launchers and the bottom send action use compact split two-line controls; the composer textarea grows programmatically and no longer exposes a manual resize handle.
 - [x] Extended the runtime surface contract test to cover compact prompt modules, split two-line actions, spectrum pairing, registry ordering, and touch scrolling.
 - [ ] Run Vitest, typecheck, production build, and browser verification. Source checks alone do not certify layout or interactions.
+
+## Prompt-library hierarchy correction — 2026-10-24
+
+The prompt-library module hierarchy is now explicit in source:
+
+- The Prompt Library's outer shell is a **standard-size StudioInterModule**.
+- Each prompt category remains a **StudioInterModule** inside the library.
+- Each individual prompt is a **non-inter-module StudioCollapsingTwoLineModule**. Its two-line header shows the prompt name and the registry-backed `promptCardSummary(card)` explanation. Expanding it reveals the complete prompt text inside that same module.
+- **Send to Chat** and **Edit First** are compact `StudioSplitTwoLineButton` controls in a shared two-column row, with the icon rail and two-line labels retained.
+- Search, category filtering, registry ordering, spectrum-pair cycle, and the existing `onPrompt` / `onEdit` handlers remain authoritative.
+
+Regression contract assertions were updated in `src/views/AIBrainRuntimeSurface.contract.test.ts`. This records source-level implementation only; focused tests, typecheck/build, and deployed browser verification still need to be run.
+

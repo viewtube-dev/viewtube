@@ -22,6 +22,8 @@ function click(element: Element | null) {
 }
 afterEach(() => {
   cleanups.splice(0).forEach(cleanup => cleanup());
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe("Studio value toggle primitives", () => {
@@ -72,6 +74,50 @@ describe("Studio value toggle primitives", () => {
     expect(twenty.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(20);
     expect(twenty.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(10);
     expect(twenty.container.querySelector('[role="meter"]')?.getAttribute("aria-valuenow")).toBe("50");
+  });
+
+  it("measures the available track width and increases the bar count for a wider layout", () => {
+    let notify: ResizeObserverCallback | undefined;
+    class MockResizeObserver {
+      constructor(callback: ResizeObserverCallback) { notify = callback; }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+    }
+    vi.stubGlobal("ResizeObserver", MockResizeObserver);
+    const { container } = mount(<StudioBarToggle value={50} onValueChange={() => {}} />);
+    const track = container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({ width: 272 } as DOMRect);
+    act(() => {
+      notify?.([{ target: track, contentRect: { width: 260 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver);
+    });
+    expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(20);
+    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(10);
+  });
+
+  it("uses size-specific bar and gap metrics when measuring compact and micro tracks", () => {
+    let notify: ResizeObserverCallback | undefined;
+    class MockResizeObserver {
+      constructor(callback: ResizeObserverCallback) { notify = callback; }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+    }
+    vi.stubGlobal("ResizeObserver", MockResizeObserver);
+
+    const compact = mount(<StudioBarToggle value={50} size="compact" onValueChange={() => {}} />);
+    const compactTrack = compact.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
+    vi.spyOn(compactTrack, "getBoundingClientRect").mockReturnValue({ width: 264 } as DOMRect);
+    act(() => notify?.([{ target: compactTrack, contentRect: { width: 256 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
+    expect(compact.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(32);
+    expect(compact.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(16);
+
+    const micro = mount(<StudioBarToggle value={50} size="micro" onValueChange={() => {}} />);
+    const microTrack = micro.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
+    vi.spyOn(microTrack, "getBoundingClientRect").mockReturnValue({ width: 164 } as DOMRect);
+    act(() => notify?.([{ target: microTrack, contentRect: { width: 160 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
+    expect(micro.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(40);
+    expect(micro.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(20);
   });
 
   it("builds Arrow Toggle from the canonical split shell with square icon rails", () => {

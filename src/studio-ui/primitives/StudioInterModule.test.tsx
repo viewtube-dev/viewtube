@@ -42,6 +42,16 @@ describe("StudioInterModule", () => {
     expect(fixed).not.toContain("aria-expanded=")
   })
 
+  it("supports rich ReactNode titles without narrowing them to native title text", () => {
+    const html = renderToStaticMarkup(
+      <StudioInterModule title={<><span>AI BRAIN</span><strong> · PROMPTS</strong></>} collapsible={false}>
+        <p>Prompt content</p>
+      </StudioInterModule>,
+    )
+    expect(html).toContain("<span>AI BRAIN</span>")
+    expect(html).toContain("<strong> · PROMPTS</strong>")
+  })
+
   it("keeps nested module chrome edge-flush without exterior side borders", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-inter-module.css"), "utf8")
     expect(css).toContain('border-bottom: var(--vt-im-stroke) solid #000')

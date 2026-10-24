@@ -164,11 +164,12 @@ export function StudioBarToggle({
     const element = barsRef.current;
     if (!element || typeof ResizeObserver === "undefined") return;
     const observer = new ResizeObserver(entries => {
-      const width = entries[0]?.contentRect.width ?? element.clientWidth;
+      // Measure the border box so CSS padding is included exactly once.
+      const width = element.getBoundingClientRect().width || entries[0]?.contentRect.width || element.clientWidth;
       setMeasuredCount(barCountFromWidth(width, size));
     });
     observer.observe(element);
-    setMeasuredCount(barCountFromWidth(element.clientWidth, size));
+    setMeasuredCount(barCountFromWidth(element.getBoundingClientRect().width || element.clientWidth, size));
     return () => observer.disconnect();
   }, [size, barCountProp]);
 

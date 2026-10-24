@@ -1,4 +1,5 @@
 import React from "react"
+import "./BrainChatPrimitives.css"
 import { StudioBrainStatusBadge, StudioButton } from "../../studio-ui"
 
 export type BrainChatStatus = "ready" | "loading" | "partial" | "warning" | "error" | "unavailable"
@@ -77,9 +78,9 @@ export const BrainResponseLayout: React.FC<{
     {header ?? (
       <div className={`shrink-0 border-b-2 border-black px-3 py-2 ${headerClassName}`}>
         {attribution || status || headerMetadata ? (
-          <div className="mb-1 flex min-w-0 flex-wrap items-center justify-between gap-1.5">
+          <div className="mb-1 flex min-w-0 flex-wrap items-center justify-between gap-1">
             {attribution ? <div className="min-w-0">{attribution}</div> : <span />}
-            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+            <div className="flex min-w-0 flex-wrap items-center gap-1">
               {status}
               {headerMetadata}
             </div>
@@ -88,7 +89,7 @@ export const BrainResponseLayout: React.FC<{
         <BrainResponseSectionHeader title={title} />
       </div>
     )}
-    <div data-vt-brain-part="response-layout-body" className={`flex min-w-0 flex-col gap-2.5 p-3 [overflow-wrap:anywhere] ${bodyClassName}`}>
+    <div data-vt-brain-part="response-layout-body" className={`flex min-w-0 flex-col gap-2 p-3 [overflow-wrap:anywhere] ${bodyClassName}`}>
       {children}
     </div>
     {actions ? <div data-vt-brain-part="response-layout-actions" className={`flex min-w-0 shrink-0 flex-wrap items-center gap-1 border-t-2 border-black px-3 py-1 ${actionsClassName}`}>{actions}</div> : null}
@@ -103,10 +104,10 @@ export const BrainResponseSectionHeader: React.FC<{
 }> = ({ title, metadata, className = "" }) => (
   <header
     data-vt-studio-brain-primitive="ResponseSectionHeader"
-    className={`flex min-w-0 flex-wrap items-center justify-between gap-1.5 ${className}`}
+    className={`flex min-w-0 flex-wrap items-center justify-between gap-1 ${className}`}
   >
     <h3 className="min-w-0 [overflow-wrap:anywhere]">{title}</h3>
-    {metadata ? <div className="flex min-w-0 flex-wrap items-center gap-1.5">{metadata}</div> : null}
+    {metadata ? <div className="flex min-w-0 flex-wrap items-center gap-1">{metadata}</div> : null}
   </header>
 )
 
@@ -179,21 +180,18 @@ export const BrainComposerAccessoryRow: React.FC<{
 export const ChatConversationViewport: React.FC<{
   children: React.ReactNode
   viewportRef: React.Ref<HTMLDivElement>
-  bottomRef?: React.Ref<HTMLDivElement>
   onScroll?: React.UIEventHandler<HTMLDivElement>
   className?: string
-}> = ({ children, viewportRef, bottomRef, onScroll, className = "" }) => (
+}> = ({ children, viewportRef, onScroll, className = "" }) => (
   <div
     ref={viewportRef}
     onScroll={onScroll}
     className={`brain-chat-scrollbar flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-y-auto overscroll-y-contain touch-pan-y [-webkit-overflow-scrolling:touch] ${className}`}
     aria-label="Brain conversation"
-    aria-live="polite"
-    role="log"
+    role="region"
     tabIndex={0}
   >
     {children}
-    <div ref={bottomRef} aria-hidden="true" />
   </div>
 )
 
@@ -205,7 +203,7 @@ export const BrainComposerShell: React.FC<{
   <footer
     data-vt-brain-component="BrainComposer"
     aria-label="Brain composer"
-    className={`shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] ${className}`}
+    className={`shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2 pb-[max(8px,env(safe-area-inset-bottom))] ${className}`}
   >
     {children}
   </footer>
