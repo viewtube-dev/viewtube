@@ -255,14 +255,14 @@ const BrainContextUsedDrawer: React.FC<{
  })
  return (
   <details data-vt-brain-component="BrainContextUsedDrawer" data-vt-brain-turn-id={turnId} className="w-full rounded-[7px] border-[2px] border-black bg-white">
-   <summary data-vt-brain-part="context-used-trigger" className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
+   <summary data-vt-brain-part="context-used-trigger" className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
     <PanelRight size={12} aria-hidden="true" /> Context used
     <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1">{items.length + contextUsed.knowledgeItems.length}</span>
    </summary>
    <div className="grid gap-2 border-t-[2px] border-black p-2">
     <ul className="grid gap-1">
      {items.map((item) => (
-      <li data-vt-brain-part="context-used-item" key={item.id} className="grid gap-0.5 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
+      <li data-vt-brain-part="context-used-item" key={item.id} className="grid gap-1 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
        <span className="text-[9px] font-black uppercase">{item.label} · {item.provenance}</span>
        <span className="break-words text-[10px] font-bold">{item.value}</span>
       </li>
@@ -636,7 +636,7 @@ export const BrainFeedbackControls: React.FC<{
  }
 
  return (
-  <div data-vt-brain-component="BrainAnswerFeedback" className="flex min-w-0 flex-wrap items-center gap-1.5">
+  <div data-vt-brain-component="BrainAnswerFeedback" className="flex min-w-0 flex-wrap items-center gap-1">
    <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Rate this response">
     {FEEDBACK_OPTIONS.map(([rating, Icon, label, color]) => {
      const isSelected = selected === rating
@@ -807,7 +807,7 @@ const CreatorResponseCard: React.FC<{
    className="w-full max-w-none shrink-0 border-0 bg-white"
    header={
     <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
-     <div className="flex flex-wrap items-start justify-between gap-1.5">
+     <div className="flex flex-wrap items-start justify-between gap-1">
       <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
       {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
      </div>
@@ -836,7 +836,7 @@ const CreatorResponseCard: React.FC<{
       <Link
        to={message.handoff.route}
        title={`Open ${message.handoff.targetTitle}`}
-       className="ml-auto inline-flex items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em]"
+       className="ml-auto inline-flex items-center gap-1 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em]"
       >
        Review only · Open
        <ArrowRight size={13} />
@@ -904,7 +904,7 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
 
  return (
   <details data-vt-brain-component="BrainEvidenceReadiness" className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
-   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1.5 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
+   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
     <span data-vt-brain-part="evidence-readiness-status"><BrainChatStatusBadge status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label="Data readiness" /></span>
     <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
    </summary>
@@ -1236,7 +1236,7 @@ const AIBrainCommandInterface: React.FC = () => {
   const chronological = [...visibleTurns].reverse()
   setMessages(
    chronological.flatMap((turn) => [
-    { id: `${turn.id}-user`, role: "user" as const, text: turn.userText },
+    { id: `${turn.id}-user`, role: "user" as const, text: turn.rawUserMessage ?? turn.userText },
     {
      id: turn.id,
      role: "model" as const,
@@ -1900,7 +1900,7 @@ const AIBrainCommandInterface: React.FC = () => {
 
         <BrainComposerShell>
          <div className="mx-auto w-full max-w-[880px]">
-          <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1.5 xl:hidden">
+          <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1 xl:hidden">
            <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-stretch gap-1">
             <div data-vt-brain-part="composer-launchers" className="vt-brain-composer-launchers grid min-w-0 grid-cols-1 gap-1 sm:grid-cols-2">
              <StudioSplitTwoLineButton
