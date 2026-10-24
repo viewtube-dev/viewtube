@@ -1184,28 +1184,33 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family
-      title="Global Rules Exceptions · Closeable Badge + Tag Editor"
+      title="StudioCloseableBadge · Fixed 20px Exception"
       nonDefaultSettings={[
-        "Closeable badge exception: 20px pill with 16px label and a secondary-pair close affordance.",
-        "Tag-editor action geometry must match the registered exception in the production token/CSS contract.",
+        "Fixed 20px metadata pill with a secondary-pair close affordance and explicit close feedback.",
+        "This metadata badge is an intentional family exception, not an ordinary size-tier control.",
       ]}
-      provenance={<Provenance
-        primitive="StudioCloseableBadge / StudioTagEditor"
-        tsx="src/studio-ui/primitives/StudioControls.tsx"
-        css="src/styles/studio-control-system.css"
-        tokens={`Closeable badge H 20px · full pill · no border · 16px type · primary color mixed 50% with white · action H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.height}px / stroke ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.stroke}px / radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.radius}px`}
-        imports={["src/studio-ui/primitives/StudioControls.tsx"]}
-      />}
+      provenance={<Provenance primitive="StudioCloseableBadge" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="20px pill · no border · 16px heavy type · content width · secondary close affordance." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-tag-editor-variant">
-        <span>Closeable badge · enter, close-swap, and fade animations</span>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-tag-editor-variant" data-vt-library-component="StudioCloseableBadge">
+        <span>20PX FIXED · CLOSE / REMOVE</span>
         <div className="vt-confirmed-tag-editor-badge-row">
           <StudioCloseableBadge label="Tag One" />
           <StudioCloseableBadge label="Featured" />
           <StudioCloseableBadge label="Live" />
         </div>
-        <span>Interactive Tag Editor · add, confirm, fly, and remove</span>
-        <StudioTagEditor defaultValue={["Tag One", "Featured"]} />
+      </div>
+    </Family>
+    <Family
+      title="StudioTagEditor · Tokenized Actions"
+      nonDefaultSettings={[
+        "Dedicated tag editor section with its own add, confirm, remove, and action-size contract.",
+        "The editor's action geometry follows the registered exception tokens; tag chips are not promoted to the top primitive ledger.",
+      ]}
+      provenance={<Provenance primitive="StudioTagEditor" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens={`Action H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.height}px / stroke ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.stroke}px / radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.radius}px.`} imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-tag-editor-variant" data-vt-library-component="StudioTagEditor">
+        <span>INTERACTIVE TAG EDITOR · ADD, CONFIRM, FLY, REMOVE</span>
+        <StudioTagEditor defaultValue={["Tag One", "Featured"]} ariaLabel="Dedicated tag editor specimen" />
       </div>
     </Family>
     <Family
