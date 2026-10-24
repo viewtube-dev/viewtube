@@ -135,9 +135,10 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Resting fill: primary color at 50% opacity.
 - Resting value, placeholder, and caret: primary color.
 - Outer border: black, size-tier stroke.
-- Inline text stroke: primary color, matching the outer border width.
+- Resting inline text stroke: primary color, matching the resting text color and selected size-tier width.
 - Focus fill: primary color at 15% opacity.
-- Focus text: black.
+- Focus text and inline text stroke: black (`#000000`), matching one another.
+- Focus caret: primary color (`--pair-a`), not black.
 - Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px / 1.3px / 0.65px standard / compact / micro), outline offset 0.
 - Focus must not shift layout. Do not add a gap between the field and its focus outline.
 - The Micro (12px) focus outline is **0.65px** (65% of its 1px border), not 1px. Both standard controls and floating-field wrappers must consume the same tier token; no Micro-only 1px override is permitted.
