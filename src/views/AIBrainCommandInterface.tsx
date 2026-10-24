@@ -1267,10 +1267,12 @@ const AIBrainCommandInterface: React.FC = () => {
   )
  }, [busy, visibleTurns])
 
- // Keep the newest exchange in view only while the reader is following the conversation.
+ // Follow the transcript by scrolling its single viewport, never the page or a message sentinel.
  useEffect(() => {
   if (!shouldFollowConversationRef.current) return
-  bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+  const viewport = conversationViewportRef.current
+  if (!viewport) return
+  viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" })
  }, [messages.length, busy])
 
  useEffect(() => {
@@ -1891,35 +1893,37 @@ const AIBrainCommandInterface: React.FC = () => {
         <BrainComposerShell>
          <div className="mx-auto w-full max-w-[880px]">
           <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1.5 xl:hidden">
-           <div data-vt-brain-part="composer-launchers" className="grid w-full min-w-0 grid-cols-2 gap-1">
-            <StudioSplitTwoLineButton
-             ref={promptLauncherRef}
-             sizeVariant="compact"
-             icon={<LayoutGrid aria-hidden="true" />}
-             firstLine="PROMPT"
-             secondLine="LIBRARY"
-             onClick={() => setPromptRailOpen(true)}
-             aria-label="Open prompt library"
-             aria-haspopup="dialog"
-             className="min-w-0 w-full xl:hidden"
-             style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
-            />
-            <StudioSplitTwoLineButton
-             ref={contextLauncherRef}
-             sizeVariant="compact"
-             icon={<PanelRight aria-hidden="true" />}
-             firstLine="CHANNEL"
-             secondLine="CONTEXT"
-             onClick={() => setContextRailOpen(true)}
-             aria-label="Open channel context"
-             aria-haspopup="dialog"
-             className="min-w-0 w-full xl:hidden"
-             style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": TOOLBOX_PALETTE[9] } as React.CSSProperties}
-            />
+           <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-stretch gap-1">
+            <div data-vt-brain-part="composer-launchers" className="vt-brain-composer-launchers grid min-w-0 grid-cols-1 gap-1 sm:grid-cols-2">
+             <StudioSplitTwoLineButton
+              ref={promptLauncherRef}
+              sizeVariant="compact"
+              icon={<LayoutGrid aria-hidden="true" />}
+              firstLine="PROMPT"
+              secondLine="LIBRARY"
+              onClick={() => setPromptRailOpen(true)}
+              aria-label="Open prompt library"
+              aria-haspopup="dialog"
+              className="min-w-0 w-full xl:hidden"
+              style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
+             />
+             <StudioSplitTwoLineButton
+              ref={contextLauncherRef}
+              sizeVariant="compact"
+              icon={<PanelRight aria-hidden="true" />}
+              firstLine="CHANNEL"
+              secondLine="CONTEXT"
+              onClick={() => setContextRailOpen(true)}
+              aria-label="Open channel context"
+              aria-haspopup="dialog"
+              className="min-w-0 w-full xl:hidden"
+              style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": TOOLBOX_PALETTE[9] } as React.CSSProperties}
+             />
+            </div>
+            <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0 self-stretch" style={{ backgroundColor: "#36E0F6" }} />
            </div>
           </BrainComposerAccessoryRow>
-          <div data-vt-brain-part="composer-controls" className="grid w-full min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-1">
-           <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
+          <div data-vt-brain-part="composer-controls" className="vt-brain-composer-controls grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-1">
            <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
            <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span data-vt-brain-part="composer-status" className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
