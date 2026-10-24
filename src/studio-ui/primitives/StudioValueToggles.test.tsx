@@ -57,9 +57,17 @@ describe("Studio value toggle primitives", () => {
     expect(container.querySelector(".vt-studio-value-toggle__divider")).toBeNull();
   });
 
-  it("renders ten bars and exposes the selected level as a meter", () => {
+  it("renders ten default bars and exposes the selected level as a meter", () => {
     const { container } = mount(<StudioBarToggle value={50} onValueChange={() => {}} />);
     expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(10);
+    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(5);
+    expect(container.querySelector('[role="meter"][aria-label="Level"]')?.getAttribute("aria-valuenow")).toBe("50");
+  });
+
+  it("keeps proportional fill when a wider track uses twenty bars", () => {
+    const { container } = mount(<StudioBarToggle value={50} barCount={20} onValueChange={() => {}} />);
+    expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(20);
+    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(10);
     expect(container.querySelector('[role="meter"][aria-label="Level"]')?.getAttribute("aria-valuenow")).toBe("50");
   });
 
