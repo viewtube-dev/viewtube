@@ -1,7 +1,8 @@
 import React from "react"
 import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
-import { StudioDropdown, StudioLegendMultiDropdown, StudioSplitLeftInput, StudioSplitTextInput, StudioUploadFrame } from "./StudioControls"
+import { StudioDropdown, StudioLegendMultiDropdown, StudioSplitLeftInput, StudioUploadFrame } from "./StudioControls"
+import { StudioSplitTextInput } from "./StudioSplitTextInput"
 
 describe("Studio Controls migrations for Vault and Studio Hub", () => {
   it("renders the split-left search input with native input props and the icon rail", () => {
