@@ -29,7 +29,7 @@ function makeItems(count: number): StudioSplitAccordionItem[] {
 function SpecimenRow({ title, count, size }: {
   title: string;
   count: number;
-  size: "standard" | "compact" | "micro";
+  size: "supreme" | "standard" | "compact" | "mini" | "micro";
 }) {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const items = React.useMemo(() => makeItems(count), [count]);
@@ -49,12 +49,14 @@ function SpecimenRow({ title, count, size }: {
 
 export const StudioSplitAccordionCatalogSpecimens: React.FC = () => (
   <div data-vt-confirmed-primitive="StudioSplitAccordion" className="grid w-full min-w-0 max-w-none gap-1" style={{ gridTemplateColumns: "minmax(0, 1fr)", width: "100%", minWidth: 0, maxWidth: "none" }}>
+    <SpecimenRow title="60px Supreme · 5 sections" count={5} size="supreme" />
     <SpecimenRow title="44px Standard · 3 sections" count={3} size="standard" />
     <SpecimenRow title="44px Standard · 4 sections" count={4} size="standard" />
     <SpecimenRow title="44px Standard · 5 sections" count={5} size="standard" />
     <SpecimenRow title="44px Standard · 10 sections" count={10} size="standard" />
     <SpecimenRow title="28px Compact · 5 sections" count={5} size="compact" />
     <SpecimenRow title="28px Compact · 10 sections" count={10} size="compact" />
+    <SpecimenRow title="20px Mini · 5 sections" count={5} size="mini" />
     <SpecimenRow title="12px Micro · 5 sections" count={5} size="micro" />
     <SpecimenRow title="12px Micro · 10 sections" count={10} size="micro" />
   </div>
