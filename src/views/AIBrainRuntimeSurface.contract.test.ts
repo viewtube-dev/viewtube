@@ -50,7 +50,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(promptLibrary).not.toContain("title={card.label}")
   expect(collapsePrimitiveSource).toContain("export const StudioCollapsingTwoLineModule")
   expect(collapsePrimitiveSource).toContain("vt-studio-two-line-module__description")
-  expect(promptLibrary).toContain('className="block w-full min-w-0 m-0 p-0"')
+  expect(promptLibrary).toContain('className="block w-full min-w-0 m-0 px-0"')
   expect(source).toContain("fillAvailable")
   expect(source).toContain('contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6]')
   expect(source).not.toContain('contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:!h-full')
