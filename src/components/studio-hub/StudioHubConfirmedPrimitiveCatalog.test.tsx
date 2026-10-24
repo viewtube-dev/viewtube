@@ -13,6 +13,22 @@ const readStudioControlCss = () => [
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
+  it("keeps the top imported-primitive ledger lean and gives module specimens dedicated sections", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const representativeStart = source.indexOf("const ConfirmedDirectPrimitiveRows")
+    const representativeEnd = source.indexOf("const ConfirmedStudioCounterFamily")
+    expect(representativeStart).toBeGreaterThanOrEqual(0)
+    expect(representativeEnd).toBeGreaterThan(representativeStart)
+    const representative = source.slice(representativeStart, representativeEnd)
+
+    expect(representative).toContain('title="Direct Imported Primitive Representatives · Standard"')
+    expect(representative).not.toContain('data-vt-library-component="StudioCollapsingSplitModule"')
+    expect(representative).not.toContain('data-vt-library-component="StudioSplitAccordion"')
+    expect(source).toContain('title="Collapsing Split Module · Standard + Compact"')
+    expect(source).toContain('title="InterModule · Standard"')
+    expect(source).toContain('title="Split Accordion · Train Motion"')
+  })
+
   it("registers the independent Split Accordion at standard, compact, and micro sizes", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
     expect(html).toContain("Split Accordion · Train Motion");
