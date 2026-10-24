@@ -147,17 +147,11 @@
 }
 
 .vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-/* The Brain prompt library opts into vertical flushness without changing other intermodule consumers. */
-.vt-studio-inter-module.brain-prompt-library-category > .vt-studio-inter-module__body,
-.vt-studio-inter-module.brain-prompt-library-prompt > .vt-studio-inter-module__body {
   padding: 0;
 }
 
-.vt-studio-inter-module.brain-prompt-library-category > .vt-studio-inter-module__body > .vt-studio-inter-module:first-child > .vt-studio-inter-module__head {
+/* Flush nested lists share the parent header edge instead of doubling the top rule. */
+.vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body > .vt-studio-inter-module:first-child > .vt-studio-inter-module__head {
   border-top: 0;
 }
 
