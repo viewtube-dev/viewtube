@@ -593,7 +593,7 @@ export const BrainPromptLibrary: React.FC<{
              ) : null}
             </div>
            </div>
-          </StudioCollapsingSplitModule>
+          </StudioCollapsingTwoLineModule>
          )
         })}
        </StudioInterModule>
