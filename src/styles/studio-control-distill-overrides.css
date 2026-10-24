@@ -395,3 +395,17 @@ html body [data-vt-studio-inter-module="true"] {
   max-width: none;
   grid-column: 1 / -1;
 }
+
+/* InterModule rails are the exact square inner face, not a 100%-height stretch. */
+html body .vt-studio-inter-module__rail {
+  --vt-im-rail-square: calc(var(--vt-im-face, 44px) - 2 * var(--vt-im-stroke, 3px));
+  box-sizing: border-box;
+  width: var(--vt-im-rail-square);
+  min-width: var(--vt-im-rail-square);
+  max-width: var(--vt-im-rail-square);
+  height: var(--vt-im-rail-square);
+  min-height: var(--vt-im-rail-square);
+  max-height: var(--vt-im-rail-square);
+  flex: 0 0 var(--vt-im-rail-square);
+  aspect-ratio: 1 / 1;
+}
