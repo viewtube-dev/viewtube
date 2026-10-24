@@ -23,6 +23,8 @@ describe("AI Brain runtime surface integration", () => {
   expect(panelSource).toContain('label="Promoted"')
   expect(panelSource).toContain('data-vt-brain-part="evidence-lineage"')
   expect(panelSource).toContain('data-vt-brain-part="embedded-evidence-lineage"')
+  expect(panelSource).toContain('data-vt-brain-part="runtime-details"')
+  expect(panelSource).toContain('data-vt-brain-part="runtime-summary"')
  })
 
  it("lets fillAvailable toolboxes fit their header and keep the remaining viewport scrollable", () => {
