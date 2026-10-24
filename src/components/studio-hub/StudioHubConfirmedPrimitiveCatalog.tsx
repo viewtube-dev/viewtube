@@ -307,7 +307,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   ]
   return (
     <Family
-      title="Direct Imported Primitive Representatives · Standard"
+      title="Representatives · One Standard Specimen Per Primitive"
       nonDefaultSettings={[
         "Each row contains one live production primitive at its standard size; examples are imported from their production owners rather than recreated as catalog-only lookalikes.",
         "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
@@ -320,7 +320,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioSplitTextInput.tsx", "src/studio-ui/primitives/StudioValueToggles.tsx"]}
       />}
     >
-      <div className="vt-confirmed-direct-primitive-rows">
+      <div className="vt-confirmed-direct-primitive-rows" data-vt-confirmed-representatives="true" aria-label="Canonical primitive representatives">
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioButton"><span>Studio Button · STANDARD</span><StudioButton sizeVariant="standard" aria-label="Studio button standard specimen">STUDIO BUTTON</StudioButton></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftButton"><span>Split Left Button · STANDARD</span><StudioSplitLeftButton sizeVariant="standard" icon={<Check aria-hidden="true" />} aria-label="Split left button standard specimen">SPLIT LEFT</StudioSplitLeftButton></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton"><span>Double Split Button · STANDARD</span><StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Double split button standard specimen">DOUBLE SPLIT</StudioDoubleSplitButton></div>
@@ -543,7 +543,7 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
       "Full-module width layout with the exact seven-row PR #756 composition: Supreme full and half rows; Standard full, half, and 1/3 + 1/4 + 1/6 + 2×1/8 row; Compact 1/3 + 1/4 + 2/9 + 1/9 + 1/12 row; then a split half-module Compact/Micro row.",
       "Row 7 keeps five compact specimens in the left half (3×1/8 + 2×1/16 of module width) and the Micro rows in the right half: 7A has 2×1/4; 7B has 2×1/8 + 4×1/16.",
       "V1 primary/black; V2 secondary/black; V3 independently toggles V1 and V2; V4 black/primary; V5 toggles V1/V2 with OFF/ON text; V6 toggles V1/black with NO/YES text; V7 primary/white.",
-      "Each specimen is a real StudioButton. The grid controls arrangement only; production primitive owns size geometry, face styling, toggle state, accessibility, and ellipsis behavior.",
+      "Each specimen is a real StudioButton. The grid controls arrangement only; production primitive owns size geometry, face styling, toggle state, accessibility, and clipped single-line text behavior (never ellipsis).",
     ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + ConfirmedSpecimenGrid.css" tokens="60px Supreme · 44px Standard · 28px Compact · 12px Micro · proportional 144-unit grid · 4px gap" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-button-gallery">
         <ConfirmedSpecimenGrid
@@ -574,14 +574,14 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 type ConfirmedCatalogFamilyName =
   | "Text Fields"
   | "Buttons"
-  | "Modules & Frames"
+  | "Modules"
   | "Dropdowns"
   | "Controls"
   | "Text Controls"
   | "Compositions"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
-  "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
+  "Text Fields", "Buttons", "Modules", "Dropdowns",
   "Controls", "Text Controls", "Compositions",
 ]
 
@@ -595,7 +595,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     : ""
   if (/Studio Text Input|Studio Text Area|Studio Text Box|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
-  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame/.test(title)) return "Modules & Frames"
+  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules"
   if (/Dropdown/.test(title)) return "Dropdowns"
   if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioChoice|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily") return "Controls"
   if (/Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|SpectrumTag|TagEditor|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
@@ -679,7 +679,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <ConfirmedCatalogFamilyGroups>
     <details className="vt-confirmed-family vt-confirmed-defaults-combined" data-vt-confirmed-family="defaults">
       <summary className="vt-confirmed-defaults-heading" id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</summary>
-      <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 20px Mini · 12px micro · 4.09px / 3px / 2px / 1.5px / 1px borders · 8.18px / 6px / 4px / 3px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
+      <p className="vt-confirmed-defaults-summary">60px Supreme · 44px Standard · 28px Compact · 20px Mini · 12px Micro · 3px / 3px / 2px / 1.5px / 1.5px borders · 6px / 6px / 4px / 3px / 3px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <p><a href="https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults, exception index, and certification rules ↗</a></p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show defaults, effective CSS behavior, and exceptions</summary>
@@ -697,7 +697,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{formatDefaultValue(value)}</span></div>)}</div>
         <div className="vt-confirmed-defaults-explainer">
           <strong>HOW TO READ THE CURRENT CONTRACT</strong>
-          <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px; Mini is 20px / 1.5px / 3px; Micro is 12px / 1px / 2px; Supreme is 60px / 4.09px / 8.18px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and default line-height (1) unless a family exception is documented.</p>
+          <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px; Mini is 20px / 1.5px / 3px; Micro is 12px / 1.5px / 3px; Supreme is 60px / 3px / 6px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and default line-height (1) unless a family exception is documented.</p>
           <p><b>Field colors:</b> At rest, value, placeholder, caret, and inline text stroke use primary (--pair-a); fill uses primary at 50% opacity and the outer border is black. Focus uses primary fill at 15%, black text fill with primary inline stroke, plus a secondary-color outline at 65% of border width with 0px offset.</p>
           <p><b>Global interaction defaults:</b> primitive shells are flat and stationary. No shell shadow, hover/press movement, or transition is part of the default contract; explicitly registered inner-icon effects must remain isolated and honor reduced motion.</p>
           <p><b>Icon presets:</b> the default production preset is 38px / 1.9 stroke standard and 24px / 2.0 compact. Current (28px / 18px) and moderate (34px / 22px) presets are opt-in. Circle icon buttons scale the large preset to 80%.</p>
@@ -707,7 +707,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <h4 className="vt-confirmed-exceptions-heading" id="vt-confirmed-exception-index-title">Global Exceptions · Current Implementation + Verification Boundary</h4>
       <p>Canonical sources: <code>src/studio-ui/primitives/StudioControls.tsx</code>, <code>src/studio-ui/tokens.ts</code>, and <code>src/styles/studio-control-system.css</code>. Named size exceptions are registered in <code>STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS</code>; effective CSS can diverge from token metadata.</p>
       <ul>
-        <li><strong>BASE SIZE LATTICE:</strong> standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius; Mini is 20px / 1.5px / 3px; Micro is 12px / 1px / 2px; Supreme is 60px / 4.09px / 8.18px. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
+        <li><strong>BASE SIZE LATTICE:</strong> standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius; Mini is 20px / 1.5px / 3px; Micro is 12px / 1.5px / 3px; Supreme is 60px / 3px / 6px. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
         <li><strong>SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact, weight 1000 and default line-height (1) while retaining selected-size geometry.</li>
         <li><strong>MULTILINE TEXTAREA:</strong> 18px standard / 14px compact, multiline line-height and padding, 92px minimum writing surface, and vertical resize.</li>
         <li><strong>PROMINENT WORKFLOW ACTION:</strong> StudioActionButton is a Supreme 60px default with standard/compact variants and token-driven geometry, and no shell shadow, transition, or hover/press translation.</li>
