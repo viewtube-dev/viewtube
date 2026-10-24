@@ -3,30 +3,44 @@ import type { StudioControlSize } from "../tokens"
 
 export type StudioSplitTextInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
   sizeVariant?: StudioControlSize
-  icon?: React.ReactNode
-  layout?: "left" | "right"
+  split?: "left" | "right" | "double"
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
-/** Text input with a canonical square split rail and one shared outer shell. */
+/** A single editable input with canonical left, right, or double split rails. */
 export const StudioSplitTextInput = React.forwardRef<HTMLInputElement, StudioSplitTextInputProps>(
-  ({ sizeVariant = "standard", icon, layout = "left", className, ...props }, ref) => (
-    <div
-      data-vt-studio-control="true"
-      data-size={sizeVariant}
-      data-vt-studio-split-shell="true"
-      data-layout={layout}
-      className={["vt-studio-split-shell", "vt-studio-split-text-input", className].filter(Boolean).join(" ")}
-    >
-      {layout === "left" && <span className="vt-studio-split-shell__rail" data-rail="start" aria-hidden="true">{icon}</span>}
-      <input
-        ref={ref}
+  ({ sizeVariant = "standard", split = "left", leftIcon, rightIcon, className, ...props }, ref) => {
+    const hasLeftRail = split === "left" || split === "double"
+    const hasRightRail = split === "right" || split === "double"
+    return (
+      <div
         data-vt-studio-control="true"
         data-size={sizeVariant}
-        className="vt-studio-split-text-input__field"
-        {...props}
-      />
-      {layout === "right" && <span className="vt-studio-split-shell__rail" data-rail="end" aria-hidden="true">{icon}</span>}
-    </div>
-  ),
+        data-vt-studio-split-shell="true"
+        data-vt-studio-split={split}
+        data-layout={split}
+        className={["vt-studio-split-shell", "vt-studio-split-text-input", className].filter(Boolean).join(" ")}
+      >
+        {hasLeftRail && (
+          <span className="vt-studio-split-shell__rail" data-vt-studio-split-rail="start" data-rail="start" aria-hidden="true">
+            {leftIcon}
+          </span>
+        )}
+        <input
+          ref={ref}
+          data-vt-studio-control="true"
+          data-size={sizeVariant}
+          className="vt-studio-split-text-input__field"
+          {...props}
+        />
+        {hasRightRail && (
+          <span className="vt-studio-split-shell__rail" data-vt-studio-split-rail="end" data-rail="end" aria-hidden="true">
+            {rightIcon}
+          </span>
+        )}
+      </div>
+    )
+  },
 )
 StudioSplitTextInput.displayName = "StudioSplitTextInput"
