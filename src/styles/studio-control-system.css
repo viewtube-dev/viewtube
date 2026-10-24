@@ -6148,3 +6148,26 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
   -webkit-text-stroke-color: #000;
   box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-studio-control-accent, var(--pair-a));
 }
+\n
+/* Geometry invariants shared by the counter and split-control families. */
+.vt-studio-counter__value,
+.vt-studio-side-counter__value {
+  aspect-ratio: 2 / 1;
+  min-width: 0;
+  min-height: 0;
+}
+.vt-studio-side-counter [data-vt-studio-split-rail],
+.vt-studio-value-toggle__double-side [data-vt-studio-split-rail] {
+  aspect-ratio: 1 / 1;
+}
+.vt-studio-value-toggle__divider {
+  outline: 0;
+  box-shadow: none;
+}
+.vt-studio-vertical-word-toggle__handle {
+  box-sizing: border-box;
+  top: var(--vt-studio-vertical-word-handle-inset, 3px);
+  bottom: var(--vt-studio-vertical-word-handle-inset, 3px);
+  height: auto;
+  border-radius: var(--vt-studio-vertical-word-handle-radius, var(--vt-studio-control-radius, 6px));
+}
