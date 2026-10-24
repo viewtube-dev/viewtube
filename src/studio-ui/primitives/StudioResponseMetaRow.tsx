@@ -26,6 +26,7 @@ export const StudioResponseMetaRow: React.FC<StudioResponseMetaRowProps> = ({
     className={["vt-studio-response-meta-row", className].filter(Boolean).join(" ")}
     data-vt-studio-control="response-meta-row"
     data-vt-studio-size={sizeVariant}
+    role="group"
     aria-label={ariaLabel ?? (typeof title === "string" ? `${title} metadata` : "Response metadata")}
   >
     <div className="vt-studio-response-meta-row__main">
