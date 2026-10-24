@@ -51,12 +51,12 @@
   --vt-studio-micro-focus-outline-width: 0.975px;
   --vt-studio-micro-secondary-outline-width: 0.975px;
   /* Textarea-specific typography is a named family exception, sourced from tokens.ts multiline. */
-  --vt-studio-textarea-supreme-font-size: 24.55px;
+  --vt-studio-textarea-supreme-font-size: 25px;
   --vt-studio-textarea-standard-font-size: 18px;
   --vt-studio-textarea-compact-font-size: 14px;
   --vt-studio-textarea-mini-font-size: 17.5px;
   --vt-studio-textarea-micro-font-size: 10px;
-  --vt-studio-textarea-supreme-text-stroke: 0.68px;
+  --vt-studio-textarea-supreme-text-stroke: 0.5px;
   --vt-studio-textarea-standard-text-stroke: 0.5px;
   --vt-studio-textarea-compact-text-stroke: 0.35px;
   --vt-studio-textarea-mini-text-stroke: 0.375px;
