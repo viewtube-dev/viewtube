@@ -54,6 +54,7 @@ describe("Studio global stroke-tier contract", () => {
     expect(css).toContain("border-width: 1.5px;")
     expect(controls).not.toContain("4.09px")
     expect(controls).not.toContain("micro 1px")
+    expect(controls).toContain('inlineStrokeWidth: "matches resolved tier: Supreme 3px, Standard 3px, Compact 2px, Mini 1.5px, Micro 1.5px"')
     expect(catalog).not.toContain("4.09px")
     expect(catalog).not.toContain("Micro is 12px / 1px")
   })
