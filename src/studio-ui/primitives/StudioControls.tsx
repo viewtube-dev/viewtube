@@ -1033,7 +1033,7 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   loading?: boolean
   selected?: boolean
   /** Explicit geometry variant for Supreme 60px, Standard 44px, and Compact 28px button geometry. */
-  heightVariant?: "60" | "44" | "28"
+  heightVariant?: "60" | "44" | "28" | "20" | "12"
   /** Layout variant owned by StudioButton; geometry and behavior remain canonical. */
   textLayout?: "single-line" | "two-line"
   /** First row for the two-line text layout variant. */
@@ -1074,9 +1074,9 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
     // Height is the authoritative geometry when supplied. This prevents a 28px
     // control from accidentally inheriting standard border/radius tokens.
     const resolvedSize = heightVariant
-      ? heightVariant === "28" ? "compact" : heightVariant === "60" ? "supreme" : "standard"
+      ? heightVariant === "60" ? "supreme" : heightVariant === "28" ? "compact" : heightVariant === "20" ? "mini" : heightVariant === "12" ? "micro" : "standard"
       : sizeVariant ?? "standard"
-    const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : resolvedSize === "micro" ? "12" : "44")
+    const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : resolvedSize === "mini" ? "20" : resolvedSize === "micro" ? "12" : "44")
     const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
       onClick?.(event)
       if (event.defaultPrevented || event.currentTarget.disabled || !isToggleVariant) return
