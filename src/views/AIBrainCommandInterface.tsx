@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import {
  ArrowRight,
  BookOpen,
+ Minus,
+ Plus,
  Lock,
  Unlock,
  Trash2,
@@ -498,7 +500,7 @@ export const BrainPromptLibrary: React.FC<{
   return Array.from(groups.entries())
    .map(([key, items]) => [key, [...items].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))] as const)
    .sort(([, left], [, right]) => Math.min(...left.map((card) => order.get(card.id) ?? 0)) - Math.min(...right.map((card) => order.get(card.id) ?? 0)))
- }, [filteredCards])
+ }, [filteredCards, cards])
 
  const setCategoryOpen = (groupCategory: string, nextOpen: boolean) => {
   setOpenCategories((current) => nextOpen
@@ -514,35 +516,38 @@ export const BrainPromptLibrary: React.FC<{
    aria-busy={busy || undefined}
    className="flex min-w-0 flex-col"
   >
-   <StudioInterModule
+   <StudioTopSplitModule
+    split="left"
     sizeVariant="compact"
     startIcon={<LayoutGrid aria-hidden="true" />}
     title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
     className="overflow-hidden brain-prompt-library-shell"
-    collapsible={false}
-    headStyle={{ background: TOOLBOX_PALETTE[11], "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
+    style={{ background: TOOLBOX_PALETTE[11], "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
    >
     <p data-vt-brain-part="prompt-library-description" className="mb-2 border-b border-black/20 pb-2 text-[10px] font-bold leading-4 text-black/65">
-     Open a task module to browse related prompts. Select a prompt to expand it in place, then send it or edit it.
+     Open a task category, then expand one prompt to review it before sending or editing.
     </p>
-    <div className="grid gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
+    <div className="grid grid-cols-1 gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
      <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
      <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: item.replace(/_/g, " ") }))]} />
     </div>
-    <p className="px-1 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
+    <p className="px-2 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
-    <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="block w-full min-w-0 m-0 px-0">
+    <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="vt-studio-inter-host--bleed block w-full min-w-0 m-0 p-0">
      {groupedCards.map(([groupCategory, groupCards], groupIndex) => {
       const isOpen = openCategories.includes(groupCategory)
+      const categoryPair = PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length]
       return (
        <StudioInterModule
         key={groupCategory}
         data-vt-brain-component="BrainPromptLibraryModule"
         data-prompt-category={groupCategory}
+        data-flush-body="true"
         title={<><span>{groupCategory.replace(/_/g, " ")}</span><small>{groupCards.length}</small></>}
         startIcon={<LayoutGrid aria-hidden="true" />}
+        endIcon={isOpen ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
         sizeVariant="compact"
-        headStyle={{ background: PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length][0], "--vt-studio-control-accent": PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length][0], "--vt-studio-control-secondary": PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length][1] } as React.CSSProperties}
+        headStyle={{ background: categoryPair[0], "--vt-studio-control-accent": categoryPair[0], "--vt-studio-control-secondary": categoryPair[1] } as React.CSSProperties}
         open={isOpen}
         onOpenChange={(nextOpen) => setCategoryOpen(groupCategory, nextOpen)}
         aria-label={`${groupCategory.replace(/_/g, " ")} prompts, ${groupCards.length} items`}
@@ -551,59 +556,54 @@ export const BrainPromptLibrary: React.FC<{
          const isSelected = card.id === selectedId
          const colorPair = PROMPT_MODULE_COLOR_PAIRS[promptIndex % PROMPT_MODULE_COLOR_PAIRS.length]
          return (
-          <StudioCollapsingTwoLineModule
+          <StudioInterModule
            key={card.id}
            data-vt-brain-part="prompt-collapsible-module"
            data-prompt-id={card.id}
-           title={card.label}
-           description={promptCardSummary(card)}
+           data-flush-body="true"
+           title={<span>{card.label}</span>}
            startIcon={<LayoutGrid aria-hidden="true" />}
-           split="left"
+           endIcon={isSelected ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
            sizeVariant="compact"
-           style={{ "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
+           headStyle={{ background: colorPair[0], "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
            open={isSelected}
            onOpenChange={(nextOpen) => setSelectedId(nextOpen ? card.id : null)}
            aria-label={`${isSelected ? "Collapse" : "Expand"} ${card.label} prompt`}
           >
            <div className="grid min-w-0 gap-2 bg-white px-2 py-2">
             <p className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
-            <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-2 gap-1">
-             <StudioSplitTwoLineButton
+            <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-1 gap-1">
+             <StudioSplitLeftButton
               sizeVariant="compact"
               icon={<Send aria-hidden="true" />}
-              firstLine="SEND TO"
-              secondLine="CHAT"
               disabled={busy}
               className="min-w-0 w-full"
               style={{ "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
-              onClick={() => { onPrompt(card.prompt); setSelectedId(null) }}
-             />
+              onClick={(event) => { event.stopPropagation(); onPrompt(card.prompt); setSelectedId(null) }}
+             >SEND TO CHAT</StudioSplitLeftButton>
              {onEdit ? (
-              <StudioSplitTwoLineButton
+              <StudioSplitLeftButton
                sizeVariant="compact"
                icon={<ArrowRight aria-hidden="true" />}
-               firstLine="EDIT"
-               secondLine="FIRST"
                className="min-w-0 w-full"
                style={{ "--vt-studio-control-accent": colorPair[1], "--vt-studio-control-secondary": colorPair[0] } as React.CSSProperties}
-               onClick={() => { onEdit(card.prompt); setSelectedId(null) }}
-              />
+               onClick={(event) => { event.stopPropagation(); onEdit(card.prompt); setSelectedId(null) }}
+              >EDIT FIRST</StudioSplitLeftButton>
              ) : null}
             </div>
            </div>
-          </StudioCollapsingTwoLineModule>
+          </StudioInterModule>
          )
         })}
        </StudioInterModule>
       )
      })}
+     {!filteredCards.length ? <p className="border-y-[2px] border-black bg-white p-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
     </div>
-   </StudioInterModule>
-   {!filteredCards.length ? <p className="border-x-[2px] border-b-[2px] border-black bg-white p-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
+   </StudioTopSplitModule>
   </section>
  )
 }
-
 const FEEDBACK_OPTIONS = [
  ["helpful", ThumbsUp, "Helpful", "#3FEE56"],
  ["not_useful", ThumbsDown, "Not useful", "#FA618A"],
