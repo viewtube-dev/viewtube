@@ -22,20 +22,20 @@ const canonicalTail = (css: string) => {
 
 
 describe("StudioTextBox size-aware stroke defaults", () => {
-  it("halves only the local stroke width while preserving the 50% fill and black text", () => {
+  it("shares full field geometry while keeping black text and primary glyph stroke", () => {
     const css = readStudioControlCss();
     const start = css.indexOf('.vt-studio-text-box[data-vt-studio-control="true"]');
     const end = css.indexOf("/* Textarea and read-only text display share", start);
     const textBox = css.slice(start, end);
-    expect(textBox).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5)");
-    expect(textBox).toContain("border: var(--studio-text-box-stroke-width) solid #000");
-    expect(textBox).toContain("inset 0 0 0 var(--studio-text-box-stroke-width)");
-    expect(textBox).toContain("outline: var(--studio-text-box-stroke-width) solid");
+    expect(textBox).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000");
+    expect(textBox).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
+    expect(textBox).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary");
     expect(textBox).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
     expect(textBox).toContain("color: #000");
-    expect(textBox).toContain("line-height: var(--textarea-description-line-height, 0.75)");
+    expect(textBox).toContain("line-height: var(--vt-studio-textarea-line-height, .85)");
     expect(textBox).toContain('[data-size="compact"]');
     expect(textBox).toContain('[data-size="micro"]');
+    expect(textBox).toContain('[data-size="mini"]');
   });
 });
 
@@ -293,26 +293,28 @@ describe("standalone Studio text fields", () => {
     expect(micro).toContain('data-size="micro"')
   })
 
-  it("uses half-width black borders and matching primary/secondary strokes for StudioTextBox", () => {
+  it("uses shared border geometry, primary glyph stroke, and a proportional secondary outline for StudioTextBox", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
     const block = css.match(/\.vt-studio-text-box\[data-vt-studio-control="true"\] \{([\s\S]*?)\n\}/)?.[1] ?? "";
     expect(block).toContain("--field-border-width: var(--vt-studio-control-stroke, 3px);");
-    expect(block).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
-    expect(block).toContain("border: var(--studio-text-box-stroke-width) solid #000;");
-    expect(block).toContain("box-shadow: inset 0 0 0 var(--studio-text-box-stroke-width) var(--vt-field-primary");
-    expect(block).toContain("outline: var(--studio-text-box-stroke-width) solid var(--vt-field-secondary");
+    expect(block).toContain("--studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);");
+    expect(block).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000;");
+    expect(block).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
+    expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary");
     expect(block).toContain("outline-offset: 0;");
     expect(block).toContain("color: #000;");
     expect(block).toContain("-webkit-text-fill-color: #000;");
     expect(block).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
-    expect(block).not.toContain("-webkit-text-stroke");
-    expect(css).not.toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) #000;");
-    expect(css).not.toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, .25px) #000;");
+    expect(block).toContain("-webkit-text-stroke-color: var(--vt-field-primary");
+    expect(css).not.toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
+    expect(css).not.toContain("-webkit-text-stroke-color: var(--vt-field-text-focus, #000);");
   });
 
   it("uses the shared 0.85 line-height token for textarea and text-box sizes", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const generated = readFileSync(resolve(process.cwd(), "src/styles/studio-control-vars.generated.css"), "utf8")
     expect(css).toContain("--vt-studio-textarea-line-height: .85;")
+    expect(generated).toContain("--vt-studio-textarea-line-height: 0.85;")
     expect(css).not.toMatch(/line-height:\s*(?:0)?\.75\b/)
     expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(5)
   })
