@@ -1451,6 +1451,7 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
     <Family title="StudioBarToggle · Standard" nonDefaultSettings={["Individual bar-toggle specimen; compact and value variants remain in the comparison section."]} provenance={<Provenance primitive="StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · ten fixed-width value bars" imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>STANDARD · BAR TOGGLE</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} barCount={10} ariaLabel="Standard bar toggle specimen" /></div>
     </Family>
+    <ConfirmedAdditionalPrimitiveSections />
   </>
 }
 
