@@ -292,20 +292,23 @@ describe("AIBrainCommandInterface", () => {
   expect(html).not.toContain("shrink-0 border-t-[4px] border-black bg-[#f8f8f4]")
  })
 
- it("keeps the mobile Brain workspace scrollable and removes nested-card chrome", () => {
+ it("bounds the mobile Brain workspace to the visual viewport and preserves a flex-sized chat/composer layout", () => {
   const html = renderHub()
 
-  expect(html).toContain("max-xl:!h-auto")
-  expect(html).toContain("max-xl:overflow-visible")
-  expect(html).toContain("max-xl:min-h-[70dvh]")
-  expect(html).toContain("max-xl:min-h-[420px]")
-  expect(html).toContain('data-vt-brain-runtime-shell="merged"')
+  expect(html).toContain("data-vt-brain-visual-viewport-height")
+  expect(html).toContain("max-xl:h-[100dvh]")
+  expect(html).toContain("max-xl:overflow-hidden")
+  expect(html).toContain("flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6]")
+  expect(html).toContain("relative flex flex-1 min-h-0 flex-col overflow-hidden")
+  expect(html).toContain('data-vt-brain-component="BrainComposer"')
+  expect(html).toContain('aria-label="Brain composer"')
+  expect(html).toContain('aria-label="Brain conversation"')
+  expect(html).toContain("env(safe-area-inset-bottom)")
   expect(html).toContain("max-xl:rounded-none")
   expect(html).toContain("max-xl:border-x-0")
-  expect(html).not.toContain("max-xl:min-h-[520px]")
   expect(html).not.toContain("LIVE BRAIN RUNTIME")
  })
-
+ 
  it("keeps internal diagnostics out of the creator workspace", () => {
   const html = renderHub()
 
