@@ -25,6 +25,21 @@ describe("confirmed composite primitive catalog", () => {
     expect(representative).not.toContain('data-vt-library-component="StudioCollapsingSplitModule"')
     expect(representative).not.toContain('data-vt-library-component="StudioInterModule"')
     expect(representative).not.toContain('data-vt-library-component="StudioSplitAccordion"')
+    for (const primitive of [
+      "StudioButton", "StudioActionButton", "StudioTwoLineButton", "StudioSplitTwoLineButton",
+      "StudioSplitLeftButton", "StudioSplitRightButton", "StudioDoubleSplitButton",
+      "StudioIconButton", "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
+      "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
+      "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioTextInput",
+      "StudioTextInputFloatingLabel", "StudioTextInputFixedLabel", "StudioTextArea", "StudioTextBox",
+      "StudioSimpleDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
+      "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
+      "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
+      "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
+      "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioTagEditor", "StudioUploadFrame",
+    ]) {
+      expect(representative).toContain(`data-vt-library-component="${primitive}"`)
+    }
     expect(source).toContain('title="Collapsing Split Module · Standard + Compact"')
     expect(source).toContain('title="InterModule · Standard"')
     expect(source).toContain('title="Split Accordion · Train Motion"')
