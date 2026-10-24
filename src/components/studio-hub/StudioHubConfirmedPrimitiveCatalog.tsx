@@ -621,6 +621,53 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
   )
 }
 
+const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
+  const [choiceChecked, setChoiceChecked] = React.useState(false)
+  const [leftCounterValue, setLeftCounterValue] = React.useState(6)
+  const [username, setUsername] = React.useState("CREATOR")
+  const [search, setSearch] = React.useState("")
+  const [number, setNumber] = React.useState("12")
+  const dropdownOptions = [
+    { value: "balanced", label: "BALANCED" },
+    { value: "focused", label: "FOCUSED" },
+    { value: "explore", label: "EXPLORE" },
+  ]
+  return (
+    <>
+      <Family title="StudioDropdown · Single Selection" nonDefaultSettings={["Canonical dropdown component distinct from the simple and split-left wrappers.", "Chevron rail and menu rows inherit the selected Studio size tier."]} provenance={<Provenance primitive="StudioDropdown" tsx="src/studio-ui/primitives/StudioDropdown.tsx" css="src/styles/studio-control-system.css" tokens="Five-tier dropdown rail/chevron tokens; primary trigger and secondary rail." imports={["src/studio-ui/primitives/StudioDropdown.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdown"><span>STANDARD · SINGLE SELECT</span><StudioDropdown sizeVariant="standard" ariaLabel="Canonical dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
+      </Family>
+      <Family title="StudioUsernameInput · Split Identity Field" nonDefaultSettings={["A real split shell with a fixed leading rail and one native text input.", "Focus paint belongs to the outer shell; no nested second outline or inset shadow."]} provenance={<Provenance primitive="StudioUsernameInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="44px standard split shell with shared field focus contract." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>STANDARD · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Username input dedicated specimen" value={username} onChange={(event) => setUsername(event.currentTarget.value)} placeholder="CREATOR NAME" /></div>
+      </Family>
+      <Family title="StudioSplitLeftInput · Split Search Field" nonDefaultSettings={["Distinct public wrapper using the same canonical split-input composition.", "Rail is square and the composite owns the single outer focus outline."]} provenance={<Provenance primitive="StudioSplitLeftInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="Standard split input; fixed square left rail and 65% secondary focus outline." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftInput"><span>STANDARD · ASSET SEARCH</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split left input dedicated specimen" value={search} onChange={(event) => setSearch(event.currentTarget.value)} placeholder="SEARCH ASSETS" /></div>
+      </Family>
+      <Family title="StudioIconButton · Standard" nonDefaultSettings={["Standalone icon button wrapper; separate from square and circular icon button families."]} provenance={<Provenance primitive="StudioIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Standard 44px icon button with canonical stroke/radius and no lift." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton"><span>STANDARD · SETTINGS</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" sizeVariant="standard" /></div>
+      </Family>
+      <Family title="StudioSplitRightButton · Standard" nonDefaultSettings={["Right-rail split button, independently catalogued from left and double split variants."]} provenance={<Provenance primitive="StudioSplitRightButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="Square secondary rail; single outer black perimeter; standard size." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightButton"><span>STANDARD · RIGHT RAIL</span><StudioSplitRightButton icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split right button dedicated specimen">SETTINGS</StudioSplitRightButton></div>
+      </Family>
+      <Family title="StudioChoice · Standard" nonDefaultSettings={["Shared production primitive used by the radio, checkbox, and X-checkbox public wrappers."]} provenance={<Provenance primitive="StudioChoice" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-distill-overrides.css" tokens="Five-tier choice geometry; secondary focus outline at 65% of the active border." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChoice"><span>STANDARD · SHARED RADIO CHOICE</span><StudioChoice kind="radio" skin="solid" checked={choiceChecked} onClick={() => setChoiceChecked((value) => !value)} sizeVariant="standard" aria-label="Shared choice dedicated specimen" /></div>
+      </Family>
+      <Family title="StudioSelect · Standard" nonDefaultSettings={["Native select primitive with canonical Studio geometry; kept separate from custom menu dropdowns."]} provenance={<Provenance primitive="StudioSelect" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-fields.css" tokens="Standard 44px field with shared field focus and text contract." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSelect"><span>STANDARD · NATIVE SELECT</span><StudioSelect sizeVariant="standard" aria-label="Native select dedicated specimen" defaultValue="balanced"><option value="balanced">BALANCED</option><option value="focused">FOCUSED</option></StudioSelect></div>
+      </Family>
+      <Family title="StudioSearchInput · Standard" nonDefaultSettings={["Native search input with autocorrect, autocapitalization, and spellcheck disabled by the canonical wrapper."]} provenance={<Provenance primitive="StudioSearchInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-text-input.css" tokens="Standard 44px input with primary resting text stroke and primary focus glyph stroke." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSearchInput"><span>STANDARD · SEARCH</span><StudioSearchInput sizeVariant="standard" aria-label="Search input dedicated specimen" placeholder="SEARCH" /></div>
+      </Family>
+      <Family title="StudioNumberInput · Standard" nonDefaultSettings={["Native number input with the same five-tier size token interface as text fields."]} provenance={<Provenance primitive="StudioNumberInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-text-input.css" tokens="Standard 44px field; black text on focus and primary glyph stroke." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioNumberInput"><span>STANDARD · NUMBER</span><StudioNumberInput sizeVariant="standard" aria-label="Number input dedicated specimen" value={number} onChange={(event) => setNumber(event.currentTarget.value)} /></div>
+      </Family>
+      <Family title="StudioLeftCounter · Standard" nonDefaultSettings={["Left-action counter variant with the same 2:1 numeric display as the standard counter."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>STANDARD · LEFT ACTION RAIL</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter dedicated specimen" /></div>
+      </Family>
+    </>
+  )
+}
+
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <>
     <div className="vt-confirmed-catalog">
