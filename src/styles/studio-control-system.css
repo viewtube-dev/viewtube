@@ -93,13 +93,13 @@
   --vt-studio-control-height: var(--vt-studio-mini-height, 20px);
   --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px);
   --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
-  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 16px);
+  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
   --vt-studio-control-font-weight: var(--vt-studio-mini-font-weight, 1000);
   --vt-studio-control-outline-stroke: .75px;
   --vt-studio-control-focus-outline-width: .975px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: .975px;
-  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 16px);
+  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 17.5px);
   --vt-studio-control-icon-stroke: var(--vt-studio-mini-icon-stroke, 1.5);
 }
 [data-vt-studio-control][data-size="micro"] {
