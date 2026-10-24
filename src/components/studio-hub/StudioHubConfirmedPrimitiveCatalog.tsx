@@ -54,6 +54,7 @@ import {
   StudioDoubleSideToggle,
   StudioBarToggle,
 } from "../../studio-ui/primitives/StudioControls"
+import { StudioChatActionGroup } from "../../studio-ui/primitives/StudioChatActionGroup"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
 import { StudioDropdown } from "../../studio-ui/primitives/StudioDropdown"
 import { StudioInterModule } from "../../studio-ui/primitives/StudioInterModule"
@@ -1416,6 +1417,20 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
         />
         <span>MICRO · LONG LABEL WRAPS</span>
         <StudioResponseMetaRow sizeVariant="micro" title="EVIDENCE PROVENANCE" metadata={<span>PARTIAL MATCH</span>} />
+      </div>
+    </Family>
+    <Family title="StudioChatActionGroup · Compact" nonDefaultSettings={[
+      "Responsive row for response actions; existing Studio buttons remain responsible for their own appearance and behavior.",
+      "Wraps on narrow widths with the canonical 4px spacing rhythm.",
+      "No parallel button variants, shadows, or geometry movement.",
+    ]} provenance={<Provenance primitive="StudioChatActionGroup" tsx="src/studio-ui/primitives/StudioChatActionGroup.tsx" css="src/styles/studio-chat-action-group.css" tokens="44px standard / 28px compact / 12px micro · 4px rhythm" imports={["src/studio-ui/primitives/StudioChatActionGroup.tsx", "src/styles/studio-chat-action-group.css"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatActionGroup">
+        <span>COMPACT · EXISTING STUDIO ACTIONS · RESPONSIVE WRAP</span>
+        <StudioChatActionGroup aria-label="Chat response action specimen">
+          <StudioButton sizeVariant="compact" onClick={() => undefined}>COPY</StudioButton>
+          <StudioButton sizeVariant="compact" onClick={() => undefined}>RETRY</StudioButton>
+          <StudioButton sizeVariant="compact" onClick={() => undefined}>EDIT</StudioButton>
+        </StudioChatActionGroup>
       </div>
     </Family>
     <Family title="StudioDoubleSplitButton · Standard" nonDefaultSettings={["Individual double-split button specimen using the production button and split-shell foundation."]} provenance={<Provenance primitive="StudioDoubleSplitButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · leading and trailing square rails" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
