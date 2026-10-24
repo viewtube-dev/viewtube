@@ -468,96 +468,58 @@ test("ConfirmedSpecimenGrid is full-width and does not split the module into sid
 });
 
 
-test("button catalog uses the PR #756 grid and real StudioButton specimens for every tier", () => {
-  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?export const StudioHubConfirmedPrimitiveCatalog/)?.[0] ?? "";
-  assert.ok(buttonFamily.includes("<ConfirmedSpecimenGrid"), "the original Button module uses the shared grid");
-  assert.ok(buttonFamily.includes('specimenRows={specimenRows}'));
-  assert.ok(buttonFamily.includes('sizeVariant={tier}'));
-  assert.ok(buttonFamily.includes('data-vt-button-skin={`v${variant}`}'));
-  assert.ok(buttonFamily.includes('variant === 3 ? (isOn ? "SECONDARY" : "PRIMARY")'));
-  assert.ok(buttonFamily.includes('setToggleStates(current => ({ ...current, [id]: !(current[id] ?? (variant === 5)) }))'));
-  assert.ok(buttonFamily.includes('aria-pressed={toggle ? isOn : undefined}'));
+test("canonical StudioButton catalog uses the PR #756 proportional grid and real StudioButton exports", () => {
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?\n}\n\nconst ConfirmedStudioButtonComparison/)?.[0] ?? "";
+  assert.ok(buttonFamily.includes("<ConfirmedSpecimenGrid"), "Button family uses the shared specimen grid");
+  assert.ok(buttonFamily.includes("layoutRows={layoutRows}"));
+  assert.ok(buttonFamily.includes("sizeVariant={tier}"));
+  assert.ok(buttonFamily.includes("variant={\`v\${variant}\` as"));
+  assert.ok(buttonFamily.includes('data-vt-library-component="StudioButton"'));
+  assert.ok(buttonFamily.includes("activeChildren={activeChildren}"));
+  assert.ok(buttonFamily.includes('id: "1-supreme-full"'));
+  assert.ok(buttonFamily.includes('id: "2-supreme-halves"'));
+  assert.ok(buttonFamily.includes('id: "3-standard-full"'));
+  assert.ok(buttonFamily.includes('id: "4-standard-halves"'));
+  assert.ok(buttonFamily.includes('id: "5-standard-fractions"'));
+  assert.ok(buttonFamily.includes('id: "6-compact-fractions"'));
+  assert.ok(buttonFamily.includes('id: "7-compact-and-micro"'));
+  assert.ok(buttonFamily.includes('id: "7A-micro-quarters"'));
+  assert.ok(buttonFamily.includes('id: "7B-micro-eighths-sixteenths"'));
 });
 
-test("button specimen labels fit inside real StudioButton faces without catalog sizing overrides", () => {
-  assert.match(styles, /\.vt-confirmed-button-skin\s*\{[^}]*width:\s*100%/s);
-  assert.match(styles, /\.vt-confirmed-button-skin\s*>\s*\[data-vt-studio-button-face\][^{]*\{[^}]*overflow-wrap:\s*anywhere/s);
-  assert.doesNotMatch(styles.slice(styles.indexOf("/* Confirmed StudioButton V1–V7 specimen gallery.")), /\.vt-confirmed-button-skin\[data-size="micro"\]/);
-});
-
-test("Confirmed Specimen Grid renders every tier in 1/2/3/4-column layouts without numbered tier captions", () => {
+test("ConfirmedSpecimenGrid keeps layout proportional and leaves control geometry to StudioButton", () => {
   const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
-  const catalogSource = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
-  for (const tier of ["supreme", "standard", "compact", "micro"]) {
-    assert.match(gridSource, new RegExp('"' + tier + '"'));
-  }
-  assert.match(gridSource, /\[1, 2, 3, 4\]\.map\(\(count\)/);
-  assert.match(gridSource, /specimen\(`\$\{id\}-\$\{index \+ 1\}`, tier, label\)/);
-  assert.doesNotMatch(gridSource, /\$\{label\} \$\{index \+ 1\}/);
-  assert.doesNotMatch(catalogSource, /<span>\{label\}<\/span>/);
-  assert.match(catalogSource, /data-vt-specimen-tier=\{tier\}/);
+  const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
+  const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"));
+  assert.match(gridCss, /--vt-specimen-gap:\\s*var\\(--vt-studio-space-unit,\\s*4px\\)/);
+  assert.match(gridCss, /grid-template-columns:\\s*repeat\\(144,\\s*minmax\\(0,\\s*1fr\\)\\)/);
+  assert.match(gridSource, /layoutRows\\.map\\(renderLayoutRow\\)/);
+  assert.match(gridSource, /gridColumn: \`span \${span}\`/);
+  assert.match(buttonCss, /\\.vt-confirmed-button-skin\\s*\\{[^}]*width:\\s*100%/s);
+  assert.doesNotMatch(buttonCss, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\\s*:/,
+    "catalog wrapper must not redefine production StudioButton geometry");
 });
 
-test("the original Button family uses the PR #756 specimen grid with the requested row hierarchy and variant labels", () => {
-  assert.match(catalog, /const ConfirmedStudioButtonFamily[\s\S]*?<ConfirmedSpecimenGrid[\s\S]*?renderSpecimen=/);
-  for (const variant of ["v1", "v2", "v3", "v4", "v5", "v6", "v7"]) {
-    assert.ok(styles.includes(`data-vt-button-skin="${variant}"`), `Button ${variant} has a catalog skin`);
-  }
-  assert.match(catalog, /supreme-full-row[\s\S]*?tier: "supreme"[\s\S]*?standard-full-row[\s\S]*?standard-half-row[\s\S]*?standard-quarter-row/);
-  assert.match(catalog, /comparisonGroup: "supreme"/);
-  assert.match(catalog, /comparisonGroup: "micro"/);
-  for (const label of ["BUTTON", "BLACK", "WHITE", "ON/OFF", "YES/NO"]) {
-    assert.ok(catalog.includes(`label: "${label}"`), `button specimens include the ${label} label`);
-  }
-  assert.match(catalog, /const toggle = variant === 3 \|\| variant === 5 \|\| variant === 6/);
-  assert.match(catalog, /onClick=\{onClick\}/);
+test("StudioButton catalog styles contain labels without retired V1-V7 skin overrides", () => {
+  const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"));
+  assert.match(buttonCss, /\\.vt-confirmed-button-skin\\s*>\\s*\\[data-vt-studio-button-face\\]/);
+  assert.match(buttonCss, /overflow:\\s*hidden/);
+  assert.doesNotMatch(buttonCss, /data-vt-button-skin/);
+  assert.doesNotMatch(buttonCss, /overflow-wrap:\\s*anywhere/,
+    "the catalog must not override StudioButton's own text containment policy");
 });
 
-test("button primary and secondary skins use stable pair tokens in the correct order", () => {
-  const buttonStyles = styles.slice(styles.indexOf("/* Confirmed StudioButton V1–V7 specimen gallery."));
-  assert.match(buttonStyles, /data-vt-button-skin="v1"[\s\S]*?background:\s*var\(--pair-a,\s*#36e0f6\)/);
-  assert.match(buttonStyles, /data-vt-button-skin="v2"[\s\S]*?background:\s*var\(--pair-b,\s*#ff7f6b\)/);
-  assert.match(buttonStyles, /data-vt-button-skin="v3"\][\s\S]*?background:\s*var\(--pair-a,\s*#36e0f6\)/);
-  assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*var\(--pair-b,\s*#ff7f6b\)/);
-  assert.doesNotMatch(buttonStyles, /--vt-studio-control-accent/);
-  const grid = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
-  assert.match(grid, /specimenRows\?: SpecimenGridRow\[\]/);
-  assert.match(grid, /comparisonGroup/);
-});
-
-test("button gallery maps primary and secondary directly to canonical pair tokens", () => {
-  const buttonStyles = styles.slice(styles.indexOf("/* Confirmed StudioButton V1–V7 specimen gallery."));
-  assert.match(buttonStyles, /data-vt-button-skin="v1"[^{}]*\{[^}]*background:\s*var\(--pair-a,/s);
-  assert.match(buttonStyles, /data-vt-button-skin="v2"[^{}]*\{[^}]*background:\s*var\(--pair-b,/s);
-  assert.match(buttonStyles, /data-vt-button-skin="v3"[^{}]*\{[^}]*background:\s*var\(--pair-a,/s);
-  assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="true"\][^{}]*\{[^}]*background:\s*var\(--pair-b,/s);
-  assert.match(buttonStyles, /data-vt-button-skin="v3"\]\[data-vt-button-on="false"\][^{}]*\{[^}]*background:\s*var\(--pair-a,/s);
-});
-
-test("V3 button toggle changes its primary/secondary face while retaining BUTTON text", () => {
-  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?export const StudioHubConfirmedPrimitiveCatalog/)?.[0] ?? "";
-  assert.match(buttonFamily, /const label = variant === 4 \? "BLACK"[^;]*: "BUTTON"/);
-  assert.match(buttonFamily, /data-vt-button-on=\{toggle && isOn \? "true" : "false"\}/);
-  assert.match(buttonFamily, /aria-pressed=\{toggle \? isOn : undefined\}/);
-  assert.match(buttonFamily, /onClick=\{onClick\}/);
-});
-
-test("original StudioButton family uses button labels and the intended comparison tiers", () => {
-  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?export const StudioHubConfirmedPrimitiveCatalog/)?.[0] ?? "";
-  assert.match(buttonFamily, /supreme-full-row[\s\S]*?standard-full-row[\s\S]*?standard-half-row[\s\S]*?standard-quarter-row/);
-  assert.match(buttonFamily, /comparisonGroup: "supreme"/);
-  assert.match(buttonFamily, /comparisonGroup: "micro"/);
-  assert.match(buttonFamily, /V3 toggles primary\/secondary fill without changing its BUTTON label/);
-  assert.match(buttonFamily, /aria-pressed=\{toggle \? isOn : undefined\}/);
-  assert.match(buttonFamily, /onClick=\{onClick\}/);
-});
-
-test("button gallery state skins outrank generic pressed-to-secondary styling", () => {
-  const gallery = styles.slice(styles.lastIndexOf("/* Button gallery face-state contract."));
-  assert.match(gallery, /html body button\.vt-confirmed-button-skin\[data-vt-button-skin="v1"\][\s\S]*?background:\s*var\(--pair-a,/);
-  assert.match(gallery, /html body button\.vt-confirmed-button-skin\[data-vt-button-skin="v3"\]\[data-vt-button-on="false"\][\s\S]*?background:\s*var\(--pair-a,/);
-  assert.match(gallery, /html body button\.vt-confirmed-button-skin\[data-vt-button-skin="v3"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*var\(--pair-b,/);
-  assert.match(gallery, /data-vt-button-skin="v5"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*var\(--pair-a,/);
-  assert.match(gallery, /data-vt-button-skin="v5"\]\[data-vt-button-on="false"\][\s\S]*?background:\s*var\(--pair-b,/);
-  assert.match(gallery, /data-vt-button-skin="v6"\]\[data-vt-button-on="true"\][\s\S]*?background:\s*#000/);
+test("PR #756 row hierarchy uses the requested proportional sizes and compact/micro split", () => {
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?\n}\n\nconst ConfirmedStudioButtonComparison/)?.[0] ?? "";
+  assert.match(buttonFamily, /row-1.*144/s);
+  assert.match(buttonFamily, /row-2a.*72/s);
+  assert.match(buttonFamily, /row-5-third.*48/s);
+  assert.match(buttonFamily, /row-5-quarter.*36/s);
+  assert.match(buttonFamily, /row-5-sixth.*24/s);
+  assert.match(buttonFamily, /row-5-eighth-a.*18/s);
+  assert.match(buttonFamily, /row-6-two-ninths.*32/s);
+  assert.match(buttonFamily, /row-6-ninth.*16/s);
+  assert.match(buttonFamily, /row-6-twelfth.*12/s);
+  assert.match(buttonFamily, /7 compact · half module/);
+  assert.match(buttonFamily, /7A–7B micro · half module/);
 });
