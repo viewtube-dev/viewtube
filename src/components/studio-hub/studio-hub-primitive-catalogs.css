@@ -3380,3 +3380,28 @@
 .vt-confirmed-vertical-word-toggle-compact > .vt-confirmed-vertical-word-toggle-specimen:nth-child(3) {
   grid-column: 2; grid-row: 2;
 }
+
+/* Canonical representatives are a full-width, single-column source-of-truth ledger.
+   The wrapper is a child of the general two-column specimen grid, so explicitly
+   span both columns before establishing its own one-column stack. */
+.vt-confirmed-primitive-module[data-vt-primitive-title^="Representatives"] > .vt-confirmed-primitive-body > .vt-confirmed-variants > .vt-confirmed-direct-primitive-rows,
+.vt-confirmed-primitive-module[data-vt-primitive-title^="Representatives"] .vt-confirmed-direct-primitive-rows {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-variant,
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-variant.is-full-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-variant > :is(button, input, textarea, select, [data-vt-studio-control]) {
+  width: 100%;
+  min-width: 0;
+}
