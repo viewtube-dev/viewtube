@@ -140,7 +140,6 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize,
     compactFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize,
     miniFontSize: STUDIO_CONTROL_SIZE_BASE.mini.fontSize,
-    miniFontSize: STUDIO_CONTROL_SIZE_BASE.mini.fontSize,
     microFontSize: STUDIO_CONTROL_SIZE_BASE.micro.fontSize,
     fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
     lineHeight: 1,
@@ -196,9 +195,9 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
 // ─── Dropdown / focus / counter contracts ────────────────────────────────────
 
 export const STUDIO_DROPDOWN_TOKENS = {
-  railSize: { supreme: 60, standard: 44, compact: 28, mini: 20 },
-  chevronSize: { supreme: 38, standard: 28, compact: 18, mini: 14 },
-  chevronStroke: { supreme: 3.41, standard: 2.5, compact: 1.65, mini: 1.2 },
+  railSize: { supreme: 60, standard: 44, compact: 28, mini: 20, micro: 12 },
+  chevronSize: { supreme: 38, standard: 28, compact: 18, mini: 14, micro: 8 },
+  chevronStroke: { supreme: 3.41, standard: 2.5, compact: 1.65, mini: 1.2, micro: 1 },
   railFill: "secondary" as const,
   splitIconFill: "black" as const,
   chevronPlacement: "trailing" as const,
@@ -231,7 +230,7 @@ export const STUDIO_GLOBAL_DEFAULTS = {
   textTransform: "uppercase" as const,
   letterSpacing: -0.02,
   lineHeight: 1,
-  textareaLineHeight: 1,
+  textareaLineHeight: 0.85,
   borderColor: "#000000",
   defaultFillOpacity: 50,
   focusFillOpacity: 15,
