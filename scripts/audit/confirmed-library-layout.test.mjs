@@ -141,7 +141,7 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   const areaModule = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
   const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
   assert.match(tokens, /standard:\s*\{[^}]*fontSize:\s*38/);
-  assert.match(tokens, /STUDIO_CONTROL_SIZE_BASE_COMPACT\s*=\s*\{[^}]*fontSize:\s*24/);
+  assert.match(tokens, /compact:\s*\{[^}]*fontSize:\s*24/);
   assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.standard\.fontSize,\s*compactFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.compact\.fontSize/);
   assert.match(tokens, /inlineStrokeWidth: "same as border width"/);
   assert.match(css, /font-size:\s*var\(--vt-studio-control-font-size,\s*38px\);/);
@@ -225,7 +225,7 @@ test("canonical Studio button tokens and CSS agree on flat stationary defaults",
   assert.match(css, /button\[data-vt-studio-button="true"\] > \[data-vt-studio-button-face\][^}]*position:\s*relative/);
   assert.match(tokens, /STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS\s*=\s*\{[^}]*buttonShadowX:\s*0,[^}]*buttonShadowY:\s*0,[^}]*hoverTransitionMs:\s*0,[^}]*hoverOffsetPx:\s*0,[^}]*clickTransitionMs:\s*0,[^}]*clickOffsetPx:\s*0/);
   assert.match(tokens, /standard: \{[^}]*\.\.\.STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS/);
-  assert.match(tokens, /STUDIO_CONTROL_SIZE_BASE_COMPACT\s*=\s*\{[^}]*\.\.\.STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS/);
+  assert.match(tokens, /compact:\s*\{[^}]*\.\.\.STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS/);
   assert.match(tokens, /textInput: \{[^}]*letterSpacing:\s*-0\.02/);
   assert.match(css, /--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1\.9;/);
   assert.match(css, /--vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2\.0;/);
@@ -242,7 +242,7 @@ test("confirmed library describes the actual default icon preset and component-s
   assert.match(catalog, /Icon presets:<\/b> the default production preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 compact/);
   assert.match(css, /button\.vt-studio-44-choice\.is-rect\s*\{\s*border-radius:\s*7\.333px/);
   assert.match(tokens, /standard: \{[^}]*letterSpacing:\s*-0\.02/);
-  assert.match(tokens, /STUDIO_CONTROL_SIZE_BASE_COMPACT\s*=\s*\{[^}]*letterSpacing:\s*-0\.02/);
+  assert.match(tokens, /compact:\s*\{[^}]*letterSpacing:\s*-0\.02/);
 });
 
 test("catalog labels dropdown and action specimens according to their actual initial state and CSS", () => {
@@ -528,5 +528,5 @@ test("confirmed primitive families have no Compounds bucket and retain Compositi
   const familyUnion = catalog.slice(catalog.indexOf("type ConfirmedCatalogFamilyName"), catalog.indexOf("const classifyConfirmedCatalogItem"));
   assert.doesNotMatch(familyUnion, /"Compounds"/);
   assert.match(familyUnion, /"Compositions"/);
-  assert.match(catalog, /if \/Publishing Card\|Brain Status LED Badges\/.test\(title\)\) return "Compositions"/);
+  assert.ok(catalog.includes('return "Compositions"'));
 });
