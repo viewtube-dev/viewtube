@@ -80,6 +80,8 @@ export const STUDIO_CONTROL_SIZE_BASE = {
 } as const
 
 export type StudioControlSize = keyof typeof STUDIO_CONTROL_SIZE_BASE
+/** Icon preset sizing is orthogonal to the five control-height tiers. */
+export type StudioIconSizeVariant = "current" | "small" | "moderate" | "large"
 /** All five size tiers; individual families may narrow this when inner geometry requires it. */
 export type StudioControlInteractiveSize = StudioControlSize
 
