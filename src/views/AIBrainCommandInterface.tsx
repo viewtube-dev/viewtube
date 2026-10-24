@@ -1064,6 +1064,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const contextCloseRef = useRef<HTMLButtonElement | null>(null)
  const bottomRef = useRef<HTMLDivElement | null>(null)
  const conversationViewportRef = useRef<HTMLDivElement | null>(null)
+ const requestInFlightRef = useRef(false)
 
  // Mobile browsers may keep the layout viewport tall when the on-screen keyboard
  // opens. Follow the visual viewport so the anchored composer stays above it.
@@ -1364,12 +1365,13 @@ const AIBrainCommandInterface: React.FC = () => {
 
  const handleSend = async (override?: string) => {
   const userText = override ?? input
-  if (!userText.trim() || busy) return
+  if (!userText.trim() || busy || requestInFlightRef.current) return
   if (shouldShowAiBrainIntake(authState.isAuthenticated)) {
    setIntakeContext(loadAiBrainContext())
    setIntakeOpen(true)
    return
   }
+  requestInFlightRef.current = true
   shouldFollowConversationRef.current = true
   setInput("")
   if (composerRef.current) composerRef.current.style.height = "52px"
@@ -1465,14 +1467,16 @@ const AIBrainCommandInterface: React.FC = () => {
     { id: makeMessageId(), role: "model", text: fallbackText, response, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
    ])
   } finally {
+   requestInFlightRef.current = false
    setBusy(false)
   }
  }
 
  const handleRetryInterruptedTurn = (message: ChatMessage, useFreshEvidence: boolean) => {
   const userText = message.originalUserText || ""
-  if (!userText.trim() || busy || message.turnStatus !== "interrupted") return
+  if (!userText.trim() || busy || requestInFlightRef.current || message.turnStatus !== "interrupted") return
 
+  requestInFlightRef.current = true
   setBusy(true)
   setMessages((current) => current.map((item) => item.id === message.id
    ? { ...item, text: "Retrying the original request…", turnStatus: "pending", response: undefined }
@@ -1558,6 +1562,7 @@ const AIBrainCommandInterface: React.FC = () => {
     console.warn("[AIBrain] Interrupted response retry failed:", error)
     await refreshConversationTurns()
    } finally {
+    requestInFlightRef.current = false
     setBusy(false)
    }
   })()
