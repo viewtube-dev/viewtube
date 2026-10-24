@@ -31,7 +31,7 @@ describe("confirmed composite primitive catalog", () => {
       "StudioIconButton", "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
       "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioTextInput",
-      "StudioTextInputFloatingLabel", "StudioTextInputFixedLabel", "StudioTextArea", "StudioTextBox",
+      "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
       "StudioDropdown", "StudioSimpleDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
@@ -41,8 +41,16 @@ describe("confirmed composite primitive catalog", () => {
       expect(representative).toContain(`data-vt-library-component="${primitive}"`)
     }
     expect(source).toContain('title="Collapsing Split Module · Standard + Compact"')
+    expect(source).toContain('title="Collapsing Two-Line Module · Standard"')
+    expect(source).toContain('data-vt-library-component="StudioCollapsingTwoLineModule"')
     expect(source).toContain('title="InterModule · Standard"')
     expect(source).toContain('title="Split Accordion · Train Motion"')
+    const directPrimitiveNames = [...representative.matchAll(/data-vt-library-component="([^"]+)"/g)].map((match) => match[1])
+    expect(new Set(directPrimitiveNames).size).toBe(directPrimitiveNames.length)
+    for (const primitive of directPrimitiveNames) {
+      expect(source.match(new RegExp(`data-vt-library-component="${primitive}"`, "g"))?.length ?? 0).toBeGreaterThanOrEqual(2)
+    }
+
     for (const title of [
       "Double Split Button · Standard + Compact",
       "Legend Multi Dropdown · Standard + Compact",
@@ -69,6 +77,10 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain("44px Standard · 10 sections");
     expect(html).toContain("28px Compact · 10 sections");
     expect(html).toContain("12px Micro · 10 sections");
+    expect(html).toContain("60px Supreme · 5 sections");
+    expect(html).toContain("20px Mini · 5 sections");
+    expect(html).toContain('data-size="supreme"');
+    expect(html).toContain('data-size="mini"');
     const specimenSource = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioSplitAccordionCatalogSpecimens.tsx"), "utf8");
     const catalogSource = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
     expect(specimenSource).toContain('gridTemplateColumns: "minmax(0, 1fr)"');
@@ -79,18 +91,21 @@ describe("confirmed composite primitive catalog", () => {
     expect(catalogCss).toContain('display: block;\n  grid-template-columns: minmax(0, 1fr);\n  width: 100%;');
   });
 
-  it("registers StudioTextBox in standard, compact, and micro sizes using shared field geometry and 0.75 line height", () => {
+  it("registers StudioTextBox against shared field geometry and the 0.85 line-height token", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain('title="StudioTextBox · Standard + Compact + Micro"')
+    expect(html).toContain('title="Studio Text Box · Supreme + Standard + Compact + Mini + Micro"')
     expect(html).toContain('data-vt-studio-text-box="true"')
     expect(html).toContain('data-size="standard"')
     expect(html).toContain('data-size="compact"')
     expect(html).toContain('data-size="micro"')
+    expect(html).toContain('data-size="mini"')
+    expect(html).toContain('data-size="supreme"')
     expect(html).toContain('aria-readonly="true"')
-    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioTextBox.tsx"), "utf8")
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-text-box.css"), "utf8")
-    expect(source).toContain('import "../../styles/studio-text-box.css"')
-    expect(css).toContain("line-height: 0.75;")
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(source).toContain("export const StudioTextBox")
+    expect(css).toContain("line-height: var(--vt-studio-textarea-line-height, .85);")
+    expect(css).not.toMatch(/line-height:\s*(?:0)?\.75\b/)
     expect(css).toContain("var(--vt-studio-control-stroke")
     expect(css).toContain("var(--vt-studio-control-radius")
     expect(css).toContain('data-size="compact"')
@@ -121,7 +136,7 @@ describe("confirmed composite primitive catalog", () => {
 
   it("registers the username composite with standard and compact native inputs", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain('Username Split-left Input · 44px + 28px')
+    expect(html).toContain('StudioUsernameInput · Split Identity Field')
     expect(html).toContain('data-vt-studio-username-input="true"')
     expect(html).toContain('data-vt-studio-username-rail="true"')
     expect(html).toContain('data-icon-size-variant="large"')
@@ -132,11 +147,13 @@ describe("confirmed composite primitive catalog", () => {
   })
   it("registers the production closeable badge and animated tag editor under global rule exceptions", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain("Global Rules Exceptions · Closeable Badge + Tag Editor")
+    expect(html).toContain("StudioCloseableBadge · Fixed 20px Exception")
+    expect(html).toContain("StudioTagEditor · Tokenized Actions")
     expect(html).toContain('data-vt-studio-badge="true"')
     expect(html).toContain('data-vt-studio-tag-editor="true"')
-    expect(html).toContain("StudioCloseableBadge / StudioTagEditor")
-    expect(html).toContain("H 20px")
+    expect(html).toContain("StudioCloseableBadge")
+    expect(html).toContain("StudioTagEditor")
+    expect(html).toContain("20px pill")
     expect(html).toContain("action H 28px")
     expect(html).toContain("vt-studio-tag-editor__square-action")
   })
@@ -308,7 +325,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(catalog).toContain('aria-label="Studio text box compact"')
     expect(catalog).toContain('aria-label="Studio text box micro"')
     const catalogSource = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
-    expect(catalogSource.match(/<Family title="Studio Text Box · Standard \+ Compact \+ Micro"/g)).toHaveLength(1)
+    expect(catalogSource.match(/<Family title="Studio Text Box · Supreme \\+ Standard \\+ Compact \\+ Mini \\+ Micro"/g)).toHaveLength(1)
     expect(catalogSource).not.toContain('src/studio-ui/primitives/StudioTextBox.tsx')
   })
 

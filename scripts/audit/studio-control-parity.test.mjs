@@ -9,6 +9,9 @@ const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
 const overrides = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8");
 const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
+const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
+const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8");
+const core = readFileSync("src/styles/studio-control-core.css", "utf8");
 
 test("side-toggle stack uses a centered overlay divider, not a half-cell border", () => {
   assert.match(css, /\.vt-studio-value-toggle__arrow-stack::after[\s\S]*?top:\s*50%[\s\S]*?translateY\(-50%\)/);
@@ -76,7 +79,7 @@ test("bar toggle uses adaptive width counts, proportional fill, and size-specifi
   assert.match(toggles, /Math\.round\(\(Math\.max\(0, Math\.min\(100, value\)\) \/ 100\) \* barCount\)/);
   assert.match(toggles, /setPointerCapture\?\.\(event\.pointerId\)/);
   assert.match(toggles, /onPointerUp=\{stopRepeat\}[\s\S]*?onPointerCancel=\{stopRepeat\}[\s\S]*?onLostPointerCapture=\{stopRepeat\}/);
-  assert.match(overrides, /--vt-bar-width:\s*10px/);
+  assert.match(overrides, /--vt-bar-width:\s*calc\(var\(--vt-bar-height\) \* 0\.4\)/);
   assert.match(overrides, /--vt-bar-gap:\s*3px/);
   assert.match(overrides, /border:\s*0\s*!important/);
   assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
@@ -87,4 +90,50 @@ test("multi-select closed trigger renders a separate black count badge inside tr
   assert.match(controls, /const extra = selectedLabels.length - 1/);
   assert.match(controls, /className="vt-studio-legend-trigger-text"[\s\S]*?vt-studio-legend-count-badge/);
   assert.doesNotMatch(controls, /\$\{selectedLabels\[0\]\} \+\$\{selectedLabels\.length - 1\}/);
+});
+
+test("the five-tier size contract is complete and generated CSS stays in parity", () => {
+  for (const [tier, height, font, icon] of [
+    ["supreme", 60, 51.82, 51.82],
+    ["standard", 44, 38, 38],
+    ["compact", 28, 24, 24],
+    ["mini", 20, 17.5, 17.5],
+    ["micro", 12, 10, 10],
+  ]) {
+    assert.match(tokens, new RegExp(`${tier}:\\s*\\{[\\s\\S]*?height:\\s*${height}\\b[\\s\\S]*?fontSize:\\s*${font}\\b[\\s\\S]*?iconSize:\\s*${icon}\\b`), `${tier} tokens must remain canonical`);
+    assert.match(generated, new RegExp(`--vt-studio-${tier}-height:\\s*${height}px`), `${tier} height must be emitted`);
+    assert.match(generated, new RegExp(`--vt-studio-${tier}-font-size:\\s*${font}px`), `${tier} font size must be emitted`);
+    assert.match(generated, new RegExp(`--vt-studio-${tier}-icon-size:\\s*${icon}px`), `${tier} icon size must be emitted`);
+    assert.match(core, new RegExp(`data-size="${tier}"[\\s\\S]*?--vt-studio-control-height:[^;]*`), `${tier} must resolve to core control geometry`);
+  }
+});
+
+test("bar toggle bars follow their size's text height and a 2.5:1 height-to-width ratio", () => {
+  assert.match(overrides, /--vt-bar-height:\s*var\(--vt-studio-control-font-size/);
+  assert.match(overrides, /aspect-ratio:\s*2\s*\/\s*5/);
+  assert.match(overrides, /border-radius:\s*var\(--vt-bar-radius/);
+  assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
+  assert.match(overrides, /data-active="true"[\s\S]*?background:\s*#000/);
+});
+
+test("top direct-representative module covers the full explicitly exported control inventory", () => {
+  const start = catalog.indexOf("const ConfirmedDirectPrimitiveRows");
+  const end = catalog.indexOf("const ConfirmedStudioCounterFamily");
+  assert.ok(start >= 0 && end > start, "representative module boundaries must remain explicit");
+  const representative = catalog.slice(start, end);
+  for (const primitive of [
+    "StudioButton", "StudioTwoLineButton", "StudioSplitTwoLineButton", "StudioActionButton",
+    "StudioIconButton", "StudioSquareIconButton", "StudioSquareIconButtonGroup", "StudioCircleIconButton",
+    "StudioSplitLeftButton", "StudioSplitRightButton", "StudioDoubleSplitButton",
+    "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
+    "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
+    "StudioDropdown", "StudioSimpleDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
+    "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
+    "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
+    "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
+    "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioTagEditor", "StudioUploadFrame",
+  ]) {
+    assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"\\b`), `${primitive} needs a direct top-module specimen`);
+  }
+  assert.doesNotMatch(representative, /data-vt-library-component="(?:StudioCollapsingSplitModule|StudioCollapsingTwoLineModule|StudioInterModule|StudioSplitAccordion)"/);
 });

@@ -118,7 +118,7 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"] {
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
   font-weight: var(--vt-studio-textarea-font-weight, 1000);
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   min-height: var(--vt-studio-textarea-min-height, 92px);
   -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
@@ -150,10 +150,15 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
   -webkit-text-stroke-width: var(--vt-studio-textarea-compact-text-stroke, 0.35px);
 }
 
-/* Studio field shells are stationary; no focus-fade or geometry-transition layer. */
+/* Fields animate only color/focus paint; geometry and position remain stationary. */
 html body :is(input, textarea, select)[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] :is(input, textarea, select) {
-  transition: none;
+  transition:
+    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
 }
 
 
@@ -248,4 +253,66 @@ textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
   outline: var(--vt-field-focus-outline);
   outline-offset: 0;
   box-shadow: none;
+}
+
+
+/* Mini is a first-class multiline field tier; preserve primary glyph stroke and 0.85 line height. */
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="mini"],
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="mini"] {
+  font-size: var(--vt-studio-textarea-mini-font-size, 17.5px);
+  line-height: var(--vt-studio-textarea-line-height, .85);
+  padding: var(--vt-studio-textarea-compact-padding-block, 8px) var(--vt-studio-textarea-compact-padding-inline, 10px);
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, .375px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="mini"]::placeholder,
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="mini"]::placeholder {
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, .375px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="mini"]:is(:focus, :focus-visible),
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="mini"]:is(:focus, :focus-visible) {
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
+  -webkit-text-stroke-width: var(--vt-studio-textarea-mini-text-stroke, .375px);
+}
+
+
+/* Resting floating labels track the selected tier; raised labels remain the shared 12px chip. */
+.vt-studio-floating-field > input[data-size="supreme"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="standard"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-standard-font-size, 38px);
+  -webkit-text-stroke: var(--vt-studio-standard-text-stroke, 1px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="compact"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-compact-font-size, 24px);
+  -webkit-text-stroke: var(--vt-studio-compact-text-stroke, .5px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="mini"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-mini-font-size, 17.5px);
+  -webkit-text-stroke: var(--vt-studio-mini-text-stroke, .375px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="micro"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-micro-font-size, 10px);
+  -webkit-text-stroke: var(--vt-studio-micro-text-stroke, .25px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="supreme"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-supreme-font-size, 24.55px);
+  -webkit-text-stroke: var(--vt-studio-textarea-supreme-text-stroke, .68px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="standard"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, .5px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="compact"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, .35px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="mini"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-mini-font-size, 17.5px);
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, .375px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="micro"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-micro-font-size, 10px);
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, .25px) currentColor;
 }

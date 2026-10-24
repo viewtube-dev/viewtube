@@ -4,7 +4,7 @@ import "../../styles/studio-split-accordion.css";
 
 export type StudioSplitAccordionLayout = "left" | "right" | "double";
 
-export type StudioSplitAccordionSize = "standard" | "compact" | "micro";
+export type StudioSplitAccordionSize = "supreme" | "standard" | "compact" | "mini" | "micro";
 
 /** Visual treatments ported from the navigation library (see studio-split-accordion.css). */
 export type StudioSplitAccordionVariant =

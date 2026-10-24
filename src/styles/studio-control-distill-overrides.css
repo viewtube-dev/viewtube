@@ -17,7 +17,12 @@ html body [data-vt-studio-control="true"] textarea {
   background-color: var(--vt-field-fill-rest);
   caret-color: var(--vt-field-text);
   box-shadow: none;
-  transition: none;
+  transition:
+    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
 }
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
@@ -61,17 +66,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   flex: 0 0 auto;
 }
 
-/* Keep every bar visible against the full-primary toggle face. */
-.vt-studio-value-toggle__bar,
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 40%, #fff) !important;
-  border: 1px solid #000;
-  pointer-events: none;
-}
-.vt-studio-value-toggle__bar[data-active="true"],
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
-  background: #000 !important;
-}
+/* Bar geometry and fill are owned by the canonical track block below. */
 .vt-studio-value-toggle__arrow {
   position: relative;
   z-index: 2;
@@ -170,9 +165,9 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 /* Bar track: size tokens, 50% primary empty bars, active bars black, no borders. */
 .vt-studio-value-toggle__bars {
   --vt-bar-gap: 3px;
-  --vt-bar-width: 10px;
-  --vt-bar-height: 28px;
-  --vt-bar-radius: 2px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 38px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
   --vt-bar-padding-inline: 6px;
   display: flex;
   flex: 1 1 auto;
@@ -185,26 +180,39 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   padding: 0 var(--vt-bar-padding-inline);
   box-sizing: border-box;
 }
+
+.vt-studio-value-toggle[data-size="supreme"] .vt-studio-value-toggle__bars {
+  --vt-bar-gap: 4px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 51.82px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
+}
+.vt-studio-value-toggle[data-size="mini"] .vt-studio-value-toggle__bars {
+  --vt-bar-gap: 1.5px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 17.5px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
+}
 .vt-studio-value-toggle[data-size="standard"] .vt-studio-value-toggle__bars,
 .vt-studio-value-toggle:not([data-size]) .vt-studio-value-toggle__bars {
   --vt-bar-gap: 3px;
-  --vt-bar-width: 10px;
-  --vt-bar-height: 28px;
-  --vt-bar-radius: 2px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 38px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
   --vt-bar-padding-inline: 6px;
 }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars {
   --vt-bar-gap: 2px;
-  --vt-bar-width: 6px;
-  --vt-bar-height: 16px;
-  --vt-bar-radius: 1.5px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 24px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
   --vt-bar-padding-inline: 4px;
 }
 .vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars {
   --vt-bar-gap: 1px;
-  --vt-bar-width: 3px;
-  --vt-bar-height: 8px;
-  --vt-bar-radius: 1px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 10px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
   --vt-bar-padding-inline: 2px;
 }
 .vt-studio-value-toggle__bar,
@@ -215,6 +223,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   min-width: var(--vt-bar-width);
   max-width: var(--vt-bar-width);
   height: var(--vt-bar-height);
+  aspect-ratio: 2 / 5;
   align-self: center;
   border: 0 !important;
   border-radius: var(--vt-bar-radius);
@@ -225,4 +234,84 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 .vt-studio-value-toggle__bar[data-active="true"],
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
   background: #000 !important;
+}
+
+
+/* Choice controls share the same five-tier geometry as the rest of Studio Controls. */
+.vt-studio-44-switch[data-vt-studio-control="true"] {
+  width: calc(var(--vt-studio-control-height, 44px) * 1.72);
+  height: var(--vt-studio-control-height, 44px);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"] .vt-studio-44-handle {
+  top: calc(var(--vt-studio-control-height, 44px) * .0833333333);
+  left: calc(var(--vt-studio-control-height, 44px) * .0833333333);
+  width: calc(var(--vt-studio-control-height, 44px) * .8333333333);
+  height: calc(var(--vt-studio-control-height, 44px) * .8333333333);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"].is-on .vt-studio-44-handle {
+  transform: translateX(calc(var(--vt-studio-control-height, 44px) * .72));
+}
+.vt-studio-44-switch[data-vt-studio-control="true"].is-rect {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .1666666667);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"].is-rect .vt-studio-44-handle {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .0833333333);
+}
+.vt-studio-44-choice[data-vt-studio-control="true"] {
+  width: var(--vt-studio-control-height, 44px);
+  height: var(--vt-studio-control-height, 44px);
+}
+.vt-studio-44-choice[data-vt-studio-control="true"] .vt-studio-44-dot {
+  width: 75%;
+  height: 75%;
+}
+.vt-studio-44-choice[data-vt-studio-control="true"].is-rect {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .1666666667);
+}
+.vt-studio-44-choice[data-vt-studio-control="true"].is-radio.is-rect .vt-studio-44-dot {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .0416666667);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"]:focus-visible,
+.vt-studio-44-choice[data-vt-studio-control="true"]:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+
+/* Horizontal word toggle follows the same five-tier tokens; its measured handle remains content-sized. */
+.vt-studio-44-word-toggle[data-vt-word-toggle-size] {
+  box-sizing: border-box;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+}
+.vt-studio-44-word-toggle[data-vt-word-toggle-size] > button {
+  font-size: var(--vt-studio-control-font-size, 38px);
+  line-height: var(--vt-studio-control-line-height, 1);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+.vt-studio-44-word-toggle[data-vt-word-toggle-size] .vt-studio-44-word-handle {
+  top: var(--vt-word-toggle-handle-inset, 2.75px);
+  bottom: var(--vt-word-toggle-handle-inset, 2.75px);
+  border-radius: max(1px, calc(var(--vt-studio-control-height, 44px) * .1));
+}
+
+
+/* Vertical word-toggle spacing scales with the selected size without changing its content-driven height. */
+.vt-studio-vertical-word-toggle.is-supreme {
+  --vt-studio-vertical-word-gap: 5px;
+  --vt-studio-vertical-word-padding: 5px;
+  --vt-studio-vertical-word-horizontal-padding: 20px;
+  --vt-studio-vertical-word-handle-inset: 3.75px;
+}
+.vt-studio-vertical-word-toggle.is-mini {
+  --vt-studio-vertical-word-gap: 1.666667px;
+  --vt-studio-vertical-word-padding: 1.666667px;
+  --vt-studio-vertical-word-horizontal-padding: 6.666667px;
+  --vt-studio-vertical-word-handle-inset: 1.25px;
+}
+.vt-studio-vertical-word-toggle:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  box-shadow: none;
 }

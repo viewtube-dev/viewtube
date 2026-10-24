@@ -15,7 +15,7 @@ The Confirmed Primitive Library is a production-component specimen and provenanc
 
 **NON-DEFAULT SETTINGS** must list only true departures from shared defaults. Do not repeat the 44px/28px lattice, global typography, ordinary selected/disabled behavior, or generic interaction rules under every family. Keep family-specific anatomy, real variants, and registered exceptions; put global contracts in the defaults strip and this index.
 
-The canonical ladder is Supreme (60px), Standard (44px), Compact (28px), and Micro (12px). Supreme is available to supported single-height controls, including buttons, split controls, fields, dropdowns, and action buttons. Micro is family-aware: expose it only on production families whose 12px geometry is supported (including informational split badges and the existing micro-capable fields); do not assume every interactive family can fit it. The canonical TypeScript tokens and `scripts/emit-studio-control-vars.mjs` remain the only sizing authority.
+The canonical five-tier ladder is Supreme (60px), Standard (44px), Compact (28px), Mini (20px), and Micro (12px). Mini uses a 1.5px stroke, 3px radius, and 17.5px typography/icon size; it is a first-class token tier, not an ad hoc intermediate size. Supreme is available to supported single-height controls, including buttons, split controls, fields, dropdowns, and action buttons. Micro is family-aware: expose it only on production families whose 12px geometry is supported (including informational split badges and the existing micro-capable fields); do not assume every interactive family can fit it. The canonical TypeScript tokens and `scripts/emit-studio-control-vars.mjs` remain the only sizing authority.
 
 A family is **source-confirmed** only when its specimen uses the production export, provenance identifies TSX/CSS/tokens/import paths, exception notes are concise, and source/API regression tests cover the public contract. Full visual certification additionally requires computed-style/browser evidence for standard, compact, and applicable exception sizes. The word “confirmed” alone is not proof that visual regression passed.
 
@@ -61,7 +61,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 ## 2. Size-based global defaults
 
-The size tier determines height, border stroke, radius, typography, icon size, and icon stroke across Supreme (60px), Standard (44px), Compact (28px), and Micro (12px), subject to registered family-specific exceptions. Do not independently override one of these properties without a registered exception.
+The size tier determines height, border stroke, radius, typography, icon size, and icon stroke across Supreme (60px / 4.09px / 8.18px / 51.82px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1px / 2px / 10px), subject to registered family-specific exceptions. Do not independently override one of these properties without a registered exception.
 
 | Property | Supreme | Standard | Compact | Micro |
 |---|---:|---:|---:|---:|
@@ -177,7 +177,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 
 1. No undocumented pill-ratio badge styling.
 2. No thin inherited badge font; use Inter weight 1000 for global badges and their labels. The Vault Spectrum Tag is the explicitly registered weight-900 exception.
-3. No hard-coded intermediate control sizes. The canonical lattice is Supreme 60px / Standard 44px / Compact 28px / Micro 12px; documented content-driven and family-specific exceptions remain explicit.
+3. No hard-coded intermediate control sizes. The canonical lattice is Supreme 60px / Standard 44px / Compact 28px / Mini 20px / Micro 12px; documented content-driven and family-specific exceptions remain explicit.
 4. No asymmetric split rails, off-center icons, label misalignment, or duplicated split borders.
 5. No internal gap on any control shell: split rails and faces are flush (no white seam), and the 4px spacing unit is for external grids/rows between whole controls only.
 6. No fixed-width ordinary buttons/fields where row-fill is required; intrinsic width is reserved for content primitives.

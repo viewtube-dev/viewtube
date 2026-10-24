@@ -342,3 +342,58 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
   outline-offset: -2px;
   z-index: 1;
 }
+
+
+/* Final rail invariant: each rail is a square inside the shell's inner box.
+   The black outer perimeter/divider stays separate; pair fill never becomes chrome. */
+[data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
+[data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail] {
+  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - var(--vt-studio-control-stroke, 3px) - var(--vt-studio-control-stroke, 3px));
+  box-sizing: border-box;
+  width: var(--vt-studio-split-rail-size);
+  min-width: var(--vt-studio-split-rail-size);
+  max-width: var(--vt-studio-split-rail-size);
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 var(--vt-studio-split-rail-size);
+}
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] {
+  grid-template-columns: calc(var(--vt-studio-control-height, 44px) - var(--vt-studio-control-stroke, 3px) - var(--vt-studio-control-stroke, 3px)) minmax(0, 1fr);
+}
+
+
+/* Split-module rails are square within the header's content box, not the outer stroke. */
+.vt-studio-top-split-module__head[data-split="left"] {
+  grid-template-columns: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px)) minmax(0, 1fr);
+}
+.vt-studio-top-split-module__head[data-split="right"] {
+  grid-template-columns: minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+}
+.vt-studio-top-split-module__head[data-split="double"] {
+  grid-template-columns: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px)) minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+}
+.vt-studio-top-split-module__rail {
+  box-sizing: border-box;
+  width: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+  min-width: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+}
+
+
+/* Split text inputs transfer focus paint to the composite shell, not a nested second outline. */
+.vt-studio-username-input:focus-within {
+  background: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent);
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  box-shadow: none;
+}
+.vt-studio-username-input:focus-within [data-vt-studio-split-field] > input[data-vt-studio-control="true"] {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
+  caret-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
+}

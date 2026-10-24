@@ -1,7 +1,7 @@
 import React from "react"
 import "../../styles/studio-inter-module.css"
 
-export type StudioInterModuleSize = "standard" | "compact" | "micro"
+export type StudioInterModuleSize = "supreme" | "standard" | "compact" | "mini" | "micro"
 
 export interface StudioInterModuleProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
   title: React.ReactNode

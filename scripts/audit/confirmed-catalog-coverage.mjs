@@ -25,11 +25,11 @@ const system = read("src/styles/studio-control-system.css")
 const checks = [
   ["distill overrides imported after field/parity styles", entry.indexOf('./studio-control-distill-overrides.css') > entry.indexOf('./studio-field-parity.css')],
   ["focused field text is black", fields.includes("color: var(--vt-field-text-focus)") && fields.includes("-webkit-text-fill-color: var(--vt-field-text-focus)") && system.includes("--vt-field-text-focus: #000;")],
-  ["focused field uses black glyph stroke, not primary", fields.includes("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)") && system.includes("--vt-field-text-stroke-focus: var(--vt-field-text-focus);") && !/(?:^|})[^{}]*:is\(:focus, :focus-visible\)[^{]*\{[^}]*-webkit-text-stroke-color:\s*var\(--vt-field-primary/s.test(fields)],
+  ["focused field keeps primary glyph stroke with black text fill", fields.includes("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)") && system.includes("--vt-field-text-stroke-focus: var(--vt-field-primary);") && system.includes("--vt-field-text-focus: #000;")],
   ["focus fill uses primary at 15 percent", system.includes("--vt-field-fill-focus: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);") && fields.includes("background-color: var(--vt-field-fill-focus);")],
   ["single-line labels clip instead of ellipsis", overrides.includes("text-overflow: clip") && !overrides.includes("text-overflow: ellipsis")],
   ["square icon group uses content width", overrides.includes(".vt-studio-square-icon-button-group") && overrides.includes("width: max-content")],
-  ["bar toggle retains visible individual bars", overrides.includes(".vt-studio-value-toggle__bar") && overrides.includes("border: 1px solid #000")],
+  ["bar toggle uses 50% primary fill, black active bars, and a 2.5:1 height/width ratio", overrides.includes(".vt-studio-value-toggle__bar") && overrides.includes("--vt-bar-height: var(--vt-studio-control-font-size") && overrides.includes("aspect-ratio: 2 / 5") && overrides.includes("50%, transparent") && overrides.includes('data-active="true"') && overrides.includes("background: #000 !important")],
   ["stacked toggle divider is centered", overrides.includes(".vt-studio-value-toggle__arrow-stack::after") && overrides.includes("top: 50%") && overrides.includes("translateY(-50%)")],
   ["catalog uses canonical StudioTopSplitModule", catalog.includes("StudioTopSplitModule") && controls.includes("StudioTopSplitModule")],
   ["catalog uses canonical StudioSquareIconButtonGroup", catalog.includes("StudioSquareIconButtonGroup") && controls.includes("StudioSquareIconButtonGroup")],
@@ -48,13 +48,13 @@ const checks = [
 ]
 
 const requiredP0 = [
-  "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioButton",
-  "StudioActionButton", "StudioSquareIconButtonGroup", "StudioTopSplitModule",
-  "StudioUploadFrame", "StudioSimpleDropdown", "StudioSplitLeftDropdown",
-  "StudioSwitch", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
+  "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput", "StudioButton",
+  "StudioActionButton", "StudioSquareIconButtonGroup", "StudioTopSplitModule", "StudioCollapsingTwoLineModule",
+  "StudioUploadFrame", "StudioDropdown", "StudioSimpleDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
+  "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox", "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioIconButton", "StudioSplitRightButton",
   "StudioWordToggle", "StudioArrowToggle", "StudioSideToggle", "StudioDoubleSideToggle",
   "StudioBarToggle", "StudioSplitAccordion", "StudioPublishingCard", "StudioBrainStatusBadge",
-  "StudioCounter", "StudioSideCounter", "StudioDoubleSplitSlider",
+  "StudioCounter", "StudioSideCounter", "StudioLeftCounter", "StudioDoubleSplitSlider", "StudioSpectrumTag", "StudioCloseableBadge", "StudioTagEditor",
 ]
 const missingP0 = requiredP0.filter((name) => !catalog.includes(name))
 checks.push(["P0 canonical specimen coverage", missingP0.length === 0])

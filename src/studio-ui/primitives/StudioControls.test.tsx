@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -22,20 +22,20 @@ const canonicalTail = (css: string) => {
 
 
 describe("StudioTextBox size-aware stroke defaults", () => {
-  it("halves only the local stroke width while preserving the 50% fill and black text", () => {
+  it("shares full field geometry while keeping black text and primary glyph stroke", () => {
     const css = readStudioControlCss();
     const start = css.indexOf('.vt-studio-text-box[data-vt-studio-control="true"]');
     const end = css.indexOf("/* Textarea and read-only text display share", start);
     const textBox = css.slice(start, end);
-    expect(textBox).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5)");
-    expect(textBox).toContain("border: var(--studio-text-box-stroke-width) solid #000");
-    expect(textBox).toContain("inset 0 0 0 var(--studio-text-box-stroke-width)");
-    expect(textBox).toContain("outline: var(--studio-text-box-stroke-width) solid");
+    expect(textBox).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000");
+    expect(textBox).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
+    expect(textBox).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary");
     expect(textBox).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
     expect(textBox).toContain("color: #000");
-    expect(textBox).toContain("line-height: var(--textarea-description-line-height, 0.75)");
+    expect(textBox).toContain("line-height: var(--vt-studio-textarea-line-height, .85)");
     expect(textBox).toContain('[data-size="compact"]');
     expect(textBox).toContain('[data-size="micro"]');
+    expect(textBox).toContain('[data-size="mini"]');
   });
 });
 
@@ -280,41 +280,62 @@ describe("standalone Studio text fields", () => {
     expect(compact).toContain('data-size="compact"')
   })
 
-  it("renders StudioTextBox as non-editable standard, compact, and micro display surfaces", () => {
+  it("renders StudioTextBox as readonly display surfaces across the supported size tiers", () => {
     const standard = renderToStaticMarkup(<StudioTextBox aria-label="Standard summary">First row{"\n"}Second row</StudioTextBox>)
+    const supreme = renderToStaticMarkup(<StudioTextBox size="supreme" aria-label="Supreme summary">Supreme content</StudioTextBox>)
     const compact = renderToStaticMarkup(<StudioTextBox size="compact" aria-label="Compact summary">Compact content</StudioTextBox>)
+    const mini = renderToStaticMarkup(<StudioTextBox size="mini" aria-label="Mini summary">Mini content</StudioTextBox>)
     const micro = renderToStaticMarkup(<StudioTextBox size="micro" aria-label="Micro summary">Micro content</StudioTextBox>)
     expect(standard).toContain('data-vt-studio-field-kind="textarea-display"')
     expect(standard).toContain('data-size="standard"')
     expect(standard).toContain('First row')
     expect(standard).toContain('Second row')
     expect(standard).toContain('contenteditable="false"')
+    expect(standard).toContain('aria-readonly="true"')
+    expect(standard).toContain('data-vt-studio-text-box="true"')
+    expect(supreme).toContain('data-size="supreme"')
     expect(compact).toContain('data-size="compact"')
+    expect(mini).toContain('data-size="mini"')
     expect(micro).toContain('data-size="micro"')
   })
 
-  it("uses half-width black borders and matching primary/secondary strokes for StudioTextBox", () => {
+  it("uses shared border geometry, primary glyph stroke, and a proportional secondary outline for StudioTextBox", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
     const block = css.match(/\.vt-studio-text-box\[data-vt-studio-control="true"\] \{([\s\S]*?)\n\}/)?.[1] ?? "";
-    expect(block).toContain("--field-border-width: var(--vt-studio-control-stroke, 3px);");
-    expect(block).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
-    expect(block).toContain("border: var(--studio-text-box-stroke-width) solid #000;");
-    expect(block).toContain("box-shadow: inset 0 0 0 var(--studio-text-box-stroke-width) var(--vt-field-primary");
-    expect(block).toContain("outline: var(--studio-text-box-stroke-width) solid var(--vt-field-secondary");
+    expect(css).toContain("--studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);");
+    expect(block).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000;");
+    expect(block).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
+    expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary");
     expect(block).toContain("outline-offset: 0;");
     expect(block).toContain("color: #000;");
     expect(block).toContain("-webkit-text-fill-color: #000;");
     expect(block).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
-    expect(block).not.toContain("-webkit-text-stroke");
-    expect(css).not.toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) #000;");
-    expect(css).not.toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, .25px) #000;");
+    expect(css).toContain("-webkit-text-stroke-color: var(--vt-field-primary");
+    expect(css).not.toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
+    expect(css).not.toContain("-webkit-text-stroke-color: var(--vt-field-text-focus, #000);");
   });
 
   it("uses the shared 0.85 line-height token for textarea and text-box sizes", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const generated = readFileSync(resolve(process.cwd(), "src/styles/studio-control-vars.generated.css"), "utf8")
     expect(css).toContain("--vt-studio-textarea-line-height: .85;")
+    expect(generated).toContain("--vt-studio-textarea-line-height: 0.85;")
     expect(css).not.toMatch(/line-height:\s*(?:0)?\.75\b/)
-    expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(5)
+    expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(6)
+  })
+
+  it("maps choice controls and horizontal word toggles through all five size tiers", () => {
+    const miniSwitch = renderToStaticMarkup(<StudioSwitch checked={false} sizeVariant="mini" aria-label="Mini switch" />)
+    const supremeRadio = renderToStaticMarkup(<StudioRadio checked={false} sizeVariant="supreme" aria-label="Supreme radio" />)
+    const miniWordToggle = renderToStaticMarkup(<StudioWordToggle size="20" value={false} words={["OFF", "ON"]} onValueChange={() => {}} aria-label="Mini word toggle" />)
+    expect(miniSwitch).toContain('data-size="mini"')
+    expect(supremeRadio).toContain('data-size="supreme"')
+    expect(miniWordToggle).toContain('data-size="mini"')
+    expect(miniWordToggle).toContain('data-vt-word-toggle-size="20"')
+    const overrides = readFileSync(resolve(process.cwd(), "src/styles/studio-control-distill-overrides.css"), "utf8")
+    expect(overrides).toContain('.vt-studio-44-switch[data-vt-studio-control="true"]')
+    expect(overrides).toContain('.vt-studio-44-choice[data-vt-studio-control="true"]')
+    expect(overrides).toContain('.vt-studio-44-word-toggle[data-vt-word-toggle-size]')
   })
 
   it("keeps the plain input free of label wrappers while textarea labels remain separate", () => {

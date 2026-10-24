@@ -15,7 +15,10 @@ import {
   StudioSelect,
   StudioSearchInput,
   StudioNumberInput,
+  StudioUsernameInput,
+  StudioSplitLeftInput,
   StudioSplitRightButton,
+  StudioCollapsingTwoLineModule,
   StudioRadio,
   StudioCheckbox,
   StudioXCheckbox,
@@ -169,7 +172,11 @@ const CanonicalSplitBadgeFamily: React.FC = () => (
 
 const CanonicalWordToggleFamily: React.FC = () => {
   const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
+  const [supremeWord, setSupremeWord] = React.useState(false)
+  const [miniWord, setMiniWord] = React.useState(false)
   const [verticalWords, setVerticalWords] = React.useState<boolean[]>(Array(12).fill(false))
+  const [verticalSupreme, setVerticalSupreme] = React.useState(false)
+  const [verticalMini, setVerticalMini] = React.useState(false)
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return (
     <>
@@ -189,10 +196,18 @@ const CanonicalWordToggleFamily: React.FC = () => {
           <strong>WORD TOGGLE · COMPACT</strong>
           <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={"Compact word toggle variant " + (col + 1)} /></div> })}</div>
         </div>
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · SUPREME</strong>
+          <div className="vt-confirmed-control-variants" data-control-size="60"><StudioWordToggle size="60" value={supremeWord} words={["WRITE", "CREATE"]} onValueChange={setSupremeWord} aria-label="Supreme word toggle specimen" /></div>
+        </div>
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · MINI</strong>
+          <div className="vt-confirmed-control-variants" data-control-size="20"><StudioWordToggle size="20" value={miniWord} words={["OFF", "ON"]} onValueChange={setMiniWord} aria-label="Mini word toggle specimen" /></div>
+        </div>
       </div>
     </div>
     <div className="vt-confirmed-toggle-subfamily">
-      <strong>VERTICAL WORD TOGGLE · STANDARD + COMPACT + MICRO</strong>
+      <strong>VERTICAL WORD TOGGLE · SUPREME + STANDARD + COMPACT + MINI + MICRO</strong>
       <div className="vt-confirmed-vertical-word-toggle-family">
         <div className="vt-confirmed-vertical-word-toggle-size-row">
           <strong>STANDARD · SINGLE COLUMN</strong>
@@ -218,6 +233,13 @@ const CanonicalWordToggleFamily: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div className="vt-confirmed-vertical-word-toggle-size-row">
+      <strong>SUPREME + MINI · SINGLE COLUMN</strong>
+      <div className="vt-confirmed-vertical-word-toggle-standard">
+        <div className="vt-confirmed-vertical-word-toggle-specimen"><small>SUPREME · 60PX</small><StudioVerticalWordToggle sizeVariant="supreme" variant="primary-secondary" value={verticalSupreme} onValueChange={setVerticalSupreme} words={["WRITE", "CREATE"]} aria-label="Supreme vertical word toggle" /></div>
+        <div className="vt-confirmed-vertical-word-toggle-specimen"><small>MINI · 20PX</small><StudioVerticalWordToggle sizeVariant="mini" variant="primary-secondary" value={verticalMini} onValueChange={setVerticalMini} words={["OFF", "ON"]} aria-label="Mini vertical word toggle" /></div>
       </div>
     </div>
     </Family>
@@ -272,6 +294,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   const [arrowValue, setArrowValue] = React.useState("ONE")
   const [barValue, setBarValue] = React.useState(40)
   const [wordValue, setWordValue] = React.useState(false)
+  const [verticalWordValue, setVerticalWordValue] = React.useState(false)
   const [sideValue, setSideValue] = React.useState("LOW")
   const [doubleLeft, setDoubleLeft] = React.useState("SOURCE")
   const [doubleRight, setDoubleRight] = React.useState("TARGET")
@@ -313,10 +336,10 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle"><span>Arrow Toggle · STANDARD</span><StudioArrowToggle size="standard" value={arrowValue} options={options} onValueChange={setArrowValue} ariaLabel="Arrow toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>Bar Toggle · STANDARD</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} barCount={10} ariaLabel="Bar toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioWordToggle"><span>Word Toggle · STANDARD</span><StudioWordToggle size="44" skin="solid" value={wordValue} words={["OFF", "ON"]} onValueChange={setWordValue} aria-label="Word toggle standard specimen" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioVerticalWordToggle"><span>Vertical Word Toggle · STANDARD</span><StudioVerticalWordToggle sizeVariant="standard" value={false} words={["OFF", "ON"]} aria-label="Vertical word toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioVerticalWordToggle"><span>Vertical Word Toggle · STANDARD</span><StudioVerticalWordToggle sizeVariant="standard" value={verticalWordValue} onValueChange={setVerticalWordValue} words={["OFF", "ON"]} aria-label="Vertical word toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInput"><span>Text Input · STANDARD</span><StudioTextInput sizeVariant="standard" aria-label="Text input standard specimen" placeholder="TYPE HERE" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInputFloatingLabel"><span>Floating Label Text Input · STANDARD</span><StudioTextInput variant="floating-label" label="CREATOR NAME" sizeVariant="standard" aria-label="Floating label creator name specimen" placeholder="TYPE HERE" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInputFixedLabel"><span>Fixed Label Text Input · STANDARD</span><StudioTextInput variant="fixed-label" label="CREATOR NAME" sizeVariant="standard" aria-label="Fixed label creator name specimen" placeholder="TYPE HERE" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>Username Split Input · STANDARD</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Username split input standard specimen" placeholder="CREATOR NAME" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftInput"><span>Split Left Search Input · STANDARD</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split left input standard specimen" placeholder="SEARCH ASSETS" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextArea"><span>Text Area · STANDARD</span><StudioTextArea sizeVariant="standard" rows={3} aria-label="Text area standard specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextBox"><span>Text Box · STANDARD</span><StudioTextBox size="standard" aria-label="Text box standard specimen">Read-only text rendered by the production StudioTextBox primitive.</StudioTextBox></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideToggle"><span>Side Toggle · STANDARD</span><StudioSideToggle size="standard" value={sideValue} options={["LOW", "MID", "HIGH"]} onValueChange={setSideValue} ariaLabel="Side toggle standard specimen" /></div>
@@ -355,26 +378,32 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
 }
 
 const ConfirmedStudioCounterFamily: React.FC = () => {
+  const [supremePrimary, setSupremePrimary] = React.useState(22)
+  const [supremeReversed, setSupremeReversed] = React.useState(22)
   const [standardPrimary, setStandardPrimary] = React.useState(22)
   const [standardReversed, setStandardReversed] = React.useState(22)
+  const [miniPrimary, setMiniPrimary] = React.useState(3)
+  const [miniReversed, setMiniReversed] = React.useState(3)
   const [compactPrimary, setCompactPrimary] = React.useState(3)
   const [compactReversed, setCompactReversed] = React.useState(3)
   const [microPrimary, setMicroPrimary] = React.useState(7)
   const [microReversed, setMicroReversed] = React.useState(7)
   return (
     <Family
-      title="StudioCounter · Standard + Compact + Micro"
+      title="StudioCounter · Supreme + Standard + Compact + Mini + Micro"
       nonDefaultSettings={[
         "Independent button-only counter; no legacy stepper composition.",
         "Each size pairs the primary right-side rail with an opposite-palette left-side rail.",
         "Catalog range is 0–100 for all counter sizes.",
       ]}
-      provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px · fixed geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · fixed geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioCounter">
         <div className="vt-confirmed-counter-size-rows">
+          <div className="vt-confirmed-counter-size-row"><small>60px SUPREME</small><div className="vt-confirmed-counter-pair"><StudioCounter value={supremePrimary} onValueChange={setSupremePrimary} size="supreme" min={0} max={100} ariaLabel="Supreme counter" /><StudioCounter className="is-reversed" value={supremeReversed} onValueChange={setSupremeReversed} size="supreme" min={0} max={100} ariaLabel="Supreme counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioCounter value={standardPrimary} onValueChange={setStandardPrimary} size="standard" min={0} max={100} ariaLabel="Standard counter" /><StudioCounter className="is-reversed" value={standardReversed} onValueChange={setStandardReversed} size="standard" min={0} max={100} ariaLabel="Standard counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioCounter value={compactPrimary} onValueChange={setCompactPrimary} size="compact" min={0} max={100} ariaLabel="Compact counter" /><StudioCounter className="is-reversed" value={compactReversed} onValueChange={setCompactReversed} size="compact" min={0} max={100} ariaLabel="Compact counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>20px MINI</small><div className="vt-confirmed-counter-pair"><StudioCounter value={miniPrimary} onValueChange={setMiniPrimary} size="mini" min={0} max={100} ariaLabel="Mini counter" /><StudioCounter className="is-reversed" value={miniReversed} onValueChange={setMiniReversed} size="mini" min={0} max={100} ariaLabel="Mini counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-counter-pair"><StudioCounter value={microPrimary} onValueChange={setMicroPrimary} size="micro" min={0} max={100} ariaLabel="Micro counter" /><StudioCounter className="is-reversed" value={microReversed} onValueChange={setMicroReversed} size="micro" min={0} max={100} ariaLabel="Micro counter secondary palette" /></div></div>
         </div>
       </div>
@@ -384,28 +413,34 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
 
 
 const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
+  const [supremeA, setSupremeA] = React.useState(62)
+  const [supremeB, setSupremeB] = React.useState(62)
   const [standardA, setStandardA] = React.useState(62)
   const [standardB, setStandardB] = React.useState(62)
   const [standardC, setStandardC] = React.useState(62)
+  const [miniA, setMiniA] = React.useState(38)
+  const [miniB, setMiniB] = React.useState(38)
   const [compactA, setCompactA] = React.useState(38)
   const [compactB, setCompactB] = React.useState(38)
   const [microA, setMicroA] = React.useState(7)
   const [microB, setMicroB] = React.useState(7)
   return (
     <Family
-      title="StudioDoubleSplitSlider · Standard + Compact + Micro"
+      title="StudioDoubleSplitSlider · Supreme + Standard + Compact + Mini + Micro"
       nonDefaultSettings={[
         "L1 range-slider track and live numeric readout on the canonical double-split shell.",
         "Rectangular v2 handle with a black structural stroke; no shell shadow or movement.",
         "Each slider specimen has independent state, including reversed palette and counter-controlled variants.",
       ]}
-      provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px · double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · square double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioDoubleSplitSlider">
         <div className="vt-confirmed-counter-size-rows">
+          <div className="vt-confirmed-counter-size-row"><small>60px SUPREME</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={supremeA} onValueChange={setSupremeA} size="supreme" ariaLabel="Supreme slider" /><StudioDoubleSplitSlider className="is-reversed" value={supremeB} onValueChange={setSupremeB} size="supreme" ariaLabel="Supreme slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardA} onValueChange={setStandardA} size="standard" ariaLabel="Standard slider" /><StudioDoubleSplitSlider className="is-reversed" value={standardB} onValueChange={setStandardB} size="standard" ariaLabel="Standard slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={compactA} onValueChange={setCompactA} size="compact" ariaLabel="Compact slider" /><StudioDoubleSplitSlider className="is-reversed" value={compactB} onValueChange={setCompactB} size="compact" ariaLabel="Compact slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>COUNTER-CONTROLLED · UP / DOWN</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardC} onValueChange={setStandardC} size="standard" leftControls="counter" ariaLabel="Counter-controlled slider" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>20px MINI</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={miniA} onValueChange={setMiniA} size="mini" ariaLabel="Mini slider" /><StudioDoubleSplitSlider className="is-reversed" value={miniB} onValueChange={setMiniB} size="mini" ariaLabel="Mini slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={microA} onValueChange={setMicroA} size="micro" ariaLabel="Micro slider" /><StudioDoubleSplitSlider className="is-reversed" value={microB} onValueChange={setMicroB} size="micro" ariaLabel="Micro slider secondary palette" /></div></div>
         </div>
       </div>
@@ -414,26 +449,32 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
 }
 
 const ConfirmedStudioSideCounterFamily: React.FC = () => {
+  const [sideSupreme, setSideSupreme] = React.useState(5)
+  const [leftSupreme, setLeftSupreme] = React.useState(5)
   const [sideStandard, setSideStandard] = React.useState(5)
   const [leftStandard, setLeftStandard] = React.useState(5)
+  const [sideMini, setSideMini] = React.useState(3)
+  const [leftMini, setLeftMini] = React.useState(3)
   const [sideCompact, setSideCompact] = React.useState(3)
   const [leftCompact, setLeftCompact] = React.useState(3)
   const [sideMicro, setSideMicro] = React.useState(8)
   const [leftMicro, setLeftMicro] = React.useState(8)
   return (
     <Family
-      title="StudioSideCounter · Standard + Compact + Micro"
+      title="StudioSideCounter · Supreme + Standard + Compact + Mini + Micro"
       nonDefaultSettings={[
         "Independent button-only counter with 2:1 display and two-cell right action rail.",
         "Each size is a centered row with primary and secondary palette variants paired side-by-side.",
         "Catalog range is 0–100 for all counter sizes.",
       ]}
-      provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px · right-side action rail geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · square action rail and 2:1 value region · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioSideCounter">
         <div className="vt-confirmed-counter-size-rows">
+          <div className="vt-confirmed-counter-size-row"><small>60px SUPREME</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideSupreme} onValueChange={setSideSupreme} size="supreme" min={0} max={100} ariaLabel="Supreme side counter" /><StudioLeftCounter className="is-reversed" value={leftSupreme} onValueChange={setLeftSupreme} size="supreme" min={0} max={100} ariaLabel="Supreme left counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideStandard} onValueChange={setSideStandard} size="standard" min={0} max={100} ariaLabel="Standard side counter" /><StudioLeftCounter className="is-reversed" value={leftStandard} onValueChange={setLeftStandard} size="standard" min={0} max={100} ariaLabel="Standard left counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideCompact} onValueChange={setSideCompact} size="compact" min={0} max={100} ariaLabel="Compact side counter" /><StudioLeftCounter className="is-reversed" value={leftCompact} onValueChange={setLeftCompact} size="compact" min={0} max={100} ariaLabel="Compact left counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>20px MINI</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideMini} onValueChange={setSideMini} size="mini" min={0} max={100} ariaLabel="Mini side counter" /><StudioLeftCounter className="is-reversed" value={leftMini} onValueChange={setLeftMini} size="mini" min={0} max={100} ariaLabel="Mini left counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideMicro} onValueChange={setSideMicro} size="micro" min={0} max={100} ariaLabel="Micro side counter" /><StudioLeftCounter className="is-reversed" value={leftMicro} onValueChange={setLeftMicro} size="micro" min={0} max={100} ariaLabel="Micro left counter secondary palette" /></div></div>
         </div>
       </div>
@@ -598,6 +639,56 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
   )
 }
 
+const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
+  const [choiceChecked, setChoiceChecked] = React.useState(false)
+  const [leftCounterValue, setLeftCounterValue] = React.useState(6)
+  const [username, setUsername] = React.useState("CREATOR")
+  const [compactUsername, setCompactUsername] = React.useState("CREATOR")
+  const [search, setSearch] = React.useState("")
+  const [number, setNumber] = React.useState("12")
+  const dropdownOptions = [
+    { value: "balanced", label: "BALANCED" },
+    { value: "focused", label: "FOCUSED" },
+    { value: "explore", label: "EXPLORE" },
+  ]
+  return (
+    <>
+      <Family title="StudioDropdown · Single Selection" nonDefaultSettings={["Canonical dropdown component distinct from the simple and split-left wrappers.", "Chevron rail and menu rows inherit the selected Studio size tier."]} provenance={<Provenance primitive="StudioDropdown" tsx="src/studio-ui/primitives/StudioDropdown.tsx" css="src/styles/studio-control-system.css" tokens="Five-tier dropdown rail/chevron tokens; primary trigger and secondary rail." imports={["src/studio-ui/primitives/StudioDropdown.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdown"><span>STANDARD · SINGLE SELECT</span><StudioDropdown sizeVariant="standard" ariaLabel="Canonical dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
+      </Family>
+      <Family title="StudioUsernameInput · Split Identity Field" nonDefaultSettings={["A real split shell with a fixed leading rail and one native text input.", "Focus paint belongs to the outer shell; no nested second outline or inset shadow."]} provenance={<Provenance primitive="StudioUsernameInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="44px standard split shell with shared field focus contract." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>STANDARD · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Standard username" value={username} onChange={(event) => setUsername(event.currentTarget.value)} placeholder="CREATOR NAME" /></div>
+        <div className="vt-confirmed-variant is-full-row"><span>COMPACT · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="compact" aria-label="Compact username" value={compactUsername} onChange={(event) => setCompactUsername(event.currentTarget.value)} placeholder="CREATOR NAME" /></div>
+        <div className="vt-confirmed-variant is-full-row"><span>DISABLED · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Disabled username" value="LOCKED CREATOR" disabled placeholder="CREATOR NAME" /></div>
+      </Family>
+      <Family title="StudioSplitLeftInput · Split Search Field" nonDefaultSettings={["Distinct public wrapper using the same canonical split-input composition.", "Rail is square and the composite owns the single outer focus outline."]} provenance={<Provenance primitive="StudioSplitLeftInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="Standard split input; fixed square left rail and 65% secondary focus outline." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftInput"><span>STANDARD · ASSET SEARCH</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split left input dedicated specimen" value={search} onChange={(event) => setSearch(event.currentTarget.value)} placeholder="SEARCH ASSETS" /></div>
+      </Family>
+      <Family title="StudioIconButton · Standard" nonDefaultSettings={["Standalone icon button wrapper; separate from square and circular icon button families."]} provenance={<Provenance primitive="StudioIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Standard 44px icon button with canonical stroke/radius and no lift." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton"><span>STANDARD · SETTINGS</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" sizeVariant="standard" /></div>
+      </Family>
+      <Family title="StudioSplitRightButton · Standard" nonDefaultSettings={["Right-rail split button, independently catalogued from left and double split variants."]} provenance={<Provenance primitive="StudioSplitRightButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="Square secondary rail; single outer black perimeter; standard size." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightButton"><span>STANDARD · RIGHT RAIL</span><StudioSplitRightButton icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split right button dedicated specimen">SETTINGS</StudioSplitRightButton></div>
+      </Family>
+      <Family title="StudioChoice · Standard" nonDefaultSettings={["Shared production primitive used by the radio, checkbox, and X-checkbox public wrappers."]} provenance={<Provenance primitive="StudioChoice" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-distill-overrides.css" tokens="Five-tier choice geometry; secondary focus outline at 65% of the active border." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChoice"><span>STANDARD · SHARED RADIO CHOICE</span><StudioChoice kind="radio" skin="solid" checked={choiceChecked} onClick={() => setChoiceChecked((value) => !value)} sizeVariant="standard" aria-label="Shared choice dedicated specimen" /></div>
+      </Family>
+      <Family title="StudioSelect · Standard" nonDefaultSettings={["Native select primitive with canonical Studio geometry; kept separate from custom menu dropdowns."]} provenance={<Provenance primitive="StudioSelect" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-fields.css" tokens="Standard 44px field with shared field focus and text contract." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSelect"><span>STANDARD · NATIVE SELECT</span><StudioSelect sizeVariant="standard" aria-label="Native select dedicated specimen" defaultValue="balanced"><option value="balanced">BALANCED</option><option value="focused">FOCUSED</option></StudioSelect></div>
+      </Family>
+      <Family title="StudioSearchInput · Standard" nonDefaultSettings={["Native search input with autocorrect, autocapitalization, and spellcheck disabled by the canonical wrapper."]} provenance={<Provenance primitive="StudioSearchInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-text-input.css" tokens="Standard 44px input with primary resting text stroke and primary focus glyph stroke." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSearchInput"><span>STANDARD · SEARCH</span><StudioSearchInput sizeVariant="standard" aria-label="Search input dedicated specimen" placeholder="SEARCH" /></div>
+      </Family>
+      <Family title="StudioNumberInput · Standard" nonDefaultSettings={["Native number input with the same five-tier size token interface as text fields."]} provenance={<Provenance primitive="StudioNumberInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-text-input.css" tokens="Standard 44px field; black text on focus and primary glyph stroke." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioNumberInput"><span>STANDARD · NUMBER</span><StudioNumberInput sizeVariant="standard" aria-label="Number input dedicated specimen" value={number} onChange={(event) => setNumber(event.currentTarget.value)} /></div>
+      </Family>
+      <Family title="StudioLeftCounter · Standard" nonDefaultSettings={["Left-action counter variant with the same 2:1 numeric display as the standard counter."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>STANDARD · LEFT ACTION RAIL</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter dedicated specimen" /></div>
+      </Family>
+    </>
+  )
+}
+
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <>
     <div className="vt-confirmed-catalog">
@@ -606,7 +697,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <ConfirmedCatalogFamilyGroups>
     <details className="vt-confirmed-family vt-confirmed-defaults-combined" data-vt-confirmed-family="defaults">
       <summary className="vt-confirmed-defaults-heading" id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</summary>
-      <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 12px micro · 4.09px / 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
+      <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 20px Mini · 12px micro · 4.09px / 3px / 2px / 1.5px / 1px borders · 8.18px / 6px / 4px / 3px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <p><a href="https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults, exception index, and certification rules ↗</a></p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show defaults, effective CSS behavior, and exceptions</summary>
@@ -614,6 +705,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-size-grid">
           <div className="vt-confirmed-size-card"><strong>44PX STANDARD</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.fontWeight}</span><span>Flat default: no shadow, hover offset, or press offset · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.standard.iconStroke}</span></div>
           <div className="vt-confirmed-size-card"><strong>28PX COMPACT</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.fontWeight}</span><span>Flat default: no shadow, hover offset, or press offset · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.compact.iconStroke}</span></div>
+          <div className="vt-confirmed-size-card"><strong>20PX MINI</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.mini.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.mini.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.mini.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.mini.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.mini.fontWeight}</span><span>Flat default: no shadow, hover offset, or press offset · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.mini.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.mini.iconStroke}</span></div>
+          <div className="vt-confirmed-size-card"><strong>12PX MICRO</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.micro.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.micro.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.micro.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.micro.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.micro.fontWeight}</span><span>Flat default: no shadow, hover offset, or press offset · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.micro.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.micro.iconStroke}</span></div>
+          <div className="vt-confirmed-size-card"><strong>60PX SUPREME</strong><span>H {STUDIO_COMPONENT_SIZE_DEFAULTS.supreme.height}px · Stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.supreme.stroke}px · R {STUDIO_COMPONENT_SIZE_DEFAULTS.supreme.radius}px · Font {STUDIO_COMPONENT_SIZE_DEFAULTS.supreme.fontSize}px / weight {STUDIO_COMPONENT_SIZE_DEFAULTS.supreme.fontWeight}</span><span>Flat default: no shadow, hover offset, or press offset · icon {STUDIO_COMPONENT_SIZE_DEFAULTS.supreme.iconSize}px / stroke {STUDIO_COMPONENT_SIZE_DEFAULTS.supreme.iconStroke}</span></div>
         </div>
         <div className="vt-confirmed-size-card"><strong>SINGLE-LINE INPUTS · GLOBAL TYPOGRAPHY</strong><span>Standard {STUDIO_COMPONENT_SIZE_DEFAULTS.textInput.standardFontSize}px · compact {STUDIO_COMPONENT_SIZE_DEFAULTS.textInput.compactFontSize}px · weight {STUDIO_COMPONENT_SIZE_DEFAULTS.textInput.fontWeight} · line-height {STUDIO_COMPONENT_SIZE_DEFAULTS.textInput.lineHeight}</span><span>Inputs keep the selected 44px / 28px geometry and use the global single-line type scale.</span></div>
         <div className="vt-confirmed-size-card vt-confirmed-field-typography-exception"><strong>MULTILINE TEXTAREA · REGISTERED EXCEPTION</strong><span>Standard {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.standardFontSize}px · compact {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.compactFontSize}px · minimum surface {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.minHeight}px · weight {STUDIO_COMPONENT_SIZE_DEFAULTS.multiline.fontWeight}</span><span>Textarea-only multiline line-height, padding, and vertical resizing; selected size still controls height family, border, and radius.</span></div>
@@ -621,7 +715,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{formatDefaultValue(value)}</span></div>)}</div>
         <div className="vt-confirmed-defaults-explainer">
           <strong>HOW TO READ THE CURRENT CONTRACT</strong>
-          <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and default line-height (1) unless a family exception is documented.</p>
+          <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px; Mini is 20px / 1.5px / 3px; Micro is 12px / 1px / 2px; Supreme is 60px / 4.09px / 8.18px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and default line-height (1) unless a family exception is documented.</p>
           <p><b>Field colors:</b> At rest, value, placeholder, caret, and inline text stroke use primary (--pair-a); fill uses primary at 50% opacity and the outer border is black. Focus uses primary fill at 15%, black text fill with primary inline stroke, plus a secondary-color outline at 65% of border width with 0px offset.</p>
           <p><b>Global interaction defaults:</b> primitive shells are flat and stationary. No shell shadow, hover/press movement, or transition is part of the default contract; explicitly registered inner-icon effects must remain isolated and honor reduced motion.</p>
           <p><b>Icon presets:</b> the default production preset is 38px / 1.9 stroke standard and 24px / 2.0 compact. Current (28px / 18px) and moderate (34px / 22px) presets are opt-in. Circle icon buttons scale the large preset to 80%.</p>
@@ -631,7 +725,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <h4 className="vt-confirmed-exceptions-heading" id="vt-confirmed-exception-index-title">Global Exceptions · Current Implementation + Verification Boundary</h4>
       <p>Canonical sources: <code>src/studio-ui/primitives/StudioControls.tsx</code>, <code>src/studio-ui/tokens.ts</code>, and <code>src/styles/studio-control-system.css</code>. Named size exceptions are registered in <code>STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS</code>; effective CSS can diverge from token metadata.</p>
       <ul>
-        <li><strong>BASE SIZE LATTICE:</strong> standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
+        <li><strong>BASE SIZE LATTICE:</strong> standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius; Mini is 20px / 1.5px / 3px; Micro is 12px / 1px / 2px; Supreme is 60px / 4.09px / 8.18px. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
         <li><strong>SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact, weight 1000 and default line-height (1) while retaining selected-size geometry.</li>
         <li><strong>MULTILINE TEXTAREA:</strong> 18px standard / 14px compact, multiline line-height and padding, 92px minimum writing surface, and vertical resize.</li>
         <li><strong>PROMINENT WORKFLOW ACTION:</strong> StudioActionButton is a Supreme 60px default with standard/compact variants and token-driven geometry, and no shell shadow, transition, or hover/press translation.</li>
@@ -653,7 +747,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "Single-line input typography remains 38px standard / 24px compact / 10px micro across all label variants.",
         "Floating labels raise to 80% of the input font size; fixed label boxes match StudioLegendMultiDropdown.",
       ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx" css="src/styles/studio-control-system.css + src/styles/studio-text-input.css" tokens="One native input family with simple, floating-label, and fixed-label variants; standard 44px / 38px, compact 28px / 24px, micro 12px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/styles/studio-control-entry.css", "src/styles/studio-text-input.css"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>60px supreme · simple input</span><StudioTextInput sizeVariant="supreme" aria-label="Studio plain text input supreme" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · simple input</span><StudioTextInput sizeVariant="standard" aria-label="Studio plain text input standard" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>20px Mini · simple input</span><StudioTextInput sizeVariant="mini" aria-label="Studio plain text input Mini" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>28px compact · simple input</span><StudioTextInput sizeVariant="compact" aria-label="Studio plain text input compact" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>12px micro · simple input</span><StudioTextInput sizeVariant="micro" aria-label="Studio plain text input micro" placeholder="TITLE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>Floating label · 44px standard · A</span><StudioTextInput variant="floating-label" floatingLabelVariant="a" label="TITLE" aria-label="Studio floating-label input standard A" data-vt-library-component="StudioTextInput" /></div>
@@ -670,7 +766,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Multiline-only exception: 18px standard / 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface.",
       ]} provenance={<Provenance primitive="StudioTextArea" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="One native textarea family with simple and floating-label variants; 92px minimum surface and standard 18px / compact 14px multiline typography." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>60px supreme · StudioTextArea</span><StudioTextArea sizeVariant="supreme" rows={4} aria-label="Studio text area supreme" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · StudioTextArea</span><StudioTextArea sizeVariant="standard" rows={4} aria-label="Studio text area 44px" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>20px Mini · StudioTextArea</span><StudioTextArea sizeVariant="mini" rows={4} aria-label="Studio text area Mini" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>28px compact · StudioTextArea</span><StudioTextArea sizeVariant="compact" rows={4} aria-label="Studio text area 28px" placeholder="TYPE HERE" data-vt-library-component="StudioTextArea" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>Floating label · 44px standard · A</span><StudioTextArea variant="floating-label" floatingLabelVariant="a" label="DESCRIPTION" aria-label="Studio floating-label textarea standard A" rows={4} data-vt-library-component="StudioTextArea" /></div>
       <div className="vt-confirmed-paired-compact-row">
@@ -684,13 +782,15 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
 
-    <Family title="Studio Text Box · Standard + Compact + Micro" nonDefaultSettings={[
+    <Family title="Studio Text Box · Supreme + Standard + Compact + Mini + Micro" nonDefaultSettings={[
         "Non-editable, selectable display surface; no caret, editing behavior, or keyboard tab stop.",
-        "Inherits the corresponding textarea border, radius, padding, typography, primary fill, and default line-height (1).",
+        "Shares the canonical field border, radius, 50% resting fill, 15% focus fill, primary glyph stroke, secondary 65% focus outline, and 0.85 line-height.",
         "Content height grows with text; newlines are preserved and long words wrap.",
-      ]} provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Textarea-matched typography: 18px standard / 14px compact / 10px micro; primary inline text stroke and primary inner stroke; secondary focus/outer outline; no shadow; shared global border widths and radii; default line-height (1)." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      ]} provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Shared field geometry across Supreme / Standard / Compact / Mini / Micro; black text with primary glyph stroke; secondary outline at 65% of the selected border; 0.85 line-height." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>SUPREME · 24.55PX</span><StudioTextBox size="supreme" aria-label="Studio text box supreme" data-vt-library-component="StudioTextBox">Supreme read-only text uses the shared field border and focus contract.</StudioTextBox></div>
       <div className="vt-confirmed-variant is-full-row"><span>STANDARD · 18PX</span><StudioTextBox aria-label="Studio text box standard" data-vt-library-component="StudioTextBox">A read-only description that can contain as little or as much text as needed.</StudioTextBox></div>
       <div className="vt-confirmed-variant is-full-row"><span>COMPACT · 14PX</span><StudioTextBox size="compact" aria-label="Studio text box compact" data-vt-library-component="StudioTextBox">Compact display text. A second row remains aligned to the textarea line-height.</StudioTextBox></div>
+      <div className="vt-confirmed-variant is-full-row"><span>MINI · 17.5PX</span><StudioTextBox size="mini" aria-label="Studio text box Mini" data-vt-library-component="StudioTextBox">Mini display text uses the 20px control tier.</StudioTextBox></div>
       <div className="vt-confirmed-variant is-full-row"><span>MICRO · 10PX</span><StudioTextBox size="micro" aria-label="Studio text box micro" data-vt-library-component="StudioTextBox">Micro display text.</StudioTextBox></div>
     </Family>
     <CanonicalControlFamilies />
@@ -978,7 +1078,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
-      <div className="vt-confirmed-variant is-full-row">
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown">
         <span>44px standard · selected values · multiselect trigger</span>
         <StudioLegendMultiDropdown
           label="dropdown"
@@ -1031,7 +1131,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family
-      title="Global Rules Exceptions · Vault Spectrum Tags"
+      title="StudioSpectrumTag · Vault Metadata Exception"
       nonDefaultSettings={[
         "Dense metadata exception: 15px height, spectrum-derived border/text, 35% color fill, and opt-in selected glow.",
       ]}
@@ -1044,7 +1144,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       />}
     >
       <p className="vt-confirmed-defaults-summary">Intentional exception to global control geometry · exact Vault asset-module chip styling</p>
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-spectrum-tag-variant">
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-spectrum-tag-variant" data-vt-library-component="StudioSpectrumTag">
         <span>50 continuous alphabetical spectrum samples</span>
         <div className="vt-confirmed-spectrum-tag-grid">
           <StudioSpectrumTag label="AARDVARK" />
@@ -1105,28 +1205,33 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family
-      title="Global Rules Exceptions · Closeable Badge + Tag Editor"
+      title="StudioCloseableBadge · Fixed 20px Exception"
       nonDefaultSettings={[
-        "Closeable badge exception: 20px pill with 16px label and a secondary-pair close affordance.",
-        "Tag-editor action geometry must match the registered exception in the production token/CSS contract.",
+        "Fixed 20px metadata pill with a secondary-pair close affordance and explicit close feedback.",
+        "This metadata badge is an intentional family exception, not an ordinary size-tier control.",
       ]}
-      provenance={<Provenance
-        primitive="StudioCloseableBadge / StudioTagEditor"
-        tsx="src/studio-ui/primitives/StudioControls.tsx"
-        css="src/styles/studio-control-system.css"
-        tokens={`Closeable badge H 20px · full pill · no border · 16px type · primary color mixed 50% with white · action H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.height}px / stroke ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.stroke}px / radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.radius}px`}
-        imports={["src/studio-ui/primitives/StudioControls.tsx"]}
-      />}
+      provenance={<Provenance primitive="StudioCloseableBadge" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="20px pill · no border · 16px heavy type · content width · secondary close affordance." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-tag-editor-variant">
-        <span>Closeable badge · enter, close-swap, and fade animations</span>
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-tag-editor-variant" data-vt-library-component="StudioCloseableBadge">
+        <span>20PX FIXED · CLOSE / REMOVE</span>
         <div className="vt-confirmed-tag-editor-badge-row">
           <StudioCloseableBadge label="Tag One" />
           <StudioCloseableBadge label="Featured" />
           <StudioCloseableBadge label="Live" />
         </div>
-        <span>Interactive Tag Editor · add, confirm, fly, and remove</span>
-        <StudioTagEditor defaultValue={["Tag One", "Featured"]} />
+      </div>
+    </Family>
+    <Family
+      title="StudioTagEditor · Tokenized Actions"
+      nonDefaultSettings={[
+        "Dedicated tag editor section with its own add, confirm, remove, and action-size contract.",
+        "The editor's action geometry follows the registered exception tokens; tag chips are not promoted to the top primitive ledger.",
+      ]}
+      provenance={<Provenance primitive="StudioTagEditor" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens={`Action H ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.height}px / stroke ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.stroke}px / radius ${STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.tagEditorAction.radius}px.`} imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-tag-editor-variant" data-vt-library-component="StudioTagEditor">
+        <span>INTERACTIVE TAG EDITOR · ADD, CONFIRM, FLY, REMOVE</span>
+        <StudioTagEditor defaultValue={["Tag One", "Featured"]} ariaLabel="Dedicated tag editor specimen" />
       </div>
     </Family>
     <Family
@@ -1152,7 +1257,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Studio Controls standard/compact sizes, Inter 1000 uppercase, inherited palette pair" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row">
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSimpleDropdown">
         <span>Standard · single select</span>
         <StudioSimpleDropdown aria-label="Example simple dropdown" defaultValue="balanced" options={[{ value: "light", label: "Light" }, { value: "balanced", label: "Balanced" }, { value: "aggressive", label: "Aggressive" }]} />
         <span>Single select · three-set choice</span>
@@ -1265,6 +1370,21 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family
+      title="Collapsing Two-Line Module · Standard"
+      nonDefaultSettings={[
+        "Dedicated production specimen for the two-line collapsing module; kept separate from the top direct-control ledger and the ordinary collapsing split module.",
+        "The title and description are rendered by the canonical StudioCollapsingTwoLineModule primitive.",
+      ]}
+      provenance={<Provenance primitive="StudioCollapsingTwoLineModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Standard 44px shell with a two-line title/description content exception." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingTwoLineModule">
+        <span>STANDARD · TWO-LINE HEADER</span>
+        <StudioCollapsingTwoLineModule title="CREATOR SETTINGS" description="Channel identity, defaults, and publishing preferences." split="double" sizeVariant="standard" defaultOpen={false}>
+          <p>Two-line module body content rendered by the production primitive.</p>
+        </StudioCollapsingTwoLineModule>
+      </div>
+    </Family>
+    <Family
       title="Brain Status LED Badges"
       nonDefaultSettings={[
         "Borderless status badge with a smaller saturated LED to the left of the label.",
@@ -1357,6 +1477,7 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
     <Family title="StudioBarToggle · Standard" nonDefaultSettings={["Individual bar-toggle specimen; compact and value variants remain in the comparison section."]} provenance={<Provenance primitive="StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · ten fixed-width value bars" imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>STANDARD · BAR TOGGLE</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} barCount={10} ariaLabel="Standard bar toggle specimen" /></div>
     </Family>
+    <ConfirmedAdditionalPrimitiveSections />
   </>
 }
 

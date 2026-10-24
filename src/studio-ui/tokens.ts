@@ -2,6 +2,54 @@
 
 import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/tokens"
 
+// ─── Global defaults applied to every Studio control ─────────────────────────
+
+export const STUDIO_GLOBAL_DEFAULTS = {
+  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
+  fontWeight: 1000,
+  textTransform: "uppercase" as const,
+  letterSpacing: -0.02,
+  lineHeight: 1,
+  textareaLineHeight: 0.85,
+  fieldDefaultTextColor: "primary" as const,
+  fieldDefaultGlyphStrokeColor: "primary" as const,
+  focusTextColor: "#000000",
+  focusGlyphStrokeColor: "primary" as const,
+  focusCaretColor: "primary" as const,
+  focusOutlineColor: "secondary" as const,
+  focusOutlineWidthRatio: 0.65,
+  focusOutlineOffset: 0,
+  focusTransitionMs: 500,
+  borderColor: "#000000",
+  defaultFillOpacity: 50,
+  focusFillOpacity: 15,
+  widthDefault: "row" as const, // 100%
+  shellMovement: "none" as const,
+  internalGap: 0,
+  spacingUnit: 4, // external gaps only
+} as const
+
+// ─── Color roles ─────────────────────────────────────────────────────────────
+
+export const STUDIO_COLOR_ROLES = {
+  primary: "var(--pair-a)",
+  secondary: "var(--pair-b)",
+  border: "#000000",
+  activeText: "#000000",
+  fieldText: "primary" as const,
+  fieldGlyphStroke: "primary" as const,
+  focusGlyphStroke: "primary" as const,
+  focusCaret: "primary" as const,
+  doubleSplitStartRail: "secondary" as const,
+  doubleSplitEndRail: "secondary" as const,
+  focusOutline: {
+    color: "secondary" as const,
+    opacity: 1,
+    widthRatio: 0.65,
+    offset: 0,
+  },
+} as const
+
 // ─── Shared interaction defaults (flat, no lift) ─────────────────────────────
 
 const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
@@ -13,8 +61,8 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
   clickOffsetPx: 0,
 } as const
 
-// ─── Four explicit size tiers (global defaults) ──────────────────────────────
-// Supreme / Standard / Compact / Micro are first-class. Nothing is derived at runtime.
+// ─── Five explicit size tiers (global defaults) ──────────────────────────────
+// Supreme / Standard / Compact / Mini / Micro are first-class. Nothing is derived at runtime.
 
 export const STUDIO_CONTROL_SIZE_BASE = {
   supreme: {
@@ -114,7 +162,7 @@ export const STUDIO_CONTROL_SIZE_BASE = {
     textStroke: 0.25,
     width: "row" as const,
     textTransform: "uppercase" as const,
-    letterSpacing: -0.01,
+    letterSpacing: -0.02,
     lineHeight: 1,
     defaultFillOpacity: 50,
     focusFillOpacity: 15,
@@ -130,6 +178,8 @@ export const STUDIO_CONTROL_SIZE_BASE = {
 } as const
 
 export type StudioControlSize = keyof typeof STUDIO_CONTROL_SIZE_BASE
+/** All five size tiers; individual families may narrow this when inner geometry requires it. */
+export type StudioControlInteractiveSize = StudioControlSize
 
 // ─── Size contract (extends base with text-input / multiline specialisations) ─
 
@@ -139,7 +189,6 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     supremeFontSize: STUDIO_CONTROL_SIZE_BASE.supreme.fontSize,
     standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize,
     compactFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize,
-    miniFontSize: STUDIO_CONTROL_SIZE_BASE.mini.fontSize,
     miniFontSize: STUDIO_CONTROL_SIZE_BASE.mini.fontSize,
     microFontSize: STUDIO_CONTROL_SIZE_BASE.micro.fontSize,
     fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
@@ -161,6 +210,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
   verticalWordToggle: {
     standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize,
     compactFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize,
+    miniFontSize: STUDIO_CONTROL_SIZE_BASE.mini.fontSize,
     microFontSize: STUDIO_CONTROL_SIZE_BASE.micro.fontSize,
     fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
     textTransform: "uppercase" as const,
@@ -184,7 +234,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     microTextStroke: 0.25,
     fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
     minHeight: 92,
-    lineHeight: 1,
+    lineHeight: 0.85,
     textAlign: "left" as const,
     resize: "vertical" as const,
     preservesSizeFamily: true,
@@ -196,9 +246,9 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
 // ─── Dropdown / focus / counter contracts ────────────────────────────────────
 
 export const STUDIO_DROPDOWN_TOKENS = {
-  railSize: { supreme: 60, standard: 44, compact: 28, mini: 20 },
-  chevronSize: { supreme: 38, standard: 28, compact: 18, mini: 14 },
-  chevronStroke: { supreme: 3.41, standard: 2.5, compact: 1.65, mini: 1.2 },
+  railSize: { supreme: 60, standard: 44, compact: 28, mini: 20, micro: 12 },
+  chevronSize: { supreme: 38, standard: 28, compact: 18, mini: 14, micro: 8 },
+  chevronStroke: { supreme: 3.41, standard: 2.5, compact: 1.65, mini: 1.2, micro: 1 },
   railFill: "secondary" as const,
   splitIconFill: "black" as const,
   chevronPlacement: "trailing" as const,
@@ -221,40 +271,6 @@ export const STUDIO_COUNTER_NUMBER_TOKENS = {
   activeStrokeColor: STUDIO_FOCUS_INTERACTION_TOKENS.activeTextColor,
   holdMs: STUDIO_FOCUS_INTERACTION_TOKENS.holdMs,
   outlineFadeMs: STUDIO_FOCUS_INTERACTION_TOKENS.outlineFadeMs,
-} as const
-
-// ─── Global defaults applied to every Studio control ─────────────────────────
-
-export const STUDIO_GLOBAL_DEFAULTS = {
-  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
-  fontWeight: 1000,
-  textTransform: "uppercase" as const,
-  letterSpacing: -0.02,
-  lineHeight: 1,
-  textareaLineHeight: 1,
-  borderColor: "#000000",
-  defaultFillOpacity: 50,
-  focusFillOpacity: 15,
-  widthDefault: "row" as const, // 100%
-  shellMovement: "none" as const,
-  internalGap: 0,
-  spacingUnit: 4, // external gaps only
-} as const
-
-// ─── Color roles ─────────────────────────────────────────────────────────────
-
-export const STUDIO_COLOR_ROLES = {
-  primary: "var(--pair-a)",
-  secondary: "var(--pair-b)",
-  border: "#000000",
-  activeText: "#000000",
-  doubleSplitStartRail: "secondary" as const,
-  doubleSplitEndRail: "secondary" as const,
-  focusOutline: {
-    color: "secondary" as const,
-    opacity: 0.65,
-    offset: 0,
-  },
 } as const
 
 // ─── Width policy + exceptions layer ─────────────────────────────────────────
