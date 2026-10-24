@@ -126,7 +126,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     globalRuleException: true,
   },
   multiline: {
-    supremeFontSize: Math.round((18 * 60) / 44),
+    supremeFontSize: 24.55,
     standardFontSize: 18,
     compactFontSize: 14,
     miniFontSize: 16,
