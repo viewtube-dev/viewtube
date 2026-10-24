@@ -167,7 +167,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       compactTextAreaFontSize: "14px",
       rule: "Single-line inputs follow global 38px standard / 24px compact typography. Textareas alone use 18px standard / 14px compact, with multiline line-height, padding, and a 92px minimum writing surface.",
     },
-    sizeFamily: "Single-line inputs use 51.82px Supreme / 38px standard / 24px compact / 17.5px Mini / 10px Micro typography. Textareas use 24.55px Supreme / 18px standard / 14px compact / 17.5px Mini with multiline line-height, padding, and a 92px minimum surface. Size selects 60/44/28/20/12px geometry, 4.09/3/2/1.5/1px stroke, and 8.18/6/4/3/2px radius where the family supports each tier.",
+    sizeFamily: "Single-line inputs use 51.82px Supreme / 38px standard / 24px compact / 16px Mini / 10px Micro typography. Textareas use 24.55px Supreme / 18px standard / 14px compact / 16px Mini with multiline line-height, padding, and a 92px minimum surface. Size selects 60/44/28/20/12px geometry, 3/3/2/1.5/1.5px stroke, and 6/6/4/3/3px radius where the family supports each tier.",
     defaultMode: {
       textColor: "primary",
       textStrokeColor: "matches text color (primary)",
