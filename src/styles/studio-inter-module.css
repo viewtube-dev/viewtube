@@ -147,8 +147,12 @@
 }
 
 .vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0;
+}
+
+/* A flush nested list reuses its parent header rule rather than drawing a second top edge. */
+.vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body > .vt-studio-inter-module:first-child > .vt-studio-inter-module__head {
+  border-top: 0;
 }
 
 .vt-studio-inter-module[data-open="false"] > .vt-studio-inter-module__body {
