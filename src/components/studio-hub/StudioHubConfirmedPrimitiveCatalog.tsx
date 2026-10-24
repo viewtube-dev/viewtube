@@ -283,14 +283,14 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
       title="Direct Imported Primitive Representatives · Standard"
       nonDefaultSettings={[
         "Each row contains one live production primitive at its standard size; examples are imported from their production owners rather than recreated as catalog-only lookalikes.",
-        "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell; the three-section accordion uses StudioSplitAccordion with exactly three items.",
+        "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
       ]}
       provenance={<Provenance
-        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioSimpleDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider · StudioSplitAccordion"
-        tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioValueToggles.tsx + src/studio-ui/primitives/StudioSplitAccordion.tsx"
-        css="src/styles/studio-control-system.css + src/styles/studio-split-accordion.css"
+        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioSimpleDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider"
+        tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioValueToggles.tsx"
+        css="src/styles/studio-control-system.css"
         tokens="44px standard geometry; component-specific native input/textarea exceptions retained"
-        imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioValueToggles.tsx", "src/studio-ui/primitives/StudioSplitAccordion.tsx"]}
+        imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioValueToggles.tsx"]}
       />}
     >
       <div className="vt-confirmed-direct-primitive-rows" style={rowStyle}>
@@ -318,13 +318,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule"><span>InterModule · COMPACT · NESTED + EDGE-FLUSH</span><StudioTopSplitModule title="PROMPT LIBRARY" split="left" startIcon={<Home aria-hidden="true" />} sizeVariant="compact" className="vt-confirmed-intermodule-host"><div data-vt-studio-inter-host="true" className="vt-confirmed-intermodule-list"><StudioInterModule title={<>ANALYTICS <small>2</small></>} startIcon={<Sparkles aria-hidden="true" />} sizeVariant="compact" defaultOpen><StudioInterModule title="ANALYZE FORMATS" startIcon={<Settings2 aria-hidden="true" />} sizeVariant="compact" headStyle={{ background: "var(--pair-a, #36e0f6)" }} defaultOpen><p className="vt-confirmed-intermodule-prompt">Compare format performance and identify the strongest next experiment.</p><StudioSplitLeftButton sizeVariant="compact" icon={<Check aria-hidden="true" />} onClick={() => undefined}>SEND TO CHAT</StudioSplitLeftButton></StudioInterModule><StudioInterModule title="AUDIENCE SIGNALS" startIcon={<Info aria-hidden="true" />} sizeVariant="compact"><p className="vt-confirmed-intermodule-prompt">Summarize the most useful audience signals.</p></StudioInterModule></StudioInterModule><StudioInterModule title={<>CONTENT STRATEGY <small>1</small></>} startIcon={<Home aria-hidden="true" />} sizeVariant="compact"><StudioInterModule title="IDEA GAP REVIEW" startIcon={<Sparkles aria-hidden="true" />} sizeVariant="compact"><p className="vt-confirmed-intermodule-prompt">Find a content gap worth exploring.</p></StudioInterModule></StudioInterModule></div></StudioTopSplitModule></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule-standard"><span>InterModule · STANDARD · EDGE-FLUSH NESTING</span><StudioTopSplitModule title="CONTENT WORKSPACE" split="left" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" className="vt-confirmed-intermodule-host"><div data-vt-studio-inter-host="true" className="vt-confirmed-intermodule-list"><StudioInterModule title="STRATEGY" startIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard" defaultOpen><p className="vt-confirmed-intermodule-prompt">A standard-size nested module shares the parent shell’s left and right edges.</p><StudioInterModule title="NEXT ACTION" startIcon={<Check aria-hidden="true" />} sizeVariant="standard"><p className="vt-confirmed-intermodule-prompt">Keep nested sections aligned with the shared border.</p></StudioInterModule></StudioInterModule><StudioInterModule title="PUBLISHING" startIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard"><p className="vt-confirmed-intermodule-prompt">Collapsed by default; expands in place.</p></StudioInterModule></div></StudioTopSplitModule></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule-micro"><span>InterModule · MICRO · DENSE NESTED LIST</span><StudioTopSplitModule title="QUICK PROMPTS" split="left" startIcon={<Home aria-hidden="true" />} sizeVariant="compact" className="vt-confirmed-intermodule-host"><div data-vt-studio-inter-host="true" className="vt-confirmed-intermodule-list"><StudioInterModule title="IDEAS" startIcon={<Sparkles aria-hidden="true" />} sizeVariant="micro" defaultOpen><StudioInterModule title="TITLE OPTIONS" startIcon={<Check aria-hidden="true" />} sizeVariant="micro"><p className="vt-confirmed-intermodule-prompt">Generate three title options for the selected video.</p><StudioSplitLeftButton sizeVariant="micro" icon={<Check aria-hidden="true" />} onClick={() => undefined}>SEND</StudioSplitLeftButton></StudioInterModule></StudioInterModule><StudioInterModule title="SEO" startIcon={<Info aria-hidden="true" />} sizeVariant="micro"><p className="vt-confirmed-intermodule-prompt">Review the title, description, and keywords.</p></StudioInterModule></div></StudioTopSplitModule></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule"><span>Collapsing Split Module · STANDARD</span><StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen><span>Collapsible module body content.</span></StudioCollapsingSplitModule></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion"><span>Three Section Split Accordion · STANDARD</span><StudioSplitAccordion sizeVariant="standard" accessibleLabel="Three section split accordion standard specimen" defaultActiveIndex={0} items={[
-          { id: "overview", accessibleLabel: "Overview section", icon: <Home aria-hidden="true" />, content: <span>OVERVIEW · PRODUCTION CONTENT</span> },
-          { id: "settings", accessibleLabel: "Settings section", icon: <Settings2 aria-hidden="true" />, content: <span>SETTINGS · PRODUCTION CONTENT</span> },
-          { id: "details", accessibleLabel: "Details section", icon: <Info aria-hidden="true" />, content: <span>DETAILS · PRODUCTION CONTENT</span> },
-        ]} /></div>
-      </div>
+                      </div>
     </Family>
   )
 }
@@ -1200,6 +1194,27 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     >
       <div className="w-full min-w-0 max-w-none" style={{ width: "100%", minWidth: 0, maxWidth: "none", gridTemplateColumns: "minmax(0, 1fr)" }}>
         <StudioSplitAccordionCatalogSpecimens />
+      </div>
+    </Family>
+    <Family
+      title="Collapsing Split Module · Standard + Compact"
+      nonDefaultSettings={[
+        "Production collapsible split module is catalogued separately from the intermodule and multi-section split accordion.",
+        "The top imported-primitive ledger stays limited to one standard-size representative per primitive; size comparisons belong here.",
+      ]}
+      provenance={<Provenance primitive="StudioCollapsingSplitModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · shared split-shell geometry." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule">
+        <span>44px STANDARD</span>
+        <StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen>
+          <span>Standard collapsible module body content.</span>
+        </StudioCollapsingSplitModule>
+      </div>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule-compact">
+        <span>28px COMPACT</span>
+        <StudioCollapsingSplitModule title="COMPACT MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="compact">
+          <span>Compact collapsible module body content.</span>
+        </StudioCollapsingSplitModule>
       </div>
     </Family>
     <Family
