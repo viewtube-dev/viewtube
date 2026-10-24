@@ -1808,7 +1808,7 @@ const AIBrainCommandInterface: React.FC = () => {
     embedded
     fillAvailable
     outerClassName="h-full min-h-0 max-xl:!h-full xl:h-full"
-    contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:!h-full max-xl:overflow-hidden xl:overflow-hidden"
+    contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:overflow-hidden xl:overflow-hidden"
    >
     {intakeOpen ? (
      <CreatorIntakeWizard
