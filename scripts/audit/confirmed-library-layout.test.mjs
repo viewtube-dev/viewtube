@@ -536,3 +536,12 @@ test("StudioDropdown owns the simple variant without a duplicate primitive famil
   assert.doesNotMatch(catalog, /<StudioDropdown variant="simple"/);
   assert.match(catalog, /<StudioDropdown sizeVariant="standard" ariaLabel="Studio dropdown standard specimen"/);
 });
+
+test("StudioSplitTextInput is a real exported primitive with a full-width standard specimen", () => {
+  const splitInput = readFileSync("src/studio-ui/primitives/StudioSplitTextInput.tsx", "utf8");
+  const publicIndex = readFileSync("src/studio-ui/index.ts", "utf8");
+  assert.match(splitInput, /export const StudioSplitTextInput/);
+  assert.ok(publicIndex.includes("StudioSplitTextInput"));
+  assert.ok(catalog.includes('data-vt-library-component="StudioSplitTextInput"'));
+  assert.ok(catalog.includes('aria-label="Split text input standard specimen"'));
+});

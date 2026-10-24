@@ -3,6 +3,7 @@ import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublish
 import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
+import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
@@ -313,7 +314,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
       ]}
       provenance={<Provenance
-        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider"
+        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioSplitTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider"
         tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioValueToggles.tsx"
         css="src/styles/studio-control-system.css"
         tokens="44px standard geometry; component-specific native input/textarea exceptions retained"
@@ -336,6 +337,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInput"><span>Text Input · STANDARD</span><StudioTextInput sizeVariant="standard" aria-label="Text input standard specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>Username Split Input · STANDARD</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Username split input standard specimen" placeholder="CREATOR NAME" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftInput"><span>Split Left Search Input · STANDARD</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split left input standard specimen" placeholder="SEARCH ASSETS" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTextInput"><span>Split Text Input · STANDARD</span><StudioSplitTextInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split text input standard specimen" placeholder="SEARCH ASSETS" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextArea"><span>Text Area · STANDARD</span><StudioTextArea sizeVariant="standard" rows={3} aria-label="Text area standard specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextBox"><span>Text Box · STANDARD</span><StudioTextBox size="standard" aria-label="Text box standard specimen">Read-only text rendered by the production StudioTextBox primitive.</StudioTextBox></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideToggle"><span>Side Toggle · STANDARD</span><StudioSideToggle size="standard" value={sideValue} options={["LOW", "MID", "HIGH"]} onValueChange={setSideValue} ariaLabel="Side toggle standard specimen" /></div>
