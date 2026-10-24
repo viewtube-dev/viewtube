@@ -181,7 +181,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       textColor: "#000000",
       textStrokeColor: "matches text color (#000000)",
       borderStrokeColor: "#000000",
-      inlineStrokeColor: "primary at 100% opacity",
+      inlineStrokeColor: "#000000 at 100% opacity",
       outlineStrokeColor: "secondary",
       focusOutlineWidth: "100% of border width: 3px standard / 2px compact / 1px micro",
       focusOutlineOffset: "0px for both sizes",
