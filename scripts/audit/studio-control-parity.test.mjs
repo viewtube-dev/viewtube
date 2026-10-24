@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 const css = readFileSync("src/styles/studio-control-system.css", "utf8");
+const overrides = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8");
 const toggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8");
 const area = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
 const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
@@ -68,8 +69,8 @@ test("double-side divider is centered and the confirmed catalog mixes compact an
 test("bar toggle has pointer capture and visible inactive segments", () => {
   assert.match(toggles, /setPointerCapture\?\.\(event\.pointerId\)/);
   assert.match(toggles, /onPointerUp=\{stopRepeat\}[\s\S]*?onPointerCancel=\{stopRepeat\}[\s\S]*?onLostPointerCapture=\{stopRepeat\}/);
-  assert.match(css, /\.vt-studio-value-toggle__bar[\s\S]*?40%, #fff/);
-  assert.match(css, /\.vt-studio-value-toggle__bar\[data-active="true"\][\s\S]*?background:\s*#000/);
+  assert.match(overrides, /\.vt-studio-value-toggle__bar[\s\S]*?background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent[^;]*50%, transparent\)/s);
+  assert.match(overrides, /\.vt-studio-value-toggle__bar\[data-active="true"\][\s\S]*?background:\s*#000/);
 });
 
 test("multi-select closed trigger renders a separate black count badge inside trigger text", () => {
