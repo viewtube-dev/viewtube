@@ -31,7 +31,7 @@ describe("confirmed composite primitive catalog", () => {
       "StudioIconButton", "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
       "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioTextInput",
-      "StudioTextInputFloatingLabel", "StudioTextInputFixedLabel", "StudioTextArea", "StudioTextBox",
+      "StudioTextInputFloatingLabel", "StudioTextInputFixedLabel", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput", "StudioCollapsingTwoLineModule",
       "StudioDropdown", "StudioSimpleDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
@@ -79,7 +79,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(catalogCss).toContain('display: block;\n  grid-template-columns: minmax(0, 1fr);\n  width: 100%;');
   });
 
-  it("registers StudioTextBox in standard, compact, and micro sizes using shared field geometry and 0.75 line height", () => {
+  it("registers StudioTextBox against shared field geometry and the 0.85 line-height token", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain('title="StudioTextBox · Standard + Compact + Micro"')
     expect(html).toContain('data-vt-studio-text-box="true"')
@@ -87,10 +87,11 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain('data-size="compact"')
     expect(html).toContain('data-size="micro"')
     expect(html).toContain('aria-readonly="true"')
-    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioTextBox.tsx"), "utf8")
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-text-box.css"), "utf8")
-    expect(source).toContain('import "../../styles/studio-text-box.css"')
-    expect(css).toContain("line-height: 0.75;")
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(source).toContain("export const StudioTextBox")
+    expect(css).toContain("line-height: var(--vt-studio-textarea-line-height, .85);")
+    expect(css).not.toMatch(/line-height:\\s*(?:0)?\\.75\\b/)
     expect(css).toContain("var(--vt-studio-control-stroke")
     expect(css).toContain("var(--vt-studio-control-radius")
     expect(css).toContain('data-size="compact"')
