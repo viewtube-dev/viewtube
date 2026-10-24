@@ -182,3 +182,47 @@
 .vt-confirmed-family-group > .vt-confirmed-family-module__body {
   min-width: 0;
 }
+
+
+/* The top direct-representative ledger is a single full-width module, never a
+   two-column sidebar. Each specimen gets its own full-width row. */
+.vt-confirmed-direct-representatives {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  grid-column: 1 / -1;
+}
+.vt-confirmed-direct-representatives > .vt-confirmed-primitive-module,
+.vt-confirmed-direct-representatives > .vt-confirmed-family {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  grid-column: 1 / -1;
+}
+.vt-confirmed-direct-representatives .vt-confirmed-primitive-body > .vt-confirmed-variants {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-direct-primitive-rows {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-variant {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-column: 1 / -1;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-variant > :not(span) {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
