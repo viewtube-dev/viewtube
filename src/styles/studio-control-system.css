@@ -1167,12 +1167,12 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is
   background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent);
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke) #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);
   outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary);
   outline-offset: var(--vt-studio-control-focus-outline-offset);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"]:is(:focus, :focus-visible) {
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke) #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);
 }
 [data-vt-studio-control="true"]:is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea):is(:disabled, [readonly]) {
   cursor: not-allowed;
