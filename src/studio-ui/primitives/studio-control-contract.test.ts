@@ -259,7 +259,7 @@ describe("Brain chat layout and prompt library contract", () => {
     expect(layout).toContain("grid-template-columns: minmax(0, 1fr) auto;");
     expect(layout).toContain("gap: 4px;");
     expect(layout).toContain("@media (min-width: 640px)");
-    expect(layout).not.toMatch(/gap:\s*([1-9]|[1-9]\.\d+)px/);
+    expect(layout.match(/gap:\s*\d+px;/g)).toEqual(["gap: 4px;", "gap: 4px;"]);
     expect(primitives).not.toMatch(/gap-\d+\.\d+/);
     expect(page).toContain("const additionalModules = filteredModules.slice(3)");
     expect(page.indexOf("response-key-insight")).toBeLessThan(page.indexOf("additional-answer-modules"));
