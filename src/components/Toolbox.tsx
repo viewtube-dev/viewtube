@@ -402,10 +402,10 @@ export const Toolbox: React.FC<ToolboxProps> = ({
           className={`grid transition-[grid-template-rows,opacity] ${collapseTransitionClass} ${fillAvailable ? 'flex-1 min-h-0' : ''} ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
           style={{ marginTop: `calc(var(--vt-toolbox-stroke, ${stroke}px) * -1)` }}
         >
-          <div className={`overflow-hidden min-h-0 ${fillAvailable ? 'h-full' : ''}`}>
+          <div className={`overflow-hidden min-h-0 ${fillAvailable ? 'flex-1 flex flex-col' : ''}`}>
             {shouldRenderContent && (
               <main
-                className={`flex-1 min-h-0 bg-white vt-main-toolbox-content ${fillAvailable ? 'h-full' : ''} ${finalContentClass}`}
+                className={`min-h-0 ${fillAvailable ? 'flex-1' : ''} bg-white vt-main-toolbox-content ${finalContentClass}`}
                 style={
                   {
                     ["--vt-level1-stroke" as any]: "4px",
