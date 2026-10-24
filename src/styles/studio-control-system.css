@@ -109,6 +109,7 @@
 }
 [data-vt-studio-control][data-size="micro"] {
   --vt-field-text-stroke-width: var(--vt-studio-mini-text-stroke, .375px);
+  --vt-studio-control-outline-stroke: .75px;
   --vt-studio-control-focus-outline-width: .975px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: .975px;
@@ -119,7 +120,7 @@
   --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000);
   --vt-studio-control-text-stroke: var(--vt-studio-mini-text-stroke, .375px);
   --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
-  --vt-studio-control-icon-stroke: var(--vt-studio-micro-icon-stroke, 1.5);
+  --vt-studio-control-icon-stroke: var(--vt-studio-mini-icon-stroke, 1.5);
 }
 
 /* Compatibility controls consume the same inherited SubToolbox pair as
