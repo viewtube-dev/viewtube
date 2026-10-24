@@ -59,8 +59,8 @@ import {
   StudioActionButton,
   StudioButton,
   StudioInput,
-  StudioNumberInput,
-  StudioSelect,
+  StudioTextInput,
+  select,
   StudioSplitLeftButton,
   StudioTextArea,
 } from "../studio-ui"
@@ -237,7 +237,7 @@ const NumberField: React.FC<{
 }> = ({ label, value, min, max, step, unit, onChange }) => (
   <Field label={label}>
     <div className="grid grid-cols-[1fr_auto] gap-2 items-center">
-      <StudioNumberInput
+      <StudioTextInput type="number"
         value={value}
         min={min}
         max={max}
@@ -285,9 +285,9 @@ const SelectField: React.FC<{
   onChange: (value: string) => void
 }> = ({ label, value, options, onChange }) => (
   <Field label={label}>
-    <StudioSelect value={value} onChange={(event) => onChange(event.currentTarget.value)} aria-label={label}>
+    <select data-vt-studio-control="true" data-size="standard" value={value} onChange={(event) => onChange(event.currentTarget.value)} aria-label={label}>
       {options.map((option) => <option value={option} key={option}>{option}</option>)}
-    </StudioSelect>
+    </select>
   </Field>
 )
 

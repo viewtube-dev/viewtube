@@ -32,8 +32,8 @@ import {
  StudioActionButton,
   StudioButton,
  StudioInput,
- StudioSearchInput,
- StudioSelect,
+ StudioTextInput,
+ select,
  StudioTextArea,
 } from "../studio-ui"
 
@@ -300,7 +300,7 @@ const ActionableTactics: React.FC<{
         </div>
         <div className="space-y-1">
          <label className={toolboxSystem.label}>AI Mode</label>
-         <StudioSelect
+         <select data-vt-studio-control="true" data-size="standard"
           value={input.systemInstructionId}
           onChange={(e) =>
            setInput({ ...input, systemInstructionId: e.target.value })
@@ -310,7 +310,7 @@ const ActionableTactics: React.FC<{
             {id.replace("-", " ").toUpperCase()}
            </option>
           ))}
-         </StudioSelect>
+         </select>
         </div>
         <StudioActionButton
          className="w-full"
@@ -343,7 +343,7 @@ const ActionableTactics: React.FC<{
            className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-black/30"
            size={16}
           />
-          <StudioSearchInput
+          <StudioTextInput type="search"
            placeholder="FILTER..."
            value={filterText}
            onChange={(e) => setFilterText(e.target.value)}
