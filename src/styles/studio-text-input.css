@@ -53,7 +53,7 @@ input.vt-studio-text-input[data-size="mini"] {
 
 input.vt-studio-text-input[data-size="micro"] {
   height: var(--vt-studio-micro-height, 12px);
-  border-width: var(--vt-studio-micro-stroke, 1px);
+  border-width: var(--vt-studio-micro-stroke, 1.5px);
   border-radius: var(--vt-studio-micro-radius, 2px);
   font-size: var(--vt-studio-micro-font-size, 10px);
 }
