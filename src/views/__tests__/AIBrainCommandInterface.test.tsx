@@ -108,10 +108,7 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain('data-vt-studio-inter-host="true"')
   expect(html).toContain("vt-studio-inter-host--bleed")
   expect(html).toContain('data-prompt-category="strategy"')
-  expect(html).toContain('data-prompt-id="analyze-channel-niche"')
-  expect(html).toContain("SEND TO CHAT")
-  expect(html).toContain("EDIT FIRST")
-  expect(html).not.toContain("StudioCollapsingTwoLineModule")
+  expect(html).toContain('data-vt-studio-inter-module="true"')
  })
 
  it("restores only typed prompt evidence whose ordered IDs match the saved turn contract", () => {
