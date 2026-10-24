@@ -1892,7 +1892,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  return (
-  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="h-full min-h-0 overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black max-xl:h-[100dvh] max-xl:overflow-hidden xl:overflow-hidden">
+  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="flex h-full min-h-0 flex-col overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black max-xl:h-[100dvh] max-xl:overflow-hidden xl:overflow-hidden">
    <Toolbox
     title="ViewTube Brain Hub"
     subtitle="One assistant for channel strategy, analytics, goals, content planning, SEO, and publishing."
@@ -1902,7 +1902,7 @@ const AIBrainCommandInterface: React.FC = () => {
     indicator="none"
     embedded
     fillAvailable
-    outerClassName="h-full min-h-0 max-xl:!h-full xl:h-full"
+    outerClassName="flex h-full min-h-0 flex-col max-xl:!h-full xl:h-full"
     contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:overflow-hidden xl:overflow-hidden"
    >
     {intakeOpen ? (
@@ -1913,7 +1913,7 @@ const AIBrainCommandInterface: React.FC = () => {
       onDefer={handleDeferIntake}
      />
     ) : (
-     <section className="relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
+     <section className="relative flex flex-1 min-h-0 flex-col overflow-hidden xl:overflow-hidden">
       <div className="shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
