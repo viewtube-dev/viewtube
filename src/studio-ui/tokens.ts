@@ -183,7 +183,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     microTextStroke: 0.25,
     fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
     minHeight: 92,
-    lineHeight: 1,
+    lineHeight: 0.85,
     textAlign: "left" as const,
     resize: "vertical" as const,
     preservesSizeFamily: true,
