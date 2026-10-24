@@ -378,6 +378,18 @@ const PROMPT_CARD_SUMMARIES: Record<string, string> = {
 export const promptCardSummary = (card: CreatorBrainPromptCard): string =>
  PROMPT_CARD_SUMMARIES[card.id] || card.prompt
 
+/** Turn registry category identifiers into creator-facing labels without changing their keys. */
+export const formatPromptCategoryLabel = (category: string): string =>
+ category
+  .replace(/([a-z])([A-Z])/g, "$1 $2")
+  .replace(/\d+$/g, "")
+  .replace(/[_-]+/g, " ")
+  .trim()
+  .toLowerCase()
+  .replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
+  .replace(/\bSeo\b/g, "SEO")
+  .replace(/\bAi\b/g, "AI")
+
 /** Canonical 12-step Studio spectrum pair cycle for individual prompt modules. */
 const PROMPT_MODULE_COLOR_PAIRS = Array.from({ length: 12 }, (_, index) => [
  TOOLBOX_PALETTE[index],
@@ -529,7 +541,7 @@ export const BrainPromptLibrary: React.FC<{
     </p>
     <div className="grid gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
      <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
-     <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: item.replace(/_/g, " ") }))]} />
+     <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: formatPromptCategoryLabel(item) }))]} />
     </div>
     <p className="px-1 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
@@ -541,13 +553,13 @@ export const BrainPromptLibrary: React.FC<{
         key={groupCategory}
         data-vt-brain-component="BrainPromptLibraryModule"
         data-prompt-category={groupCategory}
-        title={<><span>{groupCategory.replace(/_/g, " ")}</span><small>{groupCards.length}</small></>}
+        title={<><span>{formatPromptCategoryLabel(groupCategory)}</span><small>{groupCards.length}</small></>}
         startIcon={<LayoutGrid aria-hidden="true" />}
         sizeVariant="compact"
         headStyle={{ background: PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length][0], "--vt-studio-control-accent": PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length][0], "--vt-studio-control-secondary": PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length][1] } as React.CSSProperties}
         open={isOpen}
         onOpenChange={(nextOpen) => setCategoryOpen(groupCategory, nextOpen)}
-        aria-label={`${groupCategory.replace(/_/g, " ")} prompts, ${groupCards.length} items`}
+        aria-label={`${formatPromptCategoryLabel(groupCategory)} prompts, ${groupCards.length} items`}
        >
         {groupCards.map((card, promptIndex) => {
          const isSelected = card.id === selectedId
