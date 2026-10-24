@@ -86,8 +86,8 @@
   --vt-studio-focus-outline-width-ratio: 0.65;
   --vt-studio-focus-outline-offset: 0px;
   --vt-studio-dropdown-supreme-rail-size: 60px;
-  --vt-studio-dropdown-supreme-chevron-size: 38.18181818181818px;
-  --vt-studio-dropdown-supreme-chevron-stroke: 3.409090909090909;
+  --vt-studio-dropdown-supreme-chevron-size: 38px;
+  --vt-studio-dropdown-supreme-chevron-stroke: 3.41;
   --vt-studio-dropdown-standard-rail-size: 44px;
   --vt-studio-dropdown-compact-rail-size: 28px;
   --vt-studio-dropdown-mini-rail-size: 20px;
@@ -104,9 +104,10 @@
   --vt-studio-number-rest-mix: 50%;
   --vt-studio-number-active-color: #000000;
   --vt-studio-number-active-stroke: #000000;
+  --vt-studio-floating-label-supreme-height: 51.82px;
   --vt-studio-floating-label-standard-height: 38px;
   --vt-studio-floating-label-compact-height: 24px;
-  --vt-studio-floating-label-mini-height: 17.5px;
+  --vt-studio-floating-label-mini-height: 16px;
   --vt-studio-floating-label-micro-height: 10px;
   --vt-studio-floating-label-offset-ratio: 1.2;
 }
