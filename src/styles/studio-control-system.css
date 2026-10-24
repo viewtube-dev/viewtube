@@ -2586,7 +2586,7 @@ not button faces.
 
 /* Global Studio spacing and micro-size contract.
    Spacing is a 4px unit on all four sides; layouts may use explicit multiples.
-   Micro controls are explicitly 12px high with 1px stroke / 2px radius / 10px icon and type. */
+   Micro controls are explicitly 12px high with 1.5px stroke / 2px radius / 10px icon and type. */
 [data-vt-studio-control] {
   --vt-studio-space-unit: 4px;
   --vt-studio-space-top: var(--vt-studio-space-unit);
@@ -2596,7 +2596,7 @@ not button faces.
 }
 [data-vt-studio-control][data-size="micro"] {
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: 1px;
+  --vt-studio-control-stroke: 1.5px;
   --vt-studio-control-radius: 2px;
   --vt-studio-control-font-size: 10px;
   --vt-studio-control-font-weight: 1000;
@@ -3494,7 +3494,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg { width: 24px; height: 24px; stroke-width: 3; }
 .vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__actions button svg { width: 30px; height: 30px; stroke-width: 3; }
-.vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 12px; height: 12px; stroke-width: 2.25; }
+.vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 12px; height: 12px; stroke-width: 1.5; }
 .vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 2.25; }
 .vt-studio-counter__button:active svg,
 .vt-studio-side-counter__actions button:active svg,
@@ -5276,7 +5276,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   min-height: 12px;
   max-height: 12px;
   padding-inline: 2px;
-  border-width: 1px;
+  border-width: 1.5px;
   border-radius: 2px;
   font-size: 10px;
   -webkit-text-stroke-width: .375px;
@@ -5743,7 +5743,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   flex-basis: 3px;
   width: 3px;
   height: 8px;
-  border-width: 0.5px;
+  border-width: 1.5px;
 }
 .vt-studio-value-toggle__arrow,
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow {
