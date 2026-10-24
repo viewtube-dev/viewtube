@@ -295,3 +295,23 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   bottom: var(--vt-word-toggle-handle-inset, 2.75px);
   border-radius: max(1px, calc(var(--vt-studio-control-height, 44px) * .1));
 }
+
+
+/* Vertical word-toggle spacing scales with the selected size without changing its content-driven height. */
+.vt-studio-vertical-word-toggle.is-supreme {
+  --vt-studio-vertical-word-gap: 5px;
+  --vt-studio-vertical-word-padding: 5px;
+  --vt-studio-vertical-word-horizontal-padding: 20px;
+  --vt-studio-vertical-word-handle-inset: 3.75px;
+}
+.vt-studio-vertical-word-toggle.is-mini {
+  --vt-studio-vertical-word-gap: 1.666667px;
+  --vt-studio-vertical-word-padding: 1.666667px;
+  --vt-studio-vertical-word-horizontal-padding: 6.666667px;
+  --vt-studio-vertical-word-handle-inset: 1.25px;
+}
+.vt-studio-vertical-word-toggle:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  box-shadow: none;
+}
