@@ -255,14 +255,14 @@ const BrainContextUsedDrawer: React.FC<{
  })
  return (
   <details data-vt-brain-component="BrainContextUsedDrawer" data-vt-brain-turn-id={turnId} className="w-full rounded-[7px] border-[2px] border-black bg-white">
-   <summary data-vt-brain-part="context-used-trigger" className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
+   <summary data-vt-brain-part="context-used-trigger" className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
     <PanelRight size={12} aria-hidden="true" /> Context used
     <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1">{items.length + contextUsed.knowledgeItems.length}</span>
    </summary>
    <div className="grid gap-2 border-t-[2px] border-black p-2">
     <ul className="grid gap-1">
      {items.map((item) => (
-      <li data-vt-brain-part="context-used-item" key={item.id} className="grid gap-0.5 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
+      <li data-vt-brain-part="context-used-item" key={item.id} className="grid gap-1 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
        <span className="text-[9px] font-black uppercase">{item.label} · {item.provenance}</span>
        <span className="break-words text-[10px] font-bold">{item.value}</span>
       </li>
@@ -617,9 +617,11 @@ export const BrainFeedbackControls: React.FC<{
 }> = ({ message, onFeedback }) => {
  const [selected, setSelected] = useState<AIBrainFeedbackSignal["rating"] | null>(null)
  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
+ const feedbackInFlightRef = useRef(false)
 
  const submitFeedback = async (rating: AIBrainFeedbackSignal["rating"]) => {
-  if (status === "saving") return
+  if (feedbackInFlightRef.current) return
+  feedbackInFlightRef.current = true
   setSelected(rating)
   setStatus("saving")
   try {
@@ -628,11 +630,13 @@ export const BrainFeedbackControls: React.FC<{
   } catch (error) {
    console.warn("[AIBrain] Feedback was not saved:", error)
    setStatus("error")
+  } finally {
+   feedbackInFlightRef.current = false
   }
  }
 
  return (
-  <div data-vt-brain-component="BrainAnswerFeedback" className="flex min-w-0 flex-wrap items-center gap-1.5">
+  <div data-vt-brain-component="BrainAnswerFeedback" className="flex min-w-0 flex-wrap items-center gap-1">
    <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Rate this response">
     {FEEDBACK_OPTIONS.map(([rating, Icon, label, color]) => {
      const isSelected = selected === rating
@@ -803,7 +807,7 @@ const CreatorResponseCard: React.FC<{
    className="w-full max-w-none shrink-0 border-0 bg-white"
    header={
     <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
-     <div className="flex flex-wrap items-start justify-between gap-1.5">
+     <div className="flex flex-wrap items-start justify-between gap-1">
       <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
       {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
      </div>
@@ -832,7 +836,7 @@ const CreatorResponseCard: React.FC<{
       <Link
        to={message.handoff.route}
        title={`Open ${message.handoff.targetTitle}`}
-       className="ml-auto inline-flex items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em]"
+       className="ml-auto inline-flex items-center gap-1 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em]"
       >
        Review only · Open
        <ArrowRight size={13} />
@@ -900,7 +904,7 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
 
  return (
   <details data-vt-brain-component="BrainEvidenceReadiness" className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
-   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1.5 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
+   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
     <span data-vt-brain-part="evidence-readiness-status"><BrainChatStatusBadge status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label="Data readiness" /></span>
     <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
    </summary>
@@ -1062,8 +1066,8 @@ const AIBrainCommandInterface: React.FC = () => {
  const contextLauncherRef = useRef<HTMLButtonElement | null>(null)
  const promptCloseRef = useRef<HTMLButtonElement | null>(null)
  const contextCloseRef = useRef<HTMLButtonElement | null>(null)
- const bottomRef = useRef<HTMLDivElement | null>(null)
  const conversationViewportRef = useRef<HTMLDivElement | null>(null)
+ const requestInFlightRef = useRef(false)
 
  // Mobile browsers may keep the layout viewport tall when the on-screen keyboard
  // opens. Follow the visual viewport so the anchored composer stays above it.
@@ -1231,7 +1235,7 @@ const AIBrainCommandInterface: React.FC = () => {
   const chronological = [...visibleTurns].reverse()
   setMessages(
    chronological.flatMap((turn) => [
-    { id: `${turn.id}-user`, role: "user" as const, text: turn.userText },
+    { id: `${turn.id}-user`, role: "user" as const, text: turn.rawUserMessage ?? turn.userText },
     {
      id: turn.id,
      role: "model" as const,
@@ -1365,12 +1369,13 @@ const AIBrainCommandInterface: React.FC = () => {
 
  const handleSend = async (override?: string) => {
   const userText = override ?? input
-  if (!userText.trim() || busy) return
+  if (!userText.trim() || busy || requestInFlightRef.current) return
   if (shouldShowAiBrainIntake(authState.isAuthenticated)) {
    setIntakeContext(loadAiBrainContext())
    setIntakeOpen(true)
    return
   }
+  requestInFlightRef.current = true
   shouldFollowConversationRef.current = true
   setInput("")
   if (composerRef.current) composerRef.current.style.height = "52px"
@@ -1466,14 +1471,16 @@ const AIBrainCommandInterface: React.FC = () => {
     { id: makeMessageId(), role: "model", text: fallbackText, response, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
    ])
   } finally {
+   requestInFlightRef.current = false
    setBusy(false)
   }
  }
 
  const handleRetryInterruptedTurn = (message: ChatMessage, useFreshEvidence: boolean) => {
   const userText = message.originalUserText || ""
-  if (!userText.trim() || busy || message.turnStatus !== "interrupted") return
+  if (!userText.trim() || busy || requestInFlightRef.current || message.turnStatus !== "interrupted") return
 
+  requestInFlightRef.current = true
   setBusy(true)
   setMessages((current) => current.map((item) => item.id === message.id
    ? { ...item, text: "Retrying the original request…", turnStatus: "pending", response: undefined }
@@ -1559,6 +1566,7 @@ const AIBrainCommandInterface: React.FC = () => {
     console.warn("[AIBrain] Interrupted response retry failed:", error)
     await refreshConversationTurns()
    } finally {
+    requestInFlightRef.current = false
     setBusy(false)
    }
   })()
@@ -1869,7 +1877,7 @@ const AIBrainCommandInterface: React.FC = () => {
          ) : messages.length === 0 ? (
           <OpeningBriefing snapshot={snapshot} onPrompt={(prompt) => { void handleSend(prompt) }} />
          ) : (
-          <ChatConversationViewport viewportRef={conversationViewportRef} bottomRef={bottomRef} onScroll={(event) => { const viewport = event.currentTarget; shouldFollowConversationRef.current = shouldFollowBrainConversation(viewport.scrollHeight, viewport.scrollTop, viewport.clientHeight) }}>
+          <ChatConversationViewport viewportRef={conversationViewportRef} onScroll={(event) => { const viewport = event.currentTarget; shouldFollowConversationRef.current = shouldFollowBrainConversation(viewport.scrollHeight, viewport.scrollTop, viewport.clientHeight) }}>
            {messages.map((message) => message.role === "user" ? (
             <UserMessage key={message.id} text={message.text} />
            ) : (
@@ -1892,36 +1900,38 @@ const AIBrainCommandInterface: React.FC = () => {
 
         <BrainComposerShell>
          <div className="mx-auto w-full max-w-[880px]">
-          <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1.5 xl:hidden">
-           <div data-vt-brain-part="composer-launchers" className="grid w-full min-w-0 grid-cols-2 gap-1">
-            <StudioSplitTwoLineButton
-             ref={promptLauncherRef}
-             sizeVariant="compact"
-             icon={<LayoutGrid aria-hidden="true" />}
-             firstLine="PROMPT"
-             secondLine="LIBRARY"
-             onClick={() => setPromptRailOpen(true)}
-             aria-label="Open prompt library"
-             aria-haspopup="dialog"
-             className="min-w-0 w-full xl:hidden"
-             style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
-            />
-            <StudioSplitTwoLineButton
-             ref={contextLauncherRef}
-             sizeVariant="compact"
-             icon={<PanelRight aria-hidden="true" />}
-             firstLine="CHANNEL"
-             secondLine="CONTEXT"
-             onClick={() => setContextRailOpen(true)}
-             aria-label="Open channel context"
-             aria-haspopup="dialog"
-             className="min-w-0 w-full xl:hidden"
-             style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": TOOLBOX_PALETTE[9] } as React.CSSProperties}
-            />
+          <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1 xl:hidden">
+           <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-stretch gap-1">
+            <div data-vt-brain-part="composer-launchers" className="vt-brain-composer-launchers grid min-w-0 grid-cols-1 gap-1 sm:grid-cols-2">
+             <StudioSplitTwoLineButton
+              ref={promptLauncherRef}
+              sizeVariant="compact"
+              icon={<LayoutGrid aria-hidden="true" />}
+              firstLine="PROMPT"
+              secondLine="LIBRARY"
+              onClick={() => setPromptRailOpen(true)}
+              aria-label="Open prompt library"
+              aria-haspopup="dialog"
+              className="min-w-0 w-full xl:hidden"
+              style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
+             />
+             <StudioSplitTwoLineButton
+              ref={contextLauncherRef}
+              sizeVariant="compact"
+              icon={<PanelRight aria-hidden="true" />}
+              firstLine="CHANNEL"
+              secondLine="CONTEXT"
+              onClick={() => setContextRailOpen(true)}
+              aria-label="Open channel context"
+              aria-haspopup="dialog"
+              className="min-w-0 w-full xl:hidden"
+              style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": TOOLBOX_PALETTE[9] } as React.CSSProperties}
+             />
+            </div>
+            <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0 self-stretch" style={{ backgroundColor: "#36E0F6" }} />
            </div>
           </BrainComposerAccessoryRow>
-          <div data-vt-brain-part="composer-controls" className="grid w-full min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-1">
-           <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
+          <div data-vt-brain-part="composer-controls" className="vt-brain-composer-controls grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-1">
            <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
            <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span data-vt-brain-part="composer-status" className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
