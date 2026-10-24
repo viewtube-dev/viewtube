@@ -22,14 +22,14 @@ const canonicalTail = (css: string) => {
 
 
 describe("StudioTextBox size-aware stroke defaults", () => {
-  it("shares full field geometry while keeping black text and primary glyph stroke", () => {
+  it("shares full field geometry while keeping black text and matching black glyph stroke", () => {
     const css = readStudioControlCss();
     const start = css.indexOf('.vt-studio-text-box[data-vt-studio-control="true"]');
     const end = css.indexOf("/* Textarea and read-only text display share", start);
     const textBox = css.slice(start, end);
     expect(textBox).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000");
     expect(textBox).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
-    expect(textBox).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary");
+    expect(textBox).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000");
     expect(textBox).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
     expect(textBox).toContain("color: #000");
     expect(textBox).toContain("line-height: var(--vt-studio-textarea-line-height, .85)");
@@ -299,13 +299,13 @@ describe("standalone Studio text fields", () => {
     expect(micro).toContain('data-size="micro"')
   })
 
-  it("uses shared border geometry, primary glyph stroke, and a proportional secondary outline for StudioTextBox", () => {
+  it("uses shared border geometry, black glyph stroke, and a proportional secondary outline for StudioTextBox", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
     const block = css.match(/\.vt-studio-text-box\[data-vt-studio-control="true"\] \{([\s\S]*?)\n\}/)?.[1] ?? "";
     expect(css).toContain("--studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);");
     expect(block).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000;");
     expect(block).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
-    expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary");
+    expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000");
     expect(block).toContain("outline-offset: 0;");
     expect(block).toContain("color: #000;");
     expect(block).toContain("-webkit-text-fill-color: #000;");
@@ -1334,8 +1334,8 @@ describe("StudioSplitTwoLineButton", () => {
 
 describe("Studio Controls regression recovery contracts", () => {
   it("keeps the simple input primary-stroked while labelled text inputs and textareas use black focus strokes", () => {
-    const inputSource = require("fs").readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
-    const fields = require("fs").readFileSync("src/styles/studio-control-fields.css", "utf8");
+    const inputSource = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+    const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
     expect(inputSource).toContain('"vt-studio-text-input--simple"');
     expect(fields).toContain('input.vt-studio-text-input--simple[data-vt-studio-control="true"]:is(:focus, :focus-visible)');
     expect(fields).toContain('-webkit-text-stroke-color: #000;');
@@ -1343,7 +1343,7 @@ describe("Studio Controls regression recovery contracts", () => {
   });
 
   it("pins split rails to square inner dimensions and restores full-width intermodules", () => {
-    const split = require("fs").readFileSync("src/styles/studio-control-split.css", "utf8");
+    const split = readFileSync("src/styles/studio-control-split.css", "utf8");
     expect(split).toContain('height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height');
     expect(split).toContain('aspect-ratio: 1 / 1;');
     expect(split).toContain('calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px))');
