@@ -233,8 +233,3 @@
   margin-inline: -6px;
 }
 
-
-/* The Brain prompt library's category modules meet the outer module edges. */
-.vt-studio-inter-module.brain-prompt-library-shell > .vt-studio-inter-module__body {
-  padding: 0;
-}
