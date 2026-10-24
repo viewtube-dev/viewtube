@@ -1980,8 +1980,6 @@ const AIBrainCommandInterface: React.FC = () => {
            ))}
           </ChatConversationViewport>
          )}
-        </div>
-
         </BrainChatShell>
       </div>
       </div>
