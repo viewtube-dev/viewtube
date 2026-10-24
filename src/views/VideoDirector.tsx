@@ -60,7 +60,6 @@ import {
   StudioButton,
   StudioInput,
   StudioTextInput,
-  select,
   StudioSplitLeftButton,
   StudioTextArea,
 } from "../studio-ui"
