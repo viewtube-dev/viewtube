@@ -1,0 +1,19 @@
+/* Brain chat layout only; Studio Controls still own every control's geometry and skin. */
+.vt-brain-composer-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px;
+  align-items: start;
+}
+
+.vt-brain-composer-launchers {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+}
+
+@media (min-width: 640px) {
+  .vt-brain-composer-launchers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

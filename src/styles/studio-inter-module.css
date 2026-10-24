@@ -71,6 +71,11 @@
   border-top: 0;
 }
 
+/* An expanded body needs the following header to restore the single shared separator. */
+.vt-studio-inter-module[data-open="true"] + .vt-studio-inter-module > .vt-studio-inter-module__head {
+  border-top-width: var(--vt-im-stroke, 2px);
+}
+
 .vt-studio-inter-module__head[role="button"] {
   cursor: pointer;
 }
@@ -144,6 +149,16 @@
 .vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {
   padding-left: 0;
   padding-right: 0;
+}
+
+/* The Brain prompt library opts into vertical flushness without changing other intermodule consumers. */
+.vt-studio-inter-module.brain-prompt-library-category > .vt-studio-inter-module__body,
+.vt-studio-inter-module.brain-prompt-library-prompt > .vt-studio-inter-module__body {
+  padding: 0;
+}
+
+.vt-studio-inter-module.brain-prompt-library-category > .vt-studio-inter-module__body > .vt-studio-inter-module:first-child > .vt-studio-inter-module__head {
+  border-top: 0;
 }
 
 .vt-studio-inter-module[data-open="false"] > .vt-studio-inter-module__body {
