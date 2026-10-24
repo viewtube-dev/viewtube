@@ -1,4 +1,5 @@
 import React from "react"
+import "./BrainChatPrimitives.css"
 import { StudioBrainStatusBadge, StudioButton } from "../../studio-ui"
 
 export type BrainChatStatus = "ready" | "loading" | "partial" | "warning" | "error" | "unavailable"
