@@ -59,7 +59,6 @@ import {
   StudioActionButton,
   StudioButton,
   StudioInput,
-  StudioNumberInput,
   StudioSelect,
   StudioSplitLeftButton,
   StudioTextArea,
@@ -237,7 +236,8 @@ const NumberField: React.FC<{
 }> = ({ label, value, min, max, step, unit, onChange }) => (
   <Field label={label}>
     <div className="grid grid-cols-[1fr_auto] gap-2 items-center">
-      <StudioNumberInput
+      <StudioInput
+        type="number"
         value={value}
         min={min}
         max={max}
