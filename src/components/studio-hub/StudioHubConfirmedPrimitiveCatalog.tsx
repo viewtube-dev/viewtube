@@ -533,7 +533,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Top Split Module|Upload Frame/.test(title)) return "Modules & Frames"
   if (/Dropdown/.test(title)) return "Dropdowns"
   if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily") return "Controls"
-  if (/Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
+  if (/Word Toggles|Word Toggle|Arrow Toggle|Side Toggle|Double Side Toggle|Bar Toggle|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
   if (/Split Accordion/.test(title)) return "Compounds"
   if (/Publishing Card|Brain Status LED Badges/.test(title)) return "Compositions"
   return "Controls"
@@ -1193,6 +1193,90 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     >
       <div className="w-full min-w-0 max-w-none" style={{ width: "100%", minWidth: 0, maxWidth: "none", gridTemplateColumns: "minmax(0, 1fr)" }}>
         <StudioSplitAccordionCatalogSpecimens />
+      </div>
+    </Family>
+    <Family title="Double Split Button · Standard + Compact" nonDefaultSettings={[
+      "Canonical two-rail action button with both square rails retained; no catalog-only imitation.",
+    ]} provenance={<Provenance primitive="StudioDoubleSplitButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · shared split-shell geometry." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton">
+        <span>44px STANDARD</span>
+        <StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Double split button standard section">DOUBLE SPLIT</StudioDoubleSplitButton>
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px COMPACT</span>
+        <StudioDoubleSplitButton sizeVariant="compact" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Double split button compact section">DOUBLE SPLIT</StudioDoubleSplitButton>
+      </div>
+    </Family>
+    <Family title="Legend Multi Dropdown · Standard + Compact" nonDefaultSettings={[
+      "Multi-select dropdown with the shared labelled legend and canonical menu behavior.",
+    ]} provenance={<Provenance primitive="StudioLegendMultiDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · multi-select options." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown">
+        <span>44px STANDARD</span>
+        <StudioLegendMultiDropdown sizeVariant="standard" label="FORMAT" defaultValue={["videos"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }, { value: "live", label: "LIVE" }]} />
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px COMPACT</span>
+        <StudioLegendMultiDropdown sizeVariant="compact" label="FORMAT" defaultValue={["shorts"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }, { value: "live", label: "LIVE" }]} />
+      </div>
+    </Family>
+    <Family title="Arrow Toggle · Standard + Compact" nonDefaultSettings={[
+      "Value selection is controlled by the owning page; this catalog sample uses a no-op callback.",
+    ]} provenance={<Provenance primitive="StudioArrowToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · canonical selection control." imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle">
+        <span>44px STANDARD</span>
+        <StudioArrowToggle size="standard" value="ONE" options={["ONE", "TWO", "THREE"]} onValueChange={() => undefined} ariaLabel="Arrow toggle standard section" />
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px COMPACT</span>
+        <StudioArrowToggle size="compact" value="TWO" options={["ONE", "TWO", "THREE"]} onValueChange={() => undefined} ariaLabel="Arrow toggle compact section" />
+      </div>
+    </Family>
+    <Family title="Bar Toggle · Standard + Compact" nonDefaultSettings={[
+      "Ten-segment value control; the section documents its own primitive separately from arrow and side toggles.",
+    ]} provenance={<Provenance primitive="StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · ten fixed-width bars." imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle">
+        <span>44px STANDARD · 40%</span>
+        <StudioBarToggle size="standard" value={40} onValueChange={() => undefined} barCount={10} ariaLabel="Bar toggle standard section" />
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px COMPACT · 70%</span>
+        <StudioBarToggle size="compact" value={70} onValueChange={() => undefined} barCount={10} ariaLabel="Bar toggle compact section" />
+      </div>
+    </Family>
+    <Family title="Word Toggle · Standard + Compact" nonDefaultSettings={[
+      "Two-state word toggle is catalogued independently from vertical word toggle variants.",
+    ]} provenance={<Provenance primitive="StudioWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · primary/secondary palette skins." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioWordToggle">
+        <span>44px STANDARD</span>
+        <StudioWordToggle size="44" skin="solid" value={false} words={["OFF", "ON"]} onValueChange={() => undefined} aria-label="Word toggle standard section" />
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px COMPACT</span>
+        <StudioWordToggle size="28" skin="solid" value={true} words={["OFF", "ON"]} onValueChange={() => undefined} aria-label="Word toggle compact section" />
+      </div>
+    </Family>
+    <Family title="Side Toggle · Standard + Compact" nonDefaultSettings={[
+      "Three-position side toggle with a canonical side rail.",
+    ]} provenance={<Provenance primitive="StudioSideToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact." imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideToggle">
+        <span>44px STANDARD</span>
+        <StudioSideToggle size="standard" value="MID" options={["LOW", "MID", "HIGH"]} onValueChange={() => undefined} ariaLabel="Side toggle standard section" />
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px COMPACT</span>
+        <StudioSideToggle size="compact" value="HIGH" options={["LOW", "MID", "HIGH"]} onValueChange={() => undefined} ariaLabel="Side toggle compact section" />
+      </div>
+    </Family>
+    <Family title="Double Side Toggle · Standard + Compact" nonDefaultSettings={[
+      "Two independently controlled side selectors share one canonical double-side shell.",
+    ]} provenance={<Provenance primitive="StudioDoubleSideToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · two side-by-side controlled selections." imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSideToggle">
+        <span>44px STANDARD</span>
+        <StudioDoubleSideToggle size="standard" left={{ value: "SOURCE", options: ["SOURCE", "INPUT"], onValueChange: () => undefined, ariaLabel: "Double side toggle left standard" }} right={{ value: "TARGET", options: ["TARGET", "OUTPUT"], onValueChange: () => undefined, ariaLabel: "Double side toggle right standard" }} />
+      </div>
+      <div className="vt-confirmed-variant is-full-row">
+        <span>28px COMPACT</span>
+        <StudioDoubleSideToggle size="compact" left={{ value: "INPUT", options: ["SOURCE", "INPUT"], onValueChange: () => undefined, ariaLabel: "Double side toggle left compact" }} right={{ value: "OUTPUT", options: ["TARGET", "OUTPUT"], onValueChange: () => undefined, ariaLabel: "Double side toggle right compact" }} />
       </div>
     </Family>
     <Family
