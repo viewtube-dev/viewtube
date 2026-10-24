@@ -89,6 +89,7 @@ import { BrainWorkflowRunPanel } from "../components/brain/BrainWorkflowRunPanel
 import { buildWorkflowRecommendationFromBrainResponse } from "../services/brain/brainWorkflowRecommendations"
 import { resolveBrainDataReadinessPresentation } from "./brainDataReadiness"
 import { shouldFollowBrainConversation } from "./brainConversationScroll"
+export { shouldFollowBrainConversation }
 import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
