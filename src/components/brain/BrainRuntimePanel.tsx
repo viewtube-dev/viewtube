@@ -279,11 +279,11 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
     className="border-b-[2px] border-black bg-[#EEF2F7] px-2 py-2"
    >
     <details data-vt-brain-part="runtime-details" className="min-w-0">
-     <summary data-vt-brain-part="runtime-summary" className="flex min-h-9 cursor-pointer flex-wrap items-center gap-x-2 gap-y-1 px-1 text-[10px] font-[1000] uppercase tracking-[0.06em] focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
-      <span>Brain status</span>
-      <span className="border border-black/30 bg-white px-2 py-1">{trace ? titleCase(trace.status) : "No trace yet"}</span>
-      <span className="min-w-0 max-w-full break-words font-bold normal-case tracking-normal opacity-70">{project?.name || "Channel-wide"}</span>
-      {build ? <span className="font-bold normal-case tracking-normal opacity-70">Build: {titleCase(build.stage)}</span> : null}
+     <summary data-vt-brain-part="runtime-summary" className="flex min-h-9 min-w-0 cursor-pointer flex-wrap items-center gap-x-2 gap-y-1 px-1 text-[10px] font-[1000] uppercase tracking-[0.06em] focus-visible:outline focus-visible:outline-2 focus-visible:outline-black focus-visible:outline-offset-2">
+      <span className="shrink-0">Brain status</span>
+      <span className="min-w-0 max-w-full break-words border border-black/30 bg-white px-2 py-1 font-bold normal-case tracking-normal">{trace?.status === "fallback" ? "Using channel-wide fallback" : trace ? titleCase(trace.status) : "No response yet"}</span>
+      <span className="min-w-0 max-w-full break-words font-bold normal-case tracking-normal opacity-70">Project: {project?.name || "No project"}</span>
+      {build ? <span className="min-w-0 max-w-full break-words font-bold normal-case tracking-normal opacity-70">Build: {titleCase(build.stage)}</span> : null}
      </summary>
      <div className="grid grid-cols-2 gap-1 pt-1 sm:grid-cols-3 xl:grid-cols-6">
      <RuntimeCompactCell
