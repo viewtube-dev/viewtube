@@ -245,9 +245,12 @@ export const StudioTextBox = React.forwardRef<HTMLDivElement, StudioTextBoxProps
       {...props}
       ref={ref}
       contentEditable={false}
+      aria-readonly="true"
       className={studioClasses("vt-studio-text-box", className)}
       data-vt-studio-control="true"
+      data-vt-studio-text-box="true"
       data-vt-studio-field-kind="textarea-display"
+      data-vt-library-component="StudioTextBox"
       data-size={size}
     >
       {children}
