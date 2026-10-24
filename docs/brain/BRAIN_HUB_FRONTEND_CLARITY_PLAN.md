@@ -43,6 +43,7 @@ The chat surface has one clear primary focus: the creator's conversation. Contex
 - [x] Replace raw fallback mode with creator-facing runtime status text and separate project/build labels.
 - [x] Collapse learning receipt details by default.
 - [x] Add source-contract regression assertions for the above.
+- [x] Summarize readiness as one creator-facing line; mount the diagnostic list only after the creator expands it.
 - [ ] Run focused Vitest contract, Studio Controls tests, typecheck, and production build on the PR head.
 - [ ] Browser-certify narrow phone, landscape, desktop, keyboard navigation, and virtual-keyboard states.
 
