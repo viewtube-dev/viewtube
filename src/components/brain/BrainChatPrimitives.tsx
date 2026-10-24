@@ -77,9 +77,9 @@ export const BrainResponseLayout: React.FC<{
     {header ?? (
       <div className={`shrink-0 border-b-2 border-black px-3 py-2 ${headerClassName}`}>
         {attribution || status || headerMetadata ? (
-          <div className="mb-1 flex min-w-0 flex-wrap items-center justify-between gap-1.5">
+          <div className="mb-1 flex min-w-0 flex-wrap items-center justify-between gap-1">
             {attribution ? <div className="min-w-0">{attribution}</div> : <span />}
-            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+            <div className="flex min-w-0 flex-wrap items-center gap-1">
               {status}
               {headerMetadata}
             </div>
@@ -88,7 +88,7 @@ export const BrainResponseLayout: React.FC<{
         <BrainResponseSectionHeader title={title} />
       </div>
     )}
-    <div data-vt-brain-part="response-layout-body" className={`flex min-w-0 flex-col gap-2.5 p-3 [overflow-wrap:anywhere] ${bodyClassName}`}>
+    <div data-vt-brain-part="response-layout-body" className={`flex min-w-0 flex-col gap-2 p-3 [overflow-wrap:anywhere] ${bodyClassName}`}>
       {children}
     </div>
     {actions ? <div data-vt-brain-part="response-layout-actions" className={`flex min-w-0 shrink-0 flex-wrap items-center gap-1 border-t-2 border-black px-3 py-1 ${actionsClassName}`}>{actions}</div> : null}
@@ -103,10 +103,10 @@ export const BrainResponseSectionHeader: React.FC<{
 }> = ({ title, metadata, className = "" }) => (
   <header
     data-vt-studio-brain-primitive="ResponseSectionHeader"
-    className={`flex min-w-0 flex-wrap items-center justify-between gap-1.5 ${className}`}
+    className={`flex min-w-0 flex-wrap items-center justify-between gap-1 ${className}`}
   >
     <h3 className="min-w-0 [overflow-wrap:anywhere]">{title}</h3>
-    {metadata ? <div className="flex min-w-0 flex-wrap items-center gap-1.5">{metadata}</div> : null}
+    {metadata ? <div className="flex min-w-0 flex-wrap items-center gap-1">{metadata}</div> : null}
   </header>
 )
 
