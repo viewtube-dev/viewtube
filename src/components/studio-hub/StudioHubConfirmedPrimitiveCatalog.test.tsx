@@ -64,6 +64,28 @@ describe("confirmed composite primitive catalog", () => {
     }
   })
 
+  it("renders the representative ledger as a single full-width row and groups all module primitives together", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const styles = readFileSync(resolve(process.cwd(), "src/styles/studio-confirmed-catalog-modules.css"), "utf8")
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+
+    expect(source).toContain('className="vt-confirmed-catalog vt-confirmed-direct-representatives"')
+    expect(styles).toMatch(/\.vt-confirmed-direct-representatives\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s)
+    expect(styles).toMatch(/\.vt-confirmed-direct-primitive-rows\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s)
+    expect(styles).toMatch(/\.vt-confirmed-direct-primitive-rows\s*>\s*\.vt-confirmed-variant\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/s)
+
+    const classifierStart = source.indexOf("const classifyConfirmedCatalogItem")
+    const classifierEnd = source.indexOf("const ConfirmedCatalogFamilyGroups", classifierStart)
+    const classifier = source.slice(classifierStart, classifierEnd)
+    expect(classifier).toMatch(/Top Split Module\|Collapsing\|InterModule\|Split Accordion\|Upload Frame/)
+    expect(classifier).toContain('return "Modules & Frames"')
+    expect(html).toContain("Collapsing Split Module · Standard + Compact")
+    expect(html).toContain("Collapsing Two-Line Module · Standard")
+    expect(html).toContain("InterModule · Standard")
+    expect(html).toContain("Top Split Module · Left / Right / Double / None")
+    expect(html).toContain("Split Accordion · Train Motion")
+  })
+
   it("registers the independent Split Accordion at standard, compact, and micro sizes", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
     expect(html).toContain("Split Accordion · Train Motion");
