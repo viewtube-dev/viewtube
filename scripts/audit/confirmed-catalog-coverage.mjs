@@ -24,9 +24,9 @@ const system = read("src/styles/studio-control-system.css")
 
 const checks = [
   ["distill overrides imported after field/parity styles", entry.indexOf('./studio-control-distill-overrides.css') > entry.indexOf('./studio-field-parity.css')],
-  ["focused field text is black", fields.includes("color: var(--vt-field-text-focus)") && fields.includes("-webkit-text-fill-color: var(--vt-field-text-focus)") && system.includes("--vt-field-text-focus: #000;")],
-  ["focused field uses black glyph stroke, not primary", fields.includes("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)") && system.includes("--vt-field-text-stroke-focus: var(--vt-field-text-focus);") && !/(?:^|})[^{}]*:is\(:focus, :focus-visible\)[^{]*\{[^}]*-webkit-text-stroke-color:\s*var\(--vt-field-primary/s.test(fields)],
-  ["focus fill uses primary at 15 percent", system.includes("--vt-field-fill-focus: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);") && fields.includes("background-color: var(--vt-field-fill-focus);")],
+  ["focused field text is black", fields.includes("color: #000;") && fields.includes("-webkit-text-fill-color: #000;") && system.includes("--vt-field-text-focus: #000;")],
+  ["focused text-box uses black glyph stroke, not primary", fields.includes("-webkit-text-stroke-color: #000 !important;") && !/(?:^|})[^{}]*:is\(:focus, :focus-visible\)[^{]*\{[^}]*-webkit-text-stroke-color:\s*var\(--vt-field-primary/s.test(fields)],
+  ["focus fill uses primary at 15 percent", system.includes("--vt-field-fill-focus: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);") && /background-color:\s*color-mix\([\s\S]{0,180}var\(--vt-field-primary[\s\S]{0,100}15%[\s\S]{0,80}transparent\)/.test(fields)],
   ["single-line labels clip instead of ellipsis", overrides.includes("text-overflow: clip") && !overrides.includes("text-overflow: ellipsis")],
   ["square icon group uses content width", overrides.includes(".vt-studio-square-icon-button-group") && overrides.includes("width: max-content")],
   ["bar toggle retains visible individual bars", overrides.includes(".vt-studio-value-toggle__bar") && overrides.includes("border: 1px solid #000")],
