@@ -843,7 +843,7 @@ describe("Studio Username Split-Left Input", () => {
     const end = css.indexOf('.vt-studio-username-input[data-disabled="true"]', start)
     const fieldRules = css.slice(start, end)
     expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary)")
-    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000")
+    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary)")
     expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #8b8b8b")
     expect(fieldRules).not.toContain("!important")
   })
@@ -1200,7 +1200,7 @@ describe("Studio field focus, floating labels, and toggle regressions", () => {
     const css = readStudioControlCss();
     const finalFieldContract = fields.slice(fields.lastIndexOf("/* Final regression-recovery contract"));
     expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
-    expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
+    expect(finalFieldContract).toContain("text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
     expect(css).toContain("--vt-studio-floating-label-risen-font-size: 12px;");
     expect(css).toContain("--vt-studio-floating-label-risen-text-stroke: 0.5px;");
     expect(css).toContain("font-size: var(--vt-studio-floating-label-risen-font-size, 12px) !important;");
