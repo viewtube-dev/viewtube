@@ -15,11 +15,11 @@
 }
 [data-vt-studio-control="true"][data-size="supreme"] {
   --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
-  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 4.09px);
-  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 8.18px);
+  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
   --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px);
   --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 51.82px);
-  --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px);
+  --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1px);
   --vt-studio-control-line-height: 1;
 }
 [data-vt-studio-control="true"][data-size="standard"] {
@@ -44,15 +44,15 @@
   --vt-studio-control-height: var(--vt-studio-mini-height, 20px);
   --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px);
   --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
-  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
-  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 17.5px);
-  --vt-studio-control-text-stroke: var(--vt-studio-mini-text-stroke, 0.375px);
+  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 16px);
+  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 16px);
+  --vt-studio-control-text-stroke: var(--vt-studio-mini-text-stroke, 0.4px);
   --vt-studio-control-line-height: 1;
 }
 [data-vt-studio-control="true"][data-size="micro"] {
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px);
   --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
   --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
   --vt-studio-control-text-stroke: 0.25px;
