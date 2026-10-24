@@ -2,6 +2,15 @@ import React from "react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, STUDIO_FOCUS_INTERACTION_TOKENS, type StudioControlSize, type StudioControlInteractiveSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
+
+/** Canonical numeric field; shares the same Studio field geometry and tokens as text inputs. */
+export const StudioNumberInput = React.forwardRef<
+  HTMLInputElement,
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "type"> & { sizeVariant?: StudioControlSize }
+>(({ sizeVariant = "standard", ...props }, ref) => (
+  <StudioTextInput {...props} ref={ref} type="number" sizeVariant={sizeVariant} />
+));
+StudioNumberInput.displayName = "StudioNumberInput";
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
 import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Image as ImageIcon, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
