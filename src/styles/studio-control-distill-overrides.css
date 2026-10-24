@@ -340,7 +340,8 @@ html body .vt-studio-text-box[data-vt-studio-control="true"][data-size] {
   -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
   text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
 }
-/* Shared split rails stay square inside the outer border; their height cannot stretch. */
+/* Split rails: outer-face 1×1, full shell height — no inset square, no vertical gap.
+   (Replaces PR #923 distill rules that used align-self:center + height-2*stroke.) */
 html body [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
 html body [data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
 html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail],
@@ -349,39 +350,43 @@ html body .vt-studio-split-right-badge__rail,
 html body .vt-studio-double-split-badge__rail,
 html body .vt-studio-side-counter__rail,
 html body .vt-studio-counter__rail,
-html body .vt-studio-top-split-module__rail {
-  box-sizing: border-box;
-  align-self: center;
-  height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
-  min-height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
-  max-height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
-  aspect-ratio: 1 / 1;
+html body .vt-studio-top-split-module__rail,
+html body .vt-studio-arrow-toggle__rail,
+html body .vt-studio-side-toggle__rail,
+html body .vt-studio-double-side-toggle__rail,
+html body .vt-studio-bar-toggle__rail,
+html body .vt-studio-inter-module__rail {
+  box-sizing: border-box !important;
+  align-self: stretch !important;
+  flex: 0 0 var(--vt-studio-control-height, 44px) !important;
+  width: var(--vt-studio-control-height, 44px) !important;
+  min-width: var(--vt-studio-control-height, 44px) !important;
+  max-width: var(--vt-studio-control-height, 44px) !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
-html body .vt-studio-split-left-badge__rail,
-html body .vt-studio-split-right-badge__rail,
-html body .vt-studio-double-split-badge__rail,
-html body .vt-studio-side-counter__rail,
-html body .vt-studio-counter__rail {
-  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
-  width: var(--vt-studio-split-rail-size);
-  min-width: var(--vt-studio-split-rail-size);
-  max-width: var(--vt-studio-split-rail-size);
-}
+
+/* Top-split head columns: rail column = full control height (not height-2*stroke) */
 html body .vt-studio-top-split-module__head[data-split="left"] {
-  grid-template-columns: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px)) minmax(0, 1fr);
+  grid-template-columns: var(--vt-top-split-size, 44px) minmax(0, 1fr);
 }
 html body .vt-studio-top-split-module__head[data-split="right"] {
-  grid-template-columns: minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
+  grid-template-columns: minmax(0, 1fr) var(--vt-top-split-size, 44px);
 }
 html body .vt-studio-top-split-module__head[data-split="double"] {
-  grid-template-columns: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px)) minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
+  grid-template-columns: var(--vt-top-split-size, 44px) minmax(0, 1fr) var(--vt-top-split-size, 44px);
 }
 html body .vt-studio-top-split-module__rail {
-  width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-  min-width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-  max-width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
+  width: var(--vt-top-split-size, 44px) !important;
+  min-width: var(--vt-top-split-size, 44px) !important;
+  max-width: var(--vt-top-split-size, 44px) !important;
 }
-/* Intermodules are full-row sections, not narrow column specimens. */
+
+/* Intermodules: full width of host */
 html body .vt-studio-inter-module,
 html body .vt-studio-intermodule,
 html body [data-vt-studio-intermodule="true"],
@@ -393,7 +398,19 @@ html body [data-vt-studio-inter-module="true"] {
   grid-column: 1 / -1;
 }
 
-/* InterModule rails are the exact square inner face, not a 100%-height stretch. */
+/* Intermodule rails: 1×1 of face token, stretch with head (no inset square) */
+html body .vt-studio-inter-module__rail {
+  box-sizing: border-box !important;
+  width: var(--vt-im-face, 44px) !important;
+  min-width: var(--vt-im-face, 44px) !important;
+  max-width: var(--vt-im-face, 44px) !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  flex: 0 0 var(--vt-im-face, 44px) !important;
+  aspect-ratio: auto !important;
+  align-self: stretch !important;
+}
 html body .vt-studio-inter-module__rail {
   --vt-im-rail-square: calc(var(--vt-im-face, 44px) - 2 * var(--vt-im-stroke, 3px));
   box-sizing: border-box;
