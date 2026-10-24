@@ -11,6 +11,15 @@ export const STUDIO_GLOBAL_DEFAULTS = {
   letterSpacing: -0.02,
   lineHeight: 1,
   textareaLineHeight: 0.85,
+  fieldDefaultTextColor: "primary" as const,
+  fieldDefaultGlyphStrokeColor: "primary" as const,
+  focusTextColor: "#000000",
+  focusGlyphStrokeColor: "primary" as const,
+  focusCaretColor: "primary" as const,
+  focusOutlineColor: "secondary" as const,
+  focusOutlineWidthRatio: 0.65,
+  focusOutlineOffset: 0,
+  focusTransitionMs: 500,
   borderColor: "#000000",
   defaultFillOpacity: 50,
   focusFillOpacity: 15,
@@ -27,11 +36,16 @@ export const STUDIO_COLOR_ROLES = {
   secondary: "var(--pair-b)",
   border: "#000000",
   activeText: "#000000",
+  fieldText: "primary" as const,
+  fieldGlyphStroke: "primary" as const,
+  focusGlyphStroke: "primary" as const,
+  focusCaret: "primary" as const,
   doubleSplitStartRail: "secondary" as const,
   doubleSplitEndRail: "secondary" as const,
   focusOutline: {
     color: "secondary" as const,
-    opacity: 0.65,
+    opacity: 1,
+    widthRatio: 0.65,
     offset: 0,
   },
 } as const
@@ -48,7 +62,7 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
 } as const
 
 // ─── Five explicit size tiers (global defaults) ──────────────────────────────
-// Supreme / Standard / Compact / Micro are first-class. Nothing is derived at runtime.
+// Supreme / Standard / Compact / Mini / Micro are first-class. Nothing is derived at runtime.
 
 export const STUDIO_CONTROL_SIZE_BASE = {
   supreme: {
@@ -148,7 +162,7 @@ export const STUDIO_CONTROL_SIZE_BASE = {
     textStroke: 0.25,
     width: "row" as const,
     textTransform: "uppercase" as const,
-    letterSpacing: -0.01,
+    letterSpacing: -0.02,
     lineHeight: 1,
     defaultFillOpacity: 50,
     focusFillOpacity: 15,
