@@ -46,7 +46,6 @@ import {
   StudioCloseableBadge,
   StudioBrainStatusBadge,
   StudioTagEditor,
-  StudioDropdown,
   StudioSplitLeftDropdown,
   StudioUploadFrame,
   STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
