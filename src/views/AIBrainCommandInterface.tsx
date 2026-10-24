@@ -381,7 +381,7 @@ export const promptCardSummary = (card: CreatorBrainPromptCard): string =>
 /** Turn registry category identifiers into creator-facing labels without changing their keys. */
 export const formatPromptCategoryLabel = (category: string): string =>
  category
-  .replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
+  .replace(/([a-z])([A-Z])/g, "$1 $2")
   .replace(/\d+$/g, "")
   .replace(/[_-]+/g, " ")
   .trim()
