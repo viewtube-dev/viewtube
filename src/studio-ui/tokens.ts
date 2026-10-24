@@ -164,6 +164,8 @@ export const STUDIO_CONTROL_SIZE_BASE = {
 } as const
 
 export type StudioControlSize = keyof typeof STUDIO_CONTROL_SIZE_BASE
+/** All five size tiers; individual families may narrow this when inner geometry requires it. */
+export type StudioControlInteractiveSize = StudioControlSize
 
 // ─── Size contract (extends base with text-input / multiline specialisations) ─
 
