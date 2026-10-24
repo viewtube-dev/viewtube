@@ -1,5 +1,5 @@
 import React from "react"
-import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, STUDIO_FOCUS_INTERACTION_TOKENS, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
+import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, STUDIO_FOCUS_INTERACTION_TOKENS, type StudioControlSize, type StudioControlInteractiveSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
@@ -60,12 +60,12 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     colorPair: "conic perimeter and breathing layers use primary (--pair-a) and secondary (--pair-b) from the active Toolbox pair",
     behavior: "native file picker after a 1s click pulse, drag/drop, left upload and right thumbnail split rails, two-line half-scale prompt, oversized circular image preview, bottom filename badge, hover breathing at 2x speed and extra saturation, disabled state, and reduced-motion support",
     shadowPolicy: "none",
-    rationale: "The upload frame is a ratio-based media canvas, not a fixed-height 44px/28px/14px control.",
+    rationale: "The upload frame is a ratio-based media canvas, not a fixed-height 44px/28px/12px control.",
   },
   verticalWordToggle: {
     owner: "StudioVerticalWordToggle",
     globalRuleException: true,
-    height: "content-driven two-word stack; intentionally not 44px / 28px / 14px",
+    height: "content-driven two-word stack; intentionally not 44px / 28px / 12px",
     typography: "inherits standard/compact/micro Studio text-size, weight, family, case, and letter-spacing tokens",
     stroke: "standard 3px / compact 2px / micro 1px",
     radius: "standard 6px / compact 4px / micro 2px",
@@ -78,20 +78,12 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     compactFontSize: 14,
     rationale: "Multiline reading/writing surface uses a dedicated type scale while retaining canonical field geometry.",
   },
-  prominentAction: {
-    globalRuleException: true,
-    height: 56,
-    stroke: 3,
-    radius: 6,
-    shadow: 0,
-    rationale: "Prominent actions are a separate 56px action family, not a third ordinary control size.",
-  },
 } as const
 
 
 /** Global defaults apply to every Studio primitive unless a size-specific override is declared. */
 export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
-  splitSegmentRatio: "icon rails are square (1:1) to the selected size tier; labels center in the remaining text region against the outer perimeter bounds",
+  splitSegmentRatio: "icon rails are square (1:1) to the selected size tier; split-left, split-right, and double-split labels share the full component outer-border centerline regardless of rail placement",
   fixedRatioDefaults: {
     toggles: "1:1 square track/face geometry at the selected size tier; thumb is centered on its axis",
     switches: "1:1 square control footprint at the selected size tier; thumb and glyph are centered",
@@ -104,9 +96,19 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   splitIconRailColor: "secondary (--pair-b) by default; size-tier icon dimensions; centered on both axes",
   badgeTypography: "Inter, font-weight 1000, font-synthesis none; labels centered; no thin-weight inheritance",
   splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
-  globalSizeLattice: "standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 14px / 1px border / 2px radius / 10px type and icon",
+  globalSizeLattice: "supreme 60px / 4.09px border / 8.18px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
+  textContainment: "Global rule for all single-line text-bearing Studio primitives: split-left, split-right, and double-split labels center against the full component outer border box, independent of rail placement; use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls. Multiline textareas are excluded.",
+  buttonVariantContract: {
+    v1: "primary fill / black text",
+    v2: "secondary fill / black text",
+    v3: "independent click toggle between V1 and V2",
+    v4: "black fill / primary text",
+    v5: "V1 initially; toggle to V2 with optional alternate text and/or icon",
+    v6: "V1 initially; toggle to black fill / white text with optional alternate text and/or icon",
+    v7: "primary fill / white text; split icon rails use secondary fill and white icons",
+  },
 
   width: "full-row by default; data-width=content is an explicit opt-in exception",
   labelAlignment: "centered by default for all primitive labels",
@@ -120,7 +122,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   textColor: "text fields use primary by default and black on focus; other controls use their component contract",
   textTransform: "uppercase",
   letterSpacing: "-0.02em",
-  lineHeight: 0.86,
+  lineHeight: 1,
   shadowPolicy: "Global Studio primitive/component rule: no box-shadow, text-shadow, fake-shadow pseudo-layers, or shadow-based geometry compensation. No CSS transitions or press/hover transforms on primitive/component shells. Text-field borders and focus outlines remain explicit non-shadow strokes. Any future exception requires an approved token-backed contract and an accurate Reference Library entry.",
   squareIconButtonDefaults: {
     geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
@@ -156,7 +158,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
     },
     motion: "Outer shell geometry stays stationary and flat; approved inner indicators, labels, and icons may animate through studio-control-motion.css and must honor reduced-motion preferences.",
   },
-  focusOutline: "Text inputs and text areas use a zero-offset, 100%-opacity secondary-color outline at 100% of the selected border width; focus is communicated by outline, not box-shadow.",
+  focusOutline: "Text inputs and text areas use a zero-offset secondary-color outline at 65% of the selected border width; focused text and glyph stroke are black, focus fill is primary at 15%, and focus is communicated by outline, not box-shadow.",
   textFieldDefaults: {
     typography: {
       standardInputFontSize: "38px",
@@ -165,7 +167,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       compactTextAreaFontSize: "14px",
       rule: "Single-line inputs follow global 38px standard / 24px compact typography. Textareas alone use 18px standard / 14px compact, with multiline line-height, padding, and a 92px minimum writing surface.",
     },
-    sizeFamily: "Single-line inputs use global 38px standard / 24px compact typography and the global .86 line-height. Textareas alone use 18px standard / 14px compact with multiline line-height, padding, and a 92px minimum surface. Size selects 44px/28px height, 3px/2px stroke, and 6px/4px radius for both families.",
+    sizeFamily: "Single-line inputs use global 38px standard / 24px compact typography and the shared default line-height. Textareas alone use 18px standard / 14px compact with multiline line-height, padding, and a 92px minimum surface. Size selects 44px/28px height, 3px/2px stroke, and 6px/4px radius for both families.",
     defaultMode: {
       textColor: "primary",
       textStrokeColor: "matches text color (primary)",
@@ -179,11 +181,11 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       textColor: "#000000",
       textStrokeColor: "matches text color (#000000)",
       borderStrokeColor: "#000000",
-      inlineStrokeColor: "primary at 100% opacity",
+      inlineStrokeColor: "#000000 at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "100% of border width: 3px standard / 2px compact / 1px micro",
+      focusOutlineWidth: "65% of border width: 1.95px standard / 1.3px compact / 0.65px micro",
       focusOutlineOffset: "0px for both sizes",
-      outlineStrokeWidth: "100% of the selected border width; secondary color remains at 100% opacity",
+      outlineStrokeWidth: "65% of the selected border width; secondary color remains at 100% opacity",
     },
     caret: { color: "primary (--pair-a)", style: "native insertion caret; request block shape where supported; never simulate text insertion" },
   },
@@ -223,7 +225,7 @@ export { StudioTextInput, StudioInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
 
 export { StudioTextArea }
-export type { StudioTextAreaProps } from "./StudioTextArea"
+export type { StudioTextAreaProps, StudioTextAreaSize } from "./StudioTextArea"
 
 /** Read-only display surface that inherits the canonical textarea size tokens. */
 export type StudioTextBoxSize = StudioControlSize
@@ -232,7 +234,7 @@ export type StudioTextBoxProps = Omit<
   "contentEditable" | "dangerouslySetInnerHTML" | "children"
 > & {
   /** Plain display text; embedded line breaks are preserved. */
-  children?: string
+  children?: React.ReactNode
   /** Corresponding textarea typography and surface size. */
   size?: StudioTextBoxSize
 }
@@ -727,10 +729,13 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
         value={value}
         onValueChange={onValueChange}
         words={words}
-        sizeVariant={size === "28" ? "compact" : "standard"}
+        sizeVariant={verticalOnMobilePortrait ? "compact" : size === "28" ? "compact" : "standard"}
         variant={skin === "white-indicator" ? "white-fill" : skin === "black-indicator" ? "black-fill" : "primary-secondary"}
         className={className}
-        style={style}
+        style={{
+          ...style,
+          ...(skin === "black-indicator" ? { background: "#000", borderColor: "#000" } : {}),
+        }}
         aria-label={typeof props["aria-label"] === "string" ? props["aria-label"] : undefined}
       />
     );
@@ -758,8 +763,8 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
   value,
   onValueChange,
   words = ["WRITE", "CREATE"],
-  sizeVariant = "standard",
-  variant = "primary-secondary",
+  sizeVariant = "compact",
+  variant = "black-fill",
   className,
   style,
   onClick,
@@ -781,7 +786,10 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     if (!root || !word) return null;
     const rootRect = root.getBoundingClientRect();
     const wordRect = word.getBoundingClientRect();
-    return { top: wordRect.top - rootRect.top - root.clientTop - 1, height: wordRect.height + 2 };
+    // Mirror the horizontal word-toggle handle: exact word-block bounds with no
+    // line-height fudge. The 2.75px-style side insets stay in CSS, so the
+    // handle's corner radius and edge spacing align on all four sides.
+    return { top: wordRect.top - rootRect.top - root.clientTop, height: wordRect.height };
   }, []);
 
   const settle = React.useCallback((nextValue: boolean) => {
@@ -1003,23 +1011,55 @@ export const StudioSelect = React.forwardRef<
 ))
 StudioSelect.displayName = "StudioSelect"
 
+export type StudioButtonVariant = "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7"
+
 export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Global visual/interaction variant shared by all StudioButton consumers. */
+  variant?: StudioButtonVariant
+  /** Keep nested split-shell anatomy intact; ordinary labels use a constrained text slot. */
+  faceLayout?: "label" | "split"
+  /** Alternate label/content for V5 and V6 when toggled on. */
+  activeChildren?: React.ReactNode
+  /** Optional leading icon; activeIcon replaces it when V5/V6 is toggled on. */
+  icon?: React.ReactNode
+  activeIcon?: React.ReactNode
+  /** Initial local toggle state for V3, V5 and V6; every instance owns independent state. */
+  defaultOn?: boolean
+  onVariantChange?: (on: boolean) => void
+  /** StudioButton also supports the canonical 12px Micro tier for dense UI surfaces. */
   sizeVariant?: StudioControlSize
   tone?: StudioControlTone
   loading?: boolean
   selected?: boolean
-  /** Explicit geometry variant for the confirmed 44px and 28px button family. */
-  heightVariant?: "44" | "28"
+  /** Explicit geometry variant for Supreme 60px, Standard 44px, and Compact 28px button geometry. */
+  heightVariant?: "60" | "44" | "28"
+  /** Layout variant owned by StudioButton; geometry and behavior remain canonical. */
+  textLayout?: "single-line" | "two-line"
+  /** First row for the two-line text layout variant. */
+  firstLine?: React.ReactNode
+  /** Second row for the two-line text layout variant. */
+  secondLine?: React.ReactNode
 }
 
 export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProps>(
   (
     {
+      variant = "v1",
+      faceLayout = "label",
+      activeChildren,
+      icon,
+      activeIcon,
+      defaultOn = false,
+      onVariantChange,
+      onClick,
       sizeVariant,
       tone = "accent",
       loading = false,
       selected = false,
       heightVariant,
+      textLayout = "single-line",
+      firstLine,
+      secondLine,
       disabled,
       children,
       type = "button",
@@ -1027,12 +1067,28 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
     },
     ref,
   ) => {
+    const [localOn, setLocalOn] = React.useState(defaultOn)
+    const isToggleVariant = variant === "v3" || variant === "v5" || variant === "v6"
+    const isOn = isToggleVariant && localOn
     // Height is the authoritative geometry when supplied. This prevents a 28px
-    // control from accidentally inheriting standard border/radius/shadow tokens.
+    // control from accidentally inheriting standard border/radius tokens.
     const resolvedSize = heightVariant
-      ? heightVariant === "28" ? "compact" : "standard"
+      ? heightVariant === "28" ? "compact" : heightVariant === "60" ? "supreme" : "standard"
       : sizeVariant ?? "standard"
-    const resolvedHeight = heightVariant ?? (resolvedSize === "compact" ? "28" : "44")
+    const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : resolvedSize === "micro" ? "12" : "44")
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+      onClick?.(event)
+      if (event.defaultPrevented || event.currentTarget.disabled || !isToggleVariant) return
+      const next = !localOn
+      setLocalOn(next)
+      onVariantChange?.(next)
+    }
+    const visibleChildren = (variant === "v5" || variant === "v6") && isOn && activeChildren !== undefined
+      ? activeChildren
+      : children
+    const visibleIcon = (variant === "v5" || variant === "v6") && isOn && activeIcon !== undefined
+      ? activeIcon
+      : icon
 
     return (
       <button
@@ -1041,35 +1097,107 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
         {...props}
         {...withStudioAttrs(resolvedSize, tone)}
         data-vt-studio-button="true"
+        data-vt-studio-button-variant={variant}
+        data-vt-studio-button-on={isOn ? "true" : "false"}
+        data-vt-studio-button-lines={textLayout === "two-line" ? "two" : undefined}
         data-height-variant={resolvedHeight}
         data-selected={selected || undefined}
-        aria-pressed={props["aria-pressed"] ?? (selected || undefined)}
+        aria-pressed={props["aria-pressed"] ?? (isToggleVariant ? isOn : selected || undefined)}
         aria-busy={loading || undefined}
         disabled={disabled || loading}
+        onClick={handleClick}
       >
-        <span data-vt-studio-button-face>{children}</span>
+        <span data-vt-studio-button-face>
+          {visibleIcon !== undefined && <span data-vt-studio-button-icon>{visibleIcon}</span>}
+          {faceLayout === "split" ? visibleChildren : (
+            <span data-vt-studio-button-label>
+              {textLayout === "two-line" ? (
+                <>
+                  <span data-vt-studio-button-line="first">{firstLine}</span>
+                  <span data-vt-studio-button-line="second">{secondLine}</span>
+                </>
+              ) : visibleChildren}
+            </span>
+          )}
+        </span>
       </button>
     )
   },
 )
 StudioButton.displayName = "StudioButton"
 
+/** Backwards-compatible named wrapper; the actual layout variant belongs to StudioButton. */
+export interface StudioTwoLineButtonProps extends Omit<StudioButtonProps, "children" | "textLayout" | "firstLine" | "secondLine"> {
+  firstLine: React.ReactNode
+  secondLine: React.ReactNode
+}
+
+export const StudioTwoLineButton = React.forwardRef<HTMLButtonElement, StudioTwoLineButtonProps>(
+  ({ firstLine, secondLine, sizeVariant = "standard", ...props }, ref) => (
+    <StudioButton
+      {...props}
+      ref={ref}
+      sizeVariant={sizeVariant}
+      textLayout="two-line"
+      firstLine={firstLine}
+      secondLine={secondLine}
+    />
+  ),
+)
+StudioTwoLineButton.displayName = "StudioTwoLineButton"
+
+/** Split-left action button with a stacked two-line label inside the flexible face. */
+export interface StudioSplitTwoLineButtonProps extends Omit<StudioButtonProps, "children" | "faceLayout" | "textLayout" | "firstLine" | "secondLine" | "icon" | "sizeVariant"> {
+  icon: React.ReactNode
+  firstLine: React.ReactNode
+  secondLine: React.ReactNode
+  /** Split rail icon sizing uses the shared Studio size-tier presets. */
+  iconSizeVariant?: StudioIconSizeVariant
+  sizeVariant?: Extract<StudioControlSize, "standard" | "compact">
+}
+
+export const StudioSplitTwoLineButton = React.forwardRef<HTMLButtonElement, StudioSplitTwoLineButtonProps>(
+  ({ icon, firstLine, secondLine, sizeVariant = "standard", iconSizeVariant = "large", className, ...props }, ref) => (
+    <StudioButton
+      {...props}
+      ref={ref}
+      className={studioClasses("vt-studio-split-two-line-button", className)}
+      sizeVariant={sizeVariant}
+      faceLayout="split"
+      textLayout="two-line"
+      data-vt-studio-split="left"
+      data-split-left="true"
+      data-icon-size-variant={iconSizeVariant}
+      data-vt-library-component="StudioSplitTwoLineButton"
+    >
+      <StudioSplitShell layout="left" sizeVariant={sizeVariant} iconLeft={icon} faceOnly>
+        <span data-vt-studio-button-label>
+          <span data-vt-studio-button-line="first">{firstLine}</span>
+          <span data-vt-studio-button-line="second">{secondLine}</span>
+        </span>
+      </StudioSplitShell>
+    </StudioButton>
+  ),
+)
+StudioSplitTwoLineButton.displayName = "StudioSplitTwoLineButton"
+
+
 /**
- * Separate 56px action family for prominent workflow actions.
- * It is intentionally not a StudioButton size variant: StudioButton remains 44px/28px only.
+ * Prominent workflow action button defaults to Supreme and supports Standard and Compact variants.
  */
 export interface StudioActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  sizeVariant?: StudioControlInteractiveSize
   tone?: StudioControlTone
   loading?: boolean
 }
 
 export const StudioActionButton = React.forwardRef<HTMLButtonElement, StudioActionButtonProps>(
-  ({ tone = "accent", loading = false, disabled, children, type = "button", ...props }, ref) => (
+  ({ sizeVariant = "supreme", tone = "accent", loading = false, disabled, children, type = "button", ...props }, ref) => (
     <button
       ref={ref}
       type={type}
       {...props}
-      data-vt-studio-control="true"
+      {...withStudioAttrs(sizeVariant, tone)}
       data-vt-studio-action-button="true"
       data-tone={tone}
       aria-busy={loading || undefined}
@@ -1304,7 +1432,7 @@ type StudioSplitLayout = "left" | "right" | "double"
 type StudioDataAttributeProps = {
   [key: `data-${string}`]: string | undefined
 }
-interface StudioSplitShellProps {
+export interface StudioSplitShellProps {
   layout: StudioSplitLayout
   sizeVariant?: StudioControlSize
   iconLeft?: React.ReactNode
@@ -1320,11 +1448,13 @@ interface StudioSplitShellProps {
   rightRailClassName?: string
   leftRailProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
   rightRailProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
+  /** Opt-in: rails are interactive buttons rather than decorative icons. */
+  interactiveRails?: boolean
   leftRailContent?: React.ReactNode
   rightRailContent?: React.ReactNode
   shellProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
 }
-const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
+export const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   layout, sizeVariant = "standard", iconLeft, iconRight, children,
   faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, railProps,
   leftRailClassName, rightRailClassName, leftRailProps, rightRailProps,
@@ -1350,12 +1480,43 @@ const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
 
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
   ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} data-split-left="true" data-vt-studio-split="left" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-left="true" data-vt-studio-split="left" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
       <StudioSplitShell layout="left" sizeVariant={sizeVariant} iconLeft={icon} faceOnly>{children}</StudioSplitShell>
     </StudioButton>
   ),
 )
 StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
+
+/** Canonical two-rail action button, using the shared StudioButton + StudioSplitShell anatomy. */
+export interface StudioDoubleSplitButtonProps extends Omit<StudioButtonProps, "faceLayout" | "children" | "icon"> {
+  leftIcon: React.ReactNode
+  rightIcon: React.ReactNode
+  children?: React.ReactNode
+  iconSizeVariant?: StudioIconSizeVariant
+}
+export const StudioDoubleSplitButton = React.forwardRef<HTMLButtonElement, StudioDoubleSplitButtonProps>(
+  ({ leftIcon, rightIcon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-vt-studio-split="double" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioDoubleSplitButton" {...props}>
+      <StudioSplitShell layout="double" sizeVariant={sizeVariant} iconLeft={leftIcon} iconRight={rightIcon} faceOnly>{children}</StudioSplitShell>
+    </StudioButton>
+  ),
+)
+StudioDoubleSplitButton.displayName = "StudioDoubleSplitButton"
+
+/** Canonical right-rail action button; shares the same Studio split shell and tokens. */
+export interface StudioSplitRightButtonProps extends StudioButtonProps {
+  /** Icon rendered in the square right rail. */
+  icon: React.ReactNode
+  iconSizeVariant?: StudioIconSizeVariant
+}
+export const StudioSplitRightButton = React.forwardRef<HTMLButtonElement, StudioSplitRightButtonProps>(
+  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitRightButton" {...props}>
+      <StudioSplitShell layout="right" sizeVariant={sizeVariant} iconRight={icon} faceOnly>{children}</StudioSplitShell>
+    </StudioButton>
+  ),
+)
+StudioSplitRightButton.displayName = "StudioSplitRightButton"
 
 
 /** Circular shape variant of the canonical square icon button. All icon sizing,
@@ -1372,6 +1533,182 @@ export const StudioCircleIconButton = React.forwardRef<HTMLButtonElement, Studio
     />
   ),
 )
+/** Shared-shell horizontal rail for joined square icon actions. */
+export type StudioSquareIconButtonGroupSize = StudioControlInteractiveSize
+
+export interface StudioSquareIconButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Two or more square icon button faces, preferably StudioSquareIconButton. */
+  children: React.ReactNode
+  sizeVariant?: StudioSquareIconButtonGroupSize
+  /** Accessible name for the action toolbar. */
+  "aria-label"?: string
+}
+
+export const StudioSquareIconButtonGroup = React.forwardRef<HTMLDivElement, StudioSquareIconButtonGroupProps>(
+  ({ children, sizeVariant = "compact", className, "aria-label": ariaLabel = "Actions", ...rest }, ref) => {
+    const items = React.Children.toArray(children).filter(Boolean)
+    if (process.env.NODE_ENV !== "production" && items.length < 2) {
+      console.warn("[StudioSquareIconButtonGroup] expects 2 or more children; got", items.length)
+    }
+
+    return (
+      <div
+        {...rest}
+        ref={ref}
+        role="toolbar"
+        aria-label={ariaLabel}
+        data-vt-studio-control="true"
+        data-vt-studio-icon-button-group="true"
+        data-size={sizeVariant}
+        className={studioClasses("vt-studio-square-icon-button-group", className)}
+      >
+        {items}
+      </div>
+    )
+  },
+)
+StudioSquareIconButtonGroup.displayName = "StudioSquareIconButtonGroup"
+
+
+export type StudioTopSplitModuleSplit = "left" | "right" | "double" | "none"
+export type StudioTopSplitModuleSize = "standard" | "compact"
+
+export interface StudioTopSplitModuleProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
+  title: React.ReactNode
+  children?: React.ReactNode
+  split?: StudioTopSplitModuleSplit
+  startIcon?: React.ReactNode
+  endIcon?: React.ReactNode
+  sizeVariant?: StudioTopSplitModuleSize
+  tone?: "default" | "accent"
+  as?: "section" | "article" | "div"
+}
+
+/** A Studio split-control header joined to a white content body. */
+export const StudioTopSplitModule: React.FC<StudioTopSplitModuleProps> = ({
+  title,
+  children,
+  split = "none",
+  startIcon,
+  endIcon,
+  sizeVariant = "compact",
+  tone = "default",
+  as: Comp = "section",
+  className,
+  ...rest
+}) => {
+  const headSplit = split === "none" ? "none" : split
+  return (
+    <Comp
+      data-vt-studio-control="true"
+      data-vt-studio-top-split-module="true"
+      data-size={sizeVariant}
+      data-tone={tone}
+      className={studioClasses("vt-studio-top-split-module", className)}
+      {...rest}
+    >
+      <div
+        className="vt-studio-top-split-module__head"
+        data-split={headSplit}
+        style={split === "none" ? { display: "flex", alignItems: "center", paddingInline: 8 } : undefined}
+      >
+        {(split === "left" || split === "double") ? (
+          <span className="vt-studio-top-split-module__rail" data-rail="start" aria-hidden="true">{startIcon}</span>
+        ) : null}
+        <span className="vt-studio-top-split-module__title">{title}</span>
+        {(split === "right" || split === "double") ? (
+          <span className="vt-studio-top-split-module__rail" data-rail="end" aria-hidden="true">{endIcon}</span>
+        ) : null}
+      </div>
+      {children != null ? <div className="vt-studio-top-split-module__body">{children}</div> : null}
+    </Comp>
+  )
+}
+StudioTopSplitModule.displayName = "StudioTopSplitModule"
+
+/** Collapsible counterpart to StudioTopSplitModule; native details/summary keeps keyboard behavior. */
+export interface StudioCollapsingSplitModuleProps extends Omit<React.HTMLAttributes<HTMLDetailsElement>, "title" | "onToggle"> {
+  title: React.ReactNode
+  children?: React.ReactNode
+  split?: StudioTopSplitModuleSplit
+  startIcon?: React.ReactNode
+  endIcon?: React.ReactNode
+  sizeVariant?: StudioTopSplitModuleSize
+  tone?: "default" | "accent"
+  defaultOpen?: boolean
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+}
+
+export const StudioCollapsingSplitModule: React.FC<StudioCollapsingSplitModuleProps> = ({
+  title, children, split = "double", startIcon, endIcon, sizeVariant = "compact",
+  tone = "default", defaultOpen = false, open, onOpenChange, className, ...rest
+}) => {
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen)
+  const isOpen = open ?? internalOpen
+  const headSplit = split === "none" ? "none" : split
+  return (
+    <details
+      {...rest}
+      open={isOpen}
+      data-vt-studio-control="true"
+      data-vt-studio-collapsing-split-module="true"
+      data-size={sizeVariant}
+      data-tone={tone}
+      className={studioClasses("vt-studio-top-split-module", "vt-studio-collapsing-split-module", className)}
+      onToggle={event => {
+        const nextOpen = event.currentTarget.open
+        if (open === undefined) setInternalOpen(nextOpen)
+        onOpenChange?.(nextOpen)
+      }}
+    >
+      <summary
+        className="vt-studio-top-split-module__head vt-studio-collapsing-split-module__head"
+        data-split={headSplit}
+      >
+        {(split === "left" || split === "double") ? (
+          <span className="vt-studio-top-split-module__rail" data-rail="start" aria-hidden="true">{startIcon}</span>
+        ) : null}
+        <span className="vt-studio-top-split-module__title">{title}</span>
+        {(split === "right" || split === "double") ? (
+          <span className="vt-studio-top-split-module__rail" data-rail="end" aria-hidden="true">{endIcon ?? <ChevronDown aria-hidden="true" />}</span>
+        ) : (
+          <span className="vt-studio-collapsing-split-module__disclosure" aria-hidden="true"><ChevronDown /></span>
+        )}
+      </summary>
+      {children != null && isOpen ? <div className="vt-studio-top-split-module__body">{children}</div> : null}
+    </details>
+  )
+}
+StudioCollapsingSplitModule.displayName = "StudioCollapsingSplitModule"
+
+/** Collapsible module with a compact, readable title + description header. */
+export interface StudioCollapsingTwoLineModuleProps extends Omit<StudioCollapsingSplitModuleProps, "title"> {
+  title: React.ReactNode
+  description: React.ReactNode
+}
+
+/** Two-line header composition that reuses the canonical collapsible split module shell. */
+export const StudioCollapsingTwoLineModule: React.FC<StudioCollapsingTwoLineModuleProps> = ({
+  title, description, className, ...props
+}) => (
+  <StudioCollapsingSplitModule
+    {...props}
+    title={(
+      <span className="vt-studio-two-line-module__content">
+        <span className="vt-studio-two-line-module__title">{title}</span>
+        <span className="vt-studio-two-line-module__description">{description}</span>
+      </span>
+    )}
+    className={studioClasses("vt-studio-two-line-module", className)}
+    data-vt-studio-two-line-module="true"
+  />
+)
+StudioCollapsingTwoLineModule.displayName = "StudioCollapsingTwoLineModule"
+
+
+
+
 StudioCircleIconButton.displayName = "StudioCircleIconButton"
 
 
@@ -1445,66 +1782,6 @@ export const StudioPlayPauseButton = React.forwardRef<HTMLButtonElement, StudioP
 StudioPlayPauseButton.displayName = "StudioPlayPauseButton"
 
 
-export interface StudioUsernameInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "className" | "style"> {
-  icon: React.ReactNode
-  sizeVariant?: StudioControlSize
-  /** className/style apply to the complete composite; inputClassName/inputStyle target the native input. */
-  className?: string
-  style?: React.CSSProperties
-  inputClassName?: string
-  inputStyle?: React.CSSProperties
-}
-
-/**
- * Composite username field. The rail follows split-left icon geometry, while
- * the editable area is the canonical StudioTextInput. The wrapper owns the
- * shared border, inline stroke, and whole-component focus treatment; it is not
- * a button and intentionally has no offset shadow or press motion.
- */
-export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUsernameInputProps>(
-  ({
-    icon,
-    sizeVariant = "standard",
-    className,
-    style,
-    inputClassName,
-    inputStyle,
-    disabled,
-    ...inputProps
-  }, ref) => (
-    <StudioSplitShell
-      layout="left"
-      sizeVariant={sizeVariant}
-      iconLeft={icon}
-      fieldSlot
-      className={studioClasses("vt-studio-username-input", className)}
-      railClassName="vt-studio-username-input__rail"
-      railProps={{ "data-vt-studio-username-rail": "true" }}
-      shellProps={{
-        "data-vt-studio-username-input": "true",
-        "data-icon-size-variant": "large",
-        "data-disabled": disabled ? "true" : undefined,
-        style,
-      }}
-    >
-      <StudioTextInput
-        {...inputProps}
-        ref={ref}
-        sizeVariant={sizeVariant}
-        disabled={disabled}
-        className={studioClasses("vt-studio-username-input__input", inputClassName)}
-        style={inputStyle}
-      />
-    </StudioSplitShell>
-  ),
-)
-StudioUsernameInput.displayName = "StudioUsernameInput"
-
-/** Canonical split-left input alias for icon-led search fields. */
-export type StudioSplitLeftInputProps = StudioUsernameInputProps
-export const StudioSplitLeftInput = StudioUsernameInput
-
-
 export interface StudioLegendMultiDropdownOption {
   value: string
   label: string
@@ -1521,7 +1798,7 @@ export interface StudioLegendMultiDropdownProps {
   onChange?: (values: string[]) => void
   /** Commit one option and close, or allow independent multiple selection. */
   selectionMode?: "single" | "multiple"
-  sizeVariant?: "compact" | "standard"
+  sizeVariant?: StudioControlInteractiveSize
   level?: "l0" | "l1" | "l2"
   placeholder?: string
   clearLabel?: string
@@ -1566,7 +1843,7 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
     }
   }, [open])
   const selectedLabels = options.filter(option => selected.includes(option.value)).map(option => option.label)
-  const triggerLabel = selectedLabels.length ? selectedLabels.join(", ") : placeholder
+  const extra = selectedLabels.length - 1
   const menuAccessibleLabel = accessibleLabel ?? (typeof label === "string" || typeof label === "number" ? String(label) : "Filter options")
   return (
     <div
@@ -1593,8 +1870,20 @@ export const StudioLegendMultiDropdown: React.FC<StudioLegendMultiDropdownProps>
           disabled={disabled}
           onClick={() => setOpen(current => !current)}
         >
-          <span className="vt-studio-legend-trigger-text">{triggerLabel}</span>
-          <span className={["vt-studio-legend-count", selected.length ? "is-visible" : ""].filter(Boolean).join(" ")} aria-label={`${selected.length} selected`}>{selected.length}</span>
+          <span className="vt-studio-legend-trigger-text">
+            {selectedLabels.length === 0 ? (
+              placeholder
+            ) : (
+              <>
+                <span className="vt-studio-legend-trigger-label">{selectedLabels[0]}</span>
+                {extra > 0 ? (
+                  <span className="vt-studio-legend-count-badge" aria-label={`${extra} more selected`}>
+                    +{extra}
+                  </span>
+                ) : null}
+              </>
+            )}
+          </span>
           <svg className="vt-studio-legend-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
         </button>
       </div>
@@ -1713,7 +2002,7 @@ export interface StudioDropdownProps {
   className?: string
   id?: string
   ariaLabel?: string
-  sizeVariant?: "standard" | "compact"
+  sizeVariant?: StudioControlInteractiveSize
   variant?: "default" | "simple" | "split-left"
   splitIcon?: React.ReactNode
 }
@@ -1794,7 +2083,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   }
 
   return (
-    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${variant === "split-left" ? "is-split-left" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant === "compact" ? "compact" : "standard"} data-open={open ? "true" : "false"}>
+    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${variant === "split-left" ? "is-split-left" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant} data-open={open ? "true" : "false"}>
       <button
         id={id}
         type="button"
@@ -1817,8 +2106,8 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
             iconLeft={splitIcon}
             iconRight={
               <ChevronDown
-                size={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
-                strokeWidth={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
+                size={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronSize.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
+                strokeWidth={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
               />
             }
             faceOnly
@@ -1834,8 +2123,8 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
             <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
             <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true">
               <ChevronDown
-                size={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
-                strokeWidth={sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
+                size={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronSize.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
+                strokeWidth={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
               />
             </span>
           </>
@@ -1876,7 +2165,7 @@ export interface StudioSimpleDropdownProps {
   className?: string
   id?: string
   ariaLabel?: string
-  sizeVariant?: "standard" | "compact"
+  sizeVariant?: StudioControlInteractiveSize
 }
 
 /** Simple single-select child variant of the canonical StudioDropdown family. */
@@ -2028,8 +2317,8 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
       sizeVariant={size}
       className={studioClasses("vt-studio-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
       railClassName="vt-studio-counter__rail"
-      leftRailContent={<button type="button" className={`vt-studio-counter__button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={interactionFocus.pulse}><Minus aria-hidden="true" focusable="false" /></button>}
-      rightRailContent={<button type="button" className={`vt-studio-counter__button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={interactionFocus.pulse}><Plus aria-hidden="true" focusable="false" /></button>}
+      leftRailContent={<button type="button" className={`vt-studio-counter__button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><Minus aria-hidden="true" focusable="false" /></button>}
+      rightRailContent={<button type="button" className={`vt-studio-counter__button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><Plus aria-hidden="true" focusable="false" /></button>}
       shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-counter", "data-vt-library-component": "StudioCounter" }}
     >
       <span className="vt-studio-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
@@ -2065,8 +2354,8 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
       className={studioClasses("vt-studio-side-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
       railClassName="vt-studio-side-counter__rail"
       rightRailContent={<span className="vt-studio-side-counter__actions">
-        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={interactionFocus.pulse}><ChevronUp aria-hidden="true" focusable="false" /></button>
-        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={interactionFocus.pulse}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
       shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-side-counter", "data-vt-library-component": "StudioSideCounter" }}
     >
@@ -2102,8 +2391,8 @@ export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
       className={studioClasses("vt-studio-side-counter", interactionFocus.active && "is-interaction-focus", "vt-studio-left-counter", `is-${size}`, className)}
       railClassName="vt-studio-left-counter__rail"
       leftRailContent={<span className="vt-studio-side-counter__actions">
-        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={interactionFocus.pulse}><ChevronUp aria-hidden="true" focusable="false" /></button>
-        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={interactionFocus.pulse}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
       shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-left-counter", "data-vt-library-component": "StudioLeftCounter" }}
     >
@@ -2120,14 +2409,13 @@ export interface StudioCloseableBadgeProps {
   onClose?: () => void;
   className?: string;
   entering?: boolean;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   label,
   onClose,
   className,
   entering = true,
-  sizeVariant = "standard",
 }) => {
   const [swapping, setSwapping] = React.useState(false);
   const [fading, setFading] = React.useState(false);
@@ -2157,7 +2445,7 @@ export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   return (
     <span
       className={["vt-studio-closeable-badge", className].filter(Boolean).join(" ")}
-      data-size={sizeVariant}
+      data-size="standard"
       data-vt-studio-badge="true"
       data-vt-studio-width="content"
       data-entering={isEntering ? "true" : undefined}
@@ -2337,7 +2625,7 @@ StudioTagEditor.displayName = "StudioTagEditor";
 export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "onChange" | "children"> {
   accept?: string;
   prompt?: string;
-  sizeVariant?: "standard" | "compact";
+  sizeVariant?: StudioControlSize;
   disabled?: boolean;
   multiple?: boolean;
   onFileChange?: (file: File) => void;
@@ -2348,7 +2636,6 @@ export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<H
 export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   accept = "image/*,video/*",
   prompt = "Drag or drop\nImage / video here · or click to upload",
-  sizeVariant = "standard",
   disabled = false,
   multiple = false,
   onFileChange,
@@ -2413,7 +2700,7 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
       data-vt-studio-control-family="upload"
       data-vt-studio-upload-frame="true"
       data-vt-library-component="StudioUploadFrame"
-      data-size={sizeVariant}
+      data-size="standard"
       aria-disabled={disabled ? "true" : undefined}
       role="button"
       tabIndex={disabled ? -1 : 0}
@@ -2459,19 +2746,12 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
           <Upload />
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
-        {!previewUrl && (
-          <span className="vt-studio-upload-frame__label" aria-live="polite">{prompt}</span>
-        )}
       </span>
-      <span className="vt-studio-upload-frame__split vt-studio-upload-frame__split--left" data-vt-studio-upload-split="left" aria-hidden="true">
-        <Upload />
+      <span className="vt-studio-upload-frame__label" data-vt-studio-split="double" data-has-file={selectedName ? "true" : "false"} aria-live="polite">
+        <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--left" aria-hidden="true"><Upload /></span>
+        <span className="vt-studio-upload-frame__badge-text">{selectedName || prompt}</span>
+        <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--right" aria-hidden="true"><ImageIcon /></span>
       </span>
-      <span className="vt-studio-upload-frame__split vt-studio-upload-frame__split--right" data-vt-studio-upload-split="right" aria-hidden="true">
-        <ImageIcon />
-      </span>
-      {selectedName && (
-        <span className="vt-studio-upload-frame__filename" aria-live="polite">{selectedName}</span>
-      )}
     </label>
   );
 };
@@ -2482,14 +2762,14 @@ StudioUploadFrame.displayName = "StudioUploadFrame";
 export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 interface StudioSplitBadgeBaseProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   layout: "left" | "right" | "double";
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   children: React.ReactNode;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 const StudioSplitBadgeBase: React.FC<StudioSplitBadgeBaseProps> = ({
   layout, iconLeft, iconRight, children, sizeVariant = "standard", className, ...props
@@ -2520,7 +2800,7 @@ StudioSplitLeftBadge.displayName = "StudioSplitLeftBadge";
 export interface StudioSplitRightBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 export const StudioSplitRightBadge: React.FC<StudioSplitRightBadgeProps> = ({ icon, ...props }) =>
   <StudioSplitBadgeBase {...props} layout="right" iconRight={icon} />;
@@ -2530,7 +2810,7 @@ export interface StudioDoubleSplitBadgeProps extends Omit<React.HTMLAttributes<H
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   children: React.ReactNode;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 export const StudioDoubleSplitBadge: React.FC<StudioDoubleSplitBadgeProps> = ({ leftIcon, rightIcon, ...props }) =>
   <StudioSplitBadgeBase {...props} layout="double" iconLeft={leftIcon} iconRight={rightIcon} />;
@@ -2590,8 +2870,8 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
       railClassName="vt-studio-double-split-slider__rail"
       leftRailContent={leftControls === "counter" ? (
         <span className="vt-studio-double-split-slider__counter" aria-label={`Adjust ${ariaLabel}`}>
-          <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={interactionFocus.pulse}><ChevronUp aria-hidden="true" focusable="false" /></button>
-          <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={interactionFocus.pulse}><ChevronDown aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
         </span>
       ) : (
         <button
@@ -2629,3 +2909,109 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
 };
 StudioDoubleSplitSlider.displayName = "StudioDoubleSplitSlider";
 
+
+
+export type StudioBrainStatusBadgeTone = "green" | "cyan" | "purple" | "yellow" | "red" | "blue";
+export type StudioBrainStatusAppearance = "dark" | "tinted";
+export type StudioBrainStatusBadgeSize = "standard" | "compact" | "micro";
+
+export interface StudioBrainStatusBadgeProps {
+  label: string;
+  tone?: StudioBrainStatusBadgeTone;
+  appearance?: StudioBrainStatusAppearance;
+  sizeVariant?: StudioBrainStatusBadgeSize;
+  active?: boolean;
+  className?: string;
+  "aria-label"?: string;
+}
+
+/**
+ * Compact Brain status primitive: a borderless text badge paired with a smaller
+ * LED core. Active LEDs use the shared slow ripple contract; reduced-motion
+ * preferences suppress the animation without hiding status.
+ */
+export const StudioBrainStatusBadge: React.FC<StudioBrainStatusBadgeProps> = ({
+  label,
+  tone = "green",
+  appearance = "dark",
+  active = true,
+  className,
+  "aria-label": ariaLabel,
+}) => (
+  <span
+    className={["vt-studio-brain-status-badge", className].filter(Boolean).join(" ")}
+    data-vt-studio-brain-status="true"
+    data-tone={tone}
+    data-appearance={appearance}
+    data-size="standard"
+    data-active={active ? "true" : "false"}
+    role="status"
+    aria-label={ariaLabel || label}
+  >
+    <span className="vt-studio-brain-status-badge__led" aria-hidden="true">
+      <span className="vt-studio-brain-status-badge__core" />
+      <span className="vt-studio-brain-status-badge__ripple" />
+    </span>
+    <span className="vt-studio-brain-status-badge__label">{label}</span>
+  </span>
+);
+StudioBrainStatusBadge.displayName = "StudioBrainStatusBadge";
+
+
+export type StudioBrainStatusTone = "running" | "success" | "warning" | "error" | "info" | "paused" | "idle" | "queued" | "processing" | "complete" | "blocked" | "failed";
+export type StudioBrainStatusVariant = "dark" | "tinted";
+export type StudioBrainStatusSize = "standard" | "compact" | "micro";
+
+const STUDIO_BRAIN_STATUS_COLORS: Record<StudioBrainStatusTone, { led: string; tint: string; text: string }> = {
+  running: { led: "#20ff62", tint: "#d8ffe2", text: "#000" },
+  success: { led: "#168cff", tint: "#dcecff", text: "#000" },
+  warning: { led: "#ffad18", tint: "#fff0cf", text: "#000" },
+  error: { led: "#ff244f", tint: "#ffdce3", text: "#000" },
+  info: { led: "#b94dff", tint: "#f0ddff", text: "#000" },
+  paused: { led: "#00d9ee", tint: "#d6fbff", text: "#000" },
+  idle: { led: "#9ca9b8", tint: "#edf0f4", text: "#000" },
+  queued: { led: "#3478ff", tint: "#dce7ff", text: "#000" },
+  processing: { led: "#00d9ee", tint: "#d6fbff", text: "#000" },
+  complete: { led: "#20ff62", tint: "#d8ffe2", text: "#000" },
+  blocked: { led: "#ffad18", tint: "#fff0cf", text: "#000" },
+  failed: { led: "#ff244f", tint: "#ffdce3", text: "#000" },
+};
+
+/** LED + borderless badge composition for Brain/system status. Status remains readable without animation. */
+export const StudioBrainStatusIndicator: React.FC<{
+  status: StudioBrainStatusTone;
+  label: string;
+  variant?: StudioBrainStatusVariant;
+  size?: StudioBrainStatusSize;
+  pulse?: boolean;
+  className?: string;
+  title?: string;
+}> = ({ status, label, variant = "dark", pulse = true, className = "", title }) => {
+  const colors = STUDIO_BRAIN_STATUS_COLORS[status];
+  return (
+    <span
+      className={`vt-studio-brain-status vt-studio-brain-status--${variant} ${className}`.trim()}
+      data-vt-studio-control="brain-status"
+      data-vt-library-component="StudioBrainStatusIndicator"
+      data-status={status}
+      data-variant={variant}
+      data-size="standard"
+      data-pulse={pulse ? "true" : "false"}
+      title={title || label}
+      role="status"
+    >
+      <span className="vt-studio-brain-status__led-wrap" aria-hidden="true" style={{ "--vt-brain-led": colors.led } as React.CSSProperties}>
+        <span className="vt-studio-brain-status__led" />
+        <span className="vt-studio-brain-status__lens" />
+      </span>
+      <span className="vt-studio-brain-status__label">{label}</span>
+    </span>
+  );
+};
+StudioBrainStatusIndicator.displayName = "StudioBrainStatusIndicator";
+
+
+
+
+export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, STUDIO_VALUE_TOGGLE_VARIANTS } from "./StudioValueToggles";
+export type { StudioToggleAppearance, StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioBarToggleProps } from "./StudioValueToggles";

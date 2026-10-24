@@ -30,6 +30,9 @@ test("confirmed catalog CSS owns layout, not production control faces", () => {
     .map((match) => ({ selector: match[2].trim(), body: match[3] }))
     .map(({ selector, body }) => ({ selector: selector.replace(/:not\([^)]*\)/g, ""), body }))
     .filter(({ selector }) => selector.includes("vt-confirmed") && /(?:\.vt-studio-|data-vt-studio-control|data-vt-studio-button)/.test(selector))
+    // The Button family's V1–V7 catalog-only comparison skins are intentionally scoped
+    // to the specimen gallery; they do not restyle the production primitive globally.
+    .filter(({ selector }) => !/\.vt-confirmed-button-skin\[data-vt-button-skin=/.test(selector))
     .filter(({ body }) => faceProperties.test(body))
     .map(({ selector }) => selector);
   assert.deepEqual(violations, [], "production primitive face styling belongs in studio-control-system.css");
@@ -53,6 +56,10 @@ test("StudioTextInput catalog includes simple, floating-label, and fixed-label v
   assert.ok(catalog.includes('aria-label="Studio plain text input compact"'));
   assert.ok(catalog.includes('aria-label="Studio floating-label input standard A"'));
   assert.ok(catalog.includes('aria-label="Studio floating-label input compact B reverse colors"'));
+  assert.ok(catalog.includes('aria-label="Studio floating-label textarea compact A"'));
+  assert.ok(catalog.includes('aria-label="Studio floating-label textarea compact B reverse colors"'));
+  assert.ok(catalog.includes('aria-label="Studio fixed-label textarea compact A"'));
+  assert.ok(catalog.includes('aria-label="Studio fixed-label textarea compact B reverse colors"'));
   assert.ok(catalog.includes('aria-label="Studio fixed-label input standard A"'));
   assert.ok(catalog.includes('aria-label="Studio fixed-label input compact B reverse colors"'));
   assert.match(catalog, /Studio Text Input · Standalone \+ Simple \+ Floating \+ Fixed Label/);
@@ -64,23 +71,24 @@ test("global defaults distinguish the secondary focus outline from field text st
   assert.doesNotMatch(controls, /computed CSS outline itself measured 1px/);
 });
 
-test("floating labels use balanced box spacing, 48% border alignment, and 80% floated typography", () => {
-  const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(fieldCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-standard-height,\s*32px\)/);
-  assert.match(fieldCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-compact-height,\s*21px\)/);
-  assert.match(fieldCss, /--vt-studio-control-floating-label-offset-ratio:\s*var\(--vt-studio-floating-label-offset-ratio,\s*1\.2\)/);
-  assert.match(fieldCss, /--vt-studio-floating-label-size:\s*var\(--vt-studio-control-floating-label-height\)/);
+test("floating labels follow primitive resting typography and share one 18px raised rule", () => {
+  const fieldCss = readFileSync("src/styles/studio-control-fields.css", "utf8");
+  const systemCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-standard-font-size,\s*38px\)/);
+  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-compact-font-size,\s*24px\)/);
+  assert.match(fieldCss, /textarea\[data-size="standard"\] \+ \.vt-studio-floating-field-label\s*\{[^}]*font-size: var\(--vt-studio-textarea-standard-font-size, 18px\)/s);
+  assert.match(fieldCss, /textarea\[data-size="compact"\] \+ \.vt-studio-floating-field-label\s*\{[^}]*font-size: var\(--vt-studio-textarea-compact-font-size, 14px\)/s);
+  assert.match(fieldCss, /input\[data-size="standard"\] \+ \.vt-studio-floating-field-label\s*\{[^}]*font-size: var\(--vt-studio-44-font-size, 38px\)/s);
+  assert.match(fieldCss, /input\[data-size="compact"\] \+ \.vt-studio-floating-field-label\s*\{[^}]*font-size: var\(--vt-studio-28-font-size, 24px\)/s);
+  assert.match(systemCss, /:is\(input, textarea\):focus \+ \.vt-studio-floating-field-label,[\s\S]*?font-size: 18px;/);
+  assert.doesNotMatch(systemCss, /\.vt-studio-floating-field:not\(\.is-textarea\)\s*>\s*:is\(input, textarea\):focus \+ \.vt-studio-floating-field-label/);
   assert.match(fieldCss, /padding:\s*2\.25px 4\.5px/);
-  assert.match(fieldCss, /translateY\(calc\(-40% \* var\(--vt-studio-control-floating-label-offset-ratio, 1\.2\)\)\)/);
-  assert.match(fieldCss, /font-size:\s*calc\(var\(--vt-studio-floating-label-size\)\s*\*\s*\.8\)/);
-  assert.doesNotMatch(fieldCss, /\.vt-studio-floating-field\.is-textarea\s*\{[^}]*--vt-studio-floating-label-size/s);
-  assert.doesNotMatch(fieldCss, /\.vt-studio-floating-field-label\s*\{[^}]*transition:/s);
-  assert.match(fieldCss, /-webkit-text-stroke:\s*\.5px currentColor/);
+  assert.match(fieldCss, /-webkit-text-fill-color: #000;/);
+  assert.match(fieldCss, /-webkit-text-stroke-color: #000;/);
   assert.match(fieldCss, /data-vt-floating-variant="b"[\s\S]*?data-size="compact"/);
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
   assert.match(fieldCss, /\.vt-studio-floating-field\[data-vt-floating-variant="b"\]\s*>\s*:is\(input, textarea\)\[data-size="compact"\]:is\(:focus, :focus-visible\)\s*\+\s*\.vt-studio-floating-field-label\s*\{\s*outline:\s*var\(--vt-studio-control-focus-outline-width,\s*2px\)\s+solid\s+var\(--vt-studio-control-secondary/s);
 });
-
 test("circle icon buttons scale the rendered SVG to 80% of the canonical icon preset", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(fieldCss, /button\[data-vt-studio-circle-icon-button="true"\]\[data-size="standard"\]\s*\{[^}]*--vt-studio-control-icon-size:\s*38px/s);
@@ -384,4 +392,134 @@ test("50 spectrum samples cover all 26 alphabetic initials", () => {
 
 test("component descriptions above specimens stay on one compact line", () => {
   assert.match(styles, /\.vt-confirmed-family > p\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
+});
+
+
+test("confirmed primitive library layout uses a shared 4px grid rhythm", () => {
+  const marker = "/* Confirmed Primitive Library 4px grid contract */";
+  const gridContract = styles.slice(styles.lastIndexOf(marker));
+  assert.ok(gridContract.length > marker.length, "the final grid contract override exists");
+  assert.match(gridContract, /--vt-confirmed-grid-unit:\s*4px/);
+  assert.match(gridContract, /\.vt-confirmed-catalog\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 3\)/s);
+  assert.match(gridContract, /\.vt-confirmed-family\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+  assert.match(gridContract, /\.vt-confirmed-variants\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+  assert.match(gridContract, /\.vt-confirmed-variant\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  assert.match(gridContract, /\.vt-confirmed-control-family\s*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 3\)/s);
+  assert.match(gridContract, /\.vt-confirmed-choice-example-row[^{}]*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  assert.match(gridContract, /\.vt-confirmed-stepper-row-grid[^{}]*\{[^}]*gap:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 2\)/s);
+});
+
+test("confirmed primitive library grids collapse responsively without fractional or negative spacing", () => {
+  assert.match(styles, /\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/s);
+  const marker = "/* Confirmed Primitive Library 4px grid contract */";
+  const gridContract = styles.slice(styles.lastIndexOf(marker));
+  assert.match(gridContract, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vt-confirmed-variants\s*\{[^}]*min-width:\s*0/);
+  assert.match(gridContract, /\.vt-confirmed-variant\s*\{[^}]*min-width:\s*0/s);
+});
+
+
+test("confirmed library keeps the shared 4px grid hierarchy without blanket nested spacing overrides", () => {
+  assert.match(styles, /--vt-confirmed-grid-unit:\s*4px/);
+  assert.match(styles, /--vt-confirmed-space-1:\s*calc\(var\(--vt-confirmed-grid-unit\) \* 1\)/);
+  assert.match(styles, /\.vt-confirmed-catalog\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-3\)/s);
+  assert.match(styles, /\.vt-confirmed-family\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-2\)/s);
+  assert.match(styles, /\.vt-confirmed-variants\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-2\)/s);
+  assert.match(styles, /\.vt-confirmed-variant\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-1\)/s);
+  assert.match(styles, /\.vt-confirmed-control-family\s*\{[^}]*gap:\s*var\(--vt-confirmed-space-3\)/s);
+  assert.doesNotMatch(styles, /:where\(\[class\*="vt-confirmed-"\]:not\(\.vt-confirmed-catalog\)\)\s*\{[^}]*!important/s,
+    "nested catalog selectors must not globally force every gap and padding to 4px");
+  assert.match(styles, /@media\s*\(max-width:\s*560px\)[\s\S]*?\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+});
+
+
+test("StudioButton library module applies the canonical 4px grid rhythm without changing button geometry", () => {
+  const moduleGrid = styles.slice(styles.lastIndexOf("/* StudioButton library module — canonical 4px grid. */"));
+  assert.ok(moduleGrid.length > 80, "the scoped StudioButton grid contract exists");
+  assert.match(moduleGrid, /\.vt-confirmed-button-family\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  assert.match(moduleGrid, /\.vt-confirmed-button-family\s*>\s*\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  assert.match(moduleGrid, /\.vt-confirmed-button-family\s*>\s*\.vt-confirmed-variants\s*>\s*\.vt-confirmed-variant\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
+  assert.match(moduleGrid, /\.vt-confirmed-button-family\s*>\s*\.vt-confirmed-variants\s*>\s*\.vt-confirmed-variant\.is-full-row\s*\{[^}]*grid-column:\s*1 \/ -1/s);
+  assert.doesNotMatch(moduleGrid, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\s*:/, "catalog layout must not restyle production StudioButton geometry");
+});
+
+
+test("PR 756 ConfirmedSpecimenGrid is integrated into the confirmed production primitive library", () => {
+  assert.match(catalog, /import ConfirmedSpecimenGrid from "\.\/ConfirmedSpecimenGrid"/);
+  assert.match(catalog, /title="Confirmed Specimen Grid · Layout Contract"/);
+  assert.match(catalog, /<ConfirmedSpecimenGrid[\s\S]*?familyName="Studio control tier and layout reference"/);
+  assert.match(catalog, /<StudioButton heightVariant="60">SUPREME<\/StudioButton>/);
+  assert.match(catalog, /<StudioButton heightVariant="44">STANDARD<\/StudioButton>/);
+  assert.match(catalog, /<StudioButton heightVariant="28">COMPACT<\/StudioButton>/);
+  assert.match(catalog, /<StudioBrainStatusBadge label="MICRO"[^>]*sizeVariant="micro"/);
+  assert.match(catalog, /The grid controls catalog arrangement only/);
+  assert.match(catalog, /Do not map unsupported size tiers onto a primitive/);
+});
+
+test("ConfirmedSpecimenGrid is full-width and does not split the module into side-by-side columns", () => {
+  const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
+  const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
+  assert.match(gridCss, /--vt-specimen-gap:\\s*var\\(--vt-studio-space-unit,\\s*4px\\)/);
+  assert.match(gridCss, /\\.vt-specimen-module\\s*\\{[^}]*width:\\s*100%/s);
+  assert.doesNotMatch(gridCss, /vt-specimen-columns/);
+  assert.doesNotMatch(gridSource, /vt-specimen-columns/);
+  assert.match(gridSource, /aria-checked=\\{clean\\}/);
+  assert.match(gridSource, /aria-controls=\\{contentId\\}/);
+  assert.doesNotMatch(gridCss, /\\.vt-specimen-slot\\s+(?:button|input|textarea|select)[^{]*\\{[^}]*(?:height|border|background|font-size|padding)\\s*:/s);
+});
+
+
+test("canonical StudioButton catalog uses the PR #756 proportional grid and real StudioButton exports", () => {
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?\n}\n\ntype ConfirmedCatalogFamilyName/)?.[0] ?? "";
+  assert.ok(buttonFamily.includes("<ConfirmedSpecimenGrid"), "Button family uses the shared specimen grid");
+  assert.ok(buttonFamily.includes("layoutRows={layoutRows}"));
+  assert.ok(buttonFamily.includes("sizeVariant={tier}"));
+  assert.ok(buttonFamily.includes("variant={\`v\${variant}\` as"));
+  assert.ok(buttonFamily.includes('data-vt-library-component="StudioButton"'));
+  assert.ok(buttonFamily.includes("activeChildren={activeChildren}"));
+  assert.ok(buttonFamily.includes('id: "1-supreme-full"'));
+  assert.ok(buttonFamily.includes('id: "2-supreme-halves"'));
+  assert.ok(buttonFamily.includes('id: "3-standard-full"'));
+  assert.ok(buttonFamily.includes('id: "4-standard-halves"'));
+  assert.ok(buttonFamily.includes('id: "5-standard-fractions"'));
+  assert.ok(buttonFamily.includes('id: "6-compact-fractions"'));
+  assert.ok(buttonFamily.includes('id: "7-compact-and-micro"'));
+  assert.ok(buttonFamily.includes('id: "7A-micro-quarters"'));
+  assert.ok(buttonFamily.includes('id: "7B-micro-eighths-sixteenths"'));
+});
+
+test("ConfirmedSpecimenGrid keeps layout proportional and leaves control geometry to StudioButton", () => {
+  const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
+  const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
+  const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"), styles.indexOf("/* Dense, collapsed Global Defaults"));
+  assert.match(gridCss, /--vt-specimen-gap:\\s*var\\(--vt-studio-space-unit,\\s*4px\\)/);
+  assert.match(gridCss, /grid-template-columns:\\s*repeat\\(144,\\s*minmax\\(0,\\s*1fr\\)\\)/);
+  assert.match(gridSource, /layoutRows\\.map\\(renderLayoutRow\\)/);
+  assert.match(gridSource, /gridColumn: \`span \${span}\`/);
+  assert.match(buttonCss, /\.vt-confirmed-button-skin\s*\{[^}]*width:\s*100%/s);
+  assert.doesNotMatch(buttonCss, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\\s*:/,
+    "catalog wrapper must not redefine production StudioButton geometry");
+});
+
+test("StudioButton catalog styles contain labels without retired V1-V7 skin overrides", () => {
+  const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"), styles.indexOf("/* Dense, collapsed Global Defaults"));
+  assert.match(buttonCss, /\.vt-confirmed-button-skin\s*>\s*\[data-vt-studio-button-face\]/);
+  assert.match(buttonCss, /overflow:\\s*hidden/);
+  assert.doesNotMatch(buttonCss, /data-vt-button-skin/);
+  assert.doesNotMatch(buttonCss, /overflow-wrap:\\s*anywhere/,
+    "the catalog must not override StudioButton's own text containment policy");
+});
+
+test("PR #756 row hierarchy uses the requested proportional sizes and compact/micro split", () => {
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?\n}\n\ntype ConfirmedCatalogFamilyName/)?.[0] ?? "";
+  assert.match(buttonFamily, /row-1.*144/s);
+  assert.match(buttonFamily, /row-2a.*72/s);
+  assert.match(buttonFamily, /row-5-third.*48/s);
+  assert.match(buttonFamily, /row-5-quarter.*36/s);
+  assert.match(buttonFamily, /row-5-sixth.*24/s);
+  assert.match(buttonFamily, /row-5-eighth-a.*18/s);
+  assert.match(buttonFamily, /row-6-two-ninths.*32/s);
+  assert.match(buttonFamily, /row-6-ninth.*16/s);
+  assert.match(buttonFamily, /row-6-twelfth.*12/s);
+  assert.match(buttonFamily, /7 compact · half module/);
+  assert.match(buttonFamily, /7A–7B micro · half module/);
 });

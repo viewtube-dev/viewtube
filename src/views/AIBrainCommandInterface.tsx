@@ -3,6 +3,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import {
  ArrowRight,
  BookOpen,
+ Minus,
+ Plus,
+ Lock,
+ Unlock,
+ Trash2,
+ XCircle,
  Brain,
  Check,
  ChevronLeft,
@@ -17,6 +23,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
+import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioInterModule, StudioCollapsingSplitModule, StudioCollapsingTwoLineModule, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -68,13 +75,27 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
+import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow, BrainChatStatusBadge, BrainComposerShell, ChatConversationViewport } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
-import { BrainEvidenceDrawer } from "../components/brain/BrainEvidenceDrawer"
+import { BrainClaimEvidence } from "../components/brain/BrainClaimEvidence"
+import { confidenceForEvidence } from "../components/brain/BrainConfidenceChip"
+import { BrainTurnEvidenceRibbon } from "../components/brain/BrainTurnEvidenceRibbon"
+import { BrainWorkspaceNavigation } from "../components/brain/BrainWorkspaceNavigation"
 import { BrainQuestionPrompt } from "../components/brain/BrainQuestionPrompt"
 import { BrainRuntimePanel } from "../components/brain/BrainRuntimePanel"
+import { BrainWorkflowRunPanel } from "../components/brain/BrainWorkflowRunPanel"
+import { buildWorkflowRecommendationFromBrainResponse } from "../services/brain/brainWorkflowRecommendations"
+import { resolveBrainDataReadinessPresentation } from "./brainDataReadiness"
+import { shouldFollowBrainConversation } from "./brainConversationScroll"
+export { shouldFollowBrainConversation }
+import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
+import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
+import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
+import { isEvidenceRecord, type EvidenceRecord } from "../services/brain/EvidenceRecord"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
  clearBrainSurfaceSelection,
@@ -115,6 +136,8 @@ export type ChatMessage = {
  handoff?: AIBrainChatHandoff | null
  originalUserText?: string
  evidencePack?: AIBrainEvidencePack
+ evidenceRecords?: EvidenceRecord[]
+ evidenceIntegrityStatus?: PromptEvidenceIntegrityStatus
  readiness?: AIBrainTurnReadiness
  contextUsed?: BrainCreatorContextSnapshot
  learningReceipt?: {
@@ -128,6 +151,39 @@ export type ChatMessage = {
  }
  turnStatus?: AIBrainConversationTurn["status"]
  contextMayBeStale?: boolean
+}
+
+/**
+ * Read only the exact typed evidence array recorded as rendered to the model.
+ * If IDs or record contracts disagree, omit the detailed provenance rather than
+ * displaying a different evidence set as though it were the prompt input.
+ */
+export type PromptEvidenceIntegrityStatus = "verified" | "unavailable" | "mismatch"
+
+/**
+ * Distinguish legacy turns with no manifest from a present-but-invalid prompt
+ * evidence manifest. Only the latter is an integrity failure.
+ */
+export const getPromptEvidenceIntegrityStatus = (
+ metadata: Record<string, unknown> | undefined,
+): PromptEvidenceIntegrityStatus => {
+ if (!metadata || !Object.prototype.hasOwnProperty.call(metadata, "promptEvidenceRecordIds")) return "unavailable"
+ if (!Array.isArray(metadata.promptEvidenceRecordIds) || !Array.isArray(metadata.evidenceRecords)) return "mismatch"
+ const rawRecords: unknown[] = metadata.evidenceRecords
+ const rawIds: unknown[] = metadata.promptEvidenceRecordIds
+ if (!rawRecords.every(isEvidenceRecord) || !rawIds.every((id) => typeof id === "string")) return "mismatch"
+ const records = rawRecords as EvidenceRecord[]
+ const ids = rawIds as string[]
+ return records.length === ids.length && records.every((record, index) => record.id === ids[index])
+  ? "verified"
+  : "mismatch"
+}
+
+export const readPromptEvidenceRecords = (
+ metadata: Record<string, unknown> | undefined,
+): EvidenceRecord[] | undefined => {
+ if (getPromptEvidenceIntegrityStatus(metadata) !== "verified") return undefined
+ return metadata!.evidenceRecords as EvidenceRecord[]
 }
 
 export type BrainCreatorContextSnapshot = {
@@ -178,7 +234,7 @@ export type BrainCreatorContextSnapshot = {
   knowledgeClass: string
   lifecycleState: string
   confirmationState: string | null
-  source: string
+  source: "brain_memory_claim" | "channel_knowledge_model" | "learning_candidate"
   sourceId: string
   evidenceRefs: string[]
   status: "confirmed" | "inferred"
@@ -190,35 +246,33 @@ export type BrainCreatorContextSnapshot = {
 
 const BrainContextUsedDrawer: React.FC<{
  contextUsed?: BrainCreatorContextSnapshot
- onCorrectItem?: (id: string, statement: string) => void
-}> = ({ contextUsed, onCorrectItem }) => {
+ turnId?: string
+ onCorrectItem?: (item: BrainCreatorContextSnapshot["knowledgeItems"][number]) => void
+}> = ({ contextUsed, turnId, onCorrectItem }) => {
  if (!contextUsed) return null
- const selection = contextUsed.selection
- const project = contextUsed.project
- const items = [
-  { id: "channel", label: "Channel", value: contextUsed.channelId || "No channel ID", status: "confirmed" },
-  { id: "project", label: "Project", value: project ? `${project.title || project.projectId} · ${project.projectId}` : "No project in this answer's context", status: project?.source === "canonical_project" || project?.source === "canonical_project_content_build" ? "confirmed" : "inferred" },
-  { id: "content-build", label: "ContentBuild", value: project?.contentBuildId || "No linked ContentBuild", status: project?.contentBuildId ? "confirmed" : "temporary" },
-  { id: "selection", label: "Selected video / asset", value: selection ? `${selection.label} · ${selection.sourceId}` : "No selected video or asset was supplied", status: selection ? "temporary" : "inferred" },
- ]
+ const items = buildBrainContextDisplayItems({
+  channelId: contextUsed.channelId,
+  project: contextUsed.project,
+  selection: contextUsed.selection,
+ })
  return (
-  <details className="w-full rounded-[7px] border-[2px] border-black bg-white">
-   <summary className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
+  <details data-vt-brain-component="BrainContextUsedDrawer" data-vt-brain-turn-id={turnId} className="w-full rounded-[7px] border-[2px] border-black bg-white">
+   <summary data-vt-brain-part="context-used-trigger" className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1 px-2 text-[9px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">
     <PanelRight size={12} aria-hidden="true" /> Context used
     <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1">{items.length + contextUsed.knowledgeItems.length}</span>
    </summary>
    <div className="grid gap-2 border-t-[2px] border-black p-2">
     <ul className="grid gap-1">
      {items.map((item) => (
-      <li key={item.id} className="grid gap-0.5 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
-       <span className="text-[9px] font-black uppercase">{item.label} · {item.status}</span>
+      <li data-vt-brain-part="context-used-item" key={item.id} className="grid gap-1 rounded-[5px] border border-black/20 bg-[#f8f8f4] px-2 py-1">
+       <span className="text-[9px] font-black uppercase">{item.label} · {item.provenance}</span>
        <span className="break-words text-[10px] font-bold">{item.value}</span>
       </li>
      ))}
     </ul>
     {contextUsed.styleProfile ? (
      <section>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Style profile used</h4>
+      <h4 data-vt-brain-part="context-style-profile-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Style profile used</h4>
       <div className="mt-1 rounded-[5px] border border-black/20 bg-[#f8f8f4] p-2">
        <p className="text-[9px] font-black uppercase">{contextUsed.styleProfile.scope} · {contextUsed.styleProfile.source} · {contextUsed.styleProfile.id}</p>
        {([
@@ -245,15 +299,15 @@ const BrainContextUsedDrawer: React.FC<{
     ) : null}
     {contextUsed.knowledgeItems.length ? (
      <section>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Knowledge items used</h4>
+      <h4 data-vt-brain-part="context-knowledge-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Knowledge items used</h4>
       <ul className="mt-1 grid gap-1">
        {contextUsed.knowledgeItems.map((item) => (
-        <li key={item.id} className="rounded-[5px] border border-black/20 px-2 py-1">
+        <li data-vt-brain-part="context-knowledge-item" key={item.id} className="rounded-[5px] border border-black/20 px-2 py-1">
          <div className="text-[9px] font-black uppercase">{item.status} · {item.knowledgeClass.replace(/_/g, " ")}</div>
          <p className="text-[10px] font-bold leading-4">{sanitizeCreatorFacingBrainCopy(item.statement)}</p>
          <code className="block break-all text-[8px] text-black/55">{item.id}</code>
          {item.evidenceRefs.length ? <p className="break-all text-[8px] text-black/55">Evidence: {item.evidenceRefs.join(", ")}</p> : null}
-         {onCorrectItem ? <button type="button" onClick={() => onCorrectItem(item.id, item.statement)} className="mt-1 min-h-9 rounded-[5px] border border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Correct context</button> : null}
+         {onCorrectItem ? <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={() => onCorrectItem(item)} className="mt-1">Propose correction</StudioButton> : null}
         </li>
        ))}
       </ul>
@@ -261,7 +315,7 @@ const BrainContextUsedDrawer: React.FC<{
     ) : null}
     {contextUsed.conflictIds.length ? <p className="text-[10px] font-bold">Conflicting context records: {contextUsed.conflictIds.join(", ")}</p> : null}
     {contextUsed.evidenceRefs.length ? <p className="break-words text-[9px] font-bold text-black/60">Context evidence IDs: {contextUsed.evidenceRefs.join(", ")}</p> : null}
-    <p className="text-[9px] font-bold text-black/45">Resolver {contextUsed.version || "unavailable"} · Profile loaded {contextUsed.profileLoadedAt || "time unavailable"} · Style profile {contextUsed.styleProfileAvailable ? "available" : "not included"}</p>
+    <p data-vt-brain-part="context-provenance-summary" className="text-[9px] font-bold text-black/45">Resolver {contextUsed.version || "unavailable"} · Profile loaded {contextUsed.profileLoadedAt || "time unavailable"} · Style profile {contextUsed.styleProfileAvailable ? "available" : "not included"}</p>
    </div>
   </details>
  )
@@ -276,19 +330,17 @@ const BrainContextStrip: React.FC<{
  onToggleLock: () => void
  onClearProject: () => void
 }> = ({ channelLabel, projectLabel, contentBuildId, selection, onClearSelection, onToggleLock, onClearProject }) => (
- <section aria-label="Active creator context" className="sticky top-0 z-10 grid gap-1.5 rounded-[7px] border-[2px] border-black bg-white p-2 shadow-[2px_2px_0_0_#000]">
-  <div className="flex flex-wrap items-center gap-1.5">
-   <span className="rounded-[4px] border border-black bg-[#36E0F6] px-1.5 py-1 text-[9px] font-black uppercase">Channel · {channelLabel}</span>
-   <span className="rounded-[4px] border border-black bg-[#3FEE56] px-1.5 py-1 text-[9px] font-black uppercase">Project · {projectLabel}</span>
-   <span className="rounded-[4px] border border-black bg-[#FFDA47] px-1.5 py-1 text-[9px] font-black uppercase">ContentBuild · {contentBuildId || "none"}</span>
-   <span className="min-w-0 rounded-[4px] border border-black bg-[#f8f8f4] px-1.5 py-1 text-[9px] font-black uppercase">Selected · {selection?.label || "none"}</span>
+ <section data-vt-brain-component="BrainContextStrip" aria-label="Active creator context" className="sticky top-0 z-10 grid gap-1 rounded-[7px] border-[2px] border-black bg-white p-2">
+  <div data-vt-brain-part="active-context-badges" className="grid min-w-0 grid-cols-2 gap-1 sm:grid-cols-4">
+   <StudioSplitLeftBadge data-vt-brain-context="channel" sizeVariant="micro" icon={<MessageSquare aria-hidden="true" />} title={`Channel · ${channelLabel}`} aria-label={`Channel · ${channelLabel}`} className="min-w-0 max-w-full">Channel · {channelLabel}</StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="project" sizeVariant="micro" icon={<LayoutGrid aria-hidden="true" />} title={`Project · ${projectLabel}`} aria-label={`Project · ${projectLabel}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Project · {projectLabel}</span></StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="content-build" sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} title={`ContentBuild · ${contentBuildId || "none"}`} aria-label={`ContentBuild · ${contentBuildId || "none"}`} className="min-w-0 max-w-full">Build · {contentBuildId ? contentBuildId.slice(0, 8) : "none"}</StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="selection" sizeVariant="micro" icon={<Lock aria-hidden="true" />} title={`Selected · ${selection?.label || "none"}`} aria-label={`Selected · ${selection?.label || "none"}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Selected · {selection?.label || "None"}</span></StudioSplitLeftBadge>
   </div>
-  <div className="flex flex-wrap gap-1.5">
-   <button type="button" disabled={!selection} aria-pressed={Boolean(selection?.locked)} onClick={onToggleLock} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">
-    {selection?.locked ? "Unlock selection" : "Lock selection"}
-   </button>
-   <button type="button" disabled={!selection} onClick={onClearSelection} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FF7497] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">Clear selection</button>
-   <button type="button" disabled={projectLabel === "none"} onClick={onClearProject} className="min-h-9 rounded-[5px] border-[1.5px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FF7497] focus-visible:ring-2 focus-visible:ring-black disabled:opacity-40">Clear project</button>
+  <div data-vt-brain-part="context-actions" className="grid grid-cols-1 gap-1 min-[480px]:grid-cols-3">
+   <StudioSplitLeftButton sizeVariant="compact" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} aria-label={selection?.locked ? "Unlock selection" : "Lock selection"} title={selection?.locked ? "Unlock selection" : "Lock selection"} onClick={onToggleLock} className="w-full min-w-0 whitespace-normal">{selection?.locked ? "Unlock selection" : "Lock selection"}</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<XCircle aria-hidden="true" />} aria-label="Clear selection" title="Clear selection" disabled={!selection} onClick={onClearSelection} className="w-full min-w-0 whitespace-normal">Clear selection</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<Trash2 aria-hidden="true" />} aria-label="Clear project" title="Clear project" disabled={projectLabel === "none"} onClick={onClearProject} className="w-full min-w-0 whitespace-normal">Clear project</StudioSplitLeftButton>
   </div>
  </section>
 )
@@ -299,8 +351,8 @@ const assistantCardFrame = "w-full max-w-none shrink-0 border-y-[2px] border-bla
 const kpiButton =
  "inline-flex items-center gap-2 rounded-[8px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[0.08em] transition hover:bg-[#3FEE56]"
 
-export const shouldSendBrainComposerKey = ({ key, isComposing }: { key: string; isComposing: boolean }) =>
- key === "Enter" && !isComposing
+export const shouldSendBrainComposerKey = ({ key, isComposing, shiftKey = false }: { key: string; isComposing: boolean; shiftKey?: boolean }) =>
+ key === "Enter" && !isComposing && !shiftKey
 
 const PROMPT_CARD_SUMMARIES: Record<string, string> = {
  "analyze-channel-niche": "Find your niche and fuzzy edges.",
@@ -327,6 +379,12 @@ const PROMPT_CARD_SUMMARIES: Record<string, string> = {
 export const promptCardSummary = (card: CreatorBrainPromptCard): string =>
  PROMPT_CARD_SUMMARIES[card.id] || card.prompt
 
+/** Canonical 12-step Studio spectrum pair cycle for individual prompt modules. */
+const PROMPT_MODULE_COLOR_PAIRS = Array.from({ length: 12 }, (_, index) => [
+ TOOLBOX_PALETTE[index],
+ TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length],
+] as const)
+
 export const filterCreatorBrainPromptCards = (
  cards: CreatorBrainPromptCard[],
  query: string,
@@ -341,24 +399,22 @@ export const filterCreatorBrainPromptCards = (
  })
 }
 
-const GENERATION_BADGES: Record<BrainGenerationPath, { label: string; color: string; description: string }> = {
- model: { label: "Full Brain", color: "#00FF00", description: "This response was prepared with the full Brain." },
- repaired_model: { label: "Refined Answer", color: "#36E0F6", description: "This response was prepared with an additional quality pass." },
- basic_guidance: { label: "Basic Guidance", color: "#FFDA47", description: "This response was prepared from available channel evidence while full generation was unavailable." },
+const GENERATION_BADGES: Record<BrainGenerationPath, { label: string; description: string; status: "ready" | "partial" | "warning" }> = {
+ model: { label: "Full Brain", description: "This response was prepared with the full Brain.", status: "ready" },
+ repaired_model: { label: "Refined Answer", description: "This response was prepared with an additional quality pass.", status: "partial" },
+ basic_guidance: { label: "Basic Guidance", description: "Full Brain generation was unavailable, so this is limited guidance based on the evidence available—not a complete analysis.", status: "warning" },
 }
 
 export const BrainGenerationBadge: React.FC<{ path: BrainGenerationPath }> = ({ path }) => {
  const badge = GENERATION_BADGES[path]
  return (
   <span
-   role="status"
-   tabIndex={0}
-   aria-label={`${badge.label} response status`}
+   data-vt-brain-component="BrainGenerationBadge"
    title={badge.description}
-   className="max-w-full whitespace-normal break-words rounded-[6px] border-[2px] border-black px-2 py-0.5 text-center text-[8px] font-black uppercase leading-3 tracking-[0.1em] outline-none focus-visible:ring-[3px] focus-visible:ring-black"
-   style={{ backgroundColor: badge.color }}
+   className="max-w-full min-w-0"
+   aria-label={`${badge.label} response status`}
   >
-   {badge.label}
+   <BrainChatStatusBadge status={badge.status} label={badge.label} />
   </span>
  )
 }
@@ -401,7 +457,7 @@ const OpeningBriefing: React.FC<{
  return (
   // Top-aligned and scrollable: the briefing is a launchpad, not a block floating in
   // the middle of an empty canvas.
-  <div className="brain-chat-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain p-4" aria-label="Brain conversation" tabIndex={0}>
+  <div className="brain-chat-scrollbar min-h-0 h-full flex-1 overflow-y-auto overscroll-contain touch-pan-y [-webkit-overflow-scrolling:touch] p-4" aria-label="Brain conversation" tabIndex={0}>
    <section className="mx-auto grid max-w-[70ch] gap-4">
     <div>
      <div className="flex flex-wrap items-center gap-2">
@@ -411,7 +467,7 @@ const OpeningBriefing: React.FC<{
      </div>
      <p className="mt-2 text-sm font-bold leading-6 text-black/75">{sanitizeCreatorFacingBrainCopy(read)}</p>
      <BrainProfileCoverageChecklist snapshot={snapshot} onPrompt={onPrompt} />
-     <BrainEvidenceDrawer evidencePack={snapshot.evidencePack} className="mt-3" />
+     <BrainClaimEvidence evidencePack={snapshot.evidencePack} confidence={confidenceForEvidence({ hasProfile: snapshot.inferredProfile.status !== "missing", videoCount: snapshot.inferredProfile.videoCount, dataStatus: snapshot.evidencePack.dataStatus })} className="mt-3" />
     </div>
 
    </section>
@@ -420,7 +476,9 @@ const OpeningBriefing: React.FC<{
 }
 
 /** Persistent task discovery. Kept outside the empty-chat branch so prior turns
- * never hide a Brain capability from returning creators. */
+ * never hide a Brain capability from returning creators. Prompt categories are
+ * compact, collapsed Studio modules; prompt selection and dispatch remain owned
+ * by the existing registry-backed page handlers. */
 export const BrainPromptLibrary: React.FC<{
  cards: CreatorBrainPromptCard[]
  busy?: boolean
@@ -431,129 +489,128 @@ export const BrainPromptLibrary: React.FC<{
  const [selectedId, setSelectedId] = useState<string | null>(null)
  const [query, setQuery] = useState("")
  const [category, setCategory] = useState("all")
+ const [openCategories, setOpenCategories] = useState<string[]>([])
  const filteredCards = useMemo(() => filterCreatorBrainPromptCards(cards, query, category), [cards, query, category])
- const selected = filteredCards.find((card) => card.id === selectedId) || null
+ const groupedCards = useMemo(() => {
+  const groups = new Map<string, CreatorBrainPromptCard[]>()
+  filteredCards.forEach((card) => {
+   const key = card.category || "general"
+   groups.set(key, [...(groups.get(key) || []), card])
+  })
+  const order = new Map(cards.map((card, index) => [card.id, index]))
+  return Array.from(groups.entries())
+   .map(([key, items]) => [key, [...items].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))] as const)
+   .sort(([, left], [, right]) => Math.min(...left.map((card) => order.get(card.id) ?? 0)) - Math.min(...right.map((card) => order.get(card.id) ?? 0)))
+ }, [filteredCards, cards])
+
+ const setCategoryOpen = (groupCategory: string, nextOpen: boolean) => {
+  setOpenCategories((current) => nextOpen
+   ? (current.includes(groupCategory) ? current : [...current, groupCategory])
+   : current.filter((item) => item !== groupCategory))
+ }
 
  return (
   <section
+   data-vt-brain-component="BrainPromptLibrary"
    aria-label="Prompt library"
    aria-labelledby={headingId}
    aria-busy={busy || undefined}
-   className="overflow-hidden rounded-[10px] border-[2px] border-black bg-white"
+   className="flex min-w-0 flex-col"
   >
-   <div className="border-b-[2px] border-black bg-[#FF7AC8] px-3 py-2">
-    <h2 id={headingId} className="text-[12px] font-[1000] uppercase leading-4 tracking-[0.08em]">
-     Prompt Library
-    </h2>
-    <p className="mt-0.5 text-[10px] font-bold leading-4 text-black/65">
-     Search by task or topic, preview the prompt, then send it or edit it first.
+   <StudioInterModule
+    sizeVariant="standard"
+    startIcon={<LayoutGrid aria-hidden="true" />}
+    title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
+    className="overflow-hidden brain-prompt-library-shell"
+    style={{ background: TOOLBOX_PALETTE[11], "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
+   >
+    <p data-vt-brain-part="prompt-library-description" className="mb-2 border-b border-black/20 pb-2 text-[10px] font-bold leading-4 text-black/65">
+     Open a task category, then expand one prompt to review it before sending or editing.
     </p>
-   </div>
+    <div className="grid grid-cols-1 gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
+     <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
+     <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: item.replace(/_/g, " ") }))]} />
+    </div>
+    <p className="px-2 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
-   <div className="grid gap-2 border-b-[2px] border-black bg-[#fff7fc] p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
-    <label className="flex min-h-11 items-center gap-2 rounded-[7px] border-[2px] border-black bg-white px-2 focus-within:ring-[3px] focus-within:ring-black">
-     <span className="sr-only">Search prompts</span>
-     <input type="search" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 flex-1 bg-transparent py-2 text-xs font-bold outline-none" />
-    </label>
-    <label className="flex min-h-11 items-center gap-2 rounded-[7px] border-[2px] border-black bg-white px-2 focus-within:ring-[3px] focus-within:ring-black">
-     <span className="sr-only">Filter prompts by category</span>
-     <select aria-label="Filter prompts by category" value={category} onChange={(event) => { setCategory(event.target.value); setSelectedId(null) }} className="min-w-0 flex-1 bg-transparent py-2 text-xs font-bold outline-none">
-      <option value="all">All categories</option>
-      {Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => <option key={item} value={item}>{item.replace(/_/g, " ")}</option>)}
-     </select>
-    </label>
-   </div>
-   <p className="px-3 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
-   <ul className="grid grid-cols-1 gap-1.5 p-2 sm:grid-cols-2 xl:grid-cols-3">
-    {filteredCards.map((card) => {
-     const isSelected = card.id === selectedId
-     return (
-      <li key={card.id}>
-       <button
-        type="button"
-        disabled={busy}
-        aria-pressed={isSelected}
-        title={card.prompt}
-        onClick={() => setSelectedId(isSelected ? null : card.id)}
-        className={`group flex h-full min-h-11 w-full flex-col items-stretch overflow-hidden rounded-[8px] border-[2px] border-black bg-white text-left outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-50 ${isSelected ? "bg-[#FFDA47]" : "hover:bg-[#36E0F6]/20"}`}
+    <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="vt-studio-inter-host--bleed block w-full min-w-0 m-0 p-0">
+     {groupedCards.map(([groupCategory, groupCards], groupIndex) => {
+      const isOpen = openCategories.includes(groupCategory)
+      const categoryPair = PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length]
+      return (
+       <StudioInterModule
+        key={groupCategory}
+        data-vt-brain-component="BrainPromptLibraryModule"
+        className="brain-prompt-library-category"
+        data-prompt-category={groupCategory}
+        data-flush-body="true"
+        title={<><span>{groupCategory.replace(/_/g, " ")}</span><small>{groupCards.length}</small></>}
+        startIcon={<LayoutGrid aria-hidden="true" />}
+        endIcon={isOpen ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
+        sizeVariant="compact"
+        headStyle={{ background: categoryPair[0], "--vt-studio-control-accent": categoryPair[0], "--vt-studio-control-secondary": categoryPair[1] } as React.CSSProperties}
+        open={isOpen}
+        onOpenChange={(nextOpen) => setCategoryOpen(groupCategory, nextOpen)}
+        aria-label={`${groupCategory.replace(/_/g, " ")} prompts, ${groupCards.length} items`}
        >
-        <span
-         className="flex shrink-0 items-center justify-between gap-1 border-b-[2px] border-black px-2 py-2 text-xs font-[1000] uppercase leading-4"
-         style={{ backgroundColor: card.color }}
-        >
-         <span className="truncate">{card.label}</span>
-         {isSelected ? <Check size={12} className="shrink-0" aria-hidden="true" /> : null}
-        </span>
-        <span className="flex min-h-0 flex-1 items-center px-2 py-1.5">
-         <span className="line-clamp-2 block overflow-hidden text-xs font-bold leading-4 text-black/70">
-          {promptCardSummary(card)}
-         </span>
-        </span>
-       </button>
-      </li>
-     )
-    })}
-   </ul>
-   {!filteredCards.length ? <p className="px-3 pb-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
-
-   <div className="border-t-[2px] border-black bg-[#f8f8f4] p-2">
-    {selected ? (
-     <div className="overflow-hidden rounded-[8px] border-[2px] border-black bg-white shadow-[3px_3px_0_0_#000]">
-      <div
-       className="flex items-center justify-between gap-2 border-b-[2px] border-black px-2.5 py-1"
-       style={{ backgroundColor: selected.color }}
-      >
-       <span className="truncate text-xs font-[1000] uppercase tracking-[0.08em]">
-        Preview · {selected.label}
-       </span>
-       <button
-        type="button"
-        aria-label="Close preview"
-        onClick={() => setSelectedId(null)}
-        className="grid min-h-11 min-w-11 shrink-0 place-items-center rounded-[5px] border-[2px] border-black bg-white/80 outline-none focus-visible:ring-[3px] focus-visible:ring-black hover:bg-white"
-       >
-        <X size={11} />
-       </button>
-      </div>
-      <div className="grid gap-2 p-2.5">
-       <p className="text-sm font-bold leading-5 text-black/80">{selected.prompt}</p>
-       <div className="flex flex-wrap gap-1.5">
-        <button
-         type="button"
-         disabled={busy}
-         onClick={() => {
-          onPrompt(selected.prompt)
-          setSelectedId(null)
-         }}
-         className="inline-flex min-h-11 items-center gap-1.5 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase tracking-[0.06em] outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-50"
-        >
-         <Send size={12} /> Send to chat
-        </button>
-        {onEdit ? (
-         <button
-          type="button"
-          onClick={() => {
-           onEdit(selected.prompt)
-           setSelectedId(null)
-          }}
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-[7px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[0.06em] outline-none focus-visible:ring-[3px] focus-visible:ring-black hover:bg-[#FFDA47]"
-         >
-          Edit first <ArrowRight size={11} />
-         </button>
-        ) : null}
-       </div>
-      </div>
-     </div>
-    ) : (
-     <p className="px-1 py-0.5 text-[10px] font-bold uppercase leading-4 tracking-[0.08em] text-black/45">
-      Tap a prompt above to preview it before sending.
-     </p>
-    )}
-   </div>
+        {groupCards.map((card, promptIndex) => {
+         const isSelected = card.id === selectedId
+         const colorPair = PROMPT_MODULE_COLOR_PAIRS[promptIndex % PROMPT_MODULE_COLOR_PAIRS.length]
+         return (
+          <StudioCollapsingTwoLineModule
+           key={card.id}
+           data-vt-brain-part="prompt-collapsible-module"
+           className="brain-prompt-library-prompt"
+           data-prompt-id={card.id}
+           data-flush-body="true"
+           title={card.label}
+           description={promptCardSummary(card)}
+           startIcon={<LayoutGrid aria-hidden="true" />}
+           endIcon={isSelected ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
+           sizeVariant="compact"
+           headStyle={{ background: colorPair[0], "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
+           open={isSelected}
+           onOpenChange={(nextOpen) => setSelectedId(nextOpen ? card.id : null)}
+           aria-label={`${isSelected ? "Collapse" : "Expand"} ${card.label} prompt`}
+          >
+           <div className="grid min-w-0 gap-2 bg-white px-2 py-2">
+            <p data-vt-brain-part="prompt-complete-text" className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
+            <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-2 gap-1">
+             <StudioSplitTwoLineButton
+              sizeVariant="compact"
+              icon={<Send aria-hidden="true" />}
+              firstLine="SEND TO"
+              secondLine="CHAT"
+              disabled={busy}
+              className="min-w-0 w-full"
+              style={{ "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
+              onClick={(event) => { event.stopPropagation(); onPrompt(card.prompt); setSelectedId(null) }}
+             />
+             {onEdit ? (
+              <StudioSplitTwoLineButton
+               sizeVariant="compact"
+               icon={<ArrowRight aria-hidden="true" />}
+               firstLine="EDIT"
+               secondLine="FIRST"
+               className="min-w-0 w-full"
+               style={{ "--vt-studio-control-accent": colorPair[1], "--vt-studio-control-secondary": colorPair[0] } as React.CSSProperties}
+               onClick={(event) => { event.stopPropagation(); onEdit(card.prompt); setSelectedId(null) }}
+              />
+             ) : null}
+            </div>
+           </div>
+          </StudioCollapsingTwoLineModule>
+         )
+        })}
+       </StudioInterModule>
+      )
+     })}
+     {!filteredCards.length ? <p className="border-y-[2px] border-black bg-white p-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
+    </div>
+   </StudioInterModule>
   </section>
  )
 }
-
 const FEEDBACK_OPTIONS = [
  ["helpful", ThumbsUp, "Helpful", "#3FEE56"],
  ["not_useful", ThumbsDown, "Not useful", "#FA618A"],
@@ -568,9 +625,11 @@ export const BrainFeedbackControls: React.FC<{
 }> = ({ message, onFeedback }) => {
  const [selected, setSelected] = useState<AIBrainFeedbackSignal["rating"] | null>(null)
  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
+ const feedbackInFlightRef = useRef(false)
 
  const submitFeedback = async (rating: AIBrainFeedbackSignal["rating"]) => {
-  if (status === "saving") return
+  if (feedbackInFlightRef.current) return
+  feedbackInFlightRef.current = true
   setSelected(rating)
   setStatus("saving")
   try {
@@ -579,31 +638,35 @@ export const BrainFeedbackControls: React.FC<{
   } catch (error) {
    console.warn("[AIBrain] Feedback was not saved:", error)
    setStatus("error")
+  } finally {
+   feedbackInFlightRef.current = false
   }
  }
 
  return (
-  <div className="flex min-w-0 flex-wrap items-center gap-1.5" aria-label="Rate this response">
-   {FEEDBACK_OPTIONS.map(([rating, Icon, label, color]) => {
-    const isSelected = selected === rating
-    return (
-     <button
-      key={rating}
-      type="button"
-      title={label}
-      aria-label={label}
-      aria-pressed={isSelected}
-      disabled={status === "saving"}
-      onClick={() => void submitFeedback(rating)}
-      className="grid h-11 w-11 cursor-pointer place-items-center rounded-[6px] border-[2px] border-black bg-white focus-visible:ring-[3px] focus-visible:ring-black disabled:cursor-wait disabled:opacity-60"
-      style={{ backgroundColor: isSelected ? color : "#ffffff" }}
-      onMouseEnter={(event) => (event.currentTarget.style.backgroundColor = color)}
-      onMouseLeave={(event) => (event.currentTarget.style.backgroundColor = isSelected ? color : "#ffffff")}
-     >
-      <Icon size={14} aria-hidden="true" />
-     </button>
-    )
-   })}
+  <div data-vt-brain-component="BrainAnswerFeedback" className="flex min-w-0 flex-wrap items-center gap-1">
+   <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Rate this response">
+    {FEEDBACK_OPTIONS.map(([rating, Icon, label, color]) => {
+     const isSelected = selected === rating
+     return (
+      <StudioSquareIconButton
+       key={rating}
+       sizeVariant="compact"
+       iconSizeVariant="large"
+       variant={isSelected ? "v2" : "v1"}
+       icon={<Icon aria-hidden="true" />}
+       label={label}
+       title={label}
+       aria-label={label}
+       aria-pressed={isSelected}
+       disabled={status === "saving"}
+       onClick={() => void submitFeedback(rating)}
+       style={{ backgroundColor: isSelected ? color : undefined }}
+       className="cursor-pointer disabled:cursor-wait"
+      />
+     )
+    })}
+   </StudioSquareIconButtonGroup>
    <span className="ml-1 text-[10px] font-black uppercase tracking-[0.06em]" aria-live="polite" role="status">
     {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Try again" : "Rate answer"}
    </span>
@@ -620,22 +683,22 @@ const BrainLearningReceiptCard: React.FC<{
  if (!receipt) return null
  const dismissed = receipt.status === "dismissed"
  return (
-  <section aria-label="Learning receipt" className="grid gap-2 border-t-[2px] border-black bg-[#FFF8D6] p-3">
+  <section data-vt-brain-part="learning-receipt-content" aria-label="Learning receipt" className="grid gap-2 bg-[#FFF8D6] p-3">
    <div className="flex flex-wrap items-center justify-between gap-2">
-    <h4 className="text-[10px] font-black uppercase tracking-[0.12em]">Learning receipt</h4>
-    <span role="status" className="rounded-[5px] border-[1.5px] border-black bg-white px-2 py-0.5 text-[9px] font-black uppercase">{receipt.status}</span>
+    <h4 data-vt-brain-part="learning-receipt-heading" className="text-[10px] font-black uppercase tracking-[0.12em]">Learning receipt</h4>
+    <StudioSplitLeftBadge sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} role="status">Receipt · {receipt.status}</StudioSplitLeftBadge>
    </div>
-   <p className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(receipt.summary)}</p>
+   <p data-vt-brain-part="learning-receipt-summary" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(receipt.summary)}</p>
    {receipt.detail ? <p className="text-xs font-bold leading-5 text-black/70">{sanitizeCreatorFacingBrainCopy(receipt.detail)}</p> : null}
-   <dl className="grid gap-1 text-[10px] leading-4">
+   <dl data-vt-brain-part="learning-receipt-metadata" className="grid gap-1 text-[10px] leading-4">
     <div><dt className="inline font-black uppercase">Scope · </dt><dd className="inline">{receipt.scope === "durable_knowledge" ? "Confirmed durable knowledge" : "Learning ledger; not promoted to durable knowledge"}</dd></div>
     <div><dt className="inline font-black uppercase">Category · </dt><dd className="inline">{receipt.category.replace(/_/g, " ")}</dd></div>
     <div><dt className="inline font-black uppercase">Receipt ID · </dt><dd className="break-all font-mono">{receipt.entryId}</dd></div>
    </dl>
    {!dismissed ? (
-    <div className="flex flex-wrap gap-2">
-     <button type="button" onClick={() => onCorrect(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-white px-3 py-2 text-[10px] font-black uppercase hover:bg-[#36E0F6] focus-visible:ring-2 focus-visible:ring-black">Correct</button>
-     <button type="button" onClick={() => onReject(message)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FF7497] px-3 py-2 text-[10px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">Reject</button>
+    <div className="flex flex-wrap gap-1">
+     <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={() => onCorrect(message)}>Correct</StudioButton>
+     <StudioButton sizeVariant="compact" type="button" onClick={() => onReject(message)}>Reject</StudioButton>
     </div>
    ) : <p role="status" className="text-xs font-bold">This learning entry was rejected and will not be promoted.</p>}
   </section>
@@ -651,9 +714,13 @@ const CreatorResponseCard: React.FC<{
  onRetry: (message: ChatMessage, useFreshEvidence: boolean) => void
  onCorrectReceipt: (message: ChatMessage) => void
  onRejectReceipt: (message: ChatMessage) => void
- onCorrectContextItem: (id: string, statement: string) => void
+ onCorrectContextItem: (item: BrainCreatorContextSnapshot["knowledgeItems"][number]) => void
 }> = ({ message, answeredQuestionIds, onFeedback, onAnswerQuestion, onReviewHandoff, onRetry, onCorrectReceipt, onRejectReceipt, onCorrectContextItem }) => {
  const response = message.response
+ const workflowRecommendation = useMemo(
+  () => response ? buildWorkflowRecommendationFromBrainResponse(response, message.id) : null,
+  [response, message.id],
+ )
  const turnEvidencePack = message.evidencePack
  const handoffContext = `${message.originalUserText || ""} ${response?.headline || ""} ${response?.keyInsight || ""}`.toLowerCase()
  const handoffOptions = [
@@ -662,32 +729,50 @@ const CreatorResponseCard: React.FC<{
   { key: "projects" as const, label: "Review in Projects", matches: /project|publish|package|content build|workflow|content plan/ },
  ].filter((option) => option.matches.test(handoffContext))
  if (!response && message.learningReceipt) {
-  return <article className={assistantCardFrame}><BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /></article>
+  return (
+   <StudioInterModule
+    data-vt-brain-component="BrainLearningReceiptEntry"
+    title="LEARNING SAVED"
+    startIcon={<BookOpen aria-hidden="true" />}
+    sizeVariant="compact"
+    className="shrink-0"
+    headStyle={{ background: TOOLBOX_PALETTE[3], "--vt-studio-control-accent": TOOLBOX_PALETTE[3], "--vt-studio-control-secondary": TOOLBOX_PALETTE[2] } as React.CSSProperties}
+   >
+    <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} />
+   </StudioInterModule>
+  )
  }
  if (!response) {
   const canRetry = message.turnStatus === "interrupted" && Boolean(message.originalUserText)
   return (
-   <article className={`${assistantCardFrame} p-4`}>
-    <div className="mb-2 text-[10px] font-black uppercase tracking-[0.12em] text-black/45">ViewTube Copilot</div>
-    <p className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
-    {canRetry ? (
-     <div className="mt-3 grid gap-2">
-      {message.contextMayBeStale ? (
-       <p role="status" className="text-xs font-bold leading-5 text-black/70">The channel data has changed since this attempt. Choose whether to keep the original evidence or refresh it for the retry.</p>
-      ) : null}
-      <div className="flex flex-wrap gap-2">
-       <button type="button" onClick={() => onRetry(message, false)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
-        {message.contextMayBeStale ? "Retry with saved evidence" : "Retry this response"}
-       </button>
+   <StudioInterModule
+    data-vt-brain-component="BrainInterruptedResponseEntry"
+    title="VIEWTUBE COPILOT"
+    startIcon={<Brain aria-hidden="true" />}
+    sizeVariant="compact"
+    defaultOpen
+    className="shrink-0"
+    headStyle={{ background: TOOLBOX_PALETTE[7], "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[11] } as React.CSSProperties}
+   >
+    <article data-vt-brain-component="BrainInterruptedResponseCard" className="min-w-0 p-3">
+     <p data-vt-brain-part="interrupted-response-copy" className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
+     {canRetry ? (
+      <div className="mt-3 grid gap-2">
        {message.contextMayBeStale ? (
-        <button type="button" onClick={() => onRetry(message, true)} className="min-h-11 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-3 py-2 text-[10px] font-black uppercase focus-visible:ring-2 focus-visible:ring-black">
-         Refresh evidence & retry
-        </button>
+        <p role="status" className="text-xs font-bold leading-5 text-black/70">The channel data has changed since this attempt. Choose whether to keep the original evidence or refresh it for the retry.</p>
        ) : null}
+       <div className="flex flex-wrap gap-2">
+        <StudioSplitLeftButton data-vt-brain-part="retry-response-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, false)}>
+         {message.contextMayBeStale ? "Retry with saved evidence" : "Retry this response"}
+        </StudioSplitLeftButton>
+        {message.contextMayBeStale ? (
+         <StudioSplitLeftButton data-vt-brain-part="retry-refresh-evidence-action" sizeVariant="compact" icon={<ArrowRight aria-hidden="true" />} onClick={() => onRetry(message, true)}>Refresh evidence & retry</StudioSplitLeftButton>
+        ) : null}
+       </div>
       </div>
-     </div>
-    ) : null}
-   </article>
+     ) : null}
+    </article>
+   </StudioInterModule>
   )
  }
  const rawModules: AIBrainAnswerModule[] = response.modules?.length
@@ -699,72 +784,112 @@ const CreatorResponseCard: React.FC<{
      tone: section.tone,
      source: "growth" as const,
     }))
- // Drop prose modules that just restate the key insight (the common duplication),
- // and cap the count so every answer isn't the same tall stack.
- const keyNorm = sanitizeCreatorFacingBrainCopy(response.keyInsight).trim().toLowerCase()
- const modules = rawModules
-  .filter((module) => {
-   if (module.data?.metrics?.length || module.data?.items?.length) return true
-   const body = sanitizeCreatorFacingBrainCopy(module.body || "").trim().toLowerCase()
-   if (!body || !keyNorm) return Boolean(body)
-   return !(body === keyNorm || body.startsWith(keyNorm.slice(0, 60)) || keyNorm.startsWith(body.slice(0, 60)))
-  })
-  .slice(0, 3)
+ // Remove exact duplicate prose only; prefix similarity can hide useful detail.
+ const normalizedModules = rawModules.map((module) => ({
+  ...module,
+  body: sanitizeCreatorFacingBrainCopy(module.body || ""),
+ }))
+ const filteredModules = selectBrainAnswerModules(
+  normalizedModules,
+  sanitizeCreatorFacingBrainCopy(response.keyInsight),
+ )
+ // Keep the answer compact while retaining every remaining module behind disclosure.
+ const modules = filteredModules.slice(0, 3)
+ const additionalModules = filteredModules.slice(3)
  const openQuestions = response.questions.filter(
   (question) => question.category !== "creator_goal" && !answeredQuestionIds.has(question.id),
  )
 
  return (
-  <article className={`${assistantCardFrame} flex flex-col overflow-hidden`}>
-   <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
-    <div className="flex flex-wrap items-start justify-between gap-1.5">
-     <div className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
-     {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
+  <StudioInterModule
+   data-vt-brain-component="BrainAssistantChatEntry"
+   title="VIEWTUBE COPILOT"
+   startIcon={<Brain aria-hidden="true" />}
+   sizeVariant="compact"
+   defaultOpen
+   className="shrink-0"
+   headStyle={{ background: TOOLBOX_PALETTE[5], "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": "#FF7AC8" } as React.CSSProperties}
+  >
+  <BrainResponseLayout
+   title={sanitizeCreatorFacingBrainCopy(response.headline)}
+   className="w-full max-w-none shrink-0 border-0 bg-white"
+   header={
+    <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
+     <div className="flex flex-wrap items-start justify-between gap-1">
+      <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
+      {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
+     </div>
+     <BrainResponseSectionHeader
+      title={sanitizeCreatorFacingBrainCopy(response.headline)}
+      className="text-lg font-[1000] uppercase leading-none sm:text-xl"
+     />
     </div>
-    <h3 className="text-lg font-[1000] uppercase leading-none sm:text-xl">
-     {sanitizeCreatorFacingBrainCopy(response.headline)}
-    </h3>
-   </div>
-   <div className="flex flex-col gap-2.5 p-3">
-    {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
-     <BrainDataReadiness readiness={message.readiness} />
-    ) : null}
-    <p className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
-    <BrainAnswerModuleGrid modules={modules} compact />
-    {openQuestions[0] ? (
-     <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
-    ) : null}
-   </div>
-   <div className="flex min-h-9 shrink-0 flex-wrap items-center gap-1 border-t-[2px] border-black bg-[#f8f8f4] px-3 py-1">
+   }
+   actionsClassName="min-h-9 bg-[#f8f8f4]"
+   actions={
+    <>
      <BrainFeedbackControls message={message} onFeedback={onFeedback} />
-     {handoffOptions.map((option) => (
-      <button
-       key={option.key}
-       type="button"
-       onClick={() => onReviewHandoff(message, option.key)}
-       title={`Queue a review-only handoff to ${option.label}`}
-       className="min-h-9 rounded-[6px] border-[2px] border-black bg-white px-2 text-[9px] font-black uppercase hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black"
-      >
-       {option.label}
-      </button>
-     ))}
-     {turnEvidencePack && turnEvidencePack.evidenceIds.length > 0 ? (
-      <BrainEvidenceDrawer evidencePack={turnEvidencePack} compact summaryLabel="Based on" />
-     ) : null}
-     <BrainContextUsedDrawer contextUsed={message.contextUsed} onCorrectItem={onCorrectContextItem} />
+     <BrainChatActionButtonGroup
+      label="Review handoff actions"
+      className="min-w-0"
+      actions={handoffOptions.map((option) => ({
+       id: option.key,
+       label: option.label,
+       title: `Queue a review-only handoff to ${option.label}`,
+       onSelect: () => onReviewHandoff(message, option.key),
+      }))}
+     />
+     <BrainContextUsedDrawer contextUsed={message.contextUsed} turnId={message.id} onCorrectItem={onCorrectContextItem} />
      {message.handoff ? (
       <Link
        to={message.handoff.route}
        title={`Open ${message.handoff.targetTitle}`}
-       className="ml-auto inline-flex items-center gap-1.5 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em]"
+       className="ml-auto inline-flex items-center gap-1 rounded-[6px] border-[2px] border-black bg-[#FFDA47] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em]"
       >
        Review only · Open
        <ArrowRight size={13} />
       </Link>
      ) : null}
-   </div>
-   {message.learningReceipt ? <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /> : null}
-  </article>
+    </>
+   }
+   footer={message.learningReceipt ? <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /> : null}
+  >
+   <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
+   {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
+    <BrainReadinessNotice readiness={message.readiness} />
+   ) : null}
+   <BrainAnswerModuleGrid modules={modules} compact />
+   {additionalModules.length ? (
+    <details data-vt-brain-part="additional-answer-modules" className="min-w-0 border-2 border-black bg-white">
+     <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-1 bg-[#f8f8f4] px-2 py-1 text-xs font-black uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black">
+      <span>More answer details</span>
+      <StudioSplitLeftBadge sizeVariant="micro" className="shrink-0">{additionalModules.length}</StudioSplitLeftBadge>
+     </summary>
+     <div className="grid min-w-0 gap-2 border-t-2 border-black p-2">
+      <BrainAnswerModuleGrid modules={additionalModules} compact />
+     </div>
+    </details>
+   ) : null}
+   {workflowRecommendation ? (
+    <details data-vt-brain-part="action-plan-tracker-disclosure" className="min-w-0 border-[1.5px] border-black/35 bg-white">
+     <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 bg-[#f8f8f4] px-2.5 py-2 text-[10px] font-[1000] uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2">
+      <span>Track next actions</span>
+      <StudioSplitLeftBadge sizeVariant="micro" className="shrink-0">{workflowRecommendation.steps.length} steps</StudioSplitLeftBadge>
+     </summary>
+     <div className="border-t border-black/20 p-2">
+      <BrainWorkflowRunPanel recommendation={workflowRecommendation} />
+     </div>
+    </details>
+   ) : null}
+   {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
+    <BrainDataReadiness readiness={message.readiness} />
+   ) : null}
+   {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} claimEvidence={response.claimEvidence} evidenceIntegrityStatus={message.evidenceIntegrityStatus || "unavailable"} compact /> : null}
+   {openQuestions[0] ? (
+    <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
+   ) : null}
+  </BrainResponseLayout>
+  </StudioInterModule>
  )
 }
 
@@ -782,48 +907,77 @@ const readinessForSnapshot = (snapshot: AIBrainContextSnapshot): AIBrainTurnRead
  warnings: snapshot.vtSync.warnings,
 })
 
+const BrainReadinessNotice: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ readiness }) => {
+ const presentation = resolveBrainDataReadinessPresentation({
+  dataStatus: readiness.dataStatus,
+  staleDatasets: readiness.diagnostics.coverage.staleDatasets,
+  missingDatasets: readiness.diagnostics.coverage.missingDatasets,
+ })
+ if (presentation.tone === "ready") return null
+ return (
+  <p data-vt-brain-part="readiness-notice" className="flex min-w-0 flex-wrap items-center gap-1 text-xs font-bold leading-4">
+   <BrainChatStatusBadge status={presentation.tone === "unavailable" ? "unavailable" : "warning"} label={presentation.label} />
+   <span>Some details may be incomplete until channel data is synced.</span>
+  </p>
+ )
+}
+
 const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ readiness }) => {
+ const [expanded, setExpanded] = React.useState(false)
  const staleCount = readiness.diagnostics.coverage.staleDatasets
  const missingCount = readiness.diagnostics.coverage.missingDatasets
  const revenueUnavailable = !readiness.availableMetrics.includes("revenue")
- const statusLabel = readiness.dataStatus === "ready"
-  ? "Channel data synced"
-  : readiness.dataStatus === "partial"
-   ? "Partial channel data"
-   : "Channel data unavailable"
+ const presentation = resolveBrainDataReadinessPresentation({
+  dataStatus: readiness.dataStatus,
+  staleDatasets: staleCount,
+  missingDatasets: missingCount,
+ })
  const summary = [
-  statusLabel,
+  presentation.label,
   revenueUnavailable ? "Revenue unavailable" : "",
   staleCount > 0 ? `${staleCount} stale datasets` : "",
   missingCount > 0 ? `${missingCount} missing datasets` : "",
  ].filter(Boolean).join(" · ")
  const incompleteSources = readiness.sourceStatuses.filter((source) => source.status !== "ready")
+ const creatorSummary = readiness.dataStatus === "missing"
+  ? "Connect a channel to unlock performance advice"
+  : missingCount > 0
+   ? `${missingCount} data items unavailable`
+   : staleCount > 0
+    ? `${staleCount} data items may be out of date`
+    : "Channel data is ready"
 
  return (
-  <details className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
-   <summary className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1.5 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
-    <span className={`rounded-[4px] border-[1.5px] border-black px-1.5 py-0.5 ${readiness.dataStatus === "ready" ? "bg-[#3FEE56]" : readiness.dataStatus === "partial" ? "bg-[#FFDA47]" : "bg-[#FF7497]"}`}>Data readiness</span>
-    <span>{summary}</span>
+  <details data-vt-brain-component="BrainEvidenceReadiness" aria-label="Channel data details" onToggle={(event) => setExpanded(event.currentTarget.open)} className="min-w-0 overflow-hidden border-2 border-black bg-[#f8f8f4]">
+   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-9 min-w-0 cursor-pointer list-none flex-wrap items-center justify-between gap-1 px-2 py-1 text-xs font-black leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
+    <span className="shrink-0 uppercase">Channel data</span>
+    <span data-vt-brain-part="readiness-creator-summary" className="min-w-0 flex-1 break-words text-[11px] font-bold normal-case text-black/75">{creatorSummary}</span>
+    <span className="shrink-0 text-[10px] font-bold normal-case text-black/65">View details</span>
    </summary>
-   <div className="grid gap-2 border-t-[2px] border-black p-2.5">
-    <div>
+   {expanded ? (
+   <div data-vt-brain-part="evidence-diagnostics" className="grid gap-2 border-t-2 border-black p-2">
+    <div className="flex min-w-0 flex-wrap items-center gap-1 text-xs font-bold">
+     <BrainChatStatusBadge status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label={presentation.label} />
+     <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
+    </div>
+    <div data-vt-brain-part="available-metrics">
      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Metrics available for this answer</h4>
      <p className="mt-1 text-xs font-bold leading-5">{readiness.availableMetrics.length ? readiness.availableMetrics.join(", ") : "No video performance metrics are available for this request."}</p>
     </div>
     {readiness.missingInputs.length ? (
      <div>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Missing inputs</h4>
+      <h4 data-vt-brain-part="missing-inputs-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Missing inputs</h4>
       <ul className="mt-1 grid gap-1">
-       {readiness.missingInputs.map((item) => <li key={item} className="text-xs font-bold leading-5">{item}</li>)}
+       {readiness.missingInputs.map((item) => <li data-vt-brain-part="missing-input-item" key={item} className="text-xs font-bold leading-5">{item}</li>)}
       </ul>
      </div>
     ) : null}
     {incompleteSources.length ? (
      <div>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Dataset status</h4>
+      <h4 data-vt-brain-part="dataset-status-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Dataset status</h4>
       <ul className="mt-1 grid gap-1">
        {incompleteSources.map((source) => (
-        <li key={source.id} className="rounded-[5px] border border-black/20 bg-white px-2 py-1">
+        <li data-vt-brain-part="dataset-status-item" key={source.id} className="rounded-[5px] border border-black/20 bg-white px-2 py-1">
          <span className="font-black">{source.label}</span>
          <span className="block text-[10px] leading-4 text-black/65">{source.status}: {source.detail}</span>
         </li>
@@ -833,30 +987,38 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
     ) : null}
     {readiness.diagnostics.warnings.length || readiness.warnings.length ? (
      <div>
-      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Sync notes</h4>
+      <h4 data-vt-brain-part="sync-notes-heading" className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Sync notes</h4>
       <ul className="mt-1 grid gap-1">
        {[...new Set([...readiness.diagnostics.warnings, ...readiness.warnings])].slice(0, 5).map((warning) => (
-        <li key={warning} className="text-xs font-bold leading-5">{warning}</li>
+        <li data-vt-brain-part="sync-note-item" key={warning} className="text-xs font-bold leading-5">{warning}</li>
        ))}
       </ul>
      </div>
     ) : null}
-    {readiness.capturedAt ? <p className="text-[9px] font-bold text-black/45">Evidence snapshot: {readiness.capturedAt}</p> : null}
-    <p className="text-[9px] font-bold leading-4 text-black/55">This status is based on the synced data and diagnostic records attached to this turn. Missing metrics are not estimated.</p>
+    {readiness.capturedAt ? <p data-vt-brain-part="evidence-snapshot-timestamp" className="text-[9px] font-bold text-black/45">Evidence snapshot: {readiness.capturedAt}</p> : null}
+    <p data-vt-brain-part="evidence-provenance-note" className="text-[9px] font-bold leading-4 text-black/55">This status is based on the synced data and diagnostic records attached to this turn. Missing metrics are not estimated.</p>
    </div>
+   ) : null}
   </details>
  )
 }
 
 export const UserMessage: React.FC<{ text: string }> = ({ text }) => (
- <article className="grid min-h-[68px] w-full shrink-0 grid-cols-[84px_minmax(0,1fr)] overflow-hidden border-y-[2px] border-black bg-[#36E0F6]">
-  <div className="flex items-center border-r-[2px] border-black bg-[#24C8E2] px-3 text-[14px] font-[1000] uppercase tracking-[0.06em]">
-   You:
-  </div>
-  <p className="flex min-w-0 items-center whitespace-pre-wrap px-4 py-3 text-sm font-bold leading-6">
-   {sanitizeCreatorFacingBrainCopy(text)}
-  </p>
- </article>
+ <StudioInterModule
+  data-vt-brain-component="BrainUserChatEntry"
+  title="YOU"
+  startIcon={<MessageSquare aria-hidden="true" />}
+  sizeVariant="compact"
+  collapsible={false}
+  className="shrink-0"
+  headStyle={{ background: TOOLBOX_PALETTE[7], "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[6] } as React.CSSProperties}
+ >
+  <BrainChatMessageShell role="user" label="Your message" className="min-w-0 bg-[#36E0F6]">
+   <p className="whitespace-pre-wrap px-3 py-2 text-sm font-bold leading-6 [overflow-wrap:anywhere]">
+    {sanitizeCreatorFacingBrainCopy(text)}
+   </p>
+  </BrainChatMessageShell>
+ </StudioInterModule>
 )
 
 const CreatorIntakeWizard: React.FC<{
@@ -870,12 +1032,12 @@ const CreatorIntakeWizard: React.FC<{
  const question = AI_BRAIN_INTAKE_QUESTIONS[questionIndex]
  const lastQuestion = questionIndex === AI_BRAIN_INTAKE_QUESTIONS.length - 1
  return (
-  <section className={`${shellCard} flex h-full min-h-0 flex-col overflow-hidden`}>
-   <div className="border-b-[4px] border-black bg-[#3FEE56] px-5 py-4">
+  <section data-vt-brain-component="BrainProfileSetup" className={`${shellCard} flex h-full min-h-0 flex-col overflow-hidden`}>
+   <div data-vt-brain-part="profile-setup-heading" className="border-b-[4px] border-black bg-[#3FEE56] px-5 py-4">
     <div className="flex items-center justify-between gap-3">
      <div>
-      <div className="text-[10px] font-black uppercase tracking-[0.18em] text-black/55">Creator Profile Setup</div>
-      <h2 className="mt-1 text-2xl font-[1000] uppercase leading-none sm:text-3xl">Help ViewTube Understand Your Channel</h2>
+      <div data-vt-brain-part="profile-setup-eyebrow" className="text-[10px] font-black uppercase tracking-[0.18em] text-black/55">Creator Profile Setup</div>
+      <h2 data-vt-brain-part="profile-setup-title" className="mt-1 text-2xl font-[1000] uppercase leading-none sm:text-3xl">Help ViewTube Understand Your Channel</h2>
      </div>
      <span className="rounded-[8px] border-[2px] border-black bg-white px-3 py-1 text-xs font-black">
       {questionIndex + 1} / {AI_BRAIN_INTAKE_QUESTIONS.length}
@@ -885,14 +1047,18 @@ const CreatorIntakeWizard: React.FC<{
    <div className="grid min-h-0 flex-1 place-items-center p-4 sm:p-6">
     <label key={question.id} className={`${innerCard} block w-full max-w-4xl overflow-hidden`}>
      <span className="block border-b-[2px] border-black px-4 py-3" style={{ backgroundColor: TOOLBOX_PALETTE[(questionIndex + 2) % TOOLBOX_PALETTE.length] }}>
-      <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-black/55">{question.label}</span>
-      <span className="mt-1 block text-lg font-[1000] leading-6">{question.prompt}</span>
+      <span data-vt-brain-part="profile-question-label" className="block text-[9px] font-black uppercase tracking-[0.16em] text-black/55">{question.label}</span>
+      <span data-vt-brain-part="profile-question-prompt" className="mt-1 block text-lg font-[1000] leading-6">{question.prompt}</span>
      </span>
-     <textarea
+     <StudioTextArea
+      data-vt-brain-part="profile-question-answer"
+      sizeVariant="standard"
+      rows={5}
       value={String(context[question.id] || "")}
       onChange={(event) => update(question.id, event.target.value)}
       placeholder={question.placeholder}
-      className="h-[clamp(150px,28vh,250px)] w-full resize-none border-0 bg-white p-4 text-base font-bold leading-7 outline-none focus:bg-[#FFDA47]/20"
+      style={{ height: "clamp(150px, 28vh, 250px)" }}
+      className="w-full resize-none"
      />
     </label>
    </div>
@@ -901,25 +1067,9 @@ const CreatorIntakeWizard: React.FC<{
      <p className="text-sm font-bold leading-6 text-black/70">
       Answer what you know now. You can skip and continue later.
      </p>
-     <button type="button" onClick={onDefer} className={`${kpiButton} justify-center`}>
-      Skip for now
-     </button>
-     <button
-      type="button"
-      onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))}
-      disabled={questionIndex === 0}
-      className={`${kpiButton} justify-center disabled:opacity-40`}
-     >
-      <ChevronLeft size={14} /> Previous
-     </button>
-     <button
-      type="button"
-      onClick={() => lastQuestion ? onSave() : setQuestionIndex((index) => Math.min(AI_BRAIN_INTAKE_QUESTIONS.length - 1, index + 1))}
-      className="inline-flex items-center justify-center gap-2 rounded-[10px] border-[2px] border-black bg-[#3FEE56] px-4 py-3 text-[11px] font-black uppercase tracking-[0.1em] shadow-[3px_3px_0_0_#000]"
-     >
-      {lastQuestion ? "Save Creator Profile" : "Next Question"}
-      <ArrowRight size={15} />
-     </button>
+     <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={onDefer}>Skip for now</StudioButton>
+     <StudioSplitLeftButton sizeVariant="compact" icon={<ChevronLeft aria-hidden="true" />} type="button" onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))} disabled={questionIndex === 0}>Previous</StudioSplitLeftButton>
+     <StudioSplitLeftButton sizeVariant="standard" icon={<ArrowRight aria-hidden="true" />} type="button" onClick={() => lastQuestion ? onSave() : setQuestionIndex((index) => Math.min(AI_BRAIN_INTAKE_QUESTIONS.length - 1, index + 1))}>{lastQuestion ? "Save Creator Profile" : "Next Question"}</StudioSplitLeftButton>
     </div>
    </div>
   </section>
@@ -940,6 +1090,7 @@ const AIBrainCommandInterface: React.FC = () => {
   emitSignal,
  } = brainContext
  const [input, setInput] = useState("")
+ const [mobileViewportHeight, setMobileViewportHeight] = useState<number | null>(null)
  const [journalInput, setJournalInput] = useState("")
  const [busy, setBusy] = useState(false)
  const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -961,12 +1112,42 @@ const AIBrainCommandInterface: React.FC = () => {
  const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
  const [projectContextCleared, setProjectContextCleared] = useState(false)
  const [journalOpen, setJournalOpen] = useState(false)
- const composerRef = useRef<HTMLInputElement | null>(null)
+ const [contextCorrectionItem, setContextCorrectionItem] = useState<BrainContextCorrectionItem | null>(null)
+ const composerRef = useRef<HTMLTextAreaElement | null>(null)
  const promptLauncherRef = useRef<HTMLButtonElement | null>(null)
  const contextLauncherRef = useRef<HTMLButtonElement | null>(null)
  const promptCloseRef = useRef<HTMLButtonElement | null>(null)
  const contextCloseRef = useRef<HTMLButtonElement | null>(null)
- const bottomRef = useRef<HTMLDivElement | null>(null)
+ const conversationViewportRef = useRef<HTMLDivElement | null>(null)
+ const requestInFlightRef = useRef(false)
+
+ // Mobile browsers may keep the layout viewport tall when the on-screen keyboard
+ // opens. Follow the visual viewport so the anchored composer stays above it.
+ useEffect(() => {
+  const visualViewport = window.visualViewport
+  const syncMobileViewport = () => {
+   if (window.matchMedia("(max-width: 1279px)").matches) {
+    // Some browser emulation/device modes report a visual viewport taller than
+    // the layout viewport. Never size the page beyond the actual layout bounds.
+    const height = visualViewport
+     ? Math.min(visualViewport.height, window.innerHeight)
+     : window.innerHeight
+    setMobileViewportHeight(Math.max(1, Math.round(height)))
+   } else {
+    setMobileViewportHeight(null)
+   }
+  }
+  syncMobileViewport()
+  window.addEventListener("resize", syncMobileViewport)
+  window.addEventListener("orientationchange", syncMobileViewport)
+  visualViewport?.addEventListener("resize", syncMobileViewport)
+  return () => {
+   window.removeEventListener("resize", syncMobileViewport)
+   window.removeEventListener("orientationchange", syncMobileViewport)
+   visualViewport?.removeEventListener("resize", syncMobileViewport)
+  }
+ }, [])
+ const shouldFollowConversationRef = useRef(true)
  const askSeededRef = useRef(false)
  const canUseGemini = hasGeminiKey()
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
@@ -1106,7 +1287,7 @@ const AIBrainCommandInterface: React.FC = () => {
   const chronological = [...visibleTurns].reverse()
   setMessages(
    chronological.flatMap((turn) => [
-    { id: `${turn.id}-user`, role: "user" as const, text: turn.userText },
+    { id: `${turn.id}-user`, role: "user" as const, text: turn.rawUserMessage ?? turn.userText },
     {
      id: turn.id,
      role: "model" as const,
@@ -1125,6 +1306,8 @@ const AIBrainCommandInterface: React.FC = () => {
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
+     evidenceRecords: readPromptEvidenceRecords(turn.metadata),
+     evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(turn.metadata),
      readiness: turn.metadata?.dataReadinessSnapshot && typeof turn.metadata.dataReadinessSnapshot === "object"
       ? turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness
       : undefined,
@@ -1139,9 +1322,13 @@ const AIBrainCommandInterface: React.FC = () => {
   )
  }, [busy, visibleTurns])
 
- // Keep the newest exchange in view as the thread grows.
+ // Keep the newest exchange in view only while the reader is following the conversation.
+ // Scroll only the bounded transcript viewport, not page or toolbox ancestors.
  useEffect(() => {
-  bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+  if (!shouldFollowConversationRef.current) return
+  const viewport = conversationViewportRef.current
+  if (!viewport) return
+  viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" })
  }, [messages.length, busy])
 
  useEffect(() => {
@@ -1213,9 +1400,8 @@ const AIBrainCommandInterface: React.FC = () => {
   }
  }
 
- const handleCorrectContextItem = (id: string, statement: string) => {
-  setInput(`Correct this AI Brain context item ${id}. Current statement: "${statement}". Ask me to confirm the correction, then route the updated preference/fact through the existing learning governance path. Do not silently replace the existing record.`)
-  composerRef.current?.focus()
+ const handleCorrectContextItem = (item: BrainCreatorContextSnapshot["knowledgeItems"][number]) => {
+  setContextCorrectionItem({ ...item, source: item.source as BrainContextCorrectionItem["source"] })
  }
 
  const handleClearSurfaceSelection = () => {
@@ -1235,13 +1421,16 @@ const AIBrainCommandInterface: React.FC = () => {
 
  const handleSend = async (override?: string) => {
   const userText = override ?? input
-  if (!userText.trim() || busy) return
+  if (!userText.trim() || busy || requestInFlightRef.current) return
   if (shouldShowAiBrainIntake(authState.isAuthenticated)) {
    setIntakeContext(loadAiBrainContext())
    setIntakeOpen(true)
    return
   }
+  requestInFlightRef.current = true
+  shouldFollowConversationRef.current = true
   setInput("")
+  if (composerRef.current) composerRef.current.style.height = "52px"
   setBusy(true)
   const userMessage: ChatMessage = { id: makeMessageId(), role: "user", text: userText }
   // Append to the ongoing thread; the post-send refresh rebuilds it authoritatively.
@@ -1315,7 +1504,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: readPromptEvidenceRecords(result.turn.metadata), evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -1334,14 +1523,16 @@ const AIBrainCommandInterface: React.FC = () => {
     { id: makeMessageId(), role: "model", text: fallbackText, response, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
    ])
   } finally {
+   requestInFlightRef.current = false
    setBusy(false)
   }
  }
 
  const handleRetryInterruptedTurn = (message: ChatMessage, useFreshEvidence: boolean) => {
   const userText = message.originalUserText || ""
-  if (!userText.trim() || busy || message.turnStatus !== "interrupted") return
+  if (!userText.trim() || busy || requestInFlightRef.current || message.turnStatus !== "interrupted") return
 
+  requestInFlightRef.current = true
   setBusy(true)
   setMessages((current) => current.map((item) => item.id === message.id
    ? { ...item, text: "Retrying the original request…", turnStatus: "pending", response: undefined }
@@ -1414,6 +1605,8 @@ const AIBrainCommandInterface: React.FC = () => {
        turnStatus: result.turn.status,
        originalUserText: result.turn.rawUserMessage ?? userText,
        evidencePack: turnSnapshot.evidencePack,
+       evidenceRecords: readPromptEvidenceRecords(result.turn.metadata),
+       evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata),
        readiness: readinessForSnapshot(turnSnapshot),
        contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined,
        contextMayBeStale: false,
@@ -1425,6 +1618,7 @@ const AIBrainCommandInterface: React.FC = () => {
     console.warn("[AIBrain] Interrupted response retry failed:", error)
     await refreshConversationTurns()
    } finally {
+    requestInFlightRef.current = false
     setBusy(false)
    }
   })()
@@ -1692,7 +1886,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  return (
-  <main className="h-full min-h-0 overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black xl:overflow-hidden">
+  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="h-full min-h-0 overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black max-xl:h-[100dvh] max-xl:overflow-hidden xl:overflow-hidden">
    <Toolbox
     title="ViewTube Brain Hub"
     subtitle="One assistant for channel strategy, analytics, goals, content planning, SEO, and publishing."
@@ -1701,8 +1895,9 @@ const AIBrainCommandInterface: React.FC = () => {
     collapsible={false}
     indicator="none"
     embedded
-    outerClassName="min-h-full max-xl:!h-auto xl:h-full"
-    contentClassName="min-h-0 overflow-visible bg-[#f3f4f6] max-xl:!h-auto xl:overflow-hidden"
+    fillAvailable
+    outerClassName="h-full min-h-0 max-xl:!h-full xl:h-full"
+    contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:overflow-hidden xl:overflow-hidden"
    >
     {intakeOpen ? (
      <CreatorIntakeWizard
@@ -1712,13 +1907,14 @@ const AIBrainCommandInterface: React.FC = () => {
       onDefer={handleDeferIntake}
      />
     ) : (
-     <section className="relative flex min-h-0 flex-col max-xl:h-auto max-xl:overflow-visible xl:h-full xl:overflow-hidden">
+     <section className="relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
       <div className="shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
-      <div className="grid min-h-0 gap-3 bg-[#f3f4f6] max-xl:min-h-[70dvh] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:flex-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[minmax(0,1.45fr)_minmax(520px,1fr)]">
-       <div className={`${innerCard} flex min-h-0 flex-col overflow-hidden max-xl:min-h-[70dvh] max-xl:overflow-visible max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
-        <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] bg-white max-xl:min-h-[420px]">
+      <div className="grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
+       <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
+      <div className={`${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
          <BrainContextStrip
           channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
           projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
@@ -1733,7 +1929,7 @@ const AIBrainCommandInterface: React.FC = () => {
          ) : messages.length === 0 ? (
           <OpeningBriefing snapshot={snapshot} onPrompt={(prompt) => { void handleSend(prompt) }} />
          ) : (
-          <div className="brain-chat-scrollbar flex min-h-0 w-full flex-1 flex-col gap-2 overscroll-contain max-xl:overflow-visible xl:overflow-y-auto" aria-label="Brain conversation" aria-live="polite" role="log" tabIndex={0}>
+          <ChatConversationViewport viewportRef={conversationViewportRef} onScroll={(event) => { const viewport = event.currentTarget; shouldFollowConversationRef.current = shouldFollowBrainConversation(viewport.scrollHeight, viewport.scrollTop, viewport.clientHeight) }}>
            {messages.map((message) => message.role === "user" ? (
             <UserMessage key={message.id} text={message.text} />
            ) : (
@@ -1750,55 +1946,80 @@ const AIBrainCommandInterface: React.FC = () => {
              onCorrectContextItem={handleCorrectContextItem}
             />
            ))}
-           <div ref={bottomRef} aria-hidden="true" />
-          </div>
+          </ChatConversationViewport>
          )}
         </div>
 
-        <footer className="shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2">
+        <BrainComposerShell>
          <div className="mx-auto w-full max-w-[880px]">
-          <div className="mb-1.5 flex flex-wrap gap-1 xl:hidden">
-           <button ref={promptLauncherRef} type="button" onClick={() => setPromptRailOpen(true)} aria-label="Open prompt library" className="inline-flex min-h-9 items-center gap-1 rounded-[7px] border-[2px] border-black bg-[#FF7AC8] px-2 py-1 text-[9px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black xl:hidden">
-            <LayoutGrid size={13} aria-hidden="true" /> Prompt Library
-           </button>
-           <button ref={contextLauncherRef} type="button" onClick={() => setContextRailOpen(true)} aria-label="Open channel context" className="inline-flex min-h-11 items-center gap-1 rounded-[7px] border-[2px] border-black bg-[#3FEE56] px-3 py-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black xl:hidden">
-            <PanelRight size={13} aria-hidden="true" /> Channel Context
-           </button>
-          </div>
-          <div className="flex gap-2">
-           <button type="button" onClick={() => setJournalOpen(true)} aria-label="Open AI Journal" title="Open AI Journal" className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-[9px] border-[2px] border-black bg-[#36E0F6] outline-none transition hover:bg-[#FFDA47] focus-visible:ring-[3px] focus-visible:ring-black">
-            <BookOpen size={18} aria-hidden="true" />
-           </button>
-           <label className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
-           <span id="brain-composer-help" className="sr-only">Press Enter to send. Search prompts or browse capabilities for guided requests.</span>
-           <span className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
-           <input
+          <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1 xl:hidden">
+           <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-stretch gap-1">
+            <div data-vt-brain-part="composer-launchers" className="vt-brain-composer-launchers min-w-0">
+             <StudioSplitTwoLineButton
+              ref={promptLauncherRef}
+              sizeVariant="compact"
+              icon={<LayoutGrid aria-hidden="true" />}
+              firstLine="PROMPT"
+              secondLine="LIBRARY"
+              onClick={() => setPromptRailOpen(true)}
+              aria-label="Open prompt library"
+              aria-haspopup="dialog"
+              className="min-w-0 w-full xl:hidden"
+              style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
+             />
+             <StudioSplitTwoLineButton
+              ref={contextLauncherRef}
+              sizeVariant="compact"
+              icon={<PanelRight aria-hidden="true" />}
+              firstLine="CHANNEL"
+              secondLine="CONTEXT"
+              onClick={() => setContextRailOpen(true)}
+              aria-label="Open channel context"
+              aria-haspopup="dialog"
+              className="min-w-0 w-full xl:hidden"
+              style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": TOOLBOX_PALETTE[9] } as React.CSSProperties}
+             />
+            </div>
+            <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0 self-start" style={{ backgroundColor: "#36E0F6" }} />
+           </div>
+          </BrainComposerAccessoryRow>
+          <div data-vt-brain-part="composer-controls" className="vt-brain-composer-controls w-full min-w-0">
+           <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
+           <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
+           <span data-vt-brain-part="composer-status" className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
+           <StudioTextArea
             ref={composerRef}
-            type="text"
             id="brain-composer"
+            sizeVariant="compact"
+            rows={2}
             value={input}
-            onChange={(event) => setInput(event.target.value)}
+            onChange={(event) => {
+             event.currentTarget.style.height = "auto"
+             event.currentTarget.style.height = `${Math.min(event.currentTarget.scrollHeight, 144)}px`
+             setInput(event.target.value)
+            }}
             onKeyDown={(event) => {
-             if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing })) return
+             if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
              event.preventDefault()
              void handleSend()
             }}
             placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-            className="h-[52px] min-w-0 flex-1 rounded-[9px] border-[2px] border-black bg-white p-2 text-sm font-bold leading-5 outline-none focus:bg-[#FFDA47]/20 focus-visible:ring-[3px] focus-visible:ring-black" aria-label="Ask ViewTube Brain" aria-describedby="brain-composer-help"
+            className="w-full max-h-36 min-h-[44px] min-w-0 resize-none"
+            style={{ minHeight: 52 }}
+            aria-label="Ask ViewTube Brain"
+            aria-describedby="brain-composer-help"
            />
-           <button type="button" onClick={() => void handleSend()} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} className="inline-flex min-h-[52px] w-[74px] shrink-0 items-center justify-center gap-1 rounded-[9px] border-[2px] border-black bg-[#3FEE56] text-xs font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black disabled:opacity-50">
-            {busy ? <Zap className="animate-pulse" size={16} /> : <Send size={16} />} Send
-           </button>
+           <StudioSplitTwoLineButton data-vt-brain-component="BrainComposerSendAction" sizeVariant="compact" icon={busy ? <Zap aria-hidden="true" /> : <Send aria-hidden="true" />} firstLine={busy ? "BRAIN" : "SEND"} secondLine={busy ? "WORKING" : "MESSAGE"} disabled={busy || !input.trim()} aria-label={busy ? "Sending message" : "Send message"} onClick={() => void handleSend()} className="shrink-0 min-w-[4.5rem]" style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[5] } as React.CSSProperties} />
           </div>
          </div>
-        </footer>
+        </BrainComposerShell>
        </div>
 
        <div className="hidden min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-3 overflow-hidden xl:grid">
         <div className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)] overflow-hidden" aria-label="Brain launchpad">
-         <div className="grid grid-cols-2 gap-1 border-[2px] border-black bg-[#f8f8f4] p-1">
-          <button type="button" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "prompts" ? "bg-[#FF7AC8]" : "bg-white"}`}>Prompt Library</button>
-          <button type="button" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "capabilities" ? "bg-[#36E0F6]" : "bg-white"}`}>Capabilities</button>
+         <div data-vt-brain-component="BrainLauncherModeSwitch" className="brain-launcher-mode-switch grid grid-cols-2 gap-1 border-[2px] border-black bg-[#f8f8f4] p-1">
+          <StudioSplitTwoLineButton sizeVariant="compact" icon={<LayoutGrid aria-hidden="true" />} firstLine="PROMPT" secondLine="LIBRARY" aria-label="Prompt Library" title="Prompt Library" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "prompts" ? "#FF7AC8" : "#ffffff" }} />
+          <StudioSplitTwoLineButton sizeVariant="compact" icon={<Zap aria-hidden="true" />} firstLine="CAPABILITIES" secondLine="BROWSER" aria-label="Capabilities" title="Capabilities" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "capabilities" ? "#36E0F6" : "#ffffff" }} />
          </div>
          <div className="min-h-0 overflow-y-auto pt-2">
           {launcherMode === "prompts" ? <BrainPromptLibrary
@@ -1836,21 +2057,20 @@ const AIBrainCommandInterface: React.FC = () => {
 
       {promptRailOpen ? (
        <div
+        data-vt-brain-component="BrainLauncherDrawer"
         role="dialog"
         aria-modal="true"
         aria-labelledby="brain-prompt-library-dialog-title"
         className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden"
        >
-        <div className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
+        <div data-vt-brain-part="mobile-launcher-heading" className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
          <div className="flex items-center justify-between gap-2">
-          <h2 id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
-          <button ref={promptCloseRef} type="button" className={kpiButton} onClick={() => setPromptRailOpen(false)}>
-           <X size={14} aria-hidden="true" /> Close
-          </button>
+          <h2 data-vt-brain-part="launcher-drawer-heading" id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
+          <StudioSplitLeftButton ref={promptCloseRef} sizeVariant="compact" icon={<X aria-hidden="true" />} onClick={() => setPromptRailOpen(false)}>Close</StudioSplitLeftButton>
          </div>
-         <div className="grid grid-cols-2 gap-1">
-          <button type="button" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "prompts" ? "bg-[#FF7AC8]" : "bg-white"}`}>Prompt Library</button>
-          <button type="button" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className={`min-h-11 rounded-[6px] border-[2px] border-black px-2 text-[10px] font-black uppercase outline-none focus-visible:ring-[3px] focus-visible:ring-black ${launcherMode === "capabilities" ? "bg-[#36E0F6]" : "bg-white"}`}>Capabilities</button>
+         <div data-vt-brain-component="BrainLauncherModeSwitch" className="brain-launcher-mode-switch grid grid-cols-2 gap-1">
+          <StudioSplitTwoLineButton sizeVariant="compact" icon={<LayoutGrid aria-hidden="true" />} firstLine="PROMPT" secondLine="LIBRARY" aria-label="Prompt Library" title="Prompt Library" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "prompts" ? "#FF7AC8" : "#ffffff" }} />
+          <StudioSplitTwoLineButton sizeVariant="compact" icon={<Zap aria-hidden="true" />} firstLine="CAPABILITIES" secondLine="BROWSER" aria-label="Capabilities" title="Capabilities" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "capabilities" ? "#36E0F6" : "#ffffff" }} />
          </div>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Brain launchpad content" tabIndex={0}>
@@ -1873,10 +2093,10 @@ const AIBrainCommandInterface: React.FC = () => {
       ) : null}
 
       {contextRailOpen ? (
-       <div role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden">
+       <div data-vt-brain-component="BrainContextDrawer" role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden">
         <div className="mb-2 flex items-center justify-between border-b-[2px] border-black pb-2">
-         <h2 id="brain-context-dialog-title" className="text-lg font-[1000] uppercase">Your Channel Context</h2>
-         <button ref={contextCloseRef} type="button" className={kpiButton} onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</button>
+         <h2 data-vt-brain-part="context-drawer-heading" id="brain-context-dialog-title" className="text-lg font-[1000] uppercase">Your Channel Context</h2>
+         <StudioButton data-vt-brain-part="mobile-context-close" ref={contextCloseRef} sizeVariant="compact" tone="neutral" type="button" onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</StudioButton>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
          <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
@@ -1884,19 +2104,24 @@ const AIBrainCommandInterface: React.FC = () => {
        </div>
       ) : null}
 
+      {contextCorrectionItem ? (
+       <BrainContextCorrectionDialog
+        channelId={channelId}
+        item={contextCorrectionItem}
+        onClose={() => setContextCorrectionItem(null)}
+        onApplied={() => {
+         setInput(`Verify that the governed correction for context item ${contextCorrectionItem.sourceId} is reflected in the next answer. If the refreshed context does not contain it, show the unresolved conflict instead of assuming it was applied.`)
+         window.setTimeout(() => composerRef.current?.focus(), 0)
+        }}
+       />
+      ) : null}
       {journalOpen ? (
-       <div className="absolute inset-0 z-50 grid place-items-center bg-black/40 p-4">
-        <section className={`${shellCard} w-full max-w-2xl overflow-hidden`}>
-         <div className="border-b-[2px] border-black bg-[#36E0F6] px-4 py-3"><h2 className="text-xl font-[1000] uppercase">Save To AI Journal</h2></div>
-         <div className="grid gap-3 p-4">
-          <textarea value={journalInput} onChange={(event) => setJournalInput(event.target.value)} placeholder="A goal, content style note, audience insight, constraint, or decision you want the Brain to remember." className="h-[180px] resize-none rounded-[8px] border-[2px] border-black p-3 text-sm font-bold leading-6 outline-none" />
-          <div className="flex justify-end gap-2">
-           <button type="button" className={kpiButton} onClick={() => setJournalOpen(false)}>Cancel</button>
-           <button type="button" className={`${kpiButton} bg-[#3FEE56]`} disabled={!journalInput.trim()} onClick={() => { handleJournalSave(); setJournalOpen(false) }}>Remember this</button>
-          </div>
-         </div>
-        </section>
-       </div>
+       <BrainJournalDialog
+        value={journalInput}
+        onChange={setJournalInput}
+        onClose={() => setJournalOpen(false)}
+        onSave={() => { handleJournalSave(); setJournalOpen(false) }}
+       />
       ) : null}
      </section>
     )}

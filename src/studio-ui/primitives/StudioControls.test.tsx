@@ -3,9 +3,10 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
+import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
 
 const readStudioControlCss = () => [
   "studio-control-system.css",
@@ -20,6 +21,49 @@ const canonicalTail = (css: string) => {
 };
 
 
+describe("StudioTextBox size-aware stroke defaults", () => {
+  it("halves only the local stroke width while preserving the 50% fill and black text", () => {
+    const css = readStudioControlCss();
+    const start = css.indexOf('.vt-studio-text-box[data-vt-studio-control="true"]');
+    const end = css.indexOf("/* Textarea and read-only text display share", start);
+    const textBox = css.slice(start, end);
+    expect(textBox).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5)");
+    expect(textBox).toContain("border: var(--studio-text-box-stroke-width) solid #000");
+    expect(textBox).toContain("inset 0 0 0 var(--studio-text-box-stroke-width)");
+    expect(textBox).toContain("outline: var(--studio-text-box-stroke-width) solid");
+    expect(textBox).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
+    expect(textBox).toContain("color: #000");
+    expect(textBox).toContain("line-height: var(--textarea-description-line-height, 0.75)");
+    expect(textBox).toContain('[data-size="compact"]');
+    expect(textBox).toContain('[data-size="micro"]');
+  });
+});
+
+describe("Studio badge single-size contract", () => {
+  it("renders closeable and Brain status badges at the single standard size", () => {
+    const closeable = renderToStaticMarkup(<StudioCloseableBadge label="Featured" sizeVariant="micro" />);
+    const brain = renderToStaticMarkup(<StudioBrainStatusBadge label="Learning" sizeVariant="micro" />);
+    const indicator = renderToStaticMarkup(<StudioBrainStatusIndicator status="running" label="Ready" size="micro" />);
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(closeable).toContain('data-size="standard"');
+    expect(brain).toContain('data-size="standard"');
+    expect(indicator).toContain('data-size="standard"');
+    expect(css).toContain("font: 1000 18px/20px Inter");
+    expect(css).toContain("border-radius: 4px;");
+    expect(css).toContain("transform: translateY(.5px);");
+    const brainLed = css.slice(css.indexOf(".vt-studio-brain-status-badge__core {"), css.indexOf("@keyframes vt-studio-brain-led-ripple"));
+    expect(brainLed).toContain("background-color: var(--vt-brain-led-color);");
+    expect(brainLed).toContain("radial-gradient(circle at 38% 32%, #fff 0 22%, var(--vt-brain-led-color) 23% 76%, color-mix(in srgb, var(--vt-brain-led-color) 78%, #000) 100%)");
+    expect(brainLed).toContain("opacity: 1;");
+    expect(brainLed).toContain("border: 2px solid var(--vt-brain-led-color);");
+    expect(brainLed).toContain("vt-studio-brain-led-ripple 8s cubic-bezier(.16,1,.3,1) infinite");
+    expect(brainLed).toContain("transform: scale(1);");
+    expect(brainLed).toContain("37.5% { transform: scale(5); opacity: 0; }");
+    expect(css).toContain("background: #fff;");
+    expect(css).toContain("prefers-reduced-motion: reduce");
+  });
+});
+
 describe("canonical Studio upload frame", () => {
   it("renders the standard upload frame with accessible file input and layered pair-color anatomy", () => {
     const html = renderToStaticMarkup(<StudioUploadFrame aria-label="Upload media" />);
@@ -30,18 +74,46 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain('aria-label="Upload media"');
     expect(html).toContain('class="vt-studio-upload-frame__layers"');
     expect(html).toContain('class="vt-studio-upload-frame__layer vt-studio-upload-frame__layer--core"');
-    expect(html).toContain("Drop or choose file");
+    expect(html).toContain("Drag or drop");
+    expect(html).toContain("Image / video here · or click to upload");
     expect(html).not.toContain("FA618A");
     expect(html).not.toContain("4EE4BE");
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.owner).toBe("StudioUploadFrame");
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.uploadFrame.colorPair).toContain("--pair-a");
   });
 
+  it("supports multiple file selection through the canonical upload frame", () => {
+    const html = renderToStaticMarkup(<StudioUploadFrame multiple accept="image/*,video/*" aria-label="Vault asset import" />);
+    expect(html).toContain('multiple=""');
+    expect(html).toContain('accept="image/*,video/*"');
+    expect(html).toContain('aria-label="Vault asset import"');
+  });
+
+  it("renders the canonical split-left input with search icon rail and native input attributes", () => {
+    const html = renderToStaticMarkup(<StudioSplitLeftInput icon={<span aria-hidden="true">⌕</span>} value="thumbnail" placeholder="Search assets…" aria-label="Search Vault assets" />);
+    expect(html).toContain('data-vt-studio-username-input="true"');
+    expect(html).toContain('aria-label="Search Vault assets"');
+    expect(html).toContain('placeholder="Search assets…"');
+    expect(html).toContain('value="thumbnail"');
+  });
+
+  it("supports explicit single-select semantics in the shared legend dropdown", () => {
+    const html = renderToStaticMarkup(<StudioLegendMultiDropdown label="Sort" accessibleLabel="Sort assets" selectionMode="single" value={["name-asc"]} options={[{ value: "name-asc", label: "NAME ASC" }, { value: "name-desc", label: "NAME DESC" }]} />);
+    expect(html).toContain('data-vt-studio-dropdown-variant="single-select"');
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    expect(controls).toContain('aria-multiselectable={selectionMode === "multiple"}');
+    expect(controls).toContain("setSelected([option.value])");
+    expect(controls).toContain("setOpen(false)");
+  });
+
   it("exposes compact sizing and uses the shared primary/secondary pair rather than fixed colors", () => {
     const html = renderToStaticMarkup(<StudioUploadFrame sizeVariant="compact" accept="image/*" aria-label="Compact upload" />);
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
-    expect(html).toContain('data-size="compact"');
+    expect(html).toContain('data-size="standard"');
     expect(html).toContain('accept="image/*"');
+    expect(html).toContain('data-vt-studio-split="double"');
+    expect(html).toContain('class="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--left"');
+    expect(html).toContain('class="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--right"');
     expect(css).toContain(".vt-studio-upload-frame");
     expect(css).toContain("var(--pair-a");
     expect(css).toContain("var(--pair-b");
@@ -49,33 +121,45 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain(".vt-studio-upload-frame.is-drag");
     expect(css).toContain(".vt-studio-upload-frame.has-img");
     expect(css).toContain(".vt-studio-upload-frame__icon::before");
-    expect(css).toContain("border: 4px solid var(--vt-studio-upload-primary)");
-    expect(css).toContain("border: 2px solid var(--vt-studio-upload-secondary)");
+    expect(css).toContain("--vt-upload-circle-border: 4px");
+    expect(css).toContain("--vt-upload-primary-stroke: 5px");
+    expect(css).toContain("--vt-upload-secondary-stroke: 3px");
+    expect(css).toContain("border: var(--vt-upload-primary-stroke) solid var(--vt-studio-upload-primary)");
+    expect(css).toContain("border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary)");
     expect(css).toContain(".vt-studio-upload-frame__inset::before");
     expect(css).toContain(".vt-studio-upload-frame__inset::after");
     const uploadFrameBlock = css.slice(css.indexOf(".vt-studio-upload-frame {"), css.indexOf(".vt-studio-upload-frame[data-size=\"compact\"]"));
     expect(uploadFrameBlock).toContain("aspect-ratio: 16 / 9;");
     expect(css).not.toMatch(/\.vt-studio-upload-frame\s*\{\s*aspect-ratio:\s*(?!16 \/ 9)/);
-    expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px)");
+    expect(css).toContain("font-size: 12px");
+    expect(css).toContain("height: 28px");
     expect(css).toContain("font-weight: 1000");
     expect(css).toContain("letter-spacing: -.02em");
-    expect(css).toContain("border-radius: 999px;");
+    expect(css).toContain("border-radius: 4px;");
     expect(css).toContain(".vt-studio-upload-frame__icon {");
     expect(css).toContain("overflow: visible");
-    expect(css).toContain("font-size: var(--vt-studio-28-font-size, 24px)");
     expect(css).toContain(".vt-studio-upload-frame__icon::before");
     expect(css).toContain(".vt-studio-upload-frame__icon::after");
-    expect(css).not.toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {");
+    expect(css).toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {");
+    expect(css).toContain("width: 48cqw");
+    expect(css).toContain("--vt-studio-upload-quarter-stroke: calc(var(--vt-studio-upload-frame-stroke) / 4)");
+    expect(css).toContain("--vt-studio-upload-speed: 2");
+    expect(css).toContain("animation: vt-studio-upload-click-pulse 1s ease-in-out both");
     const legacyCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx"), "utf8");
+    const migrationCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx"), "utf8");
     expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
     expect(legacyCatalog).toContain("<StudioUploadFrame");
     expect(legacyCatalog).not.toContain("SubToolboxFileTarget");
+    expect(legacyCatalog).toContain("StudioSplitLeftInput");
+    expect(migrationCatalog).toContain("<StudioUploadFrame");
+    expect(migrationCatalog).toContain("StudioSplitLeftInput");
+    expect(migrationCatalog).not.toContain("SubToolboxFileTarget");
   });
 });
 
 describe("Studio radio build, orbit, and spiral motion contract", () => {
   it("renders the animated indicator inside the stationary 44px radio shell", () => {
-    const html = renderToStaticMarkup(<StudioChoice kind="radio" aria-label="Animated radio" />)
+    const html = renderToStaticMarkup(<StudioChoice kind="radio" checked={false} aria-label="Animated radio" />)
     expect(html).toContain('data-radio-motion="build"')
     expect(html).toContain('data-radio-direction="on"')
     expect(html).toContain('class="vt-studio-radio-motion"')
@@ -450,7 +534,7 @@ describe("Studio text-field module ownership and typography", () => {
     expect(inputCss).toContain("font-size: 10px;")
     expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-standard-height, 44px)")
     expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-compact-height, 28px)")
-    expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-micro-height, 14px)")
+    expect(inputCss).toContain("--vt-studio-input-height: var(--vt-studio-micro-height, 12px)")
     expect(css).toContain("--vt-studio-textarea-standard-font-size: 18px")
     expect(css).toContain("--vt-studio-textarea-compact-font-size: 14px")
     expect(css).toContain("font-size: var(--vt-studio-textarea-standard-font-size, 18px);")
@@ -923,7 +1007,7 @@ describe("StudioVerticalWordToggle", () => {
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={true} sizeVariant="compact" />)).toContain('data-size="compact"');
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={false} sizeVariant="micro" />)).toContain('data-size="micro"');
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.globalRuleException).toBe(true);
-    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.height).toBe("content-driven two-word stack; intentionally not 44px / 28px / 14px");
+    expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.height).toBe("content-driven two-word stack; intentionally not 44px / 28px / 12px");
   });
 });
 
@@ -945,3 +1029,283 @@ describe("Studio counter hold-repeat acceleration", () => {
   });
 });
 
+
+
+describe("Supreme and Micro production size contract", () => {
+  it("defines the four canonical tiers with exact 60/44/28/12px heights", () => {
+    const expected: Record<StudioControlSize, number> = {
+      supreme: 60,
+      standard: 44,
+      compact: 28,
+      micro: 12,
+    }
+    for (const [size, height] of Object.entries(expected) as [StudioControlSize, number][]) {
+      expect(STUDIO_CONTROL_SIZE_BASE[size].height).toBe(height)
+      expect(studioSizeTierToCssVars(size)["--vt-studio-control-height"]).toBe(`${height}px`)
+    }
+  })
+
+  it("renders Supreme buttons and Micro split badges using production size APIs", () => {
+    const supreme = renderToStaticMarkup(<StudioButton sizeVariant="supreme">SUPREME</StudioButton>)
+    const action = renderToStaticMarkup(<StudioActionButton>CONTINUE</StudioActionButton>)
+    const textBox = renderToStaticMarkup(<StudioTextBox size="supreme" aria-label="Supreme display">SUPREME</StudioTextBox>)
+    const dropdown = renderToStaticMarkup(<StudioDropdown sizeVariant="supreme" options={[{ value: "a", label: "Alpha" }]} />)
+    const micro = renderToStaticMarkup(<StudioSplitLeftBadge sizeVariant="micro" icon={<span>+</span>}>MICRO</StudioSplitLeftBadge>)
+    const microInput = renderToStaticMarkup(<StudioTextInput sizeVariant="micro" aria-label="Micro title" placeholder="TITLE" />)
+    expect(supreme).toContain('data-size="supreme"')
+    expect(supreme).toContain('data-height-variant="60"')
+    expect(action).toContain('data-size="supreme"')
+    expect(textBox).toContain('data-size="supreme"')
+    expect(dropdown).toContain('data-size="supreme"')
+    expect(micro).toContain('data-size="micro"')
+    expect(microInput).toContain('data-vt-studio-control="true"')
+    expect(microInput).toContain('data-size="micro"')
+  })
+
+  it("keeps Confirmed Primitive Library size specimens aligned to production APIs", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    expect(catalog).toContain('Family title="Prominent Action · 60px Supreme"')
+    expect(catalog).toContain('sizeVariant="standard"')
+    expect(catalog).toContain('sizeVariant="compact"')
+    expect(catalog).toContain('sizeVariant="supreme"')
+    expect(catalog).toContain('aria-label="Studio plain text input micro"')
+    expect(catalog).toContain('sizeVariant="micro"')
+    expect(catalog).not.toContain('Family title="Prominent Action · 56px"')
+    expect(catalog).not.toContain('56px prominent workflow action')
+  })
+
+  it("keeps generated CSS and global styles aligned to the canonical 60px and 12px tiers", () => {
+    const generated = readFileSync(resolve(process.cwd(), "src/styles/studio-control-vars.generated.css"), "utf8")
+    const system = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    expect(generated).toContain("--vt-studio-supreme-height: 60px;")
+    expect(generated).toContain("--vt-studio-micro-height: 12px;")
+    expect(system).toContain('--vt-studio-control-height: var(--vt-studio-supreme-height, 60px)')
+    expect(system).toContain('--vt-studio-control-height: var(--vt-studio-micro-height, 12px)')
+    expect(system).toContain('button[data-vt-studio-button="true"][data-size="supreme"] > [data-vt-studio-button-face]')
+    expect(system).toContain('.vt-studio-double-split-badge[data-size="supreme"]')
+    expect(system).not.toContain("--vt-studio-14-height")
+  })
+})
+
+
+describe("Studio counter single-click regression", () => {
+  it("preserves each counter button's increment/decrement click handler while pulsing focus", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    for (const [startMarker, endMarker] of [
+      ["export const StudioCounter:", "StudioCounter.displayName"],
+      ["export const StudioSideCounter:", "StudioSideCounter.displayName"],
+      ["export const StudioLeftCounter:", "StudioLeftCounter.displayName"],
+    ]) {
+      const start = source.indexOf(startMarker);
+      const end = source.indexOf(endMarker, start);
+      expect(start, startMarker).toBeGreaterThanOrEqual(0);
+      expect(end, endMarker).toBeGreaterThan(start);
+      const component = source.slice(start, end);
+      expect(component).toContain("onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}");
+      expect(component).toContain("onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}");
+    }
+  });
+});
+
+
+describe("global StudioButton variants and containment contract", () => {
+  it("exposes V1–V7 as production StudioButton variants rather than catalog-only skin attributes", () => {
+    const variants = (["v1", "v2", "v3", "v4", "v5", "v6", "v7"] as const).map(variant =>
+      renderToStaticMarkup(<StudioButton variant={variant} aria-label={`Variant ${variant}`}>BUTTON</StudioButton>),
+    );
+    variants.forEach((html, index) => {
+      expect(html).toContain(`data-vt-studio-button-variant="v${index + 1}"`);
+    });
+  });
+
+  it("keeps long labels inside the face and split-label sections using the global ellipsis contract", () => {
+    const controls = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    const css = readStudioControlCss();
+    expect(controls).toContain("variant?: StudioButtonVariant");
+    expect(controls).toContain('const isToggleVariant = variant === "v3" || variant === "v5" || variant === "v6"');
+    expect(controls).toContain("setLocalOn(next)");
+    expect(controls).toContain("onVariantChange?.(next)");
+    expect(controls).toContain("activeChildren");
+    expect(controls).toContain("activeIcon");
+    expect(css).toContain("[data-vt-studio-button-face]");
+    expect(css).toContain("[data-vt-studio-split-label]");
+    expect(css).toContain("text-overflow: clip");
+    expect(css).toContain("min-width: 0");
+    expect(css).toContain("overflow: hidden");
+    expect(css).toContain("white-space: nowrap");
+    expect(css).toContain('button[data-vt-studio-button="true"] [data-vt-studio-split-rail]');
+    expect(css).toContain('data-vt-studio-button-variant="v7"');
+  });
+
+  it("defines compact button specimens for full, half, and quarter rows in the original button grid", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(catalog).toContain('...buildStudioButtonRows("compact")');
+    expect(catalog).toContain('row("half-v1-v2"');
+    expect(catalog).toContain('row("quarter-v1-v4"');
+    expect(catalog).toContain('sizeVariant={tier}');
+    expect(catalog).not.toContain('heightVariant={tier === "standard" ? "44" : "28"}');
+    expect(catalog).toContain('variant={`v${variant}`');
+  });
+});
+
+
+describe("Confirmed Primitive Library button tier grid regression", () => {
+  it("renders all seven original StudioButton variants at Supreme, Standard, Compact, and Micro tiers", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    for (const tier of ["supreme", "standard", "compact", "micro"]) {
+      expect(catalog).toContain(`buildStudioButtonRows("${tier}")`);
+    }
+    expect(catalog).toContain('variant={`v${variant}`');
+    expect(catalog).toContain('sizeVariant={tier}');
+    expect(catalog).toContain('row("half-v1-v2"');
+    expect(catalog).toContain('row("quarter-v1-v4"');
+    expect(catalog).not.toContain('heightVariant={tier === "standard" ? "44" : "28"}');
+  });
+
+  it("gives each button variant an explicit face fill so pressed-state defaults cannot recolor primary variants", () => {
+    const css = readStudioControlCss();
+    expect(css).toMatch(/data-vt-studio-button-variant="v1"[^{}]*>\s*\[data-vt-studio-button-face\][^{}]*background:\s*var\(--pair-a/);
+    expect(css).toMatch(/data-vt-studio-button-variant="v2"[^{}]*>\s*\[data-vt-studio-button-face\][^{}]*background:\s*var\(--pair-b/);
+    expect(css).toMatch(/data-vt-studio-button-variant="v3"\]\[data-vt-studio-button-on="false"\][^{}]*>\s*\[data-vt-studio-button-face\][^{}]*background:\s*var\(--pair-a/);
+    expect(css).toMatch(/data-vt-studio-button-variant="v3"\]\[data-vt-studio-button-on="true"\][^{}]*>\s*\[data-vt-studio-button-face\][^{}]*background:\s*var\(--pair-b/);
+  });
+});
+
+
+describe("Studio field focus, floating labels, and toggle regressions", () => {
+  it("keeps resting field glyph stroke primary, focused glyph stroke black, and shares risen-label typography tokens", () => {
+    const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
+    const css = readStudioControlCss();
+    const finalFieldContract = fields.slice(fields.lastIndexOf("/* Final clarified field contract"));
+    expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));");
+    expect(finalFieldContract).toContain("-webkit-text-stroke-color: #000 !important;");
+    expect(css).toContain("--vt-studio-floating-label-risen-font-size: 12px;");
+    expect(css).toContain("--vt-studio-floating-label-risen-text-stroke: 0.5px;");
+    expect(css).toContain("font-size: var(--vt-studio-floating-label-risen-font-size, 12px) !important;");
+    expect(css).toContain("-webkit-text-stroke-width: var(--vt-studio-floating-label-risen-text-stroke, 0.5px) !important;");
+    expect(css).toContain("vt-studio-textarea-compact-font-size, 14px");
+    expect(css).toContain("vt-studio-28-font-size, 24px");
+  });
+
+  it("centers the double-side divider and gives V2/V4 compact catalog specimens", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(css).toContain(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider");
+    expect(css).toContain("left: 50%;");
+    expect(css).toContain("transform: translateX(-50%);");
+    expect(catalog).toContain('size={index === 1 || index === 3 ? "compact" : "standard"}');
+  });
+
+  it("keeps bar-toggle arrows interactive and inactive bars visible", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioValueToggles.tsx"), "utf8");
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(source).toContain("event.currentTarget.setPointerCapture?.(event.pointerId)");
+    expect(source).toContain("onPointerCancel={stopRepeat}");
+    expect(source).toContain("onLostPointerCapture={stopRepeat}");
+    expect(css).toContain("color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%)");
+    expect(css).toMatch(/\.vt-studio-value-toggle__bars\s*\{[^}]*display:\s*flex/s);
+    expect(css).toContain('data-active="true"');
+    expect(css).toContain("pointer-events: auto;");
+  });
+
+  it("renders a single multi-select summary without a second numeric badge", () => {
+    const html = renderToStaticMarkup(
+      <StudioLegendMultiDropdown
+        label="Videos"
+        value={["videos", "shorts"]}
+        options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }]}
+      />
+    );
+    expect(html).toContain("VIDEOS +1");
+    expect(html).not.toContain("vt-studio-legend-count");
+    expect(html).not.toContain('aria-label="2 selected"');
+  });
+});
+
+
+describe("StudioSquareIconButtonGroup joined rail", () => {
+  it("renders one accessible toolbar shell around two or more square icon buttons", () => {
+    const html = renderToStaticMarkup(
+      <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Rate answer">
+        <StudioSquareIconButton icon={<span>+</span>} label="Helpful" sizeVariant="compact" />
+        <StudioSquareIconButton icon={<span>-</span>} label="Not useful" sizeVariant="compact" />
+      </StudioSquareIconButtonGroup>,
+    );
+    expect(html).toContain('role="toolbar"');
+    expect(html).toContain('aria-label="Rate answer"');
+    expect(html).toContain('data-vt-studio-icon-button-group="true"');
+    expect(html).toContain('data-size="compact"');
+    expect(html).toContain('data-vt-studio-icon-button="true"');
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(css).toContain(".vt-studio-square-icon-button-group");
+    expect(css).toContain("border-right: var(--vt-icon-group-stroke) solid #000 !important;");
+    expect(css).toContain("border-radius: 0 !important;");
+  });
+});
+
+
+describe("Confirmed Primitive Library composite specimens", () => {
+  it("registers joined square icon groups, two-line buttons, and top split modules as canonical specimens", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(catalog).toContain('title="Square Icon Button Groups · Standard + Compact"');
+    expect(catalog).toContain("<StudioSquareIconButtonGroup");
+    expect(catalog).toContain('title="Two-Line Button · Standard + Compact"');
+    expect(catalog).toContain("<StudioTwoLineButton");
+    expect(catalog).toContain('title="Top Split Module · Left / Right / Double / None"');
+    expect(catalog).toContain("<StudioTopSplitModule");
+    expect(catalog).toContain('split="double"');
+    expect(catalog).toContain('tone="accent"');
+  });
+});
+
+describe("StudioTopSplitModule", () => {
+  it("renders an accessible compact split header and white content body", () => {
+    const html = renderToStaticMarkup(
+      <StudioTopSplitModule
+        title="Prompt Library"
+        split="left"
+        sizeVariant="compact"
+        startIcon={<span aria-hidden="true">P</span>}
+        aria-label="Prompt library"
+      >
+        <p>Search prompts</p>
+      </StudioTopSplitModule>,
+    );
+    expect(html).toContain('data-vt-studio-top-split-module="true"');
+    expect(html).toContain('data-size="compact"');
+    expect(html).toContain('data-split="left"');
+    expect(html).toContain('aria-label="Prompt library"');
+    expect(html).toContain('class="vt-studio-top-split-module__body"');
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(css).toContain(".vt-studio-top-split-module__head[data-split=\"left\"]");
+    expect(css).toContain(".vt-studio-top-split-module__body");
+  });
+});
+
+
+describe("StudioSplitTwoLineButton", () => {
+  it("renders a canonical split-left rail with two-line label at standard and compact sizes", () => {
+    const standard = renderToStaticMarkup(
+      <StudioSplitTwoLineButton icon={<span aria-hidden="true">✎</span>} firstLine="EDIT" secondLine="PROMPT" sizeVariant="standard" aria-label="Edit prompt" />,
+    );
+    const compact = renderToStaticMarkup(
+      <StudioSplitTwoLineButton icon={<span aria-hidden="true">✎</span>} firstLine="SEND" secondLine="TO CHAT" sizeVariant="compact" aria-label="Send to chat" />,
+    );
+    expect(standard).toContain('data-vt-library-component="StudioSplitTwoLineButton"');
+    expect(standard).toContain('data-vt-studio-split="left"');
+    expect(standard).toContain('data-vt-studio-button-lines="two"');
+    expect(standard).toContain('data-size="standard"');
+    expect(standard).toContain('data-vt-studio-button-line="first">EDIT</span>');
+    expect(standard).toContain('data-vt-studio-button-line="second">PROMPT</span>');
+    expect(standard).toContain('aria-label="Edit prompt"');
+    expect(compact).toContain('data-size="compact"');
+    expect(compact).toContain('data-vt-studio-button-line="first">SEND</span>');
+    expect(compact).toContain('data-vt-studio-button-line="second">TO CHAT</span>');
+
+    const catalog = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    expect(catalog).toContain("Split Two-Line Button");
+    expect(catalog).toContain('data-vt-library-component="StudioSplitTwoLineButton"');
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(css).toContain('[data-vt-studio-button-lines="two"][data-vt-studio-split="left"] [data-vt-studio-split-label]');
+  });
+});

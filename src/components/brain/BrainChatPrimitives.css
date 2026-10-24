@@ -1,0 +1,36 @@
+/* Brain chat layout only; Studio Controls still own every control's geometry and skin. */
+.vt-brain-composer-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px;
+  align-items: start;
+}
+
+.vt-brain-composer-launchers {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+}
+
+@media (min-width: 640px) {
+  .vt-brain-composer-launchers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Keep the Brain launchpad's two mode tabs legible without changing global Studio sizing. */
+.brain-launcher-mode-switch [data-vt-studio-button-line] {
+  min-width: 0;
+  font-size: clamp(10px, 3vw, 14px);
+  line-height: 1;
+  letter-spacing: 0;
+  -webkit-text-stroke: 0;
+}
+
+/* The top Prompt Library remains a standard intermodule; only its long title scales
+   down enough to fit between the canonical rails on narrow screens. */
+.brain-prompt-library-shell > .vt-studio-inter-module__head .vt-studio-inter-module__title {
+  min-width: 0;
+  font-size: clamp(16px, 4.5vw, 24px);
+  -webkit-text-stroke: 0;
+}
