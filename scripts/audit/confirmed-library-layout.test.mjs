@@ -530,3 +530,9 @@ test("confirmed primitive families have no Compounds bucket and retain Compositi
   assert.match(familyUnion, /"Compositions"/);
   assert.ok(catalog.includes('return "Compositions"'));
 });
+
+test("StudioDropdown owns the simple variant without a duplicate primitive family", () => {
+  assert.doesNotMatch(catalog, /StudioSimpleDropdown|Simple Dropdown · Single Selection/);
+  assert.doesNotMatch(catalog, /<StudioDropdown variant="simple"/);
+  assert.match(catalog, /<StudioDropdown sizeVariant="standard" ariaLabel="Studio dropdown standard specimen"/);
+});
