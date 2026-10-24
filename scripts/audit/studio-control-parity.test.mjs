@@ -39,6 +39,8 @@ test("click growth animation targets the SVG glyph only", () => {
 
 
 test("input and textarea focus retain the primary inline glyph stroke", () => {
+  assert.match(css, /--vt-field-text-stroke-focus:\s*var\(--vt-field-primary\)/);
+  assert.match(css, /--vt-field-caret-focus:\s*#000/);
   assert.match(fields, /input\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
   assert.match(fields, /textarea\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
   // A read-only StudioTextBox has its own display-copy focus rule; do not
