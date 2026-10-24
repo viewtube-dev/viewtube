@@ -3,7 +3,7 @@ import "../../styles/studio-inter-module.css"
 
 export type StudioInterModuleSize = "standard" | "compact" | "micro"
 
-export interface StudioInterModuleProps extends React.HTMLAttributes<HTMLElement> {
+export interface StudioInterModuleProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
   title: React.ReactNode
   startIcon?: React.ReactNode
   endIcon?: React.ReactNode
