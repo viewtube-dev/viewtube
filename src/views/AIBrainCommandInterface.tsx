@@ -917,6 +917,7 @@ const BrainReadinessNotice: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ r
 }
 
 const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ readiness }) => {
+ const [expanded, setExpanded] = React.useState(false)
  const staleCount = readiness.diagnostics.coverage.staleDatasets
  const missingCount = readiness.diagnostics.coverage.missingDatasets
  const revenueUnavailable = !readiness.availableMetrics.includes("revenue")
@@ -932,13 +933,22 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
   missingCount > 0 ? `${missingCount} missing datasets` : "",
  ].filter(Boolean).join(" · ")
  const incompleteSources = readiness.sourceStatuses.filter((source) => source.status !== "ready")
+ const creatorSummary = readiness.dataStatus === "missing"
+  ? "Connect a channel to unlock performance advice"
+  : missingCount > 0
+   ? `${missingCount} data items unavailable`
+   : staleCount > 0
+    ? `${staleCount} data items may be out of date`
+    : "Channel data is ready"
 
  return (
-  <details data-vt-brain-component="BrainEvidenceReadiness" className="min-w-0 overflow-hidden border-2 border-black bg-[#f8f8f4]">
-   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-9 cursor-pointer list-none flex-wrap items-center justify-between gap-1 px-2 py-1 text-xs font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
-    <span>Evidence and data details</span>
-    <span className="text-[10px] font-bold normal-case text-black/65">Open diagnostics</span>
+  <details data-vt-brain-component="BrainEvidenceReadiness" aria-label="Channel data details" onToggle={(event) => setExpanded(event.currentTarget.open)} className="min-w-0 overflow-hidden border-2 border-black bg-[#f8f8f4]">
+   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-9 min-w-0 cursor-pointer list-none flex-wrap items-center justify-between gap-1 px-2 py-1 text-xs font-black leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
+    <span className="shrink-0 uppercase">Channel data</span>
+    <span data-vt-brain-part="readiness-creator-summary" className="min-w-0 flex-1 break-words text-[11px] font-bold normal-case text-black/75">{creatorSummary}</span>
+    <span className="shrink-0 text-[10px] font-bold normal-case text-black/65">View details</span>
    </summary>
+   {expanded ? (
    <div data-vt-brain-part="evidence-diagnostics" className="grid gap-2 border-t-2 border-black p-2">
     <div className="flex min-w-0 flex-wrap items-center gap-1 text-xs font-bold">
      <BrainChatStatusBadge status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label={presentation.label} />
@@ -982,6 +992,7 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
     {readiness.capturedAt ? <p data-vt-brain-part="evidence-snapshot-timestamp" className="text-[9px] font-bold text-black/45">Evidence snapshot: {readiness.capturedAt}</p> : null}
     <p data-vt-brain-part="evidence-provenance-note" className="text-[9px] font-bold leading-4 text-black/55">This status is based on the synced data and diagnostic records attached to this turn. Missing metrics are not estimated.</p>
    </div>
+   ) : null}
   </details>
  )
 }

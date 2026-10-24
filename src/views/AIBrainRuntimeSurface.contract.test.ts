@@ -97,6 +97,19 @@ describe("AI Brain runtime surface integration", () => {
   expect(receiptEntry).not.toContain('defaultOpen')
  })
 
+ it("summarizes missing channel data in one collapsed creator-facing line", () => {
+  const readiness = source.slice(source.indexOf('const BrainDataReadiness:'), source.indexOf('export const UserMessage:'))
+
+  expect(readiness).toContain('data-vt-brain-part="readiness-creator-summary"')
+  expect(readiness).toContain('Channel data')
+  expect(readiness).toContain('data items unavailable')
+  expect(readiness).toContain('data-vt-brain-part="dataset-status-item"')
+  expect(readiness).not.toContain('<details data-vt-brain-component="BrainEvidenceReadiness" open')
+  expect(readiness).toContain('View details')
+  expect(readiness).toContain('{expanded ? (')
+  expect(readiness).toContain('onToggle={(event) => setExpanded(event.currentTarget.open)}')
+ })
+
  it("uses plain-language runtime status and separates project and build context", () => {
   expect(panelSource).toContain('trace?.status?.toLowerCase() === "fallback" ? "Using channel-wide fallback"')
   expect(panelSource).toContain('Project: {project?.name || "No project"}')
