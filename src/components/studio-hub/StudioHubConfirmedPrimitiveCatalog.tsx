@@ -175,6 +175,8 @@ const CanonicalWordToggleFamily: React.FC = () => {
   const [supremeWord, setSupremeWord] = React.useState(false)
   const [miniWord, setMiniWord] = React.useState(false)
   const [verticalWords, setVerticalWords] = React.useState<boolean[]>(Array(12).fill(false))
+  const [verticalSupreme, setVerticalSupreme] = React.useState(false)
+  const [verticalMini, setVerticalMini] = React.useState(false)
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return (
     <>
@@ -231,6 +233,13 @@ const CanonicalWordToggleFamily: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div className="vt-confirmed-vertical-word-toggle-size-row">
+      <strong>SUPREME + MINI · SINGLE COLUMN</strong>
+      <div className="vt-confirmed-vertical-word-toggle-standard">
+        <div className="vt-confirmed-vertical-word-toggle-specimen"><small>SUPREME · 60PX</small><StudioVerticalWordToggle sizeVariant="supreme" variant="primary-secondary" value={verticalSupreme} onValueChange={setVerticalSupreme} words={["WRITE", "CREATE"]} aria-label="Supreme vertical word toggle" /></div>
+        <div className="vt-confirmed-vertical-word-toggle-specimen"><small>MINI · 20PX</small><StudioVerticalWordToggle sizeVariant="mini" variant="primary-secondary" value={verticalMini} onValueChange={setVerticalMini} words={["OFF", "ON"]} aria-label="Mini vertical word toggle" /></div>
       </div>
     </div>
     </Family>
