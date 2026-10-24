@@ -381,14 +381,14 @@ export const promptCardSummary = (card: CreatorBrainPromptCard): string =>
 /** Turn registry category identifiers into creator-facing labels without changing their keys. */
 export const formatPromptCategoryLabel = (category: string): string =>
  category
-  .replace(/([a-z])([A-Z])/g, "$1 $2")
+  .replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
   .replace(/\d+$/g, "")
   .replace(/[_-]+/g, " ")
   .trim()
   .toLowerCase()
-  .replace(/\\b[a-z]/g, (letter) => letter.toUpperCase())
-  .replace(/\\bSeo\\b/g, "SEO")
-  .replace(/\\bAi\\b/g, "AI")
+  .replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
+  .replace(/\bSeo\b/g, "SEO")
+  .replace(/\bAi\b/g, "AI")
 
 /** Canonical 12-step Studio spectrum pair cycle for individual prompt modules. */
 const PROMPT_MODULE_COLOR_PAIRS = Array.from({ length: 12 }, (_, index) => [
