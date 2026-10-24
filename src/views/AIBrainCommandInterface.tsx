@@ -555,7 +555,7 @@ export const BrainPromptLibrary: React.FC<{
         startIcon={<LayoutGrid aria-hidden="true" />}
         endIcon={isOpen ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
         sizeVariant="compact"
-        headStyle={{ background: categoryPair[0], "--vt-studio-control-accent": categoryPair[0], "--vt-studio-control-secondary": categoryPair[1] } as React.CSSProperties}
+        style={{ background: categoryPair[0], "--vt-studio-control-accent": categoryPair[0], "--vt-studio-control-secondary": categoryPair[1] } as React.CSSProperties}
         open={isOpen}
         onOpenChange={(nextOpen) => setCategoryOpen(groupCategory, nextOpen)}
         aria-label={`${formatPromptCategoryLabel(groupCategory)} prompts, ${groupCards.length} items`}
@@ -744,7 +744,7 @@ const CreatorResponseCard: React.FC<{
     startIcon={<BookOpen aria-hidden="true" />}
     sizeVariant="compact"
     className="shrink-0"
-    headStyle={{ background: TOOLBOX_PALETTE[3], "--vt-studio-control-accent": TOOLBOX_PALETTE[3], "--vt-studio-control-secondary": TOOLBOX_PALETTE[2] } as React.CSSProperties}
+    style={{ background: TOOLBOX_PALETTE[3], "--vt-studio-control-accent": TOOLBOX_PALETTE[3], "--vt-studio-control-secondary": TOOLBOX_PALETTE[2] } as React.CSSProperties}
    >
     <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} />
    </StudioInterModule>
@@ -760,7 +760,7 @@ const CreatorResponseCard: React.FC<{
     sizeVariant="compact"
     defaultOpen
     className="shrink-0"
-    headStyle={{ background: TOOLBOX_PALETTE[7], "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[11] } as React.CSSProperties}
+    style={{ background: TOOLBOX_PALETTE[7], "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[11] } as React.CSSProperties}
    >
     <article data-vt-brain-component="BrainInterruptedResponseCard" className="min-w-0 p-3">
      <p data-vt-brain-part="interrupted-response-copy" className="whitespace-pre-wrap text-sm font-bold leading-6">{message.text ? sanitizeCreatorFacingBrainCopy(message.text) : canRetry ? "This response was interrupted before it finished." : "Preparing response…"}</p>
@@ -816,7 +816,7 @@ const CreatorResponseCard: React.FC<{
    sizeVariant="compact"
    defaultOpen
    className="shrink-0"
-   headStyle={{ background: TOOLBOX_PALETTE[5], "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": "#FF7AC8" } as React.CSSProperties}
+   style={{ background: TOOLBOX_PALETTE[5], "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": "#FF7AC8" } as React.CSSProperties}
   >
   <BrainResponseLayout
    title={sanitizeCreatorFacingBrainCopy(response.headline)}
@@ -1007,7 +1007,7 @@ export const UserMessage: React.FC<{ text: string }> = ({ text }) => (
   sizeVariant="compact"
   collapsible={false}
   className="shrink-0"
-  headStyle={{ background: TOOLBOX_PALETTE[7], "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[6] } as React.CSSProperties}
+  style={{ background: TOOLBOX_PALETTE[7], "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[6] } as React.CSSProperties}
  >
   <BrainChatMessageShell role="user" label="Your message" className="min-w-0 bg-[#36E0F6]">
    <p className="whitespace-pre-wrap px-3 py-2 text-sm font-bold leading-6 [overflow-wrap:anywhere]">
