@@ -21,7 +21,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
-import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioCollapsingSplitModule, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioCollapsingSplitModule, StudioCollapsingTwoLineModule, StudioTextArea, StudioTextInput, StudioSimpleDropdown } from "../studio-ui"
 import { StudioInterModule } from "../studio-ui/primitives/StudioInterModule"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
@@ -553,11 +553,12 @@ export const BrainPromptLibrary: React.FC<{
          const isSelected = card.id === selectedId
          const colorPair = PROMPT_MODULE_COLOR_PAIRS[promptIndex % PROMPT_MODULE_COLOR_PAIRS.length]
          return (
-          <StudioCollapsingSplitModule
+          <StudioCollapsingTwoLineModule
            key={card.id}
            data-vt-brain-part="prompt-collapsible-module"
            data-prompt-id={card.id}
            title={card.label}
+           description={promptCardSummary(card)}
            startIcon={<LayoutGrid aria-hidden="true" />}
            split="left"
            sizeVariant="compact"

@@ -1677,6 +1677,30 @@ export const StudioCollapsingSplitModule: React.FC<StudioCollapsingSplitModulePr
 }
 StudioCollapsingSplitModule.displayName = "StudioCollapsingSplitModule"
 
+/** Collapsible module with a compact, readable title + description header. */
+export interface StudioCollapsingTwoLineModuleProps extends Omit<StudioCollapsingSplitModuleProps, "title"> {
+  title: React.ReactNode
+  description: React.ReactNode
+}
+
+/** Two-line header composition that reuses the canonical collapsible split module shell. */
+export const StudioCollapsingTwoLineModule: React.FC<StudioCollapsingTwoLineModuleProps> = ({
+  title, description, className, ...props
+}) => (
+  <StudioCollapsingSplitModule
+    {...props}
+    title={(
+      <span className="vt-studio-two-line-module__content">
+        <span className="vt-studio-two-line-module__title">{title}</span>
+        <span className="vt-studio-two-line-module__description">{description}</span>
+      </span>
+    )}
+    className={studioClasses("vt-studio-two-line-module", className)}
+    data-vt-studio-two-line-module="true"
+  />
+)
+StudioCollapsingTwoLineModule.displayName = "StudioCollapsingTwoLineModule"
+
 
 
 
