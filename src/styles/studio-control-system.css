@@ -4,7 +4,7 @@
 
 [data-vt-studio-control] {
   --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);
-  /* Canonical editable-field tokens: resting text/stroke match primary; focus text/stroke are black and caret stays primary. */
+  /* Canonical editable-field tokens: resting text/stroke match primary; focus fill is black text with primary glyph stroke and primary caret. */
   --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-field-text: var(--vt-field-primary);
   --vt-field-text-stroke: var(--vt-field-text);
@@ -55,6 +55,11 @@
 
 [data-vt-studio-control][data-size="supreme"] .vt-studio-dropdown-chevron { width: var(--vt-studio-dropdown-supreme-rail-size, 60px); min-width: var(--vt-studio-dropdown-supreme-rail-size, 60px); }
 [data-vt-studio-control][data-size="supreme"] .vt-studio-dropdown-chevron svg { width: var(--vt-studio-dropdown-supreme-chevron-size, 38px); height: var(--vt-studio-dropdown-supreme-chevron-size, 38px); }
+
+[data-vt-studio-control][data-size="mini"] .vt-studio-dropdown-chevron { width: var(--vt-studio-dropdown-mini-rail-size, 20px); min-width: var(--vt-studio-dropdown-mini-rail-size, 20px); }
+[data-vt-studio-control][data-size="mini"] .vt-studio-dropdown-chevron svg { width: var(--vt-studio-dropdown-mini-chevron-size, 14px); height: var(--vt-studio-dropdown-mini-chevron-size, 14px); }
+[data-vt-studio-control][data-size="micro"] .vt-studio-dropdown-chevron { width: var(--vt-studio-dropdown-micro-rail-size, 12px); min-width: var(--vt-studio-dropdown-micro-rail-size, 12px); }
+[data-vt-studio-control][data-size="micro"] .vt-studio-dropdown-chevron svg { width: var(--vt-studio-dropdown-micro-chevron-size, 8px); height: var(--vt-studio-dropdown-micro-chevron-size, 8px); }
 
 [data-vt-studio-control][data-size="compact"] {
   --vt-field-text-stroke-width: var(--vt-studio-28-text-stroke, 0.5px);
