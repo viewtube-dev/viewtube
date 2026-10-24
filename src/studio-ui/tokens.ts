@@ -64,6 +64,11 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
 // ─── Five explicit size tiers (global defaults) ──────────────────────────────
 // Supreme / Standard / Compact / Mini / Micro are first-class. Nothing is derived at runtime.
 
+/** Paired stroke contracts: Supreme inherits Standard; Micro inherits Mini. */
+export const STUDIO_STROKE_SYSTEM_STANDARD = { stroke: 3, radius: 6, textStroke: 1, focusOutlineWidth: 1.95, secondaryFocusOutlineWidth: 1.95, iconStroke: 1.9 } as const
+export const STUDIO_STROKE_SYSTEM_COMPACT = { stroke: 2, radius: 4, textStroke: 0.5, focusOutlineWidth: 1.3, secondaryFocusOutlineWidth: 1.3, iconStroke: 2 } as const
+export const STUDIO_STROKE_SYSTEM_MINI = { stroke: 1.5, radius: 3, textStroke: 0.4, focusOutlineWidth: 0.975, secondaryFocusOutlineWidth: 0.975, iconStroke: 1.6 } as const
+
 export const STUDIO_CONTROL_SIZE_BASE = {
   supreme: { height: 60, stroke: 3, radius: 6, fontSize: 51.82, fontWeight: 1000, textStroke: 1, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 51.82, iconStroke: 1.9, floatingLabelHeight: 51.82, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, floatingLabelHeight: 38, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
