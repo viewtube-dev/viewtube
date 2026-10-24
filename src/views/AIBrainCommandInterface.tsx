@@ -932,12 +932,20 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
   missingCount > 0 ? `${missingCount} missing datasets` : "",
  ].filter(Boolean).join(" · ")
  const incompleteSources = readiness.sourceStatuses.filter((source) => source.status !== "ready")
+ const creatorSummary = readiness.dataStatus === "missing"
+  ? "Connect a channel to unlock performance advice"
+  : missingCount > 0
+   ? `${missingCount} data items unavailable`
+   : staleCount > 0
+    ? `${staleCount} data items may be out of date`
+    : "Channel data is ready"
 
  return (
-  <details data-vt-brain-component="BrainEvidenceReadiness" className="min-w-0 overflow-hidden border-2 border-black bg-[#f8f8f4]">
-   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-9 cursor-pointer list-none flex-wrap items-center justify-between gap-1 px-2 py-1 text-xs font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
-    <span>Evidence and data details</span>
-    <span className="text-[10px] font-bold normal-case text-black/65">Open diagnostics</span>
+  <details data-vt-brain-component="BrainEvidenceReadiness" aria-label="Channel data details" className="min-w-0 overflow-hidden border-2 border-black bg-[#f8f8f4]">
+   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-9 min-w-0 cursor-pointer list-none flex-wrap items-center justify-between gap-1 px-2 py-1 text-xs font-black leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
+    <span className="shrink-0 uppercase">Channel data</span>
+    <span data-vt-brain-part="readiness-creator-summary" className="min-w-0 flex-1 break-words text-[11px] font-bold normal-case text-black/75">{creatorSummary}</span>
+    <span className="shrink-0 text-[10px] font-bold normal-case text-black/65">View details</span>
    </summary>
    <div data-vt-brain-part="evidence-diagnostics" className="grid gap-2 border-t-2 border-black p-2">
     <div className="flex min-w-0 flex-wrap items-center gap-1 text-xs font-bold">
