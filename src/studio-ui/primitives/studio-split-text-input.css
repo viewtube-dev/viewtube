@@ -71,6 +71,9 @@ html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-
   max-height: 100%;
   margin: 0 !important;
   padding: 0 12px;
+  /* The split label is pointer-events: none (text sits on rails); the real
+     input must re-enable pointer events so it edits like any text input. */
+  pointer-events: auto;
   border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary) !important;
   border-radius: inherit !important;
   outline: none !important;

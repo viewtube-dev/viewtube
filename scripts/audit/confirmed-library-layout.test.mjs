@@ -495,14 +495,14 @@ test("ConfirmedSpecimenGrid keeps layout proportional and leaves control geometr
   assert.match(gridCss, /grid-template-columns:\\s*repeat\\(144,\\s*minmax\\(0,\\s*1fr\\)\\)/);
   assert.match(gridSource, /layoutRows\\.map\\(renderLayoutRow\\)/);
   assert.match(gridSource, /gridColumn: \`span \${span}\`/);
-  assert.match(buttonCss, /\\.vt-confirmed-button-skin\\s*\\{[^}]*width:\\s*100%/s);
+  assert.match(buttonCss, /\.vt-confirmed-button-skin\s*\{[^}]*width:\s*100%/s);
   assert.doesNotMatch(buttonCss, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\\s*:/,
     "catalog wrapper must not redefine production StudioButton geometry");
 });
 
 test("StudioButton catalog styles contain labels without retired V1-V7 skin overrides", () => {
   const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"), styles.indexOf("/* Dense, collapsed Global Defaults"));
-  assert.match(buttonCss, /\\.vt-confirmed-button-skin\\s*>\\s*\\[data-vt-studio-button-face\\]/);
+  assert.match(buttonCss, /\.vt-confirmed-button-skin\s*>\s*\[data-vt-studio-button-face\]/);
   assert.match(buttonCss, /overflow:\\s*hidden/);
   assert.doesNotMatch(buttonCss, /data-vt-button-skin/);
   assert.doesNotMatch(buttonCss, /overflow-wrap:\\s*anywhere/,
