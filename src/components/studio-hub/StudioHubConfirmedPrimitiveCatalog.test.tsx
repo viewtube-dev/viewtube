@@ -31,7 +31,7 @@ describe("confirmed composite primitive catalog", () => {
       "StudioIconButton", "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
       "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioTextInput",
-      "StudioTextInputFloatingLabel", "StudioTextInputFixedLabel", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
+      "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
       "StudioDropdown", "StudioSimpleDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
