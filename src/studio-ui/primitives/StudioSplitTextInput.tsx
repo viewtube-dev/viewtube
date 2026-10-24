@@ -1,30 +1,32 @@
 import React from "react"
-import { StudioSplitLeftBadge, StudioSplitRightBadge, StudioDoubleSplitBadge } from "./StudioControls"
-import { StudioTextInput } from "./StudioTextInput"
-import "./studio-split-text-input.css"
+import type { StudioControlSize } from "../tokens"
 
-export interface StudioSplitTextInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "children" | "type"> {
-  split?: "left" | "right" | "double"
-  sizeVariant?: "standard" | "compact"
-  type?: "text" | "search" | "email" | "url" | "tel" | "password"
-  leftIcon?: React.ReactNode
-  rightIcon?: React.ReactNode
-  inputClassName?: string
+export type StudioSplitTextInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
+  sizeVariant?: StudioControlSize
+  icon?: React.ReactNode
+  layout?: "left" | "right"
 }
 
-/** Badge-owned perimeter and rails; the real simple input owns editing. */
+/** Text input with a canonical square split rail and one shared outer shell. */
 export const StudioSplitTextInput = React.forwardRef<HTMLInputElement, StudioSplitTextInputProps>(
-  ({ split = "left", sizeVariant = "standard", leftIcon, rightIcon, className, style, inputClassName, ...props }, ref) => {
-    const input = <StudioTextInput {...props} ref={ref} variant="simple" sizeVariant={sizeVariant} className={inputClassName} />
-    return (
-      <span className={["vt-studio-split-text-input", className].filter(Boolean).join(" ")} data-vt-studio-control="true" data-size={sizeVariant} data-split={split} style={style}>
-        {split === "double"
-          ? <StudioDoubleSplitBadge sizeVariant={sizeVariant} leftIcon={leftIcon} rightIcon={rightIcon}>{input}</StudioDoubleSplitBadge>
-          : split === "right"
-            ? <StudioSplitRightBadge sizeVariant={sizeVariant} icon={rightIcon}>{input}</StudioSplitRightBadge>
-            : <StudioSplitLeftBadge sizeVariant={sizeVariant} icon={leftIcon}>{input}</StudioSplitLeftBadge>}
-      </span>
-    )
-  },
+  ({ sizeVariant = "standard", icon, layout = "left", className, ...props }, ref) => (
+    <div
+      data-vt-studio-control="true"
+      data-size={sizeVariant}
+      data-vt-studio-split-shell="true"
+      data-layout={layout}
+      className={["vt-studio-split-shell", "vt-studio-split-text-input", className].filter(Boolean).join(" ")}
+    >
+      {layout === "left" && <span className="vt-studio-split-shell__rail" data-rail="start" aria-hidden="true">{icon}</span>}
+      <input
+        ref={ref}
+        data-vt-studio-control="true"
+        data-size={sizeVariant}
+        className="vt-studio-split-text-input__field"
+        {...props}
+      />
+      {layout === "right" && <span className="vt-studio-split-shell__rail" data-rail="end" aria-hidden="true">{icon}</span>}
+    </div>
+  ),
 )
 StudioSplitTextInput.displayName = "StudioSplitTextInput"
