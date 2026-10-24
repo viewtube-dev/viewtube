@@ -617,9 +617,11 @@ export const BrainFeedbackControls: React.FC<{
 }> = ({ message, onFeedback }) => {
  const [selected, setSelected] = useState<AIBrainFeedbackSignal["rating"] | null>(null)
  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
+ const feedbackInFlightRef = useRef(false)
 
  const submitFeedback = async (rating: AIBrainFeedbackSignal["rating"]) => {
-  if (status === "saving") return
+  if (feedbackInFlightRef.current) return
+  feedbackInFlightRef.current = true
   setSelected(rating)
   setStatus("saving")
   try {
@@ -628,6 +630,8 @@ export const BrainFeedbackControls: React.FC<{
   } catch (error) {
    console.warn("[AIBrain] Feedback was not saved:", error)
    setStatus("error")
+  } finally {
+   feedbackInFlightRef.current = false
   }
  }
 
