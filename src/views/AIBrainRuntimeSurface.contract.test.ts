@@ -70,4 +70,13 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('max-xl:grid-rows-[minmax(0,1fr)]')
   expect(chatPrimitivesSource).toContain("overflow-y-auto touch-pan-y")
  })
+ 
+ it("preserves transcript position unless the creator is following or sends a new turn", () => {
+  expect(source).toContain("export const shouldFollowBrainConversation")
+  expect(source).toContain("if (!shouldFollowConversationRef.current) return")
+  expect(source).toContain("shouldFollowConversationRef.current = shouldFollowBrainConversation(viewport.scrollHeight, viewport.scrollTop, viewport.clientHeight)")
+  const handleSend = source.slice(source.indexOf("const handleSend = async"), source.indexOf("const handleRetryInterruptedTurn"))
+  expect(handleSend).toContain("shouldFollowConversationRef.current = true")
+ })
+
 })
