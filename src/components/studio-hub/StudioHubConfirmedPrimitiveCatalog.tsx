@@ -15,7 +15,10 @@ import {
   StudioSelect,
   StudioSearchInput,
   StudioNumberInput,
+  StudioUsernameInput,
+  StudioSplitLeftInput,
   StudioSplitRightButton,
+  StudioCollapsingTwoLineModule,
   StudioRadio,
   StudioCheckbox,
   StudioXCheckbox,
@@ -272,6 +275,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   const [arrowValue, setArrowValue] = React.useState("ONE")
   const [barValue, setBarValue] = React.useState(40)
   const [wordValue, setWordValue] = React.useState(false)
+  const [verticalWordValue, setVerticalWordValue] = React.useState(false)
   const [sideValue, setSideValue] = React.useState("LOW")
   const [doubleLeft, setDoubleLeft] = React.useState("SOURCE")
   const [doubleRight, setDoubleRight] = React.useState("TARGET")
@@ -313,8 +317,10 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle"><span>Arrow Toggle · STANDARD</span><StudioArrowToggle size="standard" value={arrowValue} options={options} onValueChange={setArrowValue} ariaLabel="Arrow toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>Bar Toggle · STANDARD</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} barCount={10} ariaLabel="Bar toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioWordToggle"><span>Word Toggle · STANDARD</span><StudioWordToggle size="44" skin="solid" value={wordValue} words={["OFF", "ON"]} onValueChange={setWordValue} aria-label="Word toggle standard specimen" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioVerticalWordToggle"><span>Vertical Word Toggle · STANDARD</span><StudioVerticalWordToggle sizeVariant="standard" value={false} words={["OFF", "ON"]} aria-label="Vertical word toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioVerticalWordToggle"><span>Vertical Word Toggle · STANDARD</span><StudioVerticalWordToggle sizeVariant="standard" value={verticalWordValue} onValueChange={setVerticalWordValue} words={["OFF", "ON"]} aria-label="Vertical word toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInput"><span>Text Input · STANDARD</span><StudioTextInput sizeVariant="standard" aria-label="Text input standard specimen" placeholder="TYPE HERE" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>Username Split Input · STANDARD</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Username split input standard specimen" placeholder="CREATOR NAME" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftInput"><span>Split Left Search Input · STANDARD</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split left input standard specimen" placeholder="SEARCH ASSETS" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInputFloatingLabel"><span>Floating Label Text Input · STANDARD</span><StudioTextInput variant="floating-label" label="CREATOR NAME" sizeVariant="standard" aria-label="Floating label creator name specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInputFixedLabel"><span>Fixed Label Text Input · STANDARD</span><StudioTextInput variant="fixed-label" label="CREATOR NAME" sizeVariant="standard" aria-label="Fixed label creator name specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextArea"><span>Text Area · STANDARD</span><StudioTextArea sizeVariant="standard" rows={3} aria-label="Text area standard specimen" placeholder="TYPE HERE" /></div>
@@ -1262,6 +1268,21 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <StudioCollapsingSplitModule title="COMPACT MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="compact">
           <span>Compact collapsible module body content.</span>
         </StudioCollapsingSplitModule>
+      </div>
+    </Family>
+    <Family
+      title="Collapsing Two-Line Module · Standard"
+      nonDefaultSettings={[
+        "Dedicated production specimen for the two-line collapsing module; kept separate from the top direct-control ledger and the ordinary collapsing split module.",
+        "The title and description are rendered by the canonical StudioCollapsingTwoLineModule primitive.",
+      ]}
+      provenance={<Provenance primitive="StudioCollapsingTwoLineModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Standard 44px shell with a two-line title/description content exception." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingTwoLineModule">
+        <span>STANDARD · TWO-LINE HEADER</span>
+        <StudioCollapsingTwoLineModule title="CREATOR SETTINGS" description="Channel identity, defaults, and publishing preferences." split="double" sizeVariant="standard" defaultOpen={false}>
+          <p>Two-line module body content rendered by the production primitive.</p>
+        </StudioCollapsingTwoLineModule>
       </div>
     </Family>
     <Family
