@@ -32,6 +32,8 @@ describe("Studio global stroke-tier contract", () => {
     expect(generated).toContain("--vt-studio-micro-stroke: 1.5px;")
     expect(generated).toContain("--vt-studio-micro-text-stroke: 0.375px;")
     expect(generated).toContain("--vt-studio-micro-focus-outline-width: 0.975px;")
+    expect(generated).toContain("--vt-studio-textarea-supreme-font-size: 25px;")
+    expect(generated).toContain("--vt-studio-textarea-supreme-text-stroke: 0.5px;")
     expect(generated).toContain("--vt-studio-dropdown-supreme-chevron-stroke: 2.5;")
     expect(generated).toContain("--vt-studio-dropdown-micro-chevron-stroke: 1.2;")
     expect(css).not.toContain("4.09px")
