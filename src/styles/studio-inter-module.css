@@ -71,6 +71,11 @@
   border-top: 0;
 }
 
+/* An expanded body needs the following header to restore the single shared separator. */
+.vt-studio-inter-module[data-open="true"] + .vt-studio-inter-module > .vt-studio-inter-module__head {
+  border-top-width: var(--vt-im-stroke, 2px);
+}
+
 .vt-studio-inter-module__head[role="button"] {
   cursor: pointer;
 }
