@@ -88,7 +88,7 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
     "operationId", "contextRevision", "traceId", "assetId", "assetType", "contentBuildId", "projectId",
     "actionPacketId", "workflowId", "recommendationId", "experimentId",
     "publishTransactionId", "approvedSnapshotId", "approvedSnapshotHash",
-    "publishedVideoId", "publicationIdentity",
+    "publishedVideoId", "publicationIdentity", "evidence",
    ] as const
    for (const field of immutableFields) {
     const previous = existing[field]
@@ -108,6 +108,17 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
    for (const field of enrichableFields) {
     if (enriched[field] == null && input[field] != null) {
      ;(enriched as Record<string, unknown>)[field] = input[field]
+     changed = true
+    }
+   }
+   // Evidence references and analytics checkpoints are append-only provenance:
+   // retries may learn about additional canonical records without changing the outcome.
+   for (const field of ["evidenceIds", "analyticsCheckpointIds"] as const) {
+    const previous = enriched[field] || []
+    const requested = input[field] || []
+    const merged = [...new Set([...previous, ...requested])]
+    if (merged.length !== previous.length) {
+     ;(enriched as Record<string, unknown>)[field] = merged
      changed = true
     }
    }
