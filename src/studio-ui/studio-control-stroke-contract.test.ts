@@ -53,6 +53,34 @@ describe("Studio global stroke-tier contract", () => {
     expect(catalog).not.toContain("Micro is 12px / 1px")
   })
 
+  it("keeps confirmed-library representatives in a full-width module, not a sidebar column", () => {
+    const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
+    const catalogCss = readFileSync("src/styles/studio-confirmed-catalog-modules.css", "utf8")
+    expect(catalog).toContain('<div className="vt-confirmed-direct-representatives">')
+    expect(catalogCss).toContain(".vt-confirmed-direct-representatives {")
+    expect(catalogCss).toContain("grid-column: 1 / -1;")
+    expect(catalogCss).toContain(".vt-confirmed-direct-representatives .vt-confirmed-primitive-body > .vt-confirmed-variants")
+    expect(catalogCss).toContain("grid-template-columns: minmax(0, 1fr);")
+  })
+
+  it("keeps split rails square and labels centered independently of the leading rail", () => {
+    const splitCss = readFileSync("src/styles/studio-control-split.css", "utf8")
+    const controlCss = readFileSync("src/styles/studio-control-system.css", "utf8")
+    expect(splitCss).toContain("aspect-ratio: 1 / 1;")
+    expect(splitCss).toContain("--vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));")
+    expect(controlCss).toContain("The icon rail and its divider occupy their own column and never bias the label.")
+    expect(controlCss).toContain("justify-content: center;")
+  })
+
+  it("preserves the primary inline glyph stroke while focused text fill becomes black", () => {
+    const css = readFileSync("src/styles/studio-control-system.css", "utf8")
+    const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
+    expect(css).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);")
+    expect(css).not.toContain('-webkit-text-stroke: var(--vt-studio-control-text-stroke) #000;')
+    expect(controls).toContain('inlineStrokeColor: "primary (--pair-a) at 100% opacity"')
+    expect(controls).toContain("focused text fill is black while the inline glyph stroke remains primary")
+  })
+
   it("exports and documents the shared split text input primitive", () => {
     const index = readFileSync("src/studio-ui/index.ts", "utf8")
     const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
