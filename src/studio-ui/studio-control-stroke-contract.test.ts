@@ -74,9 +74,13 @@ describe("Studio global stroke-tier contract", () => {
 
   it("preserves the primary inline glyph stroke while focused text fill becomes black", () => {
     const css = readFileSync("src/styles/studio-control-system.css", "utf8")
+    const fieldsCss = readFileSync("src/styles/studio-control-fields.css", "utf8")
     const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
     expect(css).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke) var(--vt-field-primary);")
     expect(css).not.toContain('-webkit-text-stroke: var(--vt-studio-control-text-stroke) #000;')
+    const focusedFieldContract = fieldsCss.slice(fieldsCss.indexOf("/* Regression recovery: focus changes glyph fill"), fieldsCss.indexOf("/* Read-only TextBox uses"))
+    expect(focusedFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary")
+    expect(focusedFieldContract).not.toContain("-webkit-text-stroke-color: #000 !important;")
     expect(controls).toContain('inlineStrokeColor: "primary (--pair-a) at 100% opacity"')
     expect(controls).toContain("focused text fill is black while the inline glyph stroke remains primary")
   })
