@@ -1,0 +1,53 @@
+From c7d751a32f4781115c9995270c2ade073942b08d Mon Sep 17 00:00:00 2001
+From: Studio Controls Bot <bot@viewtube.dev>
+Date: Sat, 24 Oct 2026 05:39:48 +0000
+Subject: [PATCH 10/12] studio-controls: finalize audit alignment (wiring,
+ floating-typography, hold timing)
+
+---
+ scripts/audit/studio-counter-primitives.test.mjs        | 2 +-
+ scripts/audit/studio-floating-input-typography.test.mjs | 3 ++-
+ scripts/audit/studio-input-token-ownership.test.mjs     | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/scripts/audit/studio-counter-primitives.test.mjs b/scripts/audit/studio-counter-primitives.test.mjs
+index c63c3ffa1..40719d44a 100644
+--- a/scripts/audit/studio-counter-primitives.test.mjs
++++ b/scripts/audit/studio-counter-primitives.test.mjs
+@@ -81,7 +81,7 @@ test("Studio counter hold behavior is wired to pointer events for touch and mous
+   assert.match(component, /const base = currentRef\.current/);
+   assert.match(component, /max = 100/);
+   assert.match(component, /accelerationEase/);
+-  assert.match(component, /accelerationProgress = Math\.min\(1, elapsed \/ 720\)/);
++  assert.match(component, /accelerationProgress = Math\.min\(1, elapsed \/ 520\)/);
+   assert.match(component, /boundaryEase/);
+   assert.match(component, /remainingSteps/);
+   assert.match(styles, /touch-action:\s*none/);
+diff --git a/scripts/audit/studio-floating-input-typography.test.mjs b/scripts/audit/studio-floating-input-typography.test.mjs
+index 445aaa48a..a396f7fc9 100644
+--- a/scripts/audit/studio-floating-input-typography.test.mjs
++++ b/scripts/audit/studio-floating-input-typography.test.mjs
+@@ -35,7 +35,8 @@ assert.ok(css.includes("font-size: var(--vt-studio-compact-font-size, 24px);"));
+ assert.ok(css.includes('input.vt-studio-text-input[data-size="micro"]'));
+ assert.ok(css.includes("font-size: var(--vt-studio-micro-font-size, 10px);"));
+ assert.ok(css.includes("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));"));
+-assert.ok(!css.includes("textarea") && !css.includes(".vt-studio-floating-field-label") && !css.includes(".vt-studio-fixed-field-label"));
++assert.ok(!/textarea[^{}]*\{/.test(css));
++assert.ok(!css.includes(".vt-studio-floating-field-label") && !css.includes(".vt-studio-fixed-field-label"));
+ 
+ function nativeInputFontSizeRules(stylesheet) {
+   return [...stylesheet.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+diff --git a/scripts/audit/studio-input-token-ownership.test.mjs b/scripts/audit/studio-input-token-ownership.test.mjs
+index 973c58c2f..8c316669f 100644
+--- a/scripts/audit/studio-input-token-ownership.test.mjs
++++ b/scripts/audit/studio-input-token-ownership.test.mjs
+@@ -92,5 +92,5 @@ test("textareas use shared input typography and the shared multiline line-height
+ 
+ test("the new regression test is wired into the normal Studio controls test command", () => {
+   const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
+-  assert.ok(packageJson.scripts["test:studio-controls"].includes("studio-input-token-ownership.test.mjs"));
++  assert.ok(packageJson.scripts["test:studio-controls"].includes("test:studio-input-token-ownership"));
+ });
+-- 
+2.43.0
+

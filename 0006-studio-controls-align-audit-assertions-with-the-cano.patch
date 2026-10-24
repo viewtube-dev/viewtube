@@ -1,0 +1,43 @@
+From ae273453a71e9984b9b5c444bb1f130fe9f460ed Mon Sep 17 00:00:00 2001
+From: Studio Controls Bot <bot@viewtube.dev>
+Date: Sat, 24 Oct 2026 05:34:54 +0000
+Subject: [PATCH 06/12] studio-controls: align audit assertions with the
+ canonical contract
+
+---
+ scripts/audit/studio-control-parity.test.mjs | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/scripts/audit/studio-control-parity.test.mjs b/scripts/audit/studio-control-parity.test.mjs
+index a675f770a..cc3a5b1ee 100644
+--- a/scripts/audit/studio-control-parity.test.mjs
++++ b/scripts/audit/studio-control-parity.test.mjs
+@@ -38,9 +38,13 @@ test("click growth animation targets the SVG glyph only", () => {
+ });
+ 
+ 
+-test("input and textarea focus retain the primary inline glyph stroke", () => {
+-  assert.match(css, /--vt-field-text-stroke-focus:\s*var\(--vt-field-primary\)/);
+-  assert.match(css, /--vt-field-caret-focus:\s*#000/);
++test("input and textarea focus retain the canonical editable-field stroke tokens", () => {
++  // Canonical contract (2026-10): resting text/stroke match primary; focus text AND
++  // focus stroke are both black, and the caret stays primary. The token chain
++  // --vt-field-text-stroke-focus -> --vt-field-text-focus is the single source.
++  assert.match(css, /--vt-field-text-stroke-focus:\s*var\(--vt-field-text-focus\)/);
++  assert.match(css, /--vt-field-text-focus:\s*#000/);
++  assert.match(css, /--vt-field-caret-focus:\s*var\(--vt-field-primary\)/);
+   assert.match(fields, /input\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
+   assert.match(fields, /textarea\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
+   // A read-only StudioTextBox has its own display-copy focus rule; do not
+@@ -69,7 +73,7 @@ test("double-side divider is centered and the confirmed catalog mixes compact an
+ });
+ 
+ test("bar toggle uses adaptive width counts, proportional fill, and size-specific borderless bars", () => {
+-  assert.match(toggles, /function barCountFromWidth\\(widthPx: number, size: string\\)/);
++  assert.match(toggles, /function barCountFromWidth\(widthPx: number, size: Record/);
+   assert.match(toggles, /barCountFromWidth\(width, size\)/);
+   assert.match(toggles, /Math\.floor\(\(inner \+ metrics\.gap\) \/ \(metrics\.bar \+ metrics\.gap\)\)/);
+   assert.match(toggles, /Math\.max\(4, Math\.min\(40, count \|\| 4\)\)/);
+-- 
+2.43.0
+

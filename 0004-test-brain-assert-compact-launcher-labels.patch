@@ -1,0 +1,25 @@
+From 31bf62b5bb1eb0b6deac4d5e64d6ebf9d34128d2 Mon Sep 17 00:00:00 2001
+From: viewtube-dev <viewtubesupport@gmail.com>
+Date: Fri, 23 Oct 2026 23:54:18 -0400
+Subject: [PATCH 04/12] test(brain): assert compact launcher labels
+
+---
+ src/views/AIBrainRuntimeSurface.contract.test.ts | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/views/AIBrainRuntimeSurface.contract.test.ts b/src/views/AIBrainRuntimeSurface.contract.test.ts
+index a48fce182..8ed5e7a92 100644
+--- a/src/views/AIBrainRuntimeSurface.contract.test.ts
++++ b/src/views/AIBrainRuntimeSurface.contract.test.ts
+@@ -70,6 +70,8 @@ describe("AI Brain runtime surface integration", () => {
+   expect(source).toContain("TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length]")
+   expect(source).toContain('className="brain-launcher-mode-switch grid grid-cols-2 gap-1 border-[2px] border-black bg-[#f8f8f4] p-1"')
+   expect(source).toContain('className="brain-launcher-mode-switch grid grid-cols-2 gap-1"')
++  expect(source).toContain('firstLine="PROMPT" secondLine="LIBRARY" aria-label="Prompt Library"')
++  expect(source).toContain('firstLine="CAPABILITIES" secondLine="BROWSER" aria-label="Capabilities"')
+   expect(chatPrimitivesCssSource).toContain(".brain-launcher-mode-switch [data-vt-studio-button-line]")
+   expect(chatPrimitivesCssSource).toContain(".brain-prompt-library-shell > .vt-studio-inter-module__head .vt-studio-inter-module__title")
+   expect(promptLibrary).toContain("order.get(card.id)")
+-- 
+2.43.0
+

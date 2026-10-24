@@ -1,0 +1,26 @@
+From ce6fea0988242d6200f3dbb04b1567235adb4e1c Mon Sep 17 00:00:00 2001
+From: Studio Controls Bot <bot@viewtube.dev>
+Date: Sat, 24 Oct 2026 05:36:02 +0000
+Subject: [PATCH 07/12] studio-controls: fix over-escaped bar-toggle audit
+ regex
+
+---
+ scripts/audit/studio-control-parity.test.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/audit/studio-control-parity.test.mjs b/scripts/audit/studio-control-parity.test.mjs
+index cc3a5b1ee..d3bc135ac 100644
+--- a/scripts/audit/studio-control-parity.test.mjs
++++ b/scripts/audit/studio-control-parity.test.mjs
+@@ -73,7 +73,7 @@ test("double-side divider is centered and the confirmed catalog mixes compact an
+ });
+ 
+ test("bar toggle uses adaptive width counts, proportional fill, and size-specific borderless bars", () => {
+-  assert.match(toggles, /function barCountFromWidth\(widthPx: number, size: Record/);
++  assert.match(toggles, /function barCountFromWidth\(widthPx: number, size: string\)/);
+   assert.match(toggles, /barCountFromWidth\(width, size\)/);
+   assert.match(toggles, /Math\.floor\(\(inner \+ metrics\.gap\) \/ \(metrics\.bar \+ metrics\.gap\)\)/);
+   assert.match(toggles, /Math\.max\(4, Math\.min\(40, count \|\| 4\)\)/);
+-- 
+2.43.0
+

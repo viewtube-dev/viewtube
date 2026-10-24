@@ -1,0 +1,128 @@
+From 6442361f9bd1aa5154f853cb34a968b8cbebb213 Mon Sep 17 00:00:00 2001
+From: Studio Controls Bot <bot@viewtube.dev>
+Date: Sat, 24 Oct 2026 05:44:55 +0000
+Subject: [PATCH 12/12] studio-controls: restore 2.5:1 bar tokens and 50%-white
+ empty fill after stash; fix measured-count mocks
+
+---
+ scripts/audit/studio-control-parity.test.mjs         |  2 +-
+ src/studio-ui/primitives/StudioValueToggles.test.tsx | 10 +++++-----
+ src/styles/studio-control-distill-overrides.css      | 11 ++++++-----
+ src/styles/studio-control-system.css                 |  4 ++--
+ 4 files changed, 14 insertions(+), 13 deletions(-)
+
+diff --git a/scripts/audit/studio-control-parity.test.mjs b/scripts/audit/studio-control-parity.test.mjs
+index 47dd58bb3..dab303abc 100644
+--- a/scripts/audit/studio-control-parity.test.mjs
++++ b/scripts/audit/studio-control-parity.test.mjs
+@@ -84,7 +84,7 @@ test("bar toggle uses adaptive width counts, proportional fill, and size-specifi
+   assert.match(overrides, /--vt-bar-width:\s*10px/);
+   assert.match(overrides, /--vt-bar-gap:\s*3px/);
+   assert.match(overrides, /border:\s*0\s*!important/);
+-  assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
++  assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%\)[\s\S]*?!important/);
+   assert.match(overrides, /\.vt-studio-value-toggle__bar\[data-active="true"\][\s\S]*?background:\s*#000/);
+ });
+ 
+diff --git a/src/studio-ui/primitives/StudioValueToggles.test.tsx b/src/studio-ui/primitives/StudioValueToggles.test.tsx
+index 4717c5c6e..4184bea71 100644
+--- a/src/studio-ui/primitives/StudioValueToggles.test.tsx
++++ b/src/studio-ui/primitives/StudioValueToggles.test.tsx
+@@ -61,9 +61,9 @@ describe("Studio value toggle primitives", () => {
+ 
+   it("renders ten default bars and exposes the selected level as a meter", () => {
+     const { container } = mount(<StudioBarToggle value={50} onValueChange={() => {}} />);
+-    expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(14);
++    expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(10);
+     expect(container.querySelector('[role="meter"][aria-label="Level"]')?.getAttribute("aria-valuenow")).toBe("50");
+-    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(7);
++    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(5);
+   });
+ 
+   it("keeps proportional fill when an explicit bar count changes", () => {
+@@ -87,7 +87,7 @@ describe("Studio value toggle primitives", () => {
+     vi.stubGlobal("ResizeObserver", MockResizeObserver);
+     const { container } = mount(<StudioBarToggle value={50} onValueChange={() => {}} />);
+     const track = container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
+-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({ width: 227 } as DOMRect);
++    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({ width: 373 } as DOMRect);
+     act(() => {
+       notify?.([{ target: track, contentRect: { width: 260 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver);
+     });
+@@ -107,14 +107,14 @@ describe("Studio value toggle primitives", () => {
+ 
+     const compact = mount(<StudioBarToggle value={50} size="compact" onValueChange={() => {}} />);
+     const compactTrack = compact.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
+-    vi.spyOn(compactTrack, "getBoundingClientRect").mockReturnValue({ width: 264 } as DOMRect);
++    vi.spyOn(compactTrack, "getBoundingClientRect").mockReturnValue({ width: 378 } as DOMRect);
+     act(() => notify?.([{ target: compactTrack, contentRect: { width: 256 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
+     expect(compact.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(32);
+     expect(compact.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(16);
+ 
+     const micro = mount(<StudioBarToggle value={50} size="micro" onValueChange={() => {}} />);
+     const microTrack = micro.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
+-    vi.spyOn(microTrack, "getBoundingClientRect").mockReturnValue({ width: 164 } as DOMRect);
++    vi.spyOn(microTrack, "getBoundingClientRect").mockReturnValue({ width: 203 } as DOMRect);
+     act(() => notify?.([{ target: microTrack, contentRect: { width: 160 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
+     expect(micro.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(40);
+     expect(micro.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(20);
+diff --git a/src/styles/studio-control-distill-overrides.css b/src/styles/studio-control-distill-overrides.css
+index 37692f781..508ec46b7 100644
+--- a/src/styles/studio-control-distill-overrides.css
++++ b/src/styles/studio-control-distill-overrides.css
+@@ -177,16 +177,17 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
+ }
+ .vt-studio-value-toggle[data-size="standard"] .vt-studio-value-toggle__bars,
+ .vt-studio-value-toggle:not([data-size]) .vt-studio-value-toggle__bars {
++  /* Bar height matches the 38px standard text height; 2.5 tall × 1 wide. */
+   --vt-bar-gap: 3px;
+-  --vt-bar-width: 10px;
+-  --vt-bar-height: 28px;
++  --vt-bar-width: 15.2px;
++  --vt-bar-height: 38px;
+   --vt-bar-radius: 2px;
+   --vt-bar-padding-inline: 6px;
+ }
+ .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars {
+   --vt-bar-gap: 2px;
+-  --vt-bar-width: 6px;
+-  --vt-bar-height: 16px;
++  --vt-bar-width: 9.6px;
++  --vt-bar-height: 24px;
+   --vt-bar-radius: 1.5px;
+   --vt-bar-padding-inline: 4px;
+ }
+@@ -218,7 +219,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
+   border-radius: var(--vt-bar-radius);
+   box-sizing: border-box;
+   pointer-events: none;
+-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
++  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%) !important;
+ }
+ .vt-studio-value-toggle__bar[data-active="true"],
+ .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
+diff --git a/src/styles/studio-control-system.css b/src/styles/studio-control-system.css
+index 9f91be627..77cc9470a 100644
+--- a/src/styles/studio-control-system.css
++++ b/src/styles/studio-control-system.css
+@@ -5727,7 +5727,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
+   max-width: 18px;
+ }
+ 
+-/* Single bar definition: inactive bars remain legible over the primary face. */
++/* Single bar definition: empty bars are 50% white-primary; full bars are black. */
+ .vt-studio-value-toggle__bar,
+ .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
+   display: block;
+@@ -5735,7 +5735,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
+   width: 18px;
+   height: 38px;
+   align-self: center;
+-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
++  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
+   border: 1px solid #000;
+   box-sizing: border-box;
+   pointer-events: none;
+-- 
+2.43.0
+

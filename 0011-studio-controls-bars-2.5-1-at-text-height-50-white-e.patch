@@ -1,0 +1,38 @@
+From ed088d7bf6c2e80edb6b35ccb148e6f54480940a Mon Sep 17 00:00:00 2001
+From: Studio Controls Bot <bot@viewtube.dev>
+Date: Sat, 24 Oct 2026 05:42:39 +0000
+Subject: [PATCH 11/12] studio-controls: bars 2.5:1 at text height, 50%-white
+ empty fill; align tests
+
+---
+ src/studio-ui/primitives/StudioValueToggles.test.tsx | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/studio-ui/primitives/StudioValueToggles.test.tsx b/src/studio-ui/primitives/StudioValueToggles.test.tsx
+index f78f6d7e1..4717c5c6e 100644
+--- a/src/studio-ui/primitives/StudioValueToggles.test.tsx
++++ b/src/studio-ui/primitives/StudioValueToggles.test.tsx
+@@ -61,9 +61,9 @@ describe("Studio value toggle primitives", () => {
+ 
+   it("renders ten default bars and exposes the selected level as a meter", () => {
+     const { container } = mount(<StudioBarToggle value={50} onValueChange={() => {}} />);
+-    expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(10);
++    expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(14);
+     expect(container.querySelector('[role="meter"][aria-label="Level"]')?.getAttribute("aria-valuenow")).toBe("50");
+-    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(5);
++    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(7);
+   });
+ 
+   it("keeps proportional fill when an explicit bar count changes", () => {
+@@ -87,7 +87,7 @@ describe("Studio value toggle primitives", () => {
+     vi.stubGlobal("ResizeObserver", MockResizeObserver);
+     const { container } = mount(<StudioBarToggle value={50} onValueChange={() => {}} />);
+     const track = container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
+-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({ width: 272 } as DOMRect);
++    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({ width: 227 } as DOMRect);
+     act(() => {
+       notify?.([{ target: track, contentRect: { width: 260 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver);
+     });
+-- 
+2.43.0
+

@@ -1,0 +1,37 @@
+From 6732832c9980cefb1faf99cbcd06f5920808104b Mon Sep 17 00:00:00 2001
+From: viewtube-dev <viewtubesupport@gmail.com>
+Date: Fri, 23 Oct 2026 23:54:08 -0400
+Subject: [PATCH 03/12] style(brain): fit launcher and prompt library titles
+
+---
+ src/components/brain/BrainChatPrimitives.css | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/src/components/brain/BrainChatPrimitives.css b/src/components/brain/BrainChatPrimitives.css
+index 61b8dbd8d..5c5c00874 100644
+--- a/src/components/brain/BrainChatPrimitives.css
++++ b/src/components/brain/BrainChatPrimitives.css
+@@ -17,3 +17,20 @@
+     grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+ }
++
++/* Keep the Brain launchpad's two mode tabs legible without changing global Studio sizing. */
++.brain-launcher-mode-switch [data-vt-studio-button-line] {
++  min-width: 0;
++  font-size: clamp(10px, 3vw, 14px);
++  line-height: 1;
++  letter-spacing: 0;
++  -webkit-text-stroke: 0;
++}
++
++/* The top Prompt Library remains a standard intermodule; only its long title scales
++   down enough to fit between the canonical rails on narrow screens. */
++.brain-prompt-library-shell > .vt-studio-inter-module__head .vt-studio-inter-module__title {
++  min-width: 0;
++  font-size: clamp(16px, 4.5vw, 24px);
++  -webkit-text-stroke: 0;
++}
+-- 
+2.43.0
+

@@ -1,0 +1,102 @@
+/* Real nested borders: badge owns black perimeter; native input owns primary
+ * interior border. No decorative overlay, background stripes, or inset shadow. */
+html body .vt-studio-split-text-input {
+  display: block !important;
+  box-sizing: border-box;
+  width: 100% !important;
+  min-width: 0;
+  max-width: none !important;
+  flex: 1 1 auto;
+  justify-self: stretch;
+  background: transparent !important;
+}
+html body .vt-studio-split-text-input > [data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  display: grid;
+  width: 100% !important;
+  min-width: 0;
+  max-width: none !important;
+  height: var(--vt-studio-control-height) !important;
+  min-height: var(--vt-studio-control-height);
+  max-height: var(--vt-studio-control-height);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+  padding: 0 !important;
+  gap: 0 !important;
+  background: transparent !important;
+}
+html body .vt-studio-split-text-input [data-vt-studio-split-label] {
+  --vt-split-field-inner-radius: max(0px, calc(var(--vt-studio-control-radius, 6px) - var(--vt-studio-control-stroke, 3px)));
+  box-sizing: border-box;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: transparent !important;
+}
+html body .vt-studio-split-text-input[data-split="left"] [data-vt-studio-split-label] {
+  border-radius: 0 var(--vt-split-field-inner-radius) var(--vt-split-field-inner-radius) 0;
+}
+html body .vt-studio-split-text-input[data-split="right"] [data-vt-studio-split-label] {
+  border-radius: var(--vt-split-field-inner-radius) 0 0 var(--vt-split-field-inner-radius);
+}
+html body .vt-studio-split-text-input [data-vt-studio-split-rail] {
+  width: calc(var(--vt-studio-control-height) - var(--vt-studio-control-stroke));
+  min-width: calc(var(--vt-studio-control-height) - var(--vt-studio-control-stroke));
+  height: 100%;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+/* Border-box includes the primary border in the native field dimensions.
+ * Grid stretch removes baseline and independently rounded height offsets. */
+html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
+  --vt-split-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  display: block;
+  box-sizing: border-box;
+  align-self: stretch;
+  width: 100% !important;
+  min-width: 0;
+  max-width: none;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100%;
+  margin: 0 !important;
+  padding: 0 12px;
+  /* The split label is pointer-events: none (text sits on rails); the real
+     input must re-enable pointer events so it edits like any text input. */
+  pointer-events: auto;
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary) !important;
+  border-radius: inherit !important;
+  outline: none !important;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--vt-split-field-primary) 50%, transparent) !important;
+  background-clip: padding-box;
+  color: var(--vt-split-field-primary);
+  -webkit-text-fill-color: var(--vt-split-field-primary);
+  -webkit-text-stroke-color: var(--vt-split-field-primary);
+  caret-color: var(--vt-split-field-primary);
+  line-height: var(--vt-studio-control-line-height, .86);
+  text-align: left;
+}
+html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size]:is(:focus, :focus-visible) {
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary) !important;
+  border-radius: inherit !important;
+  outline: none !important;
+  background: color-mix(in srgb, var(--vt-split-field-primary) 15%, transparent) !important;
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
+}
+html body .vt-studio-split-text-input:focus-within > [data-vt-studio-control="true"] {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline-offset: 0 !important;
+}

@@ -1,0 +1,27 @@
+From 35724f4287a90582df29fc8eaec7d05fed6d6c1e Mon Sep 17 00:00:00 2001
+From: viewtube-dev <viewtubesupport@gmail.com>
+Date: Fri, 23 Oct 2026 23:53:42 -0400
+Subject: [PATCH 01/12] test(brain): guard launcher and prompt header label fit
+
+---
+ src/views/AIBrainRuntimeSurface.contract.test.ts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/views/AIBrainRuntimeSurface.contract.test.ts b/src/views/AIBrainRuntimeSurface.contract.test.ts
+index a13bb172f..a48fce182 100644
+--- a/src/views/AIBrainRuntimeSurface.contract.test.ts
++++ b/src/views/AIBrainRuntimeSurface.contract.test.ts
+@@ -68,6 +68,10 @@ describe("AI Brain runtime surface integration", () => {
+   expect(source).toContain('contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6]')
+   expect(source).not.toContain('contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:!h-full')
+   expect(source).toContain("TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length]")
++  expect(source).toContain('className="brain-launcher-mode-switch grid grid-cols-2 gap-1 border-[2px] border-black bg-[#f8f8f4] p-1"')
++  expect(source).toContain('className="brain-launcher-mode-switch grid grid-cols-2 gap-1"')
++  expect(chatPrimitivesCssSource).toContain(".brain-launcher-mode-switch [data-vt-studio-button-line]")
++  expect(chatPrimitivesCssSource).toContain(".brain-prompt-library-shell > .vt-studio-inter-module__head .vt-studio-inter-module__title")
+   expect(promptLibrary).toContain("order.get(card.id)")
+   expect(chatPrimitivesSource).toContain("touch-pan-y")
+   expect(source).toContain("max-xl:h-[100dvh]")
+-- 
+2.43.0
+
