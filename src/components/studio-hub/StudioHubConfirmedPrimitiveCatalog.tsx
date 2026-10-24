@@ -394,7 +394,7 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
       ]}
       provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px · fixed geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioCounter">
         <div className="vt-confirmed-counter-size-rows">
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioCounter value={standardPrimary} onValueChange={setStandardPrimary} size="standard" min={0} max={100} ariaLabel="Standard counter" /><StudioCounter className="is-reversed" value={standardReversed} onValueChange={setStandardReversed} size="standard" min={0} max={100} ariaLabel="Standard counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioCounter value={compactPrimary} onValueChange={setCompactPrimary} size="compact" min={0} max={100} ariaLabel="Compact counter" /><StudioCounter className="is-reversed" value={compactReversed} onValueChange={setCompactReversed} size="compact" min={0} max={100} ariaLabel="Compact counter secondary palette" /></div></div>
@@ -424,7 +424,7 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
       ]}
       provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px · double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioDoubleSplitSlider">
         <div className="vt-confirmed-counter-size-rows">
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardA} onValueChange={setStandardA} size="standard" ariaLabel="Standard slider" /><StudioDoubleSplitSlider className="is-reversed" value={standardB} onValueChange={setStandardB} size="standard" ariaLabel="Standard slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={compactA} onValueChange={setCompactA} size="compact" ariaLabel="Compact slider" /><StudioDoubleSplitSlider className="is-reversed" value={compactB} onValueChange={setCompactB} size="compact" ariaLabel="Compact slider secondary palette" /></div></div>
@@ -453,7 +453,7 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
       ]}
       provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px · right-side action rail geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioSideCounter">
         <div className="vt-confirmed-counter-size-rows">
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideStandard} onValueChange={setSideStandard} size="standard" min={0} max={100} ariaLabel="Standard side counter" /><StudioLeftCounter className="is-reversed" value={leftStandard} onValueChange={setLeftStandard} size="standard" min={0} max={100} ariaLabel="Standard left counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideCompact} onValueChange={setSideCompact} size="compact" min={0} max={100} ariaLabel="Compact side counter" /><StudioLeftCounter className="is-reversed" value={leftCompact} onValueChange={setLeftCompact} size="compact" min={0} max={100} ariaLabel="Compact left counter secondary palette" /></div></div>
@@ -1057,7 +1057,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         imports={["src/studio-ui/primitives/StudioControls.tsx"]}
       />}
     >
-      <div className="vt-confirmed-variant is-full-row">
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown">
         <span>44px standard · selected values · multiselect trigger</span>
         <StudioLegendMultiDropdown
           label="dropdown"
@@ -1110,7 +1110,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family
-      title="Global Rules Exceptions · Vault Spectrum Tags"
+      title="StudioSpectrumTag · Vault Metadata Exception"
       nonDefaultSettings={[
         "Dense metadata exception: 15px height, spectrum-derived border/text, 35% color fill, and opt-in selected glow.",
       ]}
@@ -1123,7 +1123,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       />}
     >
       <p className="vt-confirmed-defaults-summary">Intentional exception to global control geometry · exact Vault asset-module chip styling</p>
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-spectrum-tag-variant">
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-spectrum-tag-variant" data-vt-library-component="StudioSpectrumTag">
         <span>50 continuous alphabetical spectrum samples</span>
         <div className="vt-confirmed-spectrum-tag-grid">
           <StudioSpectrumTag label="AARDVARK" />
@@ -1231,7 +1231,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Studio Controls standard/compact sizes, Inter 1000 uppercase, inherited palette pair" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row">
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSimpleDropdown">
         <span>Standard · single select</span>
         <StudioSimpleDropdown aria-label="Example simple dropdown" defaultValue="balanced" options={[{ value: "light", label: "Light" }, { value: "balanced", label: "Balanced" }, { value: "aggressive", label: "Aggressive" }]} />
         <span>Single select · three-set choice</span>
