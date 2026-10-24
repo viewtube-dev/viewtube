@@ -1200,7 +1200,7 @@ describe("Studio field focus, floating labels, and toggle regressions", () => {
     const css = readStudioControlCss();
     const finalFieldContract = fields.slice(fields.lastIndexOf("/* Final regression-recovery contract"));
     expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
-    expect(finalFieldContract).toContain("-webkit-text-stroke-color: #000 !important;");
+    expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
     expect(css).toContain("--vt-studio-floating-label-risen-font-size: 12px;");
     expect(css).toContain("--vt-studio-floating-label-risen-text-stroke: 0.5px;");
     expect(css).toContain("font-size: var(--vt-studio-floating-label-risen-font-size, 12px) !important;");
