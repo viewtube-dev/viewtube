@@ -30,6 +30,16 @@
   --vt-studio-compact-icon-stroke: 2;
   --vt-studio-compact-focus-outline-width: 1.3px;
   --vt-studio-compact-secondary-outline-width: 1.3px;
+  --vt-studio-mini-height: 20px;
+  --vt-studio-mini-stroke: 1.5px;
+  --vt-studio-mini-radius: 3px;
+  --vt-studio-mini-font-size: 17.5px;
+  --vt-studio-mini-icon-size: 17.5px;
+  --vt-studio-mini-font-weight: 1000;
+  --vt-studio-mini-text-stroke: 0.375px;
+  --vt-studio-mini-icon-stroke: 1.5;
+  --vt-studio-mini-focus-outline-width: 0.98px;
+  --vt-studio-mini-secondary-outline-width: 0.98px;
   --vt-studio-micro-height: 12px;
   --vt-studio-micro-stroke: 1px;
   --vt-studio-micro-radius: 2px;
@@ -44,14 +54,16 @@
   --vt-studio-textarea-supreme-font-size: 24.55px;
   --vt-studio-textarea-standard-font-size: 18px;
   --vt-studio-textarea-compact-font-size: 14px;
+  --vt-studio-textarea-mini-font-size: 17.5px;
   --vt-studio-textarea-micro-font-size: 10px;
   --vt-studio-textarea-supreme-text-stroke: 0.68px;
   --vt-studio-textarea-standard-text-stroke: 0.5px;
   --vt-studio-textarea-compact-text-stroke: 0.35px;
+  --vt-studio-textarea-mini-text-stroke: 0.375px;
   --vt-studio-textarea-micro-text-stroke: 0.25px;
   --vt-studio-textarea-font-weight: 1000;
   --vt-studio-textarea-min-height: 92px;
-  --vt-studio-textarea-line-height: 1;
+  --vt-studio-textarea-line-height: 0.85;
   /* Compatibility aliases: old numbered names resolve to the canonical tier tokens. */
   --vt-studio-60-height: var(--vt-studio-supreme-height);
   --vt-studio-60-stroke: var(--vt-studio-supreme-stroke);
@@ -78,15 +90,23 @@
   --vt-studio-dropdown-supreme-chevron-stroke: 3.409090909090909;
   --vt-studio-dropdown-standard-rail-size: 44px;
   --vt-studio-dropdown-compact-rail-size: 28px;
+  --vt-studio-dropdown-mini-rail-size: 20px;
+  --vt-studio-dropdown-micro-rail-size: 12px;
   --vt-studio-dropdown-standard-chevron-size: 28px;
   --vt-studio-dropdown-compact-chevron-size: 18px;
+  --vt-studio-dropdown-mini-chevron-size: 14px;
+  --vt-studio-dropdown-micro-chevron-size: 8px;
   --vt-studio-dropdown-standard-chevron-stroke: 2.5;
   --vt-studio-dropdown-compact-chevron-stroke: 1.65;
+  --vt-studio-dropdown-mini-chevron-stroke: 1.2;
+  --vt-studio-dropdown-micro-chevron-stroke: 1;
   --vt-studio-number-default-white-mix: 50%;
   --vt-studio-number-rest-mix: 50%;
   --vt-studio-number-active-color: #000000;
   --vt-studio-number-active-stroke: #000000;
   --vt-studio-floating-label-standard-height: 38px;
   --vt-studio-floating-label-compact-height: 24px;
+  --vt-studio-floating-label-mini-height: 17.5px;
+  --vt-studio-floating-label-micro-height: 10px;
   --vt-studio-floating-label-offset-ratio: 1.2;
 }
