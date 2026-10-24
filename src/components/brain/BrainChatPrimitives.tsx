@@ -181,7 +181,7 @@ export const ChatConversationViewport: React.FC<{
   viewportRef: React.Ref<HTMLDivElement>
   onScroll?: React.UIEventHandler<HTMLDivElement>
   className?: string
-}> = ({ children, viewportRef, bottomRef, onScroll, className = "" }) => (
+}> = ({ children, viewportRef, onScroll, className = "" }) => (
   <div
     ref={viewportRef}
     onScroll={onScroll}
