@@ -8,7 +8,7 @@ describe("Dashboard Widgets Settings primitive governance", () => {
     expect(source).toContain("SubToolbox")
     expect(source).toContain("SubToolboxSettingsSwitch")
     expect(source).toContain("SubToolboxStatusBadge")
-    expect(source).toContain("StudioSearchInput")
+    expect(source).toContain("StudioTextInput")
     expect(source).not.toContain("rounded-[20px]")
     expect(source).not.toContain("xl:grid-cols-3")
     expect(source).not.toContain("buttonClass")

@@ -8,7 +8,7 @@ import {
  SubToolboxStatePanel,
  SubToolboxSurface,
 } from "./subtoolbox/SubToolboxPrimitives"
-import { StudioSplitLeftButton, StudioButton, StudioInput, StudioSearchInput, StudioTextArea } from "../studio-ui"
+import { StudioSplitLeftButton, StudioButton, StudioInput, StudioTextInput, StudioTextArea } from "../studio-ui"
 import { useCommunityPostController, useCreatorEngagementContext, type CommunityPostType } from "../features/creator-engagement"
 
 const POST_WORKSPACE_PALETTE_INDEX = 4
@@ -79,7 +79,7 @@ export const CommunityPostGenerator: React.FC = () => {
    {post.postType === "video" && <SubToolbox title="Linked Video" icon={<Video />} collapsible isOpenInitial>
     <SubToolboxStack>
     <SubToolboxFieldLabel htmlFor="community-video-search">Search Videos</SubToolboxFieldLabel>
-    <StudioSearchInput id="community-video-search" name="communityVideoSearch" autoComplete="off" value={post.videoSearch} onChange={(event) => post.setVideoSearch(event.target.value)} placeholder="Search titles or video IDs…" />
+    <StudioTextInput type="search" id="community-video-search" name="communityVideoSearch" autoComplete="off" value={post.videoSearch} onChange={(event) => post.setVideoSearch(event.target.value)} placeholder="Search titles or video IDs…" />
     <SubToolboxSurface scroll><SubToolboxSection>{post.filteredVideos.map((video) => <StudioButton type="button" key={video.videoId} sizeVariant="compact" tone="neutral" aria-pressed={post.selectedVideoId === video.videoId} onClick={() => post.setSelectedVideoId(video.videoId)}>{video.title || video.videoId}</StudioButton>)}{!post.filteredVideos.length && <SubToolboxStatePanel state="empty" message="No videos found." />}</SubToolboxSection></SubToolboxSurface>
     </SubToolboxStack>
    </SubToolbox>}

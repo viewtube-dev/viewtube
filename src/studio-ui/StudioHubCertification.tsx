@@ -9,7 +9,7 @@ import {
   StudioButton,
   StudioIconButton,
   StudioInput,
-  StudioSearchInput,
+  StudioTextInput,
   StudioSplitLeftButton,
   StudioTextArea,
   StudioSquareIconButton,
@@ -45,7 +45,7 @@ export const StudioHubCertification: React.FC = () => {
         <SubToolboxSection label="Inputs">
           <SubToolboxGrid minItemWidth="wide">
             <StudioInput aria-label="Standard input specimen" defaultValue="title" />
-            <StudioSearchInput aria-label="Search input specimen" placeholder="Search videos…" />
+            <StudioTextInput type="search" aria-label="Search input specimen" placeholder="Search videos…" />
             <StudioInput aria-label="Disabled input specimen" value="Disabled" disabled readOnly />
           </SubToolboxGrid>
           <SubToolboxFieldLabel htmlFor="studio-cert-textarea">Textarea</SubToolboxFieldLabel>

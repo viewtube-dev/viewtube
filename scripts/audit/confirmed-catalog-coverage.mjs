@@ -25,7 +25,7 @@ const system = read("src/styles/studio-control-system.css")
 const checks = [
   ["distill overrides imported after field/parity styles", entry.indexOf('./studio-control-distill-overrides.css') > entry.indexOf('./studio-field-parity.css')],
   ["focused field text is black", fields.includes("color: var(--vt-field-text-focus)") && fields.includes("-webkit-text-fill-color: var(--vt-field-text-focus)") && system.includes("--vt-field-text-focus: #000;")],
-  ["focused field keeps primary glyph stroke with black text fill", fields.includes("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)") && system.includes("--vt-field-text-stroke-focus: var(--vt-field-primary);") && system.includes("--vt-field-text-focus: #000;")],
+  ["focused field keeps black glyph stroke with black text fill", fields.includes("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)") && system.includes("--vt-field-text-stroke-focus: #000;") && system.includes("--vt-field-text-focus: #000;")],
   ["focus fill uses primary at 15 percent", system.includes("--vt-field-fill-focus: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);") && fields.includes("background-color: var(--vt-field-fill-focus);")],
   ["single-line labels clip instead of ellipsis", overrides.includes("text-overflow: clip") && !overrides.includes("text-overflow: ellipsis")],
   ["square icon group uses content width", overrides.includes(".vt-studio-square-icon-button-group") && overrides.includes("width: max-content")],
@@ -38,11 +38,11 @@ const checks = [
   ["global defaults is collapsed by default", catalog.includes('data-vt-confirmed-family="defaults"') && !/data-vt-confirmed-family="defaults"[^>]*\bopen=/.test(catalog)],
   ["catalog imports disclosure styles", catalog.includes('import "../../styles/studio-confirmed-catalog-modules.css"') && catalogStyles.includes(".vt-confirmed-primitive-summary")],
   ["module components are exported", moduleFile.includes("ConfirmedFamilyModule") && moduleFile.includes("ConfirmedPrimitiveModule") && index.includes("ConfirmedDefaultsModule")],
-  ["all eight requested family groups are declared", [
+  ["all seven requested family groups are declared", [
     "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
-    "Controls", "Text Controls", "Compounds", "Compositions",
+    "Controls", "Text Controls", "Compositions",
   ].every((family) => catalog.includes(`"${family}"`)) && catalog.includes("CONFIRMED_CATALOG_FAMILIES")],
-  ["global defaults render before the eight family groups", catalog.indexOf("{defaults}") >= 0 && catalog.indexOf("{defaults}") < catalog.indexOf("vt-confirmed-family-grid")],
+  ["global defaults render before the seven family groups", catalog.indexOf("{defaults}") >= 0 && catalog.indexOf("{defaults}") < catalog.indexOf("vt-confirmed-family-grid")],
 
   ["retired CLEAN COMPOSITION specimen is absent from confirmed catalog", !/CLEAN COMPOSITION|Confirmed Specimen Grid\s*[·-]\s*Layout Contract/i.test(catalog)],
 ]
@@ -50,8 +50,8 @@ const checks = [
 const requiredP0 = [
   "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput", "StudioButton",
   "StudioActionButton", "StudioSquareIconButtonGroup", "StudioTopSplitModule", "StudioCollapsingTwoLineModule",
-  "StudioUploadFrame", "StudioDropdown", "StudioSimpleDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
-  "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox", "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioIconButton", "StudioSplitRightButton",
+  "StudioUploadFrame", "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown", "StudioSplitTextInput",
+  "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox", "StudioIconButton", "StudioSplitRightButton",
   "StudioWordToggle", "StudioArrowToggle", "StudioSideToggle", "StudioDoubleSideToggle",
   "StudioBarToggle", "StudioSplitAccordion", "StudioPublishingCard", "StudioBrainStatusBadge",
   "StudioCounter", "StudioSideCounter", "StudioLeftCounter", "StudioDoubleSplitSlider", "StudioSpectrumTag", "StudioCloseableBadge", "StudioTagEditor",
@@ -66,4 +66,4 @@ for (const [label, ok] of checks) {
 }
 if (missingP0.length) console.error("Missing P0 specimens:", missingP0.join(", "))
 if (failed) process.exit(1)
-console.log("Static wiring checks passed. Eight-family grouping and browser verification remain release gates.")
+console.log("Static wiring checks passed. Seven-family grouping and browser verification remain release gates.")

@@ -36,10 +36,6 @@ export {
   StudioCounter,
   StudioSideCounter,
   StudioLeftCounter,
-  StudioNumberInput,
-  StudioSimpleDropdown,
-  StudioSearchInput,
-  StudioSelect,
   StudioSplitLeftButton,
   StudioDoubleSplitButton,
   StudioSplitRightButton,
@@ -100,7 +96,6 @@ export type {
   StudioTextAreaProps,
   StudioTextBoxProps,
   StudioTextBoxSize,
-  StudioSimpleDropdownProps,
   StudioUploadFrameProps,
   StudioBrainStatusBadgeProps,
   StudioBrainStatusBadgeTone,
@@ -154,3 +149,6 @@ export { StudioInterModule } from "./primitives/StudioInterModule"
 export { StudioResponseMetaRow } from "./primitives/StudioResponseMetaRow"
 export type { StudioResponseMetaRowProps, StudioResponseMetaRowSize } from "./primitives/StudioResponseMetaRow"
 export type { StudioInterModuleProps, StudioInterModuleSize } from "./primitives/StudioInterModule"
+
+export { StudioSplitTextInput } from "./primitives/StudioSplitTextInput"
+export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInput"

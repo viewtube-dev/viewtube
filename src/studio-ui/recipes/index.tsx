@@ -2,7 +2,7 @@ import React from "react"
 import { Link2 } from "lucide-react"
 import { SubToolboxSection, SubToolboxStack } from "../layouts"
 import { StudioDropdown } from "../primitives/StudioDropdown"
-import { StudioButton, StudioInput, StudioSearchInput, StudioSplitLeftButton, StudioTextArea } from "../primitives/StudioControls"
+import { StudioButton, StudioInput, StudioTextInput, StudioSplitLeftButton, StudioTextArea } from "../primitives/StudioControls"
 
 export const VIDEO_SELECTOR = "VIDEO_SELECTOR"
 export const TEXT_GENERATOR = "TEXT_GENERATOR"
@@ -62,7 +62,7 @@ export const VideoSelectorRecipe: React.FC<VideoSelectorRecipeProps> = ({
       />
     </SubToolboxSection>
     {connected ? (
-      <StudioSearchInput
+      <StudioTextInput type="search"
         aria-label="Search videos"
         value={searchValue}
         onChange={(event) => onSearchChange?.(event.target.value)}
@@ -105,7 +105,7 @@ export const SearchResultsRecipe: React.FC<{
   children: React.ReactNode
 }> = ({ query, onQueryChange, children }) => (
   <SubToolboxStack>
-    <StudioSearchInput
+    <StudioTextInput type="search"
       aria-label="Search results"
       value={query}
       onChange={(event) => onQueryChange(event.target.value)}

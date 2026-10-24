@@ -67,8 +67,8 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     globalRuleException: true,
     height: "content-driven two-word stack; intentionally not fixed to the 60 / 44 / 28 / 20 / 12px control heights",
     typography: "inherits standard/compact/micro Studio text-size, weight, family, case, and letter-spacing tokens",
-    stroke: "Supreme 4.09px / standard 3px / compact 2px / Mini 1.5px / micro 1px",
-    radius: "Supreme 8.18px / standard 6px / compact 4px / Mini 3px / micro 2px",
+    stroke: "Supreme 3px (Standard system) / standard 3px / compact 2px / Mini 1.5px / micro 1.5px (Mini system)",
+    radius: "Supreme 6px (Standard system) / standard 6px / compact 4px / Mini 3px / micro 3px (Mini system)",
     motion: "vertical expand-and-release handle with a color wipe; word colors switch quickly at animation start; reduced-motion settles immediately",
     rationale: "Two stacked word faces need a content-driven vertical surface; only height departs from the global size lattice.",
   },
@@ -96,7 +96,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   splitIconRailColor: "secondary (--pair-b) by default; size-tier icon dimensions; centered on both axes",
   badgeTypography: "Inter, font-weight 1000, font-synthesis none; labels centered; no thin-weight inheritance",
   splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
-  globalSizeLattice: "supreme 60px / 4.09px border / 8.18px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
+  globalSizeLattice: "supreme 60px / 3px border / 6px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; mini 20px / 1.5px border / 3px radius / 16px type and icon; micro 12px / 1.5px border / 3px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
   textContainment: "Global rule for all single-line text-bearing Studio primitives: split-left, split-right, and double-split labels center against the full component outer border box, independent of rail placement; use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls. Multiline textareas are excluded.",
@@ -119,7 +119,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   strokeColor: "#000000",
   colorPairSystem: "primary = --pair-a; secondary = --pair-b",
   backgroundFill: "buttons and badges use the global primary/secondary color pair; text inputs and text areas use primary at 50% opacity by default and 15% primary on focus",
-  textColor: "text fields use primary by default and black on focus; other controls use their component contract",
+  textColor: "editable text fields use primary text and primary glyph stroke at rest, black text and black glyph stroke on focus, with a persistent primary inset; display text boxes always use black text/stroke, primary inset, and secondary outline",
   textTransform: "uppercase",
   letterSpacing: "-0.02em",
   lineHeight: 1,
@@ -200,26 +200,6 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
   "data-size": size,
   ...(tone ? { "data-tone": tone } : {}),
 })
-
-/**
- * Separate search and numeric controls remain compatible with existing consumers;
- * the StudioTextInput foundation itself is intentionally only one plain input.
- */
-export const StudioSearchInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioSearchInput.displayName = "StudioSearchInput"
-
-export const StudioNumberInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "number", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioNumberInput.displayName = "StudioNumberInput"
 
 export { StudioTextInput, StudioInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
@@ -1003,14 +983,6 @@ export const StudioWordToggle = Studiotoggle
 export const StudioRadio = Studioradio
 export const StudioCheckbox = Studiocheck
 export const StudioXCheckbox = Studioxbox
-
-export const StudioSelect = React.forwardRef<
-  HTMLSelectElement,
-  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", ...props }, ref) => (
-  <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioSelect.displayName = "StudioSelect"
 
 export type StudioButtonVariant = "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7"
 
@@ -2207,26 +2179,6 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
     </div>
   )
 }
-
-export interface StudioSimpleDropdownOption { value: string; label: string; disabled?: boolean }
-export interface StudioSimpleDropdownProps {
-  value?: string
-  defaultValue?: string
-  options: StudioSimpleDropdownOption[]
-  onChange?: (value: string) => void
-  placeholder?: React.ReactNode
-  disabled?: boolean
-  className?: string
-  id?: string
-  ariaLabel?: string
-  sizeVariant?: StudioControlInteractiveSize
-}
-
-/** Simple single-select child variant of the canonical StudioDropdown family. */
-export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ options, ...props }) => (
-  <StudioDropdown {...props} options={options} variant="simple" />
-)
-StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
 
 /** Single-select dropdown with a secondary icon rail on the left and a trailing chevron rail. */
 export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "variant">> = (props) => (
