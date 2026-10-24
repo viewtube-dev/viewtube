@@ -206,22 +206,16 @@ html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:i
    textarea fields keep the primary inline glyph stroke from their own focus rules. */
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:is(:focus, :focus-visible) {
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
-  -webkit-text-stroke-width: var(--vt-studio-control-text-stroke, 1px) !important;
-  background-color: color-mix(
-    in srgb,
-    var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 15%,
-    transparent
-  ) !important;
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65))
-    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  outline-offset: 0 !important;
-  box-shadow: none !important;
-  caret-color: #000 !important;
+  color: var(--vt-field-text-focus, #000);
+  -webkit-text-fill-color: var(--vt-field-text-focus, #000);
+  -webkit-text-stroke-color: var(--vt-field-text-stroke-focus, #000);
+  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
+  background-color: var(--vt-field-fill-focus, color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent));
+  outline: var(--vt-field-focus-outline, calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline-offset: 0;
+  box-shadow: none;
+  caret-color: var(--vt-field-caret-focus, var(--vt-field-primary, var(--pair-a, #36e0f6)));
 }
-
 /* Raised floating labels follow the focused field's black glyph treatment. */
 .vt-studio-floating-field > :is(input, textarea):is(:focus, :focus-visible) + .vt-studio-floating-field-label {
   color: #000;
