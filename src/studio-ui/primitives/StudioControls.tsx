@@ -213,13 +213,6 @@ export const StudioSearchInput = React.forwardRef<
 ))
 StudioSearchInput.displayName = "StudioSearchInput"
 
-export const StudioNumberInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "number", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioNumberInput.displayName = "StudioNumberInput"
 
 export { StudioTextInput, StudioInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
@@ -2208,25 +2201,6 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   )
 }
 
-export interface StudioSimpleDropdownOption { value: string; label: string; disabled?: boolean }
-export interface StudioSimpleDropdownProps {
-  value?: string
-  defaultValue?: string
-  options: StudioSimpleDropdownOption[]
-  onChange?: (value: string) => void
-  placeholder?: React.ReactNode
-  disabled?: boolean
-  className?: string
-  id?: string
-  ariaLabel?: string
-  sizeVariant?: StudioControlInteractiveSize
-}
-
-/** Simple single-select child variant of the canonical StudioDropdown family. */
-export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ options, ...props }) => (
-  <StudioDropdown {...props} options={options} variant="simple" />
-)
-StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
 
 /** Single-select dropdown with a secondary icon rail on the left and a trailing chevron rail. */
 export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "variant">> = (props) => (
