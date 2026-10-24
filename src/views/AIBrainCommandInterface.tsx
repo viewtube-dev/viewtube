@@ -334,13 +334,13 @@ const BrainContextStrip: React.FC<{
   <div data-vt-brain-part="active-context-badges" className="grid min-w-0 grid-cols-2 gap-1 sm:grid-cols-4">
    <StudioSplitLeftBadge data-vt-brain-context="channel" sizeVariant="micro" icon={<MessageSquare aria-hidden="true" />} title={`Channel · ${channelLabel}`} aria-label={`Channel · ${channelLabel}`} className="min-w-0 max-w-full">Channel · {channelLabel}</StudioSplitLeftBadge>
    <StudioSplitLeftBadge data-vt-brain-context="project" sizeVariant="micro" icon={<LayoutGrid aria-hidden="true" />} title={`Project · ${projectLabel}`} aria-label={`Project · ${projectLabel}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Project · {projectLabel}</span></StudioSplitLeftBadge>
-   <StudioSplitLeftBadge data-vt-brain-context="content-build" sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} title={`ContentBuild · ${contentBuildId || "none"}`} aria-label={`ContentBuild · ${contentBuildId || "none"}`} className="min-w-0 max-w-full">Build · {contentBuildId ? contentBuildId.slice(0, 8) : "none"}</StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="content-build" sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} title={`Build · ${contentBuildId || "none"}`} aria-label={`Build · ${contentBuildId || "none"}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Build · {contentBuildId ? contentBuildId.slice(0, 10) : "none"}</span></StudioSplitLeftBadge>
    <StudioSplitLeftBadge data-vt-brain-context="selection" sizeVariant="micro" icon={<Lock aria-hidden="true" />} title={`Selected · ${selection?.label || "none"}`} aria-label={`Selected · ${selection?.label || "none"}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Selected · {selection?.label || "None"}</span></StudioSplitLeftBadge>
   </div>
-  <div data-vt-brain-part="context-actions" className="grid grid-cols-1 gap-1 min-[480px]:grid-cols-3">
-   <StudioSplitLeftButton sizeVariant="compact" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} aria-label={selection?.locked ? "Unlock selection" : "Lock selection"} title={selection?.locked ? "Unlock selection" : "Lock selection"} onClick={onToggleLock} className="w-full min-w-0 whitespace-normal">{selection?.locked ? "Unlock selection" : "Lock selection"}</StudioSplitLeftButton>
-   <StudioSplitLeftButton sizeVariant="compact" icon={<XCircle aria-hidden="true" />} aria-label="Clear selection" title="Clear selection" disabled={!selection} onClick={onClearSelection} className="w-full min-w-0 whitespace-normal">Clear selection</StudioSplitLeftButton>
-   <StudioSplitLeftButton sizeVariant="compact" icon={<Trash2 aria-hidden="true" />} aria-label="Clear project" title="Clear project" disabled={projectLabel === "none"} onClick={onClearProject} className="w-full min-w-0 whitespace-normal">Clear project</StudioSplitLeftButton>
+  <div data-vt-brain-part="context-actions" className="grid grid-cols-3 gap-1">
+   <StudioSplitLeftButton sizeVariant="compact" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} aria-label={selection?.locked ? "Unlock selection" : "Lock selection"} title={selection?.locked ? "Unlock selection" : "Lock selection"} onClick={onToggleLock} className="w-full min-w-0 truncate">{selection?.locked ? "Unlock" : "Lock"}</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<XCircle aria-hidden="true" />} aria-label="Clear selection" title="Clear selection" disabled={!selection} onClick={onClearSelection} className="w-full min-w-0 truncate">Clear</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<Trash2 aria-hidden="true" />} aria-label="Clear project" title="Clear project" disabled={projectLabel === "none"} onClick={onClearProject} className="w-full min-w-0 truncate">Project</StudioSplitLeftButton>
   </div>
  </section>
 )
@@ -688,26 +688,27 @@ const BrainLearningReceiptCard: React.FC<{
  const receipt = message.learningReceipt
  if (!receipt) return null
  const dismissed = receipt.status === "dismissed"
+ const scopeLabel = receipt.scope === "durable_knowledge"
+  ? "Saved as a lasting preference"
+  : "Saved temporarily — not a permanent rule yet"
  return (
-  <section data-vt-brain-part="learning-receipt-content" aria-label="Learning receipt" className="grid gap-2 bg-[#FFF8D6] p-3">
-   <div className="flex flex-wrap items-center justify-between gap-2">
-    <h4 data-vt-brain-part="learning-receipt-heading" className="text-[10px] font-black uppercase tracking-[0.12em]">Learning receipt</h4>
-    <StudioSplitLeftBadge sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} role="status">Receipt · {receipt.status}</StudioSplitLeftBadge>
+  <details data-vt-brain-part="learning-receipt-content" aria-label="Learning saved" className="grid gap-0 bg-[#FFF8D6] open:gap-2">
+   <summary className="flex min-h-10 cursor-pointer list-none flex-wrap items-center justify-between gap-2 px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black">
+    <span data-vt-brain-part="learning-receipt-heading" className="text-[10px] font-black uppercase tracking-[0.12em]">Learning saved</span>
+    <StudioSplitLeftBadge sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} role="status">{dismissed ? "Rejected" : "Review"}</StudioSplitLeftBadge>
+   </summary>
+   <div className="grid gap-2 border-t border-black/15 px-3 pb-3">
+    <p data-vt-brain-part="learning-receipt-summary" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(receipt.summary)}</p>
+    {receipt.detail ? <p className="text-xs font-bold leading-5 text-black/70">{sanitizeCreatorFacingBrainCopy(receipt.detail)}</p> : null}
+    <p data-vt-brain-part="learning-receipt-scope" className="text-[11px] font-bold text-black/70">{scopeLabel}</p>
+    {!dismissed ? (
+     <div className="flex flex-wrap gap-1">
+      <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={() => onCorrect(message)}>Correct</StudioButton>
+      <StudioButton sizeVariant="compact" type="button" onClick={() => onReject(message)}>Reject</StudioButton>
+     </div>
+    ) : <p role="status" className="text-xs font-bold">Rejected — this will not become a permanent preference.</p>}
    </div>
-   <p data-vt-brain-part="learning-receipt-summary" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(receipt.summary)}</p>
-   {receipt.detail ? <p className="text-xs font-bold leading-5 text-black/70">{sanitizeCreatorFacingBrainCopy(receipt.detail)}</p> : null}
-   <dl data-vt-brain-part="learning-receipt-metadata" className="grid gap-1 text-[10px] leading-4">
-    <div><dt className="inline font-black uppercase">Scope · </dt><dd className="inline">{receipt.scope === "durable_knowledge" ? "Confirmed durable knowledge" : "Learning ledger; not promoted to durable knowledge"}</dd></div>
-    <div><dt className="inline font-black uppercase">Category · </dt><dd className="inline">{receipt.category.replace(/_/g, " ")}</dd></div>
-    <div><dt className="inline font-black uppercase">Receipt ID · </dt><dd className="break-all font-mono">{receipt.entryId}</dd></div>
-   </dl>
-   {!dismissed ? (
-    <div className="flex flex-wrap gap-1">
-     <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={() => onCorrect(message)}>Correct</StudioButton>
-     <StudioButton sizeVariant="compact" type="button" onClick={() => onReject(message)}>Reject</StudioButton>
-    </div>
-   ) : <p role="status" className="text-xs font-bold">This learning entry was rejected and will not be promoted.</p>}
-  </section>
+  </details>
  )
 }
 
@@ -738,7 +739,7 @@ const CreatorResponseCard: React.FC<{
   return (
    <StudioInterModule
     data-vt-brain-component="BrainLearningReceiptEntry"
-    title="LEARNING SAVED"
+    title="LEARNING"
     startIcon={<BookOpen aria-hidden="true" />}
     sizeVariant="compact"
     className="shrink-0"
@@ -1892,7 +1893,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  return (
-  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="flex h-full min-h-0 flex-col overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black max-xl:h-[100dvh] max-xl:overflow-hidden xl:overflow-hidden">
+  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="h-full min-h-0 overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black max-xl:h-[100dvh] max-xl:overflow-hidden xl:overflow-hidden">
    <Toolbox
     title="ViewTube Brain Hub"
     subtitle="One assistant for channel strategy, analytics, goals, content planning, SEO, and publishing."
@@ -1902,7 +1903,7 @@ const AIBrainCommandInterface: React.FC = () => {
     indicator="none"
     embedded
     fillAvailable
-    outerClassName="flex h-full min-h-0 flex-col max-xl:!h-full xl:h-full"
+    outerClassName="h-full min-h-0 max-xl:!h-full xl:h-full"
     contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:overflow-hidden xl:overflow-hidden"
    >
     {intakeOpen ? (
@@ -1913,7 +1914,7 @@ const AIBrainCommandInterface: React.FC = () => {
       onDefer={handleDeferIntake}
      />
     ) : (
-     <section className="relative flex flex-1 min-h-0 flex-col overflow-hidden xl:overflow-hidden">
+     <section className="relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
       <div className="shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
