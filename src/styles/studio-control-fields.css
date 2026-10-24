@@ -273,3 +273,46 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
   -webkit-text-stroke-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
   -webkit-text-stroke-width: var(--vt-studio-textarea-mini-text-stroke, .375px);
 }
+
+
+/* Resting floating labels track the selected tier; raised labels remain the shared 12px chip. */
+.vt-studio-floating-field > input[data-size="supreme"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="standard"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-standard-font-size, 38px);
+  -webkit-text-stroke: var(--vt-studio-standard-text-stroke, 1px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="compact"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-compact-font-size, 24px);
+  -webkit-text-stroke: var(--vt-studio-compact-text-stroke, .5px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="mini"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-mini-font-size, 17.5px);
+  -webkit-text-stroke: var(--vt-studio-mini-text-stroke, .375px) currentColor;
+}
+.vt-studio-floating-field > input[data-size="micro"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-micro-font-size, 10px);
+  -webkit-text-stroke: var(--vt-studio-micro-text-stroke, .25px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="supreme"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-supreme-font-size, 24.55px);
+  -webkit-text-stroke: var(--vt-studio-textarea-supreme-text-stroke, .68px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="standard"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-standard-font-size, 18px);
+  -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, .5px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="compact"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, .35px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="mini"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-mini-font-size, 17.5px);
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, .375px) currentColor;
+}
+.vt-studio-floating-field > textarea[data-size="micro"]:placeholder-shown:not(:focus, :focus-visible) + .vt-studio-floating-field-label {
+  font-size: var(--vt-studio-textarea-micro-font-size, 10px);
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, .25px) currentColor;
+}
