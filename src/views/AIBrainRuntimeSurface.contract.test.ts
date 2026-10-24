@@ -45,6 +45,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(promptLibrary).toContain('className="block w-full min-w-0 m-0 px-0"')
   expect(source).toContain("fillAvailable")
   expect(source).toContain('contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6]')
+  expect(source).not.toContain('contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:!h-full')
   expect(promptLibrary).not.toContain("<StudioInterModule\n           key={card.id}")
   expect(promptLibrary).toContain("firstLine=\"SEND TO\"")
   expect(promptLibrary).toContain("secondLine=\"CHAT\"")
