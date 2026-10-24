@@ -26,9 +26,9 @@ describe("AI Brain runtime surface integration", () => {
  })
 
  it("lets fillAvailable toolboxes fit their header and keep the remaining viewport scrollable", () => {
-  expect(toolboxSource).toContain('className={`overflow-hidden min-h-0 flex-1 flex flex-col ${fillAvailable ? "" : ""}`}')
-  expect(toolboxSource).not.toContain('${fillAvailable ? "h-full" : ""}')
-  expect(toolboxSource).not.toContain('${fillAvailable ? \'h-full\' : \'\'}')
+  expect(toolboxSource).toContain('overflow-hidden min-h-0 ${fillAvailable ? \'flex-1 flex flex-col\' : \'\'}')
+  expect(toolboxSource).toContain('className={`min-h-0 ${fillAvailable ? \'flex-1\' : \'\'} bg-white vt-main-toolbox-content ${finalContentClass}`}')
+  expect(toolboxSource).not.toContain('className={`min-h-0 ${fillAvailable ? \'flex-1\' : \'\'} bg-white vt-main-toolbox-content ${fillAvailable ? \'h-full\' : \'\'}')
  })
 
  it("uses StudioInterModule for chat entries and the registry-backed prompt library", () => {
