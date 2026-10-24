@@ -79,7 +79,7 @@ test("bar toggle uses adaptive width counts, proportional fill, and size-specifi
   assert.match(toggles, /Math\.round\(\(Math\.max\(0, Math\.min\(100, value\)\) \/ 100\) \* barCount\)/);
   assert.match(toggles, /setPointerCapture\?\.\(event\.pointerId\)/);
   assert.match(toggles, /onPointerUp=\{stopRepeat\}[\s\S]*?onPointerCancel=\{stopRepeat\}[\s\S]*?onLostPointerCapture=\{stopRepeat\}/);
-  assert.match(overrides, /--vt-bar-width:\s*10px/);
+  assert.match(overrides, /--vt-bar-width:\s*calc\(var\(--vt-bar-height\) \* 0\.4\)/);
   assert.match(overrides, /--vt-bar-gap:\s*3px/);
   assert.match(overrides, /border:\s*0\s*!important/);
   assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
