@@ -490,7 +490,7 @@ test("canonical StudioButton catalog uses the PR #756 proportional grid and real
 test("ConfirmedSpecimenGrid keeps layout proportional and leaves control geometry to StudioButton", () => {
   const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
   const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
-  const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"));
+  const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"), styles.indexOf("/* Dense, collapsed Global Defaults"));
   assert.match(gridCss, /--vt-specimen-gap:\\s*var\\(--vt-studio-space-unit,\\s*4px\\)/);
   assert.match(gridCss, /grid-template-columns:\\s*repeat\\(144,\\s*minmax\\(0,\\s*1fr\\)\\)/);
   assert.match(gridSource, /layoutRows\\.map\\(renderLayoutRow\\)/);
@@ -501,7 +501,7 @@ test("ConfirmedSpecimenGrid keeps layout proportional and leaves control geometr
 });
 
 test("StudioButton catalog styles contain labels without retired V1-V7 skin overrides", () => {
-  const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"));
+  const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"), styles.indexOf("/* Dense, collapsed Global Defaults"));
   assert.match(buttonCss, /\\.vt-confirmed-button-skin\\s*>\\s*\\[data-vt-studio-button-face\\]/);
   assert.match(buttonCss, /overflow:\\s*hidden/);
   assert.doesNotMatch(buttonCss, /data-vt-button-skin/);
