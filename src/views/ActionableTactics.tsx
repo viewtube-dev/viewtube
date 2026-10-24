@@ -33,7 +33,6 @@ import {
   StudioButton,
  StudioInput,
  StudioTextInput,
- select,
  StudioTextArea,
 } from "../studio-ui"
 
