@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest"
 const source = readFileSync(new URL("./AIBrainCommandInterface.tsx", import.meta.url), "utf8")
 const panelSource = readFileSync(new URL("../components/brain/BrainRuntimePanel.tsx", import.meta.url), "utf8")
 const chatPrimitivesSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.tsx", import.meta.url), "utf8")
+const toolboxSource = readFileSync(new URL("../components/Toolbox.tsx", import.meta.url), "utf8")
 
 describe("AI Brain runtime surface integration", () => {
  it("mounts the canonical backend runtime snapshot above the conversation workspace", () => {
@@ -22,6 +23,12 @@ describe("AI Brain runtime surface integration", () => {
   expect(panelSource).toContain('label="Promoted"')
   expect(panelSource).toContain('data-vt-brain-part="evidence-lineage"')
   expect(panelSource).toContain('data-vt-brain-part="embedded-evidence-lineage"')
+ })
+
+ it("lets fillAvailable toolboxes fit their header and keep the remaining viewport scrollable", () => {
+  expect(toolboxSource).toContain('className={`overflow-hidden min-h-0 flex-1 flex flex-col ${fillAvailable ? "" : ""}`}')
+  expect(toolboxSource).not.toContain('${fillAvailable ? "h-full" : ""}')
+  expect(toolboxSource).not.toContain('${fillAvailable ? \'h-full\' : \'\'}')
  })
 
  it("uses StudioInterModule for chat entries and the registry-backed prompt library", () => {
