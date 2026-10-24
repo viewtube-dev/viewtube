@@ -75,7 +75,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
-import { BrainChatShell, BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
+import { BrainAnswerFirst, BrainChatShell, BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
 import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow, BrainChatStatusBadge, BrainComposerShell, ChatConversationViewport } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
@@ -862,40 +862,28 @@ const CreatorResponseCard: React.FC<{
    }
    footer={message.learningReceipt ? <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /> : null}
   >
-   <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
-   {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
-    <BrainReadinessNotice readiness={message.readiness} />
-   ) : null}
-   <BrainAnswerModuleGrid modules={modules} compact />
-   {additionalModules.length ? (
-    <details data-vt-brain-part="additional-answer-modules" className="min-w-0 border-2 border-black bg-white">
-     <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-1 bg-[#f8f8f4] px-2 py-1 text-xs font-black uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black">
-      <span>More answer details</span>
-      <StudioSplitLeftBadge sizeVariant="micro" className="shrink-0">{additionalModules.length}</StudioSplitLeftBadge>
-     </summary>
-     <div className="grid min-w-0 gap-2 border-t-2 border-black p-2">
-      <BrainAnswerModuleGrid modules={additionalModules} compact />
-     </div>
-    </details>
-   ) : null}
-   {workflowRecommendation ? (
-    <details data-vt-brain-part="action-plan-tracker-disclosure" className="min-w-0 border-[1.5px] border-black/35 bg-white">
-     <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 bg-[#f8f8f4] px-2.5 py-2 text-[10px] font-[1000] uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2">
-      <span>Track next actions</span>
-      <StudioSplitLeftBadge sizeVariant="micro" className="shrink-0">{workflowRecommendation.steps.length} steps</StudioSplitLeftBadge>
-     </summary>
-     <div className="border-t border-black/20 p-2">
-      <BrainWorkflowRunPanel recommendation={workflowRecommendation} />
-     </div>
-    </details>
-   ) : null}
-   {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
-    <BrainDataReadiness readiness={message.readiness} />
-   ) : null}
-   {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} claimEvidence={response.claimEvidence} evidenceIntegrityStatus={message.evidenceIntegrityStatus || "unavailable"} compact /> : null}
-   {openQuestions[0] ? (
-    <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact />
-   ) : null}
+   <BrainAnswerFirst
+    keyInsight={sanitizeCreatorFacingBrainCopy(response.keyInsight)}
+    className="border-0 p-0"
+    alerts={message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? <BrainReadinessNotice readiness={message.readiness} /> : null}
+    details={(
+     <>
+      {additionalModules.length ? <div data-vt-brain-part="additional-answer-modules" className="grid min-w-0 gap-2 border-t border-black/20 pt-2">
+       <div className="text-[11px] font-black uppercase">More answer details</div>
+       <BrainAnswerModuleGrid modules={additionalModules} compact />
+      </div> : null}
+      {workflowRecommendation ? <div data-vt-brain-part="action-plan-tracker-disclosure" className="border-t border-black/20 pt-2">
+       <div className="mb-2 text-[11px] font-black uppercase">Track next actions</div>
+       <BrainWorkflowRunPanel recommendation={workflowRecommendation} />
+      </div> : null}
+      {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? <BrainDataReadiness readiness={message.readiness} /> : null}
+      {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} claimEvidence={response.claimEvidence} evidenceIntegrityStatus={message.evidenceIntegrityStatus || "unavailable"} compact /> : null}
+     </>
+    )}
+    actions={openQuestions[0] ? <BrainQuestionPrompt question={openQuestions[0]} onAnswer={onAnswerQuestion} compact /> : null}
+   >
+    <BrainAnswerModuleGrid modules={modules} compact />
+   </BrainAnswerFirst>
   </BrainResponseLayout>
   </StudioInterModule>
  )
