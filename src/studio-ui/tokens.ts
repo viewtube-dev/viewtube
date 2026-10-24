@@ -13,7 +13,7 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
   clickOffsetPx: 0,
 } as const
 
-// ─── Four explicit size tiers (global defaults) ──────────────────────────────
+// ─── Five explicit size tiers (global defaults) ──────────────────────────────
 // Supreme / Standard / Compact / Micro are first-class. Nothing is derived at runtime.
 
 export const STUDIO_CONTROL_SIZE_BASE = {
@@ -160,6 +160,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
   verticalWordToggle: {
     standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize,
     compactFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize,
+    miniFontSize: STUDIO_CONTROL_SIZE_BASE.mini.fontSize,
     microFontSize: STUDIO_CONTROL_SIZE_BASE.micro.fontSize,
     fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
     textTransform: "uppercase" as const,
