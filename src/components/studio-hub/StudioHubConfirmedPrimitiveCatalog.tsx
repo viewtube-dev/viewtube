@@ -172,6 +172,8 @@ const CanonicalSplitBadgeFamily: React.FC = () => (
 
 const CanonicalWordToggleFamily: React.FC = () => {
   const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
+  const [supremeWord, setSupremeWord] = React.useState(false)
+  const [miniWord, setMiniWord] = React.useState(false)
   const [verticalWords, setVerticalWords] = React.useState<boolean[]>(Array(12).fill(false))
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return (
@@ -192,10 +194,18 @@ const CanonicalWordToggleFamily: React.FC = () => {
           <strong>WORD TOGGLE · COMPACT</strong>
           <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={"Compact word toggle variant " + (col + 1)} /></div> })}</div>
         </div>
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · SUPREME</strong>
+          <div className="vt-confirmed-control-variants" data-control-size="60"><StudioWordToggle size="60" value={supremeWord} words={["WRITE", "CREATE"]} onValueChange={setSupremeWord} aria-label="Supreme word toggle specimen" /></div>
+        </div>
+        <div className="vt-confirmed-control-row">
+          <strong>WORD TOGGLE · MINI</strong>
+          <div className="vt-confirmed-control-variants" data-control-size="20"><StudioWordToggle size="20" value={miniWord} words={["OFF", "ON"]} onValueChange={setMiniWord} aria-label="Mini word toggle specimen" /></div>
+        </div>
       </div>
     </div>
     <div className="vt-confirmed-toggle-subfamily">
-      <strong>VERTICAL WORD TOGGLE · STANDARD + COMPACT + MICRO</strong>
+      <strong>VERTICAL WORD TOGGLE · SUPREME + STANDARD + COMPACT + MINI + MICRO</strong>
       <div className="vt-confirmed-vertical-word-toggle-family">
         <div className="vt-confirmed-vertical-word-toggle-size-row">
           <strong>STANDARD · SINGLE COLUMN</strong>
