@@ -479,6 +479,12 @@ const OpeningBriefing: React.FC<{
  * never hide a Brain capability from returning creators. Prompt categories are
  * compact, collapsed Studio modules; prompt selection and dispatch remain owned
  * by the existing registry-backed page handlers. */
+const formatPromptCategoryLabel = (categoryName: string): string => categoryName
+ .replace(/[_-]+/g, " ")
+ .replace(/\s+/g, " ")
+ .trim()
+ .replace(/\b\w/g, (character) => character.toUpperCase())
+
 export const BrainPromptLibrary: React.FC<{
  cards: CreatorBrainPromptCard[]
  busy?: boolean
@@ -529,7 +535,7 @@ export const BrainPromptLibrary: React.FC<{
     </p>
     <div className="grid grid-cols-1 gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
      <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
-     <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: item.replace(/_/g, " ") }))]} />
+     <StudioSimpleDropdown id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: formatPromptCategoryLabel(item) }))]} />
     </div>
     <p className="px-2 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
@@ -544,14 +550,14 @@ export const BrainPromptLibrary: React.FC<{
         className="brain-prompt-library-category"
         data-prompt-category={groupCategory}
         data-flush-body="true"
-        title={<><span>{groupCategory.replace(/_/g, " ")}</span><small>{groupCards.length}</small></>}
+        title={<><span>{formatPromptCategoryLabel(groupCategory)}</span><small>{groupCards.length}</small></>}
         startIcon={<LayoutGrid aria-hidden="true" />}
         endIcon={isOpen ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
         sizeVariant="compact"
         headStyle={{ background: categoryPair[0], "--vt-studio-control-accent": categoryPair[0], "--vt-studio-control-secondary": categoryPair[1] } as React.CSSProperties}
         open={isOpen}
         onOpenChange={(nextOpen) => setCategoryOpen(groupCategory, nextOpen)}
-        aria-label={`${groupCategory.replace(/_/g, " ")} prompts, ${groupCards.length} items`}
+        aria-label={`${formatPromptCategoryLabel(groupCategory)} prompts, ${groupCards.length} items`}
        >
         {groupCards.map((card, promptIndex) => {
          const isSelected = card.id === selectedId
@@ -575,17 +581,7 @@ export const BrainPromptLibrary: React.FC<{
           >
            <div className="grid min-w-0 gap-2 bg-white px-2 py-2">
             <p data-vt-brain-part="prompt-complete-text" className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
-            <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-2 gap-1">
-             <StudioSplitTwoLineButton
-              sizeVariant="compact"
-              icon={<Send aria-hidden="true" />}
-              firstLine="SEND TO"
-              secondLine="CHAT"
-              disabled={busy}
-              className="min-w-0 w-full"
-              style={{ "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
-              onClick={(event) => { event.stopPropagation(); onPrompt(card.prompt); setSelectedId(null) }}
-             />
+            <div data-vt-brain-part="prompt-actions" className={`grid min-w-0 gap-1 ${onEdit ? "grid-cols-2" : "grid-cols-1"}`}>
              {onEdit ? (
               <StudioSplitTwoLineButton
                sizeVariant="compact"
@@ -597,6 +593,16 @@ export const BrainPromptLibrary: React.FC<{
                onClick={(event) => { event.stopPropagation(); onEdit(card.prompt); setSelectedId(null) }}
               />
              ) : null}
+             <StudioSplitTwoLineButton
+              sizeVariant="compact"
+              icon={<Send aria-hidden="true" />}
+              firstLine="SEND TO"
+              secondLine="CHAT"
+              disabled={busy}
+              className="min-w-0 w-full"
+              style={{ "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
+              onClick={(event) => { event.stopPropagation(); onPrompt(card.prompt); setSelectedId(null) }}
+             />
             </div>
            </div>
           </StudioCollapsingTwoLineModule>
