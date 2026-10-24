@@ -95,6 +95,31 @@ describe("Studio value toggle primitives", () => {
     expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(10);
   });
 
+  it("uses size-specific bar and gap metrics when measuring compact and micro tracks", () => {
+    let notify: ResizeObserverCallback | undefined;
+    class MockResizeObserver {
+      constructor(callback: ResizeObserverCallback) { notify = callback; }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+    }
+    vi.stubGlobal("ResizeObserver", MockResizeObserver);
+
+    const compact = mount(<StudioBarToggle value={50} size="compact" onValueChange={() => {}} />);
+    const compactTrack = compact.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
+    vi.spyOn(compactTrack, "getBoundingClientRect").mockReturnValue({ width: 264 } as DOMRect);
+    act(() => notify?.([{ target: compactTrack, contentRect: { width: 256 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
+    expect(compact.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(32);
+    expect(compact.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(16);
+
+    const micro = mount(<StudioBarToggle value={50} size="micro" onValueChange={() => {}} />);
+    const microTrack = micro.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
+    vi.spyOn(microTrack, "getBoundingClientRect").mockReturnValue({ width: 164 } as DOMRect);
+    act(() => notify?.([{ target: microTrack, contentRect: { width: 160 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
+    expect(micro.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(40);
+    expect(micro.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(20);
+  });
+
   it("builds Arrow Toggle from the canonical split shell with square icon rails", () => {
     const { container } = mount(<StudioArrowToggle options={["A", "B"]} value="A" onValueChange={() => {}} />);
     const shell = container.querySelector('[data-vt-studio-split="double"]');
