@@ -362,3 +362,23 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] {
   grid-template-columns: calc(var(--vt-studio-control-height, 44px) - var(--vt-studio-control-stroke, 3px) - var(--vt-studio-control-stroke, 3px)) minmax(0, 1fr);
 }
+
+
+/* Split-module rails are square within the header's content box, not the outer stroke. */
+.vt-studio-top-split-module__head[data-split="left"] {
+  grid-template-columns: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px)) minmax(0, 1fr);
+}
+.vt-studio-top-split-module__head[data-split="right"] {
+  grid-template-columns: minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+}
+.vt-studio-top-split-module__head[data-split="double"] {
+  grid-template-columns: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px)) minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+}
+.vt-studio-top-split-module__rail {
+  box-sizing: border-box;
+  width: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+  min-width: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+}
