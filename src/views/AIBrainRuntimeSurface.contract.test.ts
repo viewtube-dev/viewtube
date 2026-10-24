@@ -86,4 +86,16 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('className="w-full max-h-36 min-h-[44px] min-w-0 resize-none"')
  })
 
+
+ it("does not make the entire transcript a live log that re-announces the full conversation", () => {
+  const viewport = chatPrimitivesSource.slice(
+   chatPrimitivesSource.indexOf("export const ChatConversationViewport:"),
+   chatPrimitivesSource.indexOf("/** Anchored composer frame"),
+  )
+  expect(viewport).toContain('aria-label="Brain conversation"')
+  expect(viewport).toContain('role="region"')
+  expect(viewport).not.toContain('role="log"')
+  expect(viewport).not.toContain('aria-live="polite"')
+ })
+
 })
