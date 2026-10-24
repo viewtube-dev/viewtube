@@ -80,7 +80,7 @@
   --vt-studio-28-radius: var(--vt-studio-compact-radius);
   --vt-studio-28-font-size: var(--vt-studio-compact-font-size);
   --vt-studio-28-icon-size: var(--vt-studio-compact-icon-size);
-  --vt-studio-secondary-focus-opacity: 65%;
+  --vt-studio-secondary-focus-width-ratio: 0.65;
   --vt-studio-focus-hold-ms: 1500ms;
   --vt-studio-focus-outline-fade-ms: 500ms;
   --vt-studio-focus-outline-width-ratio: 0.65;
