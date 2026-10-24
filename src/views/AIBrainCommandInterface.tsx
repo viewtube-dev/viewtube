@@ -1936,7 +1936,7 @@ const AIBrainCommandInterface: React.FC = () => {
          <div className="mx-auto w-full max-w-[880px]">
           <BrainComposerAccessoryRow label="Composer shortcuts" className="mb-1 xl:hidden">
            <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-stretch gap-1">
-            <div data-vt-brain-part="composer-launchers" className="vt-brain-composer-launchers grid min-w-0 grid-cols-1 gap-1 sm:grid-cols-2">
+            <div data-vt-brain-part="composer-launchers" className="vt-brain-composer-launchers min-w-0">
              <StudioSplitTwoLineButton
               ref={promptLauncherRef}
               sizeVariant="compact"
@@ -1965,7 +1965,7 @@ const AIBrainCommandInterface: React.FC = () => {
             <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0 self-start" style={{ backgroundColor: "#36E0F6" }} />
            </div>
           </BrainComposerAccessoryRow>
-          <div data-vt-brain-part="composer-controls" className="vt-brain-composer-controls grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-1">
+          <div data-vt-brain-part="composer-controls" className="vt-brain-composer-controls w-full min-w-0">
            <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
            <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
            <span data-vt-brain-part="composer-status" className="sr-only" role="status" aria-live="polite">{busy ? "Brain is preparing a response." : ""}</span>
