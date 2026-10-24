@@ -98,7 +98,7 @@ describe("AI Brain runtime surface integration", () => {
  })
 
  it("uses plain-language runtime status and separates project and build context", () => {
-  expect(panelSource).toContain('trace?.status === "fallback" ? "Using channel-wide fallback"')
+  expect(panelSource).toContain('trace?.status?.toLowerCase() === "fallback" ? "Using channel-wide fallback"')
   expect(panelSource).toContain('Project: {project?.name || "No project"}')
   expect(panelSource).toContain('Build: {titleCase(build.stage)}')
   expect(panelSource).not.toContain('{trace ? titleCase(trace.status) : "No trace yet"}')
