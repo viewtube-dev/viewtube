@@ -220,6 +220,7 @@ button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   --vt-bar-width: 10px;
   --vt-bar-height: 28px;
   --vt-bar-radius: 2px;
+  --vt-bar-padding-inline: 6px;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -228,7 +229,7 @@ button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   width: 100%;
   min-width: 0;
   height: 100%;
-  padding: 0 6px;
+  padding: 0 var(--vt-bar-padding-inline);
   box-sizing: border-box;
 }
 .vt-studio-value-toggle[data-size="standard"] .vt-studio-value-toggle__bars,
@@ -237,18 +238,21 @@ button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   --vt-bar-width: 10px;
   --vt-bar-height: 28px;
   --vt-bar-radius: 2px;
+  --vt-bar-padding-inline: 6px;
 }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars {
   --vt-bar-gap: 2px;
   --vt-bar-width: 6px;
   --vt-bar-height: 16px;
   --vt-bar-radius: 1.5px;
+  --vt-bar-padding-inline: 4px;
 }
 .vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars {
   --vt-bar-gap: 1px;
   --vt-bar-width: 3px;
   --vt-bar-height: 8px;
   --vt-bar-radius: 1px;
+  --vt-bar-padding-inline: 2px;
 }
 .vt-studio-value-toggle__bar,
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
