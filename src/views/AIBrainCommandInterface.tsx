@@ -75,7 +75,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
-import { BrainAnswerFirst, BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
+import { BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
 import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow, BrainChatStatusBadge, BrainComposerShell, ChatConversationViewport } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
