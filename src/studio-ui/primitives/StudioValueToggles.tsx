@@ -139,12 +139,14 @@ export type StudioBarToggleProps = {
   barCount?: number;
 };
 
-/** Bar geometry must remain aligned with --vt-bar-* in studio-control-distill-overrides.css. */
+/** Bar geometry must remain aligned with --vt-bar-* in studio-control-distill-overrides.css.
+ * Bar height matches the size-tier text height; bars are 2.5 tall × 1 wide,
+ * so bar width = tier font size ÷ 2.5 (standard 38/15.2 · compact 24/9.6 ·
+ * mini 17/6.8 · micro 10/4). */
 const BAR_METRICS: Record<string, { bar: number; gap: number; pad: number }> = {
-  supreme: { bar: 20.728, gap: 4, pad: 16 },
   standard: { bar: 15.2, gap: 3, pad: 12 },
   compact: { bar: 9.6, gap: 2, pad: 8 },
-  mini: { bar: 7, gap: 1.5, pad: 6 },
+  mini: { bar: 6.8, gap: 1.5, pad: 6 },
   micro: { bar: 4, gap: 1, pad: 4 },
 };
 

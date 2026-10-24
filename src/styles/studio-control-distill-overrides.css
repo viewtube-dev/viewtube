@@ -17,12 +17,7 @@ html body [data-vt-studio-control="true"] textarea {
   background-color: var(--vt-field-fill-rest);
   caret-color: var(--vt-field-text);
   box-shadow: none;
-  transition:
-    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
+  transition: none;
 }
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
@@ -52,21 +47,21 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 }
 
 /* Group width is determined by its square cells, not the parent row. */
-.vt-studio-square-icon-button-group {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-self: flex-start;
-  width: max-content;
-  max-width: 100%;
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
 [data-vt-brain-component="BrainAnswerFeedback"] .vt-studio-square-icon-button-group {
   width: max-content;
   flex: 0 0 auto;
 }
 
-/* Bar geometry and fill are owned by the canonical track block below. */
+/* Keep every bar visible against the full-primary toggle face. Empty bars are
+   50% white-primary; full bars are black; borders come from the base rule. */
+.vt-studio-value-toggle__bar[data-active="false"],
+.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="false"] {
+  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%) !important;
+}
+.vt-studio-value-toggle__bar[data-active="true"],
+.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
+  background: #000 !important;
+}
 .vt-studio-value-toggle__arrow {
   position: relative;
   z-index: 2;
@@ -165,9 +160,9 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 /* Bar track: size tokens, 50% primary empty bars, active bars black, no borders. */
 .vt-studio-value-toggle__bars {
   --vt-bar-gap: 3px;
-  --vt-bar-height: var(--vt-studio-control-font-size, 38px);
-  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
-  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
+  --vt-bar-width: 10px;
+  --vt-bar-height: 28px;
+  --vt-bar-radius: 2px;
   --vt-bar-padding-inline: 6px;
   display: flex;
   flex: 1 1 auto;
@@ -180,40 +175,36 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   padding: 0 var(--vt-bar-padding-inline);
   box-sizing: border-box;
 }
-
-.vt-studio-value-toggle[data-size="supreme"] .vt-studio-value-toggle__bars {
-  --vt-bar-gap: 4px;
-  --vt-bar-height: var(--vt-studio-control-font-size, 51.82px);
-  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
-  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
-}
-.vt-studio-value-toggle[data-size="mini"] .vt-studio-value-toggle__bars {
-  --vt-bar-gap: 1.5px;
-  --vt-bar-height: var(--vt-studio-control-font-size, 17.5px);
-  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
-  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
-}
 .vt-studio-value-toggle[data-size="standard"] .vt-studio-value-toggle__bars,
 .vt-studio-value-toggle:not([data-size]) .vt-studio-value-toggle__bars {
+  /* Bar height matches the 38px standard text height; 2.5 tall × 1 wide. */
   --vt-bar-gap: 3px;
-  --vt-bar-height: var(--vt-studio-control-font-size, 38px);
-  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
-  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
+  --vt-bar-width: 15.2px;
+  --vt-bar-height: 38px;
+  --vt-bar-radius: 2px;
   --vt-bar-padding-inline: 6px;
 }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars {
   --vt-bar-gap: 2px;
-  --vt-bar-height: var(--vt-studio-control-font-size, 24px);
-  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
-  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
+  --vt-bar-width: 9.6px;
+  --vt-bar-height: 24px;
+  --vt-bar-radius: 1.5px;
   --vt-bar-padding-inline: 4px;
 }
 .vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars {
   --vt-bar-gap: 1px;
-  --vt-bar-height: var(--vt-studio-control-font-size, 10px);
-  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
-  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
+  --vt-bar-width: 4px;
+  --vt-bar-height: 10px;
+  --vt-bar-radius: 1px;
   --vt-bar-padding-inline: 2px;
+}
+/* Mini tier: 20px text height; bars stay 2.5 tall × 1 wide (6.8 × 17). */
+.vt-studio-value-toggle[data-size="mini"] .vt-studio-value-toggle__bars {
+  --vt-bar-gap: 1.5px;
+  --vt-bar-width: 6.8px;
+  --vt-bar-height: 17px;
+  --vt-bar-radius: 1.5px;
+  --vt-bar-padding-inline: 3px;
 }
 .vt-studio-value-toggle__bar,
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
@@ -223,186 +214,14 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   min-width: var(--vt-bar-width);
   max-width: var(--vt-bar-width);
   height: var(--vt-bar-height);
-  aspect-ratio: 2 / 5;
   align-self: center;
   border: 0 !important;
   border-radius: var(--vt-bar-radius);
   box-sizing: border-box;
   pointer-events: none;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
+  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%) !important;
 }
 .vt-studio-value-toggle__bar[data-active="true"],
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
   background: #000 !important;
-}
-
-
-/* Choice controls share the same five-tier geometry as the rest of Studio Controls. */
-.vt-studio-44-switch[data-vt-studio-control="true"] {
-  width: calc(var(--vt-studio-control-height, 44px) * 1.72);
-  height: var(--vt-studio-control-height, 44px);
-}
-.vt-studio-44-switch[data-vt-studio-control="true"] .vt-studio-44-handle {
-  top: calc(var(--vt-studio-control-height, 44px) * .0833333333);
-  left: calc(var(--vt-studio-control-height, 44px) * .0833333333);
-  width: calc(var(--vt-studio-control-height, 44px) * .8333333333);
-  height: calc(var(--vt-studio-control-height, 44px) * .8333333333);
-}
-.vt-studio-44-switch[data-vt-studio-control="true"].is-on .vt-studio-44-handle {
-  transform: translateX(calc(var(--vt-studio-control-height, 44px) * .72));
-}
-.vt-studio-44-switch[data-vt-studio-control="true"].is-rect {
-  border-radius: calc(var(--vt-studio-control-height, 44px) * .1666666667);
-}
-.vt-studio-44-switch[data-vt-studio-control="true"].is-rect .vt-studio-44-handle {
-  border-radius: calc(var(--vt-studio-control-height, 44px) * .0833333333);
-}
-.vt-studio-44-choice[data-vt-studio-control="true"] {
-  width: var(--vt-studio-control-height, 44px);
-  height: var(--vt-studio-control-height, 44px);
-}
-.vt-studio-44-choice[data-vt-studio-control="true"] .vt-studio-44-dot {
-  width: 75%;
-  height: 75%;
-}
-.vt-studio-44-choice[data-vt-studio-control="true"].is-rect {
-  border-radius: calc(var(--vt-studio-control-height, 44px) * .1666666667);
-}
-.vt-studio-44-choice[data-vt-studio-control="true"].is-radio.is-rect .vt-studio-44-dot {
-  border-radius: calc(var(--vt-studio-control-height, 44px) * .0416666667);
-}
-.vt-studio-44-switch[data-vt-studio-control="true"]:focus-visible,
-.vt-studio-44-choice[data-vt-studio-control="true"]:focus-visible {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 0;
-  box-shadow: none;
-}
-
-
-/* Horizontal word toggle follows the same five-tier tokens; its measured handle remains content-sized. */
-.vt-studio-44-word-toggle[data-vt-word-toggle-size] {
-  box-sizing: border-box;
-  height: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
-}
-.vt-studio-44-word-toggle[data-vt-word-toggle-size] > button {
-  font-size: var(--vt-studio-control-font-size, 38px);
-  line-height: var(--vt-studio-control-line-height, 1);
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
-}
-.vt-studio-44-word-toggle[data-vt-word-toggle-size] .vt-studio-44-word-handle {
-  top: var(--vt-word-toggle-handle-inset, 2.75px);
-  bottom: var(--vt-word-toggle-handle-inset, 2.75px);
-  border-radius: max(1px, calc(var(--vt-studio-control-height, 44px) * .1));
-}
-
-
-/* Vertical word-toggle spacing scales with the selected size without changing its content-driven height. */
-.vt-studio-vertical-word-toggle.is-supreme {
-  --vt-studio-vertical-word-gap: 5px;
-  --vt-studio-vertical-word-padding: 5px;
-  --vt-studio-vertical-word-horizontal-padding: 20px;
-  --vt-studio-vertical-word-handle-inset: 3.75px;
-}
-.vt-studio-vertical-word-toggle.is-mini {
-  --vt-studio-vertical-word-gap: 1.666667px;
-  --vt-studio-vertical-word-padding: 1.666667px;
-  --vt-studio-vertical-word-horizontal-padding: 6.666667px;
-  --vt-studio-vertical-word-handle-inset: 1.25px;
-}
-.vt-studio-vertical-word-toggle:focus-visible {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 0;
-  box-shadow: none;
-}
-
-
-/* Final regression-recovery contract: this file loads last in studio-control-entry.css. */
-/* All Studio text fields keep a primary inline glyph stroke in every state. */
-html body input[data-vt-studio-control="true"],
-html body textarea[data-vt-studio-control="true"],
-html body [data-vt-studio-control="true"] textarea,
-html body .vt-studio-text-box[data-vt-studio-control="true"] {
-  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
-}
-html body input[data-vt-studio-control="true"],
-html body textarea[data-vt-studio-control="true"],
-html body [data-vt-studio-control="true"] textarea {
-  color: var(--vt-field-text, #000);
-  -webkit-text-fill-color: var(--vt-field-text, #000);
-}
-/* TextBox keeps its black perimeter; only its inner glyph stroke is primary. */
-html body .vt-studio-text-box[data-vt-studio-control="true"],
-html body .vt-studio-text-box[data-vt-studio-control="true"][data-size] {
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-}
-/* Shared split rails stay square inside the outer border; their height cannot stretch. */
-html body [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
-html body [data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
-html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail],
-html body .vt-studio-split-left-badge__rail,
-html body .vt-studio-split-right-badge__rail,
-html body .vt-studio-double-split-badge__rail,
-html body .vt-studio-side-counter__rail,
-html body .vt-studio-counter__rail,
-html body .vt-studio-top-split-module__rail {
-  box-sizing: border-box;
-  align-self: center;
-  height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
-  min-height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
-  max-height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
-  aspect-ratio: 1 / 1;
-}
-html body .vt-studio-split-left-badge__rail,
-html body .vt-studio-split-right-badge__rail,
-html body .vt-studio-double-split-badge__rail,
-html body .vt-studio-side-counter__rail,
-html body .vt-studio-counter__rail {
-  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
-  width: var(--vt-studio-split-rail-size);
-  min-width: var(--vt-studio-split-rail-size);
-  max-width: var(--vt-studio-split-rail-size);
-}
-html body .vt-studio-top-split-module__head[data-split="left"] {
-  grid-template-columns: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px)) minmax(0, 1fr);
-}
-html body .vt-studio-top-split-module__head[data-split="right"] {
-  grid-template-columns: minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-}
-html body .vt-studio-top-split-module__head[data-split="double"] {
-  grid-template-columns: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px)) minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-}
-html body .vt-studio-top-split-module__rail {
-  width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-  min-width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-  max-width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-}
-/* Intermodules are full-row sections, not narrow column specimens. */
-html body .vt-studio-inter-module,
-html body .vt-studio-intermodule,
-html body [data-vt-studio-intermodule="true"],
-html body [data-vt-studio-inter-module="true"] {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  max-width: none;
-  grid-column: 1 / -1;
-}
-
-/* InterModule rails are the exact square inner face, not a 100%-height stretch. */
-html body .vt-studio-inter-module__rail {
-  --vt-im-rail-square: calc(var(--vt-im-face, 44px) - 2 * var(--vt-im-stroke, 3px));
-  box-sizing: border-box;
-  width: var(--vt-im-rail-square);
-  min-width: var(--vt-im-rail-square);
-  max-width: var(--vt-im-rail-square);
-  height: var(--vt-im-rail-square);
-  min-height: var(--vt-im-rail-square);
-  max-height: var(--vt-im-rail-square);
-  flex: 0 0 var(--vt-im-rail-square);
-  aspect-ratio: 1 / 1;
 }

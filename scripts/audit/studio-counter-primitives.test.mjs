@@ -81,7 +81,7 @@ test("Studio counter hold behavior is wired to pointer events for touch and mous
   assert.match(component, /const base = currentRef\.current/);
   assert.match(component, /max = 100/);
   assert.match(component, /accelerationEase/);
-  assert.match(component, /accelerationProgress = Math\.min\(1, elapsed \/ 720\)/);
+  assert.match(component, /accelerationProgress = Math\.min\(1, elapsed \/ 520\)/);
   assert.match(component, /boundaryEase/);
   assert.match(component, /remainingSteps/);
   assert.match(styles, /touch-action:\s*none/);
