@@ -400,7 +400,7 @@ export const filterCreatorBrainPromptCards = (
 const GENERATION_BADGES: Record<BrainGenerationPath, { label: string; description: string; status: "ready" | "partial" | "warning" }> = {
  model: { label: "Full Brain", description: "This response was prepared with the full Brain.", status: "ready" },
  repaired_model: { label: "Refined Answer", description: "This response was prepared with an additional quality pass.", status: "partial" },
- basic_guidance: { label: "Basic Guidance", description: "This response was prepared from available channel evidence while full generation was unavailable.", status: "warning" },
+ basic_guidance: { label: "Basic Guidance", description: "Full Brain generation was unavailable, so this is limited guidance based on the evidence available—not a complete analysis.", status: "warning" },
 }
 
 export const BrainGenerationBadge: React.FC<{ path: BrainGenerationPath }> = ({ path }) => {
