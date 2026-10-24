@@ -71,7 +71,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(chatPrimitivesCssSource).toContain("gap: 4px;")
   expect(chatPrimitivesCssSource).toContain("@media (min-width: 640px)")
   expect(source).toContain('max-xl:grid-rows-[minmax(0,1fr)]')
-  expect(chatPrimitivesSource).toContain("overflow-y-auto touch-pan-y")
+  expect(chatPrimitivesSource).toContain("overflow-y-auto overscroll-y-contain touch-pan-y")
  })
  
  it("preserves transcript position unless the creator is following or sends a new turn", () => {
