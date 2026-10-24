@@ -174,7 +174,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       fill: "primary at 50% opacity",
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
-      inlineStrokeWidth: "same as global standard/compact/micro border width",
+      inlineStrokeWidth: "matches resolved tier: Supreme 3px, Standard 3px, Compact 2px, Mini 1.5px, Micro 1.5px",
     },
     focusMode: {
       fill: "primary at 15% opacity",
