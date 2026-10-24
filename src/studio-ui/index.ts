@@ -146,6 +146,8 @@ export type { ConfirmedModuleProps } from "../components/studio-hub/ConfirmedCat
 
 
 export { StudioInterModule } from "./primitives/StudioInterModule"
+export { StudioChatActionGroup } from "./primitives/StudioChatActionGroup"
+export type { StudioChatActionGroupProps, StudioChatActionGroupSize } from "./primitives/StudioChatActionGroup"
 export { StudioResponseMetaRow } from "./primitives/StudioResponseMetaRow"
 export type { StudioResponseMetaRowProps, StudioResponseMetaRowSize } from "./primitives/StudioResponseMetaRow"
 export type { StudioInterModuleProps, StudioInterModuleSize } from "./primitives/StudioInterModule"
