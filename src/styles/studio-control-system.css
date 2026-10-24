@@ -25,7 +25,7 @@
   --vt-studio-control-text-transform: uppercase;
   --vt-studio-control-letter-spacing: -.02em;
   --vt-studio-control-line-height: 1;
-  --vt-studio-textarea-line-height: 1;
+  --vt-studio-textarea-line-height: .85;
   
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
@@ -1111,7 +1111,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   font-weight: var(--vt-studio-control-font-weight, 1000);
   -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary);
   /* Only textarea-specific typography override: compact description row spacing. */
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   letter-spacing: var(--vt-studio-control-letter-spacing);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="supreme"] {
