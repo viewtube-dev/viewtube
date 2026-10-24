@@ -31,7 +31,7 @@ describe("confirmed composite primitive catalog", () => {
       "StudioIconButton", "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
       "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioTextInput",
-      "StudioTextInputFloatingLabel", "StudioTextInputFixedLabel", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput", "StudioCollapsingTwoLineModule",
+      "StudioTextInputFloatingLabel", "StudioTextInputFixedLabel", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
       "StudioDropdown", "StudioSimpleDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
@@ -41,6 +41,8 @@ describe("confirmed composite primitive catalog", () => {
       expect(representative).toContain(`data-vt-library-component="${primitive}"`)
     }
     expect(source).toContain('title="Collapsing Split Module · Standard + Compact"')
+    expect(source).toContain('title="Collapsing Two-Line Module · Standard"')
+    expect(source).toContain('data-vt-library-component="StudioCollapsingTwoLineModule"')
     expect(source).toContain('title="InterModule · Standard"')
     expect(source).toContain('title="Split Accordion · Train Motion"')
     for (const title of [
