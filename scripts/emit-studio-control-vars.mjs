@@ -34,12 +34,12 @@ const sizeTiers = {
 
 const multilineContract = sizeContractBlock.match(/multiline:\s*\{([^}]*)\}/)?.[1] ?? "";
 const multilineTokens = {
-  supremeFontSize: readSizeValue(multilineContract, "standardFontSize") * 60 / 44,
+  supremeFontSize: readSizeValue(multilineContract, "supremeFontSize"),
   standardFontSize: readSizeValue(multilineContract, "standardFontSize"),
   compactFontSize: readSizeValue(multilineContract, "compactFontSize"),
   miniFontSize: readSizeValue(multilineContract, "miniFontSize"),
   microFontSize: readSizeValue(multilineContract, "microFontSize"),
-  supremeTextStroke: readSizeValue(multilineContract, "standardTextStroke") * 60 / 44,
+  supremeTextStroke: readSizeValue(multilineContract, "supremeTextStroke"),
   standardTextStroke: readSizeValue(multilineContract, "standardTextStroke"),
   compactTextStroke: readSizeValue(multilineContract, "compactTextStroke"),
   miniTextStroke: readSizeValue(multilineContract, "miniTextStroke"),
