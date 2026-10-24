@@ -48,8 +48,8 @@ const checks = [
 ]
 
 const requiredP0 = [
-  "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioButton",
-  "StudioActionButton", "StudioSquareIconButtonGroup", "StudioTopSplitModule",
+  "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput", "StudioButton",
+  "StudioActionButton", "StudioSquareIconButtonGroup", "StudioTopSplitModule", "StudioCollapsingTwoLineModule",
   "StudioUploadFrame", "StudioSimpleDropdown", "StudioSplitLeftDropdown",
   "StudioSwitch", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
   "StudioWordToggle", "StudioArrowToggle", "StudioSideToggle", "StudioDoubleSideToggle",
