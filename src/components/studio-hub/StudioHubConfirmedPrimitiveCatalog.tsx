@@ -586,7 +586,6 @@ type ConfirmedCatalogFamilyName =
   | "Dropdowns"
   | "Controls"
   | "Text Controls"
-
   | "Compositions"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
@@ -602,7 +601,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   const componentName = typeof node.type === "function"
     ? (componentType.displayName || componentType.name || "")
     : ""
-  if (/Studio Text Input|Studio Text Area|Studio Text Box|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
+  if (/Studio Text Input|Studio Text Area|Studio Text Box|StudioInput|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
   if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame/.test(title)) return "Modules & Frames"
   if (/Dropdown|StudioSelect/.test(title)) return "Dropdowns"
@@ -680,7 +679,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSearchInput"><span>STANDARD · SEARCH</span><StudioSearchInput sizeVariant="standard" aria-label="Search input dedicated specimen" placeholder="SEARCH" /></div>
       </Family>
       <Family title="StudioInput · Standard" nonDefaultSettings={["Native number input with the same five-tier size token interface as text fields."]} provenance={<Provenance primitive="StudioInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-text-input.css" tokens="Standard 44px field; black text on focus and primary glyph stroke." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInput"><span>STANDARD · NUMBER</span><StudioInput type="number" type="number" sizeVariant="standard" aria-label="Number input dedicated specimen" value={number} onChange={(event) => setNumber(event.currentTarget.value)} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInput"><span>STANDARD · NUMBER</span><StudioInput type="number" sizeVariant="standard" aria-label="Number input dedicated specimen" value={number} onChange={(event) => setNumber(event.currentTarget.value)} /></div>
       </Family>
       <Family title="StudioLeftCounter · Standard" nonDefaultSettings={["Left-action counter variant with the same 2:1 numeric display as the standard counter."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>STANDARD · LEFT ACTION RAIL</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter dedicated specimen" /></div>
@@ -697,7 +696,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <ConfirmedCatalogFamilyGroups>
     <details className="vt-confirmed-family vt-confirmed-defaults-combined" data-vt-confirmed-family="defaults">
       <summary className="vt-confirmed-defaults-heading" id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</summary>
-      <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 20px Mini · 12px micro · 4.09px / 3px / 2px / 1.5px / 1px borders · 8.18px / 6px / 4px / 3px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
+      <p className="vt-confirmed-defaults-summary">60px Supreme · 44px standard · 28px compact · 20px Mini · 12px micro · 3px / 3px / 2px / 1.5px / 1.5px borders · 8.18px / 6px / 4px / 3px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <p><a href="https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults, exception index, and certification rules ↗</a></p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show defaults, effective CSS behavior, and exceptions</summary>
@@ -725,7 +724,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       <h4 className="vt-confirmed-exceptions-heading" id="vt-confirmed-exception-index-title">Global Exceptions · Current Implementation + Verification Boundary</h4>
       <p>Canonical sources: <code>src/studio-ui/primitives/StudioControls.tsx</code>, <code>src/studio-ui/tokens.ts</code>, and <code>src/styles/studio-control-system.css</code>. Named size exceptions are registered in <code>STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS</code>; effective CSS can diverge from token metadata.</p>
       <ul>
-        <li><strong>BASE SIZE LATTICE:</strong> standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius; Mini is 20px / 1.5px / 3px; Micro is 12px / 1px / 2px; Supreme is 60px / 4.09px / 8.18px. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
+        <li><strong>BASE SIZE LATTICE:</strong> Supreme is 60px / 3px stroke / 8.18px radius; standard is 44px / 3px stroke / 6px radius; compact is 28px / 2px stroke / 4px radius; Mini is 20px / 1.5px / 3px; Micro is 12px / 1.5px / 2px. These are ordinary component sizes, not universal dimensions for every metadata element.</li>
         <li><strong>SINGLE-LINE INPUT TYPOGRAPHY:</strong> 38px standard / 24px compact, weight 1000 and default line-height (1) while retaining selected-size geometry.</li>
         <li><strong>MULTILINE TEXTAREA:</strong> 18px standard / 14px compact, multiline line-height and padding, 92px minimum writing surface, and vertical resize.</li>
         <li><strong>PROMINENT WORKFLOW ACTION:</strong> StudioActionButton is a Supreme 60px default with standard/compact variants and token-driven geometry, and no shell shadow, transition, or hover/press translation.</li>
@@ -733,7 +732,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <li><strong>DROPDOWN:</strong> the trigger uses standard/compact sizing; menu rows and options are not button-press surfaces. A floating panel may have its own stationary shadow. Panel typography and stacking use dropdown-specific CSS.</li>
         <li><strong>SQUARE / CIRCLE ICON BUTTONS:</strong> share the standard/compact size lattice and default flat, stationary shell behavior. Large icon preset is default; circle buttons scale it to 80%. V1–V4 skins and documented inner-icon effects are explicit variants, not global shell behavior.</li>
         <li><strong>VAULT SPECTRUM TAG:</strong> registered 15px dense metadata chip with 2px border, 4px radius, 8px / weight-900 type, 35% white-mixed spectrum fill, and flat selected-state color treatment with no shadow, glow, or geometry offset.</li>
-        <li><strong>CLOSEABLE BADGE:</strong> follows the standard / compact / micro 44px / 28px / 12px size lattice, 3px / 2px / 1px stroke, 6px / 4px / 2px radius, and 38px / 24px / 10px type. The close action is circular and secondary-filled; no pill-ratio shell exception.</li>
+        <li><strong>CLOSEABLE BADGE:</strong> follows the standard / compact / micro 44px / 28px / 12px size lattice, 3px / 2px / 1.5px stroke, 6px / 4px / 2px radius, and 38px / 24px / 10px type. The close action is circular and secondary-filled; no pill-ratio shell exception.</li>
         <li><strong>TAG EDITOR ACTION:</strong> registered compact 28px square plus/check action, 2px stroke and 4px radius with a no shadow under the global flat-control contract.</li>
         <li><strong>SPLIT-LEFT BADGE MICRO DENSITY:</strong> informational badge examples include a 12px / 1.5px-stroke Micro size in addition to standard 44px / 3px, compact 28px / 2px, and Mini 20px / 1.5px. Micro is a first-class global size tier and inherits the Mini stroke system.</li>
         <li><strong>FIELD CARET + FOCUS:</strong> native insertion caret is retained; <code>caret-shape: block</code> is requested where supported and must not be simulated with a fake overlay. Focus uses the secondary outline at 65% of the selected border width and 0px offset; verify computed styles in a rendered browser.</li>
