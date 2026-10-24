@@ -331,14 +331,14 @@ const BrainContextStrip: React.FC<{
  <section data-vt-brain-component="BrainContextStrip" aria-label="Active creator context" className="sticky top-0 z-10 grid gap-1 rounded-[7px] border-[2px] border-black bg-white p-2">
   <div data-vt-brain-part="active-context-badges" className="grid min-w-0 grid-cols-2 gap-1 sm:grid-cols-4">
    <StudioSplitLeftBadge data-vt-brain-context="channel" sizeVariant="micro" icon={<MessageSquare aria-hidden="true" />} title={`Channel · ${channelLabel}`} aria-label={`Channel · ${channelLabel}`} className="min-w-0 max-w-full">Channel · {channelLabel}</StudioSplitLeftBadge>
-   <StudioSplitLeftBadge data-vt-brain-context="project" sizeVariant="micro" icon={<LayoutGrid aria-hidden="true" />} title={`Project · ${projectLabel}`} aria-label={`Project · ${projectLabel}`} className="min-w-0 max-w-full">Project · {projectLabel}</StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="project" sizeVariant="micro" icon={<LayoutGrid aria-hidden="true" />} title={`Project · ${projectLabel}`} aria-label={`Project · ${projectLabel}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Project · {projectLabel}</span></StudioSplitLeftBadge>
    <StudioSplitLeftBadge data-vt-brain-context="content-build" sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} title={`ContentBuild · ${contentBuildId || "none"}`} aria-label={`ContentBuild · ${contentBuildId || "none"}`} className="min-w-0 max-w-full">Build · {contentBuildId ? contentBuildId.slice(0, 8) : "none"}</StudioSplitLeftBadge>
-   <StudioSplitLeftBadge data-vt-brain-context="selection" sizeVariant="micro" icon={<Lock aria-hidden="true" />} title={`Selected · ${selection?.label || "none"}`} aria-label={`Selected · ${selection?.label || "none"}`} className="min-w-0 max-w-full">Selected · {selection?.label || "none"}</StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="selection" sizeVariant="micro" icon={<Lock aria-hidden="true" />} title={`Selected · ${selection?.label || "none"}`} aria-label={`Selected · ${selection?.label || "none"}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Selected · {selection?.label || "None"}</span></StudioSplitLeftBadge>
   </div>
-  <div className="grid grid-cols-3 gap-1">
-   <StudioSplitLeftButton sizeVariant="compact" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} aria-label={selection?.locked ? "Unlock selection" : "Lock selection"} title={selection?.locked ? "Unlock selection" : "Lock selection"} onClick={onToggleLock} className="min-w-0">{selection?.locked ? "Unlock" : "Lock"}</StudioSplitLeftButton>
-   <StudioSplitLeftButton sizeVariant="compact" icon={<XCircle aria-hidden="true" />} aria-label="Clear selection" title="Clear selection" disabled={!selection} onClick={onClearSelection} className="min-w-0">Selection</StudioSplitLeftButton>
-   <StudioSplitLeftButton sizeVariant="compact" icon={<Trash2 aria-hidden="true" />} aria-label="Clear project" title="Clear project" disabled={projectLabel === "none"} onClick={onClearProject} className="min-w-0">Project</StudioSplitLeftButton>
+  <div data-vt-brain-part="context-actions" className="grid grid-cols-1 gap-1 min-[480px]:grid-cols-3">
+   <StudioSplitLeftButton sizeVariant="compact" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} aria-label={selection?.locked ? "Unlock selection" : "Lock selection"} title={selection?.locked ? "Unlock selection" : "Lock selection"} onClick={onToggleLock} className="w-full min-w-0 whitespace-normal">{selection?.locked ? "Unlock selection" : "Lock selection"}</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<XCircle aria-hidden="true" />} aria-label="Clear selection" title="Clear selection" disabled={!selection} onClick={onClearSelection} className="w-full min-w-0 whitespace-normal">Clear selection</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<Trash2 aria-hidden="true" />} aria-label="Clear project" title="Clear project" disabled={projectLabel === "none"} onClick={onClearProject} className="w-full min-w-0 whitespace-normal">Clear project</StudioSplitLeftButton>
   </div>
  </section>
 )
@@ -726,10 +726,9 @@ const CreatorResponseCard: React.FC<{
   return (
    <StudioInterModule
     data-vt-brain-component="BrainLearningReceiptEntry"
-    title="LEARNING RECEIPT"
+    title="LEARNING SAVED"
     startIcon={<BookOpen aria-hidden="true" />}
     sizeVariant="compact"
-    defaultOpen
     className="shrink-0"
     headStyle={{ background: TOOLBOX_PALETTE[3], "--vt-studio-control-accent": TOOLBOX_PALETTE[3], "--vt-studio-control-secondary": TOOLBOX_PALETTE[2] } as React.CSSProperties}
    >
