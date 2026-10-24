@@ -22,7 +22,7 @@ const canonicalTail = (css: string) => {
 };
 
 
-describe("StudioTextBox size-aware stroke defaults", () => {
+describe("StudioTextBox size-aware primary inline stroke defaults", () => {
   it("shares full field geometry while keeping black text and matching black glyph stroke", () => {
     const css = readStudioControlCss();
     const start = css.indexOf('.vt-studio-text-box[data-vt-studio-control="true"]');
@@ -30,7 +30,7 @@ describe("StudioTextBox size-aware stroke defaults", () => {
     const textBox = css.slice(start, end);
     expect(textBox).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000");
     expect(textBox).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
-    expect(textBox).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000");
+    expect(textBox).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--pair-a, #36e0f6));");
     expect(textBox).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
     expect(textBox).toContain("color: #000");
     expect(textBox).toContain("line-height: var(--vt-studio-textarea-line-height, .85)");
@@ -306,7 +306,7 @@ describe("standalone Studio text fields", () => {
     expect(css).toContain("--studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);");
     expect(block).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000;");
     expect(block).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
-    expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000");
+    expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--pair-a, #36e0f6));");
     expect(block).toContain("outline-offset: 0;");
     expect(block).toContain("color: #000;");
     expect(block).toContain("-webkit-text-fill-color: #000;");
@@ -1195,7 +1195,7 @@ describe("Confirmed Primitive Library button tier grid regression", () => {
 
 
 describe("Studio field focus, floating labels, and toggle regressions", () => {
-  it("keeps resting field glyph stroke primary, focused glyph stroke black, and shares risen-label typography tokens", () => {
+  it("keeps field glyph stroke primary at rest and focus, and shares risen-label typography tokens", () => {
     const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-distill-overrides.css"), "utf8");
     const css = readStudioControlCss();
     const finalFieldContract = fields.slice(fields.lastIndexOf("/* Final regression-recovery contract"));
@@ -1334,12 +1334,12 @@ describe("StudioSplitTwoLineButton", () => {
 
 
 describe("Studio Controls regression recovery contracts", () => {
-  it("keeps the simple input primary-stroked while labelled text inputs and textareas use black focus strokes", () => {
+  it("keeps every Studio text field primary-stroked at rest and focus", () => {
     const inputSource = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
     const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
     expect(inputSource).toContain('"vt-studio-text-input--simple"');
     expect(fields).toContain('input.vt-studio-text-input--simple[data-vt-studio-control="true"]:is(:focus, :focus-visible)');
-    expect(fields).toContain('-webkit-text-stroke-color: #000 !important;');
+    expect(fields).toContain('-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;');
     expect(fields).toContain('[data-vt-studio-field-kind="text-box"]');
   });
 
