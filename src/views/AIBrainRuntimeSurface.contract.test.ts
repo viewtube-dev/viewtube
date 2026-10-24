@@ -98,4 +98,10 @@ describe("AI Brain runtime surface integration", () => {
   expect(viewport).not.toContain('aria-live="polite"')
  })
 
+
+ it("keeps follow scrolling inside the conversation viewport instead of scrolling ancestor layout", () => {
+  expect(source).not.toContain('bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })')
+  expect(source).toContain('viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" })')
+ })
+
 })
