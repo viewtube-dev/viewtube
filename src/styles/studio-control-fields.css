@@ -205,9 +205,9 @@ html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:i
 }
 
 
-/* Focus contract: black text and glyph stroke, 15% primary fill, secondary outline. */
-/* Text fields and textarea wrappers: black fill/stroke on focus, secondary outline. */
-/* Read-only text-box display copy and editable fields share black focus glyphs;
+/* Focus contract: black text fill, primary inline glyph stroke, 15% primary fill, secondary outline. */
+/* Text fields and textarea wrappers: black fill with primary glyph stroke on focus. */
+/* Read-only text-box display copy uses black fill with primary focus glyph stroke;
    editable caret color remains primary through the shared field tokens. */
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:is(:focus, :focus-visible) {
