@@ -201,26 +201,6 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
   ...(tone ? { "data-tone": tone } : {}),
 })
 
-/**
- * Separate search and numeric controls remain compatible with existing consumers;
- * the StudioTextInput foundation itself is intentionally only one plain input.
- */
-export const StudioSearchInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioSearchInput.displayName = "StudioSearchInput"
-
-export const StudioNumberInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "number", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioNumberInput.displayName = "StudioNumberInput"
-
 export { StudioTextInput, StudioInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
 
@@ -1003,14 +983,6 @@ export const StudioWordToggle = Studiotoggle
 export const StudioRadio = Studioradio
 export const StudioCheckbox = Studiocheck
 export const StudioXCheckbox = Studioxbox
-
-export const StudioSelect = React.forwardRef<
-  HTMLSelectElement,
-  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", ...props }, ref) => (
-  <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioSelect.displayName = "StudioSelect"
 
 export type StudioButtonVariant = "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7"
 
@@ -2207,26 +2179,6 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
     </div>
   )
 }
-
-export interface StudioSimpleDropdownOption { value: string; label: string; disabled?: boolean }
-export interface StudioSimpleDropdownProps {
-  value?: string
-  defaultValue?: string
-  options: StudioSimpleDropdownOption[]
-  onChange?: (value: string) => void
-  placeholder?: React.ReactNode
-  disabled?: boolean
-  className?: string
-  id?: string
-  ariaLabel?: string
-  sizeVariant?: StudioControlInteractiveSize
-}
-
-/** Simple single-select child variant of the canonical StudioDropdown family. */
-export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ options, ...props }) => (
-  <StudioDropdown {...props} options={options} variant="simple" />
-)
-StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
 
 /** Single-select dropdown with a secondary icon rail on the left and a trailing chevron rail. */
 export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "variant">> = (props) => (
