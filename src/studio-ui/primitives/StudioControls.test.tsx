@@ -1338,7 +1338,7 @@ describe("Studio Controls regression recovery contracts", () => {
     const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
     expect(inputSource).toContain('"vt-studio-text-input--simple"');
     expect(fields).toContain('input.vt-studio-text-input--simple[data-vt-studio-control="true"]:is(:focus, :focus-visible)');
-    expect(fields).toContain('-webkit-text-stroke-color: #000;');
+    expect(fields).toContain('-webkit-text-stroke-color: #000 !important;');
     expect(fields).toContain('[data-vt-studio-field-kind="text-box"]');
   });
 
