@@ -135,7 +135,7 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"],
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="micro"] {
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
-  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.25px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.375px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::placeholder,
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]::placeholder {
