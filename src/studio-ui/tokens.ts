@@ -10,7 +10,7 @@ export const STUDIO_GLOBAL_DEFAULTS = {
   textTransform: "uppercase" as const,
   letterSpacing: -0.02,
   lineHeight: 1,
-  textareaLineHeight: 1,
+  textareaLineHeight: 0.85,
   fieldDefaultTextColor: "primary" as const,
   fieldDefaultGlyphStrokeColor: "primary" as const,
   textFieldDefaults: {
@@ -141,7 +141,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     microTextStroke: 0.4,
     fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
     minHeight: 92,
-    lineHeight: 1.2,
+    lineHeight: 0.85,
     textAlign: "left" as const,
     resize: "vertical" as const,
     preservesSizeFamily: true,
@@ -163,7 +163,7 @@ export const STUDIO_DROPDOWN_TOKENS = {
 
 export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   holdMs: 1500,
-  outlineFadeMs: 500,
+  outlineFadeMs: 0,
   restTextMixPercent: 50,
   activeTextColor: "#000000",
   outlineColorRole: "secondary" as const,
