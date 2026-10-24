@@ -412,7 +412,8 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 .vt-studio-arrow-toggle__rail,
 .vt-studio-side-toggle__rail,
 .vt-studio-double-side-toggle__rail,
-.vt-studio-bar-toggle__rail {
+.vt-studio-bar-toggle__rail,
+.vt-studio-value-toggle__arrow {
   box-sizing: border-box;
   align-self: center;
   height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
