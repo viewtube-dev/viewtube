@@ -469,7 +469,7 @@ test("ConfirmedSpecimenGrid is full-width and does not split the module into sid
 
 
 test("canonical StudioButton catalog uses the PR #756 proportional grid and real StudioButton exports", () => {
-  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?\n}\n\nconst ConfirmedStudioButtonComparison/)?.[0] ?? "";
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?\n}\n\ntype ConfirmedCatalogFamilyName/)?.[0] ?? "";
   assert.ok(buttonFamily.includes("<ConfirmedSpecimenGrid"), "Button family uses the shared specimen grid");
   assert.ok(buttonFamily.includes("layoutRows={layoutRows}"));
   assert.ok(buttonFamily.includes("sizeVariant={tier}"));
@@ -510,7 +510,7 @@ test("StudioButton catalog styles contain labels without retired V1-V7 skin over
 });
 
 test("PR #756 row hierarchy uses the requested proportional sizes and compact/micro split", () => {
-  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?\n}\n\nconst ConfirmedStudioButtonComparison/)?.[0] ?? "";
+  const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?\n}\n\ntype ConfirmedCatalogFamilyName/)?.[0] ?? "";
   assert.match(buttonFamily, /row-1.*144/s);
   assert.match(buttonFamily, /row-2a.*72/s);
   assert.match(buttonFamily, /row-5-third.*48/s);
