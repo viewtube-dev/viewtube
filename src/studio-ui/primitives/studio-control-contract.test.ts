@@ -231,3 +231,30 @@ describe("StudioInterModule shared separator contract", () => {
     expect(css).toContain('.vt-studio-inter-module[data-open="true"] + .vt-studio-inter-module > .vt-studio-inter-module__head {\n  border-top-width: var(--vt-im-stroke, 2px);');
   });
 });
+
+
+describe("Brain chat layout and prompt library contract", () => {
+  it("uses nested StudioInterModule prompts and keeps composer scrolling bounded", () => {
+    const page = read("src/views/AIBrainCommandInterface.tsx");
+    const primitives = read("src/components/brain/BrainChatPrimitives.tsx");
+    const start = page.indexOf("export const BrainPromptLibrary");
+    const end = page.indexOf("\nconst FEEDBACK_OPTIONS", start);
+    const library = page.slice(start, end);
+
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    expect(library).toContain("<StudioTopSplitModule");
+    expect(library).toContain('data-vt-studio-inter-host="true"');
+    expect(library).toContain("<StudioInterModule");
+    expect(library).toContain("data-prompt-id={card.id}");
+    expect(library).toContain("SEND TO CHAT");
+    expect(library).toContain("EDIT FIRST");
+    expect(library).not.toContain("<StudioCollapsingTwoLineModule");
+    expect(page).not.toContain("scrollIntoView");
+    expect(page).toContain("requestInFlightRef.current");
+    expect(page).toContain("feedbackInFlightRef.current");
+    expect(primitives).toContain("pb-[max(8px,env(safe-area-inset-bottom))]");
+    expect(primitives).not.toContain("bottomRef");
+    expect(primitives).not.toMatch(/gap-\\d+\\.\\d+/);
+  });
+});
