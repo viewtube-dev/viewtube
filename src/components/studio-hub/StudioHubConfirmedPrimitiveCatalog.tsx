@@ -58,6 +58,7 @@ import {
   StudioBarToggle,
 } from "../../studio-ui/primitives/StudioControls"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
+import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
 import { StudioDropdown } from "../../studio-ui/primitives/StudioDropdown"
 import { StudioInterModule } from "../../studio-ui/primitives/StudioInterModule"
 import { StudioResponseMetaRow } from "../../studio-ui/primitives/StudioResponseMetaRow"
@@ -585,12 +586,12 @@ type ConfirmedCatalogFamilyName =
   | "Dropdowns"
   | "Controls"
   | "Text Controls"
-  | "Compounds"
+
   | "Compositions"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
   "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
-  "Controls", "Text Controls", "Compounds", "Compositions",
+  "Controls", "Text Controls", "Compositions",
 ]
 
 const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
@@ -714,7 +715,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-global-grid">{Object.entries(STUDIO_COMPONENT_GLOBAL_DEFAULTS).map(([key, value]) => <div key={key}><strong>{key.replace(/([A-Z])/g, " $1")}</strong><span>{formatDefaultValue(value)}</span></div>)}</div>
         <div className="vt-confirmed-defaults-explainer">
           <strong>HOW TO READ THE CURRENT CONTRACT</strong>
-          <p><b>Geometry:</b> standard is 44px high / 3px border / 6px radius; compact is 28px / 2px / 4px; Mini is 20px / 1.5px / 3px; Micro is 12px / 1px / 2px; Supreme is 60px / 4.09px / 8.18px. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and default line-height (1) unless a family exception is documented.</p>
+          <p><b>Geometry:</b> Supreme is 60px high / 3px border / 8.18px radius; standard is 44px / 3px / 6px; compact is 28px / 2px / 4px; Mini is 20px / 1.5px / 3px; Micro is 12px / 1.5px / 2px. Supreme shares the Standard stroke system; Micro shares the Mini stroke system. Default type is Inter, weight 1000, uppercase, -0.02em tracking, and default line-height (1) unless a family exception is documented.</p>
           <p><b>Field colors:</b> At rest, value, placeholder, caret, and inline text stroke use primary (--pair-a); fill uses primary at 50% opacity and the outer border is black. Focus uses primary fill at 15%, black text fill with primary inline stroke, plus a secondary-color outline at 65% of border width with 0px offset.</p>
           <p><b>Global interaction defaults:</b> primitive shells are flat and stationary. No shell shadow, hover/press movement, or transition is part of the default contract; explicitly registered inner-icon effects must remain isolated and honor reduced motion.</p>
           <p><b>Icon presets:</b> the default production preset is 38px / 1.9 stroke standard and 24px / 2.0 compact. Current (28px / 18px) and moderate (34px / 22px) presets are opt-in. Circle icon buttons scale the large preset to 80%.</p>
@@ -734,7 +735,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <li><strong>VAULT SPECTRUM TAG:</strong> registered 15px dense metadata chip with 2px border, 4px radius, 8px / weight-900 type, 35% white-mixed spectrum fill, and flat selected-state color treatment with no shadow, glow, or geometry offset.</li>
         <li><strong>CLOSEABLE BADGE:</strong> follows the standard / compact / micro 44px / 28px / 12px size lattice, 3px / 2px / 1px stroke, 6px / 4px / 2px radius, and 38px / 24px / 10px type. The close action is circular and secondary-filled; no pill-ratio shell exception.</li>
         <li><strong>TAG EDITOR ACTION:</strong> registered compact 28px square plus/check action, 2px stroke and 4px radius with a no shadow under the global flat-control contract.</li>
-        <li><strong>SPLIT-LEFT BADGE MICRO DENSITY:</strong> informational badge examples include a 12px / 1px-stroke micro size in addition to standard 44px / 3px and compact 28px / 2px. Micro is a local exception, not a global control size.</li>
+        <li><strong>SPLIT-LEFT BADGE MICRO DENSITY:</strong> informational badge examples include a 12px / 1.5px-stroke Micro size in addition to standard 44px / 3px, compact 28px / 2px, and Mini 20px / 1.5px. Micro is a first-class global size tier and inherits the Mini stroke system.</li>
         <li><strong>FIELD CARET + FOCUS:</strong> native insertion caret is retained; <code>caret-shape: block</code> is requested where supported and must not be simulated with a fake overlay. Focus uses the secondary outline at 65% of the selected border width and 0px offset; verify computed styles in a rendered browser.</li>
         <li><strong>REDUCED MOTION:</strong> primitive shells have no default transitions or movement. Explicitly registered inner-icon effects must honor reduced-motion preferences.</li>
         <li><strong>VERIFICATION BOUNDARY:</strong> source text and source tests do not certify the live deployment. Verify standard/compact dimensions, effective shadows/transforms, selected/disabled/loading states, keyboard focus, dropdown stacking, narrow layouts, and reduced motion in a browser.</li>
@@ -761,6 +762,14 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · A</span><StudioTextInput variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact A" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextInput className="is-reverse-colors" variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact B reverse colors" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
       </div>
+    </Family>
+    <Family title="Studio Split Text Input · Left + Right + Double" nonDefaultSettings={[
+        "Editable native input remains the single source of typing behavior; badge rails provide the split shell.",
+        "Left, right, and double variants use the same Standard/Compact stroke and focus contract as the shared Studio field family.",
+      ]} provenance={<Provenance primitive="StudioSplitTextInput" tsx="src/studio-ui/primitives/StudioSplitTextInput.tsx" css="src/styles/studio-split-text-input.css + src/styles/studio-control-system.css" tokens="StudioTextInput editing surface inside canonical split badge rails." imports={["src/studio-ui/primitives/StudioSplitTextInput.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>STANDARD · LEFT RAIL</span><StudioSplitTextInput split="left" sizeVariant="standard" aria-label="Split text input standard left" placeholder="SEARCH" leftIcon={<Info aria-hidden="true" />} data-vt-library-component="StudioSplitTextInput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>COMPACT · RIGHT RAIL</span><StudioSplitTextInput split="right" sizeVariant="compact" aria-label="Split text input compact right" placeholder="FILTER" rightIcon={<Info aria-hidden="true" />} data-vt-library-component="StudioSplitTextInput" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>STANDARD · DOUBLE RAIL</span><StudioSplitTextInput split="double" sizeVariant="standard" aria-label="Split text input double rail" placeholder="TITLE" leftIcon={<Info aria-hidden="true" />} rightIcon={<Check aria-hidden="true" />} data-vt-library-component="StudioSplitTextInput" /></div>
     </Family>
     <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Multiline-only exception: 18px standard / 14px compact typography, distinct line-height and padding, and a 92px minimum writing surface.",

@@ -107,6 +107,8 @@ export type {
   StudioBrainStatusAppearance,
   StudioBrainStatusBadgeSize,
 } from "./primitives/StudioControls"
+export { StudioSplitTextInput } from "./primitives/StudioSplitTextInput"
+export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInput"
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
 export {
