@@ -23,12 +23,20 @@ describe("Studio global stroke-tier contract", () => {
 
   it("does not retain the retired Supreme/Micro stroke overrides in shared CSS", () => {
     const css = readFileSync("src/styles/studio-control-system.css", "utf8")
+    const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
+    const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
     expect(css).not.toContain("4.09px")
     expect(css).not.toContain("2.66px")
     expect(css).not.toContain("1.36px")
     expect(css).not.toContain("2.59")
     expect(css).not.toContain("micro-stroke, 1px")
     expect(css).not.toContain("micro-text-stroke, 0.25px")
+    expect(css).toContain('data-size="micro"] { min-height: 12px; font-size: 10px; border-width: 1.5px; border-radius: 2px; }')
+    expect(css).toContain("--vt-studio-control-stroke: 1.5px")
+    expect(controls).not.toContain("4.09px")
+    expect(controls).not.toContain("micro 1px")
+    expect(catalog).not.toContain("4.09px")
+    expect(catalog).not.toContain("Micro is 12px / 1px")
   })
 
   it("exports and documents the shared split text input primitive", () => {
