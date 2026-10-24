@@ -1115,7 +1115,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   letter-spacing: var(--vt-studio-control-letter-spacing);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="supreme"] {
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-supreme-font-size, 24.55px);
   padding: calc(var(--vt-studio-textarea-standard-padding-block, 10px) * 1.363636) calc(var(--vt-studio-textarea-standard-padding-inline, 12px) * 1.363636);
 }
@@ -4779,15 +4779,15 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 }
 /* Textarea and read-only text display share the canonical 0.85 line-height token. */
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
 }
 
