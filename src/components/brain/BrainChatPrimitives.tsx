@@ -179,7 +179,6 @@ export const BrainComposerAccessoryRow: React.FC<{
 export const ChatConversationViewport: React.FC<{
   children: React.ReactNode
   viewportRef: React.Ref<HTMLDivElement>
-  bottomRef?: React.Ref<HTMLDivElement>
   onScroll?: React.UIEventHandler<HTMLDivElement>
   className?: string
 }> = ({ children, viewportRef, bottomRef, onScroll, className = "" }) => (
@@ -193,7 +192,6 @@ export const ChatConversationViewport: React.FC<{
     tabIndex={0}
   >
     {children}
-    <div ref={bottomRef} aria-hidden="true" />
   </div>
 )
 
@@ -205,7 +203,7 @@ export const BrainComposerShell: React.FC<{
   <footer
     data-vt-brain-component="BrainComposer"
     aria-label="Brain composer"
-    className={`shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] ${className}`}
+    className={`shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-2 pb-[max(8px,env(safe-area-inset-bottom))] ${className}`}
   >
     {children}
   </footer>
