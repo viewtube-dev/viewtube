@@ -235,3 +235,45 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
   background: #000 !important;
 }
+
+
+/* Choice controls share the same five-tier geometry as the rest of Studio Controls. */
+.vt-studio-44-switch[data-vt-studio-control="true"] {
+  width: calc(var(--vt-studio-control-height, 44px) * 1.72);
+  height: var(--vt-studio-control-height, 44px);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"] .vt-studio-44-handle {
+  top: calc(var(--vt-studio-control-height, 44px) * .0833333333);
+  left: calc(var(--vt-studio-control-height, 44px) * .0833333333);
+  width: calc(var(--vt-studio-control-height, 44px) * .8333333333);
+  height: calc(var(--vt-studio-control-height, 44px) * .8333333333);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"].is-on .vt-studio-44-handle {
+  transform: translateX(calc(var(--vt-studio-control-height, 44px) * .72));
+}
+.vt-studio-44-switch[data-vt-studio-control="true"].is-rect {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .1666666667);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"].is-rect .vt-studio-44-handle {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .0833333333);
+}
+.vt-studio-44-choice[data-vt-studio-control="true"] {
+  width: var(--vt-studio-control-height, 44px);
+  height: var(--vt-studio-control-height, 44px);
+}
+.vt-studio-44-choice[data-vt-studio-control="true"] .vt-studio-44-dot {
+  width: 75%;
+  height: 75%;
+}
+.vt-studio-44-choice[data-vt-studio-control="true"].is-rect {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .1666666667);
+}
+.vt-studio-44-choice[data-vt-studio-control="true"].is-radio.is-rect .vt-studio-44-dot {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .0416666667);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"]:focus-visible,
+.vt-studio-44-choice[data-vt-studio-control="true"]:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  box-shadow: none;
+}
