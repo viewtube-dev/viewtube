@@ -382,7 +382,7 @@ export const promptCardSummary = (card: CreatorBrainPromptCard): string =>
 export const formatPromptCategoryLabel = (category: string): string =>
  category
   .replace(/([a-z])([A-Z])/g, "$1 $2")
-  .replace(/\\d+$/g, "")
+  .replace(/\d+$/g, "")
   .replace(/[_-]+/g, " ")
   .trim()
   .toLowerCase()
