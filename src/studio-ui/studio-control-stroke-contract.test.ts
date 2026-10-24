@@ -53,6 +53,14 @@ describe("Studio global stroke-tier contract", () => {
     expect(catalog).not.toContain("Micro is 12px / 1px")
   })
 
+  it("classifies compact export names into the correct confirmed-library sections", () => {
+    const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
+    expect(catalog).toContain("/Text ?Input|Text ?Area|Text ?Box|StudioInput")
+    expect(catalog).toContain("/Top ?Split ?Module|Collapsing|Inter ?Module|Split ?Accordion|Upload ?Frame/")
+    expect(catalog).toContain("/Publishing ?Card|Brain ?Status ?LED ?Badges|BrainStatusBadge|ResponseMetaRow/")
+    expect(catalog.indexOf("if (/Publishing ?Card")).toBeLessThan(catalog.indexOf("if (/Button ?·"))
+  })
+
   it("keeps confirmed-library representatives in a full-width module, not a sidebar column", () => {
     const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
     const catalogCss = readFileSync("src/styles/studio-confirmed-catalog-modules.css", "utf8")
