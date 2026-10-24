@@ -237,7 +237,7 @@ describe("Studio dropdown chevron and split-left contract", () => {
   })
 
   it("keeps simple dropdowns free of a split rail and places the chevron at the trailing edge", () => {
-    const html = renderToStaticMarkup(<StudioDropdown variant="simple" aria-label="Simple mode" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }]} />)
+    const html = renderToStaticMarkup(<StudioDropdown variant="simple" ariaLabel="Simple mode" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }]} />)
     expect(html).not.toContain('data-vt-studio-split-rail')
     expect(html).toContain('class="vt-studio-dropdown-chevron is-trailing"')
   })
