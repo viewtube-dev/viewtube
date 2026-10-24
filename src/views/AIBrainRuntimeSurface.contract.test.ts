@@ -72,11 +72,18 @@ describe("AI Brain runtime surface integration", () => {
  })
  
  it("preserves transcript position unless the creator is following or sends a new turn", () => {
-  expect(source).toContain("export const shouldFollowBrainConversation")
+  expect(source.includes("export const shouldFollowBrainConversation") || source.includes('import { shouldFollowBrainConversation } from "./brainConversationScroll"')).toBe(true)
   expect(source).toContain("if (!shouldFollowConversationRef.current) return")
   expect(source).toContain("shouldFollowConversationRef.current = shouldFollowBrainConversation(viewport.scrollHeight, viewport.scrollTop, viewport.clientHeight)")
   const handleSend = source.slice(source.indexOf("const handleSend = async"), source.indexOf("const handleRetryInterruptedTurn"))
   expect(handleSend).toContain("shouldFollowConversationRef.current = true")
+ })
+
+ 
+ it("keeps the mobile composer inside the layout viewport and gives the textarea real width", () => {
+  expect(source).toContain("Math.min(visualViewport.height, window.innerHeight)")
+  expect(source).toContain('data-vt-brain-part="composer-controls" className="grid w-full min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-1"')
+  expect(source).toContain('className="w-full max-h-36 min-h-[44px] min-w-0 resize-none"')
  })
 
 })

@@ -1071,8 +1071,13 @@ const AIBrainCommandInterface: React.FC = () => {
  useEffect(() => {
   const visualViewport = window.visualViewport
   const syncMobileViewport = () => {
-   if (window.matchMedia("(max-width: 1279px)").matches && visualViewport) {
-    setMobileViewportHeight(Math.max(1, Math.round(visualViewport.height)))
+   if (window.matchMedia("(max-width: 1279px)").matches) {
+    // Some browser emulation/device modes report a visual viewport taller than
+    // the layout viewport. Never size the page beyond the actual layout bounds.
+    const height = visualViewport
+     ? Math.min(visualViewport.height, window.innerHeight)
+     : window.innerHeight
+    setMobileViewportHeight(Math.max(1, Math.round(height)))
    } else {
     setMobileViewportHeight(null)
    }
@@ -1913,7 +1918,7 @@ const AIBrainCommandInterface: React.FC = () => {
             />
            </div>
           </BrainComposerAccessoryRow>
-          <div data-vt-brain-part="composer-controls" className="flex min-w-0 items-stretch gap-1">
+          <div data-vt-brain-part="composer-controls" className="grid w-full min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-1">
            <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0" style={{ backgroundColor: "#36E0F6" }} />
            <label data-vt-brain-part="composer-label" className="sr-only" htmlFor="brain-composer">Ask ViewTube Copilot</label>
            <span data-vt-brain-part="composer-help" id="brain-composer-help" className="sr-only">Press Enter to send; use Shift+Enter for a new line. Search prompts or browse capabilities for guided requests.</span>
@@ -1935,7 +1940,7 @@ const AIBrainCommandInterface: React.FC = () => {
              void handleSend()
             }}
             placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-            className="max-h-36 min-h-[44px] min-w-0 flex-1 resize-none"
+            className="w-full max-h-36 min-h-[44px] min-w-0 resize-none"
             style={{ minHeight: 52 }}
             aria-label="Ask ViewTube Brain"
             aria-describedby="brain-composer-help"
