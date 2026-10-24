@@ -132,14 +132,27 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
   -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="mini"],
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="mini"] {
+  font-size: var(--vt-studio-textarea-mini-font-size, 16px);
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, 0.4px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"],
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="micro"] {
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
-  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.25px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.4px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]::placeholder,
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"]::placeholder {
   -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="mini"]::placeholder,
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="mini"]::placeholder {
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, 0.4px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"]::placeholder,
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="micro"]::placeholder {
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.4px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"]::placeholder,
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="compact"]::placeholder {
