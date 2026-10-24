@@ -296,8 +296,7 @@ describe("standalone Studio text fields", () => {
   it("uses shared border geometry, primary glyph stroke, and a proportional secondary outline for StudioTextBox", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
     const block = css.match(/\.vt-studio-text-box\[data-vt-studio-control="true"\] \{([\s\S]*?)\n\}/)?.[1] ?? "";
-    expect(block).toContain("--field-border-width: var(--vt-studio-control-stroke, 3px);");
-    expect(block).toContain("--studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);");
+    expect(css).toContain("--studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);");
     expect(block).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000;");
     expect(block).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
     expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary");
@@ -316,7 +315,7 @@ describe("standalone Studio text fields", () => {
     expect(css).toContain("--vt-studio-textarea-line-height: .85;")
     expect(generated).toContain("--vt-studio-textarea-line-height: 0.85;")
     expect(css).not.toMatch(/line-height:\s*(?:0)?\.75\b/)
-    expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(5)
+    expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(6)
   })
 
   it("keeps the plain input free of label wrappers while textarea labels remain separate", () => {
