@@ -780,14 +780,15 @@ const CreatorResponseCard: React.FC<{
  // Drop prose modules that just restate the key insight (the common duplication),
  // and cap the count so every answer isn't the same tall stack.
  const keyNorm = sanitizeCreatorFacingBrainCopy(response.keyInsight).trim().toLowerCase()
- const modules = rawModules
+ const filteredModules = rawModules
   .filter((module) => {
    if (module.data?.metrics?.length || module.data?.items?.length) return true
    const body = sanitizeCreatorFacingBrainCopy(module.body || "").trim().toLowerCase()
    if (!body || !keyNorm) return Boolean(body)
    return !(body === keyNorm || body.startsWith(keyNorm.slice(0, 60)) || keyNorm.startsWith(body.slice(0, 60)))
   })
-  .slice(0, 3)
+ const modules = filteredModules.slice(0, 3)
+ const additionalModules = filteredModules.slice(3)
  const openQuestions = response.questions.filter(
   (question) => question.category !== "creator_goal" && !answeredQuestionIds.has(question.id),
  )
@@ -846,11 +847,22 @@ const CreatorResponseCard: React.FC<{
    }
    footer={message.learningReceipt ? <BrainLearningReceiptCard message={message} onCorrect={onCorrectReceipt} onReject={onRejectReceipt} /> : null}
   >
-   {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
-    <BrainDataReadiness readiness={message.readiness} />
-   ) : null}
    <p data-vt-brain-part="response-key-insight" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(response.keyInsight)}</p>
+   {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
+    <BrainReadinessNotice readiness={message.readiness} />
+   ) : null}
    <BrainAnswerModuleGrid modules={modules} compact />
+   {additionalModules.length ? (
+    <details data-vt-brain-part="additional-answer-modules" className="min-w-0 border-2 border-black bg-white">
+     <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-1 bg-[#f8f8f4] px-2 py-1 text-xs font-black uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black">
+      <span>More answer details</span>
+      <StudioSplitLeftBadge sizeVariant="micro" className="shrink-0">{additionalModules.length}</StudioSplitLeftBadge>
+     </summary>
+     <div className="grid min-w-0 gap-2 border-t-2 border-black p-2">
+      <BrainAnswerModuleGrid modules={additionalModules} compact />
+     </div>
+    </details>
+   ) : null}
    {workflowRecommendation ? (
     <details data-vt-brain-part="action-plan-tracker-disclosure" className="min-w-0 border-[1.5px] border-black/35 bg-white">
      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 bg-[#f8f8f4] px-2.5 py-2 text-[10px] font-[1000] uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2">
@@ -861,6 +873,9 @@ const CreatorResponseCard: React.FC<{
       <BrainWorkflowRunPanel recommendation={workflowRecommendation} />
      </div>
     </details>
+   ) : null}
+   {message.readiness && message.evidencePack && ["analytics", "revenue", "audience", "strategy"].includes(message.evidencePack.intent) ? (
+    <BrainDataReadiness readiness={message.readiness} />
    ) : null}
    {turnEvidencePack ? <BrainTurnEvidenceRibbon turnId={message.id} evidencePack={turnEvidencePack} citedEvidenceIds={response.evidenceIds} evidenceRecords={message.evidenceRecords} claimEvidence={response.claimEvidence} evidenceIntegrityStatus={message.evidenceIntegrityStatus || "unavailable"} compact /> : null}
    {openQuestions[0] ? (
@@ -885,6 +900,21 @@ const readinessForSnapshot = (snapshot: AIBrainContextSnapshot): AIBrainTurnRead
  warnings: snapshot.vtSync.warnings,
 })
 
+const BrainReadinessNotice: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ readiness }) => {
+ const presentation = resolveBrainDataReadinessPresentation({
+  dataStatus: readiness.dataStatus,
+  staleDatasets: readiness.diagnostics.coverage.staleDatasets,
+  missingDatasets: readiness.diagnostics.coverage.missingDatasets,
+ })
+ if (presentation.tone === "ready") return null
+ return (
+  <p data-vt-brain-part="readiness-notice" className="flex min-w-0 flex-wrap items-center gap-1 text-xs font-bold leading-4">
+   <BrainChatStatusBadge status={presentation.tone === "unavailable" ? "unavailable" : "warning"} label={presentation.label} />
+   <span>Some details may be incomplete until channel data is synced.</span>
+  </p>
+ )
+}
+
 const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ readiness }) => {
  const staleCount = readiness.diagnostics.coverage.staleDatasets
  const missingCount = readiness.diagnostics.coverage.missingDatasets
@@ -903,12 +933,16 @@ const BrainDataReadiness: React.FC<{ readiness: AIBrainTurnReadiness }> = ({ rea
  const incompleteSources = readiness.sourceStatuses.filter((source) => source.status !== "ready")
 
  return (
-  <details data-vt-brain-component="BrainEvidenceReadiness" className="overflow-hidden rounded-[7px] border-[2px] border-black bg-[#f8f8f4]">
-   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-11 cursor-pointer list-none flex-wrap items-center gap-1 px-2.5 py-2 text-[9px] font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
-    <span data-vt-brain-part="evidence-readiness-status"><BrainChatStatusBadge status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label="Data readiness" /></span>
-    <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
+  <details data-vt-brain-component="BrainEvidenceReadiness" className="min-w-0 overflow-hidden border-2 border-black bg-[#f8f8f4]">
+   <summary data-vt-brain-part="evidence-readiness-trigger" className="flex min-h-9 cursor-pointer list-none flex-wrap items-center justify-between gap-1 px-2 py-1 text-xs font-black uppercase leading-4 hover:bg-[#FFDA47] focus-visible:ring-2 focus-visible:ring-black">
+    <span>Evidence and data details</span>
+    <span className="text-[10px] font-bold normal-case text-black/65">Open diagnostics</span>
    </summary>
-   <div data-vt-brain-part="evidence-diagnostics" className="grid gap-2 border-t-[2px] border-black p-2.5">
+   <div data-vt-brain-part="evidence-diagnostics" className="grid gap-2 border-t-2 border-black p-2">
+    <div className="flex min-w-0 flex-wrap items-center gap-1 text-xs font-bold">
+     <BrainChatStatusBadge status={presentation.tone === "ready" ? "ready" : presentation.tone === "unavailable" ? "unavailable" : "warning"} label={presentation.label} />
+     <span data-vt-brain-part="evidence-readiness-summary">{summary}</span>
+    </div>
     <div data-vt-brain-part="available-metrics">
      <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-black/55">Metrics available for this answer</h4>
      <p className="mt-1 text-xs font-bold leading-5">{readiness.availableMetrics.length ? readiness.availableMetrics.join(", ") : "No video performance metrics are available for this request."}</p>
@@ -1271,7 +1305,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }, [busy, visibleTurns])
 
  // Keep the newest exchange in view only while the reader is following the conversation.
- // Scroll the transcript itself; scrollIntoView can also move page/toolbox ancestors.
+ // Scroll only the bounded transcript viewport, not page or toolbox ancestors.
  useEffect(() => {
   if (!shouldFollowConversationRef.current) return
   const viewport = conversationViewportRef.current
