@@ -937,7 +937,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     </Family>
 
     <Family
-      title="Dropdown"
+      title="StudioLegendMultiDropdown · Multi Selection"
       nonDefaultSettings={[
         "Fixed floating label and multi-select count are dropdown-specific.",
         "Menu options are not button-press surfaces; the floating panel has its own stationary surface treatment.",
@@ -1266,6 +1266,12 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
   const [doubleRight, setDoubleRight] = React.useState("TARGET")
   const [barValue, setBarValue] = React.useState(40)
   return <>
+    <Family title="StudioDoubleSplitButton · Standard" nonDefaultSettings={["Individual double-split button specimen using the production button and split-shell foundation."]} provenance={<Provenance primitive="StudioDoubleSplitButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · leading and trailing square rails" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton"><span>STANDARD · DOUBLE-SPLIT BUTTON</span><StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Standard double-split button specimen">DOUBLE SPLIT</StudioDoubleSplitButton></div>
+    </Family>
+    <Family title="StudioCollapsingSplitModule · Standard" nonDefaultSettings={["Individual collapsible split-module specimen; nested module compositions remain separate from the representative strip."]} provenance={<Provenance primitive="StudioCollapsingSplitModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · double split rails · collapsible content" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule"><span>STANDARD · COLLAPSING SPLIT MODULE</span><StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen><span>Collapsible module body content.</span></StudioCollapsingSplitModule></div>
+    </Family>
     <Family title="StudioSwitch · Standard" nonDefaultSettings={["Individual canonical switch specimen; the combined matrix above remains a palette comparison reference."]} provenance={<Provenance primitive="StudioSwitch" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · canonical switch skins" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSwitch"><span>STANDARD · ROUND SWITCH</span><StudioSwitch shape="round" skin="solid" checked={switchValue} onClick={() => setSwitchValue(value => !value)} aria-label="Standard switch specimen" /></div>
     </Family>
