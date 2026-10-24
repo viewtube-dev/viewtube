@@ -4,13 +4,13 @@
 
 [data-vt-studio-control] {
   --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);
-  /* Canonical editable-field tokens: resting text/stroke match primary; focus uses black text/glyph stroke, a persistent primary inset, and a primary caret. */
+  /* Canonical editable-field tokens: resting text/stroke match primary; focus uses black text with persistent primary glyph stroke, primary inset, and primary caret. */
   --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-field-text: var(--vt-field-primary);
   --vt-field-text-stroke: var(--vt-field-text);
   --vt-field-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
   --vt-field-text-focus: #000;
-  --vt-field-text-stroke-focus: #000;
+  --vt-field-text-stroke-focus: var(--vt-field-primary);
   --vt-field-caret-focus: var(--vt-field-primary);
   --vt-field-fill-rest: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
   --vt-field-fill-focus: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);
@@ -1131,7 +1131,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
-  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.25px) var(--vt-field-primary);
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.4px) var(--vt-field-primary);
 }
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])::placeholder {
   color: var(--vt-field-primary);
@@ -6152,8 +6152,8 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
 [data-vt-studio-control][data-size="compact"]{--vt-studio-control-height:28px;--vt-studio-control-stroke:2px;--vt-studio-control-radius:4px;--vt-studio-control-font-size:24px;--vt-studio-control-text-stroke:.5px;--vt-field-text-stroke-width:.5px;--vt-studio-control-icon-size:24px;--vt-studio-control-icon-stroke:2;--vt-studio-control-focus-outline-width:1.3px;--vt-studio-control-secondary-outline-width:1.3px}
 [data-vt-studio-control][data-size="mini"]{--vt-studio-control-height:20px;--vt-studio-control-stroke:1.5px;--vt-studio-control-radius:3px;--vt-studio-control-font-size:16px;--vt-studio-control-text-stroke:.4px;--vt-field-text-stroke-width:.4px;--vt-studio-control-icon-size:16px;--vt-studio-control-icon-stroke:1.6;--vt-studio-control-focus-outline-width:.975px;--vt-studio-control-secondary-outline-width:.975px}
 [data-vt-studio-control][data-size="micro"]{--vt-studio-control-height:12px;--vt-studio-control-font-size:10px;--vt-studio-control-icon-size:10px;--vt-studio-control-stroke:1.5px;--vt-studio-control-radius:3px;--vt-studio-control-text-stroke:.4px;--vt-field-text-stroke-width:.4px;--vt-studio-control-icon-stroke:1.6;--vt-studio-control-focus-outline-width:.975px;--vt-studio-control-secondary-outline-width:.975px}
-input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus,:focus-visible),textarea[data-vt-studio-control="true"]:is(:focus,:focus-visible){color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke-color:#000;caret-color:var(--vt-field-primary);box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary);outline:var(--vt-field-focus-outline);outline-offset:0}
-.vt-studio-text-box,[data-vt-studio-field-kind="textarea-display"],[data-vt-studio-field-kind="text-box"]{color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke-color:#000;box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary);outline:var(--vt-field-focus-outline);outline-offset:0}
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus,:focus-visible),textarea[data-vt-studio-control="true"]:is(:focus,:focus-visible){color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke-color:var(--vt-field-text-stroke-focus);caret-color:var(--vt-field-primary);box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary);outline:var(--vt-field-focus-outline);outline-offset:0}
+.vt-studio-text-box,[data-vt-studio-field-kind="textarea-display"],[data-vt-studio-field-kind="text-box"]{color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke-color:var(--vt-field-primary);box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary);outline:var(--vt-field-focus-outline);outline-offset:0}
 .vt-studio-split-text-input[data-vt-studio-split-shell="true"]{box-sizing:border-box;position:relative;display:flex;flex:0 0 auto;flex-direction:row;align-items:stretch;width:100%;min-width:0;height:var(--vt-studio-control-height);min-height:var(--vt-studio-control-height);border:var(--vt-studio-control-stroke) solid #000;border-radius:var(--vt-studio-control-radius);overflow:hidden;background:var(--vt-field-fill-rest);color:#000;padding:0;gap:0;box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary)}
 .vt-studio-split-text-input > .vt-studio-split-shell__rail{box-sizing:border-box;display:grid;place-items:center;position:relative;z-index:1;flex:0 0 var(--vt-studio-control-height);width:var(--vt-studio-control-height);min-width:var(--vt-studio-control-height);max-width:var(--vt-studio-control-height);height:100%;min-height:100%;margin:0;padding:0;border:0;border-radius:0;background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));color:#000;-webkit-text-stroke:0}
 .vt-studio-split-text-input[data-layout="left"] > [data-vt-studio-split-rail="start"],.vt-studio-split-text-input[data-layout="double"] > [data-vt-studio-split-rail="start"]{border-right:var(--vt-studio-control-stroke) solid #000}
