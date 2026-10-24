@@ -216,10 +216,10 @@ describe("Studio textarea typography token ownership", () => {
     expect(system).toContain("--vt-field-caret-focus: var(--vt-field-primary)");
     expect(fields).toContain("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)");
     expect(fields).toContain("caret-color: var(--vt-field-caret-focus)");
-    expect(fields).not.toMatch(/:focus[^\\{]*\\{[^}]*-webkit-text-stroke-color:\\s*var\\(--vt-field-primary/);
-    expect(fields).not.toMatch(/:focus[^\\{]*\\{[^}]*-webkit-text-stroke-color:[^;]*!important/);
+    expect(fields).not.toMatch(/:focus[^{]*\{[^}]*-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
+    expect(fields).not.toMatch(/:focus[^{]*\{[^}]*-webkit-text-stroke-color:[^;]*!important/);
     expect(distill).toContain("-webkit-text-stroke-color: var(--vt-field-text-stroke-focus)");
-    expect(distill).not.toMatch(/:focus[^\\{]*\\{[^}]*-webkit-text-stroke-color:\\s*var\\(--vt-field-primary/);
+    expect(distill).not.toMatch(/:focus[^{]*\{[^}]*-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
   });
 });
 
