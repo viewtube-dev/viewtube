@@ -690,7 +690,9 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <>
     <div className="vt-confirmed-catalog">
-      <ConfirmedDirectPrimitiveRows />
+      <div className="vt-confirmed-direct-representatives">
+        <ConfirmedDirectPrimitiveRows />
+      </div>
     </div>
     <ConfirmedCatalogFamilyGroups>
     <details className="vt-confirmed-family vt-confirmed-defaults-combined" data-vt-confirmed-family="defaults">
