@@ -136,7 +136,7 @@ describe("confirmed composite primitive catalog", () => {
 
   it("registers the username composite with standard and compact native inputs", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain('Username Split-left Input · 44px + 28px')
+    expect(html).toContain('StudioUsernameInput · Split Identity Field')
     expect(html).toContain('data-vt-studio-username-input="true"')
     expect(html).toContain('data-vt-studio-username-rail="true"')
     expect(html).toContain('data-icon-size-variant="large"')
@@ -147,11 +147,13 @@ describe("confirmed composite primitive catalog", () => {
   })
   it("registers the production closeable badge and animated tag editor under global rule exceptions", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain("Global Rules Exceptions · Closeable Badge + Tag Editor")
+    expect(html).toContain("StudioCloseableBadge · Fixed 20px Exception")
+    expect(html).toContain("StudioTagEditor · Tokenized Actions")
     expect(html).toContain('data-vt-studio-badge="true"')
     expect(html).toContain('data-vt-studio-tag-editor="true"')
-    expect(html).toContain("StudioCloseableBadge / StudioTagEditor")
-    expect(html).toContain("H 20px")
+    expect(html).toContain("StudioCloseableBadge")
+    expect(html).toContain("StudioTagEditor")
+    expect(html).toContain("20px pill")
     expect(html).toContain("action H 28px")
     expect(html).toContain("vt-studio-tag-editor__square-action")
   })
