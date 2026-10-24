@@ -79,4 +79,11 @@ describe("AI Brain runtime surface integration", () => {
   expect(handleSend).toContain("shouldFollowConversationRef.current = true")
  })
 
+ 
+ it("keeps the mobile composer inside the layout viewport and gives the textarea real width", () => {
+  expect(source).toContain("Math.min(visualViewport.height, window.innerHeight)")
+  expect(source).toContain('data-vt-brain-part="composer-controls" className="grid w-full min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-stretch gap-1"')
+  expect(source).toContain('className="w-full max-h-36 min-h-[44px] min-w-0 resize-none"')
+ })
+
 })
