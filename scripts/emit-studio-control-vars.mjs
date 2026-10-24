@@ -14,6 +14,7 @@ const readTierBlock = (tier) => sizeBaseBlock.match(new RegExp(`${tier}:\\s*\\{(
 const supremeSizeLine = readTierBlock("supreme");
 const standardSizeLine = readTierBlock("standard");
 const compactSizeLine = readTierBlock("compact");
+const miniSizeLine = readTierBlock("mini");
 const microSizeLine = readTierBlock("micro");
 function readSizeValue(source, property) {
   const match = source.match(new RegExp(`(?:^|,)\\s*${property}:\\s*([\\d.]+)`));
@@ -27,6 +28,7 @@ const sizeTiers = {
   supreme: readTier(supremeSizeLine),
   standard: readTier(standardSizeLine),
   compact: readTier(compactSizeLine),
+  mini: readTier(miniSizeLine),
   micro: readTier(microSizeLine),
 };
 
@@ -35,10 +37,12 @@ const multilineTokens = {
   supremeFontSize: readSizeValue(multilineContract, "standardFontSize") * 60 / 44,
   standardFontSize: readSizeValue(multilineContract, "standardFontSize"),
   compactFontSize: readSizeValue(multilineContract, "compactFontSize"),
+  miniFontSize: readSizeValue(multilineContract, "miniFontSize"),
   microFontSize: readSizeValue(multilineContract, "microFontSize"),
   supremeTextStroke: readSizeValue(multilineContract, "standardTextStroke") * 60 / 44,
   standardTextStroke: readSizeValue(multilineContract, "standardTextStroke"),
   compactTextStroke: readSizeValue(multilineContract, "compactTextStroke"),
+  miniTextStroke: readSizeValue(multilineContract, "miniTextStroke"),
   microTextStroke: readSizeValue(multilineContract, "microTextStroke"),
   fontWeight: sizeTiers.standard.fontWeight,
   minHeight: readSizeValue(multilineContract, "minHeight"),
@@ -48,10 +52,12 @@ const cssNumber = (value) => Number(value.toFixed(2));
 
 function readPair(contract, property) {
   const block = contract.match(new RegExp(`${property}:\\s*\\{([^}]*)\\}`))?.[1] ?? "";
-  const standard = block.match(/standard:\s*([\d.]+)/)?.[1];
-  const compact = block.match(/compact:\s*([\d.]+)/)?.[1];
-  if (!standard || !compact) throw new Error(`Missing Studio token pair: ${property}`);
-  return { standard: Number(standard), compact: Number(compact) };
+  const values = Object.fromEntries(["supreme", "standard", "compact", "mini", "micro"].map((tier) => {
+    const value = block.match(new RegExp(`${tier}:\\\\s*([\\\\d.]+)`))?.[1];
+    if (!value) throw new Error(`Missing Studio token ${property}.${tier}`);
+    return [tier, Number(value)];
+  }));
+  return values;
 }
 
 const dropdownRail = readPair(dropdownContract, "railSize");
@@ -69,6 +75,8 @@ function readFloatingLabelMetric(source, property, { required = true } = {}) {
 }
 const floatingLabelStandardHeight = readFloatingLabelMetric(standardSizeLine, "floatingLabelHeight");
 const floatingLabelCompactHeight = readFloatingLabelMetric(compactSizeLine, "floatingLabelHeight");
+const floatingLabelMiniHeight = readFloatingLabelMetric(miniSizeLine, "floatingLabelHeight");
+const floatingLabelMicroHeight = readFloatingLabelMetric(microSizeLine, "floatingLabelHeight");
 const floatingLabelOffsetRatio = readFloatingLabelMetric(sizeBaseBlock, "floatingLabelOffsetRatio");
 const numberMix = Number(focusContract.match(/restTextMixPercent:\s*(\d+)/)?.[1]);
 const activeTextColor = focusContract.match(/activeTextColor:\s*"([^"]+)"/)?.[1];
