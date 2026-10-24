@@ -1280,6 +1280,28 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family
+      title="InterModule · Standard"
+      nonDefaultSettings={[
+        "Production intermodule component with collapsible content and inherited palette styling.",
+        "Nested category and prompt module examples live in this dedicated section, not in the top representative ledger.",
+      ]}
+      provenance={<Provenance primitive="StudioInterModule" tsx="src/studio-ui/primitives/StudioInterModule.tsx" css="src/styles/studio-inter-module.css" tokens="44px standard · shared Studio control tokens · nested module content." imports={["src/studio-ui/primitives/StudioInterModule.tsx", "src/styles/studio-inter-module.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule">
+        <span>44px STANDARD · NESTED MODULES</span>
+        <StudioTopSplitModule title="CONTENT WORKSPACE" split="left" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" className="vt-confirmed-intermodule-host">
+          <div data-vt-studio-inter-host="true" className="vt-confirmed-intermodule-list">
+            <StudioInterModule title="STRATEGY" startIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard" defaultOpen>
+              <p className="vt-confirmed-intermodule-prompt">A standard-size intermodule keeps its content aligned to the shared parent edges.</p>
+            </StudioInterModule>
+            <StudioInterModule title="PUBLISHING" startIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard">
+              <p className="vt-confirmed-intermodule-prompt">Collapsed by default; expands in place.</p>
+            </StudioInterModule>
+          </div>
+        </StudioTopSplitModule>
+      </div>
+    </Family>
+    <Family
       title="Collapsing Split Module · Standard + Compact"
       nonDefaultSettings={[
         "Production collapsible split module is catalogued separately from the intermodule and multi-section split accordion.",
