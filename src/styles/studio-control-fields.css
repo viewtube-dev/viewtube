@@ -224,7 +224,7 @@ html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"]:i
 /* Raised floating labels follow the focused field's black glyph treatment. */
 .vt-studio-floating-field > :is(input, textarea):is(:focus, :focus-visible) + .vt-studio-floating-field-label {
   color: #000;
-  -webkit-text-stroke-color: #000;
+  -webkit-text-stroke-color: #000 !important;
 }
 
 
@@ -324,7 +324,7 @@ html body input.vt-studio-text-input--simple[data-vt-studio-control="true"],
 html body input.vt-studio-text-input--simple[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
   color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   -webkit-text-fill-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
   -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
 }
 /* Labelled/editable inputs and all textareas use black glyph stroke while focused. */
@@ -334,12 +334,12 @@ html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke-color: #000;
+  -webkit-text-stroke-color: #000 !important;
 }
 /* Read-only TextBox uses black text and a matching black inline stroke at rest. */
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="text-box"],
 html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"] {
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke-color: #000;
+  -webkit-text-stroke-color: #000 !important;
 }
