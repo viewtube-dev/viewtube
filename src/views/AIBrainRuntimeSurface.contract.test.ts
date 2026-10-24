@@ -83,6 +83,27 @@ describe("AI Brain runtime surface integration", () => {
  })
 
  
+ it("keeps Brain context actions readable on narrow phones and collapses learning details by default", () => {
+  const contextStrip = source.slice(source.indexOf('const BrainContextStrip:'), source.indexOf('const shellCard ='))
+  const receiptEntry = source.slice(source.indexOf('if (!response && message.learningReceipt)'), source.indexOf('if (!response)'))
+
+  expect(contextStrip).toContain('grid-cols-1 gap-1 min-[480px]:grid-cols-3')
+  expect(contextStrip).toContain('Clear selection')
+  expect(contextStrip).toContain('Clear project')
+  expect(contextStrip).toContain('whitespace-normal')
+  expect(contextStrip).toContain('className="block min-w-0 truncate">Project · {projectLabel}</span>')
+  expect(contextStrip).toContain('className="block min-w-0 truncate">Selected · {selection?.label || "None"}</span>')
+  expect(receiptEntry).toContain('title="LEARNING SAVED"')
+  expect(receiptEntry).not.toContain('defaultOpen')
+ })
+
+ it("uses plain-language runtime status and separates project and build context", () => {
+  expect(panelSource).toContain('trace?.status === "fallback" ? "Using channel-wide fallback"')
+  expect(panelSource).toContain('Project: {project?.name || "No project"}')
+  expect(panelSource).toContain('Build: {titleCase(build.stage)}')
+  expect(panelSource).not.toContain('{trace ? titleCase(trace.status) : "No trace yet"}')
+ })
+
  it("keeps the mobile composer inside the layout viewport and gives the textarea real width", () => {
   expect(source).toContain("Math.min(visualViewport.height, window.innerHeight)")
   expect(source).toContain('data-vt-brain-part="composer-controls"')
