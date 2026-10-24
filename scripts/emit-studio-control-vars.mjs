@@ -53,7 +53,7 @@ const cssNumber = (value) => Number(value.toFixed(2));
 function readPair(contract, property) {
   const block = contract.match(new RegExp(`${property}:\\s*\\{([^}]*)\\}`))?.[1] ?? "";
   const values = Object.fromEntries(["supreme", "standard", "compact", "mini", "micro"].map((tier) => {
-    const value = block.match(new RegExp(`${tier}:\\\\s*([\\\\d.]+)`))?.[1];
+    const value = block.match(new RegExp(`${tier}:\\s*([\\d.]+)`))?.[1];
     if (!value) throw new Error(`Missing Studio token ${property}.${tier}`);
     return [tier, Number(value)];
   }));
