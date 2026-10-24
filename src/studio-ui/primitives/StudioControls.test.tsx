@@ -324,6 +324,20 @@ describe("standalone Studio text fields", () => {
     expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(6)
   })
 
+  it("maps choice controls and horizontal word toggles through all five size tiers", () => {
+    const miniSwitch = renderToStaticMarkup(<StudioSwitch checked={false} sizeVariant="mini" aria-label="Mini switch" />)
+    const supremeRadio = renderToStaticMarkup(<StudioRadio checked={false} sizeVariant="supreme" aria-label="Supreme radio" />)
+    const miniWordToggle = renderToStaticMarkup(<StudioWordToggle size="20" value={false} words={["OFF", "ON"]} onValueChange={() => {}} aria-label="Mini word toggle" />)
+    expect(miniSwitch).toContain('data-size="mini"')
+    expect(supremeRadio).toContain('data-size="supreme"')
+    expect(miniWordToggle).toContain('data-size="mini"')
+    expect(miniWordToggle).toContain('data-vt-word-toggle-size="20"')
+    const overrides = readFileSync(resolve(process.cwd(), "src/styles/studio-control-distill-overrides.css"), "utf8")
+    expect(overrides).toContain('.vt-studio-44-switch[data-vt-studio-control="true"]')
+    expect(overrides).toContain('.vt-studio-44-choice[data-vt-studio-control="true"]')
+    expect(overrides).toContain('.vt-studio-44-word-toggle[data-vt-word-toggle-size]')
+  })
+
   it("keeps the plain input free of label wrappers while textarea labels remain separate", () => {
     const standardInput = renderToStaticMarkup(<StudioTextInput aria-label="Title" />)
     const compactInput = renderToStaticMarkup(<StudioTextInput sizeVariant="compact" aria-label="Compact title" />)
