@@ -61,7 +61,8 @@ describe("Studio Controls migrations for Vault and Studio Hub", () => {
     const html = renderToStaticMarkup(
       <StudioSplitTextInput
         sizeVariant="compact"
-        icon={<span aria-hidden="true">⌕</span>}
+        split="left"
+        leftIcon={<span aria-hidden="true">⌕</span>}
         aria-label="Search assets"
         placeholder="TYPE HERE"
       />,
