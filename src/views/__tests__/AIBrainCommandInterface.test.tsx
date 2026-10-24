@@ -182,11 +182,10 @@ describe("AIBrainCommandInterface", () => {
  it("keeps every guided prompt available independently of chat history", () => {
   const cards = buildCreatorBrainPromptCards()
   const html = renderToStaticMarkup(
-   <BrainPromptLibrary cards={cards} onPrompt={() => undefined} />,
+   <BrainPromptLibrary cards={cards} onPrompt={() => undefined} onEdit={() => undefined} />,
   )
 
   expect(cards.length).toBeGreaterThanOrEqual(12)
-  // Every card renders, whatever the count, and ids are unique.
   expect(new Set(cards.map((card) => card.id)).size).toBe(cards.length)
   cards.forEach((card) => expect(html).toContain(card.label))
   expect(html).toContain('aria-labelledby="brain-prompt-library-title"')
@@ -194,31 +193,30 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("Revenue Levers")
   expect(html).toContain("Best Video Autopsy")
   expect(html).toContain("Run Daily Oracle")
-  // The newly added creator-requested prompts are present.
   expect(html).toContain("Pinned Comments")
   expect(html).toContain("10 Video Ideas")
   expect(html).toContain("Shorts Funnel Plan")
-  expect(html).toContain("sm:grid-cols-2")
-  expect(html).toContain("xl:grid-cols-1")
-  expect(html).toContain("line-clamp-2")
-  expect(html).toContain("border-b-[2px]")
-  // Cards remain selectable within their collapsed category module and preview before sending, not instant-send.
-  expect(html).toContain('aria-pressed="false"')
-  expect(html).toContain("Choose a prompt to preview and send it here.")
-  expect(html).toContain("brain-prompt-library-shell")
-  expect(html).toContain("data-vt-brain-component=\"BrainPromptLibraryModule\"")
-  expect(html).toContain("data-prompt-category=")
-  expect(html).toContain("prompt-module-body")
-  expect(html).toContain("Open a task module to browse its related prompts.")
-  // Card bodies show the short summary (the full prompt lives in the title tooltip
-  // and the preview panel, not dumped into the card body).
-  expect(html).toContain("A fresh, on-brand thumbnail concept for your next video.")
-  // One prompt-selection button per card (no preview action buttons until a prompt is selected).
-  expect((html.match(/type="button"/g) || [])).toHaveLength(cards.length)
-  expect(promptCardSummary(cards[0])).toBe("Find your niche and fuzzy edges.")
-  expect(html).toContain("Find your niche and fuzzy edges.")
- })
 
+  // The library uses the standard outer intermodule, category intermodules,
+  // and individual collapsible two-line prompt modules.
+  expect(html).toContain("brain-prompt-library-shell")
+  expect(html).toContain('data-vt-brain-component="BrainPromptLibraryModule"')
+  expect(html).toContain('data-prompt-category="')
+  expect(html).toContain('data-vt-brain-part="prompt-collapsible-module"')
+  expect(html).toContain('data-vt-brain-part="prompt-complete-text"')
+  expect(html).toContain('data-vt-brain-part="prompt-actions"')
+
+  // Each prompt's creator-facing explanation is visible in its two-line header;
+  // the full prompt and the paired compact actions are available on expansion.
+  expect(html).toContain("A fresh, on-brand thumbnail concept for your next video.")
+  expect(html).toContain("Find your niche and fuzzy edges.")
+  expect(html).toContain("EDIT")
+  expect(html).toContain("FIRST")
+  expect(html).toContain("SEND TO")
+  expect(html).toContain("CHAT")
+  expect(promptCardSummary(cards[0])).toBe("Find your niche and fuzzy edges.")
+ })
+ 
  it("exposes persistent response rating states instead of inert icon buttons", () => {
   const message = { id: "response-1", role: "model", text: "Answer", response: undefined } as const
   const html = renderToStaticMarkup(
