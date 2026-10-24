@@ -106,6 +106,8 @@ describe("AI Brain runtime surface integration", () => {
   expect(readiness).toContain('data-vt-brain-part="dataset-status-item"')
   expect(readiness).not.toContain('<details data-vt-brain-component="BrainEvidenceReadiness" open')
   expect(readiness).toContain('View details')
+  expect(readiness).toContain('{expanded ? (')
+  expect(readiness).toContain('onToggle={(event) => setExpanded(event.currentTarget.open)}')
  })
 
  it("uses plain-language runtime status and separates project and build context", () => {
