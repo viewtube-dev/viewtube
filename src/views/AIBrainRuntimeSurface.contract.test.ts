@@ -44,7 +44,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(responseCard).toContain("<StudioInterModule")
   expect(promptLibrary).toContain('data-vt-brain-component="BrainPromptLibraryModule"')
   expect(promptLibrary).toContain('data-vt-brain-part="prompt-collapsible-module"')
-  expect(promptLibrary).toContain("<StudioCollapsingSplitModule")
+  expect(promptLibrary).not.toContain("<StudioCollapsingSplitModule")
   expect(promptLibrary).toContain("<StudioCollapsingTwoLineModule")
   expect(promptLibrary).toContain("description={promptCardSummary(card)}")
   expect(promptLibrary).not.toContain("title={card.label}")
