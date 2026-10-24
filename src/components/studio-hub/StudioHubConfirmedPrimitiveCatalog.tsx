@@ -378,26 +378,32 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
 }
 
 const ConfirmedStudioCounterFamily: React.FC = () => {
+  const [supremePrimary, setSupremePrimary] = React.useState(22)
+  const [supremeReversed, setSupremeReversed] = React.useState(22)
   const [standardPrimary, setStandardPrimary] = React.useState(22)
   const [standardReversed, setStandardReversed] = React.useState(22)
+  const [miniPrimary, setMiniPrimary] = React.useState(3)
+  const [miniReversed, setMiniReversed] = React.useState(3)
   const [compactPrimary, setCompactPrimary] = React.useState(3)
   const [compactReversed, setCompactReversed] = React.useState(3)
   const [microPrimary, setMicroPrimary] = React.useState(7)
   const [microReversed, setMicroReversed] = React.useState(7)
   return (
     <Family
-      title="StudioCounter · Standard + Compact + Micro"
+      title="StudioCounter · Supreme + Standard + Compact + Mini + Micro"
       nonDefaultSettings={[
         "Independent button-only counter; no legacy stepper composition.",
         "Each size pairs the primary right-side rail with an opposite-palette left-side rail.",
         "Catalog range is 0–100 for all counter sizes.",
       ]}
-      provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px · fixed geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · fixed geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioCounter">
         <div className="vt-confirmed-counter-size-rows">
+          <div className="vt-confirmed-counter-size-row"><small>60px SUPREME</small><div className="vt-confirmed-counter-pair"><StudioCounter value={supremePrimary} onValueChange={setSupremePrimary} size="supreme" min={0} max={100} ariaLabel="Supreme counter" /><StudioCounter className="is-reversed" value={supremeReversed} onValueChange={setSupremeReversed} size="supreme" min={0} max={100} ariaLabel="Supreme counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioCounter value={standardPrimary} onValueChange={setStandardPrimary} size="standard" min={0} max={100} ariaLabel="Standard counter" /><StudioCounter className="is-reversed" value={standardReversed} onValueChange={setStandardReversed} size="standard" min={0} max={100} ariaLabel="Standard counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioCounter value={compactPrimary} onValueChange={setCompactPrimary} size="compact" min={0} max={100} ariaLabel="Compact counter" /><StudioCounter className="is-reversed" value={compactReversed} onValueChange={setCompactReversed} size="compact" min={0} max={100} ariaLabel="Compact counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>20px MINI</small><div className="vt-confirmed-counter-pair"><StudioCounter value={miniPrimary} onValueChange={setMiniPrimary} size="mini" min={0} max={100} ariaLabel="Mini counter" /><StudioCounter className="is-reversed" value={miniReversed} onValueChange={setMiniReversed} size="mini" min={0} max={100} ariaLabel="Mini counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-counter-pair"><StudioCounter value={microPrimary} onValueChange={setMicroPrimary} size="micro" min={0} max={100} ariaLabel="Micro counter" /><StudioCounter className="is-reversed" value={microReversed} onValueChange={setMicroReversed} size="micro" min={0} max={100} ariaLabel="Micro counter secondary palette" /></div></div>
         </div>
       </div>
@@ -407,28 +413,34 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
 
 
 const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
+  const [supremeA, setSupremeA] = React.useState(62)
+  const [supremeB, setSupremeB] = React.useState(62)
   const [standardA, setStandardA] = React.useState(62)
   const [standardB, setStandardB] = React.useState(62)
   const [standardC, setStandardC] = React.useState(62)
+  const [miniA, setMiniA] = React.useState(38)
+  const [miniB, setMiniB] = React.useState(38)
   const [compactA, setCompactA] = React.useState(38)
   const [compactB, setCompactB] = React.useState(38)
   const [microA, setMicroA] = React.useState(7)
   const [microB, setMicroB] = React.useState(7)
   return (
     <Family
-      title="StudioDoubleSplitSlider · Standard + Compact + Micro"
+      title="StudioDoubleSplitSlider · Supreme + Standard + Compact + Mini + Micro"
       nonDefaultSettings={[
         "L1 range-slider track and live numeric readout on the canonical double-split shell.",
         "Rectangular v2 handle with a black structural stroke; no shell shadow or movement.",
         "Each slider specimen has independent state, including reversed palette and counter-controlled variants.",
       ]}
-      provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px · double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · square double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioDoubleSplitSlider">
         <div className="vt-confirmed-counter-size-rows">
+          <div className="vt-confirmed-counter-size-row"><small>60px SUPREME</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={supremeA} onValueChange={setSupremeA} size="supreme" ariaLabel="Supreme slider" /><StudioDoubleSplitSlider className="is-reversed" value={supremeB} onValueChange={setSupremeB} size="supreme" ariaLabel="Supreme slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardA} onValueChange={setStandardA} size="standard" ariaLabel="Standard slider" /><StudioDoubleSplitSlider className="is-reversed" value={standardB} onValueChange={setStandardB} size="standard" ariaLabel="Standard slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={compactA} onValueChange={setCompactA} size="compact" ariaLabel="Compact slider" /><StudioDoubleSplitSlider className="is-reversed" value={compactB} onValueChange={setCompactB} size="compact" ariaLabel="Compact slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>COUNTER-CONTROLLED · UP / DOWN</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardC} onValueChange={setStandardC} size="standard" leftControls="counter" ariaLabel="Counter-controlled slider" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>20px MINI</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={miniA} onValueChange={setMiniA} size="mini" ariaLabel="Mini slider" /><StudioDoubleSplitSlider className="is-reversed" value={miniB} onValueChange={setMiniB} size="mini" ariaLabel="Mini slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={microA} onValueChange={setMicroA} size="micro" ariaLabel="Micro slider" /><StudioDoubleSplitSlider className="is-reversed" value={microB} onValueChange={setMicroB} size="micro" ariaLabel="Micro slider secondary palette" /></div></div>
         </div>
       </div>
@@ -437,26 +449,32 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
 }
 
 const ConfirmedStudioSideCounterFamily: React.FC = () => {
+  const [sideSupreme, setSideSupreme] = React.useState(5)
+  const [leftSupreme, setLeftSupreme] = React.useState(5)
   const [sideStandard, setSideStandard] = React.useState(5)
   const [leftStandard, setLeftStandard] = React.useState(5)
+  const [sideMini, setSideMini] = React.useState(3)
+  const [leftMini, setLeftMini] = React.useState(3)
   const [sideCompact, setSideCompact] = React.useState(3)
   const [leftCompact, setLeftCompact] = React.useState(3)
   const [sideMicro, setSideMicro] = React.useState(8)
   const [leftMicro, setLeftMicro] = React.useState(8)
   return (
     <Family
-      title="StudioSideCounter · Standard + Compact + Micro"
+      title="StudioSideCounter · Supreme + Standard + Compact + Mini + Micro"
       nonDefaultSettings={[
         "Independent button-only counter with 2:1 display and two-cell right action rail.",
         "Each size is a centered row with primary and secondary palette variants paired side-by-side.",
         "Catalog range is 0–100 for all counter sizes.",
       ]}
-      provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px · right-side action rail geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · square action rail and 2:1 value region · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioSideCounter">
         <div className="vt-confirmed-counter-size-rows">
+          <div className="vt-confirmed-counter-size-row"><small>60px SUPREME</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideSupreme} onValueChange={setSideSupreme} size="supreme" min={0} max={100} ariaLabel="Supreme side counter" /><StudioLeftCounter className="is-reversed" value={leftSupreme} onValueChange={setLeftSupreme} size="supreme" min={0} max={100} ariaLabel="Supreme left counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideStandard} onValueChange={setSideStandard} size="standard" min={0} max={100} ariaLabel="Standard side counter" /><StudioLeftCounter className="is-reversed" value={leftStandard} onValueChange={setLeftStandard} size="standard" min={0} max={100} ariaLabel="Standard left counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideCompact} onValueChange={setSideCompact} size="compact" min={0} max={100} ariaLabel="Compact side counter" /><StudioLeftCounter className="is-reversed" value={leftCompact} onValueChange={setLeftCompact} size="compact" min={0} max={100} ariaLabel="Compact left counter secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>20px MINI</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideMini} onValueChange={setSideMini} size="mini" min={0} max={100} ariaLabel="Mini side counter" /><StudioLeftCounter className="is-reversed" value={leftMini} onValueChange={setLeftMini} size="mini" min={0} max={100} ariaLabel="Mini left counter secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={sideMicro} onValueChange={setSideMicro} size="micro" min={0} max={100} ariaLabel="Micro side counter" /><StudioLeftCounter className="is-reversed" value={leftMicro} onValueChange={setLeftMicro} size="micro" min={0} max={100} ariaLabel="Micro left counter secondary palette" /></div></div>
         </div>
       </div>
