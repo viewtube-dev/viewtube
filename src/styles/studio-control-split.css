@@ -342,3 +342,23 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
   outline-offset: -2px;
   z-index: 1;
 }
+
+
+/* Final rail invariant: each rail is a square inside the shell's inner box.
+   The black outer perimeter/divider stays separate; pair fill never becomes chrome. */
+[data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
+[data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail] {
+  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - var(--vt-studio-control-stroke, 3px) - var(--vt-studio-control-stroke, 3px));
+  box-sizing: border-box;
+  width: var(--vt-studio-split-rail-size);
+  min-width: var(--vt-studio-split-rail-size);
+  max-width: var(--vt-studio-split-rail-size);
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 var(--vt-studio-split-rail-size);
+}
+button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] {
+  grid-template-columns: calc(var(--vt-studio-control-height, 44px) - var(--vt-studio-control-stroke, 3px) - var(--vt-studio-control-stroke, 3px)) minmax(0, 1fr);
+}
