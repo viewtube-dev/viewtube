@@ -87,7 +87,7 @@ describe("Studio value toggle primitives", () => {
     vi.stubGlobal("ResizeObserver", MockResizeObserver);
     const { container } = mount(<StudioBarToggle value={50} onValueChange={() => {}} />);
     const track = container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
-    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({ width: 272 } as DOMRect);
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({ width: 373 } as DOMRect);
     act(() => {
       notify?.([{ target: track, contentRect: { width: 260 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver);
     });
@@ -107,14 +107,14 @@ describe("Studio value toggle primitives", () => {
 
     const compact = mount(<StudioBarToggle value={50} size="compact" onValueChange={() => {}} />);
     const compactTrack = compact.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
-    vi.spyOn(compactTrack, "getBoundingClientRect").mockReturnValue({ width: 264 } as DOMRect);
+    vi.spyOn(compactTrack, "getBoundingClientRect").mockReturnValue({ width: 378 } as DOMRect);
     act(() => notify?.([{ target: compactTrack, contentRect: { width: 256 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
     expect(compact.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(32);
     expect(compact.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(16);
 
     const micro = mount(<StudioBarToggle value={50} size="micro" onValueChange={() => {}} />);
     const microTrack = micro.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
-    vi.spyOn(microTrack, "getBoundingClientRect").mockReturnValue({ width: 164 } as DOMRect);
+    vi.spyOn(microTrack, "getBoundingClientRect").mockReturnValue({ width: 203 } as DOMRect);
     act(() => notify?.([{ target: microTrack, contentRect: { width: 160 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
     expect(micro.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(40);
     expect(micro.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(20);

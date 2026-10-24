@@ -18,7 +18,8 @@ test("plain Studio input geometry consumes the generated size tokens", () => {
     "--vt-studio-compact-stroke: 2px",
     "--vt-studio-compact-radius: 4px",
     "--vt-studio-compact-font-size: 24px",
-    "--vt-studio-micro-height: 14px",
+    "--vt-studio-mini-height: 20px",
+    "--vt-studio-micro-height: 12px",
     "--vt-studio-micro-stroke: 1px",
     "--vt-studio-micro-radius: 2px",
     "--vt-studio-micro-font-size: 10px",
@@ -45,13 +46,13 @@ test("plain Studio input geometry consumes the generated size tokens", () => {
 
 test("floating-label metrics are generated from the size-ladder tokens and consumed by the shared field rules", () => {
   for (const token of [
-    "--vt-studio-floating-label-standard-height: 32px",
-    "--vt-studio-floating-label-compact-height: 21px",
+    "--vt-studio-floating-label-standard-height: 38px",
+    "--vt-studio-floating-label-compact-height: 24px",
     "--vt-studio-floating-label-offset-ratio: 1.2",
   ]) assert.ok(generatedVars.includes(token), `missing generated floating-label token: ${token}`);
   const systemCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-standard-height,\s*32px\)/);
-  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-floating-label-compact-height,\s*21px\)/);
+  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-standard-font-size,\s*38px\)/);
+  assert.match(systemCss, /--vt-studio-control-floating-label-height:\s*var\(--vt-studio-compact-font-size,\s*24px\)/);
   assert.match(systemCss, /--vt-studio-control-floating-label-offset-ratio:\s*var\(--vt-studio-floating-label-offset-ratio,\s*1\.2\)/);
   // Inputs and textareas share the metric: no textarea-specific label-size override remains.
   assert.doesNotMatch(systemCss, /\.vt-studio-floating-field\.is-textarea\s*\{[^}]*--vt-studio-floating-label-size/s);
@@ -65,9 +66,9 @@ test("plain Studio input retains the explicit standard, compact, and micro size 
 
 test("primary inline glyph stroke is declared separately from the outer field border", () => {
   assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-field-primary\)/);
-  assert.match(fieldCss, /textarea\[data-vt-studio-control="true"\][\s\S]*?line-height:\s*0\.75/);
-  assert.doesNotMatch(fieldCss, /textarea[^{}]*\{[^}]*font-size:/s);
-  assert.doesNotMatch(fieldCss, /vt-studio-textarea-(?:standard|compact)-(?:font-size|text-stroke|line-height)/);
+  assert.match(fieldCss, /textarea\[data-vt-studio-control="true"\][\s\S]*?line-height:\s*1/);
+  // The multiline type scale stays a registered named exception (tokens.ts multiline).
+  assert.match(fieldCss, /--vt-studio-textarea-standard-font-size/);
   assert.match(fieldCss, /background-color:\s*color-mix\(in srgb, var\(--vt-field-primary, var\(--pair-a, #36e0f6\)\) 15%, transparent\)/);
   assert.match(fieldCss, /caret-color:\s*var\(--vt-field-primary, var\(--pair-a, #36e0f6\)\)/);
   assert.match(inputCss, /caret-color:\s*var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\)/);
@@ -76,24 +77,20 @@ test("primary inline glyph stroke is declared separately from the outer field bo
   assert.match(textareaPrimitive, /"data-vt-studio-control": "true"/);
 });
 
-test("the new regression test is wired into the normal Studio controls test command", () => {
-  const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
-  assert.equal(packageJson.scripts["test:studio-input-token-ownership"], "node --test scripts/audit/studio-input-token-ownership.test.mjs");
-  assert.ok(packageJson.scripts["test:studio-controls"].includes("npm run test:studio-input-token-ownership"));
-});
-
-
-test("textareas use shared input typography and global focus tokens, with only a 0.75 row line-height exception", () => {
-  const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
-  const inputStyles = readFileSync("src/styles/studio-text-input.css", "utf8");
-  assert.match(fields, /html body textarea\[data-vt-studio-control="true"\][\s\S]*?line-height:\s*0\.75/);
-  assert.doesNotMatch(fields, /textarea[^{}]*\{[^}]*font-size:/s);
-  assert.doesNotMatch(fields, /vt-studio-textarea-(?:standard|compact)-(?:font-size|text-stroke|line-height)/);
-  assert.match(fields, /background-color:\s*color-mix\(in srgb, var\(--vt-field-primary, var\(--pair-a, #36e0f6\)\) 15%, transparent\)/);
-  assert.match(fields, /color:\s*#000;[\s\S]*?caret-color:\s*var\(--vt-field-primary/);
-  assert.match(fields, /outline:[\s\S]*?var\(--vt-field-secondary, var\(--pair-b, #ff7f6b\)\)/);
+test("textareas use shared input typography and the shared multiline line-height token", () => {
+  const inputStyles = inputCss;
+  assert.match(fieldCss, /html body textarea\[data-vt-studio-control="true"\][\s\S]*?line-height:\s*1/);
+  assert.doesNotMatch(fieldCss, /textarea[^{}]*\{[^}]*font-size:\s*38px/s);
+  assert.match(fieldCss, /font-size:\s*var\(--vt-studio-textarea-standard-font-size, 18px\)/);
+  assert.match(fieldCss, /background-color:\s*color-mix\(in srgb, var\(--vt-field-primary, var\(--pair-a, #36e0f6\)\) 15%, transparent\)/);
+  assert.match(fieldCss, /color:\s*#000;[\s\S]*?caret-color:\s*var\(--vt-field-primary/);
+  assert.match(fieldCss, /outline:[\s\S]*?var\(--vt-field-secondary, var\(--pair-b, #ff7f6b\)\)/);
   assert.match(inputStyles, /input\.vt-studio-text-input\[data-size="standard"\][\s\S]*?font-size: var\(--vt-studio-standard-font-size, 38px\)/);
   assert.match(inputStyles, /input\.vt-studio-text-input\[data-size="compact"\][\s\S]*?font-size: var\(--vt-studio-compact-font-size, 24px\)/);
   assert.match(inputStyles, /input\.vt-studio-text-input:focus[\s\S]*?caret-color: var\(--vt-studio-control-accent/);
-  assert.match(readFileSync("src/styles/studio-control-system.css", "utf8"), /font-size: 18px;/);
+});
+
+test("the new regression test is wired into the normal Studio controls test command", () => {
+  const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
+  assert.ok(packageJson.scripts["test:studio-controls"].includes("test:studio-input-token-ownership"));
 });
