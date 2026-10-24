@@ -515,9 +515,8 @@ export const BrainPromptLibrary: React.FC<{
    aria-busy={busy || undefined}
    className="flex min-w-0 flex-col"
   >
-   <StudioTopSplitModule
-    split="left"
-    sizeVariant="compact"
+   <StudioInterModule
+    sizeVariant="standard"
     startIcon={<LayoutGrid aria-hidden="true" />}
     title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
     className="overflow-hidden brain-prompt-library-shell"
@@ -556,13 +555,14 @@ export const BrainPromptLibrary: React.FC<{
          const isSelected = card.id === selectedId
          const colorPair = PROMPT_MODULE_COLOR_PAIRS[promptIndex % PROMPT_MODULE_COLOR_PAIRS.length]
          return (
-          <StudioInterModule
+          <StudioCollapsingTwoLineModule
            key={card.id}
            data-vt-brain-part="prompt-collapsible-module"
            className="brain-prompt-library-prompt"
            data-prompt-id={card.id}
            data-flush-body="true"
-           title={<span>{card.label}</span>}
+           title={card.label}
+           description={promptCardSummary(card)}
            startIcon={<LayoutGrid aria-hidden="true" />}
            endIcon={isSelected ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
            sizeVariant="compact"
@@ -572,28 +572,32 @@ export const BrainPromptLibrary: React.FC<{
            aria-label={`${isSelected ? "Collapse" : "Expand"} ${card.label} prompt`}
           >
            <div className="grid min-w-0 gap-2 bg-white px-2 py-2">
-            <p className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
-            <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-1 gap-1">
-             <StudioSplitLeftButton
+            <p data-vt-brain-part="prompt-complete-text" className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
+            <div data-vt-brain-part="prompt-actions" className="grid min-w-0 grid-cols-2 gap-1">
+             <StudioSplitTwoLineButton
               sizeVariant="compact"
               icon={<Send aria-hidden="true" />}
+              firstLine="SEND TO"
+              secondLine="CHAT"
               disabled={busy}
               className="min-w-0 w-full"
               style={{ "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
               onClick={(event) => { event.stopPropagation(); onPrompt(card.prompt); setSelectedId(null) }}
-             >SEND TO CHAT</StudioSplitLeftButton>
+             />
              {onEdit ? (
-              <StudioSplitLeftButton
+              <StudioSplitTwoLineButton
                sizeVariant="compact"
                icon={<ArrowRight aria-hidden="true" />}
+               firstLine="EDIT"
+               secondLine="FIRST"
                className="min-w-0 w-full"
                style={{ "--vt-studio-control-accent": colorPair[1], "--vt-studio-control-secondary": colorPair[0] } as React.CSSProperties}
                onClick={(event) => { event.stopPropagation(); onEdit(card.prompt); setSelectedId(null) }}
-              >EDIT FIRST</StudioSplitLeftButton>
+              />
              ) : null}
             </div>
            </div>
-          </StudioInterModule>
+          </StudioCollapsingTwoLineModule>
          )
         })}
        </StudioInterModule>
@@ -601,7 +605,7 @@ export const BrainPromptLibrary: React.FC<{
      })}
      {!filteredCards.length ? <p className="border-y-[2px] border-black bg-white p-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
     </div>
-   </StudioTopSplitModule>
+   </StudioInterModule>
   </section>
  )
 }
