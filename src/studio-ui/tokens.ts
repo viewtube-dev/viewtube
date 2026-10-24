@@ -2,6 +2,40 @@
 
 import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/tokens"
 
+// ─── Global defaults applied to every Studio control ─────────────────────────
+
+export const STUDIO_GLOBAL_DEFAULTS = {
+  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
+  fontWeight: 1000,
+  textTransform: "uppercase" as const,
+  letterSpacing: -0.02,
+  lineHeight: 1,
+  textareaLineHeight: 0.85,
+  borderColor: "#000000",
+  defaultFillOpacity: 50,
+  focusFillOpacity: 15,
+  widthDefault: "row" as const, // 100%
+  shellMovement: "none" as const,
+  internalGap: 0,
+  spacingUnit: 4, // external gaps only
+} as const
+
+// ─── Color roles ─────────────────────────────────────────────────────────────
+
+export const STUDIO_COLOR_ROLES = {
+  primary: "var(--pair-a)",
+  secondary: "var(--pair-b)",
+  border: "#000000",
+  activeText: "#000000",
+  doubleSplitStartRail: "secondary" as const,
+  doubleSplitEndRail: "secondary" as const,
+  focusOutline: {
+    color: "secondary" as const,
+    opacity: 0.65,
+    offset: 0,
+  },
+} as const
+
 // ─── Shared interaction defaults (flat, no lift) ─────────────────────────────
 
 const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
@@ -221,40 +255,6 @@ export const STUDIO_COUNTER_NUMBER_TOKENS = {
   activeStrokeColor: STUDIO_FOCUS_INTERACTION_TOKENS.activeTextColor,
   holdMs: STUDIO_FOCUS_INTERACTION_TOKENS.holdMs,
   outlineFadeMs: STUDIO_FOCUS_INTERACTION_TOKENS.outlineFadeMs,
-} as const
-
-// ─── Global defaults applied to every Studio control ─────────────────────────
-
-export const STUDIO_GLOBAL_DEFAULTS = {
-  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
-  fontWeight: 1000,
-  textTransform: "uppercase" as const,
-  letterSpacing: -0.02,
-  lineHeight: 1,
-  textareaLineHeight: 0.85,
-  borderColor: "#000000",
-  defaultFillOpacity: 50,
-  focusFillOpacity: 15,
-  widthDefault: "row" as const, // 100%
-  shellMovement: "none" as const,
-  internalGap: 0,
-  spacingUnit: 4, // external gaps only
-} as const
-
-// ─── Color roles ─────────────────────────────────────────────────────────────
-
-export const STUDIO_COLOR_ROLES = {
-  primary: "var(--pair-a)",
-  secondary: "var(--pair-b)",
-  border: "#000000",
-  activeText: "#000000",
-  doubleSplitStartRail: "secondary" as const,
-  doubleSplitEndRail: "secondary" as const,
-  focusOutline: {
-    color: "secondary" as const,
-    opacity: 0.65,
-    offset: 0,
-  },
 } as const
 
 // ─── Width policy + exceptions layer ─────────────────────────────────────────
