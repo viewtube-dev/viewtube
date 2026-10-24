@@ -23,6 +23,7 @@ describe("confirmed composite primitive catalog", () => {
 
     expect(representative).toContain('title="Direct Imported Primitive Representatives · Standard"')
     expect(representative).not.toContain('data-vt-library-component="StudioCollapsingSplitModule"')
+    expect(representative).not.toContain('data-vt-library-component="StudioInterModule"')
     expect(representative).not.toContain('data-vt-library-component="StudioSplitAccordion"')
     expect(source).toContain('title="Collapsing Split Module · Standard + Compact"')
     expect(source).toContain('title="InterModule · Standard"')
