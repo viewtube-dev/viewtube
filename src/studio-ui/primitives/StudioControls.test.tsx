@@ -1330,3 +1330,24 @@ describe("StudioSplitTwoLineButton", () => {
     expect(css).toContain('[data-vt-studio-button-lines="two"][data-vt-studio-split="left"] [data-vt-studio-split-label]');
   });
 });
+
+
+describe("Studio Controls regression recovery contracts", () => {
+  it("keeps the simple input primary-stroked while labelled text inputs and textareas use black focus strokes", () => {
+    const inputSource = require("fs").readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+    const fields = require("fs").readFileSync("src/styles/studio-control-fields.css", "utf8");
+    expect(inputSource).toContain('"vt-studio-text-input--simple"');
+    expect(fields).toContain('input.vt-studio-text-input--simple[data-vt-studio-control="true"]:is(:focus, :focus-visible)');
+    expect(fields).toContain('-webkit-text-stroke-color: #000;');
+    expect(fields).toContain('[data-vt-studio-field-kind="text-box"]');
+  });
+
+  it("pins split rails to square inner dimensions and restores full-width intermodules", () => {
+    const split = require("fs").readFileSync("src/styles/studio-control-split.css", "utf8");
+    expect(split).toContain('height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height');
+    expect(split).toContain('aspect-ratio: 1 / 1;');
+    expect(split).toContain('calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px))');
+    expect(split).toContain('.vt-studio-inter-module');
+    expect(split).toContain('grid-column: 1 / -1;');
+  });
+});
