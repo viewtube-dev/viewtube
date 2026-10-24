@@ -109,11 +109,11 @@ test("the five-tier size contract is complete and generated CSS stays in parity"
 });
 
 test("bar toggle bars follow their size's text height and a 2.5:1 height-to-width ratio", () => {
-  assert.match(overrides, /--vt-bar-height:\\s*var\\(--vt-studio-control-font-size/);
-  assert.match(overrides, /aspect-ratio:\\s*2\\s*\/\\s*5/);
-  assert.match(overrides, /border-radius:\\s*var\\(--vt-bar-radius/);
-  assert.match(overrides, /background:\\s*color-mix\\(in srgb,[\\s\\S]*?50%,\\s*transparent\\)\\s*!important/);
-  assert.match(overrides, /data-active="true"[\\s\\S]*?background:\\s*#000/);
+  assert.match(overrides, /--vt-bar-height:\s*var\(--vt-studio-control-font-size/);
+  assert.match(overrides, /aspect-ratio:\s*2\s*\/\s*5/);
+  assert.match(overrides, /border-radius:\s*var\(--vt-bar-radius/);
+  assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
+  assert.match(overrides, /data-active="true"[\s\S]*?background:\s*#000/);
 });
 
 test("top direct-representative module covers the full explicitly exported control inventory", () => {
