@@ -75,7 +75,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
-import { BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
+import { BrainChatShell, BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
 import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow, BrainChatStatusBadge, BrainComposerShell, ChatConversationViewport } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
@@ -1922,8 +1922,9 @@ const AIBrainCommandInterface: React.FC = () => {
       <div className="grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
        <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
       <div className={`${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
-         <BrainStatusStrip items={[
+       <BrainChatShell
+        className="flex-1"
+        header={<BrainStatusStrip items={[
           { id: "channel", label: "Channel", value: authState.channelName || authState.channelHandle || channelId || "Not connected", tone: channelId ? "ok" : "warn" },
           { id: "project", label: "Project", value: projectContextCleared ? "None" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "None" },
           { id: "mode", label: "Mode", value: busy ? "Working" : "Ready", tone: busy ? "ok" : "neutral" },
@@ -1935,7 +1936,26 @@ const AIBrainCommandInterface: React.FC = () => {
           onClearSelection={handleClearSurfaceSelection}
           onToggleLock={handleToggleSurfaceSelectionLock}
           onClearProject={handleClearActiveProject}
-         />} />
+         />} />}
+        composer={<div className="shrink-0 border-t-[2px] border-black bg-white p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
+         <BrainComposerBar
+          value={input}
+          onChange={setInput}
+          onSend={() => void handleSend()}
+          busy={busy}
+          textareaRef={composerRef as React.RefObject<HTMLTextAreaElement | null>}
+          onKeyDown={(event) => {
+           if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
+           event.preventDefault()
+           void handleSend()
+          }}
+          onOpenPrompts={() => setPromptRailOpen(true)}
+          onOpenContext={() => setContextRailOpen(true)}
+          onOpenJournal={() => setJournalOpen(true)}
+          placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
+         />
+        </div>}
+       >
          {!hydrated && messages.length === 0 ? (
           <div className="min-h-0 flex-1" aria-hidden="true" />
          ) : messages.length === 0 ? (
@@ -1962,64 +1982,8 @@ const AIBrainCommandInterface: React.FC = () => {
          )}
         </div>
 
-        <div className="shrink-0 border-t-[2px] border-black bg-white p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
-         <BrainComposerBar
-          value={input}
-          onChange={setInput}
-          onSend={() => void handleSend()}
-          busy={busy}
-          textareaRef={composerRef as React.RefObject<HTMLTextAreaElement | null>}
-          onKeyDown={(event) => {
-           if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
-           event.preventDefault()
-           void handleSend()
-          }}
-          onOpenPrompts={() => setPromptRailOpen(true)}
-          onOpenContext={() => setContextRailOpen(true)}
-          onOpenJournal={() => setJournalOpen(true)}
-          placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-         />
-        </div>
-       </div>
-
-       <div className="hidden min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-3 overflow-hidden xl:grid">
-        <div className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)] overflow-hidden" aria-label="Brain launchpad">
-         <div data-vt-brain-component="BrainLauncherModeSwitch" className="brain-launcher-mode-switch grid grid-cols-2 gap-1 border-[2px] border-black bg-[#f8f8f4] p-1">
-          <StudioSplitTwoLineButton sizeVariant="compact" icon={<LayoutGrid aria-hidden="true" />} firstLine="PROMPT" secondLine="LIBRARY" aria-label="Prompt Library" title="Prompt Library" aria-pressed={launcherMode === "prompts"} onClick={() => setLauncherMode("prompts")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "prompts" ? "#FF7AC8" : "#ffffff" }} />
-          <StudioSplitTwoLineButton sizeVariant="compact" icon={<Zap aria-hidden="true" />} firstLine="CAPABILITIES" secondLine="BROWSER" aria-label="Capabilities" title="Capabilities" aria-pressed={launcherMode === "capabilities"} onClick={() => setLauncherMode("capabilities")} className="min-w-0 w-full" style={{ backgroundColor: launcherMode === "capabilities" ? "#36E0F6" : "#ffffff" }} />
-         </div>
-         <div className="min-h-0 overflow-y-auto pt-2">
-          {launcherMode === "prompts" ? <BrainPromptLibrary
-           cards={promptCards}
-           busy={busy}
-           onPrompt={(prompt) => void handleSend(prompt)}
-           onEdit={(prompt) => { setInput(prompt); composerRef.current?.focus() }}
-          /> : <BrainCapabilityBrowser
-           snapshot={snapshot}
-           controls={brainControls}
-           busy={busy}
-           onPrompt={(prompt) => void handleSend(prompt)}
-           onEdit={(prompt) => { setInput(prompt); composerRef.current?.focus() }}
-          />}
-         </div>
-        </div>
-        <div className="min-h-0 overflow-hidden" aria-label="Channel context">
-         <BrainContextRail
-          channelId={authState.channelId || null}
-          snapshot={snapshot}
-          growthContext={creatorGrowthContext}
-          insights={railInsights}
-          questions={learningQuestions}
-          responseQuestions={latestResponseQuestions}
-          quickActions={quickActions}
-          onAskInsight={handleAskInsight}
-          onAcceptQuickAction={handleAcceptQuickAction}
-          onAnswerQuestion={handleAnswerQuestion}
-          onEditPrompt={(prompt) => { setInput(prompt); composerRef.current?.focus() }}
-          compactGrid
-         />
-        </div>
-       </div>
+        </BrainChatShell>
+      </div>
       </div>
 
       {promptRailOpen ? (
