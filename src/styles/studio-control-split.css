@@ -382,3 +382,18 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   min-height: 0;
   aspect-ratio: 1 / 1;
 }
+
+
+/* Split text inputs transfer focus paint to the composite shell, not a nested second outline. */
+.vt-studio-username-input:focus-within {
+  background: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent);
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  box-shadow: none;
+}
+.vt-studio-username-input:focus-within [data-vt-studio-split-field] > input[data-vt-studio-control="true"] {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
+  caret-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
