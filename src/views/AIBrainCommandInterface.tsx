@@ -540,6 +540,7 @@ export const BrainPromptLibrary: React.FC<{
        <StudioInterModule
         key={groupCategory}
         data-vt-brain-component="BrainPromptLibraryModule"
+        className="brain-prompt-library-category"
         data-prompt-category={groupCategory}
         data-flush-body="true"
         title={<><span>{groupCategory.replace(/_/g, " ")}</span><small>{groupCards.length}</small></>}
@@ -558,6 +559,7 @@ export const BrainPromptLibrary: React.FC<{
           <StudioInterModule
            key={card.id}
            data-vt-brain-part="prompt-collapsible-module"
+           className="brain-prompt-library-prompt"
            data-prompt-id={card.id}
            data-flush-body="true"
            title={<span>{card.label}</span>}
