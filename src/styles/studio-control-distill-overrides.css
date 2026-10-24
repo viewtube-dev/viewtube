@@ -17,7 +17,12 @@ html body [data-vt-studio-control="true"] textarea {
   background-color: var(--vt-field-fill-rest);
   caret-color: var(--vt-field-text);
   box-shadow: none;
-  transition: none;
+  transition:
+    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
 }
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
