@@ -5,7 +5,9 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { StudioResponseMetaRow } from "./StudioResponseMetaRow"
 
-describe("StudioResponseMetaRow", () => {
+const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+
+ describe("StudioResponseMetaRow", () => {
   it("renders a compact title with optional status and trailing metadata", () => {
     const html = renderToStaticMarkup(
       <StudioResponseMetaRow
@@ -33,6 +35,12 @@ describe("StudioResponseMetaRow", () => {
     expect(html).not.toContain("data-slot=\"status\"")
     expect(html).not.toContain("data-slot=\"metadata\"")
     expect(html).not.toContain("data-slot=\"trailing\"")
+  })
+
+  it("is registered in the Confirmed Primitive Library with source provenance", () => {
+    expect(catalog).toContain('data-vt-library-component="StudioResponseMetaRow"')
+    expect(catalog).toContain('primitive="StudioResponseMetaRow"')
+    expect(catalog).toContain('css="src/styles/studio-response-meta-row.css"')
   })
 
   it("defines compact wrapping layout without geometry movement or shadows", () => {
