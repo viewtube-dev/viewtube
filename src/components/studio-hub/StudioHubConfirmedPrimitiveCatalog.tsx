@@ -283,14 +283,14 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
       title="Direct Imported Primitive Representatives · Standard"
       nonDefaultSettings={[
         "Each row contains one live production primitive at its standard size; examples are imported from their production owners rather than recreated as catalog-only lookalikes.",
-        "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell; the three-section accordion uses StudioSplitAccordion with exactly three items.",
+        "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
       ]}
       provenance={<Provenance
-        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioSimpleDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider · StudioSplitAccordion"
-        tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioValueToggles.tsx + src/studio-ui/primitives/StudioSplitAccordion.tsx"
-        css="src/styles/studio-control-system.css + src/styles/studio-split-accordion.css"
+        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioSimpleDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider"
+        tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioValueToggles.tsx"
+        css="src/styles/studio-control-system.css"
         tokens="44px standard geometry; component-specific native input/textarea exceptions retained"
-        imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioValueToggles.tsx", "src/studio-ui/primitives/StudioSplitAccordion.tsx"]}
+        imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioValueToggles.tsx"]}
       />}
     >
       <div className="vt-confirmed-direct-primitive-rows" style={rowStyle}>
@@ -315,12 +315,6 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCounter"><span>Studio Counter · STANDARD</span><StudioCounter size="standard" value={counterValue} onValueChange={setCounterValue} min={0} max={100} ariaLabel="Studio counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideCounter"><span>Side Counter · STANDARD</span><StudioSideCounter size="standard" value={sideCounterValue} onValueChange={setSideCounterValue} min={0} max={100} ariaLabel="Side counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitSlider"><span>Double Split Slider · STANDARD</span><StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Double split slider standard specimen" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule"><span>Collapsing Split Module · STANDARD</span><StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen><span>Collapsible module body content.</span></StudioCollapsingSplitModule></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion"><span>Three Section Split Accordion · STANDARD</span><StudioSplitAccordion sizeVariant="standard" accessibleLabel="Three section split accordion standard specimen" defaultActiveIndex={0} items={[
-          { id: "overview", accessibleLabel: "Overview section", icon: <Home aria-hidden="true" />, content: <span>OVERVIEW · PRODUCTION CONTENT</span> },
-          { id: "settings", accessibleLabel: "Settings section", icon: <Settings2 aria-hidden="true" />, content: <span>SETTINGS · PRODUCTION CONTENT</span> },
-          { id: "details", accessibleLabel: "Details section", icon: <Info aria-hidden="true" />, content: <span>DETAILS · PRODUCTION CONTENT</span> },
-        ]} /></div>
       </div>
     </Family>
   )
@@ -1215,6 +1209,27 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <ConfirmedIndividualPrimitiveSections />
+    <Family
+      title="Collapsing Split Module · Standard + Compact"
+      nonDefaultSettings={[
+        "Production collapsible split module is catalogued separately from the intermodule and multi-section split accordion.",
+        "The top imported-primitive ledger stays limited to one standard-size representative per primitive; size comparisons belong here.",
+      ]}
+      provenance={<Provenance primitive="StudioCollapsingSplitModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · shared split-shell geometry." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule">
+        <span>44px STANDARD</span>
+        <StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen>
+          <span>Standard collapsible module body content.</span>
+        </StudioCollapsingSplitModule>
+      </div>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule-compact">
+        <span>28px COMPACT</span>
+        <StudioCollapsingSplitModule title="COMPACT MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="compact">
+          <span>Compact collapsible module body content.</span>
+        </StudioCollapsingSplitModule>
+      </div>
+    </Family>
     <Family
       title="Brain Status LED Badges"
       nonDefaultSettings={[
