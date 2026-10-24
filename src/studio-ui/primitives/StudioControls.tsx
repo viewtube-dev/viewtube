@@ -489,7 +489,7 @@ export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivEleme
   value: boolean;
   onValueChange?: (value: boolean) => void;
   words?: readonly [string, string];
-  size?: "44" | "28";
+  size?: "60" | "44" | "28" | "20" | "12";
   skin?: StudioControlSkin;
   /** Optional fixed handle width in CSS pixels; omitted means measure the active word. */
   handleWidth?: number;
@@ -532,8 +532,8 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     if (!root || !target) return null;
     const rootRect = root.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
-    const inset = handleInset ?? (size === "28" ? 2 : 4);
-    const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
+    const inset = handleInset ?? (size === "60" ? 5.5 : size === "28" ? 2 : size === "20" ? 1.5 : size === "12" ? 1 : 2.75);
+    const measuredWidth = Math.max(targetRect.width - inset * 2, Number(size) * 0.272727) * handleWidthScale;
     const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
     return {
       left: targetRect.left - rootRect.left - root.clientLeft + (targetRect.width - nextWidth) / 2,
@@ -745,7 +745,7 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     );
   }
 
-  return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "28" ? "compact" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "28" ? 2 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
+  return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "60" ? "supreme" : size === "28" ? "compact" : size === "20" ? "mini" : size === "12" ? "micro" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "60" ? 5.5 : size === "28" ? 2 : size === "20" ? 1.5 : size === "12" ? 1 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
     <span ref={handleRef} className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"}>
       <span ref={overlayRef} className="vt-studio-44-word-handle-color" aria-hidden="true" />
     </span>
