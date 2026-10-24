@@ -267,6 +267,7 @@ export interface StudioControlButtonProps extends Omit<React.ButtonHTMLAttribute
   skin?: StudioControlSkin;
   checked: boolean;
   shape?: "round" | "rect";
+  sizeVariant?: StudioControlSize;
 }
 const studioSkinClass = (skin: StudioControlSkin) => ({
   "solid": "is-solid",
@@ -274,8 +275,8 @@ const studioSkinClass = (skin: StudioControlSkin) => ({
   "black-indicator": "is-black-indicator",
   "white-indicator": "is-white-indicator",
 }[skin]);
-export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
-  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-size="standard" className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
+export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", sizeVariant = "standard", type = "button", ...props }) => (
+  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-size={sizeVariant} className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
 );
 export type StudioChoiceKind = "radio" | "checkbox";
 export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
@@ -427,7 +428,7 @@ const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direct
 }
 
 export const StudioChoice: React.FC<StudioChoiceProps> = ({
-  kind, mark = "check", skin = "solid", checked, className, shape = "round",
+  kind, mark = "check", skin = "solid", checked, className, shape = "round", sizeVariant = "standard",
   type = "button", onClick, disabled, ...props
 }) => {
   const [uncontrolledChecked, setUncontrolledChecked] = React.useState(false)
@@ -460,7 +461,7 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
       role={kind}
       aria-checked={isChecked}
       data-vt-studio-control="true"
-      data-size="standard"
+      data-size={sizeVariant}
       data-radio-motion={kind === "radio" ? radioMotion : undefined}
       data-radio-direction={kind === "radio" ? motionDirection : undefined}
       data-radio-motion-run={kind === "radio" ? motionRun : undefined}
