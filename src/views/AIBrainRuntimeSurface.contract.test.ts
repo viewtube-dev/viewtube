@@ -65,13 +65,13 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain("max-xl:h-[100dvh]")
   expect(source).toContain("window.visualViewport")
   expect(source).toContain("data-vt-brain-visual-viewport-height")
-  expect(source).toContain("visualViewport.addEventListener(\"resize\", syncMobileViewport)")
+  expect(source).toContain("visualViewport?.addEventListener(\"resize\", syncMobileViewport)")
   expect(chatPrimitivesSource).toContain("pb-[max(8px,env(safe-area-inset-bottom))]")
   expect(chatPrimitivesCssSource).toContain("grid-template-columns: minmax(0, 1fr) auto;")
   expect(chatPrimitivesCssSource).toContain("gap: 4px;")
   expect(chatPrimitivesCssSource).toContain("@media (min-width: 640px)")
   expect(source).toContain('max-xl:grid-rows-[minmax(0,1fr)]')
-  expect(chatPrimitivesSource).toContain("overflow-y-auto touch-pan-y")
+  expect(chatPrimitivesSource).toContain("overflow-y-auto overscroll-y-contain touch-pan-y")
  })
  
  it("preserves transcript position unless the creator is following or sends a new turn", () => {
