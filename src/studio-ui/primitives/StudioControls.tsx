@@ -1494,7 +1494,7 @@ const StudioSplitFieldInput = React.forwardRef<HTMLInputElement, StudioSplitFiel
     <StudioSplitShell
       layout="left"
       sizeVariant={sizeVariant}
-      iconLeft={icon}
+      iconLeft={<span data-vt-studio-username-rail="true">{icon}</span>}
       className={studioClasses("vt-studio-username-input", className)}
       shellProps={{
         "data-vt-studio-username-input": "true",
