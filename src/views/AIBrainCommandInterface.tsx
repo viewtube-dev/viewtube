@@ -456,7 +456,7 @@ const OpeningBriefing: React.FC<{
  return (
   // Top-aligned and scrollable: the briefing is a launchpad, not a block floating in
   // the middle of an empty canvas.
-  <div className="brain-chat-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain p-4" aria-label="Brain conversation" tabIndex={0}>
+  <div className="brain-chat-scrollbar min-h-0 h-full flex-1 overflow-y-auto overscroll-contain touch-pan-y [-webkit-overflow-scrolling:touch] p-4" aria-label="Brain conversation" tabIndex={0}>
    <section className="mx-auto grid max-w-[70ch] gap-4">
     <div>
      <div className="flex flex-wrap items-center gap-2">
@@ -520,7 +520,7 @@ export const BrainPromptLibrary: React.FC<{
     sizeVariant="compact"
     startIcon={<LayoutGrid aria-hidden="true" />}
     title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
-    className="overflow-hidden"
+    className="overflow-hidden brain-prompt-library-shell"
     collapsible={false}
     headStyle={{ background: TOOLBOX_PALETTE[11], "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
    >
@@ -533,7 +533,7 @@ export const BrainPromptLibrary: React.FC<{
     </div>
     <p className="px-1 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
-    <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="block w-full min-w-0 m-0 px-0">
+    <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="block w-full min-w-0 m-0 p-0">
      {groupedCards.map(([groupCategory, groupCards], groupIndex) => {
       const isOpen = openCategories.includes(groupCategory)
       return (
@@ -1825,7 +1825,7 @@ const AIBrainCommandInterface: React.FC = () => {
       <div className="grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
        <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
       <div className={`${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
-        <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] bg-white">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
          <BrainContextStrip
           channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
           projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}

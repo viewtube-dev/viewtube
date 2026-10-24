@@ -112,6 +112,8 @@ describe("Brain Studio chat primitives", () => {
     expect(html).toContain('aria-label="Brain conversation"')
     expect(html).toContain("Newest turn")
     expect(html).toContain('aria-hidden="true"')
+    expect(html).toContain("touch-pan-y")
+    expect(html).toContain("overflow-y-auto")
   })
 
 })
