@@ -1962,7 +1962,7 @@ const AIBrainCommandInterface: React.FC = () => {
               style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": TOOLBOX_PALETTE[9] } as React.CSSProperties}
              />
             </div>
-            <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0 self-stretch" style={{ backgroundColor: "#36E0F6" }} />
+            <StudioSquareIconButton sizeVariant="compact" iconSizeVariant="large" icon={<BookOpen aria-hidden="true" />} label="Open AI Journal" title="Open AI Journal" onClick={() => setJournalOpen(true)} className="shrink-0 self-start" style={{ backgroundColor: "#36E0F6" }} />
            </div>
           </BrainComposerAccessoryRow>
           <div data-vt-brain-part="composer-controls" className="vt-brain-composer-controls grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-1">
