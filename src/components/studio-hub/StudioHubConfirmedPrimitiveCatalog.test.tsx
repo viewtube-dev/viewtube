@@ -574,6 +574,8 @@ describe("responsive Studio upload frame", () => {
     expect(intermoduleCss).toContain('margin-inline: -4px;')
     expect(intermoduleCss).toContain('.brain-prompt-library-shell > .vt-studio-inter-module__body')
     expect(intermoduleCss).toContain('padding-inline: 0;')
+    expect(intermoduleCss).toContain('.brain-prompt-library-shell > .vt-studio-inter-module__body > [data-vt-studio-inter-host="true"].vt-studio-inter-host--bleed')
+    expect(intermoduleCss).toContain('width: 100%;\n  max-width: 100%;\n  margin-inline: 0;')
     expect(intermoduleCss).toContain('.vt-studio-collapsing-split-module:not([open])')
     expect(intermoduleCss).toContain('border-bottom-width: 0;')
     expect(intermoduleCss).toContain('border-bottom-width: var(--vt-studio-control-stroke, 3px);')
