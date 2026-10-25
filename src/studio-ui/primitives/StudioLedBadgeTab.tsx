@@ -34,7 +34,16 @@ const toneColors: Record<StudioLedTone, string> = {
   neutral: "#9299A3",
 }
 
-/** Canonical flat beveled LED badge / flush page-tab primitive. */
+const toneSecondaryColors: Record<StudioLedTone, string> = {
+  pink: "#36E0F6",
+  cyan: "#FF7AC8",
+  green: "#36E0F6",
+  yellow: "#528FFA",
+  purple: "#FF7AC8",
+  neutral: "#080808",
+}
+
+/** Canonical LED badge / border-attached page-tab primitive, visually matched to the Brain Status Badge Lab. */
 export function StudioLedBadgeTab({
   mode = "badge",
   label,
@@ -44,7 +53,7 @@ export function StudioLedBadgeTab({
   disabled = false,
   onClick,
   led = "rainbow",
-  animation = "steady",
+  animation = "prism",
   tone = "cyan",
   alert = "none",
   sizeVariant = "compact",
@@ -79,7 +88,12 @@ export function StudioLedBadgeTab({
     className,
   ].filter(Boolean).join(" ")
 
-  const style = { "--vt-led-tone": toneColors[tone], "--led-size": "1em" } as React.CSSProperties
+  const style = {
+    "--vt-led-tone": toneColors[tone],
+    "--vt-led-secondary": toneSecondaryColors[tone],
+    "--led-size": "1em",
+  } as React.CSSProperties
+
   const children = <>
     <span className="vt-studio-led-badge-tab__bevel" aria-hidden="true" />
     <span className="vt-studio-led-badge-tab__led" aria-hidden="true" />

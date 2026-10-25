@@ -1,53 +1,59 @@
-/* StudioLedBadgeTab — lab #54/#56 bevel, #59 spectrum LED, motions #52 #57 #63 #64 #67.
-   Tabs: no drop shadows; flush series; LED size tracks label text height. */
-
+/* Visual fidelity pass against viewtube-brain-status-badge-lab.html.
+   Preserve the lab's glossy LED lens, chromatic rim, hard-edged badge depth,
+   and original animation character while retaining joined-tab geometry. */
 .vt-studio-led-badge-tab {
   --vt-led-tone: #36E0F6;
+  --vt-led-secondary: #FF7AC8;
   --led-size: 1em;
   position: relative;
   isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45em;
+  gap: .55em;
   min-width: 0;
   box-sizing: border-box;
-  border: 2px solid #000;
-  border-radius: 6px;
-  padding: 4px 8px;
+  border: 2px solid #080808;
+  border-top: 4px solid var(--vt-led-tone);
+  border-bottom: 3px solid #080808;
+  border-radius: 0 0 8px 8px;
+  padding: 5px 9px;
   background: #fff;
-  color: #000;
+  color: #080808;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 10px;
   font-weight: 1000;
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -.025em;
   text-transform: uppercase;
   text-align: center;
   white-space: normal;
   overflow: hidden;
-  box-shadow: none;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--vt-led-tone) 45%, transparent);
   transition: none;
   cursor: default;
 }
-
 .vt-studio-led-badge-tab.is-mini {
   min-height: 20px;
   padding: 2px 5px;
-  border-radius: 3px;
+  border-top-width: 3px;
+  border-bottom-width: 2px;
+  border-radius: 0;
   font-size: 9px;
-  gap: 0.35em;
+  gap: .4em;
 }
-
 .vt-studio-led-badge-tab.is-compact { min-height: 28px; }
 
-/* Tab mode: flush page series under titles */
+/* Tabs retain the source lab's edge treatment but join without doubled seams. */
 .vt-studio-led-badge-tab.is-tab {
   width: 100%;
   height: 100%;
   min-height: 32px;
   border-radius: 0;
-  border-width: 2px 1px 2px 0;
+  border-top-width: 3px;
+  border-bottom-width: 3px;
+  border-right-width: 1px;
+  border-left-width: 0;
   padding: 6px 6px;
   cursor: pointer;
   box-shadow: none;
@@ -55,42 +61,64 @@
 .vt-studio-led-badge-tab.is-tab:first-child { border-left-width: 2px; }
 .vt-studio-led-badge-tab.is-tab:last-child { border-right-width: 2px; }
 .vt-studio-led-badge-tab.is-tab.is-active {
-  background: var(--vt-led-tone);
-  color: #000;
-  border-bottom-color: #000;
+  background: color-mix(in srgb, var(--vt-led-tone) 18%, #fff);
+  color: #080808;
+  border-bottom-color: var(--vt-led-secondary);
   z-index: 1;
 }
-.vt-studio-led-badge-tab.is-tab.is-active .vt-studio-led-badge-tab__bevel {
-  border-color: color-mix(in srgb, var(--vt-led-tone) 40%, #000);
+.vt-studio-led-badge-tab:focus-visible {
+  outline: 2px solid #080808;
+  outline-offset: -4px;
+  z-index: 2;
 }
-.vt-studio-led-badge-tab:focus-visible { outline: 2px solid #000; outline-offset: -4px; z-index: 2; }
-.vt-studio-led-badge-tab:disabled { opacity: 0.55; cursor: not-allowed; }
+.vt-studio-led-badge-tab:disabled { opacity: .55; cursor: not-allowed; }
 
-/* #54 / #56 colored bevel (inner frame) — not a drop shadow */
+/* The original lab combines a colored top rail with a hard lower edge.
+   This inset frame adds the layered/beveled read without a blurred shadow. */
 .vt-studio-led-badge-tab__bevel {
   position: absolute;
   inset: 2px;
   z-index: 0;
-  border: 1px solid color-mix(in srgb, var(--vt-led-tone) 78%, #000);
-  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--vt-led-tone) 78%, #080808);
+  border-top-width: 2px;
+  border-radius: 0 0 5px 5px;
   pointer-events: none;
 }
-.vt-studio-led-badge-tab.is-tab .vt-studio-led-badge-tab__bevel { inset: 2px 1px; border-radius: 0; }
-.vt-studio-led-badge-tab.is-mini .vt-studio-led-badge-tab__bevel { border-radius: 1px; }
+.vt-studio-led-badge-tab.is-tab .vt-studio-led-badge-tab__bevel {
+  inset: 2px 1px;
+  border-radius: 0;
+}
+.vt-studio-led-badge-tab.is-mini .vt-studio-led-badge-tab__bevel {
+  inset: 1px;
+  border-radius: 0;
+}
 
-/* #59 LED — size tracks text (1em), photoreal highlight */
+/* Source lab #59: black lens bezel, specular white highlight, inner shading,
+   and a colored emission halo. The LED scales with the label's text height. */
 .vt-studio-led-badge-tab__led {
   position: relative;
   display: inline-block;
-  flex: 0 0 auto;
+  flex: 0 0 var(--led-size);
   width: var(--led-size);
   height: var(--led-size);
-  border: 1px solid #000;
+  border: 2px solid #080808;
   border-radius: 50%;
   background: var(--vt-led-tone);
-  overflow: hidden;
+  overflow: visible;
   z-index: 1;
-  box-shadow: inset 1px 1px 1px rgba(255,255,255,.55), inset -1px -1px 2px rgba(0,0,0,.22);
+  box-shadow:
+    inset 1px 1px 2px #fff9,
+    inset -2px -2px 3px #0004,
+    0 0 7px color-mix(in srgb, var(--vt-led-tone) 75%, transparent);
+}
+.vt-studio-led-badge-tab__led::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 1px solid var(--vt-led-tone);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
 }
 .vt-studio-led-badge-tab__led::after {
   content: "";
@@ -99,37 +127,56 @@
   left: 16%;
   width: 38%;
   height: 28%;
+  border: 0;
   border-radius: 50%;
-  background: rgba(255,255,255,.72);
+  background: #fff9;
+  opacity: .9;
   pointer-events: none;
 }
-.vt-studio-led-badge-tab.led-off .vt-studio-led-badge-tab__led { background: #fff; box-shadow: inset 0 0 0 1px #ccc; }
+.vt-studio-led-badge-tab.led-off .vt-studio-led-badge-tab__led {
+  background: #f7f7f4;
+  box-shadow: inset 1px 1px 2px #fff9, inset -2px -2px 3px #0003;
+}
 .vt-studio-led-badge-tab.led-off .vt-studio-led-badge-tab__led::after { opacity: .35; }
+.vt-studio-led-badge-tab.led-solid .vt-studio-led-badge-tab__led { background: var(--vt-led-tone); }
 .vt-studio-led-badge-tab.led-rainbow .vt-studio-led-badge-tab__led {
-  background: conic-gradient(#ff4b4b,#ffda47,#3fee56,#36e0f6,#9a70ff,#ff7ac8,#ff4b4b);
+  background: conic-gradient(#ff4b4b, #ffda47, #3fee56, #36e0f6, #9a70ff, #ff7ac8, #ff4b4b);
+  box-shadow:
+    inset 1px 1px 2px #fff9,
+    inset -2px -2px 3px #0004,
+    0 0 7px color-mix(in srgb, #ff7ac8 55%, transparent);
 }
 
-/* Motions: #52 prism, #57 radar, #63 flare2, #64 steady, #67 blink */
-.vt-studio-led-badge-tab.motion-prism.led-rainbow .vt-studio-led-badge-tab__led { animation: vt-studio-led-prism 3.6s linear infinite; }
-.vt-studio-led-badge-tab.motion-radar .vt-studio-led-badge-tab__led { animation: vt-studio-led-radar 1.8s ease-in-out infinite; }
-.vt-studio-led-badge-tab.motion-flare2 .vt-studio-led-badge-tab__led { animation: vt-studio-led-flare2 2.4s ease-in-out infinite; }
-.vt-studio-led-badge-tab.motion-blink .vt-studio-led-badge-tab__led { animation: vt-studio-led-blink 1.2s steps(2,end) infinite; }
-.vt-studio-led-badge-tab.motion-steady .vt-studio-led-badge-tab__led,
+/* Preserve the lab's original motion language rather than generic scaling-only
+   effects: prism sweeps hue, radar scans the halo, flare2 blooms, steady glows,
+   and blink cuts opacity. */
+.vt-studio-led-badge-tab.motion-prism .vt-studio-led-badge-tab__led {
+  animation: vt-studio-led-prism 1.6s ease-in-out infinite;
+}
+.vt-studio-led-badge-tab.motion-radar .vt-studio-led-badge-tab__led::before {
+  inset: -4px;
+  border-width: 2px;
+  border-right-color: transparent;
+  opacity: 1;
+  animation: vt-studio-led-radar 1.6s linear infinite;
+}
+.vt-studio-led-badge-tab.motion-flare2 .vt-studio-led-badge-tab__led {
+  animation: vt-studio-led-flare2 2s ease-out infinite;
+}
+.vt-studio-led-badge-tab.motion-steady .vt-studio-led-badge-tab__led {
+  animation: vt-studio-led-steady 1.6s ease-in-out infinite;
+}
+.vt-studio-led-badge-tab.motion-blink .vt-studio-led-badge-tab__led {
+  animation: vt-studio-led-blink 1.6s steps(2,end) infinite;
+}
 .vt-studio-led-badge-tab.motion-none .vt-studio-led-badge-tab__led { animation: none; }
-
-/* Attention ring for alert tabs (optional class from caller) */
 .vt-studio-led-badge-tab.is-attention { z-index: 2; }
-.vt-studio-led-badge-tab.is-attention::before {
-  content: "";
-  position: absolute;
-  inset: -3px;
-  border: 1px solid var(--vt-led-tone);
-  opacity: .55;
-  pointer-events: none;
-  animation: vt-studio-led-attention 2.4s ease-out infinite;
+.vt-studio-led-badge-tab.is-attention .vt-studio-led-badge-tab__led::before {
+  animation: vt-studio-led-attention 2s ease-out infinite;
 }
 .vt-studio-led-badge-tab__label,
 .vt-studio-led-badge-tab__two-line { position: relative; z-index: 1; min-width: 0; }
+.vt-studio-led-badge-tab__label { overflow: hidden; text-overflow: clip; }
 .vt-studio-led-badge-tab__two-line {
   display: flex;
   flex-direction: column;
@@ -146,7 +193,7 @@
   letter-spacing: 0;
 }
 
-/* Flush tab row — attaches under title / to borders */
+/* Zero-gap full-width rail, independent of parent module padding. */
 .vt-studio-led-badge-tab-row {
   display: flex;
   align-items: stretch;
@@ -160,25 +207,28 @@
 }
 .vt-studio-led-badge-tab-row > .vt-studio-led-badge-tab.is-tab { flex: 1 1 0; min-width: 0; }
 
-@keyframes vt-studio-led-prism { to { filter: hue-rotate(360deg); } }
+@keyframes vt-studio-led-prism {
+  0%,100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(150deg); }
+}
 @keyframes vt-studio-led-radar {
-  0%,100% { filter: brightness(.85); transform: scale(.9); }
-  50% { filter: brightness(1.4); transform: scale(1.12); }
+  to { transform: rotate(360deg); }
 }
 @keyframes vt-studio-led-flare2 {
-  0%,100% { filter: brightness(.85); }
-  50% { filter: brightness(1.6); }
+  0%,100% { box-shadow: 0 0 3px var(--vt-led-tone); }
+  50% { box-shadow: 0 0 12px 4px color-mix(in srgb, var(--vt-led-tone) 50%, transparent); }
 }
-@keyframes vt-studio-led-blink {
-  0%,49% { opacity: 1; }
-  50%,100% { opacity: .28; }
+@keyframes vt-studio-led-steady {
+  50% { box-shadow: inset 0 0 0 2px #fff8, 0 0 8px var(--vt-led-tone); }
 }
+@keyframes vt-studio-led-blink { 50% { opacity: .22; } }
 @keyframes vt-studio-led-attention {
-  0% { transform: scale(1); opacity: .55; }
-  100% { transform: scale(1.08); opacity: 0; }
+  0% { transform: scale(1); opacity: .8; }
+  80%,100% { transform: scale(3); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-led-badge-tab__led,
+  .vt-studio-led-badge-tab__led::before,
   .vt-studio-led-badge-tab.is-attention::before {
     animation: none !important;
     transition: none !important;
