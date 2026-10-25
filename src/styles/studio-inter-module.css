@@ -271,3 +271,13 @@
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head {
   border-bottom-width: var(--vt-studio-control-stroke, 3px);
 }
+
+/* The Brain Prompt Library shell body is explicitly flush (zero horizontal
+   padding), so its child host must not apply the generic -8px bleed a second
+   time. Keep that host at the shell's exact content width on mobile and desktop. */
+.brain-prompt-library-shell > .vt-studio-inter-module__body > [data-vt-studio-inter-host="true"].vt-studio-inter-host--bleed {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  padding-inline: 0;
+}
