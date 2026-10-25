@@ -157,4 +157,4 @@ export { StudioSplitTextInput } from "./primitives/StudioSplitTextInput"
 export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInput"
 
 export { StudioLedBadgeTab } from "./primitives/StudioLedBadgeTab"
-export type { StudioLedBadgeTabProps, StudioLedBadgeTabMode, StudioLedAnimation } from "./primitives/StudioLedBadgeTab"
+export type { StudioLedBadgeTabProps, StudioLedBadgeTabMode, StudioLedAnimation, StudioLedAlert, StudioLedTone } from "./primitives/StudioLedBadgeTab"
