@@ -1995,7 +1995,6 @@ const AIBrainCommandInterface: React.FC = () => {
         )}
        </div>
       </div>
-     </section>
 
       {promptRailOpen ? (
        <div
@@ -2065,7 +2064,7 @@ const AIBrainCommandInterface: React.FC = () => {
         onSave={() => { handleJournalSave(); setJournalOpen(false) }}
        />
       ) : null}
-     </>
+     </section>
     )}
    </Toolbox>
   </main>
