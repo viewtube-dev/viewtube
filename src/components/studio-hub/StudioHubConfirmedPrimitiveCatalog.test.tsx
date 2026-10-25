@@ -64,6 +64,13 @@ describe("confirmed composite primitive catalog", () => {
     }
   })
 
+  it("forces every primitive representative to span the full width of its own module", () => {
+    const styles = readFileSync(resolve(process.cwd(), "src/styles/studio-confirmed-catalog-modules.css"), "utf8")
+    expect(styles).toMatch(/\.vt-confirmed-catalog \.vt-confirmed-primitive-module > \.vt-confirmed-primitive-body > \.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s)
+    expect(styles).toMatch(/\.vt-confirmed-catalog \.vt-confirmed-primitive-module > \.vt-confirmed-primitive-body > \.vt-confirmed-variants > \.vt-confirmed-variant\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/s)
+    expect(styles).toMatch(/\.vt-confirmed-catalog \.vt-confirmed-primitive-module > \.vt-confirmed-primitive-body > \.vt-confirmed-variants > \.vt-confirmed-variant\s*\{[^}]*width:\s*100%/s)
+  })
+
   it("renders the representative ledger as a single full-width row and groups all module primitives together", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
     const styles = readFileSync(resolve(process.cwd(), "src/styles/studio-confirmed-catalog-modules.css"), "utf8")
