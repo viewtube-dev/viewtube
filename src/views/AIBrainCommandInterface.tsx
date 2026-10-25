@@ -1904,7 +1904,7 @@ const AIBrainCommandInterface: React.FC = () => {
         {pageTab === "chat" ? (
          <div id="brain-page-panel-chat" role="tabpanel" aria-labelledby="brain-page-tab-chat" className="flex min-h-0 flex-1 flex-col">
  <BrainChatShell
-         className="flex-1"
+         className="flex-1 vt-brain-chat-column"
          header={<BrainStatusStrip items={[
            { id: "channel", label: "Channel", value: authState.channelName || authState.channelHandle || channelId || "Not connected", tone: channelId ? "ok" : "warn" },
            { id: "project", label: "Project", value: projectContextCleared ? "None" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "None" },
@@ -1993,7 +1993,7 @@ const AIBrainCommandInterface: React.FC = () => {
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); composerRef.current?.focus() }}
+          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          /> : <BrainCapabilityBrowser
           snapshot={snapshot}
           controls={brainControls}
