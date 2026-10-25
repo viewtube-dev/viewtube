@@ -117,7 +117,7 @@ const CanonicalSplitBadgeFamily: React.FC = () => (
       title="Split-left Badge · Standard + Compact + Micro"
       nonDefaultSettings={[
         "Informational split-left badge, not an action button.",
-        "Badge-only micro exception: 12px height, 1px stroke, 2px radius, and 10px type/icons; it is not an interactive-control size.",
+        "Badge-only micro exception: 12px height, 1.5px stroke, 3px radius, and 10px type/icons; it is not an interactive-control size.",
       ]}
       provenance={<Provenance
         primitive="StudioSplitLeftBadge"
