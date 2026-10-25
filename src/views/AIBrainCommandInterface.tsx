@@ -1915,6 +1915,7 @@ const AIBrainCommandInterface: React.FC = () => {
       onDefer={handleDeferIntake}
      />
     ) : (
+     <>
      <section className="relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
        <BrainPageTabs activeTab={pageTab} onChange={setPageTab} />
       <div className="shrink-0 bg-[#f3f4f6]">
@@ -2064,7 +2065,7 @@ const AIBrainCommandInterface: React.FC = () => {
         onSave={() => { handleJournalSave(); setJournalOpen(false) }}
        />
       ) : null}
-     </section>
+     </>
     )}
    </Toolbox>
   </main>
