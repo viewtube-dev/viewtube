@@ -1994,7 +1994,7 @@ const AIBrainCommandInterface: React.FC = () => {
         )}
        </div>
       </div>
-      </div>
+     </section>
 
       {promptRailOpen ? (
        <div
