@@ -158,3 +158,6 @@ export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInpu
 
 export { StudioLedBadgeTab } from "./primitives/StudioLedBadgeTab"
 export type { StudioLedBadgeTabProps, StudioLedBadgeTabMode, StudioLedAnimation, StudioLedAlert, StudioLedTone } from "./primitives/StudioLedBadgeTab"
+
+export { StudioChatResponseShell } from "./primitives/StudioChatResponseShell"
+export type { StudioChatResponseShellProps, StudioChatResponseShellSize } from "./primitives/StudioChatResponseShell"
