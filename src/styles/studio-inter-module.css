@@ -261,3 +261,13 @@
 .brain-prompt-library-shell > .vt-studio-inter-module__body {
   padding-inline: 0;
 }
+
+
+/* A closed collapsing module ends at its header's lower rule. Do not draw a
+   second shell-bottom rule underneath that same header border. */
+.vt-studio-collapsing-split-module:not([open]) {
+  border-bottom-width: 0;
+}
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head {
+  border-bottom-width: var(--vt-studio-control-stroke, 3px);
+}
