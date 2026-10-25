@@ -567,4 +567,16 @@ describe("responsive Studio upload frame", () => {
     expect(publicIndex).toContain('export { StudioInterModule } from "./primitives/StudioInterModule"')
     expect(publicIndex).toContain("StudioInterModuleProps, StudioInterModuleSize")
   })
+
+  it("flushes nested intermodules to 4px parent insets and avoids duplicate collapsed bottom rules", () => {
+    const intermoduleCss = readFileSync(resolve(process.cwd(), "src/styles/studio-inter-module.css"), "utf8")
+    expect(intermoduleCss).toContain('width: calc(100% + 8px);')
+    expect(intermoduleCss).toContain('margin-inline: -4px;')
+    expect(intermoduleCss).toContain('.brain-prompt-library-shell > .vt-studio-inter-module__body')
+    expect(intermoduleCss).toContain('padding-inline: 0;')
+    expect(intermoduleCss).toContain('.vt-studio-collapsing-split-module:not([open])')
+    expect(intermoduleCss).toContain('border-bottom-width: 0;')
+    expect(intermoduleCss).toContain('border-bottom-width: var(--vt-studio-control-stroke, 3px);')
+  })
+
 });
