@@ -3315,7 +3315,7 @@
 
 
 
-/* Button catalog is arrangement-only: primitive owns variant faces and text containment. */
+/* Button catalog is arrangement-only: clip overflowing labels; never render ellipses. */
 .vt-confirmed-button-skin {
   min-width: 0 !important;
   max-width: 100% !important;
@@ -3331,7 +3331,7 @@
   max-width: 100% !important;
   width: 100% !important;
   overflow: hidden !important;
-  text-overflow: ellipsis !important;
+  text-overflow: clip !important;
   white-space: nowrap !important;
   overflow-wrap: normal !important;
 }
@@ -3339,7 +3339,7 @@
   min-width: 0 !important;
   max-width: 100% !important;
   overflow: hidden !important;
-  text-overflow: ellipsis !important;
+  text-overflow: clip !important;
   white-space: nowrap !important;
 }
 
