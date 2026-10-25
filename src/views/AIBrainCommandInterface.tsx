@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import {
  ArrowRight,
  BookOpen,
@@ -23,7 +23,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
-import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioInterModule, StudioCollapsingSplitModule, StudioCollapsingTwoLineModule, StudioTextArea, StudioTextInput, StudioDropdown, StudioLedBadgeTab } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioInterModule, StudioCollapsingSplitModule, StudioCollapsingTwoLineModule, StudioTextArea, StudioTextInput, StudioDropdown } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -75,6 +75,8 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
+import { BrainPageTabs, type BrainPageTabId } from "../components/brain/BrainPageTabs"
+import { BrainMyBrainPanel, BrainReviewPanel, BrainControlsPanel } from "../components/brain/BrainHubPanels"
 import { BrainAnswerFirst, BrainChatShell, BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
 import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow, BrainChatStatusBadge, BrainComposerShell, ChatConversationViewport } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
@@ -1075,6 +1077,15 @@ const CreatorIntakeWizard: React.FC<{
 const AIBrainCommandInterface: React.FC = () => {
  const location = useLocation()
  const navigate = useNavigate()
+ const [searchParams, setSearchParams] = useSearchParams()
+ const requestedPageTab = searchParams.get("tab")
+ const pageTab: BrainPageTabId = requestedPageTab === "my-brain" || requestedPageTab === "review" || requestedPageTab === "controls" ? requestedPageTab : "chat"
+ const setPageTab = (tab: BrainPageTabId) => {
+  const next = new URLSearchParams(searchParams)
+  if (tab === "chat") next.delete("tab")
+  else next.set("tab", tab)
+  setSearchParams(next, { replace: true })
+ }
  const brainContext = useBrain()
  const {
   brain,
@@ -1104,7 +1115,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext())
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
- const [brainHubTab, setBrainHubTab] = useState<"status" | "prompts" | "context" | "capabilities">("status")
+
  const [contextRailOpen, setContextRailOpen] = useState(false)
  const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
  const [projectContextCleared, setProjectContextCleared] = useState(false)
@@ -1905,77 +1916,83 @@ const AIBrainCommandInterface: React.FC = () => {
      />
     ) : (
      <section className="relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
-      <nav role="tablist" aria-label="Brain workspace shortcuts" className="grid shrink-0 grid-cols-4 gap-0 bg-white">
-       <StudioLedBadgeTab mode="tab" sizeVariant="compact" label="BRAIN STATUS" firstLine="BRAIN" secondLine="STATUS" tone="green" led="solid" animation="steady" active={brainHubTab === "status"} onClick={() => setBrainHubTab("status")} />
-       <StudioLedBadgeTab mode="tab" sizeVariant="compact" label="PROMPT LIBRARY" firstLine="PROMPT" secondLine="LIBRARY" tone="pink" led="rainbow" animation="prism" active={brainHubTab === "prompts"} onClick={() => { setBrainHubTab("prompts"); setLauncherMode("prompts"); setPromptRailOpen(true) }} />
-       <StudioLedBadgeTab mode="tab" sizeVariant="compact" label="CHANNEL CONTEXT" firstLine="CHANNEL" secondLine="CONTEXT" tone="green" led="solid" animation="radar" active={brainHubTab === "context"} onClick={() => { setBrainHubTab("context"); setContextRailOpen(true) }} />
-       <StudioLedBadgeTab mode="tab" sizeVariant="compact" label="CAPABILITIES BROWSER" firstLine="CAPABILITIES" secondLine="BROWSER" tone="cyan" led="rainbow" animation="flare2" active={brainHubTab === "capabilities"} onClick={() => { setBrainHubTab("capabilities"); setLauncherMode("capabilities"); setPromptRailOpen(true) }} />
-      </nav>
+       <BrainPageTabs activeTab={pageTab} onChange={setPageTab} />
       <div className="shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
       <div className="grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
        <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
       <div className={`${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
-       <BrainChatShell
-        className="flex-1"
-        header={<BrainStatusStrip items={[
-          { id: "channel", label: "Channel", value: authState.channelName || authState.channelHandle || channelId || "Not connected", tone: channelId ? "ok" : "warn" },
-          { id: "project", label: "Project", value: projectContextCleared ? "None" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "None" },
-          { id: "mode", label: "Mode", value: busy ? "Working" : "Ready", tone: busy ? "ok" : "neutral" },
-         ]} details={<BrainContextStrip
-          channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
-          projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
-          contentBuildId={projectContextCleared ? null : brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || brain.projects.find((project) => project.status === "active")?.contentBuildId || (typeof surfaceSelection?.context?.contentBuildId === "string" ? surfaceSelection.context.contentBuildId : null)}
-          selection={surfaceSelection}
-          onClearSelection={handleClearSurfaceSelection}
-          onToggleLock={handleToggleSurfaceSelectionLock}
-          onClearProject={handleClearActiveProject}
-         />} />}
-        composer={<div className="shrink-0 border-t-[2px] border-black bg-white p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
-         <BrainComposerBar
-          value={input}
-          onChange={setInput}
-          onSend={() => void handleSend()}
-          busy={busy}
-          textareaRef={composerRef as React.RefObject<HTMLTextAreaElement | null>}
-          onKeyDown={(event) => {
-           if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
-           event.preventDefault()
-           void handleSend()
-          }}
-          onOpenPrompts={() => setPromptRailOpen(true)}
-          onOpenContext={() => setContextRailOpen(true)}
-          onOpenJournal={() => setJournalOpen(true)}
-          placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-         />
-        </div>}
-       >
-         {!hydrated && messages.length === 0 ? (
-          <div className="min-h-0 flex-1" aria-hidden="true" />
-         ) : messages.length === 0 ? (
-          <OpeningBriefing snapshot={snapshot} onPrompt={(prompt) => { void handleSend(prompt) }} />
-         ) : (
-          <ChatConversationViewport viewportRef={conversationViewportRef} onScroll={(event) => { const viewport = event.currentTarget; shouldFollowConversationRef.current = shouldFollowBrainConversation(viewport.scrollHeight, viewport.scrollTop, viewport.clientHeight) }}>
-           {messages.map((message) => message.role === "user" ? (
-            <UserMessage key={message.id} text={message.text} />
-           ) : (
-            <CreatorResponseCard
-             key={message.id}
-             message={message}
-             answeredQuestionIds={answeredQuestionIds}
-             onFeedback={handleFeedback}
-             onAnswerQuestion={handleAnswerQuestion}
-             onReviewHandoff={handleReviewHandoff}
-             onRetry={handleRetryInterruptedTurn}
-             onCorrectReceipt={handleCorrectReceipt}
-             onRejectReceipt={handleRejectReceipt}
-             onCorrectContextItem={handleCorrectContextItem}
-            />
-           ))}
-          </ChatConversationViewport>
-         )}
-        </BrainChatShell>
+        {pageTab === "chat" ? (
+         <div id="brain-page-panel-chat" role="tabpanel" aria-labelledby="brain-page-tab-chat" className="flex min-h-0 flex-1 flex-col">
+ <BrainChatShell
+         className="flex-1"
+         header={<BrainStatusStrip items={[
+           { id: "channel", label: "Channel", value: authState.channelName || authState.channelHandle || channelId || "Not connected", tone: channelId ? "ok" : "warn" },
+           { id: "project", label: "Project", value: projectContextCleared ? "None" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "None" },
+           { id: "mode", label: "Mode", value: busy ? "Working" : "Ready", tone: busy ? "ok" : "neutral" },
+          ]} details={<BrainContextStrip
+           channelLabel={authState.channelName || authState.channelHandle || channelId || "not connected"}
+           projectLabel={projectContextCleared ? "none" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "none"}
+           contentBuildId={projectContextCleared ? null : brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId || brain.projects.find((project) => project.status === "active")?.contentBuildId || (typeof surfaceSelection?.context?.contentBuildId === "string" ? surfaceSelection.context.contentBuildId : null)}
+           selection={surfaceSelection}
+           onClearSelection={handleClearSurfaceSelection}
+           onToggleLock={handleToggleSurfaceSelectionLock}
+           onClearProject={handleClearActiveProject}
+          />} />}
+         composer={<div className="shrink-0 border-t-[2px] border-black bg-white p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
+          <BrainComposerBar
+           value={input}
+           onChange={setInput}
+           onSend={() => void handleSend()}
+           busy={busy}
+           textareaRef={composerRef as React.RefObject<HTMLTextAreaElement | null>}
+           onKeyDown={(event) => {
+            if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
+            event.preventDefault()
+            void handleSend()
+           }}
+           onOpenPrompts={() => setPromptRailOpen(true)}
+           onOpenContext={() => setContextRailOpen(true)}
+           onOpenJournal={() => setJournalOpen(true)}
+           placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
+          />
+         </div>}
+        >
+          {!hydrated && messages.length === 0 ? (
+           <div className="min-h-0 flex-1" aria-hidden="true" />
+          ) : messages.length === 0 ? (
+           <OpeningBriefing snapshot={snapshot} onPrompt={(prompt) => { void handleSend(prompt) }} />
+          ) : (
+           <ChatConversationViewport viewportRef={conversationViewportRef} onScroll={(event) => { const viewport = event.currentTarget; shouldFollowConversationRef.current = shouldFollowBrainConversation(viewport.scrollHeight, viewport.scrollTop, viewport.clientHeight) }}>
+            {messages.map((message) => message.role === "user" ? (
+             <UserMessage key={message.id} text={message.text} />
+            ) : (
+             <CreatorResponseCard
+              key={message.id}
+              message={message}
+              answeredQuestionIds={answeredQuestionIds}
+              onFeedback={handleFeedback}
+              onAnswerQuestion={handleAnswerQuestion}
+              onReviewHandoff={handleReviewHandoff}
+              onRetry={handleRetryInterruptedTurn}
+              onCorrectReceipt={handleCorrectReceipt}
+              onRejectReceipt={handleRejectReceipt}
+              onCorrectContextItem={handleCorrectContextItem}
+             />
+            ))}
+           </ChatConversationViewport>
+          )}
+         </BrainChatShell>
+         </div>
+        ) : pageTab === "my-brain" ? (
+         <BrainMyBrainPanel items={[]} profileIncomplete />
+        ) : pageTab === "review" ? (
+         <BrainReviewPanel channelId={channelId} />
+        ) : (
+         <BrainControlsPanel />
+        )}
+       </div>
       </div>
       </div>
 

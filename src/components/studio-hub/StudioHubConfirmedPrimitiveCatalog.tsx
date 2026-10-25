@@ -364,7 +364,22 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitBadge"><span>Double Split Badge · STANDARD</span><StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard">STATUS</StudioDoubleSplitBadge></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSpectrumTag"><span>Spectrum Tag · STANDARD REPRESENTATIVE</span><StudioSpectrumTag label="CREATOR" spectrumKey="CREATOR" selected={false} ariaLabel="Spectrum tag standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCloseableBadge"><span>Closeable Badge · STANDARD REPRESENTATIVE</span><StudioCloseableBadge label="CREATOR" entering={false} /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusBadge"><span>Brain Status Badge · STANDARD</span><StudioBrainStatusBadge label="BRAIN READY" tone="green" appearance="dark" active={true} aria-label="Brain status badge standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLedBadgeTab">
+        <span>LED BADGE · SOLID + RAINBOW</span>
+        <div className="vt-catalog-brain-status-badges__group">
+          <StudioLedBadgeTab mode="badge" label="READY" tone="green" led="solid" animation="steady" />
+          <StudioLedBadgeTab mode="badge" label="THINKING" tone="cyan" led="rainbow" animation="prism" />
+        </div>
+        <span>FLUSH NAVIGATION · FOUR TABS / ONE ACTIVE</span>
+        <div className="vt-studio-led-badge-tab-row">
+          {([{label:"CHAT",secondLine:"ASK",tone:"cyan" as const},{label:"MY BRAIN",secondLine:"PROFILE",tone:"purple" as const},{label:"REVIEW",secondLine:"LEARNING",tone:"yellow" as const},{label:"CONTROLS",secondLine:"ACCESS",tone:"green" as const}]).map((tab,index)=><StudioLedBadgeTab key={tab.label} mode="tab" label={tab.label} firstLine={tab.label} secondLine={tab.secondLine} tone={tab.tone} led="solid" animation="steady" active={index===0} onClick={() => undefined} />)}
+        </div>
+        <span>MOTION STATES · STEADY / PRISM / RADAR / FLARE2 / BLINK</span>
+        <div className="vt-catalog-brain-status-badges__group">
+          {([{label:"STEADY",animation:"steady" as const},{label:"PRISM",animation:"prism" as const},{label:"RADAR",animation:"radar" as const},{label:"FLARE2",animation:"flare2" as const},{label:"BLINK",animation:"blink" as const}]).map((item)=><StudioLedBadgeTab key={item.animation} mode="badge" label={item.label} tone="cyan" led="rainbow" animation={item.animation} />)}
+        </div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusBadge"><span>Brain Status Badge · STANDARD</span><StudioBrainStatusBadge label="BRAIN READY" tone="green" appearance="dark" active={true} aria-label="Brain status badge standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLedBadgeTab">
           <span>LED Badge / Tab · COMPACT TWO-LINE SYSTEM</span>
           <div className="grid grid-cols-4 gap-0 bg-white">{[{label:"BRAIN STATUS",firstLine:"BRAIN",secondLine:"STATUS",tone:"green" as const},{label:"PROMPT LIBRARY",firstLine:"PROMPT",secondLine:"LIBRARY",tone:"pink" as const},{label:"CHANNEL CONTEXT",firstLine:"CHANNEL",secondLine:"CONTEXT",tone:"green" as const},{label:"CAPABILITIES BROWSER",firstLine:"CAPABILITIES",secondLine:"BROWSER",tone:"cyan" as const}].map((item,index)=><StudioLedBadgeTab key={item.label} mode="tab" sizeVariant="compact" label={item.label} firstLine={item.firstLine} secondLine={item.secondLine} tone={item.tone} active={index===0} led={index===0||index===2?"solid":"rainbow"} animation={(["steady","prism","radar","flare2"] as const)[index]} onClick={() => undefined} />)}</div>
@@ -1361,14 +1376,14 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
     <Family
-      title="Brain Status LED Badges"
+      title="Status / navigation · LED badge and tab system"
       nonDefaultSettings={[
         "Borderless status badge with a smaller saturated LED to the left of the label.",
         "Dark variant: black fill and white text; tinted variant: light fill matching the LED hue and black text.",
         "Six LED tones with a slow expanding/fading circular ripple; reduced-motion disables the ripple.",
         "Status text must reflect the owning workflow state; these specimens are visual examples, not live telemetry.",
       ]}
-      provenance={<Provenance primitive="StudioBrainStatusBadge" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="24px / 20px / 12px badge tiers · 10px / 8px / 5px LED core · black/tinted fill variants · 8s ripple cycle" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}
+      provenance={<Provenance primitive="StudioLedBadgeTab · StudioBrainStatusBadge" tsx="src/studio-ui/primitives/StudioLedBadgeTab.tsx + src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-led-badge-tab.css + src/styles/studio-control-system.css" tokens="LED diameter 1em · beveled edge · flat joined tab rail · reduced-motion support" imports={["src/studio-ui/primitives/StudioLedBadgeTab.tsx", "src/styles/studio-led-badge-tab.css", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusBadge">
         <span>STANDARD · DARK FILL / WHITE TEXT</span>

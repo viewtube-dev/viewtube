@@ -1,7 +1,10 @@
 import React from "react"
 
 export type StudioLedBadgeTabMode = "badge" | "tab"
-export type StudioLedAnimation = "prism" | "radar" | "flare2" | "steady" | "blink"
+export type StudioLedAnimation = "prism" | "radar" | "flare2" | "steady" | "blink" | "none"
+export type StudioLedTone = "pink" | "cyan" | "green" | "yellow" | "purple" | "neutral"
+export type StudioLedAlert = "none" | "attention" | "error"
+
 export type StudioLedBadgeTabProps = {
   mode?: StudioLedBadgeTabMode
   label: string
@@ -12,21 +15,26 @@ export type StudioLedBadgeTabProps = {
   onClick?: () => void
   led?: "off" | "solid" | "rainbow"
   animation?: StudioLedAnimation
-  tone?: "pink" | "cyan" | "green" | "yellow" | "purple"
+  tone?: StudioLedTone
+  alert?: StudioLedAlert
   sizeVariant?: "compact" | "mini"
+  id?: string
   className?: string
+  tabIndex?: number
   "aria-label"?: string
+  "aria-controls"?: string
 }
 
-const toneColors = {
+const toneColors: Record<StudioLedTone, string> = {
   pink: "#FF7AC8",
   cyan: "#36E0F6",
   green: "#3FEE56",
   yellow: "#FFDA47",
   purple: "#B49CFF",
-} as const
+  neutral: "#9299A3",
+}
 
-/** Canonical beveled LED badge / compact page-tab primitive. Selection remains caller-owned. */
+/** Canonical flat beveled LED badge / flush page-tab primitive. */
 export function StudioLedBadgeTab({
   mode = "badge",
   label,
@@ -36,48 +44,81 @@ export function StudioLedBadgeTab({
   disabled = false,
   onClick,
   led = "rainbow",
-  animation = "prism",
+  animation = "steady",
   tone = "cyan",
+  alert = "none",
   sizeVariant = "compact",
+  id,
   className = "",
+  tabIndex,
   "aria-label": ariaLabel,
+  "aria-controls": ariaControls,
 }: StudioLedBadgeTabProps) {
   const isTab = mode === "tab"
+  const resolvedAnimation: StudioLedAnimation =
+    alert === "attention" && animation === "steady" ? "radar"
+      : alert === "error" && animation === "steady" ? "blink"
+        : animation
+
   const content = firstLine || secondLine ? (
     <span className="vt-studio-led-badge-tab__two-line">
       <span>{firstLine ?? label}</span>
       {secondLine ? <span>{secondLine}</span> : null}
     </span>
   ) : <span className="vt-studio-led-badge-tab__label">{label}</span>
+
   const classes = [
     "vt-studio-led-badge-tab",
     isTab ? "is-tab" : "is-badge",
     active ? "is-active" : "",
+    alert !== "none" ? "is-attention" : "",
     "is-" + sizeVariant,
     "tone-" + tone,
     "led-" + led,
-    "motion-" + animation,
+    "motion-" + resolvedAnimation,
     className,
   ].filter(Boolean).join(" ")
-  const style = { "--vt-led-tone": toneColors[tone] } as React.CSSProperties
+
+  const style = { "--vt-led-tone": toneColors[tone], "--led-size": "1em" } as React.CSSProperties
+  const children = <>
+    <span className="vt-studio-led-badge-tab__bevel" aria-hidden="true" />
+    <span className="vt-studio-led-badge-tab__led" aria-hidden="true" />
+    {content}
+  </>
+
   if (isTab || onClick) {
     return (
-      <button type="button" className={classes} style={style} disabled={disabled} onClick={onClick}
-        aria-label={ariaLabel ?? label} role={isTab ? "tab" : undefined} aria-selected={isTab ? active : undefined} aria-pressed={!isTab && onClick ? active : undefined}
-        data-vt-studio-primitive="StudioLedBadgeTab" data-vt-led-animation={animation}>
-        <span className="vt-studio-led-badge-tab__bevel" aria-hidden="true" />
-        <span className="vt-studio-led-badge-tab__led" aria-hidden="true" />
-        {content}
-      </button>
+      <button
+        type="button"
+        id={id}
+        className={classes}
+        style={style}
+        disabled={disabled}
+        onClick={onClick}
+        tabIndex={tabIndex}
+        aria-label={ariaLabel ?? label}
+        role={isTab ? "tab" : undefined}
+        aria-selected={isTab ? active : undefined}
+        aria-controls={ariaControls}
+        aria-pressed={!isTab && onClick ? active : undefined}
+        data-vt-studio-primitive="StudioLedBadgeTab"
+        data-vt-led-animation={resolvedAnimation}
+        data-vt-led-alert={alert}
+      >{children}</button>
     )
   }
+
   return (
-    <span className={classes} style={style} role="status" aria-label={ariaLabel ?? label}
-      data-vt-studio-primitive="StudioLedBadgeTab" data-vt-led-animation={animation}>
-      <span className="vt-studio-led-badge-tab__bevel" aria-hidden="true" />
-      <span className="vt-studio-led-badge-tab__led" aria-hidden="true" />
-      {content}
-    </span>
+    <span
+      id={id}
+      className={classes}
+      style={style}
+      role="status"
+      aria-label={ariaLabel ?? label}
+      data-vt-studio-primitive="StudioLedBadgeTab"
+      data-vt-led-animation={resolvedAnimation}
+      data-vt-led-alert={alert}
+    >{children}</span>
   )
 }
 
