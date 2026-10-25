@@ -243,3 +243,21 @@
   margin-inline: -6px;
 }
 
+
+
+/* Nested prompt/category lists live in bodies with a 4px inset. Bleed exactly
+   that inset so their rails and outer rules meet the containing module edges. */
+.vt-studio-inter-module__body > [data-vt-studio-inter-host="true"].vt-studio-inter-host--bleed,
+.vt-studio-inter-module__body > .vt-studio-inter-host--bleed {
+  box-sizing: border-box;
+  width: calc(100% + 8px);
+  max-width: none;
+  min-width: 0;
+  margin-inline: -4px;
+}
+
+/* Prompt Library content owns its own horizontal padding per row; the shell
+   body must not add another inset on the right edge. */
+.brain-prompt-library-shell > .vt-studio-inter-module__body {
+  padding-inline: 0;
+}
