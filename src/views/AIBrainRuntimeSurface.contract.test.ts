@@ -134,7 +134,7 @@ describe("AI Brain runtime surface integration", () => {
  })
 
  it("keeps the mobile composer inside the layout viewport and gives the textarea real width", () => {
-  expect(viewportHookSource).toContain("Math.min(vv.height, layoutHeight)")
+  expect(viewportHookSource).toContain("Math.min(vv.height,layoutHeight)")
   expect(viewportHookSource).toContain('window.visualViewport')
   expect(composerDockSource).toContain('className="w-full min-h-[44px] min-w-0 resize-none"')
   expect(composerDockSource).toContain('maxHeight: maxFieldPx')
