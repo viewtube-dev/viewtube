@@ -23,7 +23,7 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
-import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioInterModule, StudioCollapsingSplitModule, StudioCollapsingTwoLineModule, StudioTextArea, StudioTextInput, StudioDropdown } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioInterModule, StudioCollapsingSplitModule, StudioCollapsingTwoLineModule, StudioTextArea, StudioTextInput, StudioDropdown, StudioLedBadgeTab } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -1104,6 +1104,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext())
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
+ const [brainHubTab, setBrainHubTab] = useState<"status" | "prompts" | "context" | "capabilities">("status")
  const [contextRailOpen, setContextRailOpen] = useState(false)
  const [surfaceSelection, setSurfaceSelection] = useState<BrainSurfaceSelection | null>(() => readBrainSurfaceSelection())
  const [projectContextCleared, setProjectContextCleared] = useState(false)
@@ -1904,6 +1905,12 @@ const AIBrainCommandInterface: React.FC = () => {
      />
     ) : (
      <section className="relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
+      <nav role="tablist" aria-label="Brain workspace shortcuts" className="grid shrink-0 grid-cols-4 gap-0 border-y-2 border-black bg-white">
+       <StudioLedBadgeTab mode="tab" sizeVariant="compact" label="BRAIN STATUS" firstLine="BRAIN" secondLine="STATUS" tone="green" led="solid" animation="steady" active={brainHubTab === "status"} onClick={() => setBrainHubTab("status")} />
+       <StudioLedBadgeTab mode="tab" sizeVariant="compact" label="PROMPT LIBRARY" firstLine="PROMPT" secondLine="LIBRARY" tone="pink" led="rainbow" animation="prism" active={brainHubTab === "prompts"} onClick={() => { setBrainHubTab("prompts"); setLauncherMode("prompts"); setPromptRailOpen(true) }} />
+       <StudioLedBadgeTab mode="tab" sizeVariant="compact" label="CHANNEL CONTEXT" firstLine="CHANNEL" secondLine="CONTEXT" tone="green" led="solid" animation="radar" active={brainHubTab === "context"} onClick={() => { setBrainHubTab("context"); setContextRailOpen(true) }} />
+       <StudioLedBadgeTab mode="tab" sizeVariant="compact" label="CAPABILITIES BROWSER" firstLine="CAPABILITIES" secondLine="BROWSER" tone="cyan" led="rainbow" animation="flare2" active={brainHubTab === "capabilities"} onClick={() => { setBrainHubTab("capabilities"); setLauncherMode("capabilities"); setPromptRailOpen(true) }} />
+      </nav>
       <div className="shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
