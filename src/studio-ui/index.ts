@@ -1,5 +1,6 @@
 import "../styles/toolbox-entry.css"
 import "../styles/studio-control-entry.css"
+import "../styles/studio-led-badge-tab.css"
 
 export { STUDIO_TOKENS } from "./tokens"
 export type { StudioControlSize, StudioHierarchyLevel } from "./tokens"
@@ -154,3 +155,6 @@ export type { StudioInterModuleProps, StudioInterModuleSize } from "./primitives
 
 export { StudioSplitTextInput } from "./primitives/StudioSplitTextInput"
 export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInput"
+
+export { StudioLedBadgeTab } from "./primitives/StudioLedBadgeTab"
+export type { StudioLedBadgeTabProps, StudioLedBadgeTabMode, StudioLedAnimation } from "./primitives/StudioLedBadgeTab"
