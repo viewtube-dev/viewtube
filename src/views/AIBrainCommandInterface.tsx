@@ -2065,6 +2065,7 @@ const AIBrainCommandInterface: React.FC = () => {
        />
       ) : null}
      </section>
+     </>
     )}
    </Toolbox>
   </main>
