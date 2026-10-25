@@ -5,6 +5,8 @@ const source = readFileSync(new URL("./AIBrainCommandInterface.tsx", import.meta
 const panelSource = readFileSync(new URL("../components/brain/BrainRuntimePanel.tsx", import.meta.url), "utf8")
 const chatPrimitivesSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.tsx", import.meta.url), "utf8")
 const chatPrimitivesCssSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.css", import.meta.url), "utf8")
+const composerDockSource = readFileSync(new URL("../components/brain/BrainComposerDock.tsx", import.meta.url), "utf8")
+const viewportHookSource = readFileSync(new URL("../components/brain/useVisualViewportHeight.ts", import.meta.url), "utf8")
 const collapsePrimitiveSource = readFileSync(new URL("../studio-ui/primitives/StudioControls.tsx", import.meta.url), "utf8")
 const toolboxSource = readFileSync(new URL("../components/Toolbox.tsx", import.meta.url), "utf8")
 
@@ -132,10 +134,12 @@ describe("AI Brain runtime surface integration", () => {
  })
 
  it("keeps the mobile composer inside the layout viewport and gives the textarea real width", () => {
-  expect(source).toContain("Math.min(visualViewport.height, window.innerHeight)")
-  expect(source).toContain('data-vt-brain-part="composer-controls"')
-  expect(source).toContain('className="vt-brain-composer-controls w-full min-w-0"')
-  expect(source).toContain('className="w-full max-h-36 min-h-[44px] min-w-0 resize-none"')
+  expect(viewportHookSource).toContain("Math.min(vv.height, layoutHeight)")
+  expect(viewportHookSource).toContain('window.visualViewport')
+  expect(composerDockSource).toContain('className="w-full min-h-[44px] min-w-0 resize-none"')
+  expect(composerDockSource).toContain('maxHeight: maxFieldPx')
+  expect(composerDockSource).toContain('data-vt-brain-component="BrainComposerSendAction"')
+  expect(source).toContain('className="vt-brain-chat-column__dock"')
  })
 
 

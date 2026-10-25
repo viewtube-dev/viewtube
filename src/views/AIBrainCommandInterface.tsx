@@ -23,6 +23,8 @@ import {
  Zap,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
+import { BrainComposerDock } from "../components/brain/BrainComposerDock"
+import { useVisualViewportHeight } from "../components/brain/useVisualViewportHeight"
 import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioInterModule, StudioCollapsingSplitModule, StudioCollapsingTwoLineModule, StudioTextArea, StudioTextInput, StudioDropdown } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
@@ -1097,7 +1099,7 @@ const AIBrainCommandInterface: React.FC = () => {
   emitSignal,
  } = brainContext
  const [input, setInput] = useState("")
- const [mobileViewportHeight, setMobileViewportHeight] = useState<number | null>(null)
+ const { height: mobileViewportHeight, keyboardOpen } = useVisualViewportHeight(true)
  const [journalInput, setJournalInput] = useState("")
  const [busy, setBusy] = useState(false)
  const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -1129,32 +1131,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const conversationViewportRef = useRef<HTMLDivElement | null>(null)
  const requestInFlightRef = useRef(false)
 
- // Mobile browsers may keep the layout viewport tall when the on-screen keyboard
- // opens. Follow the visual viewport so the anchored composer stays above it.
- useEffect(() => {
-  const visualViewport = window.visualViewport
-  const syncMobileViewport = () => {
-   if (window.matchMedia("(max-width: 1279px)").matches) {
-    // Some browser emulation/device modes report a visual viewport taller than
-    // the layout viewport. Never size the page beyond the actual layout bounds.
-    const height = visualViewport
-     ? Math.min(visualViewport.height, window.innerHeight)
-     : window.innerHeight
-    setMobileViewportHeight(Math.max(1, Math.round(height)))
-   } else {
-    setMobileViewportHeight(null)
-   }
-  }
-  syncMobileViewport()
-  window.addEventListener("resize", syncMobileViewport)
-  window.addEventListener("orientationchange", syncMobileViewport)
-  visualViewport?.addEventListener("resize", syncMobileViewport)
-  return () => {
-   window.removeEventListener("resize", syncMobileViewport)
-   window.removeEventListener("orientationchange", syncMobileViewport)
-   visualViewport?.removeEventListener("resize", syncMobileViewport)
-  }
- }, [])
+ 
  const shouldFollowConversationRef = useRef(true)
  const askSeededRef = useRef(false)
  const canUseGemini = hasGeminiKey()
@@ -1894,7 +1871,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  return (
-  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="h-full min-h-0 overflow-y-auto overscroll-contain bg-[#f3f4f6] text-black max-xl:h-[100dvh] max-xl:overflow-hidden xl:overflow-hidden">
+  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} data-keyboard-open={keyboardOpen ? "true" : "false"} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="vt-brain-module-shell h-full min-h-0 overflow-hidden overscroll-none bg-[#f3f4f6] text-black max-xl:h-[100dvh] xl:overflow-hidden">
    <Toolbox
     title="ViewTube Brain Hub"
     subtitle="One assistant for channel strategy, analytics, goals, content planning, SEO, and publishing."
@@ -1927,7 +1904,7 @@ const AIBrainCommandInterface: React.FC = () => {
         {pageTab === "chat" ? (
          <div id="brain-page-panel-chat" role="tabpanel" aria-labelledby="brain-page-tab-chat" className="flex min-h-0 flex-1 flex-col">
  <BrainChatShell
-         className="flex-1"
+         className="flex-1 vt-brain-chat-column"
          header={<BrainStatusStrip items={[
            { id: "channel", label: "Channel", value: authState.channelName || authState.channelHandle || channelId || "Not connected", tone: channelId ? "ok" : "warn" },
            { id: "project", label: "Project", value: projectContextCleared ? "None" : brain.projects.find((project) => project.id === brain.activeProjectId)?.name || brain.projects.find((project) => project.status === "active")?.name || "None" },
@@ -1941,24 +1918,20 @@ const AIBrainCommandInterface: React.FC = () => {
            onToggleLock={handleToggleSurfaceSelectionLock}
            onClearProject={handleClearActiveProject}
           />} />}
-         composer={<div className="shrink-0 border-t-[2px] border-black bg-white p-2 pb-[max(8px,env(safe-area-inset-bottom))]">
-          <BrainComposerBar
+         composer={<div className="vt-brain-chat-column__dock"><BrainComposerDock
            value={input}
            onChange={setInput}
-           onSend={() => void handleSend()}
+           onSend={() => { void handleSend() }}
            busy={busy}
-           textareaRef={composerRef as React.RefObject<HTMLTextAreaElement | null>}
-           onKeyDown={(event) => {
-            if (!shouldSendBrainComposerKey({ key: event.key, isComposing: event.nativeEvent.isComposing, shiftKey: event.shiftKey })) return
-            event.preventDefault()
-            void handleSend()
-           }}
-           onOpenPrompts={() => setPromptRailOpen(true)}
+           status={busy ? "loading" : undefined}
+           onOpenPrompts={() => { setLauncherMode("prompts"); setPromptRailOpen(true) }}
+           onOpenCapabilities={() => { setLauncherMode("capabilities"); setPromptRailOpen(true) }}
            onOpenContext={() => setContextRailOpen(true)}
            onOpenJournal={() => setJournalOpen(true)}
-           placeholder="Ask about your next video, audience, analytics, goals, thumbnails, SEO, publishing, or revenue..."
-          />
-         </div>}
+           promptLauncherRef={promptLauncherRef}
+           contextLauncherRef={contextLauncherRef}
+           composerRef={composerRef}
+          /></div>}
         >
           {!hydrated && messages.length === 0 ? (
            <div className="min-h-0 flex-1" aria-hidden="true" />
@@ -2020,14 +1993,14 @@ const AIBrainCommandInterface: React.FC = () => {
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); composerRef.current?.focus() }}
+          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          /> : <BrainCapabilityBrowser
           snapshot={snapshot}
           controls={brainControls}
           busy={busy}
           headingId="brain-capability-browser-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); composerRef.current?.focus() }}
+          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          />}
         </div>
        </div>
