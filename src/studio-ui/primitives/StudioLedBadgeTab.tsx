@@ -63,7 +63,7 @@ export function StudioLedBadgeTab({
   if (isTab || onClick) {
     return (
       <button type="button" className={classes} style={style} disabled={disabled} onClick={onClick}
-        aria-label={ariaLabel ?? label} aria-pressed={isTab ? active : undefined}
+        aria-label={ariaLabel ?? label} role={isTab ? "tab" : undefined} aria-selected={isTab ? active : undefined} aria-pressed={!isTab && onClick ? active : undefined}
         data-vt-studio-primitive="StudioLedBadgeTab" data-vt-led-animation={animation}>
         <span className="vt-studio-led-badge-tab__bevel" aria-hidden="true" />
         <span className="vt-studio-led-badge-tab__led" aria-hidden="true" />

@@ -7,7 +7,7 @@
 .vt-studio-led-badge-tab.is-tab.is-active{background:var(--vt-led-tone);color:#000;border-bottom-color:#000}
 .vt-studio-led-badge-tab:focus-visible{outline:2px solid #000;outline-offset:-4px;z-index:2}
 .vt-studio-led-badge-tab:disabled{opacity:.55;cursor:not-allowed}
-.vt-studio-led-badge-tab__bevel{position:absolute;inset:2px;z-index:-1;border:1px solid color-mix(in srgb,var(--vt-led-tone) 78%,#000);border-radius:3px;pointer-events:none}
+.vt-studio-led-badge-tab__bevel{position:absolute;inset:2px;z-index:0;border:1px solid color-mix(in srgb,var(--vt-led-tone) 78%,#000);border-radius:3px;pointer-events:none}
 .vt-studio-led-badge-tab.is-tab .vt-studio-led-badge-tab__bevel{inset:2px 1px;border-radius:0}
 .vt-studio-led-badge-tab__led{display:inline-block;position:relative;flex:0 0 auto;width:8px;height:8px;border:1px solid #000;border-radius:50%;background:var(--vt-led-tone);overflow:hidden}
 .vt-studio-led-badge-tab.is-mini .vt-studio-led-badge-tab__led{width:6px;height:6px}
