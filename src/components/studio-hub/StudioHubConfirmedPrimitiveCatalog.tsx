@@ -60,6 +60,7 @@ import { StudioDropdown } from "../../studio-ui/primitives/StudioDropdown"
 import { StudioInterModule } from "../../studio-ui/primitives/StudioInterModule"
 import { StudioResponseMetaRow } from "../../studio-ui/primitives/StudioResponseMetaRow"
 import { StudioLedBadgeTab } from "../../studio-ui/primitives/StudioLedBadgeTab"
+import { StudioChatResponseShell } from "../../studio-ui/primitives/StudioChatResponseShell"
 import "./studio-hub-primitive-catalogs.css"
 import "../../styles/studio-confirmed-catalog-modules.css"
 import { ConfirmedFamilyModule } from "./ConfirmedCatalogModules"
@@ -1441,6 +1442,21 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
         />
         <span>MICRO · LONG LABEL WRAPS</span>
         <StudioResponseMetaRow sizeVariant="micro" title="EVIDENCE PROVENANCE" metadata={<span>PARTIAL MATCH</span>} />
+      </div>
+    </Family>
+    <Family title="StudioChatResponseShell · Compact" nonDefaultSettings={[
+      "Slot-based response composition: metadata first, answer content, optional evidence, then caller-owned actions.",
+      "Evidence visibility and interaction remain owned by the caller; this shell does not add a second evidence or action system.",
+      "Responsive wrapping uses the Studio spacing rhythm without shadows or geometry movement.",
+    ]} provenance={<Provenance primitive="StudioChatResponseShell" tsx="src/studio-ui/primitives/StudioChatResponseShell.tsx" css="src/styles/studio-chat-response-shell.css" tokens="44px standard / 28px compact / 12px micro · 4px spacing rhythm" imports={["src/studio-ui/primitives/StudioChatResponseShell.tsx", "src/styles/studio-chat-response-shell.css"]} />}>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatResponseShell">
+        <StudioChatResponseShell
+          metadata={<StudioResponseMetaRow title="ANSWER SUMMARY" status={<StudioBrainStatusBadge label="READY" tone="green" appearance="tinted" />} metadata={<span>3 SOURCES</span>} />}
+          evidence={<details><summary>VIEW EVIDENCE</summary><p>Evidence details remain caller-owned content.</p></details>}
+          actions={<StudioChatActionGroup><StudioButton sizeVariant="compact">COPY</StudioButton><StudioButton sizeVariant="compact">RETRY</StudioButton></StudioChatActionGroup>}
+        >
+          <p>Answer-first response content goes here. Keep the main response readable before optional supporting detail.</p>
+        </StudioChatResponseShell>
       </div>
     </Family>
     <Family title="StudioChatActionGroup · Compact" nonDefaultSettings={[
