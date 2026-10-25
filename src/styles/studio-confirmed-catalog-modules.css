@@ -110,6 +110,23 @@
   min-width: 0;
   width: 100%;
 }
+/* Every primitive's representative specimen spans its module's full content
+   width. This applies to all family modules, not just the top ledger, so no
+   representative can be stranded in a left-hand grid column. */
+.vt-confirmed-catalog .vt-confirmed-primitive-module > .vt-confirmed-primitive-body > .vt-confirmed-variants {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  width: 100%;
+}
+.vt-confirmed-catalog .vt-confirmed-primitive-module > .vt-confirmed-primitive-body > .vt-confirmed-variants > .vt-confirmed-variant {
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
 .vt-confirmed-button-family > .vt-confirmed-primitive-body > .vt-confirmed-variants {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
