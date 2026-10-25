@@ -2000,7 +2000,7 @@ const AIBrainCommandInterface: React.FC = () => {
           busy={busy}
           headingId="brain-capability-browser-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); composerRef.current?.focus() }}
+          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          />}
         </div>
        </div>
