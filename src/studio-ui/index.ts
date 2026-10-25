@@ -1,6 +1,7 @@
 import "../styles/toolbox-entry.css"
 import "../styles/studio-control-entry.css"
 import "../styles/studio-led-badge-tab.css"
+import "../styles/studio-chat-composer-dock.css"
 
 export { STUDIO_TOKENS } from "./tokens"
 export type { StudioControlSize, StudioHierarchyLevel } from "./tokens"
@@ -158,3 +159,6 @@ export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInpu
 
 export { StudioLedBadgeTab } from "./primitives/StudioLedBadgeTab"
 export type { StudioLedBadgeTabProps, StudioLedBadgeTabMode, StudioLedAnimation, StudioLedAlert, StudioLedTone } from "./primitives/StudioLedBadgeTab"
+
+export { StudioChatComposerDock } from "./primitives/StudioChatComposerDock"
+export type { StudioChatComposerDockProps } from "./primitives/StudioChatComposerDock"
