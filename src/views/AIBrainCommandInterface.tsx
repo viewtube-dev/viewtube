@@ -1077,6 +1077,15 @@ const CreatorIntakeWizard: React.FC<{
 const AIBrainCommandInterface: React.FC = () => {
  const location = useLocation()
  const navigate = useNavigate()
+ const [searchParams, setSearchParams] = useSearchParams()
+ const requestedPageTab = searchParams.get("tab")
+ const pageTab: BrainPageTabId = requestedPageTab === "my-brain" || requestedPageTab === "review" || requestedPageTab === "controls" ? requestedPageTab : "chat"
+ const setPageTab = (tab: BrainPageTabId) => {
+  const next = new URLSearchParams(searchParams)
+  if (tab === "chat") next.delete("tab")
+  else next.set("tab", tab)
+  setSearchParams(next, { replace: true })
+ }
  const brainContext = useBrain()
  const {
   brain,
