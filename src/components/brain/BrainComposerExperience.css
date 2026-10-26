@@ -82,28 +82,39 @@
 }
 
 @media (min-width: 768px) {
-  [data-vt-brain-component="BrainLauncherDrawer"] {
+  [data-vt-brain-component="BrainLauncherDrawer"],
+  [data-vt-brain-component="BrainContextDrawer"] {
     display: grid !important;
-    inset: 0 0 0 auto;
-    width: min(700px, 62vw);
+    inset: 0;
+    grid-template-columns: minmax(0, 1fr) min(700px, 62vw);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 0;
+    padding: 0;
+    border-left: 0;
+    background: rgb(17 17 17 / 20%) !important;
+  }
+
+  [data-vt-brain-component="BrainLauncherDrawer"] > :first-child,
+  [data-vt-brain-component="BrainContextDrawer"] > :first-child {
+    grid-column: 2;
+    background: #f8f8f4;
+    padding: 16px 16px 10px;
     border-left: 2px solid #111;
   }
 
-  [data-vt-brain-component="BrainContextDrawer"] {
-    display: grid !important;
-    inset: 0 0 0 auto;
-    width: min(520px, 48vw);
+  [data-vt-brain-component="BrainLauncherDrawer"] > .vt-scrollless,
+  [data-vt-brain-component="BrainContextDrawer"] > .vt-scrollless {
+    grid-column: 2;
+    background: #f8f8f4;
+    padding: 0 16px 16px;
     border-left: 2px solid #111;
   }
 }
 
 @media (min-width: 1280px) {
-  [data-vt-brain-component="BrainLauncherDrawer"] {
-    width: min(760px, 58vw);
-  }
-
+  [data-vt-brain-component="BrainLauncherDrawer"],
   [data-vt-brain-component="BrainContextDrawer"] {
-    width: min(560px, 42vw);
+    grid-template-columns: minmax(0, 1fr) min(760px, 58vw);
   }
 }
 
