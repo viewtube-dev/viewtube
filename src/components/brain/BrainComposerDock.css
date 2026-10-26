@@ -14,9 +14,8 @@
   color: var(--brain-composer-ink);
   background: var(--brain-composer-paper);
   border: 2px solid var(--brain-composer-ink);
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: clip;
-  box-shadow: 0 0 0 1px rgb(17 17 17 / 8%);
 }
 
 .vt-brain-composer-dock [data-vt-composer-layout="toolbar-actions"] {
@@ -81,7 +80,6 @@
   min-height: 30px;
   border-radius: 4px;
   white-space: nowrap;
-  transition: background-color 120ms ease, color 120ms ease;
 }
 
 .vt-brain-composer-dock .vt-brain-composer-tool__content {
