@@ -6487,7 +6487,7 @@ button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-stud
   border:0; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); color:#000;
 }
 button[data-vt-studio-button="true"].vt-studio-split-right-button [data-vt-studio-split-rail][data-rail="end"],
-button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-rail][data-rail="end] { border-left:var(--vt-studio-control-stroke,3px) solid #000; }
+button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-rail][data-rail="end"] { border-left:var(--vt-studio-control-stroke,3px) solid #000; }
 button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-rail][data-rail="start"] { border-right:var(--vt-studio-control-stroke,3px) solid #000; }
 button[data-vt-studio-button="true"].vt-studio-split-right-button [data-vt-studio-split-rail] > svg,
 button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-rail] > svg {
