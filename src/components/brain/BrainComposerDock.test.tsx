@@ -33,8 +33,10 @@ describe("BrainComposerDock", () => {
   })
 
   it("does not enable send for an empty or whitespace-only draft", () => {
-    expect(renderComposer()).toContain('aria-label="Send message" disabled=""')
-    expect(renderComposer({ value: "   " })).toContain('aria-label="Send message" disabled=""')
+    for (const html of [renderComposer(), renderComposer({ value: "   " })]) {
+      expect(html).toContain('aria-label="Send message"')
+      expect(html).toContain('disabled=""')
+    }
   })
 
   it("enables send for a non-empty draft and disables it while Brain is working", () => {
@@ -42,8 +44,9 @@ describe("BrainComposerDock", () => {
     const busy = renderComposer({ value: "Review my latest video", busy: true })
 
     expect(ready).toContain('aria-label="Send message"')
-    expect(ready).not.toContain('aria-label="Send message" disabled=""')
-    expect(busy).toContain('aria-label="Sending message" disabled=""')
+    expect(ready).not.toContain('disabled=""')
+    expect(busy).toContain('aria-label="Sending message"')
+    expect(busy).toContain('disabled=""')
     expect(busy).toContain("Working")
   })
 })
