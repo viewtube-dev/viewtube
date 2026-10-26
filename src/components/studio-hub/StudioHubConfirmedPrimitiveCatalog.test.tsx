@@ -402,6 +402,21 @@ it("keeps one square-icon family and exposes all four canonical toggle/choice sk
 });
 
 
+
+describe("confirmed primitive edge and open-state regression coverage", () => {
+  it("extends the InterModule over the containing module's 4px side gutters", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-inter-module.css"), "utf8")
+    expect(source).toContain('className="vt-studio-inter-host--bleed"')
+    expect(css).toMatch(/\.vt-studio-inter-module\.vt-studio-inter-host--bleed\s*\{[^}]*width:\s*calc\(100%\s*\+\s*8px\)[^}]*margin-inline:\s*-4px/s)
+  })
+
+  it("restores a horizontal header/body divider only while collapsible modules are open", () => {
+    const css = readStudioControlCss()
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module\[open\]\s*>\s*\.vt-studio-collapsing-split-module__head\s*\{[^}]*border-bottom:\s*var\(--vt-top-split-stroke[^;]*solid\s+#000/s)
+  })
+})
+
 describe("confirmed double-split slider specimen isolation", () => {
   it("gives each standard, compact, and micro slider specimen an independent value state", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
