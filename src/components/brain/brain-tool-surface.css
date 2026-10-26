@@ -1,0 +1,102 @@
+/* Brain Capability Browser surface layout.
+ * Keep layout-only styles here; controls retain their approved Studio primitive styles.
+ */
+.vt-brain-tool-surface {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  color: #000;
+}
+
+.vt-brain-tool-surface__header,
+.vt-brain-tool-surface__filters,
+.vt-brain-tool-surface__meta,
+.vt-brain-tool-surface__list,
+.vt-brain-tool-surface__detail {
+  min-width: 0;
+}
+
+.vt-brain-tool-surface__filters {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fff;
+}
+
+.vt-brain-tool-surface__meta {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  line-height: 1rem;
+}
+
+.vt-brain-tool-surface__list {
+  display: grid;
+  align-content: start;
+  gap: 0.625rem;
+  min-height: 0;
+  margin: 0;
+  padding: 0.125rem 0.125rem 0.5rem 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+}
+
+.vt-brain-tool-surface__list > li {
+  min-width: 0;
+}
+
+.vt-brain-tool-surface__detail {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  padding: 0.625rem;
+  border: 2px solid #000;
+  background: #fff;
+}
+
+.vt-brain-tool-surface__actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.vt-brain-tool-surface__actions > * {
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .vt-brain-tool-surface__actions.is-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .vt-brain-tool-surface {
+    gap: 0.375rem;
+  }
+
+  .vt-brain-tool-surface__list {
+    gap: 0.5rem;
+  }
+
+  .vt-brain-tool-surface__detail {
+    padding: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-brain-tool-surface *,
+  .vt-brain-tool-surface *::before,
+  .vt-brain-tool-surface *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
