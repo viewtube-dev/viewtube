@@ -26,3 +26,11 @@ These are the user-designated starting points. Fetch the current version from th
 ## Conflict handling
 
 Do not assume every link refers to the same branch state. First inspect the explicit target branch. Use current product decisions and the current hierarchy document to resolve precedence. Record same-level conflicts for a human decision rather than inventing a winner. If code and docs disagree, document the contradiction and trace the owning layer before repairing it.
+
+
+## Active Mini-size correction
+
+- **Mini control typography and icon size: 17.5px** (not 16px).
+- Canonical implementation: `src/studio-ui/tokens.ts` → `STUDIO_CONTROL_SIZE_BASE.mini` and `STUDIO_CONTROL_SIZE_CONTRACT.multiline.miniFontSize`.
+- Preserve the existing 20px Mini control height, 1.5px stroke, and 3px radius. This correction changes typography/icon sizing, not the tier's geometry.
+- Verify generated CSS variables and primitive consumers after changing tokens; do not hand-edit generated output as a competing source of truth.
