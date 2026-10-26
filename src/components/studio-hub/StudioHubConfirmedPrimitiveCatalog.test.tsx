@@ -10,6 +10,7 @@ const readStudioControlCss = () => [
   "studio-control-core.css",
   "studio-control-split.css",
   "studio-control-fields.css",
+  "studio-inter-module.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
@@ -36,7 +37,8 @@ describe("confirmed composite primitive catalog", () => {
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
       "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
-      "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioTagEditor", "StudioUploadFrame",
+      "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioBrainStatusIndicator", "StudioTagEditor", "StudioUploadFrame",
+      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
     ]) {
       expect(representative).toContain(`data-vt-library-component="${primitive}"`)
     }
@@ -387,6 +389,20 @@ it("keeps one square-icon family and exposes all four canonical toggle/choice sk
   expect(css).toContain(".vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle")
 });
 
+
+describe("confirmed primitive edge and open-state regression coverage", () => {
+  it("bleeds the InterModule past the catalog's 4px side gutters", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-inter-module.css"), "utf8")
+    expect(source).toContain("vt-studio-inter-host--bleed")
+    expect(css).toMatch(/\.vt-studio-inter-host--bleed\s*\{[^}]*width:\s*calc\(100%\s*\+\s*8px\)[^}]*margin-inline:\s*-4px/s)
+  })
+
+  it("restores the horizontal divider while a collapsible module is open", () => {
+    const css = readStudioControlCss()
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module\[open\]\s*>\s*\.vt-studio-collapsing-split-module__head\s*\{[^}]*border-bottom:\s*var\(--vt-top-split-stroke[^;]*solid\s+#000/s)
+  })
+})
 
 describe("confirmed double-split slider specimen isolation", () => {
   it("gives each standard, compact, and micro slider specimen an independent value state", () => {
