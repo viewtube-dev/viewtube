@@ -13,6 +13,7 @@ const read = (path) => {
 
 const entry = read("src/styles/studio-control-entry.css")
 const overrides = read("src/styles/studio-control-distill-overrides.css")
+const recovery = read("src/styles/studio-control-recovery-overrides.css")
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
 const controls = read("src/studio-ui/primitives/StudioControls.tsx")
 const index = read("src/studio-ui/index.ts")
@@ -31,8 +32,12 @@ const checks = [
   ["square icon group uses content width", overrides.includes(".vt-studio-square-icon-button-group") && overrides.includes("width: max-content")],
   ["bar toggle uses 50% primary fill, black active bars, and a 2.5:1 height/width ratio", overrides.includes(".vt-studio-value-toggle__bar") && overrides.includes("--vt-bar-height: var(--vt-studio-control-font-size") && overrides.includes("aspect-ratio: 2 / 5") && overrides.includes("50%, transparent") && overrides.includes('data-active="true"') && overrides.includes("background: #000 !important")],
   ["stacked toggle divider is centered", overrides.includes(".vt-studio-value-toggle__arrow-stack::after") && overrides.includes("top: 50%") && overrides.includes("translateY(-50%)")],
+  ["side-toggle rails reuse Side Counter arrow metrics", system.includes(".vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg") && system.includes("width: 14px;") && system.includes("width: 42px;") && system.includes("width: 30px;") && system.includes("width: 15px;")],
+  ["side-toggle arrow stack has one horizontal divider owner", !system.includes(".vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow + .vt-studio-value-toggle__arrow") && system.includes(".vt-studio-value-toggle__arrow-stack::after")],
+  ["split text input has no second inset border in resting or focus state", entry.includes(".vt-studio-split-text-input{padding:0;background:var(--vt-field-fill-rest);box-shadow:none}") && entry.includes(".vt-studio-split-text-input:focus-within{outline:var(--vt-field-focus-outline);outline-offset:0;background:var(--vt-field-fill-focus);box-shadow:none}") && files["src/styles/studio-control-recovery-overrides.css"].content.includes(".vt-studio-split-text-input:focus-within { outline: var(--vt-field-focus-outline) !important; outline-offset: 0; box-shadow: none !important; }")],
   ["catalog uses canonical StudioTopSplitModule", catalog.includes("StudioTopSplitModule") && controls.includes("StudioTopSplitModule")],
   ["catalog uses canonical StudioSquareIconButtonGroup", catalog.includes("StudioSquareIconButtonGroup") && controls.includes("StudioSquareIconButtonGroup")],
+  ["Brain Status Badge has its own production representative row", catalog.includes('data-vt-library-component="StudioBrainStatusBadge"') && catalog.includes('<StudioBrainStatusBadge label="READY" tone="green" appearance="tinted" />')],
   ["Brain feedback uses canonical icon-button group", brain.includes("BrainFeedbackControls") && brain.includes("<StudioSquareIconButtonGroup")],
   ["primitive specimen sections are collapsed-by-default disclosures", catalog.includes('data-vt-confirmed-primitive="true"') && catalog.includes('className="vt-confirmed-primitive-summary"') && !/const Family:[\s\S]*?<details[^>]*\bopen=/.test(catalog)],
   ["global defaults is collapsed by default", catalog.includes('data-vt-confirmed-family="defaults"') && !/data-vt-confirmed-family="defaults"[^>]*\bopen=/.test(catalog)],
