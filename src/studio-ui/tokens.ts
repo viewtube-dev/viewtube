@@ -76,7 +76,7 @@ export const STUDIO_CONTROL_SIZE_BASE = {
   supreme: { height: 60, stroke: 3, radius: 6, fontSize: 51.82, fontWeight: 1000, textStroke: 1, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 51.82, iconStroke: 1.9, floatingLabelHeight: 51.82, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, floatingLabelHeight: 38, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2, floatingLabelHeight: 24, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
-  mini: { height: 20, stroke: 1.5, radius: 3, fontSize: 16, fontWeight: 1000, textStroke: 0.4, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.975, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.975, iconSize: 16, iconStroke: 1.6, floatingLabelHeight: 16, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  mini: { height: 20, stroke: 1.5, radius: 3, fontSize: 17.5, fontWeight: 1000, textStroke: 0.4, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.975, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.975, iconSize: 17.5, iconStroke: 1.6, floatingLabelHeight: 17.5, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   micro: { height: 12, stroke: 1.5, radius: 3, fontSize: 10, fontWeight: 1000, textStroke: 0.4, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.01, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.975, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.975, iconSize: 10, iconStroke: 1.6, floatingLabelHeight: 10, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
 } as const
 
@@ -128,7 +128,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     supremeFontSize: Math.round((18 * 60) / 44),
     standardFontSize: 18,
     compactFontSize: 14,
-    miniFontSize: 16,
+    miniFontSize: 17.5,
     microFontSize: 10,
     supremeTextStroke: 0.68,
     standardTextStroke: 0.5,
