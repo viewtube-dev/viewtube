@@ -18,7 +18,7 @@
   overflow: clip;
 }
 
-.vt-brain-composer-dock [data-vt-composer-layout="toolbar-actions"] {
+.vt-brain-composer-dock[data-vt-composer-layout="toolbar-actions"] {
   width: 100%;
   min-width: 0;
   gap: 0;
