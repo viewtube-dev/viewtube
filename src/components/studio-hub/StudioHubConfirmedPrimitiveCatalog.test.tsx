@@ -49,7 +49,7 @@ describe("confirmed composite primitive catalog", () => {
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
       "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
-      "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioTagEditor", "StudioUploadFrame",
+      "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioBrainStatusIndicator", "StudioTagEditor", "StudioUploadFrame",
     ]) {
       expect(representative).toContain(`data-vt-library-component="${primitive}"`)
     }
@@ -57,6 +57,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(source).toContain('title="Collapsing Two-Line Module · Standard"')
     expect(source).toContain('data-vt-library-component="StudioCollapsingTwoLineModule"')
     expect(source).toContain('title="InterModule · Standard"')
+    expect(source).toContain('data-vt-library-component="StudioTwoLineInterModule"')
     expect(source).toContain('title="Split Accordion · Train Motion"')
     const directPrimitiveNames = [...representative.matchAll(/data-vt-library-component="([^"]+)"/g)].map((match) => match[1])
     expect(new Set(directPrimitiveNames).size).toBe(directPrimitiveNames.length)
