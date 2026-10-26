@@ -1934,9 +1934,9 @@ const AIBrainCommandInterface: React.FC = () => {
            onSend={() => { void handleSend() }}
            busy={busy}
            status={busy ? "loading" : undefined}
-           onOpenPrompts={() => { setLauncherMode("prompts"); setPromptRailOpen(true) }}
-           onOpenCapabilities={() => { setLauncherMode("capabilities"); setPromptRailOpen(true) }}
-           onOpenContext={() => setContextRailOpen(true)}
+           onOpenPrompts={() => { setContextRailOpen(false); setLauncherMode("prompts"); setPromptRailOpen(true) }}
+           onOpenCapabilities={() => { setContextRailOpen(false); setLauncherMode("capabilities"); setPromptRailOpen(true) }}
+           onOpenContext={() => { setPromptRailOpen(false); setContextRailOpen(true) }}
            onOpenJournal={() => setJournalOpen(true)}
            promptLauncherRef={promptLauncherRef}
            contextLauncherRef={contextLauncherRef}
@@ -1985,7 +1985,7 @@ const AIBrainCommandInterface: React.FC = () => {
         role="dialog"
         aria-modal="true"
         aria-labelledby="brain-prompt-library-dialog-title"
-        className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden"
+        className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3"
        >
         <div data-vt-brain-part="mobile-launcher-heading" className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
          <div className="flex items-center justify-between gap-2">
@@ -2017,7 +2017,7 @@ const AIBrainCommandInterface: React.FC = () => {
       ) : null}
 
       {contextRailOpen ? (
-       <div data-vt-brain-component="BrainContextDrawer" role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3 xl:hidden">
+       <div data-vt-brain-component="BrainContextDrawer" role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3">
         <div className="mb-2 flex items-center justify-between border-b-[2px] border-black pb-2">
          <h2 data-vt-brain-part="context-drawer-heading" id="brain-context-dialog-title" className="text-lg font-[1000] uppercase">Your Channel Context</h2>
          <StudioButton data-vt-brain-part="mobile-context-close" ref={contextCloseRef} sizeVariant="compact" tone="neutral" type="button" onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</StudioButton>

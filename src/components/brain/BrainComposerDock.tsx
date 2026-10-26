@@ -12,6 +12,7 @@ import { BrainChatStatusBadge } from "./BrainChatPrimitives"
 import type { BrainChatStatus } from "./BrainChatPrimitives"
 import { BrainComposerToolButton, BrainComposerToolRail } from "./BrainComposerPrimitives"
 import "./BrainComposerDock.css"
+import "./BrainComposerExperience.css"
 
 export type BrainComposerDockProps = {
   value: string

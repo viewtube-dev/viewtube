@@ -25,6 +25,8 @@ describe("BrainComposerDock", () => {
     expect(html).toContain("vt-brain-composer-dock")
     expect(html).toContain("vt-brain-composer-input")
     expect(html).toContain("vt-brain-composer-send")
+    expect(html).toContain('role="group" aria-label="Brain tools"')
+    expect(html).toContain('aria-haspopup="dialog"')
     expect(html).toContain('data-vt-composer-layout="toolbar-actions"')
     expect(html.indexOf('placeholder="What would you like to work on?"')).toBeLessThan(html.indexOf('aria-label="Open Prompt Library"'))
     expect(html).toContain('placeholder="What would you like to work on?"')
