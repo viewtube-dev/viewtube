@@ -161,7 +161,7 @@ export { StudioLedBadgeTab } from "./primitives/StudioLedBadgeTab"
 export type { StudioLedBadgeTabProps, StudioLedBadgeTabMode, StudioLedAnimation, StudioLedAlert, StudioLedTone } from "./primitives/StudioLedBadgeTab"
 
 export { StudioChatComposerDock } from "./primitives/StudioChatComposerDock"
-export type { StudioChatComposerDockProps } from "./primitives/StudioChatComposerDock"
+export type { StudioChatComposerDockProps, StudioChatComposerDockLayout } from "./primitives/StudioChatComposerDock"
 
 export { StudioChatResponseShell } from "./primitives/StudioChatResponseShell"
 export type { StudioChatResponseShellProps, StudioChatResponseShellSize } from "./primitives/StudioChatResponseShell"
