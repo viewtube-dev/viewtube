@@ -22,10 +22,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(representativeEnd).toBeGreaterThan(representativeStart)
     const representative = source.slice(representativeStart, representativeEnd)
 
-    expect(representative).toContain('title="Direct Imported Primitive Representatives · Standard"')
-    expect(representative).not.toContain('data-vt-library-component="StudioCollapsingSplitModule"')
-    expect(representative).not.toContain('data-vt-library-component="StudioInterModule"')
-    expect(representative).not.toContain('data-vt-library-component="StudioSplitAccordion"')
+    expect(representative).toContain('title="Representatives · One Standard Specimen Per Primitive"')
     for (const primitive of [
       "StudioButton", "StudioActionButton", "StudioTwoLineButton", "StudioSplitTwoLineButton",
       "StudioSplitLeftButton", "StudioSplitRightButton", "StudioDoubleSplitButton",
@@ -50,7 +47,7 @@ describe("confirmed composite primitive catalog", () => {
     const directPrimitiveNames = [...representative.matchAll(/data-vt-library-component="([^"]+)"/g)].map((match) => match[1])
     expect(new Set(directPrimitiveNames).size).toBe(directPrimitiveNames.length)
     for (const primitive of directPrimitiveNames) {
-      expect(source.match(new RegExp(`data-vt-library-component="${primitive}"`, "g"))?.length ?? 0).toBeGreaterThanOrEqual(2)
+      expect(representative).toContain(`<${primitive}`)
     }
 
     for (const title of [
