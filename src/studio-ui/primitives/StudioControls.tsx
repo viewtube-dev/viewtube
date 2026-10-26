@@ -265,7 +265,7 @@ const studioSkinClass = (skin: StudioControlSkin) => ({
   "white-indicator": "is-white-indicator",
 }[skin]);
 export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", sizeVariant = "standard", type = "button", ...props }) => (
-  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-size={sizeVariant} className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
+  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-vt-studio-width="content" data-size={sizeVariant} className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
 );
 export type StudioChoiceKind = "radio" | "checkbox";
 export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
@@ -449,7 +449,7 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
       type={type}
       role={kind}
       aria-checked={isChecked}
-      data-vt-studio-control="true"
+      data-vt-studio-control="true" data-vt-studio-width="content"
       data-size={sizeVariant}
       data-radio-motion={kind === "radio" ? radioMotion : undefined}
       data-radio-direction={kind === "radio" ? motionDirection : undefined}
@@ -734,7 +734,7 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     );
   }
 
-  return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "60" ? "supreme" : size === "28" ? "compact" : size === "20" ? "mini" : size === "12" ? "micro" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "60" ? 5.5 : size === "28" ? 2 : size === "20" ? 1.5 : size === "12" ? 1 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
+  return <div ref={rootRef} role="group" data-vt-studio-control="true" data-vt-studio-width="content" data-size={size === "60" ? "supreme" : size === "28" ? "compact" : size === "20" ? "mini" : size === "12" ? "micro" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "60" ? 5.5 : size === "28" ? 2 : size === "20" ? 1.5 : size === "12" ? 1 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
     <span ref={handleRef} className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"}>
       <span ref={overlayRef} className="vt-studio-44-word-handle-color" aria-hidden="true" />
     </span>
@@ -950,7 +950,7 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       aria-checked={value}
       aria-label={ariaLabel ?? words[0] + " / " + words[1]}
       data-vt-studio-control="true"
-      data-vt-studio-vertical-word-toggle="true"
+      data-vt-studio-vertical-word-toggle="true" data-vt-studio-width="content"
       data-vertical-word-toggle-variant={variant}
       data-size={sizeVariant}
       data-value={String(value)}
