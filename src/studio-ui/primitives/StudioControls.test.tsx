@@ -1028,6 +1028,10 @@ describe("StudioVerticalWordToggle", () => {
     expect(html).toContain('data-vertical-word-toggle-variant="white-fill"');
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={true} sizeVariant="compact" />)).toContain('data-size="compact"');
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={false} sizeVariant="micro" />)).toContain('data-size="micro"');
+    const controlsSource = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    expect(controlsSource).toContain('handle.style.bottom = "auto";');
+    expect(controlsSource).toContain('handle.style.insetBlockEnd = "auto";');
+    expect(controlsSource).toContain('const destination = getBounds(to ? 1 : 0);');
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.globalRuleException).toBe(true);
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.height).toBe("content-driven two-word stack; intentionally not 44px / 28px / 12px");
   });
