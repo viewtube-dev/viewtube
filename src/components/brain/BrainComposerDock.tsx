@@ -10,6 +10,8 @@ import {
 import { TOOLBOX_PALETTE } from "../../styles/toolboxPalette"
 import { BrainChatStatusBadge } from "./BrainChatPrimitives"
 import type { BrainChatStatus } from "./BrainChatPrimitives"
+import { BrainComposerToolButton, BrainComposerToolRail } from "./BrainComposerPrimitives"
+import "./BrainComposerDock.css"
 
 export type BrainComposerDockProps = {
   value: string
@@ -46,39 +48,10 @@ const actionStyle = (primary: number, secondary: number): React.CSSProperties =>
     "--vt-studio-control-secondary": TOOLBOX_PALETTE[secondary],
   }) as React.CSSProperties
 
-const ComposerToolButton: React.FC<{
-  icon: React.ReactNode
-  children: React.ReactNode
-  label: string
-  onClick: () => void
-  className?: string
-  style?: React.CSSProperties
-  buttonRef?: React.Ref<HTMLButtonElement>
-  hasPopup?: boolean
-}> = ({ icon, children, label, onClick, className = "", style, buttonRef, hasPopup = true }) => (
-  <StudioButton
-    ref={buttonRef}
-    type="button"
-    sizeVariant="compact"
-    tone="neutral"
-    onClick={onClick}
-    aria-label={label}
-    aria-haspopup={hasPopup ? "dialog" : undefined}
-    title={label}
-    className={`vt-brain-composer-tool ${className}`.trim()}
-    style={style}
-  >
-    <span className="vt-brain-composer-tool__content">
-      <span className="vt-brain-composer-tool__icon" aria-hidden="true">{icon}</span>
-      <span>{children}</span>
-    </span>
-  </StudioButton>
-)
-
 /**
- * Single canonical composer for the Brain conversation.
- * The message field stays primary; secondary tools use short, familiar labels.
- * Capability and prompt behavior remains owned by the existing Brain surfaces.
+ * Canonical Brain composer composition. The input and send action are visually
+ * dominant; prompts, capabilities, context and journal remain one-tap discoverable.
+ * The page continues to own submission, prompt selection and Brain state.
  */
 export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   value,
@@ -149,8 +122,8 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
         ) : null
       }
       tray={
-        <>
-          <ComposerToolButton
+        <BrainComposerToolRail label="Brain tools">
+          <BrainComposerToolButton
             buttonRef={promptLauncherRef}
             icon={<LayoutGrid size={14} />}
             label="Open Prompt Library"
@@ -158,16 +131,16 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             style={actionStyle(11, 3)}
           >
             Prompts
-          </ComposerToolButton>
-          <ComposerToolButton
+          </BrainComposerToolButton>
+          <BrainComposerToolButton
             icon={<SlidersHorizontal size={14} />}
             label="Open Brain capabilities"
             onClick={onOpenCapabilities}
             style={actionStyle(7, 5)}
           >
             Tools
-          </ComposerToolButton>
-          <ComposerToolButton
+          </BrainComposerToolButton>
+          <BrainComposerToolButton
             buttonRef={contextLauncherRef}
             icon={<PanelRight size={14} />}
             label="Open channel context"
@@ -175,7 +148,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             style={actionStyle(5, 9)}
           >
             Context
-          </ComposerToolButton>
+          </BrainComposerToolButton>
           {onOpenJournal ? (
             <StudioSquareIconButton
               sizeVariant="compact"
@@ -188,7 +161,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
               style={{ backgroundColor: "#36E0F6" }}
             />
           ) : null}
-        </>
+        </BrainComposerToolRail>
       }
       field={
         <>
