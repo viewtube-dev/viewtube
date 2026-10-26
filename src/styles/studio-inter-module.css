@@ -288,7 +288,7 @@
 
 
 /* Override the catalog/module body's 4px side inset so intermodule rails meet the containing module's inner borders. */
-.vt-studio-inter-host--bleed {
+.vt-studio-inter-module.vt-studio-inter-host--bleed {
   box-sizing: border-box;
   width: calc(100% + 8px);
   max-width: none;
