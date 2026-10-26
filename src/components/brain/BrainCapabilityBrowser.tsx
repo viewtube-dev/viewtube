@@ -4,7 +4,7 @@ import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterf
 import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS, BRAIN_CAPABILITY_REGISTRY } from "../../services/brain/BrainCapabilityRegistry"
 import type { BrainCapabilityDefinition } from "../../types"
 import type { BrainUserControls } from "../../services/brain/BrainUserControls"
-import { StudioTextInput, StudioSplitLeftButton, StudioButton } from "../../studio-ui"
+import { StudioTextInput, StudioSplitLeftButton, StudioButton, StudioTopSplitModule } from "../../studio-ui"
 import { BrainChatStatusBadge } from "./BrainChatPrimitives"
 
 export type BrainCapabilityAvailability = {
@@ -74,18 +74,17 @@ export const BrainCapabilityBrowser: React.FC<{
  const selected = capabilities.find((capability) => capability.id === selectedId) || null
 
  return (
-  <section aria-labelledby={headingId} aria-busy={busy || undefined} className="flex min-h-0 flex-col overflow-hidden rounded-[10px] border-[2px] border-black bg-white">
-   <div className="shrink-0 border-b-[2px] border-black bg-[#36E0F6] px-3 py-2">
-    <h2 id={headingId} className="text-[12px] font-[1000] uppercase leading-4 tracking-[0.08em]">Capability Browser</h2>
-    <p className="mt-1 text-[10px] font-bold leading-4 text-black/70">Find a Brain capability and prepare a guided request. Launching a prompt does not bypass evidence checks or permissions.</p>
-   </div>
-   <div className="p-2">
+  <section aria-labelledby={headingId} aria-busy={busy || undefined} className="flex min-h-0 min-w-0 flex-col overflow-hidden">
+   <StudioTopSplitModule as="section" sizeVariant="compact" title={<span id={headingId}>Capability Browser</span>} className="shrink-0">
+    <p className="mt-1 text-xs font-bold leading-4">Find a Brain capability and prepare a guided request. Launching a prompt does not bypass evidence checks or permissions.</p>
+   </StudioTopSplitModule>
+   <div className="min-w-0 p-2">
     <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search capabilities, topics, or intent…" className="w-full min-w-0" aria-label="Search Brain capabilities" aria-controls={`${headingId}-results`} />
    </div>
-   <p className="px-3 pb-1 text-[10px] font-bold text-black/60" role="status" aria-live="polite">
+   <p className="px-3 pb-1 text-xs font-bold" role="status" aria-live="polite">
     {capabilities.length} of {BRAIN_CAPABILITY_REGISTRY.length} capabilities
    </p>
-   <ul id={`${headingId}-results`} className="grid min-h-0 gap-1.5 overflow-y-auto p-2" aria-label="Available Brain capabilities">
+   <ul id={`${headingId}-results`} className="grid min-h-0 min-w-0 gap-1.5 overflow-y-auto p-2" aria-label="Available Brain capabilities">
     {capabilities.map((capability) => {
      const availability = getBrainCapabilityAvailability(capability, controls, snapshot)
      const isSelected = selectedId === capability.id
@@ -93,25 +92,25 @@ export const BrainCapabilityBrowser: React.FC<{
       <li key={capability.id}>
        <div className="grid min-w-0 gap-1">
         <StudioSplitLeftButton sizeVariant="compact" icon={<Sparkles aria-hidden="true" />} disabled={busy} selected={isSelected} aria-pressed={isSelected} onClick={() => setSelectedId(isSelected ? null : capability.id)} className="w-full min-w-0" title={capability.label}>{capability.label}</StudioSplitLeftButton>
-        <p className="px-1 text-xs font-bold leading-4 text-black/70">{capability.description}</p>
+        <p className="px-1 text-xs font-bold leading-4">{capability.description}</p>
         <div className="px-1"><BrainChatStatusBadge status={availability.status === "ready" ? "ready" : availability.status === "blocked" ? "error" : "warning"} label={availability.label} /></div>
        </div>
       </li>
      )
     })}
-    {!capabilities.length ? <li className="rounded-[7px] border-[2px] border-dashed border-black/40 p-4 text-xs font-bold text-black/60">No capabilities match “{query}”. Try a topic such as analytics, SEO, audience, or publishing.</li> : null}
+    {!capabilities.length ? <li className="p-4 text-xs font-bold">No capabilities match “{query}”. Try a topic such as analytics, SEO, audience, or publishing.</li> : null}
    </ul>
    {selected ? (
-    <div className="shrink-0 border-t-[2px] border-black bg-[#f8f8f4] p-3">
+    <div className="shrink-0 min-w-0 p-3">
      <h3 className="text-[11px] font-[1000] uppercase">{selected.label}</h3>
      <p className="mt-1 text-[10px] font-bold leading-4 text-black/70">{getBrainCapabilityAvailability(selected, controls, snapshot).reason}</p>
-     <p className="mt-1 text-[9px] font-bold leading-4 text-black/50">Evidence sections: {(BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS[selected.id] || []).join(", ") || "requirements not listed"}</p>
+     <p className="mt-1 text-xs font-bold leading-4">Evidence sections: {(BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS[selected.id] || []).join(", ") || "requirements not listed"}</p>
      <div className="mt-2 flex flex-wrap gap-2">
       <StudioSplitLeftButton sizeVariant="compact" icon={<ShieldCheck aria-hidden="true" />} onClick={() => { onPrompt(capabilityPromptFor(selected)); setSelectedId(null) }} disabled={busy || getBrainCapabilityAvailability(selected, controls, snapshot).status === "blocked"}>Ask Brain</StudioSplitLeftButton>
       {onEdit ? <StudioButton sizeVariant="compact" tone="neutral" onClick={() => { onEdit(capabilityPromptFor(selected)); setSelectedId(null) }}>Edit prompt first</StudioButton> : null}
      </div>
     </div>
-   ) : <p className="shrink-0 border-t-[2px] border-black bg-[#f8f8f4] px-3 py-2 text-[10px] font-bold text-black/55">Choose a capability to see its prerequisites and launch a request.</p>}
+   ) : <p className="shrink-0 px-3 py-2 text-xs font-bold">Choose a capability to see its prerequisites and launch a request.</p>}
   </section>
  )
 }
