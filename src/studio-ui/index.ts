@@ -147,7 +147,7 @@ export { ConfirmedFamilyModule, ConfirmedPrimitiveModule, ConfirmedDefaultsModul
 export type { ConfirmedModuleProps } from "../components/studio-hub/ConfirmedCatalogModules"
 
 
-export { StudioInterModule } from "./primitives/StudioInterModule"
+export { StudioInterModule, StudioTwoLineInterModule } from "./primitives/StudioInterModule"
 export { StudioChatActionGroup } from "./primitives/StudioChatActionGroup"
 export type { StudioChatActionGroupProps, StudioChatActionGroupSize } from "./primitives/StudioChatActionGroup"
 export { StudioResponseMetaRow } from "./primitives/StudioResponseMetaRow"
