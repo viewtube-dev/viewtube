@@ -375,6 +375,19 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2">{([{label:"PRISM",animation:"prism"},{label:"RADAR",animation:"radar"},{label:"FLARE",animation:"flare2"},{label:"STEADY",animation:"steady"},{label:"BLINK",animation:"blink"}] as const).map((item)=><StudioLedBadgeTab key={item.animation} mode="badge" label={item.label} sizeVariant="compact" tone="cyan" led="rainbow" animation={item.animation} />)}</div>
           <span>LED STATES · OFF / SOLID / RAINBOW</span>
           <div className="flex flex-wrap items-center gap-2"><StudioLedBadgeTab label="OFF" led="off" animation="steady" /><StudioLedBadgeTab label="SOLID" tone="green" led="solid" animation="steady" /><StudioLedBadgeTab label="RAINBOW" led="rainbow" animation="prism" /></div>
+          <span>LED BADGE · SOLID + RAINBOW</span>
+          <div className="vt-catalog-brain-status-badges__group">
+            <StudioLedBadgeTab mode="badge" label="READY" tone="green" led="solid" animation="steady" />
+            <StudioLedBadgeTab mode="badge" label="THINKING" tone="cyan" led="rainbow" animation="prism" />
+          </div>
+          <span>FLUSH NAVIGATION · FOUR TABS / ONE ACTIVE</span>
+          <div className="vt-studio-led-badge-tab-row">
+            {([{label:"CHAT",secondLine:"ASK",tone:"cyan" as const},{label:"MY BRAIN",secondLine:"PROFILE",tone:"purple" as const},{label:"REVIEW",secondLine:"LEARNING",tone:"yellow" as const},{label:"CONTROLS",secondLine:"ACCESS",tone:"green" as const}]).map((tab,index)=><StudioLedBadgeTab key={tab.label} mode="tab" label={tab.label} firstLine={tab.label} secondLine={tab.secondLine} tone={tab.tone} led="solid" animation="steady" active={index===0} onClick={() => undefined} />)}
+          </div>
+          <span>MOTION STATES · STEADY / PRISM / RADAR / FLARE2 / BLINK</span>
+          <div className="vt-catalog-brain-status-badges__group">
+            {([{label:"STEADY",animation:"steady" as const},{label:"PRISM",animation:"prism" as const},{label:"RADAR",animation:"radar" as const},{label:"FLARE2",animation:"flare2" as const},{label:"BLINK",animation:"blink" as const}]).map((item)=><StudioLedBadgeTab key={item.animation} mode="badge" label={item.label} tone="cyan" led="rainbow" animation={item.animation} />)}
+          </div>
         </div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTagEditor"><span>Tag Editor · STANDARD REPRESENTATIVE</span><StudioTagEditor defaultValue={["CREATOR", "VIDEO"]} ariaLabel="Tag editor standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUploadFrame"><span>Upload Frame · STANDARD REPRESENTATIVE</span><StudioUploadFrame prompt="UPLOAD IMAGE OR VIDEO" aria-label="Upload frame standard specimen" /></div>
