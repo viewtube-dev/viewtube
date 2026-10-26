@@ -13,6 +13,7 @@ const read = (path) => {
 
 const entry = read("src/styles/studio-control-entry.css")
 const overrides = read("src/styles/studio-control-distill-overrides.css")
+const recovery = read("src/styles/studio-control-recovery-overrides.css")
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
 const controls = read("src/studio-ui/primitives/StudioControls.tsx")
 const index = read("src/studio-ui/index.ts")
