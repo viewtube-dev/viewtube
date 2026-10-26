@@ -1522,7 +1522,7 @@ export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioS
 )
 StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
 
-/** Canonical two-rail action button, using the shared StudioButton + StudioSplitShell anatomy. */
+/** Double split button rebuilt around the same face/rail geometry as the confirmed split-left button and split badges. */
 export interface StudioDoubleSplitButtonProps extends Omit<StudioButtonProps, "faceLayout" | "children" | "icon"> {
   leftIcon: React.ReactNode
   rightIcon: React.ReactNode
@@ -1530,24 +1530,37 @@ export interface StudioDoubleSplitButtonProps extends Omit<StudioButtonProps, "f
   iconSizeVariant?: StudioIconSizeVariant
 }
 export const StudioDoubleSplitButton = React.forwardRef<HTMLButtonElement, StudioDoubleSplitButtonProps>(
-  ({ leftIcon, rightIcon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-vt-studio-split="double" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioDoubleSplitButton" {...props}>
-      <StudioSplitShell layout="double" sizeVariant={sizeVariant} iconLeft={leftIcon} iconRight={rightIcon} faceOnly>{children}</StudioSplitShell>
+  ({ leftIcon, rightIcon, children, sizeVariant = "standard", iconSizeVariant = "large", className, ...props }, ref) => (
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split"
+      className={studioClasses("vt-studio-double-split-button", className)}
+      data-vt-studio-split="double" data-icon-size-variant={iconSizeVariant}
+      data-vt-library-component="StudioDoubleSplitButton" {...props}>
+      <span data-vt-studio-split-face="true" data-vt-studio-split="double" data-size={sizeVariant} className="vt-studio-split-face">
+        <span data-vt-studio-split-rail data-rail="start" aria-hidden="true">{leftIcon}</span>
+        <span data-vt-studio-split-label>{children}</span>
+        <span data-vt-studio-split-rail data-rail="end" aria-hidden="true">{rightIcon}</span>
+      </span>
     </StudioButton>
   ),
 )
 StudioDoubleSplitButton.displayName = "StudioDoubleSplitButton"
 
-/** Canonical right-rail action button; shares the same Studio split shell and tokens. */
+/** Right split button rebuilt as a flexible label plus one full-height right rail. */
 export interface StudioSplitRightButtonProps extends StudioButtonProps {
   /** Icon rendered in the square right rail. */
   icon: React.ReactNode
   iconSizeVariant?: StudioIconSizeVariant
 }
 export const StudioSplitRightButton = React.forwardRef<HTMLButtonElement, StudioSplitRightButtonProps>(
-  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitRightButton" {...props}>
-      <StudioSplitShell layout="right" sizeVariant={sizeVariant} iconRight={icon} faceOnly>{children}</StudioSplitShell>
+  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", className, ...props }, ref) => (
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split"
+      className={studioClasses("vt-studio-split-right-button", className)}
+      data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant}
+      data-vt-library-component="StudioSplitRightButton" {...props}>
+      <span data-vt-studio-split-face="true" data-vt-studio-split="right" data-size={sizeVariant} className="vt-studio-split-face">
+        <span data-vt-studio-split-label>{children}</span>
+        <span data-vt-studio-split-rail data-rail="end" aria-hidden="true">{icon}</span>
+      </span>
     </StudioButton>
   ),
 )
