@@ -5,6 +5,7 @@ import { BrainScopeSummary } from "../components/brain/BrainScopeSummary"
 import { BrainSettingsSwitch, BrainSettingsRange, brainSettingsButtonClass } from "../components/brain/BrainSettingsControls"
 import { BRAIN_USER_CONTROLS_STORAGE_KEY, DEFAULT_BRAIN_USER_CONTROLS, clearBrainUserControlOverride, readBrainUserControls, writeBrainUserControls, type BrainUserControls } from "../services/brain/BrainUserControls"
 import { readBrainEngineControls, resetBrainEngineControls, writeBrainEngineControls, type BrainEngineControls } from "../services/brain/BrainEngineControls"
+import { StudioButton, StudioTopSplitModule } from "../studio-ui"
 
 type Settings = { policy: BrainUserControls; engines: BrainEngineControls }
 type PolicyRow = readonly [keyof BrainUserControls, string, string]
@@ -42,7 +43,17 @@ const inheritedSettings = (): Settings => {
 }
 const Card: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => {
   const id = React.useId()
-  return <section aria-labelledby={id} className="rounded-xl border-2 border-black bg-white p-4"><h2 id={id} className="mb-2 text-lg font-bold">{title}</h2>{children}</section>
+  return (
+    <StudioTopSplitModule
+      as="section"
+      sizeVariant="standard"
+      title={<span id={id}>{title}</span>}
+      aria-labelledby={id}
+      className="min-w-0"
+    >
+      {children}
+    </StudioTopSplitModule>
+  )
 }
 
 export default function BrainControlsPage() {
@@ -89,10 +100,20 @@ export default function BrainControlsPage() {
   return <main className="min-h-screen bg-[#f5f5f2] p-3 md:p-6"><div className="mx-auto max-w-[1240px] space-y-4">
     <header><h1 className="text-2xl font-bold">Brain Controls</h1><p className="mt-1 text-sm">Channel-scoped settings in this browser. Changes apply only after Save.</p><Link to="/ai-brain" className={`${brainSettingsButtonClass} mt-2 bg-white`} onClick={event => { if (dirty && !window.confirm("Discard unsaved Brain settings and open the Brain?")) event.preventDefault() }}>Open Brain</Link></header>
     <BrainScopeSummary channelId={channelId} />
-    <div className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-3 rounded-lg border-2 border-black bg-white p-3">
-      <div><p className="font-bold">{resetPending ? "Reset preview — not saved" : dirty ? "Unsaved changes" : "No unsaved changes"}</p><p role="status" aria-live="polite" className="text-sm">{status}</p></div>
-      <div className="flex flex-wrap gap-2"><button type="button" className={`${brainSettingsButtonClass} bg-[#39e75f]`} disabled={!channelId || !scopeReady || !dirty} onClick={save}>Save changes</button><button type="button" className={`${brainSettingsButtonClass} bg-white`} disabled={!scopeReady} onClick={() => { reload(); setStatus("Reloaded saved settings. Draft changes were discarded.") }}>Cancel / reload saved settings</button></div>
-    </div>
+    <StudioTopSplitModule
+      as="section"
+      sizeVariant="standard"
+      title={<span>{resetPending ? "Reset preview — not saved" : dirty ? "Unsaved changes" : "No unsaved changes"}</span>}
+      className="sticky top-0 z-20 min-w-0"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3 p-2">
+        <p role="status" aria-live="polite" className="min-w-0 text-sm">{status}</p>
+        <div className="flex flex-wrap gap-2">
+          <StudioButton type="button" sizeVariant="standard" tone="success" disabled={!channelId || !scopeReady || !dirty} onClick={save}>SAVE CHANGES</StudioButton>
+          <StudioButton type="button" sizeVariant="standard" tone="neutral" disabled={!scopeReady} onClick={() => { reload(); setStatus("Reloaded saved settings. Draft changes were discarded.") }}>CANCEL / RELOAD</StudioButton>
+        </div>
+      </div>
+    </StudioTopSplitModule>
     {!channelId ? <p role="note">Select a channel before changing settings. No channel overrides will be written without an explicit channel.</p> : null}
     <fieldset disabled={!channelId || !scopeReady} className="grid min-w-0 gap-4 border-0 p-0 lg:grid-cols-2"><legend className="sr-only">Channel Brain settings</legend>
       <Card title="Master Brain Policy">{rows(masterRows)}</Card>
@@ -106,6 +127,6 @@ export default function BrainControlsPage() {
         </details>
       </Card>
     </fieldset>
-    <footer className="rounded-lg border-2 border-black bg-white p-4"><h2 className="font-bold">Channel overrides</h2><p className="my-2 text-sm">Reset previews inherited global settings or defaults for both policy and engines. It does not delete conversations, profile knowledge or assets. Reset takes effect only when saved. Editing the preview creates a new explicit channel configuration instead.</p><button type="button" disabled={!channelId || !scopeReady} onClick={stageReset} className={`${brainSettingsButtonClass} bg-white`}>Preview reset of channel overrides</button></footer>
+    <footer className="rounded-lg border-2 border-black bg-white p-4"><h2 className="font-bold">Channel overrides</h2><p className="my-2 text-sm">Reset previews inherited global settings or defaults for both policy and engines. It does not delete conversations, profile knowledge or assets. Reset takes effect only when saved. Editing the preview creates a new explicit channel configuration instead.</p><StudioButton type="button" sizeVariant="standard" tone="neutral" disabled={!channelId || !scopeReady} onClick={stageReset}>PREVIEW RESET</StudioButton></footer>
   </div></main>
 }
