@@ -1,9 +1,132 @@
-/* StudioChatComposerDock — pinned chat foot; control skins remain owned by Studio Controls. */
-.vt-studio-chat-composer-dock{--vt-composer-dock-bg:#f8f8f4;--vt-composer-dock-max-field:144px;box-sizing:border-box;display:flex;flex-direction:column;flex-shrink:0;gap:6px;width:100%;min-width:0;margin:0;padding:8px 8px max(8px,env(safe-area-inset-bottom,0px));border-top:2px solid #000;background:var(--vt-composer-dock-bg);position:relative;z-index:5}
-.vt-studio-chat-composer-dock__chips{display:flex;flex-wrap:wrap;align-items:center;gap:4px;min-width:0}.vt-studio-chat-composer-dock__chips:empty,.vt-studio-chat-composer-dock__status:empty{display:none}
-.vt-studio-chat-composer-dock__status{display:flex;align-items:center;min-height:0}
-.vt-studio-chat-composer-dock__tray{display:flex;flex-wrap:nowrap;align-items:stretch;gap:4px;min-width:0;width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
-.vt-studio-chat-composer-dock__tray>*{flex:1 1 0;min-width:0}@media(min-width:640px){.vt-studio-chat-composer-dock__tray>*{flex:1 1 auto}}
-.vt-studio-chat-composer-dock__field-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px;align-items:end;min-width:0;width:100%}.vt-studio-chat-composer-dock__field{min-width:0;width:100%}
-.vt-studio-chat-composer-dock__field textarea,.vt-studio-chat-composer-dock__field [data-vt-studio-control=true] textarea{max-height:var(--vt-composer-dock-max-field);overflow-y:auto!important;overscroll-behavior:contain;resize:none}
-.vt-brain-chat-column{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden;overscroll-behavior:none}.vt-brain-chat-column__scroll{flex:1 1 auto;min-height:0;overflow:hidden}.vt-brain-chat-column__dock{flex:0 0 auto}.vt-brain-module-shell{overscroll-behavior:none;touch-action:pan-y}.vt-brain-module-shell[data-keyboard-open=true]{overflow:hidden}
+/* StudioChatComposerDock — pinned chat foot.
+ * Works alone or inside BrainChatShell.__composer (shell chrome suppressed via :has).
+ * Control skins remain owned by Studio Controls.
+ */
+
+.vt-studio-chat-composer-dock {
+  --vt-composer-dock-bg: #f8f8f4;
+  --vt-composer-dock-max-field: 144px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 8px 8px max(8px, env(safe-area-inset-bottom, 0px));
+  border-top: 2px solid #000;
+  background: var(--vt-composer-dock-bg);
+  position: relative;
+  z-index: 5;
+}
+
+.vt-studio-chat-composer-dock__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.vt-studio-chat-composer-dock__chips:empty,
+.vt-studio-chat-composer-dock__status:empty {
+  display: none;
+}
+
+.vt-studio-chat-composer-dock__status {
+  display: flex;
+  align-items: center;
+  min-height: 0;
+}
+
+.vt-studio-chat-composer-dock__tray {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.vt-studio-chat-composer-dock__tray > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .vt-studio-chat-composer-dock__tray > * {
+    flex: 1 1 auto;
+  }
+}
+
+.vt-studio-chat-composer-dock__field-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px;
+  align-items: end;
+  min-width: 0;
+  width: 100%;
+}
+
+.vt-studio-chat-composer-dock__field {
+  min-width: 0;
+  width: 100%;
+}
+
+.vt-studio-chat-composer-dock__field textarea,
+.vt-studio-chat-composer-dock__field [data-vt-studio-control="true"] textarea {
+  max-height: var(--vt-composer-dock-max-field);
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  resize: none;
+}
+
+.vt-brain-chat-column {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.vt-brain-chat-column__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.vt-brain-chat-column__dock {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.vt-brain-module-shell {
+  overscroll-behavior: none;
+  touch-action: pan-y;
+}
+
+.vt-brain-module-shell[data-keyboard-open="true"] {
+  overflow: hidden;
+}
+
+/* Dock inside BrainChatShell: suppress double border/padding */
+.vt-brain-chat-shell__composer:has([data-vt-studio-primitive="StudioChatComposerDock"]),
+.vt-brain-chat-shell__composer:has(.vt-studio-chat-composer-dock) {
+  border-top: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.vt-brain-chat-shell__composer:has([data-vt-studio-primitive="StudioChatComposerDock"]) > .vt-brain-chat-column__dock,
+.vt-brain-chat-shell__composer:has(.vt-studio-chat-composer-dock) > .vt-brain-chat-column__dock {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
