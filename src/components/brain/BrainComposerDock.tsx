@@ -10,6 +10,7 @@ import {
 import { TOOLBOX_PALETTE } from "../../styles/toolboxPalette"
 import { BrainChatStatusBadge } from "./BrainChatPrimitives"
 import type { BrainChatStatus } from "./BrainChatPrimitives"
+import "./BrainComposerDock.css"
 
 export type BrainComposerDockProps = {
   value: string
@@ -46,6 +47,7 @@ const actionStyle = (primary: number, secondary: number): React.CSSProperties =>
     "--vt-studio-control-secondary": TOOLBOX_PALETTE[secondary],
   }) as React.CSSProperties
 
+/** A small, consistent action primitive; behavior stays owned by the caller. */
 const ComposerToolButton: React.FC<{
   icon: React.ReactNode
   children: React.ReactNode
@@ -76,9 +78,9 @@ const ComposerToolButton: React.FC<{
 )
 
 /**
- * Single canonical composer for the Brain conversation.
- * The message field stays primary; secondary tools use short, familiar labels.
- * Capability and prompt behavior remains owned by the existing Brain surfaces.
+ * Canonical Brain composer composition. The input and send action are visually
+ * dominant; prompts, capabilities, context and journal remain one-tap discoverable.
+ * The page continues to own submission, prompt selection and Brain state.
  */
 export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   value,
