@@ -943,8 +943,23 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);
-    if (event.defaultPrevented || props.disabled) return;
+    if (event.defaultPrevented || disabled) return;
     animateToggle(!latestValueRef.current);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    onKeyDown?.(event);
+    if (event.defaultPrevented || disabled) return;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      animateToggle(true);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      animateToggle(false);
+    } else if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
+      animateToggle(!latestValueRef.current);
+    }
   };
 
   return (
