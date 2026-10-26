@@ -132,15 +132,15 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
           >
             Prompts
           </BrainComposerToolButton>
-          <ComposerToolButton
+          <BrainComposerToolButton
             icon={<SlidersHorizontal size={14} />}
             label="Open Brain capabilities"
             onClick={onOpenCapabilities}
             style={actionStyle(7, 5)}
           >
             Tools
-          </ComposerToolButton>
-          <ComposerToolButton
+          </BrainComposerToolButton>
+          <BrainComposerToolButton
             buttonRef={contextLauncherRef}
             icon={<PanelRight size={14} />}
             label="Open channel context"
@@ -148,7 +148,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             style={actionStyle(5, 9)}
           >
             Context
-          </ComposerToolButton>
+          </BrainComposerToolButton>
           {onOpenJournal ? (
             <StudioSquareIconButton
               sizeVariant="compact"
