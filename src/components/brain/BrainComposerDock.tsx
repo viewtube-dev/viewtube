@@ -1,8 +1,8 @@
 import React, { useCallback } from "react"
-import { BookOpen, LayoutGrid, PanelRight, Send, Zap } from "lucide-react"
+import { BookOpen, LayoutGrid, PanelRight, Send, SlidersHorizontal, Zap } from "lucide-react"
 import {
+  StudioButton,
   StudioChatComposerDock,
-  StudioSplitTwoLineButton,
   StudioSquareIconButton,
   StudioTextArea,
   StudioLedBadgeTab,
@@ -40,9 +40,45 @@ const focusComposer = (node: HTMLTextAreaElement | null) => {
   }
 }
 
+const actionStyle = (primary: number, secondary: number): React.CSSProperties =>
+  ({
+    "--vt-studio-control-accent": TOOLBOX_PALETTE[primary],
+    "--vt-studio-control-secondary": TOOLBOX_PALETTE[secondary],
+  }) as React.CSSProperties
+
+const ComposerToolButton: React.FC<{
+  icon: React.ReactNode
+  children: React.ReactNode
+  label: string
+  onClick: () => void
+  className?: string
+  style?: React.CSSProperties
+  buttonRef?: React.Ref<HTMLButtonElement>
+  hasPopup?: boolean
+}> = ({ icon, children, label, onClick, className = "", style, buttonRef, hasPopup = true }) => (
+  <StudioButton
+    ref={buttonRef}
+    type="button"
+    sizeVariant="compact"
+    tone="neutral"
+    onClick={onClick}
+    aria-label={label}
+    aria-haspopup={hasPopup ? "dialog" : undefined}
+    title={label}
+    className={`vt-brain-composer-tool ${className}`.trim()}
+    style={style}
+  >
+    <span className="vt-brain-composer-tool__content">
+      <span className="vt-brain-composer-tool__icon" aria-hidden="true">{icon}</span>
+      <span>{children}</span>
+    </span>
+  </StudioButton>
+)
+
 /**
- * Brain composer for current branch: mounts inside BrainChatShell.composer.
- * Tray: Prompt Library / Capabilities / Channel Context / Journal.
+ * Single canonical composer for the Brain conversation.
+ * The message field stays primary; secondary tools use short, familiar labels.
+ * Capability and prompt behavior remains owned by the existing Brain surfaces.
  */
 export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   value,
@@ -87,9 +123,15 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
 
   return (
     <StudioChatComposerDock
-      className={className}
-      aria-label="Brain composer"
-      status={resolvedStatus ? <BrainChatStatusBadge status={resolvedStatus} label={statusLabel} /> : null}
+      className={`vt-brain-composer-dock ${className}`.trim()}
+      aria-label="Brain message composer"
+      status={
+        resolvedStatus ? (
+          <BrainChatStatusBadge status={resolvedStatus} label={statusLabel} />
+        ) : (
+          <span className="vt-brain-composer-hint">Enter to send <span aria-hidden="true">·</span> Shift+Enter for a new line</span>
+        )
+      }
       chips={
         activePromptTitle ? (
           <StudioLedBadgeTab
@@ -101,61 +143,38 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             sizeVariant="mini"
             onClick={onClearActivePrompt}
             aria-label={`Active prompt ${activePromptTitle}. Activate to clear.`}
+            title="Clear active prompt"
           />
         ) : null
       }
       tray={
         <>
-          <StudioSplitTwoLineButton
-            ref={promptLauncherRef}
-            sizeVariant="compact"
-            icon={<LayoutGrid aria-hidden="true" />}
-            firstLine="PROMPT"
-            secondLine="LIBRARY"
+          <ComposerToolButton
+            buttonRef={promptLauncherRef}
+            icon={<LayoutGrid size={14} />}
+            label="Open Prompt Library"
             onClick={onOpenPrompts}
-            aria-label="Open prompt library"
-            aria-haspopup="dialog"
-            className="min-w-0"
-            style={
-              {
-                "--vt-studio-control-accent": TOOLBOX_PALETTE[11],
-                "--vt-studio-control-secondary": TOOLBOX_PALETTE[3],
-              } as React.CSSProperties
-            }
-          />
-          <StudioSplitTwoLineButton
-            sizeVariant="compact"
-            icon={<Zap aria-hidden="true" />}
-            firstLine="CAPABILITIES"
-            secondLine="BROWSER"
+            style={actionStyle(11, 3)}
+          >
+            Prompts
+          </ComposerToolButton>
+          <ComposerToolButton
+            icon={<SlidersHorizontal size={14} />}
+            label="Open Brain capabilities"
             onClick={onOpenCapabilities}
-            aria-label="Open capabilities browser"
-            aria-haspopup="dialog"
-            className="min-w-0"
-            style={
-              {
-                "--vt-studio-control-accent": TOOLBOX_PALETTE[7],
-                "--vt-studio-control-secondary": TOOLBOX_PALETTE[5],
-              } as React.CSSProperties
-            }
-          />
-          <StudioSplitTwoLineButton
-            ref={contextLauncherRef}
-            sizeVariant="compact"
-            icon={<PanelRight aria-hidden="true" />}
-            firstLine="CHANNEL"
-            secondLine="CONTEXT"
+            style={actionStyle(7, 5)}
+          >
+            Tools
+          </ComposerToolButton>
+          <ComposerToolButton
+            buttonRef={contextLauncherRef}
+            icon={<PanelRight size={14} />}
+            label="Open channel context"
             onClick={onOpenContext}
-            aria-label="Open channel context"
-            aria-haspopup="dialog"
-            className="min-w-0"
-            style={
-              {
-                "--vt-studio-control-accent": TOOLBOX_PALETTE[5],
-                "--vt-studio-control-secondary": TOOLBOX_PALETTE[9],
-              } as React.CSSProperties
-            }
-          />
+            style={actionStyle(5, 9)}
+          >
+            Context
+          </ComposerToolButton>
           {onOpenJournal ? (
             <StudioSquareIconButton
               sizeVariant="compact"
@@ -164,7 +183,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
               label="Open AI Journal"
               title="Open AI Journal"
               onClick={onOpenJournal}
-              className="shrink-0"
+              className="vt-brain-composer-journal"
               style={{ backgroundColor: "#36E0F6" }}
             />
           ) : null}
@@ -173,26 +192,26 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
       field={
         <>
           <label className="sr-only" htmlFor="brain-composer">
-            Ask ViewTube Brain
+            Message to ViewTube Brain
           </label>
           <span id="brain-composer-help" className="sr-only">
-            Press Enter to send. Shift+Enter for a new line. Use the tool tray for prompts, capabilities, and channel
-            context.
+            Press Enter to send. Shift+Enter for a new line. Use Prompts to browse saved prompts, Tools to explore Brain
+            capabilities, and Context to inspect channel context.
           </span>
           <StudioTextArea
             ref={setRefs}
             id="brain-composer"
-            sizeVariant="compact"
+            sizeVariant="standard"
             rows={2}
             value={value}
             onChange={(event) => {
               resizeField(event.currentTarget)
               onChange(event.currentTarget.value)
             }}
-            placeholder="Ask about your next video, audience, analytics, goals, SEO, or publishing…"
-            className="w-full min-h-[44px] min-w-0 resize-none"
-            style={{ minHeight: 52, maxHeight: maxFieldPx }}
-            aria-label="Ask ViewTube Brain"
+            placeholder="What would you like to work on?"
+            className="vt-brain-composer-input w-full min-w-0 resize-none"
+            style={{ minHeight: 60, maxHeight: maxFieldPx }}
+            aria-label="Message to ViewTube Brain"
             aria-describedby="brain-composer-help"
             onFocus={(event) => {
               focusComposer(event.currentTarget)
@@ -206,23 +225,23 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
         </>
       }
       action={
-        <StudioSplitTwoLineButton
+        <StudioButton
           data-vt-brain-component="BrainComposerSendAction"
-          sizeVariant="compact"
-          icon={busy ? <Zap aria-hidden="true" /> : <Send aria-hidden="true" />}
-          firstLine={busy ? "BRAIN" : "SEND"}
-          secondLine={busy ? "WORKING" : "MESSAGE"}
+          type="button"
+          sizeVariant="standard"
+          tone="accent"
           disabled={busy || !value.trim()}
           aria-label={busy ? "Sending message" : "Send message"}
+          title={busy ? "Brain is working" : "Send message"}
           onClick={onSend}
-          className="shrink-0 min-w-[4.5rem]"
-          style={
-            {
-              "--vt-studio-control-accent": TOOLBOX_PALETTE[7],
-              "--vt-studio-control-secondary": TOOLBOX_PALETTE[5],
-            } as React.CSSProperties
-          }
-        />
+          className="vt-brain-composer-send"
+          style={actionStyle(7, 5)}
+        >
+          <span className="vt-brain-composer-send__content">
+            {busy ? <Zap size={18} aria-hidden="true" /> : <Send size={18} aria-hidden="true" />}
+            <span>{busy ? "Working" : "Send"}</span>
+          </span>
+        </StudioButton>
       }
     />
   )
