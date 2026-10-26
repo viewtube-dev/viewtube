@@ -22,6 +22,8 @@ describe("BrainComposerDock", () => {
     const html = renderComposer()
 
     expect(html).toContain('aria-label="Brain message composer"')
+    expect(html).toContain('data-vt-composer-layout="toolbar-actions"')
+    expect(html.indexOf('placeholder="What would you like to work on?"')).toBeLessThan(html.indexOf('aria-label="Open Prompt Library"'))
     expect(html).toContain('placeholder="What would you like to work on?"')
     expect(html).toContain('aria-label="Open Prompt Library"')
     expect(html).toContain('aria-label="Open Brain capabilities"')
