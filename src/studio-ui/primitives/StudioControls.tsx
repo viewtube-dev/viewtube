@@ -757,10 +757,12 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
   onValueChange,
   words = ["WRITE", "CREATE"],
   sizeVariant = "compact",
-  variant = "black-fill",
+  variant = "primary-secondary",
   className,
   style,
   onClick,
+  onKeyDown,
+  disabled,
   "aria-label": ariaLabel,
   ...props
 }) => {
@@ -786,6 +788,8 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     const bounds = getBounds(nextValue ? 1 : 0);
     const handle = handleRef.current;
     const overlay = overlayRef.current;
+    const root = rootRef.current;
+    if (root) root.dataset.value = String(nextValue);
     if (bounds && handle) {
       handle.style.top = String(bounds.top) + "px";
       handle.style.height = String(bounds.height) + "px";
@@ -793,7 +797,9 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     }
     if (overlay) {
       overlay.style.display = "none";
+      overlay.style.opacity = "";
       overlay.style.clipPath = "";
+      overlay.style.background = "";
     }
   }, [getBounds]);
 
@@ -805,7 +811,7 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
 
   const animateToggle = React.useCallback((to: boolean) => {
     const from = latestValueRef.current;
-    if (busyRef.current || to === from) return;
+    if (busyRef.current || to === from || disabled) return;
     const root = rootRef.current;
     const handle = handleRef.current;
     const overlay = overlayRef.current;
@@ -818,11 +824,11 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     }
 
     const colorFor = (state: boolean) => {
-      if (variant === "primary-white-handle") return "#ffffff";
-      if (variant === "white-fill") return "#000000";
+      if (variant === "primary-white-handle") return state ? "#ffffff" : "#000000";
+      if (variant === "white-fill" || variant === "black-fill") return "#000000";
       return state
-        ? "var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))"
-        : "var(--vt-studio-control-accent, var(--pair-a, #36e0f6))";
+        ? "var(--vt-studio-control-secondary, var(--pair-b, #f276c5))"
+        : "var(--vt-studio-control-accent, var(--pair-a, #20f13e))";
     };
     const fromColor = colorFor(from);
     const toColor = colorFor(to);
@@ -834,7 +840,9 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     const reachEnd = velvet ? 0.58 : 0.70;
     const releaseStart = velvet ? 0.72 : 0.84;
 
+    // Keep CSS variant state in lockstep with the optimistic target, not the next React render.
     latestValueRef.current = to;
+    root.dataset.value = String(to);
     stepRef.current += 1;
     busyRef.current = true;
     root.dataset.motion = velvet ? "Velvet Release" : "Late Silk";
@@ -891,9 +899,10 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       }
     };
     frameRef.current = requestAnimationFrame(tick);
-  }, [getBounds, onValueChange, settle, variant]);
+  }, [disabled, getBounds, onValueChange, settle, variant]);
 
   React.useEffect(() => {
+    if (busyRef.current) return;
     latestValueRef.current = value;
     const schedule = () => {
       if (busyRef.current) return;
@@ -938,8 +947,23 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);
-    if (event.defaultPrevented || props.disabled) return;
+    if (event.defaultPrevented || disabled) return;
     animateToggle(!latestValueRef.current);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    onKeyDown?.(event);
+    if (event.defaultPrevented || disabled) return;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      animateToggle(true);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      animateToggle(false);
+    } else if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
+      animateToggle(!latestValueRef.current);
+    }
   };
 
   return (
@@ -948,6 +972,7 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       type="button"
       role="switch"
       aria-checked={value}
+      disabled={disabled}
       aria-label={ariaLabel ?? words[0] + " / " + words[1]}
       data-vt-studio-control="true"
       data-vt-studio-vertical-word-toggle="true" data-vt-studio-width="content"
@@ -957,6 +982,7 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       className={studioClasses("vt-studio-vertical-word-toggle", "is-" + sizeVariant, "is-" + variant, className)}
       style={style}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       {...props}
     >
       <span ref={handleRef} className="vt-studio-vertical-word-toggle__handle" aria-hidden="true">

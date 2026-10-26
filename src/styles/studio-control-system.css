@@ -4694,7 +4694,8 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 
 
 
-/* Canonical vertical word toggle: global Studio typography/strokes with content-driven stacked height. */
+/* Canonical vertical word toggle — isolated from single-line global control geometry. */
+button.vt-studio-vertical-word-toggle[data-vt-studio-control="true"],
 .vt-studio-vertical-word-toggle {
   --vt-studio-vertical-word-font-size: var(--vt-studio-control-font-size, 38px);
   --vt-studio-vertical-word-stroke: var(--vt-studio-control-stroke, 3px);
@@ -4704,23 +4705,28 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   --vt-studio-vertical-word-horizontal-padding: 14.666667px;
   --vt-studio-vertical-word-text-stroke: var(--vt-studio-control-text-stroke, 1px);
   --vt-studio-vertical-word-handle-inset: 2.75px;
+  --vt-vwt-write-fill: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
+  --vt-vwt-create-fill: var(--vt-studio-control-secondary, var(--pair-b, #f276c5));
   position: relative;
+  box-sizing: border-box;
   display: inline-flex;
-  flex: 0 1 auto;
   flex-direction: column;
+  flex: 0 0 auto;
   align-items: stretch;
   justify-content: flex-start;
   gap: var(--vt-studio-vertical-word-gap);
   width: max-content;
   max-width: none;
   min-width: max-content;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
   align-self: flex-start;
-  height: auto;
   margin: 0;
-  padding: var(--vt-studio-vertical-word-padding) 0;
+  padding: var(--vt-studio-vertical-word-padding) 0 !important;
   border: var(--vt-studio-vertical-word-stroke) solid #000;
   border-radius: var(--vt-studio-vertical-word-radius);
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
+  background: #fff;
   color: #000;
   overflow: hidden;
   isolation: isolate;
@@ -4730,115 +4736,106 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   font-weight: 1000;
   font-variation-settings: "wght" 1000;
   font-synthesis: none;
-  letter-spacing: -.02em;
+  letter-spacing: -0.055em;
   line-height: 1;
   text-transform: uppercase;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+.vt-studio-vertical-word-toggle.is-supreme {
+  --vt-studio-vertical-word-font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  --vt-studio-vertical-word-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-studio-vertical-word-radius: var(--vt-studio-control-radius, 6px);
+  --vt-studio-vertical-word-gap: 5px;
+  --vt-studio-vertical-word-padding: 5px;
+  --vt-studio-vertical-word-horizontal-padding: 18px;
+  --vt-studio-vertical-word-handle-inset: 3.5px;
+  --vt-studio-vertical-word-text-stroke: var(--vt-studio-supreme-text-stroke, 1px);
+}
+.vt-studio-vertical-word-toggle.is-standard {
+  --vt-studio-vertical-word-font-size: var(--vt-studio-control-font-size, 38px);
+  --vt-studio-vertical-word-gap: 3.666667px;
+  --vt-studio-vertical-word-padding: 3.666667px;
+  --vt-studio-vertical-word-horizontal-padding: 14.666667px;
+  --vt-studio-vertical-word-handle-inset: 2.75px;
+}
 .vt-studio-vertical-word-toggle.is-compact {
-
-  --vt-studio-vertical-word-gap: 2.444444px;
-  --vt-studio-vertical-word-padding: 2.444444px;
-  --vt-studio-vertical-word-horizontal-padding: 9.333333px;
-  --vt-studio-vertical-word-handle-inset: 1.833333px;
+  --vt-studio-vertical-word-font-size: 29.333333px;
+  --vt-studio-vertical-word-stroke: 3px;
+  --vt-studio-vertical-word-radius: 7.333333px;
+  --vt-studio-vertical-word-gap: 3.666667px;
+  --vt-studio-vertical-word-padding: 3.666667px;
+  --vt-studio-vertical-word-horizontal-padding: 14.666667px;
+  --vt-studio-vertical-word-handle-inset: 2.75px;
+  --vt-studio-vertical-word-text-stroke: 1px;
+}
+.vt-studio-vertical-word-toggle.is-mini {
+  --vt-studio-vertical-word-font-size: var(--vt-studio-mini-font-size, 17.5px);
+  --vt-studio-vertical-word-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-studio-vertical-word-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-studio-vertical-word-gap: 2px;
+  --vt-studio-vertical-word-padding: 2px;
+  --vt-studio-vertical-word-horizontal-padding: 8px;
+  --vt-studio-vertical-word-handle-inset: 1.5px;
+  --vt-studio-vertical-word-text-stroke: 0.375px;
 }
 .vt-studio-vertical-word-toggle.is-micro {
-
+  --vt-studio-vertical-word-font-size: var(--vt-studio-micro-font-size, 10px);
+  --vt-studio-vertical-word-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-studio-vertical-word-radius: var(--vt-studio-mini-radius, 3px);
   --vt-studio-vertical-word-gap: 1.222222px;
   --vt-studio-vertical-word-padding: 1.222222px;
   --vt-studio-vertical-word-horizontal-padding: 4px;
-  --vt-studio-vertical-word-handle-inset: .916667px;
+  --vt-studio-vertical-word-handle-inset: 0.916667px;
+  --vt-studio-vertical-word-text-stroke: 0.25px;
 }
 .vt-studio-vertical-word-toggle:focus-visible {
   outline: var(--vt-studio-control-focus-outline-width, 1.95px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 3px;
+  outline-offset: 5px;
 }
-.vt-studio-vertical-word-toggle:disabled {
-  cursor: not-allowed;
-  opacity: .55;
-}
+.vt-studio-vertical-word-toggle:disabled { cursor: not-allowed; opacity: .55; }
 .vt-studio-vertical-word-toggle__word {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex: 0 0 var(--vt-studio-vertical-word-font-size);
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  height: var(--vt-studio-vertical-word-font-size);
-  padding: 0 var(--vt-studio-vertical-word-horizontal-padding);
-  color: #000;
-  font-family: inherit;
-  font-size: var(--vt-studio-vertical-word-font-size);
-  font-weight: 1000;
-  font-variation-settings: "wght" 1000;
-  font-synthesis: none;
-  line-height: 1;
-  letter-spacing: -.02em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  user-select: none;
+  position: relative; z-index: 1; display: flex; flex: 0 0 var(--vt-studio-vertical-word-font-size);
+  align-items: center; justify-content: center; box-sizing: border-box; min-width: 0;
+  height: var(--vt-studio-vertical-word-font-size); padding: 0 var(--vt-studio-vertical-word-horizontal-padding);
+  color: #000; font-family: inherit; font-size: var(--vt-studio-vertical-word-font-size);
+  font-weight: 1000; font-variation-settings: "wght" 1000; font-synthesis: none; line-height: 1;
+  letter-spacing: -0.055em; text-transform: uppercase; white-space: nowrap; user-select: none;
   -webkit-text-stroke: var(--vt-studio-vertical-word-text-stroke) currentColor;
   transition: color 120ms ease-out;
 }
 .vt-studio-vertical-word-toggle__handle {
-  position: absolute;
-  z-index: 0;
-  top: var(--vt-studio-vertical-word-handle-top, 3px);
-  left: var(--vt-studio-vertical-word-handle-inset);
-  right: var(--vt-studio-vertical-word-handle-inset);
-  height: var(--vt-studio-vertical-word-handle-height, var(--vt-studio-vertical-word-font-size));
+  position: absolute; z-index: 0; top: var(--vt-studio-vertical-word-padding);
+  left: var(--vt-studio-vertical-word-handle-inset); right: var(--vt-studio-vertical-word-handle-inset);
+  height: calc(var(--vt-studio-vertical-word-font-size) + 2px);
   border-radius: calc(var(--vt-studio-vertical-word-radius) * .5);
-  background: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
-  overflow: hidden;
-  pointer-events: none;
+  background: var(--vt-vwt-write-fill); overflow: hidden; pointer-events: none;
 }
 .vt-studio-vertical-word-toggle__handle-color {
-  position: absolute;
-  inset: 0;
-  display: none;
-  border-radius: inherit;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  pointer-events: none;
+  position: absolute; inset: 0; display: none; border-radius: inherit;
+  background: var(--vt-vwt-create-fill); pointer-events: none;
 }
-.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="false"] .vt-studio-vertical-word-toggle__handle,
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="false"] .vt-studio-vertical-word-toggle__handle {
-  background: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
-}
-.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="true"] .vt-studio-vertical-word-toggle__handle,
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="true"] .vt-studio-vertical-word-toggle__handle {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #f276c5));
-}
+.vt-studio-vertical-word-toggle.is-primary-secondary { background: #fff; border-color: #000; }
 .vt-studio-vertical-word-toggle.is-primary-secondary .vt-studio-vertical-word-toggle__word { color: #000; }
-.vt-studio-vertical-word-toggle.is-black-fill {
-  border-color: #000;
-  background: #000;
-}
-.vt-studio-vertical-word-toggle.is-black-fill .vt-studio-vertical-word-toggle__word { color: var(--vt-studio-control-secondary, var(--pair-b, #f276c5)); }
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="0"],
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] { color: #000; }
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] { color: var(--vt-studio-control-secondary, var(--pair-b, #f276c5)); }
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="0"] { color: var(--vt-studio-control-accent, var(--pair-a, #20f13e)); }
-.vt-studio-vertical-word-toggle.is-primary-white-handle {
-  border-color: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
-  background: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
-}
-.vt-studio-vertical-word-toggle.is-primary-white-handle .vt-studio-vertical-word-toggle__word { color: var(--vt-studio-control-secondary, var(--pair-b, #f276c5)); }
-.vt-studio-vertical-word-toggle.is-primary-white-handle .vt-studio-vertical-word-toggle__handle { background: #fff; }
-.vt-studio-vertical-word-toggle.is-white-fill {
-  border-color: #fff;
-  background: #fff;
-}
+.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="false"] .vt-studio-vertical-word-toggle__handle { background: var(--vt-vwt-write-fill); }
+.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="true"] .vt-studio-vertical-word-toggle__handle { background: var(--vt-vwt-create-fill); }
+.vt-studio-vertical-word-toggle.is-black-fill { background: #000; border-color: #000; color: #fff; }
+.vt-studio-vertical-word-toggle.is-black-fill .vt-studio-vertical-word-toggle__word { color: #fff; }
+.vt-studio-vertical-word-toggle.is-black-fill .vt-studio-vertical-word-toggle__handle { background: #000; box-shadow: inset 0 0 0 3px #fff; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle { background: var(--vt-vwt-write-fill); border-color: #000; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle .vt-studio-vertical-word-toggle__word { color: #000; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle[data-value="false"] .vt-studio-vertical-word-toggle__handle { background: #000; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle[data-value="true"] .vt-studio-vertical-word-toggle__handle { background: #fff; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="0"] { color: #fff; }
+.vt-studio-vertical-word-toggle.is-white-fill { background: #fff; border-color: #000; }
 .vt-studio-vertical-word-toggle.is-white-fill .vt-studio-vertical-word-toggle__word { color: #000; }
+.vt-studio-vertical-word-toggle.is-white-fill .vt-studio-vertical-word-toggle__handle { background: #000; }
 .vt-studio-vertical-word-toggle.is-white-fill[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="0"],
 .vt-studio-vertical-word-toggle.is-white-fill[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] { color: #fff; }
-.vt-studio-vertical-word-toggle.is-white-fill .vt-studio-vertical-word-toggle__handle { background: #000; }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-vertical-word-toggle__word { transition: none !important; }
 }
-
 
 /* Read-only text display shares textarea tokens but never receives edit/focus states. */
 /* Read-only text display follows the same geometry and glyph contract as editable fields. */
