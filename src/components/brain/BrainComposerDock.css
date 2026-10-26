@@ -25,6 +25,15 @@
   background: var(--brain-composer-paper);
 }
 
+.vt-brain-composer-dock .vt-brain-composer-tool-rail {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
 .vt-brain-composer-dock .vt-brain-composer-hint {
   display: inline-flex;
   align-items: center;
