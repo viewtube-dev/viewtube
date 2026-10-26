@@ -28,14 +28,14 @@ describe("confirmed composite primitive catalog", () => {
       "StudioSplitLeftButton", "StudioSplitRightButton", "StudioDoubleSplitButton",
       "StudioIconButton", "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
       "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
-      "StudioNumberInput", "StudioTextInput",
+      "StudioTextInput",
       "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
       "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
       "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
       "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioBrainStatusIndicator", "StudioTagEditor", "StudioUploadFrame",
-      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioSplitAccordion",
+      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
     ]) {
       expect(representative).toContain(`data-vt-library-component="${primitive}"`)
     }
@@ -393,6 +393,8 @@ describe("confirmed primitive edge and open-state regression coverage", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-inter-module.css"), "utf8")
     expect(source).toContain("vt-studio-inter-host--bleed")
     expect(css).toMatch(/\.vt-studio-inter-host--bleed\s*\{[^}]*width:\s*calc\(100%\s*\+\s*8px\)[^}]*margin-inline:\s*-4px/s)
+    expect(css).not.toMatch(/\.vt-studio-inter-host--bleed\s*\{[^}]*width:\s*calc\(100%\s*\+\s*16px\)/s)
+    expect(css).not.toMatch(/\.vt-studio-top-split-module\[data-size="compact"\][^{]*\.vt-studio-inter-host--bleed/)
   })
 
   it("restores the horizontal header/body divider while collapsible modules are open", () => {
