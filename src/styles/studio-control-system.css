@@ -6169,6 +6169,34 @@ input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):
 .vt-studio-value-toggle--double .vt-studio-value-toggle__divider{position:absolute;z-index:3;top:0;bottom:0;left:50%;width:var(--vt-studio-control-stroke);transform:translateX(-50%);background:#000;pointer-events:none;outline:none!important;box-shadow:none!important}
 .vt-studio-value-toggle--double:focus-within{outline:var(--vt-studio-control-focus-outline-width) solid var(--vt-studio-control-secondary,var(--pair-b));outline-offset:0}
 .vt-studio-counter__value,[data-vt-studio-counter-value]{aspect-ratio:2/1;flex:1 1 auto;min-width:0}
-[data-vt-studio-inter-host="true"]{padding-left:0;padding-right:0}.vt-studio-inter-module{width:100%;border-left:0;border-right:0}.vt-studio-inter-module__rail{width:var(--vt-im-face);min-width:var(--vt-im-face);max-width:var(--vt-im-face)}
-.vt-studio-collapsing-split-module:not([open])>.vt-studio-collapsing-split-module__head,.vt-studio-top-split-module:not([data-open="true"])>.vt-studio-top-split-module__head{border-bottom:var(--vt-top-split-stroke,var(--vt-studio-control-stroke)) solid #000}
-.vt-studio-collapsing-split-module:not([open])>.vt-studio-top-split-module__body,.vt-studio-collapsing-split-module:not([open])>.vt-studio-collapsing-split-module__body{display:none;border:0;padding:0;min-height:0}
+/* Intermodule host: zero horizontal padding so horizontal rules meet host vertical borders.
+   Rails stay perfectly square (inner face height = face - 2*stroke). */
+[data-vt-studio-inter-host="true"] {
+  padding-left: 0;
+  padding-right: 0;
+}
+.vt-studio-inter-module {
+  width: 100%;
+  border-left: 0;
+  border-right: 0;
+}
+.vt-studio-inter-module__rail {
+  width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  min-width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  max-width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  aspect-ratio: 1 / 1;
+}
+
+/* Collapsed modules: single bottom border only (outer shell). Head loses its bottom rule so it does not double. */
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head,
+.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head {
+  border-bottom: 0;
+}
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__body,
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__body {
+  display: none;
+  border: 0;
+  padding: 0;
+  min-height: 0;
+}
+
