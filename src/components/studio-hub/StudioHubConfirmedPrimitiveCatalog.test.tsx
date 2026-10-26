@@ -10,9 +10,22 @@ const readStudioControlCss = () => [
   "studio-control-core.css",
   "studio-control-split.css",
   "studio-control-fields.css",
+  "studio-inter-module.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
+  it("keeps the InterModule edge bleed aligned to the 4px parent gutter", () => {
+    const css = readStudioControlCss()
+    expect(css).toMatch(/\.vt-studio-inter-host--bleed\s*\{[^}]*width:\s*calc\(100%\s*\+\s*8px\)[^}]*margin-inline:\s*-4px/s)
+  })
+
+  it("restores a horizontal header/body divider only while a collapsing module is open", () => {
+    const css = readStudioControlCss()
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module\[open\]\s*>\s*\.vt-studio-collapsing-split-module__head\s*\{[^}]*border-bottom:\s*var\(--vt-top-split-stroke,\s*3px\)\s+solid\s+#000/s)
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module:not\(\[open\]\)\s*>\s*\.vt-studio-collapsing-split-module__head[^{]*\{[^}]*border-bottom:\s*0\s*!important/s)
+  })
+
+
   it("keeps the top imported-primitive ledger lean and gives module specimens dedicated sections", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
     const representativeStart = source.indexOf("const ConfirmedDirectPrimitiveRows")
@@ -555,8 +568,8 @@ describe("responsive Studio upload frame", () => {
     expect(css).toContain("padding: 0 !important;")
     expect(css).toContain("width: 100%;\n  max-width: none;\n  min-width: 0;")
     expect(css).toContain('.vt-studio-top-split-module[data-size="compact"] > .vt-studio-top-split-module__body > .vt-studio-inter-host--bleed')
-    expect(css).toContain("width: calc(100% + 12px);")
-    expect(css).toContain("margin-inline: -6px;")
+    expect(css).not.toContain("width: calc(100% + 12px);")
+    expect(css).not.toContain("margin-inline: -6px;")
     expect(publicIndex).toContain('export { StudioInterModule } from "./primitives/StudioInterModule"')
     expect(publicIndex).toContain("StudioInterModuleProps, StudioInterModuleSize")
   })
