@@ -131,6 +131,15 @@ Record exact values and rationale where useful. Mirror each real exception in th
 - Adding hover translation or box-shadow without a named exception.
 - Treating a stale reference snapshot as more authoritative than current repository code and explicit user decisions.
 
+## Mandatory Studio UI reference resource
+
+Before starting a Studio UI page redesign, component audit, token/CSS refactor, or primitive implementation, read:
+
+- Canonical repository map: `docs/ui/STUDIO_DESIGN_SYSTEM_REFERENCE_MAP.md`
+- Skill-packaged resource: `references/studio-design-system-reference-map.md`
+
+The map is the required navigation index for the current target-branch sources, ownership boundaries, responsive page-composition workflow, and primitive-change workflow. Fetch the live target-branch files it links to; do not treat the map or a skill snapshot as proof of current implementation. Keep the repository document and skill resource copy synchronized when either changes.
+
 ## References
 
 - [ViewTube Studio contract snapshot](references/viewtube-studio-contract.md)
