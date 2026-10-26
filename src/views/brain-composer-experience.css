@@ -1,0 +1,125 @@
+/**
+ * Brain launchpad + context sheet presentation.
+ * The page owns state and actions; this layer only improves responsive layout.
+ */
+[data-vt-brain-component="BrainLauncherDrawer"],
+[data-vt-brain-component="BrainContextDrawer"] {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(10px, 1.8vw, 20px);
+  overflow: hidden;
+  color: #111;
+  background: #f8f8f4 !important;
+  border-left: 2px solid #111;
+}
+
+[data-vt-brain-part="mobile-launcher-heading"] {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0 0 10px;
+  border-bottom: 2px solid #111;
+}
+
+[data-vt-brain-part="launcher-drawer-heading"],
+[data-vt-brain-part="context-drawer-heading"] {
+  margin: 0;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  line-height: 1.15;
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
+}
+
+[data-vt-brain-component="BrainLauncherModeSwitch"] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  min-width: 0;
+}
+
+[data-vt-brain-component="BrainLauncherDrawer"] > .vt-scrollless,
+[data-vt-brain-component="BrainContextDrawer"] > .vt-scrollless {
+  min-width: 0;
+  min-height: 0;
+  padding: 0 2px 2px 0;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+[data-vt-brain-component="BrainLauncherDrawer"] .brain-prompt-library-shell {
+  width: 100%;
+  min-width: 0;
+  overflow: clip;
+  border-radius: 4px !important;
+}
+
+[data-vt-brain-component="BrainLauncherDrawer"] [data-vt-brain-part="prompt-library-description"] {
+  margin-top: 0;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+[data-vt-brain-component="BrainContextDrawer"] > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 0 0 10px;
+  border-bottom: 2px solid #111;
+}
+
+[data-vt-brain-component="BrainContextDrawer"] > div:first-child h2 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 768px) {
+  [data-vt-brain-component="BrainLauncherDrawer"] {
+    inset: 0 0 0 auto;
+    width: min(700px, 62vw);
+    border-left: 2px solid #111;
+  }
+
+  [data-vt-brain-component="BrainContextDrawer"] {
+    inset: 0 0 0 auto;
+    width: min(520px, 48vw);
+    border-left: 2px solid #111;
+  }
+}
+
+@media (min-width: 1280px) {
+  [data-vt-brain-component="BrainLauncherDrawer"] {
+    width: min(760px, 58vw);
+  }
+
+  [data-vt-brain-component="BrainContextDrawer"] {
+    width: min(560px, 42vw);
+  }
+}
+
+@media (max-width: 520px) {
+  [data-vt-brain-component="BrainLauncherDrawer"],
+  [data-vt-brain-component="BrainContextDrawer"] {
+    padding: 10px;
+    border-left: 0;
+  }
+
+  [data-vt-brain-component="BrainLauncherModeSwitch"] {
+    gap: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-vt-brain-component="BrainLauncherDrawer"],
+  [data-vt-brain-component="BrainContextDrawer"] {
+    scroll-behavior: auto;
+  }
+}
