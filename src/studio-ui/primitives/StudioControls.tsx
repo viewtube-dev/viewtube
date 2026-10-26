@@ -791,6 +791,11 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     const root = rootRef.current;
     if (root) root.dataset.value = String(nextValue);
     if (bounds && handle) {
+      // The base stylesheet sets both block edges for the resting handle.
+      // Explicitly release the bottom edge whenever JS owns its measured top/height,
+      // otherwise competing inset constraints can pin the handle to the first row.
+      handle.style.bottom = "auto";
+      handle.style.insetBlockEnd = "auto";
       handle.style.top = String(bounds.top) + "px";
       handle.style.height = String(bounds.height) + "px";
       handle.style.background = "";
@@ -880,6 +885,8 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       const height = t < releaseStart
         ? mix(source.height, expandedHeight, reach)
         : mix(expandedHeight, destination.height, release);
+      handle.style.bottom = "auto";
+      handle.style.insetBlockEnd = "auto";
       handle.style.top = String(top) + "px";
       handle.style.height = String(height) + "px";
       if (velvet) {
