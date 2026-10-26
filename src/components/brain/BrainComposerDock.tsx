@@ -123,6 +123,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
 
   return (
     <StudioChatComposerDock
+      layout="toolbar-actions"
       className={`vt-brain-composer-dock ${className}`.trim()}
       aria-label="Brain message composer"
       status={
