@@ -46,6 +46,13 @@ describe("confirmed composite primitive catalog", () => {
     expect(source).toContain('title="Split Accordion · Train Motion"')
     const directPrimitiveNames = [...representative.matchAll(/data-vt-library-component="([^"]+)"/g)].map((match) => match[1])
     expect(new Set(directPrimitiveNames).size).toBe(directPrimitiveNames.length)
+    for (const primitive of [
+      "StudioBrainStatusIndicator", "StudioInterModule", "StudioTwoLineInterModule",
+      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule",
+      "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
+    ]) {
+      expect(directPrimitiveNames).toContain(primitive)
+    }
     for (const primitive of directPrimitiveNames) {
       expect(representative).toContain(`<${primitive}`)
     }
