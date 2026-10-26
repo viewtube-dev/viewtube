@@ -797,7 +797,9 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     }
     if (overlay) {
       overlay.style.display = "none";
+      overlay.style.opacity = "";
       overlay.style.clipPath = "";
+      overlay.style.background = "";
     }
   }, [getBounds]);
 
@@ -838,7 +840,9 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     const reachEnd = velvet ? 0.58 : 0.70;
     const releaseStart = velvet ? 0.72 : 0.84;
 
+    // Keep CSS variant state in lockstep with the optimistic target, not the next React render.
     latestValueRef.current = to;
+    root.dataset.value = String(to);
     stepRef.current += 1;
     busyRef.current = true;
     root.dataset.motion = velvet ? "Velvet Release" : "Late Silk";
