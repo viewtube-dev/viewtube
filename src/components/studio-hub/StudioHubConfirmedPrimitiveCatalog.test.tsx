@@ -14,6 +14,20 @@ const readStudioControlCss = () => [
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
+  it("shows the InterModule specimen using the production 4px side-gutter bleed override", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const css = readStudioControlCss()
+    expect(source).toContain('className="vt-studio-inter-host--bleed"')
+    expect(css).toMatch(/\.vt-studio-inter-module\.vt-studio-inter-host--bleed\s*\{[^}]*width:\s*calc\(100%\s*\+\s*8px\)[^}]*margin-inline:\s*-4px/s)
+  })
+
+  it("keeps a black horizontal header/body divider while collapsing modules are expanded", () => {
+    const css = readStudioControlCss()
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module\[open\]\s*>\s*\.vt-studio-collapsing-split-module__head\s*\{[^}]*border-bottom:\s*var\(--vt-top-split-stroke,\s*3px\)\s+solid\s+#000/s)
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module:not\(\[open\]\)\s*>\s*\.vt-studio-collapsing-split-module__head[^{]*\{[^}]*border-bottom:\s*0\s*!important/s)
+  })
+
+
   it("keeps the top imported-primitive ledger lean and gives module specimens dedicated sections", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
     const representativeStart = source.indexOf("const ConfirmedDirectPrimitiveRows")
