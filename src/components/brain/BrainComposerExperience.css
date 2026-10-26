@@ -94,8 +94,8 @@
     background: rgb(17 17 17 / 20%) !important;
   }
 
-  [data-vt-brain-component="BrainLauncherDrawer"] > :first-child,
-  [data-vt-brain-component="BrainContextDrawer"] > :first-child {
+  [data-vt-brain-component="BrainLauncherDrawer"] > div:first-child,
+  [data-vt-brain-component="BrainContextDrawer"] > div:first-child {
     grid-column: 2;
     background: #f8f8f4;
     padding: 16px 16px 10px;
