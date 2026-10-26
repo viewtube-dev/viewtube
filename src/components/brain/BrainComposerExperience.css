@@ -84,7 +84,7 @@
 @media (min-width: 768px) {
   [data-vt-brain-component="BrainLauncherDrawer"],
   [data-vt-brain-component="BrainContextDrawer"] {
-    display: grid !important;
+    display: grid;
     inset: 0;
     grid-template-columns: minmax(0, 1fr) min(700px, 62vw);
     grid-template-rows: auto minmax(0, 1fr);
