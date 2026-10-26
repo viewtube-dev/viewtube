@@ -1341,12 +1341,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <StudioInterModule className="vt-studio-inter-host--bleed" title="PROMPT LIBRARY" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen>
           <p className="vt-confirmed-intermodule-prompt">A standard-size intermodule keeps its content aligned to the shared parent edges.</p>
         </StudioInterModule>
+      </div>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineInterModule">
         <span>TWO-LINE INTERMODULE · STANDARD</span>
         <StudioTwoLineInterModule title="CHANNEL SETTINGS" description="Identity and publishing preferences" startIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard" defaultOpen>
           <p>Two-line production intermodule specimen with its native description header.</p>
         </StudioTwoLineInterModule>
-      </div>
       </div>
     </Family>
     <ConfirmedIndividualPrimitiveSections />
