@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { BookOpen, LayoutGrid, PanelRight, Send, Zap } from "lucide-react"
 import {
   StudioChatComposerDock,
@@ -31,6 +31,19 @@ export type BrainComposerDockProps = {
   className?: string
 }
 
+const focusComposer = (node: HTMLTextAreaElement | null) => {
+  if (!node) return
+  try {
+    node.focus({ preventScroll: true })
+  } catch {
+    node.focus()
+  }
+}
+
+/**
+ * Brain composer for current branch: mounts inside BrainChatShell.composer.
+ * Tray: Prompt Library / Capabilities / Channel Context / Journal.
+ */
 export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   value,
   onChange,
@@ -50,11 +63,26 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   maxFieldPx = 144,
   className = "",
 }) => {
-  const resizeField = (element: HTMLTextAreaElement | null) => {
-    if (!element) return
-    element.style.height = "auto"
-    element.style.height = `${Math.min(element.scrollHeight, maxFieldPx)}px`
-  }
+  const resizeField = useCallback(
+    (element: HTMLTextAreaElement | null) => {
+      if (!element) return
+      element.style.height = "auto"
+      element.style.height = `${Math.min(element.scrollHeight, maxFieldPx)}px`
+    },
+    [maxFieldPx],
+  )
+
+  const setRefs = useCallback(
+    (node: HTMLTextAreaElement | null) => {
+      if (typeof composerRef === "function") composerRef(node)
+      else if (composerRef && "current" in composerRef) {
+        ;(composerRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = node
+      }
+      if (node) resizeField(node)
+    },
+    [composerRef, resizeField],
+  )
+
   const resolvedStatus = status ?? (busy ? "loading" : undefined)
 
   return (
@@ -88,7 +116,12 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             aria-label="Open prompt library"
             aria-haspopup="dialog"
             className="min-w-0"
-            style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
+            style={
+              {
+                "--vt-studio-control-accent": TOOLBOX_PALETTE[11],
+                "--vt-studio-control-secondary": TOOLBOX_PALETTE[3],
+              } as React.CSSProperties
+            }
           />
           <StudioSplitTwoLineButton
             sizeVariant="compact"
@@ -99,7 +132,12 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             aria-label="Open capabilities browser"
             aria-haspopup="dialog"
             className="min-w-0"
-            style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[5] } as React.CSSProperties}
+            style={
+              {
+                "--vt-studio-control-accent": TOOLBOX_PALETTE[7],
+                "--vt-studio-control-secondary": TOOLBOX_PALETTE[5],
+              } as React.CSSProperties
+            }
           />
           <StudioSplitTwoLineButton
             ref={contextLauncherRef}
@@ -111,7 +149,12 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             aria-label="Open channel context"
             aria-haspopup="dialog"
             className="min-w-0"
-            style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": TOOLBOX_PALETTE[9] } as React.CSSProperties}
+            style={
+              {
+                "--vt-studio-control-accent": TOOLBOX_PALETTE[5],
+                "--vt-studio-control-secondary": TOOLBOX_PALETTE[9],
+              } as React.CSSProperties
+            }
           />
           {onOpenJournal ? (
             <StudioSquareIconButton
@@ -129,12 +172,15 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
       }
       field={
         <>
-          <label className="sr-only" htmlFor="brain-composer">Ask ViewTube Brain</label>
+          <label className="sr-only" htmlFor="brain-composer">
+            Ask ViewTube Brain
+          </label>
           <span id="brain-composer-help" className="sr-only">
-            Press Enter to send. Shift+Enter for a new line. Use the tool tray for prompts, capabilities, and channel context.
+            Press Enter to send. Shift+Enter for a new line. Use the tool tray for prompts, capabilities, and channel
+            context.
           </span>
           <StudioTextArea
-            ref={composerRef}
+            ref={setRefs}
             id="brain-composer"
             sizeVariant="compact"
             rows={2}
@@ -148,6 +194,9 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             style={{ minHeight: 52, maxHeight: maxFieldPx }}
             aria-label="Ask ViewTube Brain"
             aria-describedby="brain-composer-help"
+            onFocus={(event) => {
+              focusComposer(event.currentTarget)
+            }}
             onKeyDown={(event) => {
               if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return
               event.preventDefault()
@@ -167,7 +216,12 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
           aria-label={busy ? "Sending message" : "Send message"}
           onClick={onSend}
           className="shrink-0 min-w-[4.5rem]"
-          style={{ "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[5] } as React.CSSProperties}
+          style={
+            {
+              "--vt-studio-control-accent": TOOLBOX_PALETTE[7],
+              "--vt-studio-control-secondary": TOOLBOX_PALETTE[5],
+            } as React.CSSProperties
+          }
         />
       }
     />
@@ -175,3 +229,8 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
 }
 
 export default BrainComposerDock
+
+/** Safe focus helper for parent pages (drawers → field). */
+export const focusBrainComposer = (ref: React.RefObject<HTMLTextAreaElement | null> | null) => {
+  focusComposer(ref?.current ?? null)
+}
