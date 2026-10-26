@@ -1472,13 +1472,16 @@ button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-rail], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
 
-/* Split-right + double-split buttons: same StudioSplitShell foundation as split-left and badges. */
+/* Right and double split buttons deliberately mirror the split-left foundation:
+   one outer face grid, zero internal gaps, fixed height-sized rails, and one
+   divider per rail boundary. The shell only contributes semantic rail/label nodes. */
 button[data-vt-studio-button="true"][data-vt-studio-split="right"],
 button[data-vt-studio-button="true"][data-split-right="true"],
 button[data-vt-studio-button="true"][data-vt-studio-split="double"] {
   appearance: none;
   display: inline-flex;
   width: 100%;
+  min-width: 0;
   padding: 0;
   border: 0;
   outline: 0;
@@ -1493,12 +1496,12 @@ button[data-vt-studio-button="true"][data-split-right="true"] > [data-vt-studio-
   align-items: stretch;
   justify-content: stretch;
   gap: 0;
+  min-width: 0;
   padding: 0;
   border: var(--vt-studio-control-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius);
   overflow: hidden;
   text-align: left;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
 }
 button[data-vt-studio-button="true"][data-vt-studio-split="double"] > [data-vt-studio-button-face] {
   display: grid;
@@ -1507,12 +1510,12 @@ button[data-vt-studio-button="true"][data-vt-studio-split="double"] > [data-vt-s
   align-items: stretch;
   justify-content: stretch;
   gap: 0;
+  min-width: 0;
   padding: 0;
   border: var(--vt-studio-control-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius);
   overflow: hidden;
   text-align: left;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
 }
 button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-face],
 button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-face],
@@ -1530,6 +1533,8 @@ button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-stu
   min-width: var(--vt-studio-control-height);
   max-width: var(--vt-studio-control-height);
   height: 100%;
+  min-height: 0;
+  padding: 0;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   color: #000;
 }
@@ -1551,6 +1556,8 @@ button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-stu
   height: var(--vt-studio-control-icon-size, 28px);
   min-width: var(--vt-studio-control-icon-size, 28px);
   min-height: var(--vt-studio-control-icon-size, 28px);
+  max-width: 100%;
+  max-height: 100%;
   stroke-width: var(--vt-studio-control-icon-stroke, 2.5);
 }
 button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-label],
@@ -1558,8 +1565,11 @@ button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-sp
 button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-label] {
   display: flex;
   align-items: center;
+  justify-content: center;
   min-width: 0;
+  width: 100%;
   height: 100%;
+  box-sizing: border-box;
   padding-inline: 10px;
   overflow: hidden;
   white-space: nowrap;
@@ -1583,6 +1593,7 @@ button[data-vt-studio-button="true"][data-vt-studio-split="right"][aria-pressed=
 button[data-vt-studio-button="true"][data-vt-studio-split="double"][aria-pressed="true"] [data-vt-studio-split-rail] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
 }
+
 /* Also ensure split-left face uses display:contents for the faceOnly shell */
 button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-face],
 button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-face] {
