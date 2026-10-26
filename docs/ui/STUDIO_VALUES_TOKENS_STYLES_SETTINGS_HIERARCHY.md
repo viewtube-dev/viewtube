@@ -192,7 +192,7 @@ The following discrepancies were visible when comparing the target branch's `src
 | Concern | Later intended contract | Observed conflict to reconcile |
 |---|---|---|
 | Supreme stroke/radius | 3px / 6px Standard system | Token/index values disagree in places; the index's size table still records proportional Supreme geometry |
-| Mini type/icon size | 17.5px | Token source currently records 16px |
+| Mini type/icon size | 17.5px | Canonical token source aligned to 17.5px; verify generated variables and consumers after token changes |
 | Micro stroke/radius | 1.5px / 3px Mini system | Token source/index record 1px / 2px in places |
 | Micro focus outline | Apply Mini system consistently | Token/index values differ; reconcile to the approved Mini stroke ratio |
 | Focused text fields | Black outer border and black text/glyph stroke; primary inset remains; secondary outline | Verify all field selectors and textarea variants; any primary outer/focus stroke is a regression |
