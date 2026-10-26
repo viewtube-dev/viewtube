@@ -316,7 +316,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
       ]}
       provenance={<Provenance
-        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioSplitTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider"
+        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioSplitTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider · StudioSplitRightButton · StudioSquareIconButtonGroup · StudioInterModule · StudioCollapsingSplitModule · StudioCollapsingTwoLineModule · StudioSplitAccordion"
         tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioSplitTextInput.tsx + src/studio-ui/primitives/StudioValueToggles.tsx"
         css="src/styles/studio-control-system.css"
         tokens="44px standard geometry; component-specific native input/textarea exceptions retained"
@@ -354,7 +354,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChoice"><span>Choice Control · STANDARD</span><StudioChoice kind="radio" skin="solid" checked={false} aria-label="Choice control standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSquareIconButton"><span>Square Icon Button · STANDARD</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" aria-label="Square icon button standard specimen" sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCircleIconButton"><span>Circle Icon Button · STANDARD</span><StudioCircleIconButton icon={<Check aria-hidden="true" />} label="CONFIRM" aria-label="Circle icon button standard specimen" sizeVariant="standard" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSquareIconButtonGroup"><span>Square Icon Button Group · STANDARD</span><StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Standard icon button group"><StudioSquareIconButton icon={<Check aria-hidden="true" />} label="CONFIRM" aria-label="Confirm" sizeVariant="standard" /><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" aria-label="Settings" sizeVariant="standard" /></StudioSquareIconButtonGroup></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSquareIconButtonGroup"><span>Square Icon Button Group · STANDARD (3)</span><StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Standard icon button group" style={{ width: "max-content" }}><StudioSquareIconButton icon={<Check aria-hidden="true" />} label="CONFIRM" aria-label="Confirm" sizeVariant="standard" /><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" aria-label="Settings" sizeVariant="standard" /><StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="SPARK" aria-label="Spark" sizeVariant="standard" /></StudioSquareIconButtonGroup></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioPlayPauseButton"><span>Play / Pause Button · STANDARD</span><StudioPlayPauseButton defaultPlaying={false} sizeVariant="standard" aria-label="Play pause standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSwitch"><span>Switch · STANDARD</span><StudioSwitch shape="round" skin="solid" checked={false} aria-label="Switch standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioRadio"><span>Radio · STANDARD</span><StudioRadio shape="round" skin="solid" checked={false} aria-label="Radio standard specimen" /></div>
@@ -391,7 +391,32 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         </div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTagEditor"><span>Tag Editor · STANDARD REPRESENTATIVE</span><StudioTagEditor defaultValue={["CREATOR", "VIDEO"]} ariaLabel="Tag editor standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUploadFrame"><span>Upload Frame · STANDARD REPRESENTATIVE</span><StudioUploadFrame prompt="UPLOAD IMAGE OR VIDEO" aria-label="Upload frame standard specimen" /></div>
-      </div>
+      
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule">
+          <span>InterModule · STANDARD</span>
+          <div data-vt-studio-inter-host="true" style={{ boxSizing: "border-box", width: "100%", border: "var(--vt-studio-control-stroke, 3px) solid #000", borderRadius: "var(--vt-studio-control-radius, 6px)", overflow: "hidden", background: "#fff" }}>
+            <StudioInterModule title="PROMPT LIBRARY" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen>
+              <p className="vt-confirmed-intermodule-prompt">Standard intermodule representative — rails flush to host vertical borders.</p>
+            </StudioInterModule>
+          </div>
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule">
+          <span>Collapsing Split Module · STANDARD</span>
+          <StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen={false}>
+            <span>Collapsed single-border representative.</span>
+          </StudioCollapsingSplitModule>
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingTwoLineModule">
+          <span>Collapsing Two-Line Module · STANDARD</span>
+          <StudioCollapsingTwoLineModule title="CREATOR SETTINGS" description="Channel identity, defaults, and publishing preferences." split="double" sizeVariant="standard" defaultOpen={false}>
+            <p>Two-line collapsing module representative.</p>
+          </StudioCollapsingTwoLineModule>
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion">
+          <span>Split Accordion · STANDARD</span>
+          <StudioSplitAccordionCatalogSpecimens />
+        </div>
+</div>
     </Family>
   )
 }
