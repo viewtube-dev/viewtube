@@ -1332,7 +1332,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     >
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule">
         <span>INTERMODULE · STANDARD</span>
-        <StudioInterModule title="PROMPT LIBRARY" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen>
+        <StudioInterModule className="vt-studio-inter-host--bleed" title="PROMPT LIBRARY" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen>
           <p className="vt-confirmed-intermodule-prompt">A standard-size intermodule keeps its content aligned to the shared parent edges.</p>
         </StudioInterModule>
       </div>
