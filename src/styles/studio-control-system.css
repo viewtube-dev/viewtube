@@ -3561,6 +3561,37 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   max-height: 100%;
   stroke-width: 2.5;
 }
+
+/* Side Toggle arrow glyphs mirror Side Counter metrics by size; no global icon-size leakage. */
+.vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
+.vt-studio-value-toggle--double .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
+  display: block;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  max-width: 100%;
+  max-height: 100%;
+  stroke-width: 2.5;
+}
+.vt-studio-value-toggle--side[data-size="supreme"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
+.vt-studio-value-toggle--double[data-size="supreme"] .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
+  width: 42px;
+  height: 42px;
+  stroke-width: 3.75;
+}
+.vt-studio-value-toggle--side[data-size="compact"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
+.vt-studio-value-toggle--double[data-size="compact"] .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
+  width: 30px;
+  height: 30px;
+  stroke-width: 3;
+}
+.vt-studio-value-toggle--side[data-size="micro"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
+.vt-studio-value-toggle--double[data-size="micro"] .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.25;
+}
+
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__value,
 .vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__value,
 .vt-studio-left-counter[data-size="compact"] .vt-studio-side-counter__value { font-size: var(--vt-studio-28-font-size, 24px); }
@@ -6432,9 +6463,7 @@ button.vt-studio-44-choice {
   padding: 0;
   background: transparent;
 }
-.vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow + .vt-studio-value-toggle__arrow {
-  border-top: var(--vt-studio-control-stroke, 3px) solid #000;
-}
+/* The arrow-stack pseudo-element owns the single centered horizontal divider. */
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow-stack {
   flex-basis: var(--vt-studio-28-height, 28px);
   width: var(--vt-studio-28-height, 28px);
