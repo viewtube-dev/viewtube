@@ -513,6 +513,10 @@ export const BrainPromptLibrary: React.FC<{
    .map(([key, items]) => [key, [...items].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))] as const)
    .sort(([, left], [, right]) => Math.min(...left.map((card) => order.get(card.id) ?? 0)) - Math.min(...right.map((card) => order.get(card.id) ?? 0)))
  }, [filteredCards, cards])
+ const allCategories = useMemo(
+  () => Array.from(new Set(cards.map((card) => card.category || "general"))),
+  [cards],
+ )
 
  const setCategoryOpen = (groupCategory: string, nextOpen: boolean) => {
   setOpenCategories((current) => nextOpen
@@ -545,9 +549,12 @@ export const BrainPromptLibrary: React.FC<{
     <p className="px-2 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
     <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="vt-studio-inter-host--bleed block w-full min-w-0 m-0 p-0">
-     {groupedCards.map(([groupCategory, groupCards], groupIndex) => {
+     {groupedCards.map(([groupCategory, groupCards]) => {
       const isOpen = openCategories.includes(groupCategory)
-      const categoryPair = PROMPT_MODULE_COLOR_PAIRS[groupIndex % PROMPT_MODULE_COLOR_PAIRS.length]
+      // Keep category colors tied to the complete registry order, not the filtered
+      // result, so searching or selecting a category never recolors the library.
+      const categoryIndex = Math.max(0, allCategories.indexOf(groupCategory))
+      const categoryPair = PROMPT_MODULE_COLOR_PAIRS[categoryIndex % PROMPT_MODULE_COLOR_PAIRS.length]
       return (
        <StudioInterModule
         key={groupCategory}
@@ -564,8 +571,11 @@ export const BrainPromptLibrary: React.FC<{
         onOpenChange={(nextOpen) => setCategoryOpen(groupCategory, nextOpen)}
         aria-label={`${formatPromptCategoryLabel(groupCategory)} prompts, ${groupCards.length} items`}
        >
-        {groupCards.map((card, promptIndex) => {
+        {groupCards.map((card) => {
          const isSelected = card.id === selectedId
+         // Prompt colors also follow the full prompt registry order, not the
+         // current category/search subset.
+         const promptIndex = Math.max(0, cards.findIndex((item) => item.id === card.id))
          const colorPair = PROMPT_MODULE_COLOR_PAIRS[promptIndex % PROMPT_MODULE_COLOR_PAIRS.length]
          return (
           <StudioCollapsingTwoLineModule
