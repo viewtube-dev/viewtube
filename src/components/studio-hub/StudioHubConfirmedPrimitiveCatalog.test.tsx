@@ -14,6 +14,14 @@ const readStudioControlCss = () => [
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
+  it("retains solid/rainbow status badges, flush navigation tabs, and LED motion specimens", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    expect(source).toContain("LED BADGE · SOLID + RAINBOW")
+    expect(source).toContain("FLUSH NAVIGATION · FOUR TABS / ONE ACTIVE")
+    expect(source).toContain("MOTION STATES · STEADY / PRISM / RADAR / FLARE2 / BLINK")
+    expect(source).toContain('label:"THINKING"')
+  })
+
   it("shows the InterModule specimen using the production 4px side-gutter bleed override", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
     const css = readStudioControlCss()
