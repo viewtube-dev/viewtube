@@ -513,6 +513,10 @@ export const BrainPromptLibrary: React.FC<{
    .map(([key, items]) => [key, [...items].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))] as const)
    .sort(([, left], [, right]) => Math.min(...left.map((card) => order.get(card.id) ?? 0)) - Math.min(...right.map((card) => order.get(card.id) ?? 0)))
  }, [filteredCards, cards])
+ const allCategories = useMemo(
+  () => Array.from(new Set(cards.map((card) => card.category || "general"))),
+  [cards],
+ )
 
  const setCategoryOpen = (groupCategory: string, nextOpen: boolean) => {
   setOpenCategories((current) => nextOpen
@@ -549,7 +553,6 @@ export const BrainPromptLibrary: React.FC<{
       const isOpen = openCategories.includes(groupCategory)
       // Keep category colors tied to the complete registry order, not the filtered
       // result, so searching or selecting a category never recolors the library.
-      const allCategories = Array.from(new Set(cards.map((card) => card.category || "general")))
       const categoryIndex = Math.max(0, allCategories.indexOf(groupCategory))
       const categoryPair = PROMPT_MODULE_COLOR_PAIRS[categoryIndex % PROMPT_MODULE_COLOR_PAIRS.length]
       return (
