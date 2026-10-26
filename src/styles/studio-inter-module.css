@@ -63,7 +63,7 @@
 .vt-studio-inter-module__head {
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke))) minmax(0, 1fr) var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  grid-template-columns: var(--vt-im-face) minmax(0, 1fr) var(--vt-im-face);
   align-items: stretch;
   width: 100%;
   min-width: 0;
@@ -103,8 +103,9 @@
   box-sizing: border-box;
   display: grid;
   place-items: center;
-  width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
-  min-width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  width: var(--vt-im-face);
+  min-width: var(--vt-im-face);
+  max-width: var(--vt-im-face);
   height: 100%;
   min-height: 0;
   aspect-ratio: 1 / 1;
