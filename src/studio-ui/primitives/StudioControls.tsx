@@ -1530,9 +1530,27 @@ export interface StudioDoubleSplitButtonProps extends Omit<StudioButtonProps, "f
   iconSizeVariant?: StudioIconSizeVariant
 }
 export const StudioDoubleSplitButton = React.forwardRef<HTMLButtonElement, StudioDoubleSplitButtonProps>(
-  ({ leftIcon, rightIcon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-vt-studio-split="double" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioDoubleSplitButton" {...props}>
-      <StudioSplitShell layout="double" sizeVariant={sizeVariant} iconLeft={leftIcon} iconRight={rightIcon} faceOnly>{children}</StudioSplitShell>
+  ({ leftIcon, rightIcon, children, sizeVariant = "standard", iconSizeVariant = "large", className, ...props }, ref) => (
+    <StudioButton
+      {...props}
+      ref={ref}
+      className={studioClasses("vt-studio-double-split-button", className)}
+      sizeVariant={sizeVariant}
+      faceLayout="split"
+      data-vt-studio-split="double"
+      data-icon-size-variant={iconSizeVariant}
+      data-vt-library-component="StudioDoubleSplitButton"
+    >
+      <StudioSplitShell
+        layout="double"
+        sizeVariant={sizeVariant}
+        iconLeft={leftIcon}
+        iconRight={rightIcon}
+        faceOnly
+        className="vt-studio-double-split-button__face"
+      >
+        {children}
+      </StudioSplitShell>
     </StudioButton>
   ),
 )
@@ -1545,9 +1563,27 @@ export interface StudioSplitRightButtonProps extends StudioButtonProps {
   iconSizeVariant?: StudioIconSizeVariant
 }
 export const StudioSplitRightButton = React.forwardRef<HTMLButtonElement, StudioSplitRightButtonProps>(
-  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitRightButton" {...props}>
-      <StudioSplitShell layout="right" sizeVariant={sizeVariant} iconRight={icon} faceOnly>{children}</StudioSplitShell>
+  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", className, ...props }, ref) => (
+    <StudioButton
+      {...props}
+      ref={ref}
+      className={studioClasses("vt-studio-split-right-button", className)}
+      sizeVariant={sizeVariant}
+      faceLayout="split"
+      data-split-right="true"
+      data-vt-studio-split="right"
+      data-icon-size-variant={iconSizeVariant}
+      data-vt-library-component="StudioSplitRightButton"
+    >
+      <StudioSplitShell
+        layout="right"
+        sizeVariant={sizeVariant}
+        iconRight={icon}
+        faceOnly
+        className="vt-studio-split-right-button__face"
+      >
+        {children}
+      </StudioSplitShell>
     </StudioButton>
   ),
 )
