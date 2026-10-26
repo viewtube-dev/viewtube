@@ -1471,6 +1471,124 @@ button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studi
 button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="left"] [data-vt-studio-split-label] { padding-inline:8px; }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-rail], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
+
+/* Split-right + double-split buttons: same StudioSplitShell foundation as split-left and badges. */
+button[data-vt-studio-button="true"][data-vt-studio-split="right"],
+button[data-vt-studio-button="true"][data-split-right="true"],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] {
+  appearance: none;
+  display: inline-flex;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  overflow: visible;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-split-right="true"] > [data-vt-studio-button-face] {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height);
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0;
+  padding: 0;
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  overflow: hidden;
+  text-align: left;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] > [data-vt-studio-button-face] {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr) var(--vt-studio-control-height);
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0;
+  padding: 0;
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  overflow: hidden;
+  text-align: left;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-face],
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-face] {
+  display: contents;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail] {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: var(--vt-studio-control-height);
+  min-width: var(--vt-studio-control-height);
+  max-width: var(--vt-studio-control-height);
+  height: 100%;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail][data-rail="end"] {
+  border-left: var(--vt-studio-control-stroke) solid #000;
+  border-right: 0;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail][data-rail="start"] {
+  border-right: var(--vt-studio-control-stroke) solid #000;
+  border-left: 0;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-rail] > svg,
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-rail] > svg,
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail] > svg {
+  display: block;
+  width: var(--vt-studio-control-icon-size, 28px);
+  height: var(--vt-studio-control-icon-size, 28px);
+  min-width: var(--vt-studio-control-icon-size, 28px);
+  min-height: var(--vt-studio-control-icon-size, 28px);
+  stroke-width: var(--vt-studio-control-icon-stroke, 2.5);
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-label] {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+  padding-inline: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  color: #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="right"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="double"] [data-vt-studio-split-label] {
+  padding-inline: 8px;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][data-selected="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][data-selected="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][aria-pressed="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][aria-pressed="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][data-selected="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][data-selected="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][aria-pressed="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][aria-pressed="true"] [data-vt-studio-split-rail] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+/* Also ensure split-left face uses display:contents for the faceOnly shell */
+button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-face],
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-face] {
+  display: contents;
+}
+
 @media (prefers-reduced-motion:reduce) { button[data-vt-studio-button="true"], button[data-vt-studio-button="true"]::before, button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {  } }
 
 /* 4. Word-toggle sizing remains configurable at the component boundary. */
@@ -5689,14 +5807,28 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
 }
 
 /* Single bar definition: inactive bars remain legible over the primary face. */
+.vt-studio-value-toggle__bars,
+.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bars {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
 .vt-studio-value-toggle__bar,
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
   display: block;
-  flex: 0 0 18px;
-  width: 18px;
-  height: 38px;
+  flex: 0 0 12px;
+  width: 12px;
+  height: 28px;
   align-self: center;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 40%, #fff);
+  /* Empty bars: 50% white of primary so they remain visible on the face. */
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff);
   border: 1px solid #000;
   box-sizing: border-box;
   pointer-events: none;
@@ -6304,3 +6436,12 @@ button.vt-studio-44-choice {
   border-radius: 0;
 }
 
+/* Square icon button group: content-sized (not row-fill); default specimen uses 3 buttons. */
+.vt-studio-square-icon-button-group,
+[data-vt-studio-icon-button-group="true"] {
+  width: max-content !important;
+  max-width: 100%;
+  flex: 0 0 auto !important;
+  display: inline-flex;
+  align-items: stretch;
+}
