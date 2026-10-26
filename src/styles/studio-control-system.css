@@ -6349,6 +6349,13 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collap
   overflow: hidden !important;
 }
 
+
+/* Expanded collapsible modules need a visible horizontal separator between header and body.
+   The collapsed state intentionally removes this line so only the outer bottom border remains. */
+.vt-studio-collapsing-split-module[open] > .vt-studio-collapsing-split-module__head {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+}
+
 /* Intermodule: eliminate any residual host/body inset so rails flush to outer vertical borders. */
 [data-vt-studio-inter-host="true"],
 .vt-confirmed-intermodule-host,
