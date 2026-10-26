@@ -100,10 +100,20 @@ export default function BrainControlsPage() {
   return <main className="min-h-screen bg-[#f5f5f2] p-3 md:p-6"><div className="mx-auto max-w-[1240px] space-y-4">
     <header><h1 className="text-2xl font-bold">Brain Controls</h1><p className="mt-1 text-sm">Channel-scoped settings in this browser. Changes apply only after Save.</p><Link to="/ai-brain" className={`${brainSettingsButtonClass} mt-2 bg-white`} onClick={event => { if (dirty && !window.confirm("Discard unsaved Brain settings and open the Brain?")) event.preventDefault() }}>Open Brain</Link></header>
     <BrainScopeSummary channelId={channelId} />
-    <div className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-3 rounded-lg border-2 border-black bg-white p-3">
-      <div><p className="font-bold">{resetPending ? "Reset preview — not saved" : dirty ? "Unsaved changes" : "No unsaved changes"}</p><p role="status" aria-live="polite" className="text-sm">{status}</p></div>
-      <div className="flex flex-wrap gap-2"><StudioButton type="button" sizeVariant="standard" tone="success" disabled={!channelId || !scopeReady || !dirty} onClick={save}>SAVE CHANGES</StudioButton><StudioButton type="button" sizeVariant="standard" tone="neutral" disabled={!scopeReady} onClick={() => { reload(); setStatus("Reloaded saved settings. Draft changes were discarded.") }}>CANCEL / RELOAD</StudioButton></div>
-    </div>
+    <StudioTopSplitModule
+      as="section"
+      sizeVariant="standard"
+      title={<span>{resetPending ? "Reset preview — not saved" : dirty ? "Unsaved changes" : "No unsaved changes"}</span>}
+      className="sticky top-0 z-20 min-w-0"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3 p-2">
+        <p role="status" aria-live="polite" className="min-w-0 text-sm">{status}</p>
+        <div className="flex flex-wrap gap-2">
+          <StudioButton type="button" sizeVariant="standard" tone="success" disabled={!channelId || !scopeReady || !dirty} onClick={save}>SAVE CHANGES</StudioButton>
+          <StudioButton type="button" sizeVariant="standard" tone="neutral" disabled={!scopeReady} onClick={() => { reload(); setStatus("Reloaded saved settings. Draft changes were discarded.") }}>CANCEL / RELOAD</StudioButton>
+        </div>
+      </div>
+    </StudioTopSplitModule>
     {!channelId ? <p role="note">Select a channel before changing settings. No channel overrides will be written without an explicit channel.</p> : null}
     <fieldset disabled={!channelId || !scopeReady} className="grid min-w-0 gap-4 border-0 p-0 lg:grid-cols-2"><legend className="sr-only">Channel Brain settings</legend>
       <Card title="Master Brain Policy">{rows(masterRows)}</Card>
