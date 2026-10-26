@@ -40,11 +40,13 @@ import {
   StudioTextArea,
   StudioTextBox,
   StudioTextInput,
+  StudioNumberInput,
   StudioWordToggle,
   StudioVerticalWordToggle,
   StudioSpectrumTag,
   StudioCloseableBadge,
   StudioBrainStatusBadge,
+  StudioBrainStatusIndicator,
   StudioTagEditor,
   StudioSplitLeftDropdown,
   StudioUploadFrame,
@@ -57,7 +59,7 @@ import {
 import { StudioChatActionGroup } from "../../studio-ui/primitives/StudioChatActionGroup"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
 import { StudioDropdown } from "../../studio-ui/primitives/StudioDropdown"
-import { StudioInterModule } from "../../studio-ui/primitives/StudioInterModule"
+import { StudioInterModule, StudioTwoLineInterModule } from "../../studio-ui/primitives/StudioInterModule"
 import { StudioResponseMetaRow } from "../../studio-ui/primitives/StudioResponseMetaRow"
 import { StudioLedBadgeTab } from "../../studio-ui/primitives/StudioLedBadgeTab"
 import { StudioChatResponseShell } from "../../studio-ui/primitives/StudioChatResponseShell"
@@ -336,6 +338,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>Bar Toggle · STANDARD</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} barCount={10} ariaLabel="Bar toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioWordToggle"><span>Word Toggle · STANDARD</span><StudioWordToggle size="44" skin="solid" value={wordValue} words={["OFF", "ON"]} onValueChange={setWordValue} aria-label="Word toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioVerticalWordToggle"><span>Vertical Word Toggle · STANDARD</span><StudioVerticalWordToggle sizeVariant="standard" value={verticalWordValue} onValueChange={setVerticalWordValue} words={["OFF", "ON"]} aria-label="Vertical word toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioNumberInput"><span>Number Input · STANDARD</span><StudioNumberInput aria-label="Number input specimen" defaultValue={42} sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInput"><span>Text Input · STANDARD</span><StudioTextInput sizeVariant="standard" aria-label="Text input standard specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>Username Split Input · STANDARD</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Username split input standard specimen" placeholder="CREATOR NAME" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftInput"><span>Split Left Search Input · STANDARD</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split left input standard specimen" placeholder="SEARCH ASSETS" /></div>
@@ -366,22 +369,6 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSpectrumTag"><span>Spectrum Tag · STANDARD REPRESENTATIVE</span><StudioSpectrumTag label="CREATOR" spectrumKey="CREATOR" selected={false} ariaLabel="Spectrum tag standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCloseableBadge"><span>Closeable Badge · STANDARD REPRESENTATIVE</span><StudioCloseableBadge label="CREATOR" entering={false} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLedBadgeTab">
-        <span>LED BADGE · SOLID + RAINBOW</span>
-        <div className="vt-catalog-brain-status-badges__group">
-          <StudioLedBadgeTab mode="badge" label="READY" tone="green" led="solid" animation="steady" />
-          <StudioLedBadgeTab mode="badge" label="THINKING" tone="cyan" led="rainbow" animation="prism" />
-        </div>
-        <span>FLUSH NAVIGATION · FOUR TABS / ONE ACTIVE</span>
-        <div className="vt-studio-led-badge-tab-row">
-          {([{label:"CHAT",secondLine:"ASK",tone:"cyan" as const},{label:"MY BRAIN",secondLine:"PROFILE",tone:"purple" as const},{label:"REVIEW",secondLine:"LEARNING",tone:"yellow" as const},{label:"CONTROLS",secondLine:"ACCESS",tone:"green" as const}]).map((tab,index)=><StudioLedBadgeTab key={tab.label} mode="tab" label={tab.label} firstLine={tab.label} secondLine={tab.secondLine} tone={tab.tone} led="solid" animation="steady" active={index===0} onClick={() => undefined} />)}
-        </div>
-        <span>MOTION STATES · STEADY / PRISM / RADAR / FLARE2 / BLINK</span>
-        <div className="vt-catalog-brain-status-badges__group">
-          {([{label:"STEADY",animation:"steady" as const},{label:"PRISM",animation:"prism" as const},{label:"RADAR",animation:"radar" as const},{label:"FLARE2",animation:"flare2" as const},{label:"BLINK",animation:"blink" as const}]).map((item)=><StudioLedBadgeTab key={item.animation} mode="badge" label={item.label} tone="cyan" led="rainbow" animation={item.animation} />)}
-        </div>
-      </div>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusBadge"><span>Brain Status Badge · STANDARD</span><StudioBrainStatusBadge label="BRAIN READY" tone="green" appearance="dark" active={true} aria-label="Brain status badge standard specimen" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLedBadgeTab">
           <span>LED Badge / Tab · COMPACT TWO-LINE SYSTEM</span>
           <div className="grid grid-cols-4 gap-0 bg-white">{[{label:"BRAIN STATUS",firstLine:"BRAIN",secondLine:"STATUS",tone:"green" as const},{label:"PROMPT LIBRARY",firstLine:"PROMPT",secondLine:"LIBRARY",tone:"pink" as const},{label:"CHANNEL CONTEXT",firstLine:"CHANNEL",secondLine:"CONTEXT",tone:"green" as const},{label:"CAPABILITIES BROWSER",firstLine:"CAPABILITIES",secondLine:"BROWSER",tone:"cyan" as const}].map((item,index)=><StudioLedBadgeTab key={item.label} mode="tab" sizeVariant="compact" label={item.label} firstLine={item.firstLine} secondLine={item.secondLine} tone={item.tone} active={index===0} led={index===0||index===2?"solid":"rainbow"} animation={(["steady","prism","radar","flare2"] as const)[index]} onClick={() => undefined} />)}</div>
           <span>LED ANIMATION STATES · ALL FIVE REFERENCE STYLES</span>
@@ -391,6 +378,17 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         </div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTagEditor"><span>Tag Editor · STANDARD REPRESENTATIVE</span><StudioTagEditor defaultValue={["CREATOR", "VIDEO"]} ariaLabel="Tag editor standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUploadFrame"><span>Upload Frame · STANDARD REPRESENTATIVE</span><StudioUploadFrame prompt="UPLOAD IMAGE OR VIDEO" aria-label="Upload frame standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusIndicator"><span>Brain Status Indicator · STANDARD</span><StudioBrainStatusIndicator status="running" label="BRAIN RUNNING" pulse={false} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule"><span>InterModule · STANDARD REPRESENTATIVE</span><StudioInterModule className="vt-studio-inter-host--bleed" title="INTERMODULE" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen><p className="vt-confirmed-intermodule-prompt">Production intermodule with its rails extending to the containing module's inner borders.</p></StudioInterModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineInterModule"><span>Two-Line InterModule · STANDARD</span><StudioTwoLineInterModule title="CHANNEL SETTINGS" description="Identity and publishing preferences" startIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard" defaultOpen><p>Two-line production intermodule specimen.</p></StudioTwoLineInterModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTopSplitModule"><span>Top Split Module · STANDARD</span><StudioTopSplitModule title="MODULE HEADER" split="double" startIcon={<Home aria-hidden="true" />} endIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard"><p>Production top-split module body.</p></StudioTopSplitModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule"><span>Collapsing Split Module · STANDARD · OPEN</span><StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen><p>Expanded body separated from its header by the required horizontal divider.</p><StudioInterModule title="INNER SECTION" sizeVariant="standard" defaultOpen><p>Inner section content.</p></StudioInterModule></StudioCollapsingSplitModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingTwoLineModule"><span>Collapsing Two-Line Module · STANDARD</span><StudioCollapsingTwoLineModule title="CREATOR SETTINGS" description="Identity and publishing preferences" split="double" sizeVariant="standard" defaultOpen><p>Two-line collapsible module body.</p></StudioCollapsingTwoLineModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion"><span>Split Accordion · STANDARD</span><StudioSplitAccordion sizeVariant="standard" accessibleLabel="Confirmed split accordion" items={[{accessibleLabel:"OVERVIEW",icon:<Home aria-hidden="true" />,content:<p>Overview section content.</p>},{accessibleLabel:"SETTINGS",icon:<Settings2 aria-hidden="true" />,content:<p>Settings section content.</p>},{accessibleLabel:"STATUS",icon:<Info aria-hidden="true" />,content:<p>Status section content.</p>}]} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioResponseMetaRow"><span>Response Meta Row · COMPACT</span><StudioResponseMetaRow title="ANSWER SUMMARY" status={<StudioBrainStatusBadge label="VERIFIED" tone="green" appearance="tinted" />} metadata={<span>3 SOURCES</span>} trailing={<span>OPEN DETAILS</span>} sizeVariant="compact" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatResponseShell"><span>Chat Response Shell · COMPACT</span><StudioChatResponseShell metadata={<StudioResponseMetaRow title="ANSWER SUMMARY" metadata={<span>3 SOURCES</span>} sizeVariant="compact" />} actions={<StudioChatActionGroup><StudioButton sizeVariant="compact">COPY</StudioButton><StudioButton sizeVariant="compact">RETRY</StudioButton></StudioChatActionGroup>}><p>Answer-first response content using the production shell.</p></StudioChatResponseShell></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatActionGroup"><span>Chat Action Group · COMPACT</span><StudioChatActionGroup aria-label="Chat action group specimen"><StudioButton sizeVariant="compact" onClick={() => undefined}>COPY</StudioButton><StudioButton sizeVariant="compact" onClick={() => undefined}>RETRY</StudioButton></StudioChatActionGroup></div>
+
       </div>
     </Family>
   )

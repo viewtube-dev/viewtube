@@ -287,17 +287,10 @@
 }
 
 
-/* Bleed through the existing 8px parent-body inset so rails and rules meet the shell's inner edges. */
-.vt-studio-inter-host--bleed {
-  width: calc(100% + 16px);
+/* Override the catalog/module body's 4px side inset so intermodule rails meet the containing module's inner borders. */
+.vt-studio-inter-module.vt-studio-inter-host--bleed {
+  box-sizing: border-box;
+  width: calc(100% + 8px);
   max-width: none;
-  margin-inline: -8px;
+  margin-inline: -4px;
 }
-
-/* Compact StudioTopSplitModule bodies have 6px inset rather than the standard 8px. */
-.vt-studio-top-split-module[data-size="compact"] > .vt-studio-top-split-module__body > .vt-studio-inter-host--bleed {
-  width: calc(100% + 12px);
-  max-width: none;
-  margin-inline: -6px;
-}
-
