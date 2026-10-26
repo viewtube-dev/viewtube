@@ -75,8 +75,7 @@ export const BrainCapabilityBrowser: React.FC<{
 
  return (
   <section aria-labelledby={headingId} aria-busy={busy || undefined} className="flex min-h-0 min-w-0 flex-col overflow-hidden">
-   <StudioTopSplitModule as="header" sizeVariant="compact" className="shrink-0 px-3 py-2">
-    <h2 id={headingId} className="text-[12px] font-[1000] uppercase leading-4 tracking-[0.08em]">Capability Browser</h2>
+   <StudioTopSplitModule as="section" sizeVariant="compact" title={<span id={headingId}>Capability Browser</span>} className="shrink-0">
     <p className="mt-1 text-xs font-bold leading-4">Find a Brain capability and prepare a guided request. Launching a prompt does not bypass evidence checks or permissions.</p>
    </StudioTopSplitModule>
    <div className="min-w-0 p-2">
