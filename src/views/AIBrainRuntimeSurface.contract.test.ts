@@ -203,6 +203,15 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" })')
  })
 
+
+ it("labels capability and context handoffs in the existing composer without auto-sending", () => {
+  expect(source).toContain('setActivePromptTitle("Capability draft")')
+  expect(source).toContain('setActivePromptTitle("Suggested action")')
+  expect(source).toContain('setActivePromptTitle("Context correction review")')
+  expect(source).toContain('requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions))')
+  expect(source).not.toContain('setContextRailOpen(false); setInput(prompt); composerRef.current?.focus()')
+ })
+
 })
 
 
