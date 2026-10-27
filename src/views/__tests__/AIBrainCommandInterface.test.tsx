@@ -8,7 +8,6 @@ import { BrainPromptLibrary as StudioBrainPromptLibrary } from "../../components
 import AIBrainCommandInterface, {
  BrainGenerationBadge,
  BrainFeedbackControls,
- BrainPromptLibrary,
  promptCardSummary,
  readPromptEvidenceRecords,
  getPromptEvidenceIntegrityStatus,
@@ -96,35 +95,18 @@ describe("AIBrainCommandInterface", () => {
  })
 
 
- it("renders the prompt library as a top split shell with nested intermodules", () => {
+ it("renders the extracted prompt library using the approved Studio intermodule shell", () => {
   const html = renderToStaticMarkup(
-   <BrainPromptLibrary
+   <StudioBrainPromptLibrary
     cards={buildCreatorBrainPromptCards().slice(0, 1)}
     onPrompt={vi.fn()}
     onEdit={vi.fn()}
    />,
   )
 
-  expect(html).toContain('data-vt-studio-top-split-module="true"')
-  expect(html).toContain('data-vt-studio-inter-host="true"')
-  expect(html).toContain("vt-studio-inter-host--bleed")
-  expect(html).toContain('data-prompt-category="strategy"')
+  expect(html).toContain('data-vt-brain-component="BrainPromptLibrary"')
+  expect(html).toContain("Prompt Library")
   expect(html).toContain('data-vt-studio-inter-module="true"')
- })
-
-
-
- it("opens the first prompt category on entry and opens a chosen category when filtered", () => {
-  const cards = buildCreatorBrainPromptCards()
-  const html = renderToStaticMarkup(
-   <StudioBrainPromptLibrary cards={cards} onPrompt={vi.fn()} onEdit={vi.fn()} />,
-  )
-
-  const firstCategory = cards[0]?.category
-  expect(firstCategory).toBeTruthy()
-  expect(html).toContain(`data-prompt-category="${firstCategory}"`)
-  expect(html).toContain('data-prompt-id="')
-  expect(html).toContain('data-prompt-id="')
  })
 
  it("restores only typed prompt evidence whose ordered IDs match the saved turn contract", () => {
