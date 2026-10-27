@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router-dom"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { GlobalDataContext, fallbackContext } from "../../context/GlobalDataContextTypes"
 import { buildCreatorBrainPromptCards } from "../../services/aiBrainCommandInterface"
+import { BrainPromptLibrary as StudioBrainPromptLibrary } from "../../components/brain/BrainPromptLibrary"
 import AIBrainCommandInterface, {
  BrainGenerationBadge,
  BrainFeedbackControls,
@@ -109,6 +110,19 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("vt-studio-inter-host--bleed")
   expect(html).toContain('data-prompt-category="strategy"')
   expect(html).toContain('data-vt-studio-inter-module="true"')
+ })
+
+
+
+ it("opens the first prompt category on entry and opens a chosen category when filtered", () => {
+  const cards = buildCreatorBrainPromptCards()
+  const html = renderToStaticMarkup(
+   <StudioBrainPromptLibrary cards={cards} onPrompt={vi.fn()} onEdit={vi.fn()} />,
+  )
+
+  const strategyCategory = html.match(/<div[^>]*data-vt-studio-inter-module="true"[^>]*data-open="true"[^>]*>[\\s\\S]*?strategy/i)
+  expect(strategyCategory).not.toBeNull()
+  expect(html).toContain('data-prompt-id="')
  })
 
  it("restores only typed prompt evidence whose ordered IDs match the saved turn contract", () => {
