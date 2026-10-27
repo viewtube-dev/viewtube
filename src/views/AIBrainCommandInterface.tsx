@@ -2013,7 +2013,7 @@ const AIBrainCommandInterface: React.FC = () => {
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
+          onEdit={(prompt, title) => { setPromptRailOpen(false); setActivePromptTitle(title || "Custom prompt"); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          /> : <BrainCapabilityBrowser
           snapshot={snapshot}
           controls={brainControls}
