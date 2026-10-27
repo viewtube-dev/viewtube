@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react"
-import { ShieldCheck, Sparkles } from "lucide-react"
+import { ArrowRight, Send, ShieldCheck, Sparkles } from "lucide-react"
 import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 import {
   BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS,
@@ -11,6 +11,7 @@ import {
   StudioTextInput,
   StudioSplitLeftButton,
   StudioButton,
+  StudioSplitTwoLineButton,
   StudioTopSplitModule,
 } from "../../studio-ui"
 import { BrainChatStatusBadge } from "./BrainChatPrimitives"
@@ -226,31 +227,31 @@ export const BrainCapabilityBrowser: React.FC<{
               {(BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS[selected.id] || []).join(", ") || "requirements not listed"}
             </p>
             <div className={`vt-brain-tool-surface__actions mt-2 ${onEdit ? "is-pair" : ""}`}>
-              <StudioSplitLeftButton
+              {onEdit ? (
+                <StudioSplitTwoLineButton
+                  sizeVariant="compact"
+                  icon={<ArrowRight aria-hidden="true" />}
+                  firstLine="EDIT"
+                  secondLine="FIRST"
+                  onClick={() => {
+                    onEdit(capabilityPromptFor(selected))
+                    setSelectedId(null)
+                  }}
+                  className="w-full min-w-0"
+                />
+              ) : null}
+              <StudioSplitTwoLineButton
                 sizeVariant="compact"
-                icon={<ShieldCheck aria-hidden="true" />}
+                icon={<Send aria-hidden="true" />}
+                firstLine="SEND TO"
+                secondLine="CHAT"
                 onClick={() => {
                   onPrompt(capabilityPromptFor(selected))
                   setSelectedId(null)
                 }}
                 disabled={busy || selectedAvailability.status === "blocked"}
                 className="w-full min-w-0"
-              >
-                Ask Brain
-              </StudioSplitLeftButton>
-              {onEdit ? (
-                <StudioButton
-                  sizeVariant="compact"
-                  tone="neutral"
-                  onClick={() => {
-                    onEdit(capabilityPromptFor(selected))
-                    setSelectedId(null)
-                  }}
-                  className="w-full min-w-0"
-                >
-                  Edit prompt first
-                </StudioButton>
-              ) : null}
+              />
             </div>
           </>
         ) : (
