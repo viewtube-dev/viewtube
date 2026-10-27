@@ -15,7 +15,7 @@ The Confirmed Primitive Library is a production-component specimen and provenanc
 
 **NON-DEFAULT SETTINGS** must list only true departures from shared defaults. Do not repeat the 44px/28px lattice, global typography, ordinary selected/disabled behavior, or generic interaction rules under every family. Keep family-specific anatomy, real variants, and registered exceptions; put global contracts in the defaults strip and this index.
 
-The canonical five-tier ladder is Supreme (60px), Standard (44px), Compact (28px), Mini (20px), and Micro (12px). Mini uses a 1.5px stroke, 3px radius, and 17.5px typography/icon size; it is a first-class token tier, not an ad hoc intermediate size. Supreme is available to supported single-height controls, including buttons, split controls, fields, dropdowns, and action buttons. Micro is family-aware: expose it only on production families whose 12px geometry is supported (including informational split badges and the existing micro-capable fields); do not assume every interactive family can fit it. The canonical TypeScript tokens and `scripts/emit-studio-control-vars.mjs` remain the only sizing authority.
+The canonical five-tier ladder is Supreme (60px), Standard (44px), Compact (28px), Mini (20px), and Micro (12px). Mini uses 1.5px stroke, 3px radius, and 17.5px type/icons. Micro keeps 12px height and 10px type/icons while inheriting Mini's 1.5px stroke, 3px radius, 0.975px outline, and global `-0.02em` letter-spacing. TypeScript tokens are the only sizing authority; generated CSS is emitted from tokens and `studio-control-system.css` consumes it.
 
 A family is **source-confirmed** only when its specimen uses the production export, provenance identifies TSX/CSS/tokens/import paths, exception notes are concise, and source/API regression tests cover the public contract. Full visual certification additionally requires computed-style/browser evidence for standard, compact, and applicable exception sizes. The word “confirmed” alone is not proof that visual regression passed.
 
@@ -41,7 +41,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 | Font synthesis | Disabled for badge labels where supported, so synthetic light styles do not override the heavy weight |
 | Text transform | Uppercase for control labels and tags |
 | Letter spacing | `-0.02em`; only named component exceptions may differ |
-| Baseline line-height | `1` (shared default for single-line controls and multiline areas) |
+| Baseline line-height | `1` for single-line controls; textarea multiline exception is `0.85` from the multiline token |
 | Primary color | `--pair-a` |
 | Secondary color | `--pair-b` |
 | Default fill | Fields use 50% primary fill at rest and 15% on focus. Solid button/badge/action faces may use 100% primary only where their family contract explicitly specifies a solid face; do not generalize that exception to fields or all controls. |
@@ -61,7 +61,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 ## 2. Size-based global defaults
 
-The intended size contract is Supreme (60px / 3px / 6px / 51.82px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1.5px / 3px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro reuses the Mini stroke/radius system. Source/document drift is listed in the audit note at the end of this document.
+The intended size contract is Supreme (60px / 3px / 6px / 51.82px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1.5px / 3px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro reuses the Mini stroke/radius system. Global line-height `1` remains the single-line default; textarea uses the explicit multiline exception `0.85`.
 
 | Property | Supreme | Standard | Compact | Mini | Micro |
 |---|---:|---:|---:|---:|
@@ -141,13 +141,13 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Focus caret: primary color (`--pair-a`), not black.
 - Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px standard / 1.3px compact / 0.975px Mini and Micro), outline offset 0.
 - Focus must not shift layout. Do not add a gap between the field and its focus outline.
-- The Micro (12px) focus outline is **0.975px** (65% of its 1.5px Mini-system border), not 0.65px. Both standard controls and floating-field wrappers must consume the same tier token; no Micro-only 1px or 0.65px override is permitted.
+- Micro inherits Mini's 0.975px outline (65% of the 1.5px stroke). All controls and floating-field wrappers consume the same tier token; no Micro-specific override is permitted.
 
 ### Multiline textarea (registered typography exception)
 
 - Alignment: left; text starts at the top of the writing area with normal multiline padding.
-- Standard type: 18px, weight 1000, 0.5px text stroke, default line-height (`1`).
-- Compact type: 14px, weight 1000, 0.35px text stroke, default line-height (`1`).
+- Standard type: 18px, weight 1000, 0.5px text stroke, multiline line-height (`0.85`).
+- Compact type: 14px, weight 1000, 0.35px text stroke, multiline line-height (`0.85`).
 - Minimum writing surface: 92px.
 - Resize: vertical.
 - Geometry still follows the selected size tier: standard 44px family / 3px border / 6px radius; compact 28px family / 2px border / 4px radius. The 92px minimum surface may make the textarea taller than the nominal one-line control height.
@@ -166,7 +166,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Vault spectrum tag | 15px high, 2px border, 4px radius, 8px type, weight 900, 0.3px letter spacing; alphabetical spectrum fill mixed 35% with white; resolved spectrum text/border color | Dense asset-vault metadata chip with an established spectrum-color identity |
 | Closeable badge | Named family exception: 20px pill height, no outer border, 16px Inter 1000 uppercase label, primary fill, 16px secondary close control with primary glyph | Dense removable metadata chip; this fixed geometry does not redefine the global five-tier lattice |
 | Tag editor plus/check action | Compact 28px face, 2px stroke, 4px radius, no shadow | Dense inline tag-editing affordance; action remains square |
-| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, default line-height (`1`), min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
+| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, line-height `0.85`, min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
 | Prominent action button | Supreme 60px by default; standard/compact variants use shared tier tokens; flat shell, no shadow | Workflow emphasis is a component role, not a separate 56px geometry tier |
 | Switch/choice geometry | 44px reference uses 7.333px rectangular radius, 1.72:1 switch track, and the exact handle/indicator ratios in §3 | Matches the supplied 44px HTML reference; does not redefine ordinary button/field radius |
 | Icon preset variants | Default large preset is 38px / 1.9 standard and 24px / 2.0 compact; moderate 34px/22px and compact 28px/18px are opt-in only | Optional icon density must not silently become the global default |
@@ -213,7 +213,7 @@ The split-left button, split-left/right/double badges, and username composite in
 
 ### Stabilized defaults
 
-- Supreme / standard / compact / micro face geometry: 60px / 44px / 28px / 12px; border: 4.09px / 3px / 2px / 1px; radius: 8.18px / 6px / 4px / 2px; typography and icon: 51.82px / 38px / 24px / 10px.
+- Supreme / standard / compact / mini / micro face geometry: 60px / 44px / 28px / 20px / 12px; border: 3px / 3px / 2px / 1.5px / 1.5px; radius: 6px / 6px / 4px / 3px / 3px; typography and icon: 51.82px / 38px / 24px / 17.5px / 10px.
 - Inter-component gap remains 4px for all tiers; micro is an explicit 12px tier and is not derived by halving Compact.
 - Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
 - Both rails in a double split use the secondary color role.
@@ -235,7 +235,7 @@ Visual verification is still required in the running app for supreme/standard/co
 ## Vertical Studio word toggle — registered height exception
 
 - Canonical primitive: `StudioVerticalWordToggle` in `src/studio-ui/primitives/StudioControls.tsx`; CSS owner: `src/styles/studio-control-system.css`; live specimens: `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`.
-- The two stacked word faces create a content-driven height. This is the sole size-lattice exception: standard typography/stroke/radius tokens remain 38px / 3px / 6px, compact remains 24px / 2px / 4px, and micro remains 10px / 1px / 2px. The resulting overall height is content-driven and is not forced to the 60px / 44px / 28px / 12px lattice.
+- The two stacked word faces create a content-driven height. This is the sole size-lattice exception: standard typography/stroke/radius tokens remain 38px / 3px / 6px, compact remains 24px / 2px / 4px, and Micro uses 10px type with the shared Mini 1.5px / 3px stroke/radius system. The resulting overall height is content-driven and is not forced to the 60px / 44px / 28px / 12px lattice.
 - Four variants: primary/secondary pair; black fill with the inactive word colored to match the handle color at the start of the last transition and the active word black on the colored handle; primary fill/border with secondary text and a white handle; white fill/border with a black handle and inverse text.
 - Word colors change quickly at the beginning of the handle animation; the handle expands vertically, releases to the other word, and uses a vertical color wipe on alternating transitions. Reduced-motion settles immediately.
 - Catalog layout: standard two per row; compact three per row; a 2×2 micro matrix occupies the remaining two cells at the end of compact row two. Every specimen has independent state.
@@ -275,18 +275,36 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 | Concern | Intended contract | Source observation | Status |
 |---|---|---|---|
 | Supreme | 60px height; Standard stroke/radius system (3px / 6px); 51.82px type/icon | TypeScript tokens and recovery CSS agree on 3px / 6px | Source-aligned; browser verification outstanding |
-| Mini type/icon | 20px height; 1.5px / 3px geometry; 17.5px type/icon | TypeScript tokens declare 17.5px; recovery CSS overrides type/icon to 16px | **Open implementation drift** |
-| Micro | 12px; Mini stroke/radius system (1.5px / 3px); 10px type/icon; 0.975px outline | TypeScript tokens and recovery CSS align; older docs were stale | Documentation corrected here; browser verification outstanding |
-| Micro letter spacing | Shared `-0.02em` unless an exception is registered | TypeScript token declares `-0.01em` | **Unregistered token exception / open decision** |
-| Editable field inset | Primary inset persists at rest and focus; focus changes text/glyph to black | Recovery CSS preserves primary inset and black focused text/stroke; split input has shell-owned border and gradient inset in later entry-file rules | Source requires computed-style/browser verification |
+| Mini type/icon | 20px height; 1.5px / 3px geometry; 17.5px type/icon | Token and generated CSS align; duplicate tier declarations removed from core/recovery | Source aligned; runtime verification outstanding |
+| Micro | 12px; Mini stroke/radius system (1.5px / 3px); 10px type/icon; 0.975px outline; `-0.02em` letter-spacing | Tokens, generated CSS, and system selector align | Source aligned; runtime verification outstanding |
+| Micro letter spacing | Shared `-0.02em` | TypeScript token matches the global contract | Source aligned; runtime verification outstanding |
+| Editable field inset | Primary inset persists at rest and focus; focus changes text/glyph to black | Shared field rules own editable text/stroke/color/caret; recovery field rules preserve the standard inset; split input owns its shell border and gradient inset in `studio-split-text-input.css` and routes focus through its shell | Source aligned; computed-style/browser verification outstanding |
 | TextBox | Black text/glyph; primary inset; secondary outline | Recovery CSS declares black text/glyph, primary inset, secondary outline | Source-aligned; browser verification outstanding |
 | Catalog provenance | Real production exports; catalog CSS owns arrangement only | Confirmed catalog imports production primitives, including dedicated `StudioSplitTextInput` and `StudioSplitAccordion` | Source registration confirmed; visual certification outstanding |
 
 ### Required follow-up
 
 1. Reconcile Mini typography in `src/styles/studio-control-recovery-overrides.css` with the 17.5px TypeScript token and regenerate/verify dependent output if required.
-2. Decide whether Micro `-0.01em` is intentional. If not, align it to `-0.02em`; if yes, register a narrowly scoped exception in the machine-readable exception map and this document.
+2. Verify the emitter output, focused field/split tests, typecheck/build, computed styles, and desktop/mobile layouts.
 3. Run token emitter consistency checks, focused tests, typecheck/build, computed-style assertions, and desktop/mobile browser inspection for all five tiers.
 4. Test editable input, textarea, TextBox, and split input separately at rest and focus. Assert outer border, inset, fill, text/glyph stroke, caret, outline width/color/offset, and divider count.
 
 **Verification boundary:** This is a source/documentation audit, not rendered visual certification. No tests, build, computed-style capture, browser screenshots, or assistive-technology tests were run in this pass.
+
+
+### Source-of-truth and split-field inheritance
+
+- Token source: `src/studio-ui/tokens.ts`.
+- Generated CSS: `src/styles/studio-control-vars.generated.css`, emitted by `scripts/emit-studio-control-vars.mjs`.
+- Global size selectors: `src/styles/studio-control-system.css` only; core and recovery styles must not reintroduce tier geometry.
+- Split input: the component imports its shell stylesheet. Shared field rules own matching text typography, rest/focus colors, caret, and text stroke. The split shell owns its outer border, rails, persistent inset geometry, and focus outline routing.
+- Preferred maintenance: remove duplicate/stale declarations and use existing token variables before adding CSS. Each real exception needs one owner and a matching catalog/documentation entry.
+
+
+### Source-of-truth and split-field inheritance
+
+- Token source: `src/studio-ui/tokens.ts`.
+- Generated CSS: `src/styles/studio-control-vars.generated.css`, emitted by `scripts/emit-studio-control-vars.mjs`.
+- Global size selectors: `src/styles/studio-control-system.css` only; core and recovery styles must not reintroduce tier geometry.
+- Split input: the component imports its shell stylesheet. Shared field rules own matching text typography, rest/focus colors, caret, and text stroke. The split shell owns its outer border, rails, persistent inset geometry, and focus outline routing.
+- Preferred maintenance: remove duplicate/stale declarations and use existing token variables before adding CSS. Each real exception needs one owner and a matching catalog/documentation entry.

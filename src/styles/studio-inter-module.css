@@ -35,24 +35,24 @@
 }
 
 .vt-studio-inter-module[data-size="compact"] {
-  --vt-im-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-im-face: var(--vt-studio-28-height, 28px);
-  --vt-im-font: var(--vt-studio-28-font-size, 24px);
-  --vt-im-text-stroke: var(--vt-studio-28-text-stroke, 0.5px);
+  --vt-im-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-im-face: var(--vt-studio-compact-height, 28px);
+  --vt-im-font: var(--vt-studio-compact-font-size, 24px);
+  --vt-im-text-stroke: var(--vt-studio-compact-text-stroke, 0.5px);
 }
 
 .vt-studio-inter-module[data-size="mini"] {
   --vt-im-stroke: var(--vt-studio-mini-stroke, 1.5px);
   --vt-im-face: var(--vt-studio-mini-height, 20px);
   --vt-im-font: var(--vt-studio-mini-font-size, 17.5px);
-  --vt-im-text-stroke: var(--vt-studio-mini-text-stroke, 0.375px);
+  --vt-im-text-stroke: var(--vt-studio-mini-text-stroke, 0.4px);
 }
 
 .vt-studio-inter-module[data-size="micro"] {
-  --vt-im-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-im-stroke: var(--vt-studio-micro-stroke, 1.5px);
   --vt-im-face: var(--vt-studio-micro-height, 12px);
   --vt-im-font: var(--vt-studio-micro-font-size, 10px);
-  --vt-im-text-stroke: var(--vt-studio-micro-text-stroke, 0.25px);
+  --vt-im-text-stroke: var(--vt-studio-micro-text-stroke, 0.4px);
 }
 
 .vt-studio-inter-module[data-tone="accent"] {
