@@ -139,3 +139,20 @@
     animation: none !important;
   }
 }
+
+
+/* Geometry experiments for diagnosing the split-field's missing lower inset.
+   Keep the current production geometry as the default until a visual comparison
+   confirms which variant fits the border box without clipping. */
+.vt-studio-split-text-input[data-geometry-variant="half-vertical-padding"] > .vt-studio-split-text-input__field {
+  padding-block: calc(var(--vt-studio-space-unit, 4px) / 2);
+}
+
+.vt-studio-split-text-input[data-geometry-variant="username-height"] > .vt-studio-split-text-input__field,
+.vt-studio-split-text-input[data-geometry-variant="username-height"] > .vt-studio-split-text-input__field:focus,
+.vt-studio-split-text-input[data-geometry-variant="username-height"] > .vt-studio-split-text-input__field:focus-visible {
+  /* StudioUsernameInput uses height:100% for its unbordered field. Here the
+     blue-bordered field occupies that same inner shell height explicitly. */
+  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+  padding-block: 0;
+}
