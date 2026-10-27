@@ -240,9 +240,9 @@ textarea[data-vt-studio-control="true"],
   background-color: var(--vt-field-fill-rest);
   caret-color: var(--vt-field-text);
 }
-input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
-[data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+[data-vt-studio-control="true"] input:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   color: var(--vt-field-text-focus);
   -webkit-text-fill-color: var(--vt-field-text-focus);
