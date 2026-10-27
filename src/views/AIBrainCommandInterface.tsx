@@ -501,7 +501,8 @@ export const BrainPromptLibrary: React.FC<{
  const [selectedId, setSelectedId] = useState<string | null>(null)
  const [query, setQuery] = useState("")
  const [category, setCategory] = useState("all")
- const [openCategories, setOpenCategories] = useState<string[]>([])
+ const [openCategories, setOpenCategories] = useState<string[]>(() => cards.length ? [cards[0]?.category || "general"] : [])
+ const [libraryOpen, setLibraryOpen] = useState(true)
  const filteredCards = useMemo(() => filterCreatorBrainPromptCards(cards, query, category), [cards, query, category])
  const groupedCards = useMemo(() => {
   const groups = new Map<string, CreatorBrainPromptCard[]>()
@@ -538,6 +539,8 @@ export const BrainPromptLibrary: React.FC<{
     startIcon={<LayoutGrid aria-hidden="true" />}
     title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
     className="overflow-hidden brain-prompt-library-shell"
+    open={libraryOpen}
+    onOpenChange={setLibraryOpen}
     style={{ background: TOOLBOX_PALETTE[11], "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
    >
     <p data-vt-brain-part="prompt-library-description" className="mb-2 border-b border-black/20 pb-2 text-[10px] font-bold leading-4 text-black/65">
@@ -545,7 +548,7 @@ export const BrainPromptLibrary: React.FC<{
     </p>
     <div className="grid grid-cols-1 gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
      <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
-     <StudioDropdown variant="simple" id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: formatPromptCategoryLabel(item) }))]} />
+     <StudioDropdown variant="simple" id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [String(value)]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: formatPromptCategoryLabel(item) }))]} />
     </div>
     <p className="px-2 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
 
