@@ -5456,13 +5456,8 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-value-toggle--nested { border: 0; border-radius: 0; min-width: 0; }
 .vt-studio-value-toggle__divider { flex: 0 0 1px; background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
 .vt-studio-value-toggle--bar { align-items: stretch; }
-.vt-studio-value-toggle--bar .vt-studio-value-toggle__arrow { min-width: 38px; }
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow { min-width: 24px; }
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow svg { width: 24px; height: 24px; }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars { gap: 1px; }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bar { flex-basis: 10px; width: 10px; height: 20px; }
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__arrow { min-width: 12px; }
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__arrow svg { width: 10px; height: 10px; }
 .vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars { gap: 1px; padding: 0 1px; }
 .vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bar { flex-basis: 3px; width: 3px; height: 8px; border-width: .5px; }
 
@@ -5480,7 +5475,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-split-shell.vt-studio-value-toggle[data-vt-studio-split="double"] { grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr) var(--vt-studio-control-height, 44px); }
 .vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] { width: var(--vt-studio-control-height, 44px); min-width: 0; background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); border-color: #000; }
 .vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-value-toggle__arrow { width: 100%; min-width: 0; height: 100%; padding: 0; color: var(--vt-toggle-icon, #000); background: var(--vt-toggle-icon-fill, transparent); }
-.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-value-toggle__arrow svg { width: min(var(--vt-studio-control-icon-size, 38px), 100%); height: min(var(--vt-studio-control-icon-size, 38px), 100%); }
+ .vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-value-toggle__arrow svg { width: 100%; height: 100%; }
 .vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-label] { min-width: 0; width: 100%; overflow: hidden; padding: 0 4px; background: var(--vt-toggle-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))); color: var(--vt-toggle-text, #000); -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor; }
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__face { display: flex; width: 100%; min-width: 0; height: 100%; align-items: center; justify-content: center; padding-block: 0; overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1; color: inherit; }
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow { display: grid; place-items: center; border: 0; border-radius: 0; cursor: pointer; }
@@ -5489,10 +5484,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
-}
+
 .vt-studio-value-toggle--double:not(.vt-studio-split-shell) { display: flex; align-items: stretch; gap: 0; width: 100%; min-width: 0; min-height: var(--vt-studio-control-height, 44px); box-sizing: border-box; border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden; background: var(--vt-toggle-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))); }
 .vt-studio-value-toggle__double-side { display: flex; flex: 1 1 0; min-width: 0; }
 .vt-studio-value-toggle__double-side > .vt-studio-split-shell { flex: 1 1 auto; min-width: 0; width: 100%; border: 0; border-radius: 0; }
@@ -5558,7 +5550,6 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 }
 /* Double Side Toggle owns one perimeter; propagate the same size tokens into both nested shells. */
 .vt-studio-value-toggle--double[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px); }
-.vt-studio-value-toggle--double[data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px; --vt-studio-control-font-size: 38px; --vt-studio-control-icon-size: 38px; }
 .vt-studio-value-toggle--double[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px); }
 .vt-studio-value-toggle--double[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); }
 .vt-studio-value-toggle--double .vt-studio-value-toggle__double-side > .vt-studio-split-shell { height: 100%; min-height: 100%; font-size: var(--vt-studio-control-font-size); }
@@ -5603,20 +5594,8 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   outline-offset: 0;
 }
 
-[data-vt-studio-control][data-size="standard"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(38px, 100%);
-  height: min(38px, 100%);
-}
 
-[data-vt-studio-control][data-size="compact"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(30px, 100%);
-  height: min(30px, 100%);
-}
 
-[data-vt-studio-control][data-size="micro"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(15px, 100%);
-  height: min(15px, 100%);
-}
 
 /* Focus parity for both simple and labeled textarea writing surfaces. */
 [data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible) {
