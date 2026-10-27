@@ -183,6 +183,12 @@ describe("AI Brain runtime surface integration", () => {
   expect(capabilityBrowserSource).toContain('selectedAvailability.reason')
  })
 
+ it("clears an expanded prompt only when search or category filters hide it", () => {
+  expect(promptLibrarySource).toContain('filterCreatorBrainPromptCards(cards, nextQuery, category, summarize).some((card) => card.id === selectedId)')
+  expect(promptLibrarySource).toContain('filterCreatorBrainPromptCards(cards, query, nextCategory, summarize).some((card) => card.id === selectedId)')
+  expect(promptLibrarySource).toContain('if (nextCategory !== "all") setOpenCategories([nextCategory])')
+ })
+
  it("labels capability, context, and correction drafts when handing off to the composer", () => {
   expect(source).toContain('setActivePromptTitle("Capability draft")')
   expect(source).toContain('setActivePromptTitle("Suggested action")')
