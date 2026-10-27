@@ -160,6 +160,16 @@ describe("AI Brain runtime surface integration", () => {
   expect(capabilityBrowserSource).toContain('selectedAvailability.reason')
  })
 
+ it("carries the selected prompt title into the composer and clears it on send", () => {
+  expect(promptLibrarySource).toContain('onEdit?: (prompt: string, title: string) => void')
+  expect(promptLibrarySource).toContain('onEdit(card.prompt, card.label)')
+  expect(source).toContain('const [activePromptTitle, setActivePromptTitle] = useState<string | null>(null)')
+  expect(source).toContain('activePromptTitle={activePromptTitle}')
+  expect(source).toContain('onClearActivePrompt={() => setActivePromptTitle(null)}')
+  expect(source).toContain('setActivePromptTitle(title)')
+  expect(composerDockSource).toContain('aria-label={`Active prompt ${activePromptTitle}. Activate to clear.`}')
+ })
+
  it("keeps response cards answer-first without duplicate assistant branding", () => {
   const responseCard = source.slice(source.indexOf('const CreatorResponseCard:'), source.indexOf('const readinessForSnapshot:'))
 
