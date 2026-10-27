@@ -181,6 +181,13 @@ describe("AI Brain runtime surface integration", () => {
   expect(capabilityBrowserSource).toContain('selectedAvailability.reason')
  })
 
+ it("labels capability, context, and correction drafts when handing off to the composer", () => {
+  expect(source).toContain('setActivePromptTitle("Capability draft")')
+  expect(source).toContain('setActivePromptTitle("Suggested action")')
+  expect(source).toContain('setActivePromptTitle("Context correction review")')
+  expect(source).toContain('requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions))')
+ })
+
  it("keeps the composer draft recoverable with a direct clear action", () => {
   const composerSource = readFileSync(new URL("../components/brain/BrainComposerDock.tsx", import.meta.url), "utf8")
   expect(composerSource).toContain('activePromptTitle || activeContextLabel || value.trim()')
