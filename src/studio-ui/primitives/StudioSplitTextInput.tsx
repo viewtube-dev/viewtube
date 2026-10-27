@@ -1,4 +1,5 @@
 import React from "react"
+import "../../styles/studio-split-text-input.css"
 import type { StudioControlSize } from "../tokens"
 
 export type StudioSplitTextInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
