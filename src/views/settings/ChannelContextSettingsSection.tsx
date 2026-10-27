@@ -3,7 +3,7 @@ import { StudioButton, StudioTextInput } from "../../studio-ui"
 import { CHANNEL_CONTEXT_QUESTIONS, type ChannelContextQuestion } from "../../context/channelContextQuestions"
 import type { ChannelContextProfile } from "../../context/ChannelContextProfile"
 import { scoreContext } from "../../context/ChannelContextScoring"
-import { loadAiBrainContext, saveAiBrainContext } from "../../services/aiBrainContext"
+import { loadAiBrainContext, saveChannelContextProfile } from "../../services/aiBrainContext"
 
 const CATEGORIES = [
   ["identity", "Channel identity"],
@@ -50,8 +50,7 @@ export const ChannelContextSettingsSection: React.FC = () => {
   }
 
   const save = () => {
-    const current = loadAiBrainContext()
-    saveAiBrainContext({ channelContext: profile, source: current.source === "system" ? "wizard" : current.source })
+    saveChannelContextProfile(profile)
     setSaved(true)
   }
 
