@@ -169,6 +169,13 @@ describe("AI Brain runtime surface integration", () => {
   expect(responseCard).toContain('BrainGenerationBadge path={response.generationPath}')
  })
 
+ it("keeps the composer handoff visibly labeled for capability, context, and correction drafts", () => {
+  expect(source).toContain('setActivePromptTitle("Capability draft")')
+  expect(source).toContain('setActivePromptTitle("Suggested action")')
+  expect(source).toContain('setActivePromptTitle("Context correction review")')
+  expect(source).toContain('requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions))')
+ })
+
  it("does not make the entire transcript a live log that re-announces the full conversation", () => {
   const viewport = chatPrimitivesSource.slice(
    chatPrimitivesSource.indexOf("export const ChatConversationViewport:"),
