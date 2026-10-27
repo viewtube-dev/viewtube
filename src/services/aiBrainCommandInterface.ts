@@ -218,9 +218,11 @@ const readStoredPublicChannelSnapshot = (): PublicChannelSnapshot | null => {
 const publicSnapshotMatchesActiveChannel = (p: PublicChannelSnapshot | null, id: string | null, handle: string | null, name: string | null): p is PublicChannelSnapshot => {
  if (!p || (id && id !== p.channelId)) return false
  const norm = (v: string | null) => { const t = String(v || "").trim(); return (t.startsWith("@") ? t.slice(1) : t).toLowerCase() }
- if (norm(p.handle) && norm(handle) && norm(p.handle) !== norm(handle)) return false
- if (!id && !p.handle && norm(p.title) && norm(name) && norm(p.title) !== norm(name)) return false
- return true
+ const savedHandle = norm(p.handle), activeHandle = norm(handle), savedName = norm(p.title), activeName = norm(name)
+ if (id) return true
+ if (savedHandle && activeHandle) return savedHandle === activeHandle
+ if (savedName && activeName) return savedName === activeName
+ return !savedHandle && !savedName || !activeHandle && !activeName
 }
 const publicChannelEvidenceVideo = (v: PublicChannelSnapshot["topVideos"][number]): AIBrainEvidenceVideo => ({ id: "public:" + v.videoId, evidenceId: "public-video:" + v.videoId, title: cleanProfileText(v.title) || "Untitled public video", publishedAt: cleanProfileText(v.publishedAt) || null, format: null, descriptionSnippet: null, tags: [], metrics: { views: null, watchTime: null, subscribers: null, revenue: null, ctr: null, averagePercentageViewed: null, likes: null, comments: null } })
 export type AIBrainContextInput = {
@@ -1354,7 +1356,9 @@ export const buildEvidenceRankingModule = (
  evidencePack: AIBrainEvidencePack,
 ): AIBrainAnswerModule | null => {
  const videos = evidencePack.topVideos.slice(0, 3)
- if (!videos.length) return null
+ // Public-page metadata can ground topic and title suggestions, but cannot establish
+ // a performance ranking. Do not render an analytics ranking without actual metrics.
+ if (!videos.length || !videos.some((video) => Object.values(video.metrics).some((value) => value !== null))) return null
  return {
   id: "video-evidence-ranking",
   title: "What I ranked this on",
