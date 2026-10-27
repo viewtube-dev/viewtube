@@ -340,12 +340,36 @@ html body .vt-studio-text-box[data-vt-studio-control="true"][data-size] {
 
 /* Side and double-side toggle faces are solid primary like counter value faces.
    Arrow button cells use the same solid secondary fill, black glyphs and shared divider. */
-html body .vt-studio-value-toggle--side .vt-studio-value-toggle__face,
-html body .vt-studio-value-toggle--double .vt-studio-value-toggle__face {
+html body .vt-studio-value-toggle--side:not(.vt-studio-value-toggle--nested) .vt-studio-value-toggle__face {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
   -webkit-text-stroke-color: #000 !important;
+}
+html body .vt-studio-value-toggle--double .vt-studio-value-toggle__double-side:first-child .vt-studio-value-toggle__face {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+}
+/* Preserve the explicit V1/V2 right-side appearance axis. */
+html body .vt-studio-value-toggle--double[data-right-appearance="primary"] .vt-studio-value-toggle__double-side:last-child .vt-studio-value-toggle__face {
+  background: var(--pair-a, #36e0f6) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+}
+html body .vt-studio-value-toggle--double[data-right-appearance="secondary"] .vt-studio-value-toggle__double-side:last-child .vt-studio-value-toggle__face {
+  background: var(--pair-b, #ff7f6b) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+}
+html body .vt-studio-value-toggle--double[data-right-appearance="black-primary-text"] .vt-studio-value-toggle__double-side:last-child .vt-studio-value-toggle__face {
+  background: #000 !important;
+  color: var(--pair-a, #36e0f6) !important;
+  -webkit-text-fill-color: var(--pair-a, #36e0f6) !important;
+  -webkit-text-stroke-color: var(--pair-a, #36e0f6) !important;
 }
 html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack,
 html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow-stack {
