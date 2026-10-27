@@ -2342,6 +2342,7 @@ const useStudioCounterHold = (
 
 /** Independent button-only counter primitives. These deliberately do not compose either legacy stepper. */
 export interface StudioCounterProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
+  [key: `data-${string}`]: string | undefined;
   value: number;
   onValueChange: (value: number) => void;
   min?: number;
@@ -2351,6 +2352,22 @@ export interface StudioCounterProps extends Omit<React.HTMLAttributes<HTMLSpanEl
   disabled?: boolean;
   ariaLabel?: string;
 }
+
+export interface StudioLeftCounterProps extends StudioCounterProps {
+  /** Optional display override used by semantic variants that retain numeric counter mechanics. */
+  displayValue?: React.ReactNode;
+}
+
+export type StudioLeftWordCounterProps = Omit<StudioCounterProps, "min" | "max" | "step">;
+export type StudioLeftWordSliderProps = Omit<StudioDoubleSplitSliderProps, "min" | "max" | "step" | "leftControls">;
+
+export const STUDIO_LEFT_WORD_OPTIONS = ["ONE", "TWO", "THREE", "FOUR"] as const;
+export type StudioLeftWord = typeof STUDIO_LEFT_WORD_OPTIONS[number];
+
+export const normalizeStudioLeftWordIndex = (value: number): number => {
+  if (!Number.isFinite(value)) return 1;
+  return ((Math.round(value) - 1 + STUDIO_LEFT_WORD_OPTIONS.length) % STUDIO_LEFT_WORD_OPTIONS.length + STUDIO_LEFT_WORD_OPTIONS.length) % STUDIO_LEFT_WORD_OPTIONS.length + 1;
+};
 
 /** Three-part counter: square decrement, 2:1 display, square increment. */
 export const StudioCounter: React.FC<StudioCounterProps> = ({
@@ -2426,10 +2443,10 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
 };
 StudioSideCounter.displayName = "StudioSideCounter";
 
-export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
+export const StudioLeftCounter: React.FC<StudioLeftCounterProps> = ({
   value, onValueChange, min = 0, max = 100, step = 1,
   size = "standard", disabled = false, ariaLabel = "Value",
-  className, ...props
+  displayValue, className, ...props
 }) => {
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const interactionFocus = useStudioInteractionFocus();
@@ -2455,13 +2472,42 @@ export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
         <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
         <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
-      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-left-counter", "data-vt-library-component": "StudioLeftCounter" }}
+      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-left-counter", "data-vt-library-component": props["data-vt-library-component"] ?? "StudioLeftCounter" }}
     >
-      <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
+      <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{displayValue ?? String(current)}</span>
     </StudioSplitShell>
   );
 };
 StudioLeftCounter.displayName = "StudioLeftCounter";
+
+/** Four-state word cycle built on the canonical StudioLeftCounter interaction mechanics. */
+export const StudioLeftWordCounter: React.FC<StudioLeftWordCounterProps> = ({
+  value, onValueChange, size = "standard", className, disabled = false, ariaLabel = "Word",
+  ...props
+}) => {
+  const wordIndex = normalizeStudioLeftWordIndex(value);
+  const handleValueChange = React.useCallback((nextValue: number) => {
+    onValueChange(normalizeStudioLeftWordIndex(nextValue));
+  }, [onValueChange]);
+  return (
+    <StudioLeftCounter
+      {...props}
+      value={wordIndex}
+      onValueChange={handleValueChange}
+      min={0}
+      max={STUDIO_LEFT_WORD_OPTIONS.length + 1}
+      step={1}
+      size={size}
+      disabled={disabled}
+      ariaLabel={ariaLabel}
+      displayValue={STUDIO_LEFT_WORD_OPTIONS[wordIndex - 1]}
+      className={studioClasses("vt-studio-left-word-counter", className)}
+      data-vt-studio-word-index={String(wordIndex)}
+      data-vt-library-component="StudioLeftWordCounter"
+    />
+  );
+};
+StudioLeftWordCounter.displayName = "StudioLeftWordCounter";
 
 
 /** Closeable metadata badge using the global Studio size and palette contract. */
@@ -2878,6 +2924,7 @@ export const StudioDoubleSplitBadge: React.FC<StudioDoubleSplitBadgeProps> = ({ 
 StudioDoubleSplitBadge.displayName = "StudioDoubleSplitBadge";
 
 export interface StudioDoubleSplitSliderProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
+  [key: `data-${string}`]: string | undefined;
   value: number;
   onValueChange: (value: number) => void;
   min?: number;
@@ -2946,9 +2993,9 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
       )}
       rightRailContent={<output className="vt-studio-double-split-slider__value" aria-live="off">{current}</output>}
       shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end,
-        "data-vt-studio-slider": "double-split",
+        "data-vt-studio-slider": props["data-vt-studio-slider"] ?? "double-split",
         "data-vt-studio-slider-left-controls": leftControls,
-        "data-vt-library-component": "StudioDoubleSplitSlider",
+        "data-vt-library-component": props["data-vt-library-component"] ?? "StudioDoubleSplitSlider",
         "data-size": size,
         "aria-disabled": disabled || !validBounds ? "true" : undefined,
       }}
@@ -2969,6 +3016,35 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
   );
 };
 StudioDoubleSplitSlider.displayName = "StudioDoubleSplitSlider";
+
+/** Four-position left counter + slider with a live numeric value in the right rail. */
+export const StudioLeftWordSlider: React.FC<StudioLeftWordSliderProps> = ({
+  value, onValueChange, size = "standard", className, disabled = false, ariaLabel = "Word slider",
+  ...props
+}) => {
+  const wordIndex = normalizeStudioLeftWordIndex(value);
+  const handleValueChange = React.useCallback((nextValue: number) => {
+    onValueChange(normalizeStudioLeftWordIndex(nextValue));
+  }, [onValueChange]);
+  return (
+    <StudioDoubleSplitSlider
+      {...props}
+      value={wordIndex}
+      onValueChange={handleValueChange}
+      min={1}
+      max={STUDIO_LEFT_WORD_OPTIONS.length}
+      step={1}
+      size={size}
+      disabled={disabled}
+      ariaLabel={ariaLabel}
+      leftControls="counter"
+      className={studioClasses("vt-studio-left-word-slider", className)}
+      data-vt-studio-slider="left-word"
+      data-vt-library-component="StudioLeftWordSlider"
+    />
+  );
+};
+StudioLeftWordSlider.displayName = "StudioLeftWordSlider";
 
 
 

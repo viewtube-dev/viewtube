@@ -16,3 +16,6 @@
 /* Final primitive-level geometry and composition-only grid layout. */
 @import "./studio-side-rail-unify.css";
 @import "./studio-component-grid.css";
+
+/* New counter-family variants must follow the shared production control cascade. */
+@import "./studio-control-word-counter.css";

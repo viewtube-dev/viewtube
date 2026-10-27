@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -15,6 +15,7 @@ const readStudioControlCss = () => [
   "studio-control-fields.css",
   "studio-control-distill-overrides.css",
   "studio-control-recovery-overrides.css",
+  "studio-control-word-counter.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
 
 const canonicalTail = (css: string) => {
@@ -1378,3 +1379,63 @@ describe("toggle and switch visible backgrounds", () => {
     expect(css).toContain(".vt-studio-value-toggle__bar[data-active=\"true\"]")
   })
 })
+
+
+describe("Studio left word counter and word slider", () => {
+  it("cycles forward and backward through exactly four word states", () => {
+    expect(STUDIO_LEFT_WORD_OPTIONS).toEqual(["ONE", "TWO", "THREE", "FOUR"]);
+    expect(normalizeStudioLeftWordIndex(5)).toBe(1);
+    expect(normalizeStudioLeftWordIndex(0)).toBe(4);
+    expect(normalizeStudioLeftWordIndex(3)).toBe(3);
+  });
+
+  it("renders the corresponding label and semantic state for every word", () => {
+    const specimens = [1, 2, 3, 4].map(value => renderToStaticMarkup(
+      <StudioLeftWordCounter value={value} onValueChange={() => undefined} ariaLabel="Word state specimen" />,
+    ));
+    ["ONE", "TWO", "THREE", "FOUR"].forEach((word, index) => {
+      expect(specimens[index]).toContain(`data-vt-studio-word-index="${index + 1}"`);
+      expect(specimens[index]).toContain(`>${word}</span>`);
+    });
+  });
+
+  it("renders the four-state left counter using the existing counter shell", () => {
+    const html = renderToStaticMarkup(
+      <StudioLeftWordCounter value={3} onValueChange={() => undefined} ariaLabel="Word counter test" />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioLeftWordCounter"');
+    expect(html).toContain('data-vt-studio-word-index="3"');
+    expect(html).toContain(">THREE</span>");
+    expect(html).toContain('aria-label="Increase Word counter test"');
+    expect(html).toContain('aria-label="Decrease Word counter test"');
+  });
+
+  it("renders a four-position slider with a synchronized numeric right section", () => {
+    const html = renderToStaticMarkup(
+      <StudioLeftWordSlider value={3} onValueChange={() => undefined} ariaLabel="Word slider test" />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioLeftWordSlider"');
+    expect(html).toContain('data-vt-studio-slider="left-word"');
+    expect(html).toContain('type="range"');
+    expect(html).toContain('min="1"');
+    expect(html).toContain('max="4"');
+    expect(html).toContain('value="3"');
+    expect(html).toContain('aria-label="Word slider test"');
+    expect(html).toContain('>3</output>');
+  });
+
+  it("registers both production primitives in the confirmed representative library", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    expect(html).toContain('data-vt-library-component="StudioLeftWordCounter"');
+    expect(html).toContain('data-vt-library-component="StudioLeftWordSlider"');
+  });
+
+  it("defines palette-state and slider geometry rules in the dedicated stylesheet", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-word-counter.css"), "utf8");
+    expect(css).toContain('[data-vt-studio-word-index="2"]');
+    expect(css).toContain('[data-vt-studio-word-index="3"]');
+    expect(css).toContain('[data-vt-studio-word-index="4"]');
+    expect(css).toContain(".vt-studio-left-word-slider");
+    expect(css).toContain("prefers-reduced-motion");
+  });
+});
