@@ -21,8 +21,23 @@ function readSizeValue(source, property) {
   if (!match) throw new Error(`Missing Studio size token: ${property}`);
   return Number(match[1]);
 }
+const focusWidthRatio = Number(tokenSource.match(/focusOutlineWidthRatio:\\s*([\\d.]+)/)?.[1]);
+if (!Number.isFinite(focusWidthRatio) || focusWidthRatio <= 0) {
+  throw new Error("Missing canonical Studio focusOutlineWidthRatio");
+}
+
 function readTier(source) {
-  return Object.fromEntries(["height", "stroke", "radius", "fontSize", "iconSize", "fontWeight", "textStroke", "iconStroke", "focusOutlineWidth", "secondaryFocusOutlineWidth"].map((property) => [property, readSizeValue(source, property)]));
+  const values = Object.fromEntries(
+    ["height", "stroke", "radius", "fontSize", "iconSize", "fontWeight", "textStroke", "iconStroke"]
+      .map((property) => [property, readSizeValue(source, property)]),
+  );
+  // Focus geometry is derived, never duplicated as independent tier values.
+  const focusOutlineWidth = Number((values.stroke * focusWidthRatio).toFixed(3));
+  return {
+    ...values,
+    focusOutlineWidth,
+    secondaryFocusOutlineWidth: focusOutlineWidth,
+  };
 }
 const sizeTiers = {
   supreme: readTier(supremeSizeLine),
