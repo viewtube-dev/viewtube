@@ -52,7 +52,7 @@ When levels disagree, follow the higher level and repair the lower-level impleme
 - Existing Studio contract index: `docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md`
 - Existing Component Library ownership reference: `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md`
 
-**Repository reconciliation (2026-10-27):** TypeScript tokens are the size authority; generated CSS is emitted from them; `studio-control-system.css` owns the shared tier selectors. Core and recovery stylesheets no longer redeclare the global five-tier geometry. Mini and Micro use `-0.02em`; Micro inherits Mini's stroke/radius/outline system while retaining its 12px height and 10px type/icon size.
+**Repository reconciliation (2026-10-27):** TypeScript tokens are the size authority; generated CSS is emitted from them; `studio-control-system.css` remains the existing shared tier-selector owner while the legacy cascade is migrated incrementally. Focus outline widths are derived from the canonical `focusOutlineWidthRatio` (0.65), not independently maintained per tier. Supreme type/icons are rounded to 52px. Mini and Micro use `-0.02em`; Micro inherits Mini's 1.5px stroke, 3px radius, and 0.975px outline while retaining its 12px height and 10px type/icon size. Legacy family/recovery sheets are retained until their behavior is covered by the owning production stylesheet and regression tests.
 
 ## 3. Definitions
 
@@ -113,7 +113,7 @@ The Studio tier names and intended heights are:
 
 | Tier | Height | Intended stroke | Intended radius | Intended type/icon size |
 |---|---:|---:|---:|---:|
-| Supreme | 60px | Standard stroke system: 3px | Standard radius: 6px | 51.82px |
+| Supreme | 60px | Standard stroke system: 3px | Standard radius: 6px | 52px |
 | Standard | 44px | 3px | 6px | 38px |
 | Compact | 28px | 2px | 4px | 24px |
 | Mini | 20px | Mini stroke system: 1.5px | 3px | 17.5px |
