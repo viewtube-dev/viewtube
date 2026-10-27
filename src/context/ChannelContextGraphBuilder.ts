@@ -28,7 +28,7 @@ export function buildChannelContextGraph(context: ChannelContextProfile): Channe
     if (!label) continue
     const id = `competitor:${label.toLocaleLowerCase()}`
     if (!seen.has(id)) {
-      graph.nodes.push({ id, type: "competitor", label, confidence: 1, evidenceIds: [] })
+      graph.nodes.push({ id, type: "competitor", label, evidenceIds: [] })
       seen.add(id)
     }
     graph.edges.push({ from: "channel", to: id, relationship: "competes_with" })
