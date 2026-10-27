@@ -26,7 +26,7 @@ test("canonical size tokens preserve the five-tier geometry contract", () => {
     const match = tokens.match(new RegExp(tier + ":\\s*\\{([^}]+)\\}"));
     assert.ok(match, "missing canonical " + tier + " token");
     for (const [key, value] of Object.entries(values)) {
-      assert.match(match[1], new RegExp(key + ":\\s*" + String(value).replace(".", "\\\\.") + "(?:,|\\s)"), tier + "." + key);
+      assert.match(match[1], new RegExp(key + ":\\s*" + String(value).replace(".", "[.]") + "(?:,|\\s)"), tier + "." + key);
       assert.match(generated, new RegExp("--vt-studio-" + tier + "-" + key.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase()) + ":\\s*" + value + "(?:px)?;"), tier + "." + key + " generated variable");
     }
   }
