@@ -6632,3 +6632,10 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-sp
 details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head {
   border-bottom-color: transparent !important;
 }
+
+/* Border reservation is handled by box-sizing on the header; do not add
+   collapsed-only padding, which would make its auto height grow. */
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
+  padding-bottom: 0 !important;
+}
