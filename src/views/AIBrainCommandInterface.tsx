@@ -4,8 +4,6 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import {
  ArrowRight,
  BookOpen,
- Minus,
- Plus,
  Lock,
  Unlock,
  Trash2,
@@ -29,7 +27,7 @@ import { BrainPromptLibrary, promptCardSummary } from "../components/brain/Brain
 export { filterCreatorBrainPromptCards } from "../components/brain/BrainPromptLibrary"
 export { BrainPromptLibrary, promptCardSummary }
 import { useVisualViewportHeight } from "../components/brain/useVisualViewportHeight"
-import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioInterModule, StudioTextArea } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioInterModule, StudioTextArea } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -122,7 +120,6 @@ import type {
  BrainGenerationPath,
  BrainQuickAction,
  CreatorBrainLearningQuestion,
- CreatorBrainPromptCard,
  CreatorBrainResponse,
  CreatorInitialInsight,
 } from "../types"
