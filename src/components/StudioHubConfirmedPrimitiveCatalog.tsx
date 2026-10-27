@@ -1,9 +1,9 @@
 import React from "react"
-import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
+import { StudioPublishingCard } from "../studio-ui/compositions/StudioPublishingCard"
 import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
-import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
-import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
-import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
+import { StudioSplitAccordionCatalogSpecimens } from "./studio-hub/StudioSplitAccordionCatalogSpecimens"
+import ConfirmedSpecimenGrid from "./studio-hub/ConfirmedSpecimenGrid"
+import { StudioSplitTextInput } from "../studio-ui/primitives/StudioSplitTextInput"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
@@ -53,17 +53,17 @@ import {
   StudioSideToggle,
   StudioDoubleSideToggle,
   StudioBarToggle,
-} from "../../studio-ui/primitives/StudioControls"
-import { StudioChatActionGroup } from "../../studio-ui/primitives/StudioChatActionGroup"
-import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
-import { StudioDropdown } from "../../studio-ui/primitives/StudioDropdown"
-import { StudioInterModule } from "../../studio-ui/primitives/StudioInterModule"
-import { StudioResponseMetaRow } from "../../studio-ui/primitives/StudioResponseMetaRow"
-import { StudioLedBadgeTab } from "../../studio-ui/primitives/StudioLedBadgeTab"
-import { StudioChatResponseShell } from "../../studio-ui/primitives/StudioChatResponseShell"
+} from "../studio-ui/primitives/StudioControls"
+import { StudioChatActionGroup } from "../studio-ui/primitives/StudioChatActionGroup"
+import { StudioSplitAccordion } from "../studio-ui/primitives/StudioSplitAccordion"
+import { StudioDropdown } from "../studio-ui/primitives/StudioDropdown"
+import { StudioInterModule } from "../studio-ui/primitives/StudioInterModule"
+import { StudioResponseMetaRow } from "../studio-ui/primitives/StudioResponseMetaRow"
+import { StudioLedBadgeTab } from "../studio-ui/primitives/StudioLedBadgeTab"
+import { StudioChatResponseShell } from "../studio-ui/primitives/StudioChatResponseShell"
 import "./studio-hub-primitive-catalogs.css"
-import "../../styles/studio-confirmed-catalog-modules.css"
-import { ConfirmedFamilyModule } from "./ConfirmedCatalogModules"
+import "../styles/studio-confirmed-catalog-modules.css"
+import { ConfirmedFamilyModule } from "./studio-hub/ConfirmedCatalogModules"
 
 type Size = "44px" | "28px"
 
