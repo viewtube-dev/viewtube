@@ -11,7 +11,7 @@ export interface ChannelContextQuestion {
 }
 
 export const CHANNEL_CONTEXT_QUESTIONS: ChannelContextQuestion[] = [
-  { id: "channel_name", category: "identity", title: "What is your channel name?", required: true, contextField: "identity.name", evidenceWeight: 1 },
+  { id: "channel_name", category: "identity", title: "What is your channel name?", description: "Use the exact display name of the channel currently active in Brain; mismatched names are withheld from prompts.", required: true, contextField: "identity.name", evidenceWeight: 1 },
   { id: "channel_description", category: "identity", title: "Describe your channel in one sentence.", required: true, contextField: "identity.description", evidenceWeight: 1 },
   { id: "primary_niche", category: "identity", title: "What is your primary niche?", required: true, contextField: "identity.niche", evidenceWeight: 1 },
   { id: "sub_niches", category: "identity", title: "What sub-niches do you cover?", required: false, contextField: "identity.subNiches", evidenceWeight: 0.9 },
