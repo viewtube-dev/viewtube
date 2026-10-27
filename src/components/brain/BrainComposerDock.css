@@ -37,6 +37,21 @@
   min-width: 0;
 }
 
+.vt-brain-composer-dock .vt-brain-composer-attachment {
+  box-sizing: border-box;
+  max-width: min(100%, 260px);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.vt-brain-composer-dock .vt-brain-composer-attachment .vt-studio-led-badge-tab__label {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+
 .vt-brain-composer-dock .vt-brain-composer-hint {
   display: inline-flex;
   align-items: center;
@@ -157,6 +172,10 @@
     min-height: 64px;
     padding: 12px 10px 10px;
     font-size: 17.5px;
+  }
+
+  .vt-brain-composer-dock .vt-brain-composer-attachment {
+    max-width: min(100%, 180px);
   }
 
   .vt-brain-composer-dock .vt-brain-composer-tool {
