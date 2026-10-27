@@ -166,6 +166,8 @@ describe("AI Brain runtime surface integration", () => {
   expect(composerDockSource).toContain('title="Review active context"')
   expect(composerDockSource).toContain('aria-keyshortcuts="Enter Shift+Enter"')
   expect(composerDockCssSource).toContain('font-size: 17.5px;')
+  expect(composerDockCssSource).toContain('text-overflow: clip;')
+  expect(composerDockCssSource).toContain('max-width: min(100%, 180px);')
  })
 
  it("opens a useful prompt category on entry and the chosen category after filtering", () => {
