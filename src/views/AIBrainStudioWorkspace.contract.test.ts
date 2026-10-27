@@ -28,6 +28,22 @@ describe("AI Brain Studio Workspace composition", () => {
     expect(workspaceStyles).toContain("@media (prefers-reduced-motion: reduce)")
   })
 
+  it("presents the prompt/capability launchpad and context as accessible responsive sheets", () => {
+    expect(pageSource).toContain('data-vt-brain-part="launchpad-backdrop"')
+    expect(pageSource).toContain('data-vt-brain-part="launchpad-panel"')
+    expect(pageSource).toContain('data-vt-brain-part="context-drawer-backdrop"')
+    expect(pageSource).toContain('data-vt-brain-part="context-drawer-panel"')
+    expect(pageSource).toContain('aria-modal="true"')
+    expect(pageSource).toContain("event.target === event.currentTarget")
+    expect(workspaceStyles).toContain(".vt-brain-studio-workspace__drawer-backdrop")
+    expect(workspaceStyles).toContain("width: min(560px, 46vw)")
+  })
+
+  it("uses the extracted Prompt Library instead of a duplicate inline implementation", () => {
+    expect(pageSource).toContain('from "../components/brain/BrainPromptLibrary"')
+    expect(pageSource).not.toContain("export const BrainPromptLibrary: React.FC")
+  })
+
   it("uses the approved Studio palette and avoids decorative motion or shadow treatment", () => {
     expect(workspaceStyles).toContain("var(--vt-studio")
     expect(workspaceStyles).not.toMatch(/box-shadow\s*:/i)

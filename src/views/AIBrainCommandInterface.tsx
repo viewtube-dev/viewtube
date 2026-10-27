@@ -4,8 +4,6 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import {
  ArrowRight,
  BookOpen,
- Minus,
- Plus,
  Lock,
  Unlock,
  Trash2,
@@ -25,8 +23,9 @@ import {
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
 import { BrainComposerDock } from "../components/brain/BrainComposerDock"
+import { BrainPromptLibrary, promptCardSummary } from "../components/brain/BrainPromptLibrary"
 import { useVisualViewportHeight } from "../components/brain/useVisualViewportHeight"
-import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioInterModule, StudioCollapsingSplitModule, StudioCollapsingTwoLineModule, StudioTextArea, StudioTextInput, StudioDropdown } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioInterModule, StudioTextArea } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -81,7 +80,7 @@ import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
 import { BrainPageTabs, type BrainPageTabId } from "../components/brain/BrainPageTabs"
 import { BrainMyBrainPanel, BrainReviewPanel, BrainControlsPanel } from "../components/brain/BrainHubPanels"
 import { BrainAnswerFirst, BrainChatShell, BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
-import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainPromptLibraryItem, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow, BrainChatStatusBadge, BrainComposerShell, ChatConversationViewport } from "../components/brain/BrainChatPrimitives"
+import { BrainChatActionButtonGroup, BrainChatMessageShell, BrainResponseSectionHeader, BrainResponseLayout, BrainComposerAccessoryRow, BrainChatStatusBadge, BrainComposerShell, ChatConversationViewport } from "../components/brain/BrainChatPrimitives"
 import { BrainCapabilityBrowser } from "../components/brain/BrainCapabilityBrowser"
 import { BrainProfileCoverageChecklist } from "../components/brain/BrainProfileCoverageChecklist"
 import { BrainContextRail } from "../components/brain/BrainContextRail"
@@ -123,6 +122,9 @@ import type {
  CreatorBrainResponse,
  CreatorInitialInsight,
 } from "../types"
+
+export { filterCreatorBrainPromptCards } from "../components/brain/BrainPromptLibrary"
+export { BrainPromptLibrary, promptCardSummary }
 
 export type AIBrainTurnReadiness = {
  dataStatus: AIBrainEvidencePack["dataStatus"]
@@ -360,51 +362,6 @@ const kpiButton =
 export const shouldSendBrainComposerKey = ({ key, isComposing, shiftKey = false }: { key: string; isComposing: boolean; shiftKey?: boolean }) =>
  key === "Enter" && !isComposing && !shiftKey
 
-const PROMPT_CARD_SUMMARIES: Record<string, string> = {
- "analyze-channel-niche": "Find your niche and fuzzy edges.",
- "niche-growth-ideas": "Choose adjacent topics that still fit.",
- "analyze-formats": "Compare views, retention, and revenue.",
- "seo-script-drafter": "Draft a concept, hook, description, and tags.",
- "format-strategy": "Plan five repeatable uploads.",
- "clarify-channel-goals": "Confirm goals, audience, and direction.",
- "revenue-levers": "Find practical 30-day revenue moves.",
- "audience-language": "Identify audience interests and wording.",
- "why-views-changed": "Diagnose momentum and choose three moves.",
- "best-video-autopsy": "Explain and replicate your best video.",
- "title-thumbnail-test": "Create the next title and thumbnail test.",
- "daily-oracle": "Get today’s priority, quick win, and action.",
- "pinned-comments": "Engagement pinned comments for your top 10 videos.",
- "ten-video-ideas": "10 new titles and topics from your best long-form.",
- "shorts-funnel-plan": "Turn Shorts viewers into subscribers and long-form watch time.",
- "shorts-from-longform": "Find the best Short moments in your long-form videos.",
- "metric-correlations": "See what drives success across your metrics.",
- "uploader-assets": "Optimized title, description, and tags for your next video.",
- "thumbnail-brief": "A fresh, on-brand thumbnail concept for your next video.",
-}
-
-export const promptCardSummary = (card: CreatorBrainPromptCard): string =>
- PROMPT_CARD_SUMMARIES[card.id] || card.prompt
-
-/** Canonical 12-step Studio spectrum pair cycle for individual prompt modules. */
-const PROMPT_MODULE_COLOR_PAIRS = Array.from({ length: 12 }, (_, index) => [
- TOOLBOX_PALETTE[index],
- TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length],
-] as const)
-
-export const filterCreatorBrainPromptCards = (
- cards: CreatorBrainPromptCard[],
- query: string,
- category = "all",
-): CreatorBrainPromptCard[] => {
- const normalized = query.trim().toLowerCase()
- return cards.filter((card) => {
-  if (category !== "all" && card.category !== category) return false
-  if (!normalized) return true
-  return [card.label, card.prompt, promptCardSummary(card), card.category, card.id]
-   .some((value) => value.toLowerCase().includes(normalized))
- })
-}
-
 const GENERATION_BADGES: Record<BrainGenerationPath, { label: string; description: string; status: "ready" | "partial" | "warning" }> = {
  model: { label: "Full Brain", description: "This response was prepared with the full Brain.", status: "ready" },
  repaired_model: { label: "Refined Answer", description: "This response was prepared with an additional quality pass.", status: "partial" },
@@ -480,166 +437,6 @@ const OpeningBriefing: React.FC<{
   </div>
  )
 }
-
-/** Persistent task discovery. Kept outside the empty-chat branch so prior turns
- * never hide a Brain capability from returning creators. Prompt categories are
- * compact, collapsed Studio modules; prompt selection and dispatch remain owned
- * by the existing registry-backed page handlers. */
-const formatPromptCategoryLabel = (categoryName: string): string => categoryName
- .replace(/[_-]+/g, " ")
- .replace(/\s+/g, " ")
- .trim()
- .replace(/\b\w/g, (character) => character.toUpperCase())
-
-export const BrainPromptLibrary: React.FC<{
- cards: CreatorBrainPromptCard[]
- busy?: boolean
- headingId?: string
- onPrompt: (prompt: string) => void
- onEdit?: (prompt: string) => void
-}> = ({ cards, busy = false, headingId = "brain-prompt-library-title", onPrompt, onEdit }) => {
- const [selectedId, setSelectedId] = useState<string | null>(null)
- const [query, setQuery] = useState("")
- const [category, setCategory] = useState("all")
- const [openCategories, setOpenCategories] = useState<string[]>([])
- const filteredCards = useMemo(() => filterCreatorBrainPromptCards(cards, query, category), [cards, query, category])
- const groupedCards = useMemo(() => {
-  const groups = new Map<string, CreatorBrainPromptCard[]>()
-  filteredCards.forEach((card) => {
-   const key = card.category || "general"
-   groups.set(key, [...(groups.get(key) || []), card])
-  })
-  const order = new Map(cards.map((card, index) => [card.id, index]))
-  return Array.from(groups.entries())
-   .map(([key, items]) => [key, [...items].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))] as const)
-   .sort(([, left], [, right]) => Math.min(...left.map((card) => order.get(card.id) ?? 0)) - Math.min(...right.map((card) => order.get(card.id) ?? 0)))
- }, [filteredCards, cards])
- const allCategories = useMemo(
-  () => Array.from(new Set(cards.map((card) => card.category || "general"))),
-  [cards],
- )
-
- const setCategoryOpen = (groupCategory: string, nextOpen: boolean) => {
-  setOpenCategories((current) => nextOpen
-   ? (current.includes(groupCategory) ? current : [...current, groupCategory])
-   : current.filter((item) => item !== groupCategory))
- }
-
- return (
-  <section
-   data-vt-brain-component="BrainPromptLibrary"
-   aria-label="Prompt library"
-   aria-labelledby={headingId}
-   aria-busy={busy || undefined}
-   className="flex min-w-0 flex-col"
-  >
-   <StudioInterModule
-    sizeVariant="standard"
-    startIcon={<LayoutGrid aria-hidden="true" />}
-    title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
-    className="overflow-hidden brain-prompt-library-shell"
-    style={{ background: TOOLBOX_PALETTE[11], "--vt-studio-control-accent": TOOLBOX_PALETTE[11], "--vt-studio-control-secondary": TOOLBOX_PALETTE[3] } as React.CSSProperties}
-   >
-    <p data-vt-brain-part="prompt-library-description" className="mb-2 border-b border-black/20 pb-2 text-[10px] font-bold leading-4 text-black/65">
-     Open a task category, then expand one prompt to review it before sending or editing.
-    </p>
-    <div className="grid grid-cols-1 gap-1 border-b-[2px] border-black p-2 sm:grid-cols-[minmax(0,1fr)_minmax(120px,0.5fr)]">
-     <StudioTextInput type="search" sizeVariant="compact" value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="Search prompts…" aria-label="Search prompts" className="min-w-0 w-full" />
-     <StudioDropdown variant="simple" id={`${headingId}-category`} sizeVariant="compact" value={category} onChange={(value) => { setCategory(value); setSelectedId(null); setOpenCategories(value === "all" ? [] : [value]) }} ariaLabel="Filter prompts by category" placeholder="All categories" className="min-w-0 w-full" options={[{ value: "all", label: "All categories" }, ...Array.from(new Set(cards.map((card) => card.category))).sort().map((item) => ({ value: item, label: formatPromptCategoryLabel(item) }))]} />
-    </div>
-    <p className="px-2 pt-2 text-[10px] font-bold text-black/60" role="status" aria-live="polite">{filteredCards.length} of {cards.length} prompts</p>
-
-    <div data-vt-studio-inter-host="true" data-vt-brain-part="prompt-intermodule-host" className="vt-studio-inter-host--bleed block w-full min-w-0 m-0 p-0">
-     {groupedCards.map(([groupCategory, groupCards]) => {
-      const isOpen = openCategories.includes(groupCategory)
-      // Keep category colors tied to the complete registry order, not the filtered
-      // result, so searching or selecting a category never recolors the library.
-      const categoryIndex = Math.max(0, allCategories.indexOf(groupCategory))
-      const categoryPair = PROMPT_MODULE_COLOR_PAIRS[categoryIndex % PROMPT_MODULE_COLOR_PAIRS.length]
-      return (
-       <StudioInterModule
-        key={groupCategory}
-        data-vt-brain-component="BrainPromptLibraryModule"
-        className="brain-prompt-library-category"
-        data-prompt-category={groupCategory}
-        data-flush-body="true"
-        title={<><span>{formatPromptCategoryLabel(groupCategory)}</span><small>{groupCards.length}</small></>}
-        startIcon={<LayoutGrid aria-hidden="true" />}
-        endIcon={isOpen ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
-        sizeVariant="compact"
-        style={{ background: categoryPair[0], "--vt-studio-control-accent": categoryPair[0], "--vt-studio-control-secondary": categoryPair[1] } as React.CSSProperties}
-        open={isOpen}
-        onOpenChange={(nextOpen) => setCategoryOpen(groupCategory, nextOpen)}
-        aria-label={`${formatPromptCategoryLabel(groupCategory)} prompts, ${groupCards.length} items`}
-       >
-        {groupCards.map((card) => {
-         const isSelected = card.id === selectedId
-         // Prompt colors also follow the full prompt registry order, not the
-         // current category/search subset.
-         const promptIndex = Math.max(0, cards.findIndex((item) => item.id === card.id))
-         const colorPair = PROMPT_MODULE_COLOR_PAIRS[promptIndex % PROMPT_MODULE_COLOR_PAIRS.length]
-         return (
-          <StudioCollapsingTwoLineModule
-           key={card.id}
-           data-vt-brain-part="prompt-collapsible-module"
-           className="brain-prompt-library-prompt"
-           data-prompt-id={card.id}
-           data-flush-body="true"
-           title={card.label}
-           description={promptCardSummary(card)}
-           startIcon={<LayoutGrid aria-hidden="true" />}
-           endIcon={isSelected ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
-           sizeVariant="compact"
-           style={{ background: colorPair[0], "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
-           open={isSelected}
-           onOpenChange={(nextOpen) => setSelectedId(nextOpen ? card.id : null)}
-           aria-label={`${isSelected ? "Collapse" : "Expand"} ${card.label} prompt`}
-          >
-           <div className="grid min-w-0 gap-2 bg-white px-2 py-2">
-            <p data-vt-brain-part="prompt-complete-text" className="whitespace-pre-wrap text-xs font-bold leading-4 [overflow-wrap:anywhere]">{card.prompt}</p>
-            <div data-vt-brain-part="prompt-actions" className={`grid min-w-0 gap-1 ${onEdit ? "grid-cols-2" : "grid-cols-1"}`}>
-             {onEdit ? (
-              <StudioSplitTwoLineButton
-               sizeVariant="compact"
-               icon={<ArrowRight aria-hidden="true" />}
-               firstLine="EDIT"
-               secondLine="FIRST"
-               className="min-w-0 w-full"
-               style={{ "--vt-studio-control-accent": colorPair[1], "--vt-studio-control-secondary": colorPair[0] } as React.CSSProperties}
-               onClick={(event) => { event.stopPropagation(); onEdit(card.prompt); setSelectedId(null) }}
-              />
-             ) : null}
-             <StudioSplitTwoLineButton
-              sizeVariant="compact"
-              icon={<Send aria-hidden="true" />}
-              firstLine="SEND TO"
-              secondLine="CHAT"
-              disabled={busy}
-              className="min-w-0 w-full"
-              style={{ "--vt-studio-control-accent": colorPair[0], "--vt-studio-control-secondary": colorPair[1] } as React.CSSProperties}
-              onClick={(event) => { event.stopPropagation(); onPrompt(card.prompt); setSelectedId(null) }}
-             />
-            </div>
-           </div>
-          </StudioCollapsingTwoLineModule>
-         )
-        })}
-       </StudioInterModule>
-      )
-     })}
-     {!filteredCards.length ? <p className="border-y-[2px] border-black bg-white p-3 text-xs font-bold text-black/60">No prompts match these filters. Try another search or choose All categories.</p> : null}
-    </div>
-   </StudioInterModule>
-  </section>
- )
-}
-const FEEDBACK_OPTIONS = [
- ["helpful", ThumbsUp, "Helpful", "#3FEE56"],
- ["not_useful", ThumbsDown, "Not useful", "#FA618A"],
- ["inaccurate", HelpCircle, "Inaccurate", "#FFDA47"],
- ["save_insight", BookOpen, "Save insight", "#36E0F6"],
- ["ask_follow_up", MessageSquare, "Ask follow-up", "#FF7AC8"],
-] as const satisfies ReadonlyArray<readonly [AIBrainFeedbackSignal["rating"], React.ComponentType<{ size?: number }>, string, string]>
 
 export const BrainFeedbackControls: React.FC<{
  message: ChatMessage
@@ -1985,12 +1782,18 @@ const AIBrainCommandInterface: React.FC = () => {
 
       {promptRailOpen ? (
        <div
-        data-vt-brain-component="BrainLauncherDrawer"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="brain-prompt-library-dialog-title"
-        className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3"
+        data-vt-brain-part="launchpad-backdrop"
+        className="vt-brain-studio-workspace__drawer-backdrop"
+        onClick={(event) => { if (event.target === event.currentTarget) setPromptRailOpen(false) }}
        >
+        <div
+         data-vt-brain-component="BrainLauncherDrawer"
+         data-vt-brain-part="launchpad-panel"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="brain-prompt-library-dialog-title"
+         className="vt-brain-studio-workspace__drawer-panel grid min-h-0 grid-rows-[auto_1fr] bg-white p-3"
+        >
         <div data-vt-brain-part="mobile-launcher-heading" className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
          <div className="flex items-center justify-between gap-2">
           <h2 data-vt-brain-part="launcher-drawer-heading" id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
@@ -2004,6 +1807,7 @@ const AIBrainCommandInterface: React.FC = () => {
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Brain launchpad content" tabIndex={0}>
          {launcherMode === "prompts" ? <BrainPromptLibrary
           cards={promptCards}
+          summarize={promptCardSummary}
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
@@ -2017,17 +1821,31 @@ const AIBrainCommandInterface: React.FC = () => {
           onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          />}
         </div>
+        </div>
        </div>
       ) : null}
 
       {contextRailOpen ? (
-       <div data-vt-brain-component="BrainContextDrawer" role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3">
+       <div
+        data-vt-brain-part="context-drawer-backdrop"
+        className="vt-brain-studio-workspace__drawer-backdrop"
+        onClick={(event) => { if (event.target === event.currentTarget) setContextRailOpen(false) }}
+       >
+        <div
+         data-vt-brain-component="BrainContextDrawer"
+         data-vt-brain-part="context-drawer-panel"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="brain-context-dialog-title"
+         className="vt-brain-studio-workspace__drawer-panel grid min-h-0 grid-rows-[auto_1fr] bg-white p-3"
+        >
         <div className="mb-2 flex items-center justify-between border-b-[2px] border-black pb-2">
          <h2 data-vt-brain-part="context-drawer-heading" id="brain-context-dialog-title" className="text-lg font-[1000] uppercase">Your Channel Context</h2>
          <StudioButton data-vt-brain-part="mobile-context-close" ref={contextCloseRef} sizeVariant="compact" tone="neutral" type="button" onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</StudioButton>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
          <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
+        </div>
         </div>
        </div>
       ) : null}

@@ -74,17 +74,19 @@ describe("AIBrainCommandInterface", () => {
   expect(getPromptEvidenceIntegrityStatus({ evidenceRecords: [], promptEvidenceRecordIds: [record.id] })).toBe("mismatch")
  })
 
- it("renders one autonomous surface with no tab or mode selector", () => {
+ it("renders the Studio workspace with clear local destinations", () => {
   const html = renderHub()
 
   expect(html).toContain("AI Brain")
-  expect(html).toContain("Prompt Library")
+  expect(html).toContain('role="tablist" aria-label="Brain pages"')
+  expect(html).toContain('role="tab"')
+  expect(html).toContain("Chat")
+  expect(html).toContain("My Brain")
+  expect(html).toContain("Review")
+  expect(html).toContain("Controls")
+  expect(html).toContain('aria-label="Open prompt library"')
   expect(html).not.toContain("Ask ViewTube Copilot Anything")
   expect(html).not.toContain("views pending sign-in")
-
-  // The creator never picks a mode: no tab controls of any kind.
-  expect(html).not.toContain('role="tab"')
-  expect(html).not.toContain(">Ask Copilot<")
   expect(html).not.toContain(">Growth Prompts<")
   expect(html).not.toContain(">Daily Oracle<")
   expect(html).not.toContain(">Analytics Signals<")
@@ -94,21 +96,22 @@ describe("AIBrainCommandInterface", () => {
   expect(html).not.toContain(">Advanced Health<")
  })
 
-
- it("renders the prompt library as a top split shell with nested intermodules", () => {
+ it("renders the prompt library as a standard Studio intermodule with nested category modules", () => {
   const html = renderToStaticMarkup(
    <BrainPromptLibrary
     cards={buildCreatorBrainPromptCards().slice(0, 1)}
+    summarize={promptCardSummary}
     onPrompt={vi.fn()}
     onEdit={vi.fn()}
    />,
   )
 
-  expect(html).toContain('data-vt-studio-top-split-module="true"')
-  expect(html).toContain('data-vt-studio-inter-host="true"')
-  expect(html).toContain("vt-studio-inter-host--bleed")
-  expect(html).toContain('data-prompt-category="strategy"')
   expect(html).toContain('data-vt-studio-inter-module="true"')
+  expect(html).toContain("brain-prompt-library-shell")
+  expect(html).toContain('data-vt-brain-part="prompt-library-title"')
+  expect(html).toContain('data-vt-brain-part="prompt-category-module"')
+  expect(html).toContain('data-prompt-category="strategy"')
+  expect(html).toContain('data-vt-brain-part="prompt-collapsible-module"')
  })
 
  it("restores only typed prompt evidence whose ordered IDs match the saved turn contract", () => {
@@ -179,14 +182,13 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("AI Journal")
  })
 
- it("keeps every guided prompt available independently of chat history", () => {
+ it("keeps every guided prompt available in its expanded category modules", () => {
   const cards = buildCreatorBrainPromptCards()
   const html = renderToStaticMarkup(
-   <BrainPromptLibrary cards={cards} onPrompt={() => undefined} />,
+   <BrainPromptLibrary cards={cards} summarize={promptCardSummary} onPrompt={() => undefined} onEdit={() => undefined} />,
   )
 
   expect(cards.length).toBeGreaterThanOrEqual(12)
-  // Every card renders, whatever the count, and ids are unique.
   expect(new Set(cards.map((card) => card.id)).size).toBe(cards.length)
   cards.forEach((card) => expect(html).toContain(card.label))
   expect(html).toContain('aria-labelledby="brain-prompt-library-title"')
@@ -194,29 +196,13 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("Revenue Levers")
   expect(html).toContain("Best Video Autopsy")
   expect(html).toContain("Run Daily Oracle")
-  // The newly added creator-requested prompts are present.
   expect(html).toContain("Pinned Comments")
   expect(html).toContain("10 Video Ideas")
   expect(html).toContain("Shorts Funnel Plan")
-  expect(html).toContain("sm:grid-cols-2")
-  expect(html).toContain("xl:grid-cols-1")
-  expect(html).toContain("line-clamp-2")
-  expect(html).toContain("border-b-[2px]")
-  // Cards remain selectable within their collapsed category module and preview before sending, not instant-send.
-  expect(html).toContain('aria-pressed="false"')
-  expect(html).toContain("Choose a prompt to preview and send it here.")
-  expect(html).toContain("brain-prompt-library-shell")
-  expect(html).toContain("data-vt-brain-component=\"BrainPromptLibraryModule\"")
-  expect(html).toContain("data-prompt-category=")
-  expect(html).toContain("prompt-module-body")
-  expect(html).toContain("Open a task module to browse its related prompts.")
-  // Card bodies show the short summary (the full prompt lives in the title tooltip
-  // and the preview panel, not dumped into the card body).
-  expect(html).toContain("A fresh, on-brand thumbnail concept for your next video.")
-  // One prompt-selection button per card (no preview action buttons until a prompt is selected).
-  expect((html.match(/type="button"/g) || [])).toHaveLength(cards.length)
-  expect(promptCardSummary(cards[0])).toBe("Find your niche and fuzzy edges.")
+  expect(html).toContain('data-vt-brain-part="prompt-collapsible-module"')
+  expect((html.match(/data-vt-brain-part="prompt-collapsible-module"/g) || []).length).toBe(cards.length)
   expect(html).toContain("Find your niche and fuzzy edges.")
+  expect(html).not.toContain("SEND TO")
  })
 
  it("exposes persistent response rating states instead of inert icon buttons", () => {
@@ -231,13 +217,15 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("Rate answer")
  })
 
- it("renders creator prompts as cyan split-row messages", () => {
+ it("renders creator prompts as an accessible cyan message card", () => {
   const html = renderToStaticMarkup(<UserMessage text="Plan my next upload." />)
 
+  expect(html).toContain('data-vt-brain-component="BrainUserChatEntry"')
+  expect(html).toContain("YOU")
+  expect(html).toContain('data-message-role="user"')
+  expect(html).toContain('aria-label="Your message"')
   expect(html).toContain("bg-[#36E0F6]")
-  expect(html).toContain("grid-cols-[84px_minmax(0,1fr)]")
-  expect(html).toContain("text-[14px]")
-  expect(html).toContain("You:")
+  expect(html).toContain("Plan my next upload.")
  })
 
  it("follows new turns at the bottom but preserves scroll when reading history", () => {
@@ -258,7 +246,7 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain('<textarea')
   expect(html).toContain('id="brain-composer"')
   expect(html).toContain("Shift+Enter for a new line")
-  expect(html).toContain("max-h-36")
+  expect(html).toMatch(/max-height:\s*144px/)
  })
 
  it("keeps prompt and channel-context launchers reachable on smaller screens", () => {
@@ -275,40 +263,38 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("brain-chat-scrollbar")
   expect(html).toContain("touch-pan-y")
   expect(html).toContain('aria-label="Brain conversation"')
-  expect(html).toContain('aria-label="Prompt library"')
-  expect(html).toContain('aria-label="Channel context"')
+  expect(html).toContain('aria-label="Brain message composer"')
+  expect(html).toContain('aria-label="Brain tools"')
   expect(html).not.toContain("custom-scrollbar")
  })
 
- it("mounts the conversation directly against its panel instead of adding a second content mat", () => {
+ it("mounts the conversation directly against the Studio Workspace layout", () => {
   const html = renderHub()
 
   expect(html).not.toContain("grid min-h-0 flex-1 gap-2 bg-white p-2")
-  expect(html).toContain("flex min-h-0 flex-1 flex-col overflow-hidden bg-white")
+  expect(html).toContain("vt-brain-studio-workspace__conversation")
+  expect(html).toContain("vt-brain-chat-column")
   expect(html).toContain("xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)]")
   expect(html).toContain("xl:pt-3")
   expect(html).toContain("brain-chat-scrollbar")
   expect(html).toContain('aria-label="Open AI Journal"')
-  expect(html).not.toContain("shrink-0 border-t-[4px] border-black bg-[#f8f8f4]")
  })
 
- it("bounds the mobile Brain workspace to the visual viewport and preserves a flex-sized chat/composer layout", () => {
+ it("bounds the mobile Brain workspace and preserves a flex-sized chat/composer layout", () => {
   const html = renderHub()
 
-  expect(html).toContain("data-vt-brain-visual-viewport-height")
+  expect(html).toContain('data-keyboard-open="false"')
   expect(html).toContain("max-xl:h-[100dvh]")
   expect(html).toContain("max-xl:overflow-hidden")
-  expect(html).toContain("flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6]")
-  expect(html).toContain("relative flex flex-1 min-h-0 flex-col overflow-hidden")
-  expect(html).toContain('data-vt-brain-component="BrainComposer"')
-  expect(html).toContain('aria-label="Brain composer"')
+  expect(html).toContain("vt-brain-studio-workspace__surface")
+  expect(html).toContain("vt-brain-studio-workspace__composer")
+  expect(html).toContain('aria-label="Brain message composer"')
   expect(html).toContain('aria-label="Brain conversation"')
-  expect(html).toContain("env(safe-area-inset-bottom)")
   expect(html).toContain("max-xl:rounded-none")
   expect(html).toContain("max-xl:border-x-0")
   expect(html).not.toContain("LIVE BRAIN RUNTIME")
  })
- 
+
  it("keeps internal diagnostics out of the creator workspace", () => {
   const html = renderHub()
 

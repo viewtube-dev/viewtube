@@ -92,6 +92,43 @@
   min-width: 0;
 }
 
+.vt-brain-studio-workspace .vt-brain-studio-workspace__drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+  min-height: 0;
+  background: rgb(0 0 0 / 14%);
+}
+
+.vt-brain-studio-workspace .vt-brain-studio-workspace__drawer-panel {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  align-self: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 12px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: 0;
+  background: #ffffff;
+}
+
+@media (min-width: 1280px) {
+  .vt-brain-studio-workspace .vt-brain-studio-workspace__drawer-panel {
+    width: min(560px, 46vw);
+    max-width: 560px;
+    border-left: 2px solid #000000;
+  }
+}
+
 @media (min-width: 1536px) {
   .vt-brain-studio-workspace .vt-brain-studio-workspace__grid {
     grid-template-columns: minmax(160px, 180px) minmax(0, 1.45fr) minmax(300px, 0.85fr);

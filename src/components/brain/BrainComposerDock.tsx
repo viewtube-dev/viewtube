@@ -127,7 +127,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
           <BrainComposerToolButton
             buttonRef={promptLauncherRef}
             icon={<LayoutGrid size={14} />}
-            label="Open Prompt Library"
+            label="Open prompt library"
             onClick={onOpenPrompts}
             style={actionStyle(11, 3)}
           >

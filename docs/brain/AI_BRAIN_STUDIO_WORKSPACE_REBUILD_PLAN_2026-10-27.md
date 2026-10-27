@@ -65,3 +65,12 @@ This is a composition redesign, not a replacement of Brain's domain runtime.
 ## Verification status
 
 The GitHub source was inspected on master/consolidated-feature-integration before changes. This work is on codex/ai-brain-studio-workspace-rebuild. Repository commands and rendered browser verification have not yet been run in a local checkout; do not treat source-contract preflight checks as a substitute for Vitest, typecheck, build, accessibility, or visual verification.
+
+## Phase 2 — launchpad and context surfaces
+
+- Prompt Library categories are open on first render so the available prompt titles and two-line summaries are discoverable without an extra navigation step; individual prompt modules remain collapsed until selected, and the full prompt plus SEND TO CHAT / EDIT FIRST actions appear only in the selected row.
+- The page passes the canonical prompt summary function into the Prompt Library rather than using the full prompt as its collapsed description.
+- Prompt Library / Capabilities and Channel Context open as responsive sheets: full-width within the workspace on mobile and a right-side panel on desktop, with a dimmed backdrop, outside-click close, existing Escape handling, and existing focus trapping/return.
+- Launchpad category modules now expose stable Brain-specific category markers for regression and accessibility checks.
+- Composer launcher accessible names use sentence case and remain present even while the sheets are closed.
+- The page-level test assertions were reconciled to the current Studio Workspace architecture instead of obsolete grid, drawer, and tab markup assumptions.
