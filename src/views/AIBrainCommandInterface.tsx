@@ -1258,6 +1258,7 @@ const AIBrainCommandInterface: React.FC = () => {
     recentConversationTurns: recentTurns,
     requestText: userText,
     creatorGrowthContext: turnGrowthContext,
+    channelContext: loadAiBrainContext().channelContext,
    })
    const historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = projectContextCleared
@@ -1369,6 +1370,7 @@ const AIBrainCommandInterface: React.FC = () => {
      requestText: userText,
      evidencePackOverride: !useFreshEvidence ? message.evidencePack : undefined,
      creatorGrowthContext: turnGrowthContext,
+     channelContext: loadAiBrainContext().channelContext,
     })
     const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
     const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
