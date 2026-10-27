@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
+import "./AIBrainStudioWorkspace.css"
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import {
  ArrowRight,
@@ -1881,10 +1882,10 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  return (
-  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} data-keyboard-open={keyboardOpen ? "true" : "false"} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="vt-brain-module-shell h-full min-h-0 overflow-hidden overscroll-none bg-[#f3f4f6] text-black max-xl:h-[100dvh] xl:overflow-hidden">
+  <main data-vt-brain-workspace="studio" data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} data-keyboard-open={keyboardOpen ? "true" : "false"} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="vt-brain-module-shell vt-brain-studio-workspace h-full min-h-0 overflow-hidden overscroll-none bg-[#f3f4f6] text-black max-xl:h-[100dvh] xl:overflow-hidden">
    <Toolbox
-    title="ViewTube Brain Hub"
-    subtitle="One assistant for channel strategy, analytics, goals, content planning, SEO, and publishing."
+    title="AI Brain"
+    subtitle="Your creator workspace for strategy, evidence, and the next best action."
     icon={<Brain />}
     paletteIndex={5}
     collapsible={false}
@@ -1892,7 +1893,7 @@ const AIBrainCommandInterface: React.FC = () => {
     embedded
     fillAvailable
     outerClassName="h-full min-h-0 max-xl:!h-full xl:h-full"
-    contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:overflow-hidden xl:overflow-hidden"
+    contentClassName="vt-brain-studio-workspace__toolbox-content flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:overflow-hidden xl:overflow-hidden"
    >
     {intakeOpen ? (
      <CreatorIntakeWizard
@@ -1903,14 +1904,14 @@ const AIBrainCommandInterface: React.FC = () => {
      />
     ) : (
      <>
-     <section className="relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
+     <section data-vt-brain-workspace-part="surface" className="vt-brain-studio-workspace__surface relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
        <BrainPageTabs activeTab={pageTab} onChange={setPageTab} />
-      <div className="shrink-0 bg-[#f3f4f6]">
+      <div data-vt-brain-workspace-part="runtime-context" className="vt-brain-studio-workspace__runtime shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
-      <div className="grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
-       <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
-      <div className={`${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
+      <div data-vt-brain-workspace-part="grid" className="vt-brain-studio-workspace__grid grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
+       <div data-vt-brain-workspace-part="navigation" className="vt-brain-studio-workspace__navigation hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
+      <div data-vt-brain-workspace-part="conversation" className={`vt-brain-studio-workspace__conversation ${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
         {pageTab === "chat" ? (
          <div id="brain-page-panel-chat" role="tabpanel" aria-labelledby="brain-page-tab-chat" className="flex min-h-0 flex-1 flex-col">
  <BrainChatShell
@@ -1928,7 +1929,7 @@ const AIBrainCommandInterface: React.FC = () => {
            onToggleLock={handleToggleSurfaceSelectionLock}
            onClearProject={handleClearActiveProject}
           />} />}
-         composer={<div className="vt-brain-chat-column__dock"><BrainComposerDock
+         composer={<div className="vt-brain-studio-workspace__composer vt-brain-chat-column__dock"><BrainComposerDock
            value={input}
            onChange={setInput}
            onSend={() => { void handleSend() }}
@@ -1977,6 +1978,9 @@ const AIBrainCommandInterface: React.FC = () => {
          <BrainControlsPanel />
         )}
        </div>
+       <aside data-vt-brain-workspace-part="right-context" aria-label="Creator context and recommended actions" className="vt-brain-studio-workspace__context-rail hidden min-h-0 overflow-y-auto xl:block">
+        <BrainContextRail channelId={channelId} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
+       </aside>
       </div>
 
       {promptRailOpen ? (
