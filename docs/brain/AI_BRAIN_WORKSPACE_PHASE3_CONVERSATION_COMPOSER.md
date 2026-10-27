@@ -7,7 +7,9 @@ Make the conversation read as a conversation first, not as a collection of inter
 ## Changes in this slice
 
 - Align interrupted assistant turns with the same concise **ANSWER** heading used for completed turns; interruption and retry details remain in the message body.
-- Add a regression contract for the shared answer-first hierarchy.
+- Remove the extra outer `StudioInterModule` accordion from completed assistant answers. The existing `BrainResponseLayout` is now the single answer shell, so the creator sees one headline and one coherent response instead of an accordion wrapped around another response card.
+- Keep learning receipts and interrupted/retry states in their explicit Studio modules; they are exceptional states with distinct actions.
+- Add a regression contract that prevents the completed answer from regaining its redundant outer accordion.
 - Keep the existing canonical composer as the only send surface. Enter sends, Shift+Enter inserts a newline, active prompts remain explicitly clearable, and prompt/capability/context launchers remain available without inventing a parallel action store.
 
 ## Guardrails
@@ -19,4 +21,4 @@ Make the conversation read as a conversation first, not as a collection of inter
 
 ## Verification status
 
-This is a focused source change, not a claim that the repository is green. The current Phase 2 pull request's CI reports repository-wide type/test/governance failures, including Studio primitive export/type errors and evidence-rendering assertions. Those failures must be triaged separately; this phase should not conceal them by weakening checks.
+This is a focused source change, not a claim that the repository is green. The previous CI run had passing production-build, local-smoke, and Brain quality-loop jobs, but failed the full suite, typecheck, focused contracts, and catalog governance. Logs show broad Studio primitive/export/type mismatches and stale catalog assertions in addition to Brain render-contract failures. Fresh CI runs are queued for the answer-shell change. Keep these failures visible and fix feature-specific regressions without weakening checks.
