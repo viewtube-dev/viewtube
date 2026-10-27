@@ -4,6 +4,7 @@ import { getVtSyncSnapshot } from "../../features/vt-sync-local"
 import { buildBrainOnboardingArtifactsForTest } from "../brain/OnboardingBootstrap"
 import {
  buildAIBrainContextSnapshot,
+ buildEvidenceRankingModule,
  buildAIBrainSystemPrompt,
  buildBrainLearningQuestions,
  buildCreatorBrainPromptCards,
@@ -152,6 +153,7 @@ describe("aiBrainCommandInterface", () => {
   expect(snapshot.evidencePack.topVideos[0]?.title).toBe("The Hidden History")
   expect(snapshot.evidencePack.topVideos[0]?.metrics).toEqual({ views: null, watchTime: null, subscribers: null, revenue: null, ctr: null, averagePercentageViewed: null, likes: null, comments: null })
   expect(snapshot.evidencePack.dataStatus).toBe("partial")
+  expect(buildEvidenceRankingModule(snapshot.evidencePack)).toBeNull()
   expect(snapshot.evidencePack.missingInputs).toContain("public video metadata only; performance metrics unavailable")
   expect(snapshot.inferredProfile.topEvidenceVideos).toContainEqual({ title: "The Hidden History", views: null, publishedAt: "2026-10-20T00:00:00.000Z" })
   expect(snapshot.sourceStatuses.find((source) => source.id === "public-channel")?.status).toBe("partial")
