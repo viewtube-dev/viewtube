@@ -1472,7 +1472,8 @@ describe("StudioSplitTextInput transparent-panel composition", () => {
     expect(field).toContain("outline: none");
     expect(field).toContain("background: var(--vt-field-fill-rest)");
     expect(field).not.toContain("border: 0 !important");
-    expect(field).not.toContain("background-image:");
+    expect(field).toContain("background-image: none !important");
+    expect(field).not.toContain("linear-gradient(");
     expect(css.slice(focusStart, focusStart + 1000)).toContain("outline: none");
   });
 });
