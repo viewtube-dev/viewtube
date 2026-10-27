@@ -111,7 +111,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
       }
       chips={
         activePromptTitle || activeContextLabel || value.trim() ? (
-          <div className="flex min-w-0 flex-wrap items-center gap-1" data-vt-brain-part="composer-attachments" aria-label="Active prompt and context">
+          <div className="flex min-w-0 flex-wrap items-center gap-1" data-vt-brain-part="composer-attachments" role="group" aria-label="Active prompt and context">
             {activePromptTitle ? (
               <StudioLedBadgeTab
                 mode="badge"
