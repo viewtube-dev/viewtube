@@ -160,6 +160,8 @@ describe("AI Brain runtime surface integration", () => {
 
  it("surfaces selected context in the composer and preserves explicit keyboard guidance", () => {
   expect(source).toContain('activeContextLabel={surfaceSelection?.label || null}')
+  expect(source).toContain('activePromptTitle={activePromptTitle}')
+  expect(source).toContain('setActivePromptTitle(promptCards.find((card) => card.prompt === prompt)?.label || "Custom prompt")')
   expect(composerDockSource).toContain('data-vt-brain-part="composer-attachments"')
   expect(composerDockSource).toContain('title="Review active context"')
   expect(composerDockSource).toContain('aria-keyshortcuts="Enter Shift+Enter"')
