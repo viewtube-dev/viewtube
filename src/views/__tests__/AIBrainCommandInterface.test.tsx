@@ -180,7 +180,7 @@ describe("AIBrainCommandInterface", () => {
  it("keeps every guided prompt available independently of chat history", () => {
   const cards = buildCreatorBrainPromptCards()
   const html = renderToStaticMarkup(
-   <BrainPromptLibrary cards={cards} onPrompt={() => undefined} />,
+   <StudioBrainPromptLibrary cards={cards} onPrompt={() => undefined} />,
   )
 
   expect(cards.length).toBeGreaterThanOrEqual(12)
