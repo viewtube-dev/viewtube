@@ -16,6 +16,9 @@ import { BrainPromptPolicyPanel } from "./BrainPromptPolicyPanel"
 import { BrainOutcomeLearningCard } from "./BrainOutcomeLearningCard"
 import { BrainStatusIndicatorShowcase } from "./BrainStatusIndicatorShowcase"
 import { StudioSplitLeftBadge, StudioSplitLeftButton, StudioSquareIconButton, StudioTwoLineButton } from "../../studio-ui"
+import { CHANNEL_CONTEXT_QUESTIONS } from "../../context/channelContextQuestions"
+import { loadAiBrainContext } from "../../services/aiBrainContext"
+import { scoreContext } from "../../context/ChannelContextScoring"
 
 const Panel: React.FC<{ title: string; children: React.ReactNode }> = ({
  title,
@@ -78,6 +81,11 @@ export const BrainContextRail: React.FC<{
  const goalIsSaved = Boolean(goal && !/not set|tell me what matters/i.test(goal))
  const channelFocusIsSaved = Boolean(snapshot.brain.coreConcept.trim() || snapshot.brain.targetNiche.trim() || snapshot.inferredProfile.niche)
  const styleNotesAreSaved = Boolean(snapshot.brain.contentDNA.trim())
+ const channelContext = loadAiBrainContext().channelContext
+ const contextScore = scoreContext(channelContext)
+ const recommendedContextQuestions = CHANNEL_CONTEXT_QUESTIONS
+  .filter((question) => question.required && contextScore.missingFields.includes(question.contextField))
+  .slice(0, 3)
  const profileChecks = [
   { label: "Channel focus", complete: channelFocusIsSaved, detail: snapshot.inferredProfile.niche || snapshot.brain.targetNiche || snapshot.brain.coreConcept },
   { label: "Videos analyzed", complete: snapshot.inferredProfile.videoCount > 0, detail: snapshot.inferredProfile.videoCount.toLocaleString() + " videos" },
@@ -124,6 +132,31 @@ export const BrainContextRail: React.FC<{
       </li>
      ))}
     </ul>
+   </Panel>
+
+   <Panel title="Teach the Brain your channel">
+    <p className="text-[11px] font-bold leading-4 text-black/70">
+     Answer a few short questions to make recommendations more specific. Your answers stay creator-provided context, not verified channel evidence.
+    </p>
+    <div className="flex flex-wrap items-center justify-between gap-2 border-y border-black/15 py-2" aria-live="polite">
+     <span className="text-[10px] font-black uppercase">{contextScore.completionScore}% complete · {contextScore.requiredCount - contextScore.missingFields.length}/{contextScore.requiredCount} required</span>
+     <Link to="/settings?panel=ai" className="inline-flex min-h-9 items-center gap-1 rounded-[5px] border-2 border-black bg-[#36E0F6] px-2 text-[10px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+      {contextScore.missingFields.length ? "Complete profile" : "Edit answers"} <ArrowRight size={12} aria-hidden="true" />
+     </Link>
+    </div>
+    {recommendedContextQuestions.length ? (
+     <ul className="grid gap-1.5">
+      {recommendedContextQuestions.map((question, index) => (
+       <li key={question.id} className="flex min-w-0 items-start gap-2 rounded-[5px] border border-black/20 p-2">
+        <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full border border-black bg-[#FFDA47] text-[10px] font-black">{index + 1}</span>
+        <span className="min-w-0 flex-1 text-[11px] font-bold leading-4">{question.title}</span>
+        <Link to="/settings?panel=ai" aria-label={`Answer: ${question.title}`} className="inline-flex min-h-9 shrink-0 items-center rounded-[4px] border border-black px-2 text-[9px] font-black uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-black">Answer</Link>
+       </li>
+      ))}
+     </ul>
+    ) : (
+     <p className="text-[11px] font-bold leading-4">Required answers are complete. Add optional detail whenever you want more tailored help.</p>
+    )}
    </Panel>
 
    <Panel title="Your channel">
