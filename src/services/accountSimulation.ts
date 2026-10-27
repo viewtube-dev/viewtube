@@ -166,6 +166,7 @@ const DEFAULT_AI_BRAIN_CONTEXT: AiBrainContext = {
   updatedAt: null,
   source: "system",
   version: 2,
+  channelContext: { identity: {}, goals: {}, audience: {}, content: {}, brand: {}, intelligence: {} },
 }
 
 const nowIso = () => new Date().toISOString()

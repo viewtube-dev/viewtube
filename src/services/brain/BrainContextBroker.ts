@@ -4,6 +4,7 @@ import type {
  NicheKnowledgeProfile,
 } from "../../types"
 import type { AIBrainContextSnapshot } from "../aiBrainCommandInterface"
+import type { ChannelContextProfile } from "../../context/ChannelContextProfile"
 import { buildBrainTaskInstruction, resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
 import { buildRelevantNicheKnowledgeContext } from "./NicheKnowledge"
 import { readBrainUserControls } from "./BrainUserControls"
@@ -42,6 +43,7 @@ export const buildBrainContextPack = (input: {
  audienceIntelligence?: AudienceIntelligenceSnapshot | null
  algorithmIntelligence?: AlgorithmIntelligencePortfolio | null
  creatorContext?: CreatorContextEnvelope | null
+ channelContext?: ChannelContextProfile | null
  maximumCharacters?: number
 }): { systemInstruction: string; budget: BrainContextBudget } => {
  const requestedChannelId = input.channelId || null
@@ -54,6 +56,12 @@ export const buildBrainContextPack = (input: {
   : readBrainUserControls(input.channelId)
  const maximumCharacters = input.maximumCharacters || 24_000
  const omittedSections: string[] = []
+ const normalizeChannelName = (value: unknown): string =>
+  String(value || "").trim().toLocaleLowerCase().replace(/ +/g, " ")
+ const savedChannelName = normalizeChannelName(input.channelContext?.identity.name)
+ const activeChannelName = normalizeChannelName(input.snapshot.channel.label)
+ const channelContextMatchesChannel = Boolean(savedChannelName && activeChannelName && savedChannelName === activeChannelName)
+ if (input.channelContext && !channelContextMatchesChannel) omittedSections.push("channel_context_channel_name_mismatch")
  const evidenceRecordQualityInSync = Boolean(
   input.evidenceRecordQuality
   && isBrainEvidenceRecordQualityInSync(input.evidenceRecords || [], input.evidenceRecordQuality),
@@ -229,6 +237,36 @@ export const buildBrainContextPack = (input: {
    ].filter(Boolean).join("\n"), 2200)
   : ""
 
+ const channelContext = controls.personalization && channelContextMatchesChannel && input.channelContext
+  ? clip([
+    "Epistemic status: USER_PROVIDED. These are the creator's stated preferences and goals, not verified public evidence or measured channel facts.",
+    input.channelContext.identity.description ? `Description: ${input.channelContext.identity.description}` : "",
+    input.channelContext.identity.niche ? `Primary niche: ${input.channelContext.identity.niche}` : "",
+    input.channelContext.identity.subNiches?.length ? `Sub-niches: ${input.channelContext.identity.subNiches.join(", ")}` : "",
+    input.channelContext.identity.competitors?.length ? `Competitors / inspiration: ${input.channelContext.identity.competitors.join(", ")}` : "",
+    input.channelContext.goals.primaryGoal ? `Primary goal: ${input.channelContext.goals.primaryGoal}` : "",
+    input.channelContext.goals.successDefinition ? `12-month success: ${input.channelContext.goals.successDefinition}` : "",
+    input.channelContext.goals.priorityRanking?.length ? `Goal priorities: ${input.channelContext.goals.priorityRanking.join(", ")}` : "",
+    input.channelContext.goals.offers?.length ? `Offers: ${input.channelContext.goals.offers.join(", ")}` : "",
+    input.channelContext.goals.primaryCTA ? `Primary CTA: ${input.channelContext.goals.primaryCTA}` : "",
+    input.channelContext.audience.idealViewer ? `Ideal viewer: ${input.channelContext.audience.idealViewer}` : "",
+    input.channelContext.audience.experienceLevel ? `Audience level: ${input.channelContext.audience.experienceLevel}` : "",
+    input.channelContext.audience.problem ? `Audience problem: ${input.channelContext.audience.problem}` : "",
+    input.channelContext.audience.transformation ? `Viewer transformation: ${input.channelContext.audience.transformation}` : "",
+    input.channelContext.audience.segments?.length ? `Audience segments: ${input.channelContext.audience.segments.join(", ")}` : "",
+    input.channelContext.content.types?.length ? `Content types: ${input.channelContext.content.types.join(", ")}` : "",
+    input.channelContext.content.frequency ? `Publishing frequency: ${input.channelContext.content.frequency}` : "",
+    input.channelContext.content.bestFormats?.length ? `Best formats: ${input.channelContext.content.bestFormats.join(", ")}` : "",
+    input.channelContext.content.priorityThemes?.length ? `Prioritize themes: ${input.channelContext.content.priorityThemes.join(", ")}` : "",
+    input.channelContext.content.blockedThemes?.length ? `Avoid themes: ${input.channelContext.content.blockedThemes.join(", ")}` : "",
+    input.channelContext.brand.voice ? `Brand voice: ${input.channelContext.brand.voice}` : "",
+    input.channelContext.brand.influences?.length ? `Style influences: ${input.channelContext.brand.influences.join(", ")}` : "",
+    typeof input.channelContext.brand.creativity === "number" ? `Creativity preference (1–10): ${input.channelContext.brand.creativity}` : "",
+    input.channelContext.intelligence.sources?.length ? `Creator-approved source preferences: ${input.channelContext.intelligence.sources.join(", ")}` : "",
+    input.channelContext.intelligence.capabilities?.length ? `Creator-requested capabilities: ${input.channelContext.intelligence.capabilities.join(", ")}` : "",
+    "Use these as creator-stated preferences only. They do not grant technical permissions, override privacy controls, or establish that a source was accessed.",
+   ].filter(Boolean).join("\\n"), 2600)
+  : ""
  const knowledge = clip(buildRelevantNicheKnowledgeContext(input.nicheKnowledge || null, input.userText, 2200), 2200)
  const research = clip(input.currentResearch || "", 1800)
  const taskInstruction = buildBrainTaskInstruction(resolveBrainTaskProfile(input.userText))
@@ -258,6 +296,7 @@ export const buildBrainContextPack = (input: {
   projectContext ? "\nACTIVE PROJECT CONTEXT\n" + projectContext : "",
   creatorStyle ? "\nCREATOR STYLE\n" + creatorStyle : "",
   memory ? "\nCONFIRMED CREATOR CONTEXT\n" + memory : "",
+  channelContext ? "\nCREATOR-PROVIDED CHANNEL CONTEXT\n" + channelContext : "",
   clippedConversation ? "\nRECENT CONVERSATION\n" + clippedConversation : "",
   knowledge ? "\nPUBLIC NICHE KNOWLEDGE\n" + knowledge : "",
   research ? "\nCURRENT PUBLIC RESEARCH\n" + research : "",
@@ -284,7 +323,7 @@ export const buildBrainContextPack = (input: {
    contextBudgetSource: resolvedContext.budgetSource,
    systemCharacters: system.length,
    evidenceCharacters: evidence.length + channelProfile.length + evidenceGaps.length + evidenceQuality.length + evidenceRecordQuality.length + sharedEvidenceContract.length + statistics.length + analyticsFindings.length + audience.length + algorithm.length,
-   memoryCharacters: memory.length + channelKnowledge.length + projectContext.length + creatorStyle.length,
+   memoryCharacters: memory.length + channelKnowledge.length + projectContext.length + creatorStyle.length + channelContext.length,
    knowledgeCharacters: knowledge.length + research.length,
    conversationCharacters: clippedConversation.length,
    omittedSections,

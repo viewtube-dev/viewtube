@@ -11,7 +11,7 @@ export interface ChannelContextQuestion {
 }
 
 export const CHANNEL_CONTEXT_QUESTIONS: ChannelContextQuestion[] = [
-  { id: "channel_name", category: "identity", title: "What is your channel name?", required: true, contextField: "identity.name", evidenceWeight: 1 },
+  { id: "channel_name", category: "identity", title: "What is your channel name?", description: "Use the exact display name of the channel currently active in Brain; mismatched names are withheld from prompts.", required: true, contextField: "identity.name", evidenceWeight: 1 },
   { id: "channel_description", category: "identity", title: "Describe your channel in one sentence.", required: true, contextField: "identity.description", evidenceWeight: 1 },
   { id: "primary_niche", category: "identity", title: "What is your primary niche?", required: true, contextField: "identity.niche", evidenceWeight: 1 },
   { id: "sub_niches", category: "identity", title: "What sub-niches do you cover?", required: false, contextField: "identity.subNiches", evidenceWeight: 0.9 },
@@ -35,5 +35,5 @@ export const CHANNEL_CONTEXT_QUESTIONS: ChannelContextQuestion[] = [
   { id: "style_influences", category: "brand", title: "Which creators have a similar style?", required: false, contextField: "brand.influences", evidenceWeight: 0.7 },
   { id: "creativity_scale", category: "brand", title: "How creative should AI be on a 1–10 scale?", required: true, contextField: "brand.creativity", evidenceWeight: 0.7 },
   { id: "allowed_sources", category: "intelligence", title: "Which evidence sources may AI use?", required: true, contextField: "intelligence.sources", evidenceWeight: 1 },
-  { id: "enabled_capabilities", category: "intelligence", title: "Which AI capabilities should be enabled?", required: true, contextField: "intelligence.capabilities", evidenceWeight: 1 },
+  { id: "enabled_capabilities", category: "intelligence", title: "Which AI capabilities should the Brain prioritize?", required: true, contextField: "intelligence.capabilities", evidenceWeight: 1 },
 ]

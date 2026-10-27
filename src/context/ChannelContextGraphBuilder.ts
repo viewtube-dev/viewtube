@@ -23,6 +23,7 @@ export function buildChannelContextGraph(context: ChannelContextProfile): Channe
   graph.nodes.push({ id: "channel", type: "channel", label: channelName, evidenceIds: [] })
 
   const seen = new Set<string>(["channel"])
+  const seenEdges = new Set<string>()
   for (const competitor of context.identity.competitors ?? []) {
     const label = competitor.trim()
     if (!label) continue
@@ -31,7 +32,11 @@ export function buildChannelContextGraph(context: ChannelContextProfile): Channe
       graph.nodes.push({ id, type: "competitor", label, evidenceIds: [] })
       seen.add(id)
     }
-    graph.edges.push({ from: "channel", to: id, relationship: "competes_with" })
+    const edgeId = `competes_with:${id}`
+    if (!seenEdges.has(edgeId)) {
+      graph.edges.push({ from: "channel", to: id, relationship: "competes_with" })
+      seenEdges.add(edgeId)
+    }
   }
 
   for (const topic of context.content.priorityThemes ?? []) {
@@ -42,7 +47,11 @@ export function buildChannelContextGraph(context: ChannelContextProfile): Channe
       graph.nodes.push({ id, type: "topic", label, evidenceIds: [] })
       seen.add(id)
     }
-    graph.edges.push({ from: "channel", to: id, relationship: "contains" })
+    const edgeId = `contains:${id}`
+    if (!seenEdges.has(edgeId)) {
+      graph.edges.push({ from: "channel", to: id, relationship: "contains" })
+      seenEdges.add(edgeId)
+    }
   }
   return graph
 }

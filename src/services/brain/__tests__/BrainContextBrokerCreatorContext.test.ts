@@ -212,4 +212,74 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(result.systemInstruction).not.toContain("value=2800")
  })
 
+ it("includes saved channel context as creator-provided guidance, never as verified evidence", () => {
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "Plan my content",
+   channelContext: {
+    identity: { name: "History Channel", niche: "Historical explainers" },
+    goals: { primaryGoal: "Grow a loyal audience" },
+    audience: { idealViewer: "Curious history fans" },
+    content: { priorityThemes: ["primary sources"] },
+    brand: { voice: "measured and accessible" },
+    intelligence: { sources: ["public videos"], capabilities: ["research"] },
+   },
+  })
+
+  expect(result.systemInstruction).toContain("CREATOR-PROVIDED CHANNEL CONTEXT")
+  expect(result.systemInstruction).toContain("Historical explainers")
+  expect(result.systemInstruction).toContain("USER_PROVIDED")
+  expect(result.systemInstruction).toContain("not verified public evidence")
+ })
+
+ it("does not inject channel context when the saved profile names another channel", () => {
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "Plan my content",
+   channelContext: {
+    identity: { name: "Different Channel", niche: "Unrelated topic" },
+    goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+   },
+  })
+
+  expect(result.systemInstruction).not.toContain("Unrelated topic")
+  expect(result.budget.omittedSections).toContain("channel_context_channel_name_mismatch")
+ })
+
+ it("respects the existing personalization control for saved channel context", () => {
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "Plan my content",
+   channelContext: {
+    identity: { name: "History Channel", niche: "Private niche preference" },
+    goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+   },
+   creatorContext: {
+    version: "vt-creator-context-v1",
+    channelId: "channel-1",
+    controls: { ...DEFAULT_BRAIN_USER_CONTROLS, personalization: false, allowAnalytics: false },
+    profile: null,
+    channelKnowledge: null,
+    styleProfile: null,
+    project: null,
+    surface: null,
+    selection: null,
+    evidenceRefs: [],
+    provenance: { profileLoadedAt: null, selectionUpdatedAt: null, projectSource: null },
+   } as any,
+  })
+
+  expect(result.systemInstruction).not.toContain("Private niche preference")
+  expect(result.budget.omittedSections).toContain("creator_personalization_disabled")
+ })
+
 })
