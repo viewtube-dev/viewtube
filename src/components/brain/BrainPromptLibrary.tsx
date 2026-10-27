@@ -128,6 +128,7 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
       <div className="vt-brain-tool-surface__header">
         <StudioInterModule
           sizeVariant="standard"
+          defaultOpen
           startIcon={<LayoutGrid aria-hidden="true" />}
           title={<span data-vt-brain-part="prompt-library-title" id={headingId}>Prompt Library</span>}
           className="overflow-hidden brain-prompt-library-shell min-w-0"
