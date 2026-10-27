@@ -2,8 +2,7 @@
 [data-vt-studio-control="true"] {
   box-sizing: border-box;
   box-shadow: none;
-  transition-property: color, background-color, border-color, outline-color;
-  transition-duration: 0ms;
+  transition: none;
   /* No internal gap: split shells are flush (rails and faces touch) and the
      4px spacing unit is reserved for external gaps between whole controls. */
   gap: 0;
