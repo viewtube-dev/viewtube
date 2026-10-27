@@ -257,6 +257,17 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
  return payload
 }
 
+export const saveChannelContextProfile = (channelContext: ChannelContextProfile): AiBrainContext => {
+ const previous = loadAiBrainContext()
+ const payload = normalizeContext({
+  ...previous,
+  channelContext,
+  updatedAt: new Date().toISOString(),
+ })
+ localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+ return payload
+}
+
 export const hasCompletedAiBrainContext = (): boolean =>
  localStorage.getItem(COMPLETED_KEY) === "true" || Boolean(loadAiBrainContext().completedAt)
 
