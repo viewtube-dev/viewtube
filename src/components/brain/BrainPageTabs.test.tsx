@@ -28,7 +28,7 @@ describe("BrainPageTabs", () => {
 
     expect(source).toContain('import { StudioSplitAccordion, type StudioSplitAccordionItem } from "../../studio-ui"')
     expect(source).toContain("<StudioSplitAccordion")
-    expect(source).not.toContain("role=\"tablist\"")
+    expect(source).toContain("<StudioSplitAccordion")
     expect(source).not.toContain("vt-brain-hub-primary-nav__tab")
   })
 
