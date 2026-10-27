@@ -773,7 +773,7 @@ const CreatorResponseCard: React.FC<{
   return (
    <StudioInterModule
     data-vt-brain-component="BrainInterruptedResponseEntry"
-    title="VIEWTUBE COPILOT"
+    title="RESPONSE INTERRUPTED"
     startIcon={<Brain aria-hidden="true" />}
     sizeVariant="compact"
     defaultOpen
