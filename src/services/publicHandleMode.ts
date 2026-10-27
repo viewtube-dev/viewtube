@@ -16,7 +16,7 @@ export interface PublicChannelSnapshot {
  subscriberCount: number | null
  videoCount: number | null
  viewCount: number | null
- source?: "youtube_data_api_public" | "fixture"
+ source?: "youtube_data_api_public" | "public_page" | "fixture"
  topVideos: Array<{
   videoId: string
   title: string
