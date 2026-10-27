@@ -4,7 +4,6 @@ export interface ChannelContextGraphNode {
   id: string
   type: "channel" | "competitor" | "topic"
   label: string
-  confidence: number
   evidenceIds: string[]
 }
 export interface ChannelContextGraphEdge {
@@ -21,7 +20,7 @@ export interface ChannelContextGraph {
 export function buildChannelContextGraph(context: ChannelContextProfile): ChannelContextGraph {
   const graph: ChannelContextGraph = { nodes: [], edges: [] }
   const channelName = context.identity.name?.trim() || "Unknown Channel"
-  graph.nodes.push({ id: "channel", type: "channel", label: channelName, confidence: 1, evidenceIds: [] })
+  graph.nodes.push({ id: "channel", type: "channel", label: channelName, evidenceIds: [] })
 
   const seen = new Set<string>(["channel"])
   for (const competitor of context.identity.competitors ?? []) {
