@@ -94,6 +94,14 @@
   height: calc(var(--vt-side-chevron-size) * .72) !important;
 }
 
+/* One shared-edge inset stroke; the shell owns the outside perimeter. */
+.vt-studio-value-toggle--side[data-arrow-side="right"] > [data-vt-studio-split-rail] {
+  box-shadow: inset var(--vt-side-rail-stroke) 0 0 #000;
+}
+.vt-studio-value-toggle--side[data-arrow-side="left"] > [data-vt-studio-split-rail] {
+  box-shadow: inset calc(-1 * var(--vt-side-rail-stroke)) 0 0 #000;
+}
+
 /* Counter rail and toggle rail are the same square module. */
 .vt-studio-side-counter__rail {
   box-sizing: border-box;
