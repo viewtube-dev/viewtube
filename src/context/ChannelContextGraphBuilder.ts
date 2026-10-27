@@ -39,7 +39,7 @@ export function buildChannelContextGraph(context: ChannelContextProfile): Channe
     if (!label) continue
     const id = `topic:${label.toLocaleLowerCase()}`
     if (!seen.has(id)) {
-      graph.nodes.push({ id, type: "topic", label, confidence: 1, evidenceIds: [] })
+      graph.nodes.push({ id, type: "topic", label, evidenceIds: [] })
       seen.add(id)
     }
     graph.edges.push({ from: "channel", to: id, relationship: "contains" })
