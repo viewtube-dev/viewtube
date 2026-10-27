@@ -17,6 +17,17 @@ export type PromptCardSummaryFn = (card: CreatorBrainPromptCard) => string
 
 const defaultSummary = (card: CreatorBrainPromptCard) => card.prompt
 
+/** Convert internal prompt category keys into readable creator-facing labels. */
+export const formatBrainPromptCategoryLabel = (category: string): string =>
+  category
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/\d+$/g, "")
+    .replace(/[_-]+/g, " ")
+    .trim()
+    .toLowerCase()
+    .replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
+    .replace(/\bSeo\b/g, "SEO")
+    .replace(/\bAi\b/g, "AI")
 const PROMPT_MODULE_COLOR_PAIRS = Array.from({ length: 12 }, (_, index) => [
   TOOLBOX_PALETTE[index],
   TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length],
@@ -102,7 +113,7 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
       { value: "all", label: "All categories" },
       ...allCategories.map((item) => ({
         value: item,
-        label: item.replace(/[-_]/g, " "),
+        label: formatBrainPromptCategoryLabel(item),
       })),
     ],
     [allCategories],
@@ -187,7 +198,7 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
             <StudioInterModule
               key={groupCategory}
               sizeVariant="compact"
-              title={<span className="uppercase">{groupCategory.replace(/[-_]/g, " ")}</span>}
+              title={<span className="uppercase">{formatBrainPromptCategoryLabel(groupCategory)}</span>}
               className="min-w-0 overflow-hidden"
               open={groupOpen}
               onOpenChange={(next) => setCategoryOpen(groupCategory, next)}
