@@ -19,3 +19,4 @@
 
 /* New counter-family variants must follow the shared production control cascade. */
 @import "./studio-control-word-counter.css";
+@import "./studio-split-text-input.css";
