@@ -1,3 +1,4 @@
+import type { ChannelContextProfile } from "../context/ChannelContextProfile"
 export type BrainPrimaryGoal =
  | "views"
  | "subscribers"
@@ -54,10 +55,11 @@ export type AiBrainContext = AiBrainCreatorProfile & {
  updatedAt: string | null
  source: "wizard" | "settings_migration" | "legacy" | "system"
  version: 2
+ channelContext: ChannelContextProfile
 }
 
 export type AiBrainContextInput = Partial<AiBrainCreatorProfile> &
- Partial<Pick<AiBrainContext, "whatNext" | "primaryGoal" | "audienceNiche" | "oneMonthGoals" | "deferredAt" | "source">>
+ Partial<Pick<AiBrainContext, "whatNext" | "primaryGoal" | "audienceNiche" | "oneMonthGoals" | "deferredAt" | "source" | "channelContext">>
 
 export const AI_BRAIN_INTAKE_QUESTIONS: Array<{
  id: keyof AiBrainCreatorProfile
@@ -162,6 +164,7 @@ const defaultContext: AiBrainContext = {
  updatedAt: null,
  source: "system",
  version: 2,
+ channelContext: { identity: {}, goals: {}, audience: {}, content: {}, brand: {}, intelligence: {} },
 }
 
 const clean = (value: unknown): string => String(value || "").replace(/\s+/g, " ").trim()
@@ -218,6 +221,7 @@ const normalizeContext = (parsed: Partial<AiBrainContext> = {}): AiBrainContext 
   updatedAt: parsed.updatedAt || parsed.completedAt || null,
   source: parsed.version === 2 ? parsed.source || "system" : "legacy",
   version: 2,
+  channelContext: parsed.channelContext && typeof parsed.channelContext === "object" ? parsed.channelContext : defaultContext.channelContext,
  }
 }
 
@@ -250,6 +254,17 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
  localStorage.setItem(COMPLETED_KEY, "true")
  localStorage.removeItem(DISMISSED_KEY)
+ return payload
+}
+
+export const saveChannelContextProfile = (channelContext: ChannelContextProfile): AiBrainContext => {
+ const previous = loadAiBrainContext()
+ const payload = normalizeContext({
+  ...previous,
+  channelContext,
+  updatedAt: new Date().toISOString(),
+ })
+ localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
  return payload
 }
 
