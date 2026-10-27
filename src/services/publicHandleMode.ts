@@ -1,3 +1,5 @@
+import { normalizeHandle } from "./brain/public/normalizeHandle"
+
 export interface PublicChannelResolution {
  input: string
  resolvedChannelId: string | null
@@ -27,25 +29,7 @@ export interface PublicChannelSnapshot {
 
 const YT_DATA_BASE = "https://www.googleapis.com/youtube/v3"
 
-const extractHandleLike = (input: string): string | null => {
- const trimmed = input.trim()
- if (!trimmed) return null
-
- if (trimmed.startsWith("@")) return trimmed.slice(1)
-
- try {
-  const url = new URL(trimmed)
-  const pathname = url.pathname
-  if (pathname.startsWith("/@")) return pathname.slice(2)
-  if (pathname.startsWith("/channel/")) return pathname.replace("/channel/", "")
-  if (pathname.startsWith("/c/")) return pathname.replace("/c/", "")
-  if (pathname.startsWith("/user/")) return pathname.replace("/user/", "")
- } catch {
-  // not a URL
- }
-
- return trimmed
-}
+const extractHandleLike = (input: string): string | null => normalizeHandle(input)
 
 const toNum = (value: unknown): number | null => {
  if (typeof value === "number" && Number.isFinite(value)) return value
