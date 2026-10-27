@@ -529,6 +529,58 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
       </div>
     </Family>
   )
+
+}
+
+const ConfirmedStudioLeftWordCounterFamily: React.FC = () => {
+  const [variantValues, setVariantValues] = React.useState([1, 2, 3, 4])
+  const [sizeValues, setSizeValues] = React.useState([1, 2, 3, 4, 1])
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const updateAt = (setter: React.Dispatch<React.SetStateAction<number[]>>, index: number, value: number) =>
+    setter(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))
+  return (
+    <Family
+      title="StudioLeftWordCounter · Four-State Cycle + Five Sizes"
+      nonDefaultSettings={[
+        "Reuses StudioLeftCounter's accelerated hold-repeat buttons, focus feedback, disabled behavior, and canonical split geometry.",
+        "Forward wraps FOUR → ONE and backward wraps ONE → FOUR; the four face states use primary, secondary, black/primary-text, and white/primary-text treatments.",
+        "Word typography is constrained to the available face width so THREE remains readable without ellipsis.",
+      ]}
+      provenance={<Provenance primitive="StudioLeftWordCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-word-counter.css" tokens="60px / 44px / 28px / 20px / 12px · four-state cyclic domain · shared left-counter hold-repeat" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-word-counter.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioLeftWordCounter">
+        <div className="vt-confirmed-counter-size-rows">
+          <div className="vt-confirmed-counter-size-row"><small>ONE · PRIMARY</small><div className="vt-confirmed-counter-pair"><StudioLeftWordCounter size="standard" value={variantValues[0]} onValueChange={value => updateAt(setVariantValues, 0, value)} ariaLabel="Primary word counter specimen" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>TWO · SECONDARY</small><div className="vt-confirmed-counter-pair"><StudioLeftWordCounter size="standard" value={variantValues[1]} onValueChange={value => updateAt(setVariantValues, 1, value)} ariaLabel="Secondary word counter specimen" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>THREE · BLACK / PRIMARY TEXT</small><div className="vt-confirmed-counter-pair"><StudioLeftWordCounter size="standard" value={variantValues[2]} onValueChange={value => updateAt(setVariantValues, 2, value)} ariaLabel="Black word counter specimen" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>FOUR · WHITE / PRIMARY TEXT</small><div className="vt-confirmed-counter-pair"><StudioLeftWordCounter size="standard" value={variantValues[3]} onValueChange={value => updateAt(setVariantValues, 3, value)} ariaLabel="White word counter specimen" /></div></div>
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]}</small><div className="vt-confirmed-counter-pair"><StudioLeftWordCounter size={size} value={sizeValues[index]} onValueChange={value => updateAt(setSizeValues, index, value)} ariaLabel={`${size} word counter specimen`} /></div></div>)}
+        </div>
+      </div>
+    </Family>
+  )
+}
+
+const ConfirmedStudioLeftWordSliderFamily: React.FC = () => {
+  const [values, setValues] = React.useState([1, 2, 3, 4, 1])
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  return (
+    <Family
+      title="StudioLeftWordSlider · Slider + Numeric Right Rail"
+      nonDefaultSettings={[
+        "Uses the canonical double-split slider and shared accelerated counter controls, constrained to integer values 1–4.",
+        "The slider position and right-hand numeric readout always represent the same value.",
+        "Supports all five Studio size tiers and inherits the shared flat, focus, disabled, and reduced-motion behavior.",
+      ]}
+      provenance={<Provenance primitive="StudioLeftWordSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-word-counter.css" tokens="60px / 44px / 28px / 20px / 12px · integer range 1–4 · numeric output on right rail" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-word-counter.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioLeftWordSlider">
+        <div className="vt-confirmed-counter-size-rows">
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]}</small><div className="vt-confirmed-slider-pair"><StudioLeftWordSlider size={size} value={values[index]} onValueChange={value => setValues(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))} ariaLabel={`${size} word slider specimen`} /></div></div>)}
+        </div>
+      </div>
+    </Family>
+  )
 }
 
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
@@ -653,7 +705,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
   if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules"
   if (/Dropdown/.test(title)) return "Dropdowns"
-  if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioChoice|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily") return "Controls"
+  if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftWordCounter|StudioLeftWordSlider|StudioChoice|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily" || componentName === "ConfirmedStudioLeftWordCounterFamily" || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Controls"
   if (/Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|SpectrumTag|TagEditor|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
   if (/Publishing Card|Brain Status LED Badges/.test(title)) return "Compositions"
   return "Controls"
@@ -1340,6 +1392,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioSideCounterFamily />
+    <ConfirmedStudioLeftWordCounterFamily />
+    <ConfirmedStudioLeftWordSliderFamily />
     <Family
       title="Split Accordion · Train Motion"
       nonDefaultSettings={[
