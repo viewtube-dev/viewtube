@@ -51,11 +51,11 @@ test("textarea typography inherits field size tiers and uses the canonical .85 m
     studioCss.indexOf('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {'),
     studioCss.indexOf('input[data-vt-studio-control="true"]:not([type="checkbox"])', studioCss.indexOf('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {')),
   );
-  assert.match(textareaBlock, /font-size:\s*var\(--vt-studio-standard-font-size, 38px\)/);
+  assert.match(textareaBlock, /font-size:\s*var\(--vt-studio-textarea-standard-font-size, 18px\)/);
   assert.match(textareaBlock, /line-height:\s*var\(--vt-studio-textarea-line-height, \.85\)/);
-  assert.match(textareaBlock, /--vt-studio-compact-font-size, 24px/);
-  assert.match(textareaBlock, /--vt-studio-micro-font-size, 10px/);
-  assert.doesNotMatch(textareaBlock, /vt-studio-textarea-(?:standard|compact)-(?:font-size|text-stroke|line-height)/);
+  assert.match(textareaBlock, /--vt-studio-textarea-compact-font-size, 14px/);
+  assert.match(textareaBlock, /--vt-studio-textarea-micro-font-size, 10px/);
+  assert.match(textareaBlock, /vt-studio-textarea-standard-font-size/);\n  assert.match(textareaBlock, /vt-studio-textarea-compact-font-size/);
   assert.match(studioCss, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]:is\(:focus, :focus-visible\)[\s\S]*?background: color-mix\(in srgb, var\(--vt-field-primary\) var\(--vt-studio-control-focus-fill-opacity\), transparent\)/);
 });
 
