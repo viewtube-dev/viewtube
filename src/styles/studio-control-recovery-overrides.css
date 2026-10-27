@@ -169,3 +169,14 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-siz
 }
 .vt-studio-split-text-input:focus-within { outline: var(--vt-field-focus-outline) !important; outline-offset: 0; box-shadow: none !important; }
 .vt-studio-split-text-input:focus-within .vt-studio-split-text-input__field { color: var(--vt-field-text-focus) !important; -webkit-text-fill-color: var(--vt-field-text-focus) !important; -webkit-text-stroke-color: var(--vt-field-text-stroke-focus) !important; caret-color: var(--vt-field-caret-focus) !important; }
+
+/* Keep collapsed module header geometry identical to the expanded header.
+   A transparent bottom rule reserves the divider's space without drawing a
+   second line over the module shell's outer bottom border. */
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head,
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__head,
+.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head,
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head,
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
+}
