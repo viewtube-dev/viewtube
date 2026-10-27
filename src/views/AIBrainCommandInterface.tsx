@@ -1445,11 +1445,9 @@ const AIBrainCommandInterface: React.FC = () => {
    metadata: "Prepare a metadata draft for review",
    projects: "Review this content in Projects",
   }
+  const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
   const selectedContentId = message.evidencePack?.evidenceIds.find((id) => id.startsWith("video:"))
-   || brain.projects.find((project) => project.id === brain.activeProjectId)?.contentBuildId
-   || null
-  const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
-   || brain.projects.find((project) => project.status === "active")
+   || activeProject?.contentBuildId
    || null
   try {
    const handoff = await queueAIBrainReviewedAction({
