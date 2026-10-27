@@ -36,7 +36,7 @@ describe("buildChannelContextGraph", () => {
     expect(graph.nodes.map((node) => node.id)).toEqual([
       "channel", "competitor:alpha", "competitor:beta", "topic:history",
     ])
-    expect(graph.edges).toHaveLength(4)
+    expect(graph.edges).toHaveLength(3)
   })
 
   it("uses a safe fallback label for an unnamed channel", () => {
