@@ -77,7 +77,7 @@ describe("AIBrainCommandInterface", () => {
  it("renders one autonomous surface with no tab or mode selector", () => {
   const html = renderHub()
 
-  expect(html).toContain("ViewTube Brain Hub")
+  expect(html).toContain("AI Brain")
   expect(html).toContain("Prompt Library")
   expect(html).not.toContain("Ask ViewTube Copilot Anything")
   expect(html).not.toContain("views pending sign-in")
