@@ -46,6 +46,8 @@ describe("AI Brain Studio status and evidence chrome", () => {
     const assistantEntry = source.slice(start, end)
 
     expect(assistantEntry).toContain('title="ANSWER"')
+    expect(assistantEntry).toContain('background: "#ffffff"')
+    expect(assistantEntry).toContain('"--vt-studio-control-accent": "#ffffff"')
     expect(assistantEntry.match(/ViewTube Copilot/g)).toHaveLength(1)
   })
 })
