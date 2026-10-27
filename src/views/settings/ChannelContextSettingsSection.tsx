@@ -59,7 +59,8 @@ export const ChannelContextSettingsSection: React.FC = () => {
       <header className="space-y-2">
         <p className="text-xs font-black uppercase tracking-widest">Creator Brain · Context</p>
         <h2 id="channel-context-title" className="text-2xl font-black uppercase">Teach the Brain your channel</h2>
-        <p className="max-w-3xl text-sm">Set the strategy, audience, content boundaries, and intelligence permissions that should shape future assistance. Your answers are saved with the existing Creator Brain profile.</p>
+        <p className="max-w-3xl text-sm">Set the strategy, audience, content boundaries, and intelligence preferences that should shape future assistance. Your answers are saved with the existing Creator Brain profile.</p>
+        <p className="max-w-3xl border-l-2 border-black pl-3 text-sm">These answers personalize recommendations; they do not independently grant tool access, change privacy controls, or enable unavailable capabilities.</p>
         <div className="flex flex-wrap items-center gap-3" aria-live="polite">
           <strong className="text-lg tabular-nums">{score.completionScore}%</strong>
           <span className="text-sm">required context complete · {score.requiredCount - score.missingFields.length} of {score.requiredCount} required answers</span>
