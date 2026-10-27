@@ -29,3 +29,29 @@ describe("StudioTextBox default stroke contract", () => {
   expect(textBoxBlock).toContain("line-height: var(--textarea-description-line-height, 0.75);")
  })
 })
+
+
+const finalOverrides = fs.readFileSync(path.resolve(process.cwd(), "src/styles/studio-control-distill-overrides.css"), "utf8")
+
+describe("TextBox and side-toggle visual exceptions", () => {
+ it("keeps read-only TextBox glyph fill and stroke black while preserving its secondary outline", () => {
+  const start = finalOverrides.indexOf("/* Read-only TextBox intentionally keeps black text and black glyph stroke.")
+  const end = finalOverrides.indexOf("/* Side and double-side toggle faces", start)
+  const block = finalOverrides.slice(start, end)
+  expect(block).toContain("color: #000 !important")
+  expect(block).toContain("-webkit-text-fill-color: #000 !important")
+  expect(block).toContain("-webkit-text-stroke-color: #000 !important")
+  expect(block).toContain("text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important")
+  expect(block).not.toContain("outline:")
+ })
+
+ it("uses solid primary faces and secondary arrow cells for side and double-side toggles", () => {
+  const start = finalOverrides.indexOf("/* Side and double-side toggle faces")
+  const block = finalOverrides.slice(start)
+  expect(block).toContain(".vt-studio-value-toggle--side .vt-studio-value-toggle__face")
+  expect(block).toContain(".vt-studio-value-toggle--double .vt-studio-value-toggle__face")
+  expect(block).toContain("background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important")
+  expect(block).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important")
+  expect(block).toContain(".vt-studio-value-toggle--double .vt-studio-value-toggle__arrow svg")
+ })
+})
