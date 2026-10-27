@@ -31,7 +31,6 @@ export const StudioSplitTextInput = React.forwardRef<HTMLInputElement, StudioSpl
         <input
           ref={ref}
           data-vt-studio-control="true"
-          data-vt-studio-control="true"
           data-size={sizeVariant}
           data-vt-studio-field-kind="text-input"
           className="vt-studio-split-text-input__field"
