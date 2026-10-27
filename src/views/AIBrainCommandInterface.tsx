@@ -1112,6 +1112,7 @@ const AIBrainCommandInterface: React.FC = () => {
   emitSignal,
  } = brainContext
  const [input, setInput] = useState("")
+ const [activePromptTitle, setActivePromptTitle] = useState<string | null>(null)
  const { height: mobileViewportHeight, keyboardOpen } = useVisualViewportHeight(true)
  const [journalInput, setJournalInput] = useState("")
  const [busy, setBusy] = useState(false)
@@ -1428,6 +1429,7 @@ const AIBrainCommandInterface: React.FC = () => {
   requestInFlightRef.current = true
   shouldFollowConversationRef.current = true
   setInput("")
+  setActivePromptTitle(null)
   if (composerRef.current) composerRef.current.style.height = "52px"
   setBusy(true)
   const userMessage: ChatMessage = { id: makeMessageId(), role: "user", text: userText }
@@ -1934,6 +1936,8 @@ const AIBrainCommandInterface: React.FC = () => {
          composer={<div className="vt-brain-studio-workspace__composer vt-brain-chat-column__dock"><BrainComposerDock
            value={input}
            onChange={setInput}
+           activePromptTitle={activePromptTitle}
+           onClearActivePrompt={() => setActivePromptTitle(null)}
            onSend={() => { void handleSend() }}
            busy={busy}
            status={busy ? "loading" : undefined}
