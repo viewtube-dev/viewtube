@@ -14,6 +14,16 @@ describe("Brain composer Studio field contract", () => {
     expect(defaultState).not.toContain("border: 0 !important")
   })
 
+  it("uses the dock only as a separator so the textarea owns the field border", () => {
+    const dock = styles.slice(
+      styles.indexOf('.vt-brain-composer-dock[data-vt-composer-layout="toolbar-actions"] {'),
+      styles.indexOf(".vt-brain-composer-dock .vt-brain-composer-tool-rail"),
+    )
+    expect(dock).toContain("border: 0")
+    expect(dock).toContain("border-radius: 0")
+    expect(dock).toContain("overflow: visible")
+  })
+
   it("uses black text and glyph stroke on focus with the primary inset retained", () => {
     const focusState = styles.slice(
       styles.indexOf(".vt-brain-composer-dock .vt-brain-composer-input:focus {"),
