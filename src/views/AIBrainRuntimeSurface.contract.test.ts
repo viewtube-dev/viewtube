@@ -179,6 +179,14 @@ describe("AI Brain runtime surface integration", () => {
   expect(capabilityBrowserSource).toContain('selectedAvailability.reason')
  })
 
+ it("keeps the composer draft recoverable with a direct clear action", () => {
+  const composerSource = readFileSync(new URL("../components/brain/BrainComposerDock.tsx", import.meta.url), "utf8")
+  expect(composerSource).toContain('activePromptTitle || activeContextLabel || value.trim()')
+  expect(composerSource).toContain('data-vt-brain-part="clear-composer-draft"')
+  expect(composerSource).toContain('onClick={() => onChange("")}')
+  expect(composerSource).toContain('aria-label="Clear message draft"')
+ })
+
  it("does not make the entire transcript a live log that re-announces the full conversation", () => {
   const viewport = chatPrimitivesSource.slice(
    chatPrimitivesSource.indexOf("export const ChatConversationViewport:"),
