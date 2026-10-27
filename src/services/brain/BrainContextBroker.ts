@@ -57,7 +57,7 @@ export const buildBrainContextPack = (input: {
  const maximumCharacters = input.maximumCharacters || 24_000
  const omittedSections: string[] = []
  const normalizeChannelName = (value: unknown): string =>
-  String(value || "").trim().toLocaleLowerCase().replace(/\\s+/g, " ")
+  String(value || "").trim().toLocaleLowerCase().replace(/ +/g, " ")
  const savedChannelName = normalizeChannelName(input.channelContext?.identity.name)
  const activeChannelName = normalizeChannelName(input.snapshot.channel.label)
  const channelContextMatchesChannel = Boolean(savedChannelName && activeChannelName && savedChannelName === activeChannelName)
