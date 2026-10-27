@@ -104,6 +104,13 @@ export type {
   StudioBrainStatusAppearance,
   StudioBrainStatusBadgeSize,
 } from "./primitives/StudioControls"
+export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle } from "./primitives/StudioValueToggles";
+export type { StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioToggleAppearance } from "./primitives/StudioValueToggles";
+export { StudioComponentGrid, StudioComponentGridCell, StudioComponentGridRow } from "./primitives/StudioComponentGrid";
+export type { StudioComponentGridProps, StudioComponentGridCellProps, StudioGridSize, StudioGridCorners } from "./primitives/StudioComponentGrid";
+export { StudioComponentGridSpecimen, StudioComponentGridSpecimenPair } from "./primitives/StudioComponentGridSpecimen";
+export type { StudioComponentGridSpecimenProps } from "./primitives/StudioComponentGridSpecimen";
+
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
 export {

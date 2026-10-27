@@ -12,3 +12,7 @@
 @import "./studio-field-parity.css";
 @import "./studio-control-distill-overrides.css";
 @import "./studio-control-recovery-overrides.css";
+
+/* Final primitive-level geometry and composition-only grid layout. */
+@import "./studio-side-rail-unify.css";
+@import "./studio-component-grid.css";
