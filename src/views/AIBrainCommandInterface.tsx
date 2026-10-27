@@ -120,6 +120,7 @@ import type {
  BrainGenerationPath,
  BrainQuickAction,
  CreatorBrainLearningQuestion,
+ CreatorBrainPromptCard,
  CreatorBrainResponse,
  CreatorInitialInsight,
 } from "../types"
@@ -433,6 +434,93 @@ const OpeningBriefing: React.FC<{
 
    </section>
   </div>
+ )
+}
+
+export const BrainFeedbackControls: React.FC<{
+ message: ChatMessage
+ onFeedback: (message: ChatMessage, rating: AIBrainFeedbackSignal["rating"]) => Promise<void>
+}> = ({ message, onFeedback }) => {
+ const [selected, setSelected] = useState<AIBrainFeedbackSignal["rating"] | null>(null)
+ const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
+ const feedbackInFlightRef = useRef(false)
+
+ const submitFeedback = async (rating: AIBrainFeedbackSignal["rating"]) => {
+  if (feedbackInFlightRef.current) return
+  feedbackInFlightRef.current = true
+  setSelected(rating)
+  setStatus("saving")
+  try {
+   await onFeedback(message, rating)
+   setStatus("saved")
+  } catch (error) {
+   console.warn("[AIBrain] Feedback was not saved:", error)
+   setStatus("error")
+  } finally {
+   feedbackInFlightRef.current = false
+  }
+ }
+
+ return (
+  <div data-vt-brain-component="BrainAnswerFeedback" className="flex min-w-0 flex-wrap items-center gap-1">
+   <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Rate this response">
+    {FEEDBACK_OPTIONS.map(([rating, Icon, label, color]) => {
+     const isSelected = selected === rating
+     return (
+      <StudioSquareIconButton
+       key={rating}
+       sizeVariant="compact"
+       iconSizeVariant="large"
+       variant={isSelected ? "v2" : "v1"}
+       icon={<Icon aria-hidden="true" />}
+       label={label}
+       title={label}
+       aria-label={label}
+       aria-pressed={isSelected}
+       disabled={status === "saving"}
+       onClick={() => void submitFeedback(rating)}
+       style={{ backgroundColor: isSelected ? color : undefined }}
+       className="cursor-pointer disabled:cursor-wait"
+      />
+     )
+    })}
+   </StudioSquareIconButtonGroup>
+   <span className="ml-1 text-[10px] font-black uppercase tracking-[0.06em]" aria-live="polite" role="status">
+    {status === "saving" ? "Saving…" : status === "saved" ? "Saved" : status === "error" ? "Try again" : "Rate answer"}
+   </span>
+  </div>
+ )
+}
+
+const BrainLearningReceiptCard: React.FC<{
+ message: ChatMessage
+ onCorrect: (message: ChatMessage) => void
+ onReject: (message: ChatMessage) => void
+}> = ({ message, onCorrect, onReject }) => {
+ const receipt = message.learningReceipt
+ if (!receipt) return null
+ const dismissed = receipt.status === "dismissed"
+ const scopeLabel = receipt.scope === "durable_knowledge"
+  ? "Saved as a lasting preference"
+  : "Saved temporarily — not a permanent rule yet"
+ return (
+  <details data-vt-brain-part="learning-receipt-content" aria-label="Learning saved" className="grid gap-0 bg-[#FFF8D6] open:gap-2">
+   <summary className="flex min-h-10 cursor-pointer list-none flex-wrap items-center justify-between gap-2 px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black">
+    <span data-vt-brain-part="learning-receipt-heading" className="text-[10px] font-black uppercase tracking-[0.12em]">Learning saved</span>
+    <StudioSplitLeftBadge sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} role="status">{dismissed ? "Rejected" : "Review"}</StudioSplitLeftBadge>
+   </summary>
+   <div className="grid gap-2 border-t border-black/15 px-3 pb-3">
+    <p data-vt-brain-part="learning-receipt-summary" className="text-sm font-black leading-5">{sanitizeCreatorFacingBrainCopy(receipt.summary)}</p>
+    {receipt.detail ? <p className="text-xs font-bold leading-5 text-black/70">{sanitizeCreatorFacingBrainCopy(receipt.detail)}</p> : null}
+    <p data-vt-brain-part="learning-receipt-scope" className="text-[11px] font-bold text-black/70">{scopeLabel}</p>
+    {!dismissed ? (
+     <div className="flex flex-wrap gap-1">
+      <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={() => onCorrect(message)}>Correct</StudioButton>
+      <StudioButton sizeVariant="compact" type="button" onClick={() => onReject(message)}>Reject</StudioButton>
+     </div>
+    ) : <p role="status" className="text-xs font-bold">Rejected — this will not become a permanent preference.</p>}
+   </div>
+  </details>
  )
 }
 
