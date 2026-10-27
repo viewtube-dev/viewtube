@@ -23,7 +23,7 @@ describe("scoreContext", () => {
     expect(scoreContext(context).missingFields).toEqual([])
   })
 
-  it("treats zero as a valid numeric answer and trims whitespace-only strings", () => {
+  it("rejects out-of-range creativity and trims whitespace-only strings", () => {
     const result = scoreContext({
       identity: { name: "  ", description: " ", niche: "" },
       goals: { primaryGoal: "", successDefinition: "" },
@@ -33,5 +33,6 @@ describe("scoreContext", () => {
       intelligence: { sources: [], capabilities: [] },
     })
     expect(result.completionScore).toBe(0)
+    expect(result.missingFields).toContain("brand.creativity")
   })
 })
