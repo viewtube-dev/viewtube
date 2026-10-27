@@ -6,7 +6,6 @@ const promptLibrarySource = readFileSync(new URL("../components/brain/BrainPromp
 const panelSource = readFileSync(new URL("../components/brain/BrainRuntimePanel.tsx", import.meta.url), "utf8")
 const chatPrimitivesSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.tsx", import.meta.url), "utf8")
 const chatPrimitivesCssSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.css", import.meta.url), "utf8")
-const promptLibraryCssSource = readFileSync(new URL("../components/brain/brain-tool-surface.css", import.meta.url), "utf8")
 const composerDockSource = readFileSync(new URL("../components/brain/BrainComposerDock.tsx", import.meta.url), "utf8")
 const viewportHookSource = readFileSync(new URL("../components/brain/useVisualViewportHeight.ts", import.meta.url), "utf8")
 const collapsePrimitiveSource = readFileSync(new URL("../studio-ui/primitives/StudioControls.tsx", import.meta.url), "utf8")
