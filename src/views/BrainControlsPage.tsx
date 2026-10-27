@@ -7,7 +7,7 @@ import { BRAIN_USER_CONTROLS_STORAGE_KEY, DEFAULT_BRAIN_USER_CONTROLS, clearBrai
 import { readBrainEngineControls, resetBrainEngineControls, writeBrainEngineControls, type BrainEngineControls } from "../services/brain/BrainEngineControls"
 import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS, BRAIN_CAPABILITY_REGISTRY } from "../services/brain/BrainCapabilityRegistry"
 import type { BrainCapabilityDefinition } from "../types"
-import { StudioButton, StudioInterModule, StudioSplitLeftButton, StudioTopSplitModule } from "../studio-ui"
+import { StudioButton, StudioInterModule, StudioTopSplitModule } from "../studio-ui"
 
 type Settings = { policy: BrainUserControls; engines: BrainEngineControls }
 type PolicyRow = readonly [keyof BrainUserControls, string, string]
