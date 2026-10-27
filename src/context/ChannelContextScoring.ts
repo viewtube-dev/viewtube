@@ -14,7 +14,10 @@ const readPath = (value: unknown, path: string): unknown =>
     return (current as Record<string, unknown>)[key]
   }, value)
 
-const hasAnswer = (value: unknown): boolean => {
+const hasAnswer = (value: unknown, contextField: string): boolean => {
+  if (contextField === "brand.creativity") {
+    return typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 10
+  }
   if (typeof value === "string") return value.trim().length > 0
   if (typeof value === "number") return Number.isFinite(value)
   if (Array.isArray(value)) return value.some((item) => String(item).trim().length > 0)
@@ -24,7 +27,7 @@ const hasAnswer = (value: unknown): boolean => {
 export function scoreContext(context: ChannelContextProfile): ContextScoreResult {
   const required = CHANNEL_CONTEXT_QUESTIONS.filter((question) => question.required)
   const missingFields = required
-    .filter((question) => !hasAnswer(readPath(context, question.contextField)))
+    .filter((question) => !hasAnswer(readPath(context, question.contextField), question.contextField))
     .map((question) => question.contextField)
 
   return {
