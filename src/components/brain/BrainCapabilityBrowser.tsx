@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react"
-import { ArrowRight, Send, ShieldCheck, Sparkles } from "lucide-react"
+import { ArrowRight, Send, Sparkles } from "lucide-react"
 import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
 import {
   BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS,
@@ -10,7 +10,6 @@ import type { BrainUserControls } from "../../services/brain/BrainUserControls"
 import {
   StudioTextInput,
   StudioSplitLeftButton,
-  StudioButton,
   StudioSplitTwoLineButton,
   StudioTopSplitModule,
 } from "../../studio-ui"
@@ -103,6 +102,48 @@ export const filterBrainCapabilities = (
 
 export const capabilityPromptFor = (capability: BrainCapabilityDefinition): string =>
   `Help me with ${capability.label.toLowerCase()}. ${capability.description} Explain what the available evidence supports, call out missing inputs or uncertainty, and give me the most useful next step. Do not claim this capability ran unless the response confirms it.`
+
+export const BrainCapabilityActions: React.FC<{
+  capability: BrainCapabilityDefinition
+  availability: BrainCapabilityAvailability
+  busy?: boolean
+  onPrompt: (prompt: string) => void
+  onEdit?: (prompt: string) => void
+  onClose: () => void
+}> = ({ capability, availability, busy = false, onPrompt, onEdit, onClose }) => {
+  const prompt = capabilityPromptFor(capability)
+  const blocked = busy || availability.status === "blocked"
+
+  return (
+    <div className={"vt-brain-tool-surface__actions " + (onEdit ? "is-pair" : "")}>
+      {onEdit ? (
+        <StudioSplitTwoLineButton
+          sizeVariant="compact"
+          icon={<ArrowRight aria-hidden="true" />}
+          firstLine="EDIT"
+          secondLine="FIRST"
+          onClick={() => {
+            onEdit(prompt)
+            onClose()
+          }}
+          className="w-full min-w-0"
+        />
+      ) : null}
+      <StudioSplitTwoLineButton
+        sizeVariant="compact"
+        icon={<Send aria-hidden="true" />}
+        firstLine="SEND TO"
+        secondLine="CHAT"
+        onClick={() => {
+          onPrompt(prompt)
+          onClose()
+        }}
+        disabled={blocked}
+        className="w-full min-w-0"
+      />
+    </div>
+  )
+}
 
 /**
  * Capability browser — Studio composition only.
@@ -226,31 +267,14 @@ export const BrainCapabilityBrowser: React.FC<{
               Evidence sections:{" "}
               {(BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS[selected.id] || []).join(", ") || "requirements not listed"}
             </p>
-            <div className={`vt-brain-tool-surface__actions mt-2 ${onEdit ? "is-pair" : ""}`}>
-              {onEdit ? (
-                <StudioSplitTwoLineButton
-                  sizeVariant="compact"
-                  icon={<ArrowRight aria-hidden="true" />}
-                  firstLine="EDIT"
-                  secondLine="FIRST"
-                  onClick={() => {
-                    onEdit(capabilityPromptFor(selected))
-                    setSelectedId(null)
-                  }}
-                  className="w-full min-w-0"
-                />
-              ) : null}
-              <StudioSplitTwoLineButton
-                sizeVariant="compact"
-                icon={<Send aria-hidden="true" />}
-                firstLine="SEND TO"
-                secondLine="CHAT"
-                onClick={() => {
-                  onPrompt(capabilityPromptFor(selected))
-                  setSelectedId(null)
-                }}
-                disabled={busy || selectedAvailability.status === "blocked"}
-                className="w-full min-w-0"
+            <div className="mt-2">
+              <BrainCapabilityActions
+                capability={selected}
+                availability={selectedAvailability}
+                busy={busy}
+                onPrompt={onPrompt}
+                onEdit={onEdit}
+                onClose={() => setSelectedId(null)}
               />
             </div>
           </>
