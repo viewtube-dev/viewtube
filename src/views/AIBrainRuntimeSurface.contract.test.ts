@@ -208,10 +208,10 @@ describe("AI Brain runtime surface integration", () => {
 
 describe("AI Brain creator-facing prompt category labels", () => {
   it("humanizes internal category identifiers while preserving their keys", () => {
-    expect(promptLibrarySource).toContain("export const formatPromptCategoryLabel")
-    expect(promptLibrarySource).toContain("label: formatPromptCategoryLabel(item)")
-    expect(promptLibrarySource).toContain("formatPromptCategoryLabel(groupCategory)")
+    expect(promptLibrarySource).toContain("export const formatBrainPromptCategoryLabel")
+    expect(promptLibrarySource).toContain("label: formatBrainPromptCategoryLabel(item)")
+    expect(promptLibrarySource).toContain("formatBrainPromptCategoryLabel(groupCategory)")
     expect(promptLibrarySource).toContain('replace(/([a-z])([A-Z])/g, "$1 $2")')
-    expect(promptLibrarySource).toContain('replace(/\\\\d+$/g, "")')
+    expect(promptLibrarySource).toContain('replace(/\\d+$/g, "")')
   })
 })
