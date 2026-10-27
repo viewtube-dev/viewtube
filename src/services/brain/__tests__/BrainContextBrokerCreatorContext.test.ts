@@ -212,4 +212,44 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(result.systemInstruction).not.toContain("value=2800")
  })
 
+ it("includes saved channel context as creator-provided guidance, never as verified evidence", () => {
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "Plan my content",
+   channelContext: {
+    identity: { name: "History Channel", niche: "Historical explainers" },
+    goals: { primaryGoal: "Grow a loyal audience" },
+    audience: { idealViewer: "Curious history fans" },
+    content: { priorityThemes: ["primary sources"] },
+    brand: { voice: "measured and accessible" },
+    intelligence: { sources: ["public videos"], capabilities: ["research"] },
+   },
+  })
+
+  expect(result.systemInstruction).toContain("CREATOR-PROVIDED CHANNEL CONTEXT")
+  expect(result.systemInstruction).toContain("Historical explainers")
+  expect(result.systemInstruction).toContain("USER_PROVIDED")
+  expect(result.systemInstruction).toContain("not verified public evidence")
+ })
+
+ it("does not inject channel context when the saved profile names another channel", () => {
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "Plan my content",
+   channelContext: {
+    identity: { name: "Different Channel", niche: "Unrelated topic" },
+    goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+   },
+  })
+
+  expect(result.systemInstruction).not.toContain("Unrelated topic")
+  expect(result.budget.omittedSections).toContain("channel_context_channel_name_mismatch")
+ })
+
 })
