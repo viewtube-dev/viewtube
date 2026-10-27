@@ -4,6 +4,7 @@ import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { StudioSplitTextInput } from "./StudioSplitTextInput"
+import StudioHubConfirmedPrimitiveCatalog from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 
 describe("StudioSplitTextInput geometry comparison variants", () => {
   it("exposes the baseline, half-vertical-padding, and username-matched-height variants", () => {
@@ -20,6 +21,18 @@ describe("StudioSplitTextInput geometry comparison variants", () => {
     expect(html).toContain('data-geometry-variant="username-height"')
     expect(html.match(/data-vt-studio-split-rail="start"/g)).toHaveLength(3)
     expect(html.match(/class="vt-studio-split-text-input__field"/g)).toHaveLength(3)
+  })
+
+
+  it("makes all three geometry variants visible in the confirmed Studio library", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain("Split Text Input · Vertical Geometry Comparison")
+    expect(html).toContain("CURRENT · BASELINE")
+    expect(html).toContain("HALF VERTICAL PADDING")
+    expect(html).toContain("USERNAME-MATCHED INNER HEIGHT")
+    expect(html).toContain('data-geometry-variant="current"')
+    expect(html).toContain('data-geometry-variant="half-vertical-padding"')
+    expect(html).toContain('data-geometry-variant="username-height"')
   })
 
   it("changes only field padding or field height while preserving the rail's centered geometry", () => {
