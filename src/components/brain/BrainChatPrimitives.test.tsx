@@ -92,6 +92,10 @@ describe("Brain Studio chat primitives", () => {
     expect(html).toContain("Three practical next steps")
     expect(html).toContain("Retry")
     expect(html).toContain("Evidence provenance")
+    expect(html).toContain('data-vt-studio-control="chat-response-shell"')
+    expect(html).toContain('data-slot="metadata"')
+    expect(html).toContain('data-slot="response"')
+    expect(html).toContain('data-slot="actions"')
   })
 
   it("provides a named composer shell with safe-area padding", () => {
