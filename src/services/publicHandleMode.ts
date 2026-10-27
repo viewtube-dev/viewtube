@@ -1,3 +1,5 @@
+import { normalizePublicChannelInput } from "./brain/public/normalizeHandle"
+
 export interface PublicChannelResolution {
  input: string
  resolvedChannelId: string | null
@@ -27,26 +29,6 @@ export interface PublicChannelSnapshot {
 
 const YT_DATA_BASE = "https://www.googleapis.com/youtube/v3"
 
-const extractHandleLike = (input: string): string | null => {
- const trimmed = input.trim()
- if (!trimmed) return null
-
- if (trimmed.startsWith("@")) return trimmed.slice(1)
-
- try {
-  const url = new URL(trimmed)
-  const pathname = url.pathname
-  if (pathname.startsWith("/@")) return pathname.slice(2)
-  if (pathname.startsWith("/channel/")) return pathname.replace("/channel/", "")
-  if (pathname.startsWith("/c/")) return pathname.replace("/c/", "")
-  if (pathname.startsWith("/user/")) return pathname.replace("/user/", "")
- } catch {
-  // not a URL
- }
-
- return trimmed
-}
-
 const toNum = (value: unknown): number | null => {
  if (typeof value === "number" && Number.isFinite(value)) return value
  if (typeof value === "string") {
@@ -68,9 +50,10 @@ export const resolvePublicChannel = async (
  handleInput: string,
 ): Promise<PublicChannelResolution> => {
  const apiKey = getApiKey()
- const candidate = extractHandleLike(handleInput)
+ const normalized = normalizePublicChannelInput(handleInput)
+ const candidate = normalized?.value || null
 
- if (!candidate) {
+ if (!candidate || !normalized) {
   return {
    input: handleInput,
    resolvedChannelId: null,
@@ -91,14 +74,17 @@ export const resolvePublicChannel = async (
   }
  }
 
- const isLikelyChannelId = /^UC[a-zA-Z0-9_-]{20,}$/.test(candidate)
  const byChannelIdUrl = `${YT_DATA_BASE}/channels?part=snippet&id=${encodeURIComponent(candidate)}&key=${apiKey}`
- const byHandleUrl = `${YT_DATA_BASE}/channels?part=snippet&forHandle=${encodeURIComponent(candidate.replace(/^@/, ""))}&key=${apiKey}`
+ const byHandleUrl = `${YT_DATA_BASE}/channels?part=snippet&forHandle=${encodeURIComponent(candidate)}&key=${apiKey}`
  const bySearchUrl = `${YT_DATA_BASE}/search?part=snippet&type=channel&maxResults=1&q=${encodeURIComponent(candidate)}&key=${apiKey}`
 
- const tryUrls = isLikelyChannelId
-  ? [byChannelIdUrl, byHandleUrl, bySearchUrl]
-  : [byHandleUrl, bySearchUrl, byChannelIdUrl]
+ // Custom URLs and legacy /user/ paths must be resolved through search; they
+ // are not valid values for the Data API forHandle parameter.
+ const tryUrls = normalized.kind === "channel_id"
+  ? [byChannelIdUrl]
+  : normalized.kind === "handle"
+   ? [byHandleUrl, bySearchUrl]
+   : [bySearchUrl]
 
  for (const url of tryUrls) {
   try {
