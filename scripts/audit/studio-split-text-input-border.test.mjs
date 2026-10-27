@@ -4,6 +4,7 @@ import test from "node:test"
 
 const entryCss = await readFile(new URL("../../src/styles/studio-control-entry.css", import.meta.url), "utf8")
 const splitCss = await readFile(new URL("../../src/styles/studio-control-split.css", import.meta.url), "utf8")
+const recoveryCss = await readFile(new URL("../../src/styles/studio-control-recovery-overrides.css", import.meta.url), "utf8")
 
 test("split text input shell owns one black perimeter and the native field stays borderless", () => {
   const shell = entryCss.slice(entryCss.indexOf(".vt-studio-split-text-input {"), entryCss.indexOf(".vt-studio-split-text-input__field {"))
@@ -21,4 +22,16 @@ test("split text input keeps a primary inset stroke without adding a second bord
   assert.match(field, /background-position:\s*top left, bottom left, top right/)
   assert.match(field, /-webkit-text-fill-color:\s*var\(--vt-field-text\)/)
   assert.match(entryCss, /\.vt-studio-split-text-input:focus-within \.vt-studio-split-text-input__field\s*\{[\s\S]*-webkit-text-fill-color:\s*var\(--vt-field-text-focus\)[\s\S]*caret-color:\s*var\(--vt-field-caret-focus\)/)
+})
+
+
+test("recovery field defaults do not repaint the split input perimeter or inset stroke", () => {
+  const editableFields = recoveryCss.slice(
+    recoveryCss.indexOf("/* Editable fields: matching text/stroke"),
+    recoveryCss.indexOf(".vt-studio-text-box"),
+  )
+  const [resting, focused] = editableFields.split(/\\n(?=input\\[data-vt-studio-control=.*:is\\(:focus)/)
+  assert.match(resting, /:not\\(\\.vt-studio-split-text-input__field\\)/)
+  assert.match(focused, /:not\\(\\.vt-studio-split-text-input__field\\)/)
+  assert.doesNotMatch(resting, /\\.vt-studio-split-text-input__field[^,{]*\\{[^}]*box-shadow:[^}]*!important/s)
 })
