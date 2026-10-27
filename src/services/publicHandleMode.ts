@@ -179,8 +179,19 @@ export const resolvePublicChannel = async (
 export const fetchPublicChannelSnapshot = async (
  handleInput: string,
 ): Promise<PublicChannelSnapshot | null> => {
- const resolved = await resolvePublicChannel(handleInput)
  const apiKey = getApiKey()
+ if (!apiKey) {
+  try {
+   const response = await fetch(`/api/public-channel?handle=${encodeURIComponent(handleInput)}`)
+   if (response.ok) {
+    const payload = await response.json() as { snapshot?: PublicChannelSnapshot }
+    if (payload.snapshot?.channelId) return payload.snapshot
+   }
+  } catch {
+   // Fall through to allowlisted fixtures for local testing.
+  }
+ }
+ const resolved = await resolvePublicChannel(handleInput)
  const candidate = extractHandleLike(handleInput)
  if (resolved.resolvedChannelId?.startsWith("UC_FIXTURE_") || !apiKey) {
   if (candidate) {
