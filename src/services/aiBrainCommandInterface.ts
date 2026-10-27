@@ -1929,7 +1929,11 @@ export const buildChannelContextInstruction = (profile?: ChannelContextProfile |
  const add = (label: string, value: unknown) => {
   const values = Array.isArray(value)
    ? value.map((item) => String(item ?? "").trim()).filter(Boolean)
-   : typeof value === "string" && value.trim() ? [value.trim()] : []
+   : typeof value === "string" && value.trim()
+    ? [value.trim()]
+    : typeof value === "number" && Number.isFinite(value)
+     ? [String(value)]
+     : []
   if (values.length) sections.push(`${label}: ${values.join("; ")}`)
  }
  add("Channel name", profile.identity.name)
