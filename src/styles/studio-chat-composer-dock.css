@@ -274,3 +274,93 @@
     gap: 3px;
   }
 }
+
+
+/* Brain composer: keep the message field dominant, with stacked split-left actions beside it. */
+.vt-studio-chat-composer-dock.vt-brain-composer-dock[data-vt-composer-layout="inline-actions"] {
+  gap: 0;
+  padding: 8px 10px max(10px, env(safe-area-inset-bottom, 0px));
+  border-top: 2px solid #000;
+  overflow: visible;
+}
+
+.vt-brain-composer-dock .vt-studio-chat-composer-dock__field-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 18%);
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+  width: 100%;
+}
+
+.vt-brain-composer-dock .vt-studio-chat-composer-dock__field {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  width: 100%;
+}
+
+.vt-brain-composer-dock .vt-studio-chat-composer-dock__field textarea,
+.vt-brain-composer-dock .vt-studio-chat-composer-dock__field [data-vt-studio-control="true"] textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 60px;
+  max-height: var(--vt-composer-dock-max-field);
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.vt-brain-composer-action {
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  align-self: stretch;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+  min-height: 60px;
+  height: 100%;
+}
+
+.vt-brain-composer-action > button {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding-inline: 3px;
+  overflow: hidden;
+}
+
+.vt-brain-composer-action .vt-studio-split-label,
+.vt-brain-composer-action [data-vt-studio-split-label] {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.vt-brain-composer-action > button:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 1px;
+  z-index: 1;
+}
+
+@media (max-width: 420px) {
+  .vt-brain-composer-dock.vt-studio-chat-composer-dock {
+    padding-inline: 6px;
+  }
+
+  .vt-brain-composer-dock .vt-studio-chat-composer-dock__field-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 18%);
+    gap: 3px;
+  }
+
+  .vt-brain-composer-action {
+    gap: 3px;
+  }
+
+  .vt-brain-composer-action > button {
+    padding-inline: 1px;
+    font-size: 10px;
+  }
+}
