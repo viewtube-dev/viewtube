@@ -46,13 +46,13 @@ test("button faces use the solid primary color and own their aligned shadow", ()
   assert.match(studioCss, /button\[data-vt-studio-button="true"\]\s*>\s*\[data-vt-studio-button-face\]\s*\{[^}]*box-shadow:\s*var\(--vt-studio-control-shadow\)/s)
 })
 
-test("textarea typography inherits input size tiers and uses only the .75 description line-height override", () => {
+test("textarea typography inherits field size tiers and uses the canonical .85 multiline line-height", () => {
   const textareaBlock = studioCss.slice(
     studioCss.indexOf('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {'),
     studioCss.indexOf('input[data-vt-studio-control="true"]:not([type="checkbox"])', studioCss.indexOf('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {')),
   );
   assert.match(textareaBlock, /font-size:\s*var\(--vt-studio-standard-font-size, 38px\)/);
-  assert.match(textareaBlock, /line-height:\s*\.75/);
+  assert.match(textareaBlock, /line-height:\s*var\(--vt-studio-textarea-line-height, \.85\)/);
   assert.match(textareaBlock, /--vt-studio-compact-font-size, 24px/);
   assert.match(textareaBlock, /--vt-studio-micro-font-size, 10px/);
   assert.doesNotMatch(textareaBlock, /vt-studio-textarea-(?:standard|compact)-(?:font-size|text-stroke|line-height)/);
