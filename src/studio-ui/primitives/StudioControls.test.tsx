@@ -1389,6 +1389,16 @@ describe("Studio left word counter and word slider", () => {
     expect(normalizeStudioLeftWordIndex(3)).toBe(3);
   });
 
+  it("renders the corresponding label and semantic state for every word", () => {
+    const specimens = [1, 2, 3, 4].map(value => renderToStaticMarkup(
+      <StudioLeftWordCounter value={value} onValueChange={() => undefined} ariaLabel="Word state specimen" />,
+    ));
+    ["ONE", "TWO", "THREE", "FOUR"].forEach((word, index) => {
+      expect(specimens[index]).toContain(`data-vt-studio-word-index="${index + 1}"`);
+      expect(specimens[index]).toContain(`>${word}</span>`);
+    });
+  });
+
   it("renders the four-state left counter using the existing counter shell", () => {
     const html = renderToStaticMarkup(
       <StudioLeftWordCounter value={3} onValueChange={() => undefined} ariaLabel="Word counter test" />,
