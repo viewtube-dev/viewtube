@@ -66,6 +66,30 @@ const getApiKey = (): string | null => {
  return null
 }
 
+type PublicPageIngestionPayload = {
+ resolution?: { resolvedChannelId?: string | null; resolvedHandle?: string | null; channelTitle?: string | null; reason?: string | null }
+ snapshot?: PublicChannelSnapshot
+}
+
+const fetchPublicPageIngestion = async (handleInput: string): Promise<PublicPageIngestionPayload | null> => {
+ const configuredBase = String(import.meta.env.VITE_BILLING_API_BASE || "").replace(/\\/$/, "")
+ const query = `?handle=${encodeURIComponent(handleInput)}`
+ const urls = configuredBase
+  ? [`${configuredBase}/public-channel/resolve${query}`, `${configuredBase}/api/public-channel${query}`]
+  : [`/public-channel/resolve${query}`, `/api/public-channel${query}`]
+ for (const url of urls) {
+  try {
+   const response = await fetch(url, { headers: { Accept: "application/json" } })
+   if (!response.ok) continue
+   const payload = await response.json() as PublicPageIngestionPayload
+   if (payload.resolution?.resolvedChannelId || payload.snapshot?.channelId) return payload
+  } catch {
+   // Try the other supported deployment route, then allowlisted local fixtures.
+  }
+ }
+ return null
+}
+
 export const resolvePublicChannel = async (
  handleInput: string,
 ): Promise<PublicChannelResolution> => {
@@ -84,19 +108,14 @@ export const resolvePublicChannel = async (
 
  if (!apiKey) {
   try {
-   const response = await fetch(`/api/public-channel?handle=${encodeURIComponent(handleInput)}`)
-   if (response.ok) {
-    const payload = await response.json() as {
-     resolution?: { resolvedChannelId?: string | null; resolvedHandle?: string | null; channelTitle?: string | null }
-    }
-    if (payload.resolution?.resolvedChannelId) {
-     return {
-      input: handleInput,
-      resolvedChannelId: payload.resolution.resolvedChannelId,
-      resolvedHandle: payload.resolution.resolvedHandle || candidate,
-      channelTitle: payload.resolution.channelTitle || null,
-      reason: null,
-     }
+   const payload = await fetchPublicPageIngestion(handleInput)
+   if (payload?.resolution?.resolvedChannelId) {
+    return {
+     input: handleInput,
+     resolvedChannelId: payload.resolution.resolvedChannelId,
+     resolvedHandle: payload.resolution.resolvedHandle || candidate,
+     channelTitle: payload.resolution.channelTitle || null,
+     reason: null,
     }
    }
   } catch {
@@ -182,11 +201,8 @@ export const fetchPublicChannelSnapshot = async (
  const apiKey = getApiKey()
  if (!apiKey) {
   try {
-   const response = await fetch(`/api/public-channel?handle=${encodeURIComponent(handleInput)}`)
-   if (response.ok) {
-    const payload = await response.json() as { snapshot?: PublicChannelSnapshot }
-    if (payload.snapshot?.channelId) return payload.snapshot
-   }
+   const payload = await fetchPublicPageIngestion(handleInput)
+   if (payload?.snapshot?.channelId) return payload.snapshot
   } catch {
    // Fall through to allowlisted fixtures for local testing.
   }
