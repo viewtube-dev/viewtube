@@ -827,15 +827,7 @@ const CreatorResponseCard: React.FC<{
  )
 
  return (
-  <StudioInterModule
-   data-vt-brain-component="BrainAssistantChatEntry"
-   title="ANSWER"
-   startIcon={<Brain aria-hidden="true" />}
-   sizeVariant="compact"
-   defaultOpen
-   className="shrink-0"
-   style={{ background: "#ffffff", "--vt-studio-control-accent": "#ffffff", "--vt-studio-control-secondary": TOOLBOX_PALETTE[5] } as React.CSSProperties}
-  >
+  <div data-vt-brain-component="BrainAssistantChatEntry" className="min-w-0 w-full">
   <BrainResponseLayout
    title={sanitizeCreatorFacingBrainCopy(response.headline)}
    className="w-full max-w-none shrink-0 border-0 bg-white"
@@ -902,7 +894,7 @@ const CreatorResponseCard: React.FC<{
     <BrainAnswerModuleGrid modules={modules} compact />
    </BrainAnswerFirst>
   </BrainResponseLayout>
-  </StudioInterModule>
+  </div>
  )
 }
 
