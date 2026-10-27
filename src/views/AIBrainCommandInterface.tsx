@@ -1104,6 +1104,7 @@ const AIBrainCommandInterface: React.FC = () => {
   emitSignal,
  } = brainContext
  const [input, setInput] = useState("")
+ const [activePromptTitle, setActivePromptTitle] = useState<string | null>(null)
  const { height: mobileViewportHeight, keyboardOpen } = useVisualViewportHeight(true)
  const [journalInput, setJournalInput] = useState("")
  const [busy, setBusy] = useState(false)
@@ -1925,10 +1926,15 @@ const AIBrainCommandInterface: React.FC = () => {
           />} />}
          composer={<div className="vt-brain-studio-workspace__composer vt-brain-chat-column__dock"><BrainComposerDock
            value={input}
-           onChange={setInput}
+           onChange={(nextValue) => {
+            setInput(nextValue)
+            if (!nextValue.trim()) setActivePromptTitle(null)
+           }}
            onSend={() => { void handleSend() }}
            busy={busy}
            status={busy ? "loading" : undefined}
+           activePromptTitle={activePromptTitle}
+           onClearActivePrompt={() => setActivePromptTitle(null)}
            onOpenPrompts={() => { setContextRailOpen(false); setLauncherMode("prompts"); setPromptRailOpen(true) }}
            onOpenCapabilities={() => { setContextRailOpen(false); setLauncherMode("capabilities"); setPromptRailOpen(true) }}
            onOpenContext={() => { setPromptRailOpen(false); setContextRailOpen(true) }}
@@ -2002,7 +2008,12 @@ const AIBrainCommandInterface: React.FC = () => {
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
+          onEdit={(prompt) => {
+           setPromptRailOpen(false)
+           setInput(prompt)
+           setActivePromptTitle(promptCards.find((card) => card.prompt === prompt)?.label || "Custom prompt")
+           requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions))
+          }}
          /> : <BrainCapabilityBrowser
           snapshot={snapshot}
           controls={brainControls}
