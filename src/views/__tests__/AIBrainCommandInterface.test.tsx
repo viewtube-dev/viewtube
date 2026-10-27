@@ -1,4 +1,5 @@
-import React from "react"
+import React, { act } from "react"
+import { createRoot } from "react-dom/client"
 import { renderToStaticMarkup } from "react-dom/server"
 import { MemoryRouter } from "react-router-dom"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
@@ -186,7 +187,7 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("AI Journal")
  })
 
- it("presents capability launches with the same Send to Chat and Edit First actions as prompts", () => {
+ it("presents capability launches with the same Send to Chat and Edit First actions as prompts", async () => {
   const capability = {
    id: "audience-promise",
    label: "Audience promise",
@@ -204,22 +205,36 @@ describe("AIBrainCommandInterface", () => {
    personalization: true,
    allowProjects: true,
   } as BrainUserControls
-  const html = renderToStaticMarkup(
-   <BrainCapabilityBrowser
-    snapshot={snapshot}
-    controls={controls}
-    onPrompt={() => undefined}
-    onEdit={() => undefined}
-   />,
-  )
+  const host = document.createElement("div")
+  document.body.appendChild(host)
+  const root = createRoot(host)
 
-  expect(html).toContain("SEND TO")
-  expect(html).toContain("CHAT")
-  expect(html).toContain("EDIT")
-  expect(html).toContain("FIRST")
-  expect(html).not.toContain(">Ask Brain<")
-  expect(html).not.toContain(">Edit prompt first<")
-  expect(capabilityPromptFor(capability)).toContain("audience promise")
+  try {
+   await act(async () => {
+    root.render(
+     <BrainCapabilityBrowser
+      snapshot={snapshot}
+      controls={controls}
+      onPrompt={() => undefined}
+      onEdit={() => undefined}
+     />,
+    )
+   })
+   const capabilityButton = host.querySelector<HTMLButtonElement>('button[title="Audience promise"]')
+   expect(capabilityButton).not.toBeNull()
+   await act(async () => capabilityButton!.click())
+
+   expect(host.innerHTML).toContain("SEND TO")
+   expect(host.innerHTML).toContain("CHAT")
+   expect(host.innerHTML).toContain("EDIT")
+   expect(host.innerHTML).toContain("FIRST")
+   expect(host.innerHTML).not.toContain(">Ask Brain<")
+   expect(host.innerHTML).not.toContain(">Edit prompt first<")
+   expect(capabilityPromptFor(capability)).toContain("audience promise")
+  } finally {
+   await act(async () => root.unmount())
+   host.remove()
+  }
  })
 
  it("keeps every guided prompt available in its expanded category modules", () => {
