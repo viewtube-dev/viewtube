@@ -1,3 +1,4 @@
+import { resolveFromFixture, snapshotFromFixture, fixturesEnabled } from "./publicHandleMode.fixtures"
 export interface PublicChannelResolution {
  input: string
  resolvedChannelId: string | null
@@ -15,6 +16,7 @@ export interface PublicChannelSnapshot {
  subscriberCount: number | null
  videoCount: number | null
  viewCount: number | null
+ source?: "youtube_data_api_public" | "fixture"
  topVideos: Array<{
   videoId: string
   title: string
@@ -81,13 +83,24 @@ export const resolvePublicChannel = async (
  }
 
  if (!apiKey) {
+  const fixture = resolveFromFixture(handleInput)
+  if (fixture) {
+   return {
+    input: handleInput,
+    resolvedChannelId: fixture.channelId,
+    resolvedHandle: fixture.handle,
+    channelTitle: fixture.title,
+    reason: "Fixture data only — not live YouTube analytics.",
+   }
+  }
   return {
    input: handleInput,
    resolvedChannelId: null,
    resolvedHandle: candidate,
    channelTitle: null,
-   reason:
-    "Missing VITE_YOUTUBE_API_KEY (or localStorage yt_public_api_key). Public handle mode needs a Data API key.",
+   reason: fixturesEnabled()
+    ? 'No API key and no fixture for "' + candidate + '". Try @themotionvis or @viewtube_demo, or set localStorage yt_public_api_key.'
+    : "Missing VITE_YOUTUBE_API_KEY (or localStorage yt_public_api_key). Public handle mode needs a Data API key.",
   }
  }
 
@@ -148,9 +161,15 @@ export const fetchPublicChannelSnapshot = async (
  handleInput: string,
 ): Promise<PublicChannelSnapshot | null> => {
  const resolved = await resolvePublicChannel(handleInput)
- if (!resolved.resolvedChannelId) return null
-
  const apiKey = getApiKey()
+ const candidate = extractHandleLike(handleInput)
+ if (resolved.resolvedChannelId?.startsWith("UC_FIXTURE_") || !apiKey) {
+  if (candidate) {
+   const fixture = snapshotFromFixture(candidate) || snapshotFromFixture(handleInput)
+   if (fixture) return fixture
+  }
+ }
+ if (!resolved.resolvedChannelId) return null
  if (!apiKey) return null
 
  const channelId = resolved.resolvedChannelId
@@ -213,6 +232,7 @@ export const fetchPublicChannelSnapshot = async (
 
  return {
   mode: "public_handle",
+  source: "youtube_data_api_public",
   fetchedAt: new Date().toISOString(),
   channelId,
   handle: channel.snippet?.customUrl || resolved.resolvedHandle || null,
