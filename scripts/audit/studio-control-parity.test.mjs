@@ -41,11 +41,11 @@ test("click growth animation targets the SVG glyph only", () => {
 });
 
 
-test("input and textarea focus retain the primary inline glyph stroke", () => {
-  assert.match(css, /--vt-field-text-stroke-focus:\s*var\(--vt-field-primary\)/);
-  assert.match(css, /--vt-field-caret-focus:\s*#000/);
-  assert.match(fields, /input\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
-  assert.match(fields, /textarea\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
+test("input and textarea focus use black text/glyph stroke and retain the primary caret", () => {
+  assert.match(css, /--vt-field-text-stroke-focus:\s*#000/);
+  assert.match(css, /--vt-field-caret-focus:\s*var\(--vt-field-primary\)/);
+  assert.match(fields, /input\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-text-stroke-focus/);
+  assert.match(fields, /textarea\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-text-stroke-focus/);
   // A read-only StudioTextBox has its own display-copy focus rule; do not
   // confuse that rule with the editable input/textarea focus contract.
   const editableFocusRules = fields
@@ -53,7 +53,7 @@ test("input and textarea focus retain the primary inline glyph stroke", () => {
     .filter((rule) => /(?:input|textarea)\[data-vt-studio-control="true"\]/.test(rule) && /:focus/.test(rule))
     .join("}");
   assert.ok(editableFocusRules.length > 0, "editable field focus rules must be present");
-  assert.doesNotMatch(editableFocusRules, /-webkit-text-stroke-color:\s*#000\s*!important/);
+  assert.match(editableFocusRules, /-webkit-text-stroke-color:\s*var\(--vt-field-text-stroke-focus\)/);
 });
 
 test("floating-label risen typography uses one shared token pair while rest labels retain field-size tokens", () => {
@@ -104,7 +104,7 @@ test("the five-tier size contract is complete and generated CSS stays in parity"
     assert.match(generated, new RegExp(`--vt-studio-${tier}-height:\\s*${height}px`), `${tier} height must be emitted`);
     assert.match(generated, new RegExp(`--vt-studio-${tier}-font-size:\\s*${font}px`), `${tier} font size must be emitted`);
     assert.match(generated, new RegExp(`--vt-studio-${tier}-icon-size:\\s*${icon}px`), `${tier} icon size must be emitted`);
-    assert.match(core, new RegExp(`data-size="${tier}"[\\s\\S]*?--vt-studio-control-height:[^;]*`), `${tier} must resolve to core control geometry`);
+    assert.match(css, new RegExp(`data-size="${tier}"[\\s\\S]*?--vt-studio-control-height:[^;]*`), `${tier} must resolve to canonical system control geometry`);
   }
 });
 
@@ -136,4 +136,19 @@ test("top direct-representative module covers the full explicitly exported contr
     assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"\\b`), `${primitive} needs a direct top-module specimen`);
   }
   assert.doesNotMatch(representative, /data-vt-library-component="(?:StudioCollapsingSplitModule|StudioCollapsingTwoLineModule|StudioInterModule|StudioSplitAccordion)"/);
+});
+
+
+test("size-tier ownership is centralized and Micro inherits Mini's shared styling contract", () => {
+  const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8");
+  assert.match(tokens, /micro: \{[^}]*letterSpacing: -0\.02/);
+  assert.match(css, /data-size="supreme"[\s\S]*?supreme-stroke, 3px[\s\S]*?supreme-radius, 6px/);
+  assert.match(css, /data-size="micro"[\s\S]*?micro-stroke, 1\.5px[\s\S]*?micro-radius, 3px[\s\S]*?micro-text-stroke, 0\.4px/);
+  assert.match(css, /data-size="micro"[\s\S]*?vt-studio-mini-focus-outline-width, 0\.975px/);
+  assert.doesNotMatch(css, /\.vt-studio-value-toggle\[data-size="micro"\] \{[^}]*border-width: 1px|\.vt-studio-value-toggle--double\[data-size="micro"\] \{[^}]*control-stroke: 1px/);
+  assert.doesNotMatch(core, /data-size="(?:supreme|standard|compact|mini|micro)"\s*\{/);
+  assert.doesNotMatch(recovery, /\[data-vt-studio-control\]\[data-size="(?:supreme|standard|compact|mini|micro)"\]\s*\{/);\n  assert.doesNotMatch(recovery, /\.vt-studio-split-text-input(?:__field)?\s*\{/);
+  assert.match(generated, /--vt-studio-mini-font-size: 17\.5px/);
+  assert.match(generated, /--vt-studio-mini-icon-size: 17\.5px/);
+  assert.match(generated, /--vt-studio-textarea-mini-font-size: 17\.5px/);
 });
