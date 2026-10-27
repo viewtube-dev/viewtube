@@ -14,7 +14,7 @@ const jsonResponse = (payload: unknown) => ({
   json: async () => payload,
 }) as Response
 
-describe("public channel mode fixtures", () => {
+describe("public channel mode public ingestion and fixtures", () => {
   beforeEach(() => {
     storage.clear()
     vi.stubGlobal("localStorage", mockStorage)
@@ -47,8 +47,40 @@ describe("public channel mode fixtures", () => {
     storage.set("vt_public_handle_fixtures", "1")
     const resolved = await resolvePublicChannel("@unknown_channel")
     expect(resolved.resolvedChannelId).toBeNull()
-    expect(resolved.reason).toContain("no fixture")
+    expect(resolved.reason).toMatch(/no fixture|Public channel ingestion/i)
     expect(await fetchPublicChannelSnapshot("@unknown_channel")).toBeNull()
+  })
+
+
+  it("resolves and snapshots a public handle without login or a YouTube Data API key", async () => {
+    const snapshot = {
+      mode: "public_handle",
+      source: "public_page",
+      fetchedAt: "2026-10-27T12:00:00.000Z",
+      channelId: "UC1234567890123456789012",
+      handle: "@public_creator",
+      title: "Public Creator",
+      subscriberCount: null,
+      videoCount: null,
+      viewCount: null,
+      topVideos: [{ videoId: "abc123", title: "Latest upload", publishedAt: "2026-10-26T12:00:00.000Z", viewCount: null, likeCount: null, commentCount: null }],
+    }
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse({
+      resolution: { resolvedChannelId: snapshot.channelId, resolvedHandle: snapshot.handle, channelTitle: snapshot.title, reason: null },
+      snapshot,
+    }))
+    vi.stubGlobal("fetch", fetchMock)
+
+    const resolved = await resolvePublicChannel("@public_creator")
+    expect(resolved).toMatchObject({
+      resolvedChannelId: snapshot.channelId,
+      resolvedHandle: snapshot.handle,
+      channelTitle: snapshot.title,
+      reason: null,
+    })
+    const ingested = await fetchPublicChannelSnapshot("@public_creator")
+    expect(ingested).toMatchObject({ source: "public_page", channelId: snapshot.channelId, topVideos: snapshot.topVideos })
+    expect(fetchMock).toHaveBeenCalledWith("/public-channel/resolve?handle=%40public_creator", { headers: { Accept: "application/json" } })
   })
 
   it("keeps a supplied real local API key on the live path", async () => {
@@ -68,6 +100,6 @@ describe("public channel mode fixtures", () => {
   it("does not enable fixtures by default in production", async () => {
     const resolved = await resolvePublicChannel("@themotionvis")
     expect(resolved.resolvedChannelId).toBeNull()
-    expect(resolved.reason).toContain("Missing VITE_YOUTUBE_API_KEY")
+    expect(resolved.reason).toContain("Public channel ingestion is unavailable")
   })
 })

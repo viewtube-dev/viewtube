@@ -16,7 +16,7 @@ export interface PublicChannelSnapshot {
  subscriberCount: number | null
  videoCount: number | null
  viewCount: number | null
- source?: "youtube_data_api_public" | "fixture"
+ source?: "youtube_data_api_public" | "public_page" | "fixture"
  topVideos: Array<{
   videoId: string
   title: string
@@ -66,6 +66,30 @@ const getApiKey = (): string | null => {
  return null
 }
 
+type PublicPageIngestionPayload = {
+ resolution?: { resolvedChannelId?: string | null; resolvedHandle?: string | null; channelTitle?: string | null; reason?: string | null }
+ snapshot?: PublicChannelSnapshot
+}
+
+const fetchPublicPageIngestion = async (handleInput: string): Promise<PublicPageIngestionPayload | null> => {
+ const configuredBase = String(import.meta.env.VITE_BILLING_API_BASE || "").replace(/\/$/, "")
+ const query = `?handle=${encodeURIComponent(handleInput)}`
+ const urls = configuredBase
+  ? [`${configuredBase}/public-channel/resolve${query}`, `${configuredBase}/api/public-channel${query}`]
+  : [`/public-channel/resolve${query}`, `/api/public-channel${query}`]
+ for (const url of urls) {
+  try {
+   const response = await fetch(url, { headers: { Accept: "application/json" } })
+   if (!response.ok) continue
+   const payload = await response.json() as PublicPageIngestionPayload
+   if (payload.resolution?.resolvedChannelId || payload.snapshot?.channelId) return payload
+  } catch {
+   // Try the other supported deployment route, then allowlisted local fixtures.
+  }
+ }
+ return null
+}
+
 export const resolvePublicChannel = async (
  handleInput: string,
 ): Promise<PublicChannelResolution> => {
@@ -83,6 +107,20 @@ export const resolvePublicChannel = async (
  }
 
  if (!apiKey) {
+  try {
+   const payload = await fetchPublicPageIngestion(handleInput)
+   if (payload?.resolution?.resolvedChannelId) {
+    return {
+     input: handleInput,
+     resolvedChannelId: payload.resolution.resolvedChannelId,
+     resolvedHandle: payload.resolution.resolvedHandle || candidate,
+     channelTitle: payload.resolution.channelTitle || null,
+     reason: null,
+    }
+   }
+  } catch {
+   // Local fixture fallback remains available when the public ingestion route is not hosted.
+  }
   const fixture = resolveFromFixture(handleInput)
   if (fixture) {
    return {
@@ -99,8 +137,8 @@ export const resolvePublicChannel = async (
    resolvedHandle: candidate,
    channelTitle: null,
    reason: fixturesEnabled()
-    ? 'No API key and no fixture for "' + candidate + '". Try @themotionvis or @viewtube_demo, or set localStorage yt_public_api_key.'
-    : "Missing VITE_YOUTUBE_API_KEY (or localStorage yt_public_api_key). Public handle mode needs a Data API key.",
+    ? 'Public channel ingestion could not resolve "' + candidate + '" and no fixture matched.'
+    : "Public channel ingestion is unavailable. This path uses public channel pages and RSS, not a YouTube Data API key; confirm the /api/public-channel route is deployed.",
   }
  }
 
@@ -160,8 +198,16 @@ export const resolvePublicChannel = async (
 export const fetchPublicChannelSnapshot = async (
  handleInput: string,
 ): Promise<PublicChannelSnapshot | null> => {
- const resolved = await resolvePublicChannel(handleInput)
  const apiKey = getApiKey()
+ if (!apiKey) {
+  try {
+   const payload = await fetchPublicPageIngestion(handleInput)
+   if (payload?.snapshot?.channelId) return payload.snapshot
+  } catch {
+   // Fall through to allowlisted fixtures for local testing.
+  }
+ }
+ const resolved = await resolvePublicChannel(handleInput)
  const candidate = extractHandleLike(handleInput)
  if (resolved.resolvedChannelId?.startsWith("UC_FIXTURE_") || !apiKey) {
   if (candidate) {

@@ -25,7 +25,7 @@ import {
   setStoredIngestMode,
   type IngestMode,
 } from "../services/productArchitecture"
-import { resolvePublicChannel } from "../services/publicHandleMode"
+import { fetchPublicChannelSnapshot, resolvePublicChannel } from "../services/publicHandleMode"
 import type { SubscriptionPlanId } from "../services/subscriptionPlans"
 import { SettingsHelpSection } from "./settings/SettingsHelpSection"
 import { ChannelContextSettingsSection } from "./settings/ChannelContextSettingsSection"
@@ -72,7 +72,6 @@ const Settings: React.FC = () => {
   const query = new URLSearchParams(location.search)
   const activePanel = resolveSettingsPanel(query.get("panel"))
   const entitlement = getCurrentEntitlement()
-  const isBasicPlan = entitlement.subscriptionPlanId === "basic"
   const canViewGeminiKey = entitlement.tier === "large" || isOwnerEmail(currentEmail)
   const showInternalOpsLink = isOwnerEmail(currentEmail)
   const profileName = account.snapshot.profile.displayName || authState.channelName || ""
@@ -170,16 +169,22 @@ const Settings: React.FC = () => {
   const handlePublicResolve = async () => {
     setHandleStatus("Resolving channel...")
     try {
-      const result = await resolvePublicChannel(handleInput)
+      const snapshot = await fetchPublicChannelSnapshot(handleInput)
+      const result = snapshot
+        ? { resolvedChannelId: snapshot.channelId, resolvedHandle: snapshot.handle, channelTitle: snapshot.title, reason: null }
+        : await resolvePublicChannel(handleInput)
       if (!result.resolvedChannelId) {
         setHandleStatus(result.reason || "Channel not resolved.")
         return
       }
-      setHandleStatus(`Resolved: ${result.channelTitle || "Unknown Channel"} (${result.resolvedChannelId})`)
       setIngestMode("public_handle")
       setStoredIngestMode("public_handle")
       localStorage.setItem("vt_public_channel_id", result.resolvedChannelId)
       if (result.resolvedHandle) localStorage.setItem("vt_public_channel_handle", result.resolvedHandle)
+      if (snapshot) localStorage.setItem("vt_public_channel_snapshot", JSON.stringify(snapshot))
+      setHandleStatus(
+        `Selected public channel: ${result.channelTitle || "Channel"} · ${snapshot?.topVideos.length || 0} recent public videos ingested. ${snapshot?.source === "public_page" ? "No login or YouTube Data API key used." : result.reason || "Public source only."}`,
+      )
     } catch (error) {
       setHandleStatus(`Resolve failed: ${error instanceof Error ? error.message : String(error)}`)
     }
@@ -311,7 +316,7 @@ const Settings: React.FC = () => {
       <UnifiedAccountSettingsSection
         activePanel={activePanel}
         billingStatus={billingStatus}
-        canResolvePublicHandle={isBasicPlan}
+        canResolvePublicHandle={true}
         canViewGeminiKey={canViewGeminiKey}
         channelConnection={{ ...channelConnection, isConnected: connected, settingsLabel: account.label, state: account.pending ? "authorizing" : channelConnection.state }}
         currentEmail={currentEmail}
