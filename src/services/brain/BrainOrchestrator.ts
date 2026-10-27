@@ -637,6 +637,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    audienceIntelligence,
    algorithmIntelligence,
    creatorContext,
+   channelContext: savedChannelContext,
   })
   renderedEvidenceRecords = promptEvidenceRecords.filter((record) =>
    context.systemInstruction.includes(record.id),
