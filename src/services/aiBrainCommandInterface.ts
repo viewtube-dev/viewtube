@@ -1,4 +1,5 @@
 import type { ChannelContextProfile } from "../context/ChannelContextProfile"
+import type { PublicChannelSnapshot } from "./publicHandleMode"
 import { resolveChannelContextForActiveChannel } from "../context/channelContextScope"
 import type {
  AuthState,
@@ -203,6 +204,25 @@ export type AIBrainContextSnapshot = {
  }
 }
 
+const readStoredPublicChannelSnapshot = (): PublicChannelSnapshot | null => {
+ try {
+  if (typeof localStorage === "undefined") return null
+  const raw = localStorage.getItem("vt_public_channel_snapshot")
+  if (!raw) return null
+  const value = JSON.parse(raw) as Partial<PublicChannelSnapshot>
+  if (value.mode !== "public_handle" || typeof value.channelId !== "string" || !value.channelId.trim() || !Array.isArray(value.topVideos)) return null
+  return { mode: "public_handle", fetchedAt: typeof value.fetchedAt === "string" ? value.fetchedAt : "", channelId: value.channelId, handle: typeof value.handle === "string" ? value.handle : null, title: typeof value.title === "string" ? value.title : null, subscriberCount: null, videoCount: null, viewCount: null, source: value.source === "public_page" ? "public_page" : value.source === "fixture" ? "fixture" : "youtube_data_api_public",
+   topVideos: value.topVideos.filter((video) => Boolean(video && typeof video.videoId === "string" && typeof video.title === "string")).map((video) => ({ videoId: video.videoId, title: video.title, publishedAt: typeof video.publishedAt === "string" ? video.publishedAt : "", viewCount: null, likeCount: null, commentCount: null })) }
+ } catch { return null }
+}
+const publicSnapshotMatchesActiveChannel = (p: PublicChannelSnapshot | null, id: string | null, handle: string | null, name: string | null): p is PublicChannelSnapshot => {
+ if (!p || (id && id !== p.channelId)) return false
+ const norm = (v: string | null) => { const t = String(v || "").trim(); return (t.startsWith("@") ? t.slice(1) : t).toLowerCase() }
+ if (norm(p.handle) && norm(handle) && norm(p.handle) !== norm(handle)) return false
+ if (!id && !p.handle && norm(p.title) && norm(name) && norm(p.title) !== norm(name)) return false
+ return true
+}
+const publicChannelEvidenceVideo = (v: PublicChannelSnapshot["topVideos"][number]): AIBrainEvidenceVideo => ({ id: "public:" + v.videoId, evidenceId: "public-video:" + v.videoId, title: cleanProfileText(v.title) || "Untitled public video", publishedAt: cleanProfileText(v.publishedAt) || null, format: null, descriptionSnippet: null, tags: [], metrics: { views: null, watchTime: null, subscribers: null, revenue: null, ctr: null, averagePercentageViewed: null, likes: null, comments: null } })
 export type AIBrainContextInput = {
  brain: WorkspaceBrain
  authState: AuthState
@@ -1057,8 +1077,25 @@ export const buildAIBrainContextSnapshot = ({
  now = new Date(),
 }: AIBrainContextInput): AIBrainContextSnapshot => {
  const snapshot = applyVtSyncPrivacyFilters(vtSyncSnapshot || getVtSyncSnapshot())
+ const activeChannelId = snapshot.channelId || null
+ const activeChannelHandle = authState.channelHandle || brain.channelProfile?.channelHandle || null
+ const activeChannelName = authState.channelName || brain.channelProfile?.name || null
+ const storedPublicSnapshot = readStoredPublicChannelSnapshot()
+ const publicChannelSnapshot = publicSnapshotMatchesActiveChannel(storedPublicSnapshot, activeChannelId, activeChannelHandle, activeChannelName) ? storedPublicSnapshot : null
+ const publicVideos = (publicChannelSnapshot?.topVideos || []).filter((v) => v.videoId && v.title.trim()).map(publicChannelEvidenceVideo)
  const vtSyncBrainContext = buildVtSyncBrainContext(snapshot)
  const evidencePack = buildAIBrainEvidencePack(requestText, snapshot)
+ if (publicChannelSnapshot && publicVideos.length) {
+  const existingIds = new Set([...evidencePack.topVideos, ...evidencePack.recentVideos].map((v) => v.evidenceId))
+  const newPublicVideos = publicVideos.filter((v) => !existingIds.has(v.evidenceId))
+  if (!snapshot.videos.length) { evidencePack.topVideos = publicVideos.slice(0, 10); evidencePack.recentVideos = publicVideos.slice(0, 10) }
+  else evidencePack.recentVideos = [...evidencePack.recentVideos, ...newPublicVideos].slice(0, 25)
+  evidencePack.items = Array.from(new Map([...evidencePack.items, ...newPublicVideos.map((v) => ({ id: v.evidenceId, label: v.title, source: "public YouTube metadata", detail: v.publishedAt ? "published " + v.publishedAt + "; performance metrics unavailable" : "performance metrics unavailable" }))].map((item) => [item.id, item])).values()).slice(0, 50)
+  evidencePack.evidenceIds = Array.from(new Set([...evidencePack.evidenceIds, ...newPublicVideos.map((v) => v.evidenceId)]))
+  evidencePack.channelId = publicChannelSnapshot.channelId; evidencePack.channelName = publicChannelSnapshot.title || publicChannelSnapshot.handle || evidencePack.channelName; evidencePack.capturedAt = publicChannelSnapshot.fetchedAt || evidencePack.capturedAt
+  evidencePack.dataStatus = snapshot.videos.length ? evidencePack.dataStatus : "partial"
+  evidencePack.missingInputs = Array.from(new Set([...evidencePack.missingInputs.filter((v) => v !== "synced video inventory"), ...(snapshot.videos.length ? [] : ["public video metadata only; performance metrics unavailable"])]))
+ }
  const inferredProfile = buildInferredProfileSnapshot({
   brain,
   authState,
@@ -1068,6 +1105,14 @@ export const buildAIBrainContextSnapshot = ({
   brainOnboardingSnapshot,
   now,
  }, snapshot)
+ if (publicChannelSnapshot && publicVideos.length) {
+  const titles = new Set(inferredProfile.topEvidenceVideos.map((v) => v.title.toLowerCase()))
+  inferredProfile.topEvidenceVideos = [...inferredProfile.topEvidenceVideos, ...publicVideos.filter((v) => !titles.has(v.title.toLowerCase())).slice(0, 10).map((v) => ({ title: v.title, views: null, publishedAt: v.publishedAt }))].slice(0, 10)
+  inferredProfile.videoCount = Math.max(inferredProfile.videoCount, publicChannelSnapshot.topVideos.length)
+  if (inferredProfile.status === "missing") inferredProfile.status = "partial"
+  if (inferredProfile.summary === "No inferred channel profile is available yet.") inferredProfile.summary = "Public channel titles are available for creative context; channel performance metrics and a verified niche profile are not available."
+  inferredProfile.contextBlock = [inferredProfile.contextBlock || "", "Public channel metadata: titles and publish dates only. Not verified ownership signals; no performance analytics."].filter(Boolean).join(" ")
+ }
  const commands = listBrainCommandActions()
  const generations = listGenerationRecords()
  const workflows = listWorkflowChains()
@@ -1123,6 +1168,7 @@ export const buildAIBrainContextSnapshot = ({
    sourceStatus("ai-journal", "AI Journal", journalEntries, `${journalEntries} journal entries.`),
    sourceStatus("goals", "Goals", safeArrayLength((brain as unknown as { goalTargets?: unknown[] }).goalTargets), "Dashboard goals and creator targets."),
    sourceStatus("daily-tasks", "Daily Tasks", dayTasks, `${dayTasks} calendar task buckets with entries.`),
+   ...(publicChannelSnapshot ? [{ id: "public-channel", label: "Public Channel Metadata", status: publicVideos.length ? "partial" as const : "missing" as const, detail: publicVideos.length ? publicVideos.length + " public video titles available; performance metrics are not included." : "A public channel is selected, but no public video titles were ingested." }] : []),
    {
     id: "vt-sync",
     label: "Channel Data",
