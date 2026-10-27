@@ -1717,7 +1717,7 @@ const AIBrainCommandInterface: React.FC = () => {
        <BrainPageTabs activeTab={pageTab} onChange={setPageTab} />
        <BrainHubUtilityRow
         size="compact"
-        promptLauncherRef={promptLauncherRef}
+        showPrompts={false}
         contextLauncherRef={contextLauncherRef}
         onOpenPrompts={() => { setContextRailOpen(false); setLauncherMode("prompts"); setPromptRailOpen(true) }}
         onOpenContext={() => { setPromptRailOpen(false); setContextRailOpen(true) }}
