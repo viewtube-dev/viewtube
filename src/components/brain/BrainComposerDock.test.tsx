@@ -1,4 +1,6 @@
 import React from "react"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it, vi } from "vitest"
 import { BrainComposerDock } from "./BrainComposerDock"
@@ -18,25 +20,24 @@ const renderComposer = (overrides: Partial<React.ComponentProps<typeof BrainComp
   )
 
 describe("BrainComposerDock", () => {
-  it("keeps the message field primary and capability entry points concise", () => {
+  it("keeps the textarea dominant and places Prompts and Send as split-left actions beside it", () => {
     const html = renderComposer()
+    const css = readFileSync(resolve(process.cwd(), "src/components/brain/BrainComposerDock.css"), "utf8")
 
     expect(html).toContain('aria-label="Brain message composer"')
-    expect(html).toContain("vt-brain-composer-dock")
-    expect(html).toContain("vt-brain-composer-input")
-    expect(html).toContain("vt-brain-composer-send")
-    expect(html).toContain('role="group" aria-label="Brain tools"')
-    expect(html).toContain('aria-haspopup="dialog"')
-    expect(html).toContain('data-vt-composer-layout="toolbar-actions"')
-    expect(html.indexOf('placeholder="What would you like to work on?"')).toBeLessThan(html.indexOf('aria-label="Open Prompt Library"'))
-    expect(html).toContain('placeholder="What would you like to work on?"')
-    expect(html).toContain('aria-label="Open Prompt Library"')
-    expect(html).toContain('aria-label="Open Brain capabilities"')
-    expect(html).toContain('aria-label="Open channel context"')
-    expect(html).toContain('aria-label="Open AI Journal"')
+    expect(html).toContain('data-vt-composer-layout="inline-actions"')
+    expect(html).toContain('aria-label="Message to ViewTube Brain"')
+    expect(html).toContain('data-vt-brain-component="BrainComposerPromptLibraryAction"')
+    expect(html).toContain('aria-label="Open prompt library"')
+    expect(html).toContain('data-vt-brain-component="BrainComposerSendAction"')
+    expect(html).toContain('aria-label="Send message"')
+    expect(html.indexOf('aria-label="Message to ViewTube Brain"')).toBeLessThan(html.indexOf('aria-label="Open prompt library"'))
+    expect(html.indexOf('aria-label="Open prompt library"')).toBeLessThan(html.indexOf('aria-label="Send message"'))
+    expect(css).toContain('grid-template-columns: minmax(0, 4.4fr) minmax(0, 1fr)')
+    expect(css).toContain('grid-template-rows: repeat(2, minmax(0, 1fr))')
+    expect(css).toContain('gap: 4px')
     expect(html).toContain("Enter to send")
     expect(html).toContain("Shift+Enter for a new line")
-    expect(html).not.toContain("Ask about your next video, audience, analytics, goals, SEO, or publishing")
   })
 
   it("does not enable send for an empty or whitespace-only draft", () => {
