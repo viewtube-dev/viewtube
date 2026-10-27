@@ -75,6 +75,7 @@ import {
  dismissAIBrainLearning,
 } from "../services/aiBrainSelfImprovement"
 import { runBrainTask } from "../services/brain/runtime/BrainRuntime"
+import { resolveActiveBrainProject } from "../services/brain/resolveActiveBrainProject"
 import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommunicationIngestion"
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
@@ -1263,11 +1264,7 @@ const AIBrainCommandInterface: React.FC = () => {
     channelContext: loadAiBrainContext().channelContext,
    })
    const historyPayload = buildBrainConversationHistory(recentTurns)
-   const activeProject = projectContextCleared
-    ? null
-    : brain.projects.find((project) => project.id === brain.activeProjectId)
-     || brain.projects.find((project) => project.status === "active")
-     || null
+   const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
    if (channelId) {
     const communicationControls = readBrainUserControls(channelId)
     if (communicationControls.enabled && communicationControls.personalization && communicationControls.learnFromInteractions && communicationControls.captureCreatorCommunications) {
@@ -1375,9 +1372,7 @@ const AIBrainCommandInterface: React.FC = () => {
      channelContext: loadAiBrainContext().channelContext,
     })
     const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
-    const activeProject = brain.projects.find((project) => project.id === brain.activeProjectId)
-     || brain.projects.find((project) => project.status === "active")
-     || null
+    const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
 
     const result = await runBrainTask({
      surface: "ai-brain",
