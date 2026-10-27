@@ -41,7 +41,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 | Font synthesis | Disabled for badge labels where supported, so synthetic light styles do not override the heavy weight |
 | Text transform | Uppercase for control labels and tags |
 | Letter spacing | `-0.02em`; only named component exceptions may differ |
-| Baseline line-height | `1` (shared default for single-line controls and multiline areas) |
+| Baseline line-height | `1` for single-line controls; textarea multiline exception is `0.85` from the multiline token |
 | Primary color | `--pair-a` |
 | Secondary color | `--pair-b` |
 | Default fill | Fields use 50% primary fill at rest and 15% on focus. Solid button/badge/action faces may use 100% primary only where their family contract explicitly specifies a solid face; do not generalize that exception to fields or all controls. |
@@ -61,7 +61,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 ## 2. Size-based global defaults
 
-The intended size contract is Supreme (60px / 3px / 6px / 51.82px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1.5px / 3px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro reuses the Mini stroke/radius system. Source/document drift is listed in the audit note at the end of this document.
+The intended size contract is Supreme (60px / 3px / 6px / 51.82px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1.5px / 3px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro reuses the Mini stroke/radius system. Global line-height `1` remains the single-line default; textarea uses the explicit multiline exception `0.85`.
 
 | Property | Supreme | Standard | Compact | Mini | Micro |
 |---|---:|---:|---:|---:|
@@ -146,8 +146,8 @@ These are content-driven components, not fixed-width row controls. Their intrins
 ### Multiline textarea (registered typography exception)
 
 - Alignment: left; text starts at the top of the writing area with normal multiline padding.
-- Standard type: 18px, weight 1000, 0.5px text stroke, default line-height (`1`).
-- Compact type: 14px, weight 1000, 0.35px text stroke, default line-height (`1`).
+- Standard type: 18px, weight 1000, 0.5px text stroke, multiline line-height (`0.85`).
+- Compact type: 14px, weight 1000, 0.35px text stroke, multiline line-height (`0.85`).
 - Minimum writing surface: 92px.
 - Resize: vertical.
 - Geometry still follows the selected size tier: standard 44px family / 3px border / 6px radius; compact 28px family / 2px border / 4px radius. The 92px minimum surface may make the textarea taller than the nominal one-line control height.
@@ -166,7 +166,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Vault spectrum tag | 15px high, 2px border, 4px radius, 8px type, weight 900, 0.3px letter spacing; alphabetical spectrum fill mixed 35% with white; resolved spectrum text/border color | Dense asset-vault metadata chip with an established spectrum-color identity |
 | Closeable badge | Named family exception: 20px pill height, no outer border, 16px Inter 1000 uppercase label, primary fill, 16px secondary close control with primary glyph | Dense removable metadata chip; this fixed geometry does not redefine the global five-tier lattice |
 | Tag editor plus/check action | Compact 28px face, 2px stroke, 4px radius, no shadow | Dense inline tag-editing affordance; action remains square |
-| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, default line-height (`1`), min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
+| Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, line-height `0.85`, min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
 | Prominent action button | Supreme 60px by default; standard/compact variants use shared tier tokens; flat shell, no shadow | Workflow emphasis is a component role, not a separate 56px geometry tier |
 | Switch/choice geometry | 44px reference uses 7.333px rectangular radius, 1.72:1 switch track, and the exact handle/indicator ratios in §3 | Matches the supplied 44px HTML reference; does not redefine ordinary button/field radius |
 | Icon preset variants | Default large preset is 38px / 1.9 standard and 24px / 2.0 compact; moderate 34px/22px and compact 28px/18px are opt-in only | Optional icon density must not silently become the global default |
