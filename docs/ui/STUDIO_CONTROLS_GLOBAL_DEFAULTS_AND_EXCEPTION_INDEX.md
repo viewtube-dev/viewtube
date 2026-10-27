@@ -1,7 +1,7 @@
 # Studio Controls — Definitive Global Defaults, Size Contract & Primitive Exceptions
 
 **Status:** Canonical requirements reference; implementation and rendered verification must be checked against the source files below.  
-**Reviewed:** 2026-10-20  
+**Reviewed:** 2026-10-27  
 **Repository:** `viewtube-dev/viewtube`  
 **Work branch:** `master/consolidated-feature-integration` (canonical integration target)  
 **Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/studio-ui/primitives/StudioSplitAccordion.tsx`, `src/styles/studio-control-system.css`, `src/styles/studio-split-accordion.css`  
@@ -308,3 +308,8 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 - Global size selectors: `src/styles/studio-control-system.css` only; core and recovery styles must not reintroduce tier geometry.
 - Split input: the component imports its shell stylesheet. Shared field rules own matching text typography, rest/focus colors, caret, and text stroke. The split shell owns its outer border, rails, persistent inset geometry, and focus outline routing.
 - Preferred maintenance: remove duplicate/stale declarations and use existing token variables before adding CSS. Each real exception needs one owner and a matching catalog/documentation entry.
+
+
+## Simplification ownership rule — 2026-10-27
+
+The token source in `src/studio-ui/tokens.ts` is authoritative. The emitter must derive tier values from that source; generated CSS is never hand-edited. Shared tier aliases and global shell defaults must have one CSS owner, while field appearance, split anatomy, and accordion motion remain in their family sheets. Do not remove recovery/parity styles until their required selectors have been migrated and covered by ownership tests. Preserve Mini's 17.5px type/icons and Micro's Mini-matched stroke/radius/outline (1.5px / 3px / 0.975px). Global letter-spacing remains `-0.02em`; field defaults retain the black outer border, primary inset stroke, primary caret, and black focused text/glyph stroke with secondary zero-offset outline.
