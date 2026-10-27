@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { BRAIN_CAPABILITY_REGISTRY, BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS } from "../services/brain/BrainCapabilityRegistry"
 import { getBrainCapabilityGroups } from "./BrainControlsPage"
+import { capabilityPromptFor } from "../components/brain/BrainCapabilityBrowser"
 
 describe("Brain controls capability discovery", () => {
   it("surfaces every registered capability exactly once", () => {
@@ -8,6 +9,15 @@ describe("Brain controls capability discovery", () => {
     expect(surfaced).toHaveLength(BRAIN_CAPABILITY_REGISTRY.length)
     expect(new Set(surfaced).size).toBe(surfaced.length)
     expect([...surfaced].sort()).toEqual(BRAIN_CAPABILITY_REGISTRY.map(capability => capability.id).sort())
+  })
+
+  it("creates a non-executing composer draft for every capability", () => {
+    for (const capability of BRAIN_CAPABILITY_REGISTRY) {
+      const prompt = capabilityPromptFor(capability)
+      expect(prompt).toContain(capability.label.toLowerCase())
+      expect(prompt).toContain(capability.description)
+      expect(prompt).toContain("Do not claim this capability ran")
+    }
   })
 
   it("provides a discoverable title, description, intents, and invocation limit for every capability", () => {
