@@ -24,7 +24,7 @@ export const StudioComponentGrid = React.forwardRef<HTMLDivElement, StudioCompon
     return <div ref={ref} className={["vt-studio-component-grid", className].filter(Boolean).join(" ")}
       data-vt-studio-component-grid="true" data-size={size} data-corners={corners} data-cols={c} data-rows={r}
       role="group" aria-label={ariaLabel}
-      style={{ ["--scg-cols" as string]: String(c), ["--scg-rows" as string]: String(r), ...(gap != null ? { ["--scg-gap" as string]: `${gap}px` } : {}), ...style }}>
+      style={{ ["--scg-cols" as string]: String(c), ["--scg-rows" as string]: String(r), ...(gap != null ? { ["--scg-gap" as string]: `${gap}px` } : {}), ...style } as React.CSSProperties}>
       {children}
     </div>;
   },
