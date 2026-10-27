@@ -79,6 +79,7 @@ export const ChannelContextSettingsSection: React.FC = () => {
               const arrayField = ["subNiches", "competitors", "priorityRanking", "offers", "segments", "types", "bestFormats", "priorityThemes", "blockedThemes", "influences", "sources", "capabilities"].includes(question.contextField.split(".")[1])
               return (
                 <label key={question.id} className="min-w-0 space-y-1">
+                  {question.description ? <span className="block text-xs opacity-75">{question.description}</span> : null}
                   <span className="flex items-start gap-2 text-sm font-bold">
                     <span className="min-w-0 flex-1">{question.title}</span>
                     {question.required ? <span aria-label="Required" className="shrink-0 text-xs">REQUIRED</span> : <span className="shrink-0 text-xs opacity-60">OPTIONAL</span>}
