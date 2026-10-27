@@ -9,8 +9,8 @@ export const resolveChannelContextForActiveChannel = (
   profile: ChannelContextProfile | null | undefined,
   activeChannelLabel: string | null | undefined,
 ): ChannelContextProfile | null => {
-  const profileName = profile?.identity?.name?.trim().replace(/\\s+/g, " ").toLocaleLowerCase()
-  const activeName = activeChannelLabel?.trim().replace(/\\s+/g, " ").toLocaleLowerCase()
+  const profileName = profile?.identity?.name?.trim().replace(/\s+/g, " ").toLocaleLowerCase()
+  const activeName = activeChannelLabel?.trim().replace(/\s+/g, " ").toLocaleLowerCase()
   if (!profile || !profileName || !activeName || profileName !== activeName) return null
   return profile
 }
