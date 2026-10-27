@@ -41,11 +41,11 @@ test("click growth animation targets the SVG glyph only", () => {
 });
 
 
-test("input and textarea focus retain the primary inline glyph stroke", () => {
-  assert.match(css, /--vt-field-text-stroke-focus:\s*var\(--vt-field-primary\)/);
-  assert.match(css, /--vt-field-caret-focus:\s*#000/);
-  assert.match(fields, /input\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
-  assert.match(fields, /textarea\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-primary/);
+test("input and textarea focus use black text/glyph stroke and retain the primary caret", () => {
+  assert.match(css, /--vt-field-text-stroke-focus:\s*#000/);
+  assert.match(css, /--vt-field-caret-focus:\s*var\(--vt-field-primary\)/);
+  assert.match(fields, /input\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-text-stroke-focus/);
+  assert.match(fields, /textarea\[data-vt-studio-control="true"\][\s\S]*?:focus[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-field-text-stroke-focus/);
   // A read-only StudioTextBox has its own display-copy focus rule; do not
   // confuse that rule with the editable input/textarea focus contract.
   const editableFocusRules = fields
@@ -53,7 +53,7 @@ test("input and textarea focus retain the primary inline glyph stroke", () => {
     .filter((rule) => /(?:input|textarea)\[data-vt-studio-control="true"\]/.test(rule) && /:focus/.test(rule))
     .join("}");
   assert.ok(editableFocusRules.length > 0, "editable field focus rules must be present");
-  assert.doesNotMatch(editableFocusRules, /-webkit-text-stroke-color:\s*#000\s*!important/);
+  assert.match(editableFocusRules, /-webkit-text-stroke-color:\s*var\(--vt-field-text-stroke-focus\)/);
 });
 
 test("floating-label risen typography uses one shared token pair while rest labels retain field-size tokens", () => {
