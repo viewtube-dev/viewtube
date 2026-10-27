@@ -28,6 +28,7 @@ import {
 import { resolvePublicChannel } from "../services/publicHandleMode"
 import type { SubscriptionPlanId } from "../services/subscriptionPlans"
 import { SettingsHelpSection } from "./settings/SettingsHelpSection"
+import { ChannelContextSettingsSection } from "./settings/ChannelContextSettingsSection"
 import { SettingsConfirmationDialog, type SettingsConfirmationKind } from "./settings/SettingsConfirmationDialog"
 import { SettingsWorkspace } from "./settings/SettingsWorkspace"
 import { DashboardWidgetsSettingsSection } from "./settings/DashboardWidgetsSettingsSection"
@@ -362,6 +363,7 @@ const Settings: React.FC = () => {
         showKey={showKey}
       />
 
+      {activePanel === "ai" ? <ChannelContextSettingsSection /> : null}
       {activePanel === "widgets" ? <DashboardWidgetsSettingsSection /> : null}
       {activePanel === "help" ? <SettingsHelpSection onNavigate={navigate} /> : null}
       </SettingsWorkspace>
