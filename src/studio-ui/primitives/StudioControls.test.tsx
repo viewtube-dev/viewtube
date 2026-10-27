@@ -1366,3 +1366,15 @@ describe("collapsing module header geometry", () => {
     expect(css).toContain("Keep collapsed module header geometry identical to the expanded header.")
   })
 })
+
+
+describe("toggle and switch visible backgrounds", () => {
+  it("keeps the switch tracks, word-toggle handles, and value-toggle faces visibly painted in the final CSS layer", () => {
+    const css = readStudioControlCss()
+    expect(css).toContain("Restore visible toggle/switch silhouettes after the final recovery layer.")
+    expect(css).toContain('button[data-vt-studio-control="true"].vt-studio-44-switch')
+    expect(css).toContain(".vt-studio-44-word-toggle .vt-studio-44-word-handle")
+    expect(css).toContain(".vt-studio-value-toggle__face")
+    expect(css).toContain(".vt-studio-value-toggle__bar[data-active=\"true\"]")
+  })
+})
