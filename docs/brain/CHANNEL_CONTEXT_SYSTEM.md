@@ -17,6 +17,12 @@ Answers are creator-provided context, not observed evidence. The graph builder l
 
 The context question registry has 25 questions across identity, goals, audience, content, brand, and intelligence. Array answers are entered as comma-separated values; creativity is constrained to 1–10. The current completion score measures required-answer coverage only; it is not a confidence, readiness, or channel-performance score.
 
+## Phase 2 — Brain prompt integration
+
+The AI Brain chat and retry prompt paths now pass the saved channel profile into `buildAIBrainSystemPrompt`. The prompt formatter emits only non-empty fields, labels them as creator-provided and unverified, includes creator-stated blocked themes, and explicitly says that source/capability preferences do not override runtime authorization. Focused formatter tests cover empty profiles, useful context, and omission of blank claims.
+
+The account simulation default profile also includes the new empty `channelContext` shape. The prompt integration reads the canonical existing profile at each turn, so saved settings edits can affect the next request without introducing a parallel prompt store.
+
 ## Integration boundary
 
 The draft referenced `src/core/context/types` and `src/core/bootstrap/registerDefaultCapabilities.ts`, but those exact paths were not present on the target branch during implementation inspection. This change therefore defines a narrow local graph projection and does not invent or register a parallel capability registry. Capability bootstrap integration must use the actual canonical registry once its current owner/path is verified.
