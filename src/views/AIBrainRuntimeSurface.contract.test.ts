@@ -2,6 +2,8 @@ import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 
 const source = readFileSync(new URL("./AIBrainCommandInterface.tsx", import.meta.url), "utf8")
+const capabilityBrowserSource = readFileSync(new URL("../components/brain/BrainCapabilityBrowser.tsx", import.meta.url), "utf8")
+const promptLibrarySource = readFileSync(new URL("../components/brain/BrainPromptLibrary.tsx", import.meta.url), "utf8")
 const panelSource = readFileSync(new URL("../components/brain/BrainRuntimePanel.tsx", import.meta.url), "utf8")
 const chatPrimitivesSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.tsx", import.meta.url), "utf8")
 const chatPrimitivesCssSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.css", import.meta.url), "utf8")
@@ -142,6 +144,19 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('className="vt-brain-studio-workspace__composer vt-brain-chat-column__dock"')
  })
 
+
+ it("opens a useful prompt category on entry and the chosen category after filtering", () => {
+  expect(promptLibrarySource).toContain('useState<string[]>(() => {')
+  expect(promptLibrarySource).toContain('const firstCategory = cards[0]?.category || "general"')
+  expect(promptLibrarySource).toContain('if (nextCategory !== "all") setOpenCategories([nextCategory])')
+ })
+
+ it("shows capability prerequisites immediately and keeps selection aligned with search results", () => {
+  expect(capabilityBrowserSource).toContain('useState<string | null>(() => BRAIN_CAPABILITY_REGISTRY[0]?.id ?? null)')
+  expect(capabilityBrowserSource).toContain('const matchingCapabilities = filterBrainCapabilities(BRAIN_CAPABILITY_REGISTRY, nextQuery)')
+  expect(capabilityBrowserSource).toContain('setSelectedId(matchingCapabilities[0]?.id ?? null)')
+  expect(capabilityBrowserSource).toContain('selectedAvailability.reason')
+ })
 
  it("does not make the entire transcript a live log that re-announces the full conversation", () => {
   const viewport = chatPrimitivesSource.slice(
