@@ -61,21 +61,21 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 ## 2. Size-based global defaults
 
-The intended size contract is Supreme (60px / 3px / 6px / 51.82px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1.5px / 3px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro reuses the Mini stroke/radius system. Global line-height `1` remains the single-line default; textarea uses the explicit multiline exception `0.85`.
+The intended size contract is Supreme (60px / 3px / 6px / 52px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1.5px / 3px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro reuses the Mini stroke/radius system. Global line-height `1` remains the single-line default; textarea uses the explicit multiline exception `0.85`.
 
 | Property | Supreme | Standard | Compact | Mini | Micro |
 |---|---:|---:|---:|---:|
 | Control height | 60px | 44px | 28px | 20px | 12px |
 | Border/stroke width | 3px | 3px | 2px | 1.5px | 1.5px |
 | Corner radius | 6px | 6px | 4px | 3px | 3px |
-| Text size | 51.82px | 38px | 24px | 17.5px | 10px |
+| Text size | 52px | 38px | 24px | 17.5px | 10px |
 | Text weight | 1000 | 1000 | 1000 | 1000 | 1000 |
 | Text stroke | 1px | 1px | 0.5px | 0.4px | 0.4px |
-| Icon size | 51.82px | 38px | 24px | 17.5px | 10px |
+| Icon size | 52px | 38px | 24px | 17.5px | 10px |
 | Default icon stroke | 1.9 | 1.9 | 2 | 1.6 | 1.6 |
 | Secondary focus-outline width (when applicable) | 1.95px | 1.95px | 1.3px | 0.975px | 0.975px |
 | Standard gap token | 4px external only | 4px | 4px | 4px | 4px |
-| Floating-label height | 51.82px where supported | 38px | 24px | 17.5px where supported | 10px where supported |
+| Floating-label height | 52px where supported | 38px | 24px | 17.5px where supported | 10px where supported |
 | Floating-label raised-offset ratio | 1.2 | 1.2 | 1.2 | 1.2 | 1.2 |
 | Text transform | Uppercase | Uppercase | Uppercase | Uppercase | Uppercase |
 | Letter spacing | -0.02em | -0.02em | -0.02em | -0.02em | -0.02em |
@@ -213,7 +213,7 @@ The split-left button, split-left/right/double badges, and username composite in
 
 ### Stabilized defaults
 
-- Supreme / standard / compact / mini / micro face geometry: 60px / 44px / 28px / 20px / 12px; border: 3px / 3px / 2px / 1.5px / 1.5px; radius: 6px / 6px / 4px / 3px / 3px; typography and icon: 51.82px / 38px / 24px / 17.5px / 10px.
+- Supreme / standard / compact / mini / micro face geometry: 60px / 44px / 28px / 20px / 12px; border: 3px / 3px / 2px / 1.5px / 1.5px; radius: 6px / 6px / 4px / 3px / 3px; typography and icon: 52px / 38px / 24px / 17.5px / 10px.
 - Inter-component gap remains 4px for all tiers; micro is an explicit 12px tier and is not derived by halving Compact.
 - Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
 - Both rails in a double split use the secondary color role.
@@ -274,7 +274,7 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 
 | Concern | Intended contract | Source observation | Status |
 |---|---|---|---|
-| Supreme | 60px height; Standard stroke/radius system (3px / 6px); 51.82px type/icon | TypeScript tokens and recovery CSS agree on 3px / 6px | Source-aligned; browser verification outstanding |
+| Supreme | 60px height; Standard stroke/radius system (3px / 6px); 52px type/icon | TypeScript tokens and recovery CSS agree on 3px / 6px | Source-aligned; browser verification outstanding |
 | Mini type/icon | 20px height; 1.5px / 3px geometry; 17.5px type/icon | Token and generated CSS align; duplicate tier declarations removed from core/recovery | Source aligned; runtime verification outstanding |
 | Micro | 12px; Mini stroke/radius system (1.5px / 3px); 10px type/icon; 0.975px outline; `-0.02em` letter-spacing | Tokens, generated CSS, and system selector align | Source aligned; runtime verification outstanding |
 | Micro letter spacing | Shared `-0.02em` | TypeScript token matches the global contract | Source aligned; runtime verification outstanding |
