@@ -75,7 +75,6 @@ import {
  dismissAIBrainLearning,
 } from "../services/aiBrainSelfImprovement"
 import { runBrainTask } from "../services/brain/runtime/BrainRuntime"
-import { resolveActiveBrainProject } from "../services/brain/resolveActiveBrainProject"
 import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommunicationIngestion"
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
