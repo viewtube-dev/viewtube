@@ -296,6 +296,7 @@ export const buildBrainContextPack = (input: {
   projectContext ? "\nACTIVE PROJECT CONTEXT\n" + projectContext : "",
   creatorStyle ? "\nCREATOR STYLE\n" + creatorStyle : "",
   memory ? "\nCONFIRMED CREATOR CONTEXT\n" + memory : "",
+  channelContext ? "\nCREATOR-PROVIDED CHANNEL CONTEXT\n" + channelContext : "",
   clippedConversation ? "\nRECENT CONVERSATION\n" + clippedConversation : "",
   knowledge ? "\nPUBLIC NICHE KNOWLEDGE\n" + knowledge : "",
   research ? "\nCURRENT PUBLIC RESEARCH\n" + research : "",
