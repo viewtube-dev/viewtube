@@ -10,7 +10,7 @@ const cache = new Map()
 const rateBuckets = new Map()
 
 const validChannelId = (value) => /^UC[a-zA-Z0-9_-]{20,}$/.test(String(value || ""))
-const normalizeInput = (value) => String(value || "").trim().slice(0, 200)
+const normalizeInput = (value) => String(value || "").trim()
 const cacheKey = (value) => createHash("sha256").update(value.toLowerCase()).digest("hex")
 
 export const resetPublicChannelResolverForTests = () => {
@@ -141,9 +141,7 @@ export const handlePublicChannelResolveRoute = async (req, res, options = {}) =>
   const fetchImpl = options.fetchImpl || globalThis.fetch
   const apiKey = String(options.apiKey || process.env.YOUTUBE_DATA_API_KEY || process.env.YOUTUBE_API_KEY || "").trim()
   const now = Date.now()
-  const forwarded = String(req.headers?.["x-forwarded-for"] || "").split(",")[0].trim()
-  const remote = req.socket?.remoteAddress || "unknown"
-  const clientKey = forwarded || remote
+  const clientKey = req.socket?.remoteAddress || "unknown"
   const bucket = rateBuckets.get(clientKey) || { start: now, count: 0 }
   if (now - bucket.start >= RATE_WINDOW_MS) { bucket.start = now; bucket.count = 0 }
   bucket.count += 1
@@ -166,6 +164,7 @@ export const handlePublicChannelResolveRoute = async (req, res, options = {}) =>
     return json(res, 400, { ok: false, code: "INVALID_JSON", message: "Request body must be valid JSON." })
   }
   const input = normalizeInput(body?.input)
+  if (input.length > 200) return json(res, 400, { ok: false, code: "INVALID_CHANNEL_INPUT", message: "Channel input is too long." })
   if (!input) return json(res, 400, { ok: false, code: "INVALID_CHANNEL_INPUT", message: "A channel handle, URL, or ID is required." })
   try {
     const result = await resolveChannel(input, apiKey, fetchImpl)
