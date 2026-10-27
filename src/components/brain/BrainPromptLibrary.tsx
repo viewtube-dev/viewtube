@@ -28,6 +28,18 @@ export const formatBrainPromptCategoryLabel = (category: string): string =>
     .replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
     .replace(/\bSeo\b/g, "SEO")
     .replace(/\bAi\b/g, "AI")
+/** Convert internal category keys into creator-facing labels without changing registry identity. */
+export const formatPromptCategoryLabel = (category: string): string =>
+  category
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/\\d+$/g, "")
+    .replace(/[_-]+/g, " ")
+    .trim()
+    .toLowerCase()
+    .replace(/\\b[a-z]/g, (letter) => letter.toUpperCase())
+    .replace(/\\bSeo\\b/g, "SEO")
+    .replace(/\\bAi\\b/g, "AI")
+
 const PROMPT_MODULE_COLOR_PAIRS = Array.from({ length: 12 }, (_, index) => [
   TOOLBOX_PALETTE[index],
   TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length],
