@@ -1,16 +1,12 @@
 import React, { useCallback } from "react"
-import { BookOpen, LayoutGrid, PanelRight, Send, SlidersHorizontal, Zap } from "lucide-react"
+import { Send, Zap } from "lucide-react"
 import {
   StudioButton,
   StudioChatComposerDock,
-  StudioSquareIconButton,
   StudioTextArea,
-  StudioLedBadgeTab,
 } from "../../studio-ui"
-import { TOOLBOX_PALETTE } from "../../styles/toolboxPalette"
 import { BrainChatStatusBadge } from "./BrainChatPrimitives"
 import type { BrainChatStatus } from "./BrainChatPrimitives"
-import { BrainComposerToolButton, BrainComposerToolRail } from "./BrainComposerPrimitives"
 import "./BrainComposerDock.css"
 import "./BrainComposerExperience.css"
 
@@ -23,9 +19,9 @@ export type BrainComposerDockProps = {
   statusLabel?: string
   activePromptTitle?: string | null
   onClearActivePrompt?: () => void
-  onOpenPrompts: () => void
-  onOpenCapabilities: () => void
-  onOpenContext: () => void
+  onOpenPrompts?: () => void
+  onOpenCapabilities?: () => void
+  onOpenContext?: () => void
   onOpenJournal?: () => void
   promptLauncherRef?: React.Ref<HTMLButtonElement>
   contextLauncherRef?: React.Ref<HTMLButtonElement>
@@ -42,12 +38,6 @@ const focusComposer = (node: HTMLTextAreaElement | null) => {
     node.focus()
   }
 }
-
-const actionStyle = (primary: number, secondary: number): React.CSSProperties =>
-  ({
-    "--vt-studio-control-accent": TOOLBOX_PALETTE[primary],
-    "--vt-studio-control-secondary": TOOLBOX_PALETTE[secondary],
-  }) as React.CSSProperties
 
 /**
  * Canonical Brain composer composition. The input and send action are visually
@@ -107,63 +97,8 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
           <span className="vt-brain-composer-hint">Enter to send <span aria-hidden="true">·</span> Shift+Enter for a new line</span>
         )
       }
-      chips={
-        activePromptTitle ? (
-          <StudioLedBadgeTab
-            mode="badge"
-            label={activePromptTitle}
-            tone="pink"
-            led="solid"
-            animation="steady"
-            sizeVariant="mini"
-            onClick={onClearActivePrompt}
-            aria-label={`Active prompt ${activePromptTitle}. Activate to clear.`}
-            title="Clear active prompt"
-          />
-        ) : null
-      }
-      tray={
-        <BrainComposerToolRail label="Brain tools">
-          <BrainComposerToolButton
-            buttonRef={promptLauncherRef}
-            icon={<LayoutGrid size={14} />}
-            label="Open prompt library"
-            onClick={onOpenPrompts}
-            style={actionStyle(11, 3)}
-          >
-            Prompts
-          </BrainComposerToolButton>
-          <BrainComposerToolButton
-            icon={<SlidersHorizontal size={14} />}
-            label="Open Brain capabilities"
-            onClick={onOpenCapabilities}
-            style={actionStyle(7, 5)}
-          >
-            Tools
-          </BrainComposerToolButton>
-          <BrainComposerToolButton
-            buttonRef={contextLauncherRef}
-            icon={<PanelRight size={14} />}
-            label="Open channel context"
-            onClick={onOpenContext}
-            style={actionStyle(5, 9)}
-          >
-            Context
-          </BrainComposerToolButton>
-          {onOpenJournal ? (
-            <StudioSquareIconButton
-              sizeVariant="compact"
-              iconSizeVariant="large"
-              icon={<BookOpen aria-hidden="true" />}
-              label="Open AI Journal"
-              title="Open AI Journal"
-              onClick={onOpenJournal}
-              className="vt-brain-composer-journal"
-              style={{ backgroundColor: "#36E0F6" }}
-            />
-          ) : null}
-        </BrainComposerToolRail>
-      }
+      chips={null}
+      tray={null}
       field={
         <>
           <label className="sr-only" htmlFor="brain-composer">
@@ -183,7 +118,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
               resizeField(event.currentTarget)
               onChange(event.currentTarget.value)
             }}
-            placeholder="What would you like to work on?"
+            placeholder="Ask anything about your channel, content, or next upload…"
             className="vt-brain-composer-input w-full min-w-0 resize-none"
             style={{ minHeight: 60, maxHeight: maxFieldPx }}
             aria-label="Message to ViewTube Brain"

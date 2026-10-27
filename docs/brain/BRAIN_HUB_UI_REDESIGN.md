@@ -23,6 +23,6 @@ This document accompanies the Brain Hub shell components in `src/components/brai
 
 ## Integration notes
 
-The example is a harness, not a replacement for production state. Wire `onOpenPrompts` and `onOpenContext` to the existing prompt library and context UI. Wire the panes to the existing Chat, My Brain/Profile, Review/Learning, and Controls/Access implementations. Import the stylesheet after the existing Studio stylesheet when adopting the shell.
+The example remains a harness; the production integration is in `src/views/AIBrainCommandInterface.tsx`. The active page now uses the split-rail navigation while preserving the existing Chat, My Brain/Profile, Review/Learning, and Controls/Access pane state and content. Prompts, Context, and optional Tools launch the existing production drawers. The composer keeps the existing Brain runtime and history, with the utility actions removed from its toolbar.
 
-This PR adds the supplied components as a separate implementation package. It does not replace the active Brain Hub view or claim that the production integration is complete.
+The shell stylesheet is imported after the Studio UI import. The existing Studio primitives remain the source of truth for the composer field and send action; the split-rail and utility row use the package's fallback layout styles.

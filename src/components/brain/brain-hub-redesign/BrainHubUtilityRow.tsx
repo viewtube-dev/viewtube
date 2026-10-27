@@ -5,6 +5,8 @@ export type BrainHubUtilityRowProps = {
   onOpenContext: () => void
   /** Optional: tools still reachable without stacking in composer */
   onOpenTools?: () => void
+  promptLauncherRef?: React.Ref<HTMLButtonElement>
+  contextLauncherRef?: React.Ref<HTMLButtonElement>
   size?: "compact" | "standard"
   className?: string
 }
@@ -17,6 +19,8 @@ export function BrainHubUtilityRow({
   onOpenPrompts,
   onOpenContext,
   onOpenTools,
+  promptLauncherRef,
+  contextLauncherRef,
   size = "compact",
   className,
 }: BrainHubUtilityRowProps) {
@@ -32,6 +36,7 @@ export function BrainHubUtilityRow({
         data-vt-studio-control="true"
         data-size={size}
         data-vt-studio-width="content"
+        ref={promptLauncherRef}
         onClick={onOpenPrompts}
       >
         <span data-vt-studio-button-face>
@@ -50,6 +55,7 @@ export function BrainHubUtilityRow({
         data-vt-studio-control="true"
         data-size={size}
         data-vt-studio-width="content"
+        ref={contextLauncherRef}
         onClick={onOpenContext}
       >
         <span data-vt-studio-button-face>
