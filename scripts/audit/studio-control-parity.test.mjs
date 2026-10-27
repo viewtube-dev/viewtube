@@ -141,12 +141,12 @@ test("top direct-representative module covers the full explicitly exported contr
 
 test("size-tier ownership is centralized and Micro inherits Mini's shared styling contract", () => {
   const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8");
-  assert.match(tokens, /micro: \\{[^}]*letterSpacing: -0\\.02/);
-  assert.match(css, /data-size="supreme"[\\s\\S]*?supreme-stroke, 3px[\\s\\S]*?supreme-radius, 6px/);
-  assert.match(css, /data-size="micro"[\\s\\S]*?micro-stroke, 1\\.5px[\\s\\S]*?micro-radius, 3px[\\s\\S]*?micro-text-stroke, 0\\.4px[\\s\\S]*?micro-focus-outline-width, 0\\.975px/);
-  assert.doesNotMatch(core, /data-size="(?:supreme|standard|compact|mini|micro)"\\s*\\{/);
-  assert.doesNotMatch(recovery, /\\[data-vt-studio-control\\]\\[data-size="(?:supreme|standard|compact|mini|micro)"\\]\\s*\\{/);
-  assert.match(generated, /--vt-studio-mini-font-size: 17\\.5px/);
-  assert.match(generated, /--vt-studio-mini-icon-size: 17\\.5px/);
-  assert.match(generated, /--vt-studio-textarea-mini-font-size: 17\\.5px/);
+  assert.match(tokens, /micro: \{[^}]*letterSpacing: -0\.02/);
+  assert.match(css, /data-size="supreme"[\s\S]*?supreme-stroke, 3px[\s\S]*?supreme-radius, 6px/);
+  assert.match(css, /data-size="micro"[\s\S]*?micro-stroke, 1\.5px[\s\S]*?micro-radius, 3px[\s\S]*?micro-text-stroke, 0\.4px/);\n  assert.match(css, /data-size="micro"[\s\S]*?vt-studio-mini-focus-outline-width, 0\.975px/);
+  assert.doesNotMatch(core, /data-size="(?:supreme|standard|compact|mini|micro)"\s*\{/);
+  assert.doesNotMatch(recovery, /\[data-vt-studio-control\]\[data-size="(?:supreme|standard|compact|mini|micro)"\]\s*\{/);
+  assert.match(generated, /--vt-studio-mini-font-size: 17\.5px/);
+  assert.match(generated, /--vt-studio-mini-icon-size: 17\.5px/);
+  assert.match(generated, /--vt-studio-textarea-mini-font-size: 17\.5px/);
 });
