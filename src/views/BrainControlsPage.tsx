@@ -8,6 +8,7 @@ import { readBrainEngineControls, resetBrainEngineControls, writeBrainEngineCont
 import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS, BRAIN_CAPABILITY_REGISTRY } from "../services/brain/BrainCapabilityRegistry"
 import type { BrainCapabilityDefinition } from "../types"
 import { StudioButton, StudioInterModule, StudioTopSplitModule } from "../studio-ui"
+import { capabilityPromptFor } from "../components/brain/BrainCapabilityBrowser"
 
 type Settings = { policy: BrainUserControls; engines: BrainEngineControls }
 type PolicyRow = readonly [keyof BrainUserControls, string, string]
@@ -78,6 +79,7 @@ const CapabilityInventory: React.FC = () => {
           <p className="text-[10px] font-black uppercase text-black/60">Intents: {capability.intents.join(" · ").replace(/_/g, " ")}</p>
           <p className="break-words text-[10px] font-bold leading-4">Evidence contract: {(BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS[capability.id] || []).join(", ").replace(/_/g, " ") || "No specific sections registered"}</p>
           <p className="text-[10px] font-bold leading-4 text-black/65">{capability.requiresChannelData ? "Requires channel evidence." : "Can be useful without channel analytics."} {capability.requiresCurrentResearch ? "Only selected for timely/current research requests." : ""} Maximum invocations per turn: {capability.maximumInvocationsPerTurn}.</p>
+          <StudioButton type="button" sizeVariant="compact" tone="neutral" onClick={() => navigate("/ai-brain?draft=" + encodeURIComponent(capabilityPromptFor(capability)))}>PREPARE REQUEST IN BRAIN</StudioButton>
         </div>
       </details>)}
     </section>)}
