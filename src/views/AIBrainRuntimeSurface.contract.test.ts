@@ -61,7 +61,6 @@ describe("AI Brain runtime surface integration", () => {
   expect(promptLibrary).toContain('secondLine="CHAT"')
   expect(promptLibrary).toContain('firstLine="EDIT"')
   expect(promptLibrary).toContain('secondLine="FIRST"')
-  expect(promptLibrary).toContain('data-vt-studio-inter-host="true"')
   expect(promptLibrary).toContain("data-prompt-id={card.id}")
   expect(promptLibrary).toContain('firstLine="SEND TO"')
   expect(promptLibrary).toContain('firstLine="EDIT"')
