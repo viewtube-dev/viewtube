@@ -72,7 +72,7 @@ type PublicPageIngestionPayload = {
 }
 
 const fetchPublicPageIngestion = async (handleInput: string): Promise<PublicPageIngestionPayload | null> => {
- const configuredBase = String(import.meta.env.VITE_BILLING_API_BASE || "").replace(/\\/$/, "")
+ const configuredBase = String(import.meta.env.VITE_BILLING_API_BASE || "").replace(/\/$/, "")
  const query = `?handle=${encodeURIComponent(handleInput)}`
  const urls = configuredBase
   ? [`${configuredBase}/public-channel/resolve${query}`, `${configuredBase}/api/public-channel${query}`]
