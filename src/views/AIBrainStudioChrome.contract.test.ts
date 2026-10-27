@@ -39,4 +39,13 @@ describe("AI Brain Studio status and evidence chrome", () => {
     expect(receipt).toContain('<StudioSplitLeftBadge sizeVariant="micro"')
     expect(receipt).not.toContain('rounded-[5px] border-[1.5px] border-black bg-white')
   })
+
+  it("avoids repeating the Copilot brand in both the answer module and response header", () => {
+    const start = source.indexOf('data-vt-brain-component="BrainAssistantChatEntry"')
+    const end = source.indexOf("const readinessForSnapshot", start)
+    const assistantEntry = source.slice(start, end)
+
+    expect(assistantEntry).toContain('title="ANSWER"')
+    expect(assistantEntry.match(/ViewTube Copilot/g)).toHaveLength(1)
+  })
 })
