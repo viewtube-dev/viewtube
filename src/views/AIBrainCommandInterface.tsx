@@ -755,7 +755,7 @@ const CreatorResponseCard: React.FC<{
   return (
    <StudioInterModule
     data-vt-brain-component="BrainLearningReceiptEntry"
-    title="LEARNING"
+    title="LEARNING SAVED"
     startIcon={<BookOpen aria-hidden="true" />}
     sizeVariant="compact"
     className="shrink-0"
