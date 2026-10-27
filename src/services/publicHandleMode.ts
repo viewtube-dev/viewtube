@@ -83,6 +83,25 @@ export const resolvePublicChannel = async (
  }
 
  if (!apiKey) {
+  try {
+   const response = await fetch(`/api/public-channel?handle=${encodeURIComponent(handleInput)}`)
+   if (response.ok) {
+    const payload = await response.json() as {
+     resolution?: { resolvedChannelId?: string | null; resolvedHandle?: string | null; channelTitle?: string | null }
+    }
+    if (payload.resolution?.resolvedChannelId) {
+     return {
+      input: handleInput,
+      resolvedChannelId: payload.resolution.resolvedChannelId,
+      resolvedHandle: payload.resolution.resolvedHandle || candidate,
+      channelTitle: payload.resolution.channelTitle || null,
+      reason: null,
+     }
+    }
+   }
+  } catch {
+   // Local fixture fallback remains available when the public ingestion route is not hosted.
+  }
   const fixture = resolveFromFixture(handleInput)
   if (fixture) {
    return {
@@ -99,8 +118,8 @@ export const resolvePublicChannel = async (
    resolvedHandle: candidate,
    channelTitle: null,
    reason: fixturesEnabled()
-    ? 'No API key and no fixture for "' + candidate + '". Try @themotionvis or @viewtube_demo, or set localStorage yt_public_api_key.'
-    : "Missing VITE_YOUTUBE_API_KEY (or localStorage yt_public_api_key). Public handle mode needs a Data API key.",
+    ? 'Public channel ingestion could not resolve "' + candidate + '" and no fixture matched.'
+    : "Public channel ingestion is unavailable. This path uses public channel pages and RSS, not a YouTube Data API key; confirm the /api/public-channel route is deployed.",
   }
  }
 
