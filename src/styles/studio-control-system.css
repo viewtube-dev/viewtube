@@ -45,9 +45,9 @@
   --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
   --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
   --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
-  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px);
   --vt-studio-control-font-weight: var(--vt-studio-supreme-font-weight, 1000);
-  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 51.82px);
+  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px);
   --vt-studio-control-icon-stroke: var(--vt-studio-supreme-icon-stroke, 1.9);
   --vt-studio-control-focus-outline-width: var(--vt-studio-supreme-focus-outline-width, 1.95px);
   --vt-studio-control-secondary-outline-width: var(--vt-studio-supreme-secondary-outline-width, 1.95px);
@@ -309,10 +309,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-dropdown[data-size="supreme"] {
   --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
-  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px);
   --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
   --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
-  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 51.82px);
+  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px);
   --vt-studio-dropdown-rail-size: var(--vt-studio-dropdown-supreme-rail-size, 60px);
   --vt-studio-dropdown-chevron-size: var(--vt-studio-dropdown-supreme-chevron-size, 38px);
   --vt-studio-dropdown-chevron-stroke: var(--vt-studio-dropdown-supreme-chevron-stroke, 3.41);
@@ -646,7 +646,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 
 /* Canonical size defaults — keep in sync with STUDIO_COMPONENT_SIZE_DEFAULTS at the top of StudioControls.tsx. */
 :root {
-  --vt-studio-60-height: var(--vt-studio-supreme-height, 60px); --vt-studio-60-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-60-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-60-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-60-font-weight: 1000;
+  --vt-studio-60-height: var(--vt-studio-supreme-height, 60px); --vt-studio-60-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-60-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-60-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-60-font-weight: 1000;
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
    
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
@@ -1324,8 +1324,8 @@ button[data-vt-studio-button="true"][data-size="compact"] {
   
 }
 
-button[data-vt-studio-button="true"][data-size="supreme"] { --vt-studio-control-height:60px; --vt-studio-control-stroke:var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius:var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size:51.82px; --vt-studio-control-font-weight:1000; --vt-studio-control-text-stroke:var(--vt-studio-supreme-text-stroke, 1px); --vt-studio-control-icon-size:51.82px; --vt-studio-control-icon-stroke:var(--vt-studio-supreme-icon-stroke, 1.9); }
-button[data-vt-studio-button="true"][data-size="supreme"] > [data-vt-studio-button-face] { font-size:51.82px; padding-inline:14px; border-width:var(--vt-studio-supreme-stroke, 3px); border-radius:var(--vt-studio-supreme-radius, 6px); -webkit-text-stroke:var(--vt-studio-supreme-text-stroke, 1px) currentColor; }
+button[data-vt-studio-button="true"][data-size="supreme"] { --vt-studio-control-height:60px; --vt-studio-control-stroke:var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius:var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size:52px; --vt-studio-control-font-weight:1000; --vt-studio-control-text-stroke:var(--vt-studio-supreme-text-stroke, 1px); --vt-studio-control-icon-size:52px; --vt-studio-control-icon-stroke:var(--vt-studio-supreme-icon-stroke, 1.9); }
+button[data-vt-studio-button="true"][data-size="supreme"] > [data-vt-studio-button-face] { font-size:52px; padding-inline:14px; border-width:var(--vt-studio-supreme-stroke, 3px); border-radius:var(--vt-studio-supreme-radius, 6px); -webkit-text-stroke:var(--vt-studio-supreme-text-stroke, 1px) currentColor; }
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
 button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
 
@@ -1344,7 +1344,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
    overflow: visible; color: #000;
   
 }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1px); --vt-studio-control-secondary-outline-width: var(--vt-studio-supreme-secondary-outline-width, var(--vt-studio-supreme-focus-outline-width, 1.95px)); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1px); --vt-studio-control-secondary-outline-width: var(--vt-studio-supreme-secondary-outline-width, var(--vt-studio-supreme-focus-outline-width, 1.95px)); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="standard"] { --vt-studio-control-height: var(--vt-studio-standard-height, 44px); --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px); --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px); --vt-studio-control-secondary-outline-width: var(--vt-studio-standard-secondary-outline-width, 1.95px); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-text-stroke: var(--vt-studio-compact-text-stroke, .5px); --vt-studio-control-secondary-outline-width: var(--vt-studio-compact-secondary-outline-width, 1.3px); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
@@ -1353,7 +1353,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
   border: var(--vt-studio-control-stroke, var(--vt-studio-supreme-stroke, 3px)) solid #000; border-radius: var(--vt-studio-control-radius, var(--vt-studio-supreme-radius, 6px));
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));  color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: var(--vt-studio-control-font-size, 51.82px); font-weight: 1000; line-height: 1; letter-spacing: -.02em;
+  font-size: var(--vt-studio-control-font-size, 52px); font-weight: 1000; line-height: 1; letter-spacing: -.02em;
   text-transform: uppercase; -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1px) currentColor;
   
 }
@@ -3098,7 +3098,7 @@ no shell shadows{
 .vt-studio-double-split-badge[data-size="standard"] { --vt-studio-control-height: var(--vt-studio-standard-height, 44px); --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px); --vt-studio-control-font-weight: var(--vt-studio-standard-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px); --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px); }
 .vt-studio-split-left-badge[data-size="supreme"],
 .vt-studio-split-right-badge[data-size="supreme"],
-.vt-studio-double-split-badge[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-control-font-weight: 1000; --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 51.82px); --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1px); }
+.vt-studio-double-split-badge[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-font-weight: 1000; --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px); --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1px); }
 .vt-studio-split-left-badge[data-size="compact"],
 .vt-studio-split-right-badge[data-size="compact"],
 .vt-studio-double-split-badge[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-font-weight: var(--vt-studio-compact-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px); --vt-studio-control-text-stroke: var(--vt-studio-compact-text-stroke, .5px); }
@@ -4775,7 +4775,7 @@ button.vt-studio-vertical-word-toggle[data-vt-studio-control="true"],
   -webkit-tap-highlight-color: transparent;
 }
 .vt-studio-vertical-word-toggle.is-supreme {
-  --vt-studio-vertical-word-font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  --vt-studio-vertical-word-font-size: var(--vt-studio-supreme-font-size, 52px);
   --vt-studio-vertical-word-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-studio-vertical-word-radius: var(--vt-studio-control-radius, 6px);
   --vt-studio-vertical-word-gap: 5px;
@@ -5558,7 +5558,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   --vt-toggle-text: var(--pair-a, #36e0f6);
 }
 /* Double Side Toggle owns one perimeter; propagate the same size tokens into both nested shells. */
-.vt-studio-value-toggle--double[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 51.82px); }
+.vt-studio-value-toggle--double[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px); }
 .vt-studio-value-toggle--double[data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px; --vt-studio-control-font-size: 38px; --vt-studio-control-icon-size: 38px; }
 .vt-studio-value-toggle--double[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px); }
 .vt-studio-value-toggle--double[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); }
@@ -5729,7 +5729,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   --vt-studio-floating-label-risen-text-stroke: 0.5px;
 }
 .vt-studio-floating-field > input[data-size="supreme"] + .vt-studio-floating-field-label {
-  font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  font-size: var(--vt-studio-supreme-font-size, 52px);
   -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1px) currentColor;
 }
 .vt-studio-floating-field > input[data-size="standard"] + .vt-studio-floating-field-label,
