@@ -178,6 +178,12 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
               const nextCategory = String(next)
               setCategory(nextCategory)
               if (nextCategory !== "all") setOpenCategories([nextCategory])
+              if (
+                selectedId &&
+                !filterCreatorBrainPromptCards(cards, query, nextCategory, summarize).some((card) => card.id === selectedId)
+              ) {
+                setSelectedId(null)
+              }
             }}
             aria-label="Filter by category"
             className="min-w-0 w-full"
