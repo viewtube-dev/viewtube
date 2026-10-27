@@ -10,7 +10,7 @@ describe("Brain composer Studio field contract", () => {
       styles.indexOf(".vt-brain-composer-dock .vt-brain-composer-input::placeholder"),
     )
     expect(defaultState).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000000")
-    expect(defaultState).toContain("inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--pair-a)")
+    expect(defaultState).toContain("inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--pair-a, #36e0f6)")
     expect(defaultState).not.toContain("border: 0 !important")
   })
 
@@ -21,8 +21,8 @@ describe("Brain composer Studio field contract", () => {
     )
     expect(focusState).toContain("color: #000000")
     expect(focusState).toContain("-webkit-text-stroke: 1px #000000")
-    expect(focusState).toContain("var(--pair-a)")
-    expect(focusState).toContain("var(--pair-b)")
+    expect(focusState).toContain("var(--pair-a, #36e0f6)")
+    expect(focusState).toContain("var(--pair-b, #ff7ac8)")
     expect(focusState).not.toContain("var(--brain-composer-accent)")
   })
 
