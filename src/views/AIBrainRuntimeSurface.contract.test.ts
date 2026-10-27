@@ -48,6 +48,8 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('from "../studio-ui"')
   expect(userMessage).toContain("<StudioInterModule")
   expect(responseCard).toContain("<StudioInterModule")
+  expect(responseCard).not.toContain('data-vt-brain-part="response-attribution"')
+  expect(responseCard).toContain("BrainGenerationBadge")
   expect(promptLibrary).toContain('data-vt-brain-component="BrainPromptLibraryModule"')
   expect(promptLibrary).toContain('data-vt-brain-part="prompt-collapsible-module"')
   expect(promptLibrary).not.toContain("<StudioCollapsingSplitModule")
