@@ -156,7 +156,16 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
             type="search"
             sizeVariant="compact"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              const nextQuery = event.target.value
+              setQuery(nextQuery)
+              if (
+                selectedId &&
+                !filterCreatorBrainPromptCards(cards, nextQuery, category, summarize).some((card) => card.id === selectedId)
+              ) {
+                setSelectedId(null)
+              }
+            }
             placeholder="Search prompts…"
             className="w-full min-w-0"
             aria-label="Search prompt library"
