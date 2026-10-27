@@ -1421,6 +1421,7 @@ const AIBrainCommandInterface: React.FC = () => {
   requestInFlightRef.current = true
   shouldFollowConversationRef.current = true
   setInput("")
+  setActivePromptTitle(null)
   if (composerRef.current) composerRef.current.style.height = "52px"
   setBusy(true)
   const userMessage: ChatMessage = { id: makeMessageId(), role: "user", text: userText }
