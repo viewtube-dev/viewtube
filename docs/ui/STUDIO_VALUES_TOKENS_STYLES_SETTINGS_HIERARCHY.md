@@ -52,7 +52,7 @@ When levels disagree, follow the higher level and repair the lower-level impleme
 - Existing Studio contract index: `docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md`
 - Existing Component Library ownership reference: `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md`
 
-**Repository audit note:** the target branch's existing token source and older defaults index contain disagreements with later Studio recovery decisions (see §8). This hierarchy records the decisions that should win; it does not misrepresent the current token file as already reconciled.
+**Repository audit note (2026-10-27):** the TypeScript token contract, recovery stylesheet, and older defaults index are not fully aligned. Mini is 17.5px in tokens but 16px in recovery CSS; Micro's 1.5px / 3px geometry is in tokens and recovery CSS but older normative documentation still says 1px / 2px. Treat these as verified source/document drift, not proof that the rendered page is corrected.
 
 ## 3. Definitions
 
@@ -191,10 +191,10 @@ The following discrepancies were visible when comparing the target branch's `src
 
 | Concern | Later intended contract | Observed conflict to reconcile |
 |---|---|---|
-| Supreme stroke/radius | 3px / 6px Standard system | Token/index values disagree in places; the index's size table still records proportional Supreme geometry |
-| Mini type/icon size | 17.5px | Canonical token source aligned to 17.5px; verify generated variables and consumers after token changes |
-| Micro stroke/radius | 1.5px / 3px Mini system | Token source/index record 1px / 2px in places |
-| Micro focus outline | Apply Mini system consistently | Token/index values differ; reconcile to the approved Mini stroke ratio |
+| Supreme stroke/radius | 3px / 6px Standard system | TypeScript tokens and recovery CSS agree; superseded proportional values remain in historical documentation and catalog notes and must not be treated as current global defaults |
+| Mini type/icon size | 17.5px | `src/studio-ui/tokens.ts` declares 17.5px, but `studio-control-recovery-overrides.css` resets Mini type/icon to 16px; runtime cascade must be reconciled and verified |
+| Micro stroke/radius | 1.5px / 3px Mini system | Tokens and recovery CSS declare 1.5px / 3px, but the defaults index still records legacy 1px / 2px values in its normative section |
+| Micro focus outline | 0.975px (65% of the 1.5px Mini-system stroke), offset 0 | Token source and recovery CSS declare 0.975px; the defaults index still contains a legacy 0.65px Micro outline |
 | Focused text fields | Black outer border and black text/glyph stroke; primary inset remains; secondary outline | Verify all field selectors and textarea variants; any primary outer/focus stroke is a regression |
 | TextBox | Black text and glyph stroke; primary inset; secondary outline | Verify no inherited generic primary glyph rule overrides the TextBox contract |
 | Catalog authority | Real production exports; catalog CSS only arranges specimens | Audit every specimen for direct production imports and prevent lookalike implementations |
@@ -275,3 +275,26 @@ This document is the architecture contract, not proof of implementation completi
 - remaining deviations are explicitly listed rather than described as complete.
 
 **Authority summary:** contract decides meaning; tokens name values; primitives define behavior and anatomy; production styles apply tokens; composition places controls; catalogs demonstrate them; tests and browser evidence verify them.
+
+
+## Studio Controls documentation reconciliation — 2026-10-27
+
+This update records the current production primitive surface and remaining source/document disagreements found during a read-only audit of `master/consolidated-feature-integration`. It updates documentation authority only; it does not claim that CSS, generated output, tests, or rendered visuals were repaired by this change.
+
+### Canonical family inventory
+
+The Confirmed Primitive Library at `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` contains a full-width representative row set backed by production imports for buttons (standard, split-left, double-split, two-line, split two-line); dropdowns (simple, multi, split-left); toggles (arrow, bar, horizontal/vertical word, side, double-side); fields (single-line, split text input, textarea, read-only TextBox); counters (standard, side, left); and double-split slider. `StudioSplitTextInput` comes from `src/studio-ui/primitives/StudioSplitTextInput.tsx`; `StudioSplitAccordion` is a standalone primitive with its own production module and stylesheet.
+
+A catalog row is evidence of registration and wiring, not by itself evidence of all variants, accessibility states, or pixel-level behavior. Each family record should identify exact export/module, style owner, supported size tiers, public variants, semantic/keyboard behavior, regression tests, and verification level.
+
+### Verified implementation/documentation conflicts
+
+- `src/studio-ui/tokens.ts` defines Mini as 20px / 1.5px stroke / 3px radius / 17.5px type and icon; `src/styles/studio-control-recovery-overrides.css` currently resets Mini type/icon to 16px.
+- TypeScript tokens and recovery CSS define Micro as 12px / 1.5px stroke / 3px radius / 10px type and icon, with a 0.975px focus outline. Older normative rows in the defaults index still contain the superseded 1px / 2px / 0.65px interpretation.
+- TypeScript Micro letter spacing is `-0.01em`, while the global contract says `-0.02em`. Normalize the token or explicitly register Micro as a named exception; do not leave the difference implicit.
+- `src/styles/studio-control-entry.css` imports the recovery stylesheet after the other imported control styles, then defines split-input rules later in the same file. Cascade ownership must be described by actual order and selector scope.
+- Editable fields use primary text/stroke and a primary inset at rest; focused fields switch text/stroke to black while retaining the primary inset and using a secondary outline at 65% of border width. TextBox remains black text/stroke with primary inset and secondary outline. The border, inset, and outline are independent layers.
+
+### Verification boundary
+
+Source inspection covered the three target documents, token definitions, public export barrel, shared control implementation, confirmed catalog, and control stylesheet entry/recovery layers. No build, automated tests, computed-style capture, assistive-technology run, or desktop/mobile browser screenshot was executed in this documentation pass. These remain outstanding.
