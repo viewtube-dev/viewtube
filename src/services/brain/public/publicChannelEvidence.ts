@@ -137,5 +137,19 @@ export const buildPublicChannelEvidenceRecords = (
       }),
     )
   }
+  if (snapshot.provenance?.source === "fixture") {
+    return records.map((record) => ({
+      ...record,
+      limitations: [
+        ...record.limitations,
+        "SYNTHETIC FIXTURE DATA: never present these values as observed/live YouTube analytics.",
+      ],
+      provenance: {
+        ...record.provenance,
+        sourceRoute: "local://public-handle-fixtures",
+        sourceVersion: "public-handle-fixture-v1",
+      },
+    }))
+  }
   return records
 }
