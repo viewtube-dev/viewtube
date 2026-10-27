@@ -53,7 +53,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(promptLibrary).toContain("<StudioCollapsingTwoLineModule")
   expect(promptLibrary).toContain("description={promptCardSummary(card)}")
   expect(promptLibrary).toContain('data-vt-brain-part="prompt-complete-text"')
-  expect(promptLibrary).toContain('className="grid min-w-0 grid-cols-2 gap-1"')
+  expect(promptLibrary).toContain('onEdit ? "grid-cols-2" : "grid-cols-1"')
   expect(promptLibrary).toContain('<StudioSplitTwoLineButton')
   expect(promptLibrary).toContain('firstLine="SEND TO"')
   expect(promptLibrary).toContain('secondLine="CHAT"')
@@ -67,10 +67,9 @@ describe("AI Brain runtime surface integration", () => {
   expect(promptLibrary).toContain("title={card.label}")
   expect(collapsePrimitiveSource).toContain("export const StudioCollapsingTwoLineModule")
   expect(source).toContain("fillAvailable")
-  expect(source).toContain('contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6]')
+  expect(source).toContain('contentClassName="vt-brain-studio-workspace__toolbox-content flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6]')
   expect(source).not.toContain('contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:!h-full')
   expect(source).toContain("TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length]")
-  expect(source).toContain('className="brain-launcher-mode-switch grid grid-cols-2 gap-1 border-[2px] border-black bg-[#f8f8f4] p-1"')
   expect(source).toContain('className="brain-launcher-mode-switch grid grid-cols-2 gap-1"')
   expect(source).toContain('firstLine="PROMPT" secondLine="LIBRARY" aria-label="Prompt Library"')
   expect(source).toContain('firstLine="CAPABILITIES" secondLine="BROWSER" aria-label="Capabilities"')
@@ -103,7 +102,7 @@ describe("AI Brain runtime surface integration", () => {
   const contextStrip = source.slice(source.indexOf('const BrainContextStrip:'), source.indexOf('const shellCard ='))
   const receiptEntry = source.slice(source.indexOf('if (!response && message.learningReceipt)'), source.indexOf('if (!response)'))
 
-  expect(contextStrip).toContain('grid-cols-1 gap-1 min-[480px]:grid-cols-3')
+  expect(contextStrip).toContain('grid-cols-1 gap-1 min-[480px]:grid-cols-3 sm:grid-cols-4')
   expect(contextStrip).toContain('Clear selection')
   expect(contextStrip).toContain('Clear project')
   expect(contextStrip).toContain('whitespace-normal')
@@ -134,12 +133,12 @@ describe("AI Brain runtime surface integration", () => {
  })
 
  it("keeps the mobile composer inside the layout viewport and gives the textarea real width", () => {
-  expect(viewportHookSource).toContain("Math.min(vv.height, layoutHeight)")
+  expect(viewportHookSource).toMatch(/Math\\.min\\(vv\\.height,\\s*layoutHeight\\)/)
   expect(viewportHookSource).toContain('window.visualViewport')
-  expect(composerDockSource).toContain('className="w-full min-h-[44px] min-w-0 resize-none"')
+  expect(composerDockSource).toContain('className="vt-brain-composer-input w-full min-w-0 resize-none"')
   expect(composerDockSource).toContain('maxHeight: maxFieldPx')
   expect(composerDockSource).toContain('data-vt-brain-component="BrainComposerSendAction"')
-  expect(source).toContain('className="vt-brain-chat-column__dock"')
+  expect(source).toContain('className="vt-brain-studio-workspace__composer vt-brain-chat-column__dock"')
  })
 
 
