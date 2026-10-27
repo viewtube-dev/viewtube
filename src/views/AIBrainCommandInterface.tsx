@@ -25,7 +25,7 @@ import { Toolbox } from "../components/Toolbox"
 import { BrainComposerDock } from "../components/brain/BrainComposerDock"
 import { BrainPromptLibrary, promptCardSummary } from "../components/brain/BrainPromptLibrary"
 import { useVisualViewportHeight } from "../components/brain/useVisualViewportHeight"
-import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioInterModule, StudioTextArea } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioInterModule, StudioTextArea, StudioSquareIconButton, StudioSquareIconButtonGroup } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -125,6 +125,14 @@ import type {
 
 export { filterCreatorBrainPromptCards } from "../components/brain/BrainPromptLibrary"
 export { BrainPromptLibrary, promptCardSummary }
+
+const FEEDBACK_OPTIONS = [
+ ["helpful", ThumbsUp, "Helpful", "#3FEE56"],
+ ["not_useful", ThumbsDown, "Not useful", "#FA618A"],
+ ["inaccurate", HelpCircle, "Inaccurate", "#FFDA47"],
+ ["save_insight", BookOpen, "Save insight", "#36E0F6"],
+ ["ask_follow_up", MessageSquare, "Ask follow-up", "#FF7AC8"],
+] as const satisfies ReadonlyArray<readonly [AIBrainFeedbackSignal["rating"], React.ComponentType<{ size?: number }>, string, string]>
 
 export type AIBrainTurnReadiness = {
  dataStatus: AIBrainEvidencePack["dataStatus"]
