@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react"
-import { StudioButton, StudioTextInput } from "../../studio-ui"
+import { StudioButton, StudioTextArea, StudioTextInput } from "../../studio-ui"
 import { CHANNEL_CONTEXT_QUESTIONS, type ChannelContextQuestion } from "../../context/channelContextQuestions"
 import type { ChannelContextProfile } from "../../context/ChannelContextProfile"
 import { scoreContext } from "../../context/ChannelContextScoring"
@@ -82,17 +82,29 @@ export const ChannelContextSettingsSection: React.FC = () => {
                     <span className="min-w-0 flex-1">{question.title}</span>
                     {question.required ? <span aria-label="Required" className="shrink-0 text-xs">REQUIRED</span> : <span className="shrink-0 text-xs opacity-60">OPTIONAL</span>}
                   </span>
-                  <StudioTextInput
-                    sizeVariant="standard"
-                    value={value}
-                    onChange={(event) => update(question, event.currentTarget.value)}
-                    placeholder={arrayField ? "Separate items with commas" : question.contextField === "brand.creativity" ? "1–10" : "Add your answer"}
-                    type={question.contextField === "brand.creativity" ? "number" : "text"}
-                    min={question.contextField === "brand.creativity" ? 1 : undefined}
-                    max={question.contextField === "brand.creativity" ? 10 : undefined}
-                    aria-invalid={missing}
-                    aria-describedby={missing ? `${question.id}-required` : undefined}
-                  />
+                  {["identity.description", "goals.successDefinition", "audience.idealViewer", "audience.problem", "audience.transformation", "brand.voice"].includes(question.contextField) ? (
+                    <StudioTextArea
+                      sizeVariant="standard"
+                      rows={3}
+                      value={value}
+                      onChange={(event) => update(question, event.currentTarget.value)}
+                      placeholder="Add a little detail so the Brain can give more relevant help"
+                      aria-invalid={missing}
+                      aria-describedby={missing ? `${question.id}-required` : undefined}
+                    />
+                  ) : (
+                    <StudioTextInput
+                      sizeVariant="standard"
+                      value={value}
+                      onChange={(event) => update(question, event.currentTarget.value)}
+                      placeholder={arrayField ? "Separate items with commas" : question.contextField === "brand.creativity" ? "1–10" : "Add your answer"}
+                      type={question.contextField === "brand.creativity" ? "number" : "text"}
+                      min={question.contextField === "brand.creativity" ? 1 : undefined}
+                      max={question.contextField === "brand.creativity" ? 10 : undefined}
+                      aria-invalid={missing}
+                      aria-describedby={missing ? `${question.id}-required` : undefined}
+                    />
+                  )}
                   {missing ? <span id={`${question.id}-required`} className="block text-xs font-bold">Add an answer to complete required context.</span> : null}
                 </label>
               )
