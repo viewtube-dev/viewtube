@@ -1468,7 +1468,7 @@ describe("StudioSplitTextInput transparent-panel composition", () => {
     const field = css.slice(fieldStart, focusStart);
     expect(shell).toContain("background: transparent");
     expect(field).toContain("border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary");
-    expect(field).toContain("height: calc(100% - 2 * var(--vt-studio-control-stroke, 3px))");
+    expect(field).toContain("height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px))");
     expect(field).toContain("outline: none");
     expect(field).toContain("background: var(--vt-field-fill-rest)");
     expect(field).not.toContain("border: 0 !important");
