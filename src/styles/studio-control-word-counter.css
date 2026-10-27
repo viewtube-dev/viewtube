@@ -2,6 +2,9 @@
 .vt-studio-left-word-counter {
   --vt-studio-number-background: var(--pair-a);
 }
+.vt-studio-left-word-counter .vt-studio-side-counter__value {
+  font-size: min(var(--vt-studio-control-font-size, 38px), calc(var(--vt-studio-counter-width, 132px) * .18));
+}
 .vt-studio-left-word-counter[data-vt-studio-word-index="1"] .vt-studio-side-counter__value {
   background: var(--pair-a);
   color: #000;
