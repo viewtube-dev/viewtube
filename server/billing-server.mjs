@@ -7,6 +7,7 @@ import { handleCompressAnalysisRoute } from "./media-compression.mjs";
 import { handleVaultMediaBinaryGetRoute, handleVaultMediaBinaryUploadRoute } from "./vault-media-storage.mjs";
 import { handleVaultOperationStore } from "./vault-operation-store.mjs";
 import { handleYouTubeAcquireRoute } from "./youtube-acquisition.mjs";
+import { handlePublicChannelResolveRoute } from "./public-channel-resolver.mjs";
 import { getReleaseMetadata } from "./release-metadata.mjs";
 import { getAuthenticatedViewtubeUserId, handleAccountRoute } from "./account-auth.mjs";
 import { routeSimpleAuth } from "./simple-auth-route.mjs";
@@ -771,6 +772,10 @@ const server = http.createServer(async (req, res) => {
 
     if (method === "POST" && pathname === "/api/youtube/acquire") {
       return await handleYouTubeAcquireRoute(req, res);
+    }
+
+    if (pathname === "/api/public-channel/resolve") {
+      return await handlePublicChannelResolveRoute(req, res);
     }
 
     if (pathname.startsWith("/api/projects/")) {
