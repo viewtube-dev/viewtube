@@ -1354,7 +1354,9 @@ export const buildEvidenceRankingModule = (
  evidencePack: AIBrainEvidencePack,
 ): AIBrainAnswerModule | null => {
  const videos = evidencePack.topVideos.slice(0, 3)
- if (!videos.length) return null
+ // Public-page metadata can ground topic and title suggestions, but cannot establish
+ // a performance ranking. Do not render an analytics ranking without actual metrics.
+ if (!videos.length || !videos.some((video) => Object.values(video.metrics).some((value) => value !== null))) return null
  return {
   id: "video-evidence-ranking",
   title: "What I ranked this on",
@@ -1385,6 +1387,7 @@ const formatIntentModules = (input: {
  const clusters = snapshot.inferredProfile.topicClusters.slice(0, 3)
  const pillars = snapshot.inferredProfile.contentPillars.slice(0, 3)
  const topVideo = evidencePack.topVideos[0]
+ const hasPerformanceEvidence = evidencePack.topVideos.some((video) => Object.values(video.metrics).some((value) => value !== null))
  const strongestLane = clusters[0] || pillars[0] || snapshot.inferredProfile.niche || "the clearest viewer promise in your channel data"
  const titleExample = topVideo?.title ? `"${topVideo.title}"` : "your strongest comparable upload"
  const asksProjection = /\b(project|projection|pace|forecast|goal path|30[- ]day)\b/i.test(requestText)
@@ -1484,7 +1487,7 @@ const formatIntentModules = (input: {
    moduleFor(
     "audience-signal",
     "Audience Signal",
-    topVideo?.title
+    topVideo?.title && hasPerformanceEvidence
      ? `${titleExample} and the recurring ${strongestLane} lane show the clearest available viewer-interest signal. This identifies the payoff they choose, not yet the exact words they use in comments.`
      : `The recurring ${strongestLane} lane is the best available viewer-interest signal, but direct audience behavior is still limited.`,
     "green",
@@ -1515,9 +1518,11 @@ const formatIntentModules = (input: {
    moduleFor(
     "best-video-autopsy",
     "Best Video Autopsy",
-    topVideo?.title
+    topVideo?.title && hasPerformanceEvidence
      ? `${titleExample}${topVideo.metrics.views !== null ? ` is the strongest available video signal here with ${topVideo.metrics.views.toLocaleString()} views.` : " is the strongest available video signal here."} Treat it as the control sample for topic, promise, pacing, and packaging.`
-     : "I need more complete video performance evidence before naming a true winner, but the right analysis is still the same: compare topic, promise, title clarity, thumbnail, hook, retention, and subscriber conversion.",
+     : topVideo?.title
+      ? `Public metadata includes ${titleExample}, but titles and publish dates alone cannot identify a best-performing video. Sync performance metrics to compare winners.`
+      : "I need video performance evidence before naming a true winner. Compare topic, promise, title clarity, thumbnail, hook, retention, and subscriber conversion once those metrics are available.",
     "blue",
     "analytics",
    ),
