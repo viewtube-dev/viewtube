@@ -22,6 +22,8 @@ describe("AI Brain Studio Workspace composition", () => {
 
   it("switches from a multi-rail desktop workspace to a single-column mobile workspace", () => {
     expect(workspaceStyles).toContain("minmax(0, 1.45fr)")
+    expect(workspaceStyles).toContain("@media (min-width: 1280px) and (max-width: 1535px)")
+    expect(workspaceStyles).toContain("grid-template-columns: minmax(56px, 64px) minmax(0, 1fr)")
     expect(workspaceStyles).toContain("@media (max-width: 1279px)")
     expect(workspaceStyles).toContain("@media (prefers-reduced-motion: reduce)")
   })
