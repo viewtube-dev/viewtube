@@ -4,6 +4,10 @@ import { MemoryRouter } from "react-router-dom"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { GlobalDataContext, fallbackContext } from "../../context/GlobalDataContextTypes"
 import { buildCreatorBrainPromptCards } from "../../services/aiBrainCommandInterface"
+import { BrainCapabilityBrowser, capabilityPromptFor } from "../../components/brain/BrainCapabilityBrowser"
+import type { AIBrainContextSnapshot } from "../../services/aiBrainCommandInterface"
+import type { BrainUserControls } from "../../services/brain/BrainUserControls"
+import type { BrainCapabilityDefinition } from "../../types"
 import AIBrainCommandInterface, {
  BrainGenerationBadge,
  BrainFeedbackControls,
@@ -180,6 +184,42 @@ describe("AIBrainCommandInterface", () => {
 
   // Journal capture is an inline affordance in the composer, not a mode/tab.
   expect(html).toContain("AI Journal")
+ })
+
+ it("presents capability launches with the same Send to Chat and Edit First actions as prompts", () => {
+  const capability = {
+   id: "audience-promise",
+   label: "Audience promise",
+   description: "Connects topics and formats to a clear viewer payoff.",
+   intents: ["audience", "strategy", "publishing"],
+   maximumInvocationsPerTurn: 1,
+  } as BrainCapabilityDefinition
+  const snapshot = {
+   inferredProfile: { videoCount: 4 },
+   brain: { activeProjects: 1 },
+  } as unknown as AIBrainContextSnapshot
+  const controls = {
+   enabled: true,
+   allowAnalytics: true,
+   personalization: true,
+   allowProjects: true,
+  } as BrainUserControls
+  const html = renderToStaticMarkup(
+   <BrainCapabilityBrowser
+    snapshot={snapshot}
+    controls={controls}
+    onPrompt={() => undefined}
+    onEdit={() => undefined}
+   />,
+  )
+
+  expect(html).toContain("SEND TO")
+  expect(html).toContain("CHAT")
+  expect(html).toContain("EDIT")
+  expect(html).toContain("FIRST")
+  expect(html).not.toContain(">Ask Brain<")
+  expect(html).not.toContain(">Edit prompt first<")
+  expect(capabilityPromptFor(capability)).toContain("audience promise")
  })
 
  it("keeps every guided prompt available in its expanded category modules", () => {
