@@ -43,7 +43,7 @@ export type BrainPromptLibraryProps = {
   busy?: boolean
   headingId?: string
   onPrompt: (prompt: string) => void
-  onEdit?: (prompt: string) => void
+  onEdit?: (prompt: string, title: string) => void
   /** Optional; pass `promptCardSummary` from AIBrainCommandInterface for richer blurbs */
   summarize?: PromptCardSummaryFn
 }
@@ -245,7 +245,7 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
                             }
                             onClick={(event) => {
                               event.stopPropagation()
-                              onEdit(card.prompt)
+                              onEdit(card.prompt, card.label)
                               setSelectedId(null)
                             }}
                           />
