@@ -74,6 +74,7 @@
     "test:studio-input-token-ownership": "node --test scripts/audit/studio-input-token-ownership.test.mjs",
     "test:studio-dropdown-counter-slider-contract": "node --test scripts/audit/studio-dropdown-counter-slider-contract.test.mjs",
     "test:studio-control-fill": "node --test scripts/audit/studio-control-fill-and-catalog-cleanup.test.mjs",
+    "test:studio-component-grid-css": "node --test scripts/audit/studio-component-grid-css-minifier.test.mjs",
     "audit:confirmed-catalog": "node scripts/audit/confirmed-catalog-coverage.mjs"
   },
   "dependencies": {
