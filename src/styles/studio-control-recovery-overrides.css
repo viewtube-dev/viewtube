@@ -5,17 +5,7 @@
  */
 [data-vt-studio-control] {
   --vt-studio-space-unit: 4px;
-  --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  --vt-field-text: var(--vt-field-primary);
-  --vt-field-text-stroke: var(--vt-field-text);
-  --vt-field-text-stroke-width: var(--vt-studio-control-text-stroke);
-  --vt-field-text-focus: #000;
-  --vt-field-text-stroke-focus: #000;
-  --vt-field-caret-focus: var(--vt-field-primary);
-  --vt-field-fill-rest: color-mix(in srgb, var(--vt-field-primary) 50%, transparent);
-  --vt-field-fill-focus: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);
   --vt-field-inline-stroke: var(--vt-field-primary);
-  --vt-field-focus-outline: var(--vt-studio-control-focus-outline-width) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 
 /* Shared split shell and square rails: one divider, no nested rail borders. */
@@ -61,7 +51,7 @@
 }
 
 /* Editable fields: matching text/stroke, persistent primary inset, black focus text/stroke. */
-input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 textarea[data-vt-studio-control="true"], .vt-studio-text-input input, .vt-studio-text-area textarea {
   box-sizing: border-box; border: var(--vt-studio-control-stroke) solid #000 !important; border-radius: var(--vt-studio-control-radius);
   box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-inline-stroke) !important;
@@ -69,7 +59,7 @@ textarea[data-vt-studio-control="true"], .vt-studio-text-input input, .vt-studio
   -webkit-text-fill-color: var(--vt-field-text) !important; -webkit-text-stroke-color: var(--vt-field-text-stroke) !important;
   -webkit-text-stroke-width: var(--vt-field-text-stroke-width) !important; caret-color: var(--vt-field-text) !important; outline: none;
 }
-input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus,:focus-visible),
+input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus,:focus-visible),
 textarea[data-vt-studio-control="true"]:is(:focus,:focus-visible), .vt-studio-text-input:focus-within input, .vt-studio-text-area:focus-within textarea {
   color: var(--vt-field-text-focus) !important; -webkit-text-fill-color: var(--vt-field-text-focus) !important;
   -webkit-text-stroke-color: var(--vt-field-text-stroke-focus) !important; background: var(--vt-field-fill-focus) !important;
@@ -121,18 +111,6 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-siz
 .vt-studio-top-split-module[data-size="compact"] > .vt-studio-top-split-module__body > .vt-studio-inter-host--bleed { width: calc(100% + 12px); margin-inline: -6px; }
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__body,
 .vt-studio-top-split-module[data-open="false"] > .vt-studio-top-split-module__body { display: none !important; border: 0 !important; padding: 0 !important; min-height: 0 !important; }
-
-/* Split input inner field is borderless; shell owns outer stroke and rail divider. */
-.vt-studio-split-text-input { padding: 0; background: var(--vt-field-fill-rest); }
-.vt-studio-split-text-input__field {
-  flex: 1 1 auto; min-width: 0; height: 100%; width: 100%; border: 0 !important; border-radius: 0 !important;
-  box-shadow: none !important; outline: none; background: transparent !important; color: var(--vt-field-text) !important;
-  -webkit-text-fill-color: var(--vt-field-text) !important; -webkit-text-stroke-color: var(--vt-field-text-stroke) !important;
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width) !important; caret-color: var(--vt-field-text) !important;
-  font-size: var(--vt-studio-control-font-size); font-weight: 1000; text-transform: uppercase; padding: 0 4px;
-}
-.vt-studio-split-text-input:focus-within { outline: var(--vt-field-focus-outline) !important; outline-offset: 0; box-shadow: none !important; }
-.vt-studio-split-text-input:focus-within .vt-studio-split-text-input__field { color: var(--vt-field-text-focus) !important; -webkit-text-fill-color: var(--vt-field-text-focus) !important; -webkit-text-stroke-color: var(--vt-field-text-stroke-focus) !important; caret-color: var(--vt-field-caret-focus) !important; }
 
 /* Keep collapsed module header geometry identical to the expanded header.
    A transparent bottom rule reserves the divider's space without drawing a
