@@ -23,9 +23,11 @@ import {
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
 import { BrainComposerDock } from "../components/brain/BrainComposerDock"
+import { BrainHubUtilityRow } from "../components/brain/brain-hub-redesign/BrainHubUtilityRow"
 import { BrainPromptLibrary, promptCardSummary } from "../components/brain/BrainPromptLibrary"
 import { useVisualViewportHeight } from "../components/brain/useVisualViewportHeight"
 import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioInterModule, StudioTextArea, StudioSquareIconButton, StudioSquareIconButtonGroup } from "../studio-ui"
+import "../components/brain/brain-hub-redesign/brain-hub-shell.css"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
@@ -1713,6 +1715,14 @@ const AIBrainCommandInterface: React.FC = () => {
      <>
      <section data-vt-brain-workspace-part="surface" className="vt-brain-studio-workspace__surface relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
        <BrainPageTabs activeTab={pageTab} onChange={setPageTab} />
+       <BrainHubUtilityRow
+        size="compact"
+        promptLauncherRef={promptLauncherRef}
+        contextLauncherRef={contextLauncherRef}
+        onOpenPrompts={() => { setContextRailOpen(false); setLauncherMode("prompts"); setPromptRailOpen(true) }}
+        onOpenContext={() => { setPromptRailOpen(false); setContextRailOpen(true) }}
+        onOpenTools={() => { setContextRailOpen(false); setLauncherMode("capabilities"); setPromptRailOpen(true) }}
+       />
       <div data-vt-brain-workspace-part="runtime-context" className="vt-brain-studio-workspace__runtime shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>

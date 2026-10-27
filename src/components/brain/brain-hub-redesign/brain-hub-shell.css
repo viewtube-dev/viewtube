@@ -384,3 +384,27 @@
     transition: none;
   }
 }
+
+
+/* Production Brain page integration: compact split rail on mobile, standard on desktop. */
+@media (max-width: 767px) {
+  .vt-brain-hub-primary-nav[data-vt-brain-component="BrainPageTabs"] {
+    --sra-size: var(--vt-studio-compact-height, 28px);
+    --sra-stroke: var(--vt-studio-compact-stroke, 2px);
+  }
+  .vt-brain-hub-primary-nav[data-vt-brain-component="BrainPageTabs"] [data-vt-studio-split-rail-label] { font-size: 12px; }
+}
+@media (min-width: 768px) {
+  .vt-brain-hub-primary-nav[data-vt-brain-component="BrainPageTabs"] {
+    --sra-size: var(--vt-studio-standard-height, 44px);
+    --sra-stroke: var(--vt-studio-standard-stroke, 3px);
+  }
+  .vt-brain-hub-primary-nav[data-vt-brain-component="BrainPageTabs"] [data-vt-studio-split-rail-label] { font-size: 20px; }
+}
+.vt-brain-hub-utility-row { flex: 0 0 auto; padding: 4px 0 2px; }
+.vt-brain-hub-utility-btn:focus-visible,
+.vt-brain-hub-primary-nav [role="tab"]:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .vt-brain-hub-primary-nav .vt-studio-split-rail-accordion__item,
+  .vt-brain-hub-primary-nav .vt-studio-split-rail-accordion__content { transition: none; }
+}
