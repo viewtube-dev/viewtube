@@ -1923,7 +1923,7 @@ export const buildCreatorBrainLocalFallback = (
  ].join(" ")
 }
 
-const buildChannelContextInstruction = (profile?: ChannelContextProfile | null): string => {
+export const buildChannelContextInstruction = (profile?: ChannelContextProfile | null): string => {
  if (!profile) return ""
  const sections: string[] = []
  const add = (label: string, value: unknown) => {
