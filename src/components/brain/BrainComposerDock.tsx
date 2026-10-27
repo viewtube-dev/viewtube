@@ -1,8 +1,8 @@
 import React, { useCallback } from "react"
-import { Send, Zap } from "lucide-react"
+import { BookOpen, Send, Zap } from "lucide-react"
 import {
-  StudioButton,
   StudioChatComposerDock,
+  StudioSplitLeftButton,
   StudioTextArea,
 } from "../../studio-ui"
 import { BrainChatStatusBadge } from "./BrainChatPrimitives"
@@ -87,7 +87,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
 
   return (
     <StudioChatComposerDock
-      layout="toolbar-actions"
+      layout="inline-actions"
       className={`vt-brain-composer-dock ${className}`.trim()}
       aria-label="Brain message composer"
       status={
@@ -135,22 +135,35 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
         </>
       }
       action={
-        <StudioButton
-          data-vt-brain-component="BrainComposerSendAction"
-          type="button"
-          sizeVariant="standard"
-          tone="accent"
-          disabled={busy || !value.trim()}
-          aria-label={busy ? "Sending message" : "Send message"}
-          title={busy ? "Brain is working" : "Send message"}
-          onClick={onSend}
-          className="vt-brain-composer-send"
-        >
-          <span className="vt-brain-composer-send__content">
-            {busy ? <Zap size={18} aria-hidden="true" /> : <Send size={18} aria-hidden="true" />}
-            <span>{busy ? "Working" : "Send"}</span>
-          </span>
-        </StudioButton>
+        <div className="vt-brain-composer-actions" role="group" aria-label="Message actions">
+          <StudioSplitLeftButton
+            ref={promptLauncherRef}
+            data-vt-brain-component="BrainComposerPromptsAction"
+            type="button"
+            sizeVariant="mini"
+            icon={<BookOpen size={14} aria-hidden="true" />}
+            disabled={!onOpenPrompts}
+            aria-label="Open Prompt Library"
+            title="Open Prompt Library"
+            onClick={onOpenPrompts}
+            className="vt-brain-composer-action"
+          >
+            Prompts
+          </StudioSplitLeftButton>
+          <StudioSplitLeftButton
+            data-vt-brain-component="BrainComposerSendAction"
+            type="button"
+            sizeVariant="mini"
+            icon={busy ? <Zap size={14} aria-hidden="true" /> : <Send size={14} aria-hidden="true" />}
+            disabled={busy || !value.trim()}
+            aria-label={busy ? "Sending message" : "Send message"}
+            title={busy ? "Brain is working" : "Send message"}
+            onClick={onSend}
+            className="vt-brain-composer-action"
+          >
+            {busy ? "Working" : "Send"}
+          </StudioSplitLeftButton>
+        </div>
       }
     />
   )
