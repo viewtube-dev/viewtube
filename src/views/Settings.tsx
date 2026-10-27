@@ -169,7 +169,10 @@ const Settings: React.FC = () => {
   const handlePublicResolve = async () => {
     setHandleStatus("Resolving channel...")
     try {
-      const result = await resolvePublicChannel(handleInput)
+      const snapshot = await fetchPublicChannelSnapshot(handleInput)
+      const result = snapshot
+        ? { resolvedChannelId: snapshot.channelId, resolvedHandle: snapshot.handle, channelTitle: snapshot.title, reason: null }
+        : await resolvePublicChannel(handleInput)
       if (!result.resolvedChannelId) {
         setHandleStatus(result.reason || "Channel not resolved.")
         return
@@ -178,10 +181,9 @@ const Settings: React.FC = () => {
       setStoredIngestMode("public_handle")
       localStorage.setItem("vt_public_channel_id", result.resolvedChannelId)
       if (result.resolvedHandle) localStorage.setItem("vt_public_channel_handle", result.resolvedHandle)
-      const snapshot = await fetchPublicChannelSnapshot(handleInput)
       if (snapshot) localStorage.setItem("vt_public_channel_snapshot", JSON.stringify(snapshot))
       setHandleStatus(
-        `Connected public channel: ${result.channelTitle || "Channel"} · ${snapshot?.topVideos.length || 0} recent public videos ingested. ${snapshot?.source === "public_page" ? "No login or YouTube Data API key used." : result.reason || "Public source only."}`,
+        `Selected public channel: ${result.channelTitle || "Channel"} · ${snapshot?.topVideos.length || 0} recent public videos ingested. ${snapshot?.source === "public_page" ? "No login or YouTube Data API key used." : result.reason || "Public source only."}`,
       )
     } catch (error) {
       setHandleStatus(`Resolve failed: ${error instanceof Error ? error.message : String(error)}`)
