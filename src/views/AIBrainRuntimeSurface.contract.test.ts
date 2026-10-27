@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 
 const source = readFileSync(new URL("./AIBrainCommandInterface.tsx", import.meta.url), "utf8")
+const promptLibrarySource = readFileSync(new URL("../components/brain/BrainPromptLibrary.tsx", import.meta.url), "utf8")
 const panelSource = readFileSync(new URL("../components/brain/BrainRuntimePanel.tsx", import.meta.url), "utf8")
 const chatPrimitivesSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.tsx", import.meta.url), "utf8")
 const chatPrimitivesCssSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.css", import.meta.url), "utf8")
@@ -40,9 +41,9 @@ describe("AI Brain runtime surface integration", () => {
  it("uses StudioInterModule for chat entries and the registry-backed prompt library", () => {
   const userMessage = source.slice(source.indexOf('export const UserMessage:'), source.indexOf('const CreatorIntakeWizard:'))
   const responseCard = source.slice(source.indexOf('const CreatorResponseCard:'), source.indexOf('const readinessForSnapshot:'))
-  const promptLibrary = source.slice(source.indexOf('export const BrainPromptLibrary:'), source.indexOf('const FEEDBACK_OPTIONS ='))
+  const promptLibrary = promptLibrarySource
 
-  expect(source).toContain('StudioInterModule, StudioCollapsingSplitModule')
+  expect(source).toContain('from "../components/brain/BrainPromptLibrary"')
   expect(source).toContain('from "../studio-ui"')
   expect(userMessage).toContain("<StudioInterModule")
   expect(responseCard).toContain("<StudioInterModule")
@@ -51,7 +52,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(promptLibrary).not.toContain("<StudioCollapsingSplitModule")
   expect(promptLibrary).toContain('<StudioInterModule\n    sizeVariant="standard"')
   expect(promptLibrary).toContain("<StudioCollapsingTwoLineModule")
-  expect(promptLibrary).toContain("description={promptCardSummary(card)}")
+  expect(promptLibrary).toContain("description={summarize(card)}")
   expect(promptLibrary).toContain('data-vt-brain-part="prompt-complete-text"')
   expect(promptLibrary).toContain('onEdit ? "grid-cols-2" : "grid-cols-1"')
   expect(promptLibrary).toContain('<StudioSplitTwoLineButton')
@@ -69,7 +70,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain("fillAvailable")
   expect(source).toContain('contentClassName="vt-brain-studio-workspace__toolbox-content flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6]')
   expect(source).not.toContain('contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:!h-full')
-  expect(source).toContain("TOOLBOX_PALETTE[(index + 4) % TOOLBOX_PALETTE.length]")
+  expect(promptLibrary).toContain("PROMPT_MODULE_COLOR_PAIRS[(index + 4) % PROMPT_MODULE_COLOR_PAIRS.length]")
   expect(source).toContain('className="brain-launcher-mode-switch grid grid-cols-2 gap-1"')
   expect(source).toContain('firstLine="PROMPT" secondLine="LIBRARY" aria-label="Prompt Library"')
   expect(source).toContain('firstLine="CAPABILITIES" secondLine="BROWSER" aria-label="Capabilities"')
