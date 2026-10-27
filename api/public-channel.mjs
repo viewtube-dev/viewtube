@@ -6,7 +6,7 @@ const normalizeHandle = (input) => {
     if (!["youtube.com", "www.youtube.com", "m.youtube.com"].includes(url.hostname.toLowerCase())) return null;
     const match = url.pathname.match(/^\/@([^/]+)|^\/channel\/([^/]+)|^\/c\/([^/]+)|^\/user\/([^/]+)/i);
     if (!match) return null;
-    return { handle: match[1] || null, channelId: match[2] || null, legacyName: match[3] || match[4] || null };
+    return { handle: match[1] || null, channelId: match[2] || null, legacyName: match[3] || match[4] || null, legacyType: match[3] ? "c" : match[4] ? "user" : null };
   } catch {
     const bare = value.replace(/^@+/, "").split(/[/?#]/)[0];
     return /^[\w.-]{1,100}$/.test(bare) ? { handle: bare, channelId: null, legacyName: null } : null;
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     let title = null;
     let resolvedHandle = parsed.handle;
     if (!channelId) {
-      const path = parsed.handle ? `/@${encodeURIComponent(parsed.handle)}` : parsed.legacyName ? `/${parsed.legacyName.startsWith("user:") ? "user" : "c"}/${encodeURIComponent(parsed.legacyName)}` : "";
+      const path = parsed.handle ? `/@${encodeURIComponent(parsed.handle)}` : parsed.legacyName ? `/${parsed.legacyType || "c"}/${encodeURIComponent(parsed.legacyName)}` : "";
       if (!path) return res.status(400).json({ error: "This channel URL format is not supported. Use a handle such as @channel." });
       const html = await fetchText(`https://www.youtube.com${path}`);
       const page = parsePublicChannel(html);
