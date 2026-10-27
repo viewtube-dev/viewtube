@@ -156,16 +156,7 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
             type="search"
             sizeVariant="compact"
             value={query}
-            onChange={(event) => {
-              const nextQuery = event.target.value
-              setQuery(nextQuery)
-              if (
-                selectedId &&
-                !filterCreatorBrainPromptCards(cards, nextQuery, category, summarize).some((card) => card.id === selectedId)
-              ) {
-                setSelectedId(null)
-              }
-            }
+            onChange={(event) => setQuery(event.target.value)}
             placeholder="Search prompts…"
             className="w-full min-w-0"
             aria-label="Search prompt library"
@@ -178,12 +169,6 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
               const nextCategory = String(next)
               setCategory(nextCategory)
               if (nextCategory !== "all") setOpenCategories([nextCategory])
-              if (
-                selectedId &&
-                !filterCreatorBrainPromptCards(cards, query, nextCategory, summarize).some((card) => card.id === selectedId)
-              ) {
-                setSelectedId(null)
-              }
             }}
             aria-label="Filter by category"
             className="min-w-0 w-full"
