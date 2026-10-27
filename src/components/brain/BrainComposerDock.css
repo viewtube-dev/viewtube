@@ -21,6 +21,10 @@
   width: 100%;
   min-width: 0;
   gap: 0;
+  border: 0;
+  border-top: 2px solid #000000;
+  border-radius: 0;
+  overflow: visible;
   background: var(--brain-composer-paper);
 }
 
