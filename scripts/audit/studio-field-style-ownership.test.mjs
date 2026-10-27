@@ -46,15 +46,29 @@ test("button faces use the solid primary color and own their aligned shadow", ()
   assert.match(studioCss, /button\[data-vt-studio-button="true"\]\s*>\s*\[data-vt-studio-button-face\]\s*\{[^}]*box-shadow:\s*var\(--vt-studio-control-shadow\)/s)
 })
 
-test("textarea typography inherits input size tiers and uses only the .75 description line-height override", () => {
+test("textarea typography inherits field size tiers and uses the canonical .85 multiline line-height", () => {
   const textareaBlock = studioCss.slice(
     studioCss.indexOf('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {'),
     studioCss.indexOf('input[data-vt-studio-control="true"]:not([type="checkbox"])', studioCss.indexOf('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {')),
   );
-  assert.match(textareaBlock, /font-size:\s*var\(--vt-studio-standard-font-size, 38px\)/);
-  assert.match(textareaBlock, /line-height:\s*\.75/);
-  assert.match(textareaBlock, /--vt-studio-compact-font-size, 24px/);
-  assert.match(textareaBlock, /--vt-studio-micro-font-size, 10px/);
-  assert.doesNotMatch(textareaBlock, /vt-studio-textarea-(?:standard|compact)-(?:font-size|text-stroke|line-height)/);
+  assert.match(textareaBlock, /font-size:\s*var\(--vt-studio-textarea-standard-font-size, 18px\)/);
+  assert.match(textareaBlock, /line-height:\s*var\(--vt-studio-textarea-line-height, \.85\)/);
+  assert.match(textareaBlock, /--vt-studio-textarea-compact-font-size, 14px/);
+  assert.match(textareaBlock, /--vt-studio-textarea-micro-font-size, 10px/);
+  assert.match(textareaBlock, /vt-studio-textarea-standard-font-size/);\n  assert.match(textareaBlock, /vt-studio-textarea-compact-font-size/);
   assert.match(studioCss, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]:is\(:focus, :focus-visible\)[\s\S]*?background: color-mix\(in srgb, var\(--vt-field-primary\) var\(--vt-studio-control-focus-fill-opacity\), transparent\)/);
+});
+
+
+test("split text input imports primitive-owned shell CSS and inherits shared field typography and state", async () => {
+  const primitive = await readFile(new URL("../../src/studio-ui/primitives/StudioSplitTextInput.tsx", import.meta.url), "utf8");
+  const shellCss = await readFile(new URL("../../src/styles/studio-split-text-input.css", import.meta.url), "utf8");
+  const fieldCss = await readFile(new URL("../../src/styles/studio-control-fields.css", import.meta.url), "utf8");
+  assert.match(primitive, /import ["']\.\.\/\.\.\/styles\/studio-split-text-input\.css["']/);
+  assert.match(shellCss, /border: var\(--vt-studio-control-stroke, 3px\) solid #000/);
+  assert.match(shellCss, /background-image:[\s\S]*linear-gradient\(var\(--vt-field-primary\)/);
+  assert.doesNotMatch(shellCss, /font-weight:\s*1000|font-size:\s*var\(--vt-studio-control-font-size\)|text-transform:\s*uppercase|letter-spacing:/);
+  assert.match(fieldCss, /letter-spacing:\s*var\(--vt-studio-control-letter-spacing, -0\.02em\)/);
+  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) var\(--vt-field-primary/);
+  assert.match(fieldCss, /--vt-field-text-stroke-focus:\s*#000/);
 });
