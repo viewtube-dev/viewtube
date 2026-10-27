@@ -6,6 +6,7 @@ import { BrainSettingsSwitch, BrainSettingsRange } from "../components/brain/Bra
 import { BRAIN_USER_CONTROLS_STORAGE_KEY, DEFAULT_BRAIN_USER_CONTROLS, clearBrainUserControlOverride, readBrainUserControls, writeBrainUserControls, type BrainUserControls } from "../services/brain/BrainUserControls"
 import { readBrainEngineControls, resetBrainEngineControls, writeBrainEngineControls, type BrainEngineControls } from "../services/brain/BrainEngineControls"
 import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS, BRAIN_CAPABILITY_REGISTRY } from "../services/brain/BrainCapabilityRegistry"
+import type { BrainCapabilityDefinition } from "../types"
 import { StudioButton, StudioInterModule, StudioSplitLeftButton, StudioTopSplitModule } from "../studio-ui"
 
 type Settings = { policy: BrainUserControls; engines: BrainEngineControls }
@@ -60,7 +61,7 @@ export const getBrainCapabilityGroups = () => [
   { title: "Channel intelligence", ids: ["channel-profile", "signal-anomaly-intelligence", "statistics-intelligence", "algorithm-intelligence", "analytics-diagnosis", "top-performer-mining"] },
   { title: "Creator strategy", ids: ["audience-promise", "goal-coach", "daily-oracle", "journal-memory"] },
   { title: "Discovery + publishing", ids: ["seo-opportunity", "niche-knowledge", "current-grounding", "content-generation"] },
-].map(group => ({ ...group, capabilities: group.ids.map(id => BRAIN_CAPABILITY_REGISTRY.find(item => item.id === id)).filter((item): item is typeof BRAIN_CAPABILITY_REGISTRY[number] => Boolean(item)) }))
+].map(group => ({ ...group, capabilities: group.ids.map(id => BRAIN_CAPABILITY_REGISTRY.find(item => item.id === id)).filter((item): item is BrainCapabilityDefinition => Boolean(item)) }))
 
 const CapabilityInventory: React.FC = () => {
   const groups = getBrainCapabilityGroups()
