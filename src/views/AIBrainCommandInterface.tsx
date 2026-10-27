@@ -838,8 +838,7 @@ const CreatorResponseCard: React.FC<{
    className="w-full max-w-none shrink-0 border-0 bg-white"
    header={
     <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
-     <div className="flex flex-wrap items-start justify-between gap-1">
-      <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
+     <div className="flex min-h-0 flex-wrap items-center justify-end gap-1">
       {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
      </div>
      <BrainResponseSectionHeader
