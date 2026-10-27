@@ -26,6 +26,8 @@ import {
   StudioDoubleSplitSlider,
   StudioSideCounter,
   StudioLeftCounter,
+  StudioLeftWordCounter,
+  StudioLeftWordSlider,
   StudioSplitLeftButton,
   StudioDoubleSplitButton,
   StudioSplitLeftBadge,
@@ -304,6 +306,8 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   const [doubleRight, setDoubleRight] = React.useState("TARGET")
   const [counterValue, setCounterValue] = React.useState(24)
   const [sideCounterValue, setSideCounterValue] = React.useState(36)
+  const [leftWordValue, setLeftWordValue] = React.useState(1)
+  const [leftWordSliderValue, setLeftWordSliderValue] = React.useState(3)
   const [sliderValue, setSliderValue] = React.useState(58)
   const options = ["ONE", "TWO", "THREE"] as const
   const dropdownOptions = [
@@ -319,7 +323,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
       ]}
       provenance={<Provenance
-        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioSplitTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioDoubleSplitSlider"
+        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioSplitTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioLeftWordCounter · StudioLeftWordSlider · StudioDoubleSplitSlider"
         tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioSplitTextInput.tsx + src/studio-ui/primitives/StudioValueToggles.tsx"
         css="src/styles/studio-control-system.css"
         tokens="44px standard geometry; component-specific native input/textarea exceptions retained"
@@ -362,6 +366,8 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
           </div>
         ))}
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>Left Counter · STANDARD</span><StudioLeftCounter size="standard" value={sideCounterValue} onValueChange={setSideCounterValue} min={0} max={100} ariaLabel="Studio left counter standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordCounter"><span>Left Word Counter · STANDARD</span><StudioLeftWordCounter size="standard" value={leftWordValue} onValueChange={setLeftWordValue} ariaLabel="Studio left word counter standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordSlider"><span>Left Word Slider · STANDARD</span><StudioLeftWordSlider size="standard" value={leftWordSliderValue} onValueChange={setLeftWordSliderValue} ariaLabel="Studio left word slider standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitSlider"><span>Double Split Slider · STANDARD</span><StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Double split slider standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioActionButton"><span>Action Button · STANDARD</span><StudioActionButton sizeVariant="standard" aria-label="Action button standard specimen">PRIMARY ACTION</StudioActionButton></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton"><span>Icon Button · STANDARD</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" sizeVariant="standard" /></div>
