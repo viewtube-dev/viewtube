@@ -134,6 +134,39 @@ describe("aiBrainCommandInterface", () => {
   expect(snapshot.tools.every((tool) => !tool.route.startsWith("/data-transparency"))).toBe(true)
  })
 
+ it("adds selected public channel titles to Brain context without inventing analytics metrics", () => {
+  storage.setItem("vt_public_channel_snapshot", JSON.stringify({
+   mode: "public_handle", fetchedAt: "2026-10-27T12:00:00.000Z", channelId: "UC_public_demo", handle: "PublicDemo", title: "Public Demo Channel",
+   subscriberCount: null, videoCount: null, viewCount: null, source: "public_page",
+   topVideos: [{ videoId: "pub-video-1", title: "The Hidden History", publishedAt: "2026-10-20T00:00:00.000Z", viewCount: null, likeCount: null, commentCount: null }],
+  }))
+  const snapshot = buildAIBrainContextSnapshot({
+   brain: { ...fallbackContext.brain, channelProfile: { ...fallbackContext.brain.channelProfile, name: "Public Demo Channel", channelHandle: "@PublicDemo" } },
+   authState: { ...fallbackContext.authState, channelName: "Public Demo Channel", channelHandle: "@PublicDemo", subscriberCount: null, totalViews: null },
+   channelConnection: { ...fallbackContext.channelConnection, isConnected: false },
+   brainMemory: fallbackContext.getBrainMemory(),
+   vtSyncSnapshot: getVtSyncSnapshot({ source: "empty", snapshotId: "empty-public-demo", capturedAt: "2026-10-27T12:00:00.000Z", channelName: null, videos: [] }),
+   now: new Date("2026-10-27T12:01:00.000Z"),
+  })
+  expect(snapshot.evidencePack.topVideos[0]?.evidenceId).toBe("public-video:pub-video-1")
+  expect(snapshot.evidencePack.topVideos[0]?.title).toBe("The Hidden History")
+  expect(snapshot.evidencePack.topVideos[0]?.metrics).toEqual({ views: null, watchTime: null, subscribers: null, revenue: null, ctr: null, averagePercentageViewed: null, likes: null, comments: null })
+  expect(snapshot.evidencePack.dataStatus).toBe("partial")
+  expect(snapshot.evidencePack.missingInputs).toContain("public video metadata only; performance metrics unavailable")
+  expect(snapshot.inferredProfile.topEvidenceVideos).toContainEqual({ title: "The Hidden History", views: null, publishedAt: "2026-10-20T00:00:00.000Z" })
+  expect(snapshot.sourceStatuses.find((source) => source.id === "public-channel")?.status).toBe("partial")
+ })
+
+ it("does not attach a stored public channel snapshot to a different active channel", () => {
+  storage.setItem("vt_public_channel_snapshot", JSON.stringify({ mode: "public_handle", fetchedAt: "2026-10-27T12:00:00.000Z", channelId: "UC_public_demo", handle: "PublicDemo", title: "Public Demo Channel", topVideos: [{ videoId: "pub-video-1", title: "The Hidden History", publishedAt: "", viewCount: null, likeCount: null, commentCount: null }] }))
+  const snapshot = buildAIBrainContextSnapshot({
+   brain: fallbackContext.brain,
+   authState: { ...fallbackContext.authState, channelName: "Different Channel", channelHandle: "@different" },
+   channelConnection: fallbackContext.channelConnection,
+   brainMemory: fallbackContext.getBrainMemory(),
+  })
+  expect(snapshot.evidencePack.evidenceIds).not.toContain("public-video:pub-video-1")
+ })
  it("builds the runtime system prompt through the imported assistant registry", () => {
   const prompt = buildAIBrainSystemPrompt({
    brain: fallbackContext.brain,
