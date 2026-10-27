@@ -66,9 +66,9 @@ test("split text input imports primitive-owned shell CSS and inherits shared fie
   const fieldCss = await readFile(new URL("../../src/styles/studio-control-fields.css", import.meta.url), "utf8");
   assert.match(primitive, /import ["']\.\.\/\.\.\/styles\/studio-split-text-input\.css["']/);
   assert.match(shellCss, /border: var\(--vt-studio-control-stroke, 3px\) solid #000/);
-  assert.match(shellCss, /background-image:[\\s\\S]*linear-gradient\\(var\\(--vt-field-primary\\)/);
-  assert.doesNotMatch(shellCss, /font-weight:\\s*1000|font-size:\\s*var\\(--vt-studio-control-font-size\\)|text-transform:\\s*uppercase|letter-spacing:/);
-  assert.match(fieldCss, /letter-spacing:\\s*var\\(--vt-studio-control-letter-spacing, -0\\.02em\\)/);
-  assert.match(fieldCss, /-webkit-text-stroke:\\s*var\\(--vt-studio-control-text-stroke, 1px\\) var\\(--vt-field-primary/);
-  assert.match(fieldCss, /--vt-field-text-stroke-focus:\\s*#000/);
+  assert.match(shellCss, /background-image:[\s\S]*linear-gradient\(var\(--vt-field-primary\)/);
+  assert.doesNotMatch(shellCss, /font-weight:\s*1000|font-size:\s*var\(--vt-studio-control-font-size\)|text-transform:\s*uppercase|letter-spacing:/);
+  assert.match(fieldCss, /letter-spacing:\s*var\(--vt-studio-control-letter-spacing, -0\.02em\)/);
+  assert.match(fieldCss, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) var\(--vt-field-primary/);
+  assert.match(fieldCss, /--vt-field-text-stroke-focus:\s*#000/);
 });
