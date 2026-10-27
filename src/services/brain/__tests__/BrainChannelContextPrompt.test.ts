@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { buildChannelContextInstruction } from "../aiBrainCommandInterface"
-import type { ChannelContextProfile } from "../../context/ChannelContextProfile"
+import { buildChannelContextInstruction } from "../../aiBrainCommandInterface"
+import type { ChannelContextProfile } from "../../../context/ChannelContextProfile"
 
 const emptyProfile: ChannelContextProfile = {
   identity: {}, goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
