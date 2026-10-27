@@ -1933,6 +1933,7 @@ const AIBrainCommandInterface: React.FC = () => {
            onOpenCapabilities={() => { setContextRailOpen(false); setLauncherMode("capabilities"); setPromptRailOpen(true) }}
            onOpenContext={() => { setPromptRailOpen(false); setContextRailOpen(true) }}
            onOpenJournal={() => setJournalOpen(true)}
+           activeContextLabel={surfaceSelection?.label || null}
            promptLauncherRef={promptLauncherRef}
            contextLauncherRef={contextLauncherRef}
            composerRef={composerRef}
