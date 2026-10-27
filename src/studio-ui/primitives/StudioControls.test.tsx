@@ -14,6 +14,7 @@ const readStudioControlCss = () => [
   "studio-control-split.css",
   "studio-control-fields.css",
   "studio-control-distill-overrides.css",
+  "studio-control-recovery-overrides.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
 
 const canonicalTail = (css: string) => {
@@ -1356,3 +1357,12 @@ describe("Studio Controls regression recovery contracts", () => {
     expect(split).toContain('grid-column: 1 / -1;');
   });
 });
+
+
+describe("collapsing module header geometry", () => {
+  it("reserves the bottom divider space when collapsed so header content does not shift", () => {
+    const css = readStudioControlCss()
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module:not\(\[open\]\)[^,{]*,?[\s\S]*?border-bottom:\s*var\(--vt-top-split-stroke,\s*3px\)\s+solid\s+transparent\s*!important/s)
+    expect(css).toContain("Keep collapsed module header geometry identical to the expanded header.")
+  })
+})
