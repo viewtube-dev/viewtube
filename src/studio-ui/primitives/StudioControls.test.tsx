@@ -1468,7 +1468,12 @@ describe("StudioSplitTextInput transparent-panel composition", () => {
     const field = css.slice(fieldStart, focusStart);
     expect(shell).toContain("background: transparent");
     expect(field).toContain("border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary");
-    expect(field).toContain("height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px))");
+    expect(field).toContain("height: calc(var(--vt-studio-control-height, 44px) - 3 * var(--vt-studio-control-stroke, 3px))");
+    expect(field).toContain("align-self: center");
+    const rail = css.slice(css.indexOf(".vt-studio-split-text-input > .vt-studio-split-shell__rail"), css.indexOf(".vt-studio-split-text-input__field"));
+    expect(rail).toContain("place-items: center");
+    expect(rail).toContain("flex: 0 0 calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px))");
+    expect(rail).toContain("height: 100%");
     expect(field).toContain("outline: none");
     expect(field).toContain("background: var(--vt-field-fill-rest, transparent)");
     expect(field).not.toContain("border: 0 !important");
