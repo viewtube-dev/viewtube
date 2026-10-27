@@ -140,7 +140,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             ref={promptLauncherRef}
             data-vt-brain-component="BrainComposerPromptsAction"
             type="button"
-            sizeVariant="mini"
+            sizeVariant="micro"
             icon={<BookOpen size={14} aria-hidden="true" />}
             disabled={!onOpenPrompts}
             aria-label="Open Prompt Library"
@@ -153,7 +153,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
           <StudioSplitLeftButton
             data-vt-brain-component="BrainComposerSendAction"
             type="button"
-            sizeVariant="mini"
+            sizeVariant="micro"
             icon={busy ? <Zap size={14} aria-hidden="true" /> : <Send size={14} aria-hidden="true" />}
             disabled={busy || !value.trim()}
             aria-label={busy ? "Sending message" : "Send message"}
