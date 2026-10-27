@@ -30,6 +30,6 @@ describe("Brain composer Studio field contract", () => {
     expect(styles).toContain("outline: 1.95px solid var(--pair-b, #ff7ac8)")
     expect(styles).toContain("outline-offset: 0")
     expect(styles).not.toContain("box-shadow: 0 ")
-    expect(styles).not.toMatch(/transform\\s*:/i)
+    expect(styles).not.toMatch(/transform\s*:/i)
   })
 })
