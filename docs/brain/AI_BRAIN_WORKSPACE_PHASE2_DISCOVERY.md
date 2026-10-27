@@ -25,3 +25,9 @@ The focused runtime surface contract suite now guards these defaults. The pull r
 1. Review conversation hierarchy and reduce repeated assistant chrome while preserving answer, evidence, readiness, feedback, and learning receipt ownership.
 2. Improve composer capability/prompt/context handoff feedback and mobile ergonomics without replacing the canonical composer.
 3. Refine context/saved-work surfaces, then run rendered desktop/mobile visual QA and regression checks.
+
+## Phase 3 — Conversation and composer continuity
+
+- The expanded prompt now remains open only while it is still visible in the active search/category result set. Searching or changing category preserves the current expansion if the selected prompt still matches; otherwise it collapses the now-hidden prompt rather than unexpectedly reopening it when filters are cleared.
+- The existing composer remains the sole submission owner. Prompt actions still route through the existing `onPrompt` and `onEdit` callbacks, and the canonical Studio composer retains keyboard submission, active prompt/context indicators, and explicit send state.
+- Regression coverage guards both search and category filter transitions. This is a state-continuity refinement, not a new prompt store or alternate composer path.
