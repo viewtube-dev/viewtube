@@ -337,7 +337,7 @@ const BrainContextStrip: React.FC<{
  onClearProject: () => void
 }> = ({ channelLabel, projectLabel, contentBuildId, selection, onClearSelection, onToggleLock, onClearProject }) => (
  <section data-vt-brain-component="BrainContextStrip" aria-label="Active creator context" className="sticky top-0 z-10 grid gap-1 rounded-[7px] border-[2px] border-black bg-white p-2">
-  <div data-vt-brain-part="active-context-badges" className="grid min-w-0 grid-cols-2 gap-1 sm:grid-cols-4">
+  <div data-vt-brain-part="active-context-badges" className="grid min-w-0 grid-cols-1 gap-1 min-[480px]:grid-cols-3 sm:grid-cols-4">
    <StudioSplitLeftBadge data-vt-brain-context="channel" sizeVariant="micro" icon={<MessageSquare aria-hidden="true" />} title={`Channel · ${channelLabel}`} aria-label={`Channel · ${channelLabel}`} className="min-w-0 max-w-full">Channel · {channelLabel}</StudioSplitLeftBadge>
    <StudioSplitLeftBadge data-vt-brain-context="project" sizeVariant="micro" icon={<LayoutGrid aria-hidden="true" />} title={`Project · ${projectLabel}`} aria-label={`Project · ${projectLabel}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Project · {projectLabel}</span></StudioSplitLeftBadge>
    <StudioSplitLeftBadge data-vt-brain-context="content-build" sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} title={`Build · ${contentBuildId || "none"}`} aria-label={`Build · ${contentBuildId || "none"}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Build · {contentBuildId ? contentBuildId.slice(0, 10) : "none"}</span></StudioSplitLeftBadge>
