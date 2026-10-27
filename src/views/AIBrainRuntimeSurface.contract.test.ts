@@ -8,6 +8,7 @@ const panelSource = readFileSync(new URL("../components/brain/BrainRuntimePanel.
 const chatPrimitivesSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.tsx", import.meta.url), "utf8")
 const chatPrimitivesCssSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.css", import.meta.url), "utf8")
 const composerDockSource = readFileSync(new URL("../components/brain/BrainComposerDock.tsx", import.meta.url), "utf8")
+const composerDockCssSource = readFileSync(new URL("../components/brain/BrainComposerDock.css", import.meta.url), "utf8")
 const viewportHookSource = readFileSync(new URL("../components/brain/useVisualViewportHeight.ts", import.meta.url), "utf8")
 const collapsePrimitiveSource = readFileSync(new URL("../studio-ui/primitives/StudioControls.tsx", import.meta.url), "utf8")
 const toolboxSource = readFileSync(new URL("../components/Toolbox.tsx", import.meta.url), "utf8")
@@ -155,6 +156,14 @@ describe("AI Brain runtime surface integration", () => {
   expect(interruptedEntry).toContain('title="ANSWER"')
   expect(interruptedEntry).not.toContain('title="VIEWTUBE COPILOT"')
   expect(source).toContain('data-vt-brain-component="BrainAssistantChatEntry"')
+ })
+
+ it("surfaces selected context in the composer and preserves explicit keyboard guidance", () => {
+  expect(source).toContain('activeContextLabel={surfaceSelection?.label || null}')
+  expect(composerDockSource).toContain('data-vt-brain-part="composer-attachments"')
+  expect(composerDockSource).toContain('title="Review active context"')
+  expect(composerDockSource).toContain('aria-keyshortcuts="Enter Shift+Enter"')
+  expect(composerDockCssSource).toContain('font-size: 17.5px;')
  })
 
  it("opens a useful prompt category on entry and the chosen category after filtering", () => {
