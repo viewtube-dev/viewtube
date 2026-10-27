@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react"
-import { Link } from "react-router-dom"
+import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useBrain } from "../context/useBrain"
 import { BrainScopeSummary } from "../components/brain/BrainScopeSummary"
 import { BrainSettingsSwitch, BrainSettingsRange } from "../components/brain/BrainSettingsControls"
@@ -56,12 +56,14 @@ const Card: React.FC<{ title: string; eyebrow?: string; children: React.ReactNod
     </StudioTopSplitModule>
   )
 }
+export const getBrainCapabilityGroups = () => [
+  { title: "Channel intelligence", ids: ["channel-profile", "signal-anomaly-intelligence", "statistics-intelligence", "algorithm-intelligence", "analytics-diagnosis", "top-performer-mining"] },
+  { title: "Creator strategy", ids: ["audience-promise", "goal-coach", "daily-oracle", "journal-memory"] },
+  { title: "Discovery + publishing", ids: ["seo-opportunity", "niche-knowledge", "current-grounding", "content-generation"] },
+].map(group => ({ ...group, capabilities: group.ids.map(id => BRAIN_CAPABILITY_REGISTRY.find(item => item.id === id)).filter((item): item is typeof BRAIN_CAPABILITY_REGISTRY[number] => Boolean(item)) }))
+
 const CapabilityInventory: React.FC = () => {
-  const groups = useMemo(() => [
-    { title: "Channel intelligence", ids: ["channel-profile", "signal-anomaly-intelligence", "statistics-intelligence", "algorithm-intelligence", "analytics-diagnosis", "top-performer-mining"] },
-    { title: "Creator strategy", ids: ["audience-promise", "goal-coach", "daily-oracle", "journal-memory"] },
-    { title: "Discovery + publishing", ids: ["seo-opportunity", "niche-knowledge", "current-grounding", "content-generation"] },
-  ].map(group => ({ ...group, capabilities: group.ids.map(id => BRAIN_CAPABILITY_REGISTRY.find(item => item.id === id)).filter((item): item is typeof BRAIN_CAPABILITY_REGISTRY[number] => Boolean(item)) })), [])
+  const groups = getBrainCapabilityGroups()
   return <div className="grid min-w-0 gap-3">
     <p className="text-sm font-bold leading-5">This is the complete registered capability catalog—not a promise that every capability is ready for every channel. Each request still checks permissions, evidence, and context.</p>
     {groups.map(group => <section key={group.title} className="grid min-w-0 gap-2">
@@ -83,6 +85,7 @@ const CapabilityInventory: React.FC = () => {
 
 export default function BrainControlsPage() {
   const { authState } = useBrain()
+  const navigate = useNavigate()
   const channelId = authState.channelId || authState.channelHandle || null
   const [draft, setDraft] = useState(() => loadSettings(channelId))
   const [saved, setSaved] = useState(() => loadSettings(channelId))
@@ -131,9 +134,9 @@ export default function BrainControlsPage() {
             <h1 className="text-2xl font-black uppercase tracking-tight sm:text-3xl">Brain Controls</h1>
             <p className="max-w-2xl text-sm font-bold leading-5 text-black/70">One control surface for intelligence, permissions, learning, evidence, and safety. Draft changes are local until you save.</p>
           </div>
-          <Link to="/ai-brain" className="shrink-0" onClick={event => { if (dirty && !window.confirm("Discard unsaved Brain settings and open the Brain?")) event.preventDefault() }}>
-            <StudioButton type="button" sizeVariant="standard" tone="neutral">OPEN BRAIN</StudioButton>
-          </Link>
+          <StudioButton type="button" sizeVariant="standard" tone="neutral" onClick={() => {
+            if (!dirty || window.confirm("Discard unsaved Brain settings and open the Brain?")) navigate("/ai-brain")
+          }}>OPEN BRAIN</StudioButton>
         </div>
         <BrainScopeSummary channelId={channelId} />
       </header>
