@@ -39,6 +39,11 @@ describe("AI Brain Studio Workspace composition", () => {
     expect(workspaceStyles).toContain("width: min(560px, 46vw)")
   })
 
+  it("uses the extracted Prompt Library instead of a duplicate inline implementation", () => {
+    expect(pageSource).toContain('from "../components/brain/BrainPromptLibrary"')
+    expect(pageSource).not.toContain("export const BrainPromptLibrary: React.FC")
+  })
+
   it("uses the approved Studio palette and avoids decorative motion or shadow treatment", () => {
     expect(workspaceStyles).toContain("var(--vt-studio")
     expect(workspaceStyles).not.toMatch(/box-shadow\s*:/i)
