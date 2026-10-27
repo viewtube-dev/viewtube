@@ -104,7 +104,7 @@ test("the five-tier size contract is complete and generated CSS stays in parity"
     assert.match(generated, new RegExp(`--vt-studio-${tier}-height:\\s*${height}px`), `${tier} height must be emitted`);
     assert.match(generated, new RegExp(`--vt-studio-${tier}-font-size:\\s*${font}px`), `${tier} font size must be emitted`);
     assert.match(generated, new RegExp(`--vt-studio-${tier}-icon-size:\\s*${icon}px`), `${tier} icon size must be emitted`);
-    assert.match(core, new RegExp(`data-size="${tier}"[\\s\\S]*?--vt-studio-control-height:[^;]*`), `${tier} must resolve to core control geometry`);
+    assert.match(css, new RegExp(`data-size="${tier}"[\\s\\S]*?--vt-studio-control-height:[^;]*`), `${tier} must resolve to canonical system control geometry`);
   }
 });
 
@@ -136,4 +136,17 @@ test("top direct-representative module covers the full explicitly exported contr
     assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"\\b`), `${primitive} needs a direct top-module specimen`);
   }
   assert.doesNotMatch(representative, /data-vt-library-component="(?:StudioCollapsingSplitModule|StudioCollapsingTwoLineModule|StudioInterModule|StudioSplitAccordion)"/);
+});
+
+
+test("size-tier ownership is centralized and Micro inherits Mini's shared styling contract", () => {
+  const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8");
+  assert.match(tokens, /micro: \\{[^}]*letterSpacing: -0\\.02/);
+  assert.match(css, /data-size="supreme"[\\s\\S]*?supreme-stroke, 3px[\\s\\S]*?supreme-radius, 6px/);
+  assert.match(css, /data-size="micro"[\\s\\S]*?micro-stroke, 1\\.5px[\\s\\S]*?micro-radius, 3px[\\s\\S]*?micro-text-stroke, 0\\.4px[\\s\\S]*?micro-focus-outline-width, 0\\.975px/);
+  assert.doesNotMatch(core, /data-size="(?:supreme|standard|compact|mini|micro)"\\s*\\{/);
+  assert.doesNotMatch(recovery, /\\[data-vt-studio-control\\]\\[data-size="(?:supreme|standard|compact|mini|micro)"\\]\\s*\\{/);
+  assert.match(generated, /--vt-studio-mini-font-size: 17\\.5px/);
+  assert.match(generated, /--vt-studio-mini-icon-size: 17\\.5px/);
+  assert.match(generated, /--vt-studio-textarea-mini-font-size: 17\\.5px/);
 });
