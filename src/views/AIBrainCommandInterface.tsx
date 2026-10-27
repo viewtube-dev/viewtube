@@ -97,6 +97,7 @@ import { buildWorkflowRecommendationFromBrainResponse } from "../services/brain/
 import { resolveBrainDataReadinessPresentation } from "./brainDataReadiness"
 import { shouldFollowBrainConversation } from "./brainConversationScroll"
 import { resolveActiveBrainProject } from "./brainProjectContext"
+import { resolveBrainReviewHandoffContext } from "./brainReviewHandoffContext"
 export { shouldFollowBrainConversation }
 import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
@@ -1445,10 +1446,12 @@ const AIBrainCommandInterface: React.FC = () => {
    metadata: "Prepare a metadata draft for review",
    projects: "Review this content in Projects",
   }
-  const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
-  const selectedContentId = message.evidencePack?.evidenceIds.find((id) => id.startsWith("video:"))
-   || activeProject?.contentBuildId
-   || null
+  const { project: activeProject, selectedContentId } = resolveBrainReviewHandoffContext(
+   brain.projects,
+   brain.activeProjectId,
+   projectContextCleared,
+   message.evidencePack?.evidenceIds || [],
+  )
   try {
    const handoff = await queueAIBrainReviewedAction({
     request: `${targetRequests[target]}: ${message.originalUserText || message.response?.headline || "the current answer"}. Carry the selected content and evidence references forward. Review only; do not publish or perform external mutations.`,
