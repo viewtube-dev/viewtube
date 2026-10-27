@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
+import "./AIBrainStudioWorkspace.css"
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import {
  ArrowRight,
@@ -336,16 +337,16 @@ const BrainContextStrip: React.FC<{
  onClearProject: () => void
 }> = ({ channelLabel, projectLabel, contentBuildId, selection, onClearSelection, onToggleLock, onClearProject }) => (
  <section data-vt-brain-component="BrainContextStrip" aria-label="Active creator context" className="sticky top-0 z-10 grid gap-1 rounded-[7px] border-[2px] border-black bg-white p-2">
-  <div data-vt-brain-part="active-context-badges" className="grid min-w-0 grid-cols-2 gap-1 sm:grid-cols-4">
-   <StudioSplitLeftBadge data-vt-brain-context="channel" sizeVariant="micro" icon={<MessageSquare aria-hidden="true" />} title={`Channel · ${channelLabel}`} aria-label={`Channel · ${channelLabel}`} className="min-w-0 max-w-full">Channel · {channelLabel}</StudioSplitLeftBadge>
-   <StudioSplitLeftBadge data-vt-brain-context="project" sizeVariant="micro" icon={<LayoutGrid aria-hidden="true" />} title={`Project · ${projectLabel}`} aria-label={`Project · ${projectLabel}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Project · {projectLabel}</span></StudioSplitLeftBadge>
-   <StudioSplitLeftBadge data-vt-brain-context="content-build" sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} title={`Build · ${contentBuildId || "none"}`} aria-label={`Build · ${contentBuildId || "none"}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Build · {contentBuildId ? contentBuildId.slice(0, 10) : "none"}</span></StudioSplitLeftBadge>
-   <StudioSplitLeftBadge data-vt-brain-context="selection" sizeVariant="micro" icon={<Lock aria-hidden="true" />} title={`Selected · ${selection?.label || "none"}`} aria-label={`Selected · ${selection?.label || "none"}`} className="min-w-0 max-w-full"><span className="block min-w-0 truncate">Selected · {selection?.label || "None"}</span></StudioSplitLeftBadge>
+  <div data-vt-brain-part="active-context-badges" className="grid min-w-0 grid-cols-1 gap-1 min-[480px]:grid-cols-3 sm:grid-cols-4">
+   <StudioSplitLeftBadge data-vt-brain-context="channel" sizeVariant="micro" icon={<MessageSquare aria-hidden="true" />} title={`Channel · ${channelLabel}`} aria-label={`Channel · ${channelLabel}`} className="min-w-0 max-w-full"><span className="block min-w-0 whitespace-nowrap overflow-hidden text-clip">Channel · {channelLabel}</span></StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="project" sizeVariant="micro" icon={<LayoutGrid aria-hidden="true" />} title={`Project · ${projectLabel}`} aria-label={`Project · ${projectLabel}`} className="min-w-0 max-w-full"><span className="block min-w-0 whitespace-nowrap overflow-hidden text-clip">Project · {projectLabel}</span></StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="content-build" sizeVariant="micro" icon={<BookOpen aria-hidden="true" />} title={`Build · ${contentBuildId || "none"}`} aria-label={`Build · ${contentBuildId || "none"}`} className="min-w-0 max-w-full"><span className="block min-w-0 whitespace-nowrap overflow-hidden text-clip">Build · {contentBuildId ? contentBuildId.slice(0, 10) : "none"}</span></StudioSplitLeftBadge>
+   <StudioSplitLeftBadge data-vt-brain-context="selection" sizeVariant="micro" icon={<Lock aria-hidden="true" />} title={`Selected · ${selection?.label || "none"}`} aria-label={`Selected · ${selection?.label || "none"}`} className="min-w-0 max-w-full"><span className="block min-w-0 whitespace-nowrap overflow-hidden text-clip">Selected · {selection?.label || "None"}</span></StudioSplitLeftBadge>
   </div>
   <div data-vt-brain-part="context-actions" className="grid grid-cols-3 gap-1">
-   <StudioSplitLeftButton sizeVariant="compact" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} aria-label={selection?.locked ? "Unlock selection" : "Lock selection"} title={selection?.locked ? "Unlock selection" : "Lock selection"} onClick={onToggleLock} className="w-full min-w-0 truncate">{selection?.locked ? "Unlock" : "Lock"}</StudioSplitLeftButton>
-   <StudioSplitLeftButton sizeVariant="compact" icon={<XCircle aria-hidden="true" />} aria-label="Clear selection" title="Clear selection" disabled={!selection} onClick={onClearSelection} className="w-full min-w-0 truncate">Clear</StudioSplitLeftButton>
-   <StudioSplitLeftButton sizeVariant="compact" icon={<Trash2 aria-hidden="true" />} aria-label="Clear project" title="Clear project" disabled={projectLabel === "none"} onClick={onClearProject} className="w-full min-w-0 truncate">Project</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={selection?.locked ? <Unlock aria-hidden="true" /> : <Lock aria-hidden="true" />} disabled={!selection} aria-pressed={Boolean(selection?.locked)} aria-label={selection?.locked ? "Unlock selection" : "Lock selection"} title={selection?.locked ? "Unlock selection" : "Lock selection"} onClick={onToggleLock} className="w-full min-w-0 whitespace-nowrap overflow-hidden text-clip">{selection?.locked ? "Unlock" : "Lock"}</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<XCircle aria-hidden="true" />} aria-label="Clear selection" title="Clear selection" disabled={!selection} onClick={onClearSelection} className="w-full min-w-0 whitespace-nowrap overflow-hidden text-clip">Clear</StudioSplitLeftButton>
+   <StudioSplitLeftButton sizeVariant="compact" icon={<Trash2 aria-hidden="true" />} aria-label="Clear project" title="Clear project" disabled={projectLabel === "none"} onClick={onClearProject} className="w-full min-w-0 whitespace-nowrap overflow-hidden text-clip">Project</StudioSplitLeftButton>
   </div>
  </section>
 )
@@ -754,7 +755,7 @@ const CreatorResponseCard: React.FC<{
   return (
    <StudioInterModule
     data-vt-brain-component="BrainLearningReceiptEntry"
-    title="LEARNING"
+    title="LEARNING SAVED"
     startIcon={<BookOpen aria-hidden="true" />}
     sizeVariant="compact"
     className="shrink-0"
@@ -825,12 +826,12 @@ const CreatorResponseCard: React.FC<{
  return (
   <StudioInterModule
    data-vt-brain-component="BrainAssistantChatEntry"
-   title="VIEWTUBE COPILOT"
+   title="ANSWER"
    startIcon={<Brain aria-hidden="true" />}
    sizeVariant="compact"
    defaultOpen
    className="shrink-0"
-   style={{ background: TOOLBOX_PALETTE[5], "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": "#FF7AC8" } as React.CSSProperties}
+   style={{ background: "#ffffff", "--vt-studio-control-accent": "#ffffff", "--vt-studio-control-secondary": TOOLBOX_PALETTE[5] } as React.CSSProperties}
   >
   <BrainResponseLayout
    title={sanitizeCreatorFacingBrainCopy(response.headline)}
@@ -1021,7 +1022,7 @@ export const UserMessage: React.FC<{ text: string }> = ({ text }) => (
   sizeVariant="compact"
   collapsible={false}
   className="shrink-0"
-  style={{ background: TOOLBOX_PALETTE[7], "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[6] } as React.CSSProperties}
+  style={{ background: "#ffffff", "--vt-studio-control-accent": "#ffffff", "--vt-studio-control-secondary": TOOLBOX_PALETTE[7] } as React.CSSProperties}
  >
   <BrainChatMessageShell role="user" label="Your message" className="min-w-0 bg-[#36E0F6]">
    <p className="whitespace-pre-wrap px-3 py-2 text-sm font-bold leading-6 [overflow-wrap:anywhere]">
@@ -1881,10 +1882,10 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  return (
-  <main data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} data-keyboard-open={keyboardOpen ? "true" : "false"} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="vt-brain-module-shell h-full min-h-0 overflow-hidden overscroll-none bg-[#f3f4f6] text-black max-xl:h-[100dvh] xl:overflow-hidden">
+  <main data-vt-brain-workspace="studio" data-vt-brain-visual-viewport-height={mobileViewportHeight ?? undefined} data-keyboard-open={keyboardOpen ? "true" : "false"} style={mobileViewportHeight ? { height: `${mobileViewportHeight}px`, maxHeight: `${mobileViewportHeight}px` } : undefined} className="vt-brain-module-shell vt-brain-studio-workspace h-full min-h-0 overflow-hidden overscroll-none bg-[#f3f4f6] text-black max-xl:h-[100dvh] xl:overflow-hidden">
    <Toolbox
-    title="ViewTube Brain Hub"
-    subtitle="One assistant for channel strategy, analytics, goals, content planning, SEO, and publishing."
+    title="AI Brain"
+    subtitle="Your creator workspace for strategy, evidence, and the next best action."
     icon={<Brain />}
     paletteIndex={5}
     collapsible={false}
@@ -1892,7 +1893,7 @@ const AIBrainCommandInterface: React.FC = () => {
     embedded
     fillAvailable
     outerClassName="h-full min-h-0 max-xl:!h-full xl:h-full"
-    contentClassName="flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:overflow-hidden xl:overflow-hidden"
+    contentClassName="vt-brain-studio-workspace__toolbox-content flex min-h-0 flex-col overflow-hidden bg-[#f3f4f6] max-xl:overflow-hidden xl:overflow-hidden"
    >
     {intakeOpen ? (
      <CreatorIntakeWizard
@@ -1903,14 +1904,14 @@ const AIBrainCommandInterface: React.FC = () => {
      />
     ) : (
      <>
-     <section className="relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
+     <section data-vt-brain-workspace-part="surface" className="vt-brain-studio-workspace__surface relative flex h-full min-h-0 flex-col overflow-hidden max-xl:h-full xl:h-full xl:overflow-hidden">
        <BrainPageTabs activeTab={pageTab} onChange={setPageTab} />
-      <div className="shrink-0 bg-[#f3f4f6]">
+      <div data-vt-brain-workspace-part="runtime-context" className="vt-brain-studio-workspace__runtime shrink-0 bg-[#f3f4f6]">
        <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
       </div>
-      <div className="grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
-       <div className="hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
-      <div className={`${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
+      <div data-vt-brain-workspace-part="grid" className="vt-brain-studio-workspace__grid grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
+       <div data-vt-brain-workspace-part="navigation" className="vt-brain-studio-workspace__navigation hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
+      <div data-vt-brain-workspace-part="conversation" className={`vt-brain-studio-workspace__conversation ${innerCard} flex h-full min-h-0 min-w-0 flex-col overflow-hidden max-xl:rounded-none max-xl:border-x-0 max-xl:border-b-0`}>
         {pageTab === "chat" ? (
          <div id="brain-page-panel-chat" role="tabpanel" aria-labelledby="brain-page-tab-chat" className="flex min-h-0 flex-1 flex-col">
  <BrainChatShell
@@ -1928,7 +1929,7 @@ const AIBrainCommandInterface: React.FC = () => {
            onToggleLock={handleToggleSurfaceSelectionLock}
            onClearProject={handleClearActiveProject}
           />} />}
-         composer={<div className="vt-brain-chat-column__dock"><BrainComposerDock
+         composer={<div className="vt-brain-studio-workspace__composer vt-brain-chat-column__dock"><BrainComposerDock
            value={input}
            onChange={setInput}
            onSend={() => { void handleSend() }}
@@ -1977,6 +1978,9 @@ const AIBrainCommandInterface: React.FC = () => {
          <BrainControlsPanel />
         )}
        </div>
+       <aside data-vt-brain-workspace-part="right-context" aria-label="Creator context and recommended actions" className="vt-brain-studio-workspace__context-rail hidden min-h-0 overflow-y-auto xl:block">
+        <BrainContextRail channelId={channelId} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
+       </aside>
       </div>
 
       {promptRailOpen ? (

@@ -4,9 +4,8 @@
  * composes their layout and visual hierarchy.
  */
 .vt-brain-composer-dock {
-  --brain-composer-ink: #111111;
+  --brain-composer-ink: #000000;
   --brain-composer-paper: #f8f8f4;
-  --brain-composer-accent: #36e0f6;
   --brain-composer-muted: #5b6268;
   display: block;
   width: 100%;
@@ -22,6 +21,10 @@
   width: 100%;
   min-width: 0;
   gap: 0;
+  border: 0;
+  border-top: 2px solid #000000;
+  border-radius: 0;
+  overflow: visible;
   background: var(--brain-composer-paper);
 }
 
@@ -47,25 +50,27 @@
 
 .vt-brain-composer-dock .vt-brain-composer-input {
   display: block;
+  box-sizing: border-box;
   width: 100%;
   min-width: 0;
   min-height: 68px;
   max-height: min(30vh, 220px);
   padding: 14px 14px 12px;
-  border: 0 !important;
-  border-radius: 0 !important;
+  border: var(--vt-studio-control-stroke, 3px) solid #000000 !important;
+  border-radius: var(--vt-studio-control-radius, 6px) !important;
   outline: 0;
-  background: transparent !important;
-  color: var(--brain-composer-ink);
+  background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, #ffffff 50%) !important;
+  color: var(--pair-a, #36e0f6);
+  -webkit-text-stroke: 1px var(--pair-a, #36e0f6);
   font-size: 16px;
-  font-weight: 550;
+  font-weight: 1000;
   line-height: 1.45;
   letter-spacing: -.012em;
-  box-shadow: none !important;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--pair-a, #36e0f6) !important;
   resize: none;
   overflow-y: auto;
   overflow-wrap: anywhere;
-  caret-color: var(--brain-composer-ink);
+  caret-color: var(--pair-a, #36e0f6);
 }
 
 .vt-brain-composer-dock .vt-brain-composer-input::placeholder {
@@ -75,8 +80,13 @@
 }
 
 .vt-brain-composer-dock .vt-brain-composer-input:focus {
-  outline: 0;
-  box-shadow: inset 0 0 0 2px var(--brain-composer-accent) !important;
+  color: #000000;
+  -webkit-text-stroke: 1px #000000;
+  background: color-mix(in srgb, var(--pair-a, #36e0f6) 15%, #ffffff 85%) !important;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--pair-a, #36e0f6) !important;
+  outline: 1.95px solid var(--pair-b, #ff7ac8);
+  outline-offset: 0;
+  caret-color: var(--pair-a, #36e0f6);
 }
 
 .vt-brain-composer-dock .vt-brain-composer-input:disabled {
