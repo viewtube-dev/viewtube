@@ -1,6 +1,6 @@
 /**
- * Studio Component Grid: composition only. Primitive CSS owns all control geometry.
- * Cells share borders - adjacent borders collapse into a single stroke.
+ * Studio Component Grid: composition only. Primitive CSS owns control geometry.
+ * The grid's black background and fixed gap create shared, single-stroke dividers.
  */
 .vt-studio-component-grid {
   --scg-height: var(--vt-studio-control-height, 44px);
@@ -10,10 +10,11 @@
   display: grid;
   grid-template-columns: repeat(var(--scg-cols, 2), minmax(0, 1fr));
   grid-template-rows: repeat(var(--scg-rows, 2), var(--scg-height));
-  gap: 0;
+  gap: var(--scg-stroke);
   width: 100%;
   align-items: stretch;
   justify-items: stretch;
+  background: #000;
   border: var(--scg-stroke) solid #000;
   border-radius: var(--scg-radius);
   overflow: hidden;
@@ -77,64 +78,6 @@
   box-sizing: border-box;
 }
 
-/* Shared border system: each cell contributes only right and bottom borders */
-.vt-studio-component-grid__cell::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 10;
-}
-
-/* Right border for all except last column */
-.vt-studio-component-grid__cell:not(:nth-child(n + 1)):not([data-col-span]):not(:last-child)::after,
-.vt-studio-component-grid__cell[style*="grid-column-start"]:not([style*="grid-column-end: span"])::after {
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--scg-stroke);
-  background: #000;
-}
-
-/* Bottom border for all except last row */
-.vt-studio-component-grid__cell::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: var(--scg-stroke);
-  background: #000;
-  pointer-events: none;
-  z-index: 10;
-}
-
-/* Remove borders on last row */
-.vt-studio-component-grid__cell:nth-last-child(-n + var(--scg-cols))::before {
-  display: none;
-}
-
-/* Simplified approach: use CSS grid lines */
-.vt-studio-component-grid__cell {
-  border-right: var(--scg-stroke) solid #000;
-  border-bottom: var(--scg-stroke) solid #000;
-  margin-right: calc(var(--scg-stroke) * -1);
-  margin-bottom: calc(var(--scg-stroke) * -1);
-}
-
-/* Hide right border on last column */
-.vt-studio-component-grid__cell:nth-child(var(--scg-cols)n) {
-  border-right: 0;
-  margin-right: 0;
-}
-
-/* Hide bottom border on last row cells */
-.vt-studio-component-grid__cell:nth-last-child(-n + var(--scg-cols)) {
-  border-bottom: 0;
-  margin-bottom: 0;
-}
-
 /* Propagate size tokens to children */
 .vt-studio-component-grid[data-size] [data-vt-studio-control="true"] {
   --vt-studio-control-height: var(--scg-height);
@@ -175,6 +118,7 @@
     flex-direction: row;
     align-items: flex-start;
   }
+
   .vt-studio-component-grid-specimen-pair > div {
     flex: 1 1 0;
     min-width: 0;
