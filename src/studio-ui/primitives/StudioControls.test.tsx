@@ -7,6 +7,7 @@ import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLi
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
+import { StudioSplitTextInput } from "./StudioSplitTextInput"
 
 const readStudioControlCss = () => [
   "studio-control-system.css",
@@ -16,6 +17,7 @@ const readStudioControlCss = () => [
   "studio-control-distill-overrides.css",
   "studio-control-recovery-overrides.css",
   "studio-control-word-counter.css",
+  "studio-split-text-input.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
 
 const canonicalTail = (css: string) => {
@@ -1437,5 +1439,40 @@ describe("Studio left word counter and word slider", () => {
     expect(css).toContain('[data-vt-studio-word-index="4"]');
     expect(css).toContain(".vt-studio-left-word-slider");
     expect(css).toContain("prefers-reduced-motion");
+  });
+});
+
+
+describe("StudioSplitTextInput transparent-panel composition", () => {
+  it("keeps the split badge shell and places a size-aware text input inside it", () => {
+    const html = renderToStaticMarkup(
+      <StudioSplitTextInput split="left" sizeVariant="standard" leftIcon={<span>SEARCH</span>} aria-label="Search" />,
+    );
+    expect(html).toContain('class="vt-studio-split-shell vt-studio-split-text-input"');
+    expect(html).toContain('data-vt-studio-split="left"');
+    expect(html).toContain('class="vt-studio-split-shell__rail"');
+    expect(html).toContain('class="vt-studio-split-text-input__field"');
+    expect(html).toContain('aria-label="Search"');
+    expect(html).toContain('data-size="standard"');
+  });
+
+  it("uses a transparent split panel and an inset primary-border input without a second focus outline", () => {
+    const css = readStudioControlCss();
+    const shellStart = css.lastIndexOf(".vt-studio-split-text-input {");
+    const fieldStart = css.lastIndexOf(".vt-studio-split-text-input__field {");
+    const focusStart = css.lastIndexOf(".vt-studio-split-text-input:focus-within");
+    expect(shellStart).toBeGreaterThanOrEqual(0);
+    expect(fieldStart).toBeGreaterThan(shellStart);
+    expect(focusStart).toBeGreaterThan(fieldStart);
+    const shell = css.slice(shellStart, fieldStart);
+    const field = css.slice(fieldStart, focusStart);
+    expect(shell).toContain("background: transparent");
+    expect(field).toContain("border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary");
+    expect(field).toContain("height: calc(100% - 2 * var(--vt-studio-control-stroke, 3px))");
+    expect(field).toContain("outline: none");
+    expect(field).toContain("background: var(--vt-field-fill-rest)");
+    expect(field).not.toContain("border: 0 !important");
+    expect(field).not.toContain("background-image:");
+    expect(css.slice(focusStart, focusStart + 1000)).toContain("outline: none");
   });
 });
