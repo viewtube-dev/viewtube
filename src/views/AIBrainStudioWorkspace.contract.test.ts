@@ -10,6 +10,7 @@ describe("AI Brain Studio Workspace composition", () => {
     expect(pageSource).toContain('data-vt-brain-workspace-part="runtime-context"')
     expect(pageSource).toContain('data-vt-brain-workspace-part="conversation"')
     expect(pageSource).toContain('data-vt-brain-workspace-part="navigation"')
+    expect(pageSource).toContain('data-vt-brain-workspace-part="right-context"')
   })
 
   it("keeps the conversation as the bounded scroll owner with a persistent composer", () => {
