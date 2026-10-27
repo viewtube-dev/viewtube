@@ -13,6 +13,15 @@
 
 Do not author Studio controls in `src/components/subtoolbox/SubToolboxPrimitives.tsx` or style them in `src/styles/subtoolbox-system.css`. Those files remain the authority for Toolbox/SubToolbox-only primitives. Compatibility exports may remain there, but must delegate to Studio Controls and must not contain a second implementation or duplicate style block.
 
+## Token and CSS ownership workflow
+
+- `src/studio-ui/tokens.ts` is the canonical value source. Keep the five semantic tiers there and preserve required exports consumed by production primitives.
+- Focus outline widths are derived from `STUDIO_GLOBAL_DEFAULTS.focusOutlineWidthRatio` (0.65) and each tier's stroke. Do not independently tune a tier's focus width.
+- Run `npm run studio:tokens` after token changes and commit `src/styles/studio-control-vars.generated.css`. Never hand-maintain generated values.
+- `src/styles/studio-control-system.css` currently contains the established tier mapping and production family rules. Do not replace it with a barrel or delete recovery/parity layers until each selector has been migrated and the existing field, split, dropdown, toggle, and accordion tests pass.
+- Micro remains 12px high with 10px type/icons, but inherits Mini's 1.5px stroke, 3px radius, and 0.975px focus outline. Supreme type/icons are 52px; Mini type/icons are 17.5px.
+- Add regressions to `scripts/audit/studio-control-simplification-contract.test.mjs` for any changes to tier geometry or generated focus variables.
+
 ## Required workflow
 
 1. Search the existing Studio Controls exports and Component Library before creating a new primitive.
