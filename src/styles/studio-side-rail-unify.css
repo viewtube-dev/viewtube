@@ -15,37 +15,37 @@
 [data-vt-studio-control][data-size="supreme"],
 .vt-studio-value-toggle[data-size="supreme"],
 .vt-studio-side-counter[data-size="supreme"] {
-  --vt-side-rail-size: var(--vt-studio-supreme-height, 60px);
-  --vt-side-rail-stroke: var(--vt-studio-standard-stroke, 3px);
-  --vt-side-rail-radius: var(--vt-studio-standard-radius, 6px);
+  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-supreme-height, 60px));
+  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-standard-stroke, 3px));
+  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-standard-radius, 6px));
 }
 [data-vt-studio-control][data-size="standard"],
 .vt-studio-value-toggle[data-size="standard"],
 .vt-studio-side-counter[data-size="standard"] {
-  --vt-side-rail-size: var(--vt-studio-standard-height, 44px);
-  --vt-side-rail-stroke: var(--vt-studio-standard-stroke, 3px);
-  --vt-side-rail-radius: var(--vt-studio-standard-radius, 6px);
+  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-standard-height, 44px));
+  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-standard-stroke, 3px));
+  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-standard-radius, 6px));
 }
 [data-vt-studio-control][data-size="compact"],
 .vt-studio-value-toggle[data-size="compact"],
 .vt-studio-side-counter[data-size="compact"] {
-  --vt-side-rail-size: var(--vt-studio-compact-height, 28px);
-  --vt-side-rail-stroke: var(--vt-studio-compact-stroke, 2px);
-  --vt-side-rail-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-compact-height, 28px));
+  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-compact-stroke, 2px));
+  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-compact-radius, 4px));
 }
 [data-vt-studio-control][data-size="mini"],
 .vt-studio-value-toggle[data-size="mini"],
 .vt-studio-side-counter[data-size="mini"] {
-  --vt-side-rail-size: var(--vt-studio-mini-height, 20px);
-  --vt-side-rail-stroke: var(--vt-studio-mini-stroke, 1.5px);
-  --vt-side-rail-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-mini-height, 20px));
+  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-mini-stroke, 1.5px));
+  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-mini-radius, 3px));
 }
 [data-vt-studio-control][data-size="micro"],
 .vt-studio-value-toggle[data-size="micro"],
 .vt-studio-side-counter[data-size="micro"] {
-  --vt-side-rail-size: var(--vt-studio-micro-height, 12px);
-  --vt-side-rail-stroke: var(--vt-studio-micro-stroke, 1.5px);
-  --vt-side-rail-radius: var(--vt-studio-micro-radius, 3px);
+  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-micro-height, 12px));
+  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-micro-stroke, 1.5px));
+  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-micro-radius, 3px));
 }
 
 .vt-studio-value-toggle__arrow {
