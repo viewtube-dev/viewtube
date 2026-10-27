@@ -8,6 +8,7 @@ export type BrainHubUtilityRowProps = {
   promptLauncherRef?: React.Ref<HTMLButtonElement>
   contextLauncherRef?: React.Ref<HTMLButtonElement>
   size?: "compact" | "standard"
+  showPrompts?: boolean
   className?: string
 }
 
@@ -22,6 +23,7 @@ export function BrainHubUtilityRow({
   promptLauncherRef,
   contextLauncherRef,
   size = "compact",
+  showPrompts = true,
   className,
 }: BrainHubUtilityRowProps) {
   return (
@@ -30,24 +32,26 @@ export function BrainHubUtilityRow({
       role="toolbar"
       aria-label="Brain utilities"
     >
-      <button
-        type="button"
-        className="vt-brain-hub-utility-btn"
-        data-vt-studio-control="true"
-        data-size={size}
-        data-vt-studio-width="content"
-        ref={promptLauncherRef}
-        onClick={onOpenPrompts}
-      >
-        <span data-vt-studio-button-face>
-          <span className="vt-brain-hub-utility-btn__icon" aria-hidden>
-            <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="2.4">
-              <path d="M7 5h10v14H7zM9 9h6M9 13h6" strokeLinejoin="round" />
-            </svg>
+      {showPrompts ? (
+        <button
+          type="button"
+          className="vt-brain-hub-utility-btn"
+          data-vt-studio-control="true"
+          data-size={size}
+          data-vt-studio-width="content"
+          ref={promptLauncherRef}
+          onClick={onOpenPrompts}
+        >
+          <span data-vt-studio-button-face>
+            <span className="vt-brain-hub-utility-btn__icon" aria-hidden>
+              <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="2.4">
+                <path d="M7 5h10v14H7zM9 9h6M9 13h6" strokeLinejoin="round" />
+              </svg>
+            </span>
+            PROMPTS
           </span>
-          PROMPTS
-        </span>
-      </button>
+        </button>
+      ) : null}
 
       <button
         type="button"

@@ -120,7 +120,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             }}
             placeholder="Ask anything about your channel, content, or next upload…"
             className="vt-brain-composer-input w-full min-w-0 resize-none"
-            style={{ minHeight: 60, maxHeight: maxFieldPx }}
+            style={{ minHeight: 68, maxHeight: maxFieldPx }}
             aria-label="Message to ViewTube Brain"
             aria-describedby="brain-composer-help"
             onFocus={(event) => {
