@@ -1,157 +1,108 @@
 /**
- * Canonical primitive-level side rail geometry.
- * Loaded after legacy family CSS so every page uses the same tiered metrics.
- * Grid compositions may supply the same tokens but never own rail geometry.
+ * PRIMITIVE-LEVEL side-rail unification
+ * -------------------------------------
+ * Load from the Studio Controls entry (with studio-control-system.css),
+ * NOT only inside the component grid.
+ *
+ * Owns: value-toggle arrows, arrow stacks, double-toggle chrome.
+ * Aligns to the same tokens as side counters / steppers.
+ *
+ * REMOVE from studio-control-system.css (conflicting hard-codes):
+ *   .vt-studio-value-toggle__arrow { min-width: 38px; padding: 0 2px; }
+ *   .vt-studio-value-toggle__arrow svg { width: 38px; height: 38px; }
+ *   .vt-studio-value-toggle[data-size="standard"] { min-height: 44px; } // bare px without token
  */
-[data-vt-studio-control][data-size],
-.vt-studio-value-toggle[data-size],
-.vt-studio-side-counter[data-size] {
+
+/* —— Shared rail tokens on value-toggle roots —— */
+.vt-studio-value-toggle,
+[data-vt-studio-value-toggle] {
   --vt-side-rail-size: var(--vt-studio-control-height, 44px);
   --vt-side-rail-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-side-rail-radius: var(--vt-studio-control-radius, 6px);
-  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * .62);
+  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.62);
+  box-sizing: border-box;
+  height: var(--vt-side-rail-size);
+  min-height: var(--vt-side-rail-size);
+  border-width: var(--vt-side-rail-stroke);
+  border-radius: var(--vt-side-rail-radius);
 }
 
-[data-vt-studio-control][data-size="supreme"],
 .vt-studio-value-toggle[data-size="supreme"],
-.vt-studio-side-counter[data-size="supreme"] {
-  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-supreme-height, 60px));
-  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-standard-stroke, 3px));
-  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-standard-radius, 6px));
-}
-[data-vt-studio-control][data-size="standard"],
-.vt-studio-value-toggle[data-size="standard"],
-.vt-studio-side-counter[data-size="standard"] {
-  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-standard-height, 44px));
-  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-standard-stroke, 3px));
-  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-standard-radius, 6px));
-}
-[data-vt-studio-control][data-size="compact"],
-.vt-studio-value-toggle[data-size="compact"],
-.vt-studio-side-counter[data-size="compact"] {
-  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-compact-height, 28px));
-  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-compact-stroke, 2px));
-  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-compact-radius, 4px));
-}
-[data-vt-studio-control][data-size="mini"],
-.vt-studio-value-toggle[data-size="mini"],
-.vt-studio-side-counter[data-size="mini"] {
-  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-mini-height, 20px));
-  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-mini-stroke, 1.5px));
-  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-mini-radius, 3px));
-}
-[data-vt-studio-control][data-size="micro"],
-.vt-studio-value-toggle[data-size="micro"],
-.vt-studio-side-counter[data-size="micro"] {
-  --vt-side-rail-size: var(--vt-studio-control-height, var(--vt-studio-micro-height, 12px));
-  --vt-side-rail-stroke: var(--vt-studio-control-stroke, var(--vt-studio-micro-stroke, 1.5px));
-  --vt-side-rail-radius: var(--vt-studio-control-radius, var(--vt-studio-micro-radius, 3px));
+[data-vt-studio-value-toggle][data-size="supreme"] {
+  --vt-side-rail-size: var(--vt-studio-supreme-height, 60px);
+  --vt-side-rail-stroke: var(--vt-studio-supreme-stroke, 3px);
+  --vt-side-rail-radius: var(--vt-studio-supreme-radius, 8px);
+  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.62);
 }
 
+.vt-studio-value-toggle[data-size="standard"],
+[data-vt-studio-value-toggle][data-size="standard"] {
+  --vt-side-rail-size: var(--vt-studio-standard-height, 44px);
+  --vt-side-rail-stroke: var(--vt-studio-standard-stroke, 3px);
+  --vt-side-rail-radius: var(--vt-studio-standard-radius, 6px);
+  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.62);
+}
+
+.vt-studio-value-toggle[data-size="compact"],
+[data-vt-studio-value-toggle][data-size="compact"] {
+  --vt-side-rail-size: var(--vt-studio-compact-height, 28px);
+  --vt-side-rail-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-side-rail-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.62);
+}
+
+.vt-studio-value-toggle[data-size="mini"],
+[data-vt-studio-value-toggle][data-size="mini"] {
+  --vt-side-rail-size: var(--vt-studio-mini-height, 20px);
+  --vt-side-rail-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-side-rail-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.62);
+}
+
+.vt-studio-value-toggle[data-size="micro"],
+[data-vt-studio-value-toggle][data-size="micro"] {
+  --vt-side-rail-size: var(--vt-studio-micro-height, 12px);
+  --vt-side-rail-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-side-rail-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.62);
+}
+
+/* —— Arrow button = square rail (matches side counter) —— */
 .vt-studio-value-toggle__arrow {
   box-sizing: border-box;
   display: grid;
   place-items: center;
-  flex: 0 0 var(--vt-side-rail-size) !important;
-  width: var(--vt-side-rail-size) !important;
-  min-width: var(--vt-side-rail-size) !important;
-  max-width: var(--vt-side-rail-size);
-  height: 100%;
-  margin: 0;
-  padding: 0 !important;
-  border: 0;
-  border-radius: 0;
-  background: var(--vt-toggle-icon-fill, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
-  color: var(--vt-toggle-icon, #000);
-  cursor: pointer;
-}
-.vt-studio-value-toggle__arrow svg {
-  display: block;
-  width: var(--vt-side-chevron-size) !important;
-  height: var(--vt-side-chevron-size) !important;
-  max-width: 100%;
-  max-height: 100%;
-  stroke-width: var(--vt-studio-dropdown-chevron-stroke, 2.4);
-}
-.vt-studio-value-toggle__arrow-stack {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
   flex: 0 0 var(--vt-side-rail-size);
   width: var(--vt-side-rail-size);
   min-width: var(--vt-side-rail-size);
-  height: 100%;
-}
-.vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow {
-  flex: 1 1 0;
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: none;
-  height: auto;
-}
-.vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: calc(var(--vt-side-chevron-size) * .72) !important;
-  height: calc(var(--vt-side-chevron-size) * .72) !important;
-}
-
-/* One shared-edge inset stroke; the shell owns the outside perimeter. */
-.vt-studio-value-toggle--side[data-arrow-side="right"] > [data-vt-studio-split-rail] {
-  box-shadow: inset var(--vt-side-rail-stroke) 0 0 #000;
-}
-.vt-studio-value-toggle--side[data-arrow-side="left"] > [data-vt-studio-split-rail] {
-  box-shadow: inset calc(-1 * var(--vt-side-rail-stroke)) 0 0 #000;
-}
-
-/* Counter rail and toggle rail are the same square module. */
-.vt-studio-side-counter__rail {
-  box-sizing: border-box;
-  flex: 0 0 var(--vt-side-rail-size) !important;
-  width: var(--vt-side-rail-size) !important;
-  min-width: var(--vt-side-rail-size) !important;
   max-width: var(--vt-side-rail-size);
-  height: var(--vt-side-rail-size);
-}
-.vt-studio-side-counter__actions {
-  width: 100%;
   height: 100%;
-  min-width: 0;
-}
-.vt-studio-side-counter__actions button {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  height: 50%;
+  margin: 0;
   padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: var(--vt-toggle-icon, #000);
+  background: var(--vt-toggle-icon-fill, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  cursor: pointer;
 }
-.vt-studio-side-counter__actions button svg {
+
+.vt-studio-value-toggle__arrow svg {
+  display: block;
   width: var(--vt-side-chevron-size);
   height: var(--vt-side-chevron-size);
-  max-width: 100%;
-  max-height: 100%;
+  stroke-width: var(--vt-studio-dropdown-chevron-stroke, 2.4);
 }
-.vt-studio-value-toggle__arrow:active:not(:disabled) svg,
-.vt-studio-value-toggle__arrow.is-holding svg,
-.vt-studio-side-counter__actions button:is(:active, .is-holding, [data-press-holding="true"]) svg {
-  animation: vt-studio-counter-pop 180ms ease-out;
+
+.vt-studio-value-toggle__arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
-@media (prefers-reduced-motion: reduce) {
-  .vt-studio-value-toggle__arrow:active:not(:disabled) svg,
-  .vt-studio-value-toggle__arrow.is-holding svg,
-  .vt-studio-side-counter__actions button:is(:active, .is-holding, [data-press-holding="true"]) svg {
-    animation: none;
-  }
+
+.vt-studio-value-toggle__arrow:focus-visible {
+  outline: calc(var(--vt-side-rail-stroke) * var(--vt-studio-focus-outline-width-ratio, 0.65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
 }
-.vt-studio-value-toggle--double {
-  height: var(--vt-side-rail-size);
-  min-height: var(--vt-side-rail-size);
-}
-.vt-studio-value-toggle--double .vt-studio-value-toggle__double-side,
-.vt-studio-value-toggle--double .vt-studio-value-toggle--nested {
-  height: 100%;
-  min-height: 100%;
-}
-.vt-studio-value-toggle--double .vt-studio-value-toggle--nested {
-  border: 0 !important;
-  border-radius: 0 !important;
-}
+
+/* Up/down stack fills the same square column as a side
+... 
