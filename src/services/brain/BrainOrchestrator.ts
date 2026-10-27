@@ -50,6 +50,7 @@ import { collectKnownNumbers, parseNumericToken } from "./numericClaims"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
 import { readBrainEngineControls } from "./BrainEngineControls"
 import { resolveCreatorContext } from "./CreatorContextResolver"
+import { loadAiBrainContext } from "../aiBrainContext"
 import { readBrainSurfaceSelection } from "./BrainSurfaceSelection"
 import {
  cacheCurrentNicheResearch,
@@ -466,6 +467,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   ? evidenceIntelligence?.audienceIntelligence || null
   : null
  const surfaceSelection = readBrainSurfaceSelection()
+ const savedChannelContext = loadAiBrainContext().channelContext
  const creatorContext = await resolveCreatorContext({
   channelId: input.channelId,
   query: input.userText,
@@ -571,6 +573,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   audienceIntelligence,
   algorithmIntelligence,
   creatorContext,
+  channelContext: savedChannelContext,
  })
  const questionTrace = beginBrainTrace({ kind: "question", channelId: input.channelId || null })
  questionTrace.setIntent({ intent: taskProfile.id, taskProfileId: taskProfile.id })
