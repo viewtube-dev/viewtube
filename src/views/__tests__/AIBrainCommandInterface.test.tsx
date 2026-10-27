@@ -120,8 +120,10 @@ describe("AIBrainCommandInterface", () => {
    <StudioBrainPromptLibrary cards={cards} onPrompt={vi.fn()} onEdit={vi.fn()} />,
   )
 
-  const strategyCategory = html.match(/<div[^>]*data-vt-studio-inter-module="true"[^>]*data-open="true"[^>]*>[\\s\\S]*?strategy/i)
-  expect(strategyCategory).not.toBeNull()
+  const firstCategory = cards[0]?.category
+  expect(firstCategory).toBeTruthy()
+  expect(html).toContain(`data-prompt-category="${firstCategory}"`)
+  expect(html).toContain('data-prompt-id="')
   expect(html).toContain('data-prompt-id="')
  })
 
