@@ -110,7 +110,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
         )
       }
       chips={
-        activePromptTitle || activeContextLabel ? (
+        activePromptTitle || activeContextLabel || value.trim() ? (
           <div className="flex min-w-0 flex-wrap items-center gap-1" data-vt-brain-part="composer-attachments" aria-label="Active prompt and context">
             {activePromptTitle ? (
               <StudioLedBadgeTab
@@ -137,6 +137,19 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
                 aria-label={`Active context ${activeContextLabel}. Activate to review context.`}
                 title="Review active context"
               />
+            ) : null}
+            {value.trim() ? (
+              <StudioButton
+                type="button"
+                sizeVariant="compact"
+                tone="neutral"
+                data-vt-brain-part="clear-composer-draft"
+                onClick={() => onChange("")}
+                aria-label="Clear message draft"
+                title="Clear the current draft"
+              >
+                Clear draft
+              </StudioButton>
             ) : null}
           </div>
         ) : null
