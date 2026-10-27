@@ -831,7 +831,7 @@ const CreatorResponseCard: React.FC<{
    sizeVariant="compact"
    defaultOpen
    className="shrink-0"
-   style={{ background: TOOLBOX_PALETTE[5], "--vt-studio-control-accent": TOOLBOX_PALETTE[5], "--vt-studio-control-secondary": "#FF7AC8" } as React.CSSProperties}
+   style={{ background: "#ffffff", "--vt-studio-control-accent": "#ffffff", "--vt-studio-control-secondary": TOOLBOX_PALETTE[5] } as React.CSSProperties}
   >
   <BrainResponseLayout
    title={sanitizeCreatorFacingBrainCopy(response.headline)}
@@ -1022,7 +1022,7 @@ export const UserMessage: React.FC<{ text: string }> = ({ text }) => (
   sizeVariant="compact"
   collapsible={false}
   className="shrink-0"
-  style={{ background: TOOLBOX_PALETTE[7], "--vt-studio-control-accent": TOOLBOX_PALETTE[7], "--vt-studio-control-secondary": TOOLBOX_PALETTE[6] } as React.CSSProperties}
+  style={{ background: "#ffffff", "--vt-studio-control-accent": "#ffffff", "--vt-studio-control-secondary": TOOLBOX_PALETTE[7] } as React.CSSProperties}
  >
   <BrainChatMessageShell role="user" label="Your message" className="min-w-0 bg-[#36E0F6]">
    <p className="whitespace-pre-wrap px-3 py-2 text-sm font-bold leading-6 [overflow-wrap:anywhere]">
