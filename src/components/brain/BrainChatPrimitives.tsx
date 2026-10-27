@@ -1,6 +1,6 @@
 import React from "react"
 import "./BrainChatPrimitives.css"
-import { StudioBrainStatusBadge, StudioButton } from "../../studio-ui"
+import { StudioBrainStatusBadge, StudioButton, StudioChatResponseShell } from "../../studio-ui"
 
 export type BrainChatStatus = "ready" | "loading" | "partial" | "warning" | "error" | "unavailable"
 
@@ -70,12 +70,11 @@ export const BrainResponseLayout: React.FC<{
   bodyClassName?: string
   actionsClassName?: string
 }> = ({ title, children, header, attribution, status, headerMetadata, actions, footer, className = "", headerClassName = "", bodyClassName = "", actionsClassName = "" }) => (
-  <article
+  <StudioChatResponseShell
     data-vt-brain-component="BrainResponseLayout"
     aria-label={title}
-    className={`flex min-w-0 flex-col overflow-hidden ${className}`}
-  >
-    {header ?? (
+    className={`overflow-hidden ${className}`}
+    metadata={header ?? (
       <div className={`shrink-0 border-b-2 border-black px-3 py-2 ${headerClassName}`}>
         {attribution || status || headerMetadata ? (
           <div className="mb-1 flex min-w-0 flex-wrap items-center justify-between gap-1">
@@ -89,12 +88,17 @@ export const BrainResponseLayout: React.FC<{
         <BrainResponseSectionHeader title={title} />
       </div>
     )}
+    actions={(actions || footer) ? (
+      <>
+        {actions ? <div className={`flex min-w-0 shrink-0 flex-wrap items-center gap-1 border-t-2 border-black px-3 py-1 ${actionsClassName}`}>{actions}</div> : null}
+        {footer ? <div className="w-full min-w-0">{footer}</div> : null}
+      </>
+    ) : null}
+  >
     <div data-vt-brain-part="response-layout-body" className={`flex min-w-0 flex-col gap-2 p-3 [overflow-wrap:anywhere] ${bodyClassName}`}>
       {children}
     </div>
-    {actions ? <div data-vt-brain-part="response-layout-actions" className={`flex min-w-0 shrink-0 flex-wrap items-center gap-1 border-t-2 border-black px-3 py-1 ${actionsClassName}`}>{actions}</div> : null}
-    {footer}
-  </article>
+  </StudioChatResponseShell>
 )
 
 export const BrainResponseSectionHeader: React.FC<{
