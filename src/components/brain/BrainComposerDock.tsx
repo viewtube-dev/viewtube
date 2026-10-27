@@ -23,6 +23,7 @@ export type BrainComposerDockProps = {
   statusLabel?: string
   activePromptTitle?: string | null
   onClearActivePrompt?: () => void
+  activeContextLabel?: string | null
   onOpenPrompts: () => void
   onOpenCapabilities: () => void
   onOpenContext: () => void
@@ -63,6 +64,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   statusLabel,
   activePromptTitle,
   onClearActivePrompt,
+  activeContextLabel,
   onOpenPrompts,
   onOpenCapabilities,
   onOpenContext,
@@ -108,18 +110,35 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
         )
       }
       chips={
-        activePromptTitle ? (
-          <StudioLedBadgeTab
-            mode="badge"
-            label={activePromptTitle}
-            tone="pink"
-            led="solid"
-            animation="steady"
-            sizeVariant="mini"
-            onClick={onClearActivePrompt}
-            aria-label={`Active prompt ${activePromptTitle}. Activate to clear.`}
-            title="Clear active prompt"
-          />
+        activePromptTitle || activeContextLabel ? (
+          <div className="flex min-w-0 flex-wrap items-center gap-1" data-vt-brain-part="composer-attachments" aria-label="Active prompt and context">
+            {activePromptTitle ? (
+              <StudioLedBadgeTab
+                mode="badge"
+                label={`Prompt: ${activePromptTitle}`}
+                tone="pink"
+                led="solid"
+                animation="steady"
+                sizeVariant="mini"
+                onClick={onClearActivePrompt}
+                aria-label={`Active prompt ${activePromptTitle}. Activate to clear.`}
+                title="Clear active prompt"
+              />
+            ) : null}
+            {activeContextLabel ? (
+              <StudioLedBadgeTab
+                mode="badge"
+                label={`Context: ${activeContextLabel}`}
+                tone="cyan"
+                led="solid"
+                animation="steady"
+                sizeVariant="mini"
+                onClick={onOpenContext}
+                aria-label={`Active context ${activeContextLabel}. Activate to review context.`}
+                title="Review active context"
+              />
+            ) : null}
+          </div>
         ) : null
       }
       tray={
@@ -188,6 +207,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             style={{ minHeight: 60, maxHeight: maxFieldPx }}
             aria-label="Message to ViewTube Brain"
             aria-describedby="brain-composer-help"
+            aria-keyshortcuts="Enter Shift+Enter"
             onFocus={(event) => {
               focusComposer(event.currentTarget)
             }}
