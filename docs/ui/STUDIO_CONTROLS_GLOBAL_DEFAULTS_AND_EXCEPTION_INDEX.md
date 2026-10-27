@@ -285,11 +285,20 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 ### Required follow-up
 
 1. Reconcile Mini typography in `src/styles/studio-control-recovery-overrides.css` with the 17.5px TypeScript token and regenerate/verify dependent output if required.
-2. Decide whether Micro `-0.01em` is intentional. If not, align it to `-0.02em`; if yes, register a narrowly scoped exception in the machine-readable exception map and this document.
+2. Verify the emitter output, focused field/split tests, typecheck/build, computed styles, and desktop/mobile layouts.
 3. Run token emitter consistency checks, focused tests, typecheck/build, computed-style assertions, and desktop/mobile browser inspection for all five tiers.
 4. Test editable input, textarea, TextBox, and split input separately at rest and focus. Assert outer border, inset, fill, text/glyph stroke, caret, outline width/color/offset, and divider count.
 
 **Verification boundary:** This is a source/documentation audit, not rendered visual certification. No tests, build, computed-style capture, browser screenshots, or assistive-technology tests were run in this pass.
+
+
+### Source-of-truth and split-field inheritance
+
+- Token source: `src/studio-ui/tokens.ts`.
+- Generated CSS: `src/styles/studio-control-vars.generated.css`, emitted by `scripts/emit-studio-control-vars.mjs`.
+- Global size selectors: `src/styles/studio-control-system.css` only; core and recovery styles must not reintroduce tier geometry.
+- Split input: the component imports its shell stylesheet. Shared field rules own matching text typography, rest/focus colors, caret, and text stroke. The split shell owns its outer border, rails, persistent inset geometry, and focus outline routing.
+- Preferred maintenance: remove duplicate/stale declarations and use existing token variables before adding CSS. Each real exception needs one owner and a matching catalog/documentation entry.
 
 
 ### Source-of-truth and split-field inheritance
