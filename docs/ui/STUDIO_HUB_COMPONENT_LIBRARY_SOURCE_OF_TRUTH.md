@@ -8,7 +8,7 @@
 
 ## Studio Controls size-tier authority — 2026-10-20
 
-The intended production size ladder is **Supreme 60px / Standard 44px / Compact 28px / Mini 20px / Micro 12px**. Mini is a first-class tier with 1.5px stroke, 3px radius, and 17.5px typography/icon size in TypeScript tokens; recovery CSS currently sets its type/icon to 16px, so rendered parity remains an open defect. The canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` emits `src/styles/studio-control-vars.generated.css`; production geometry is applied by `src/styles/studio-control-system.css` and the family-specific styles. Supreme dimensional tokens scale Standard by 60/44 while preserving typography ratios, color roles, and flat-shell behavior. Mini has explicit 20px height / 1.5px stroke / 3px radius and is not interpolated from neighboring tiers. Micro has an explicit 12px height and is not derived from half Compact. Mini and Micro remain family-aware and must not be added to a component whose inner geometry cannot fit. The Confirmed Primitive Library may show a tier only after the production API and rendered behavior support it.
+The canonical production size ladder is **Supreme 60px / Standard 44px / Compact 28px / Mini 20px / Micro 12px**. TypeScript tokens are authoritative, generated CSS is emitted from those tokens, and `studio-control-system.css` owns shared tier selectors. Mini uses 17.5px type/icons; Micro keeps 12px height and 10px type/icons while inheriting Mini's 1.5px stroke, 3px radius, 0.975px outline, and global `-0.02em` letter-spacing. The canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` emits `src/styles/studio-control-vars.generated.css`; production geometry is applied by `src/styles/studio-control-system.css` and the family-specific styles. Supreme dimensional tokens scale Standard by 60/44 while preserving typography ratios, color roles, and flat-shell behavior. Mini has explicit 20px height / 1.5px stroke / 3px radius and is not interpolated from neighboring tiers. Micro has an explicit 12px height and is not derived from half Compact. Mini and Micro remain family-aware and must not be added to a component whose inner geometry cannot fit. The Confirmed Primitive Library may show a tier only after the production API and rendered behavior support it.
 
 `ToolboxUIReferenceLibrary.tsx` is the Studio Hub entry point and shell. It must not maintain an independent subset of component examples.
 
@@ -305,7 +305,7 @@ The Text Input family in the Complete Component + Primitive Catalog now renders 
 - Standard: 44px control height and 38px text.
 - Compact: 28px control height and 24px text.
 - Keep the text sizes stable when focused. Focus may change border/fill/indicator treatment, but must not change typography or layout geometry.
-- The TypeScript size contract and production CSS must remain aligned. CSS declarations and token cascade in `studio-control-system.css` are the final rendering authority.
+- The TypeScript size contract is authoritative; `scripts/emit-studio-control-vars.mjs` generates CSS variables, and `studio-control-system.css` consumes them. Core and recovery CSS must not redeclare the five-tier lattice. Family styles may own only family-specific anatomy and documented exceptions.
 
 ### Selection-control stroke contract — follow PR #78
 - **Word toggles:** 3px solid black border at 44px and 2px solid black border at 28px.
@@ -496,11 +496,33 @@ The representative list is a source/provenance ledger, not a guarantee that ever
 
 ### Size and styling drift requiring follow-up
 
-- TypeScript tokens specify Mini type/icon at 17.5px; recovery CSS sets both to 16px.
-- Tokens and recovery CSS specify Micro 1.5px stroke / 3px radius / 0.975px focus outline, while the catalog's split-left badge caption and older normative text still record 1px / 2px / 0.65px. Confirm whether that badge is an approved exception; otherwise update its source caption and implementation together.
-- TypeScript Micro letter spacing is `-0.01em`, unlike the shared `-0.02em` contract; register or resolve this difference.
+- Mini type/icon is 17.5px in tokens and generated CSS; core/recovery styles no longer redeclare the five-tier geometry.
+- Micro follows Mini's shared stroke/radius/outline and letter-spacing settings; its size-specific values are 12px height and 10px type/icons. Catalog-only captions must not override the token contract.
+- Micro follows the global `-0.02em` letter-spacing token; there is no Micro-specific exception.
 - The three Studio contract documents must agree on intended rules and separately report implementation status. Documentation must not mark a source defect as fixed.
 
 ### Verification status — 2026-10-27
 
 Source paths and imports were inspected. Browser visual certification, computed-style verification, keyboard/assistive-technology testing, typecheck, and build have not been run in this documentation pass. Do not describe the new representatives as fully certified until those checks are complete.
+
+
+### Style ownership and minimal-change rule — 2026-10-27
+
+- `src/studio-ui/tokens.ts` owns global size and field tokens.
+- `scripts/emit-studio-control-vars.mjs` generates `src/styles/studio-control-vars.generated.css`; do not hand-edit generated values when the emitter can produce them.
+- `src/styles/studio-control-system.css` owns global tier selectors and consumes generated named-tier variables.
+- `src/styles/studio-control-core.css` owns generic layout/interaction behavior, not a second size ladder.
+- `src/styles/studio-control-recovery-overrides.css` owns only scoped regressions that cannot yet live in the owning primitive stylesheet; it must not redefine the global size ladder.
+- `StudioSplitTextInput` imports `studio-split-text-input.css` for shell perimeter, rails, inset geometry, and focus routing. Shared field typography and state colors remain owned by `studio-control-fields.css` and global tokens.
+- For future changes, remove stale declarations and use existing token variables before adding CSS. Add a new selector/file only when a primitive truly owns unique anatomy that cannot be expressed by shared rules.
+
+
+### Style ownership and minimal-change rule — 2026-10-27
+
+- `src/studio-ui/tokens.ts` owns global size and field tokens.
+- `scripts/emit-studio-control-vars.mjs` generates `src/styles/studio-control-vars.generated.css`; do not hand-edit generated values when the emitter can produce them.
+- `src/styles/studio-control-system.css` owns global tier selectors and consumes generated named-tier variables.
+- `src/styles/studio-control-core.css` owns generic layout/interaction behavior, not a second size ladder.
+- `src/styles/studio-control-recovery-overrides.css` owns only scoped regressions that cannot yet live in the owning primitive stylesheet; it must not redefine the global size ladder.
+- `StudioSplitTextInput` imports `studio-split-text-input.css` for shell perimeter, rails, inset geometry, and focus routing. Shared field typography and state colors remain owned by `studio-control-fields.css` and global tokens.
+- For future changes, remove stale declarations and use existing token variables before adding CSS. Add a new selector/file only when a primitive truly owns unique anatomy that cannot be expressed by shared rules.
