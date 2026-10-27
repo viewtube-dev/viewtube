@@ -97,6 +97,7 @@ import { BrainWorkflowRunPanel } from "../components/brain/BrainWorkflowRunPanel
 import { buildWorkflowRecommendationFromBrainResponse } from "../services/brain/brainWorkflowRecommendations"
 import { resolveBrainDataReadinessPresentation } from "./brainDataReadiness"
 import { shouldFollowBrainConversation } from "./brainConversationScroll"
+import { resolveActiveBrainProject } from "./brainProjectContext"
 export { shouldFollowBrainConversation }
 import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
