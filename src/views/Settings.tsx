@@ -25,7 +25,7 @@ import {
   setStoredIngestMode,
   type IngestMode,
 } from "../services/productArchitecture"
-import { resolvePublicChannel } from "../services/publicHandleMode"
+import { fetchPublicChannelSnapshot, resolvePublicChannel } from "../services/publicHandleMode"
 import type { SubscriptionPlanId } from "../services/subscriptionPlans"
 import { SettingsHelpSection } from "./settings/SettingsHelpSection"
 import { ChannelContextSettingsSection } from "./settings/ChannelContextSettingsSection"
@@ -174,11 +174,15 @@ const Settings: React.FC = () => {
         setHandleStatus(result.reason || "Channel not resolved.")
         return
       }
-      setHandleStatus(`Resolved: ${result.channelTitle || "Unknown Channel"} (${result.resolvedChannelId})`)
       setIngestMode("public_handle")
       setStoredIngestMode("public_handle")
       localStorage.setItem("vt_public_channel_id", result.resolvedChannelId)
       if (result.resolvedHandle) localStorage.setItem("vt_public_channel_handle", result.resolvedHandle)
+      const snapshot = await fetchPublicChannelSnapshot(handleInput)
+      if (snapshot) localStorage.setItem("vt_public_channel_snapshot", JSON.stringify(snapshot))
+      setHandleStatus(
+        `Connected public channel: ${result.channelTitle || "Channel"} · ${snapshot?.topVideos.length || 0} recent public videos ingested. ${snapshot?.source === "public_page" ? "No login or YouTube Data API key used." : result.reason || "Public source only."}`,
+      )
     } catch (error) {
       setHandleStatus(`Resolve failed: ${error instanceof Error ? error.message : String(error)}`)
     }
