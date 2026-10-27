@@ -497,7 +497,7 @@ The representative list is a source/provenance ledger, not a guarantee that ever
 ### Size and styling drift requiring follow-up
 
 - TypeScript tokens specify Mini type/icon at 17.5px; recovery CSS sets both to 16px.
-- Tokens and recovery CSS specify Micro 1.5px stroke / 3px radius / 0.975px focus outline, while older normative text records 1px / 2px / 0.65px.
+- Tokens and recovery CSS specify Micro 1.5px stroke / 3px radius / 0.975px focus outline, while the catalog's split-left badge caption and older normative text still record 1px / 2px / 0.65px. Confirm whether that badge is an approved exception; otherwise update its source caption and implementation together.
 - TypeScript Micro letter spacing is `-0.01em`, unlike the shared `-0.02em` contract; register or resolve this difference.
 - The three Studio contract documents must agree on intended rules and separately report implementation status. Documentation must not mark a source defect as fixed.
 
