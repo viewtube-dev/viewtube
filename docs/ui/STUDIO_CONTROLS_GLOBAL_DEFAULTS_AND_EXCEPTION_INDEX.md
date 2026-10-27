@@ -61,25 +61,25 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 ## 2. Size-based global defaults
 
-The size tier determines height, border stroke, radius, typography, icon size, and icon stroke across Supreme (60px / 4.09px / 8.18px / 51.82px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1px / 2px / 10px), subject to registered family-specific exceptions. Do not independently override one of these properties without a registered exception.
+The intended size contract is Supreme (60px / 3px / 6px / 51.82px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1.5px / 3px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro reuses the Mini stroke/radius system. Source/document drift is listed in the audit note at the end of this document.
 
-| Property | Supreme | Standard | Compact | Micro |
+| Property | Supreme | Standard | Compact | Mini | Micro |
 |---|---:|---:|---:|---:|
-| Control height | 60px | 44px | 28px | 12px |
-| Border/stroke width | 4.09px | 3px | 2px | 1px |
-| Corner radius | 8.18px | 6px | 4px | 2px |
-| Text size | 51.82px | 38px | 24px | 10px |
-| Text weight | 1000 | 1000 | 1000 | 1000 |
-| Text stroke | 1.36px | 1px | 0.5px | 0.25px |
-| Icon size | 51.82px | 38px | 24px | 10px |
-| Default icon stroke | 2.59px | 1.9px | 2px | 1.5px |
-| Secondary focus-outline width (when applicable) | 2.66px | 1.95px | 1.3px | 0.65px |
-| Standard gap token | 4px external only | 4px | 4px | 4px |
-| Floating-label height | 51.82px where supported | 38px | 24px | 10px where supported |
-| Floating-label raised-offset ratio | 1.2 | 1.2 | 1.2 | 1.2 |
-| Text transform | Uppercase | Uppercase | Uppercase | Uppercase |
-| Letter spacing | -0.02em | -0.02em | -0.02em | -0.01em |
-| Line height | 1.0 | 1.0 | 1.0 | 1.0 |
+| Control height | 60px | 44px | 28px | 20px | 12px |
+| Border/stroke width | 3px | 3px | 2px | 1.5px | 1.5px |
+| Corner radius | 6px | 6px | 4px | 3px | 3px |
+| Text size | 51.82px | 38px | 24px | 17.5px | 10px |
+| Text weight | 1000 | 1000 | 1000 | 1000 | 1000 |
+| Text stroke | 1px | 1px | 0.5px | 0.4px | 0.4px |
+| Icon size | 51.82px | 38px | 24px | 17.5px | 10px |
+| Default icon stroke | 1.9 | 1.9 | 2 | 1.6 | 1.6 |
+| Secondary focus-outline width (when applicable) | 1.95px | 1.95px | 1.3px | 0.975px | 0.975px |
+| Standard gap token | 4px external only | 4px | 4px | 4px | 4px |
+| Floating-label height | 51.82px where supported | 38px | 24px | 17.5px where supported | 10px where supported |
+| Floating-label raised-offset ratio | 1.2 | 1.2 | 1.2 | 1.2 | 1.2 |
+| Text transform | Uppercase | Uppercase | Uppercase | Uppercase | Uppercase |
+| Letter spacing | -0.02em | -0.02em | -0.02em | -0.02em | -0.02em |
+| Line height | 1.0 | 1.0 | 1.0 | 1.0 | 1.0 |
 
 **Color/ratio invariant:** A size change scales geometry and typography; it must not silently change primary/secondary color ownership, text weight, label centering, split-rail color, or row-fill behavior.
 
@@ -266,3 +266,27 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 - Responsive rules change placement only. They must not change production size tier, stroke, typography, fill, split anatomy, or behavior.
 - The confirmed catalog imports production primitives from `src/studio-ui/primitives/StudioControls.tsx`. The complete catalog is a legacy comparison surface and must not be treated as the geometry source of truth.
 - The grid contract is regression-tested in `src/studio-ui/primitives/studio-control-contract.test.ts`. Source tests do not replace browser verification at desktop and narrow mobile widths, including open dropdowns, textareas, split controls, compact specimens, and status badges.
+
+
+## Source reconciliation audit — 2026-10-27
+
+### Intended contract versus observed source
+
+| Concern | Intended contract | Source observation | Status |
+|---|---|---|---|
+| Supreme | 60px height; Standard stroke/radius system (3px / 6px); 51.82px type/icon | TypeScript tokens and recovery CSS agree on 3px / 6px | Source-aligned; browser verification outstanding |
+| Mini type/icon | 20px height; 1.5px / 3px geometry; 17.5px type/icon | TypeScript tokens declare 17.5px; recovery CSS overrides type/icon to 16px | **Open implementation drift** |
+| Micro | 12px; Mini stroke/radius system (1.5px / 3px); 10px type/icon; 0.975px outline | TypeScript tokens and recovery CSS align; older docs were stale | Documentation corrected here; browser verification outstanding |
+| Micro letter spacing | Shared `-0.02em` unless an exception is registered | TypeScript token declares `-0.01em` | **Unregistered token exception / open decision** |
+| Editable field inset | Primary inset persists at rest and focus; focus changes text/glyph to black | Recovery CSS preserves primary inset and black focused text/stroke; split input has shell-owned border and gradient inset in later entry-file rules | Source requires computed-style/browser verification |
+| TextBox | Black text/glyph; primary inset; secondary outline | Recovery CSS declares black text/glyph, primary inset, secondary outline | Source-aligned; browser verification outstanding |
+| Catalog provenance | Real production exports; catalog CSS owns arrangement only | Confirmed catalog imports production primitives, including dedicated `StudioSplitTextInput` and `StudioSplitAccordion` | Source registration confirmed; visual certification outstanding |
+
+### Required follow-up
+
+1. Reconcile Mini typography in `src/styles/studio-control-recovery-overrides.css` with the 17.5px TypeScript token and regenerate/verify dependent output if required.
+2. Decide whether Micro `-0.01em` is intentional. If not, align it to `-0.02em`; if yes, register a narrowly scoped exception in the machine-readable exception map and this document.
+3. Run token emitter consistency checks, focused tests, typecheck/build, computed-style assertions, and desktop/mobile browser inspection for all five tiers.
+4. Test editable input, textarea, TextBox, and split input separately at rest and focus. Assert outer border, inset, fill, text/glyph stroke, caret, outline width/color/offset, and divider count.
+
+**Verification boundary:** This is a source/documentation audit, not rendered visual certification. No tests, build, computed-style capture, browser screenshots, or assistive-technology tests were run in this pass.
