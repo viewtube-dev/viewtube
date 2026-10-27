@@ -62,7 +62,10 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState("all")
-  const [openCategories, setOpenCategories] = useState<string[]>([])
+  const [openCategories, setOpenCategories] = useState<string[]>(() => {
+    const firstCategory = cards[0]?.category || "general"
+    return cards.length ? [firstCategory] : []
+  })
 
   const filteredCards = useMemo(
     () => filterCreatorBrainPromptCards(cards, query, category, summarize),
@@ -160,7 +163,11 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
             sizeVariant="compact"
             value={category}
             options={categoryOptions}
-            onChange={(next) => setCategory(String(next))}
+            onChange={(next) => {
+              const nextCategory = String(next)
+              setCategory(nextCategory)
+              if (nextCategory !== "all") setOpenCategories([nextCategory])
+            }}
             aria-label="Filter by category"
             className="min-w-0 w-full"
           />
