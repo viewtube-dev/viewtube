@@ -1,3 +1,4 @@
+import { resolveFromFixture, snapshotFromFixture, fixturesEnabled } from "./publicHandleMode.fixtures"
 export interface PublicChannelResolution {
  input: string
  resolvedChannelId: string | null
@@ -31,6 +32,7 @@ export interface PublicChannelSnapshot {
 }
 
 type PublicLookupResponse = {
+ code?: string
  ok: boolean
  code?: string
  message?: string
@@ -46,6 +48,11 @@ type PublicLookupResponse = {
  provenance?: PublicChannelSnapshot["provenance"]
 }
 
+class PublicLookupError extends Error {
+ code: string | undefined
+ constructor(message: string, code?: string) { super(message); this.name = "PublicLookupError"; this.code = code }
+}
+
 const resolveFromServer = async (handleInput: string): Promise<PublicLookupResponse> => {
  const response = await fetch("/api/public-channel/resolve", {
   method: "POST",
@@ -55,7 +62,7 @@ const resolveFromServer = async (handleInput: string): Promise<PublicLookupRespo
  })
  const payload = await response.json().catch(() => null) as PublicLookupResponse | null
  if (!response.ok || !payload?.ok) {
-  throw new Error(payload?.message || "Public channel lookup failed.")
+  throw new PublicLookupError(payload?.message || "Public channel lookup failed.", payload?.code)
  }
  return payload
 }
@@ -73,6 +80,27 @@ export const resolvePublicChannel = async (
    reason: null,
   }
  } catch (error) {
+  const missingServerKey = error instanceof PublicLookupError && error.code === "PUBLIC_LOOKUP_UNAVAILABLE"
+  if (missingServerKey && fixturesEnabled()) {
+   const fixture = resolveFromFixture(handleInput)
+   if (fixture) {
+    return {
+     input: handleInput,
+     resolvedChannelId: fixture.channelId,
+     resolvedHandle: fixture.handle,
+     channelTitle: fixture.title,
+     reason: "Fixture data only — not live YouTube analytics.",
+    }
+   }
+   const candidate = handleInput.trim().replace(/^@/, "")
+   return {
+    input: handleInput,
+    resolvedChannelId: null,
+    resolvedHandle: candidate || null,
+    channelTitle: null,
+    reason: 'No API key and no fixture for "' + candidate + '". Try @themotionvis or @viewtube_demo.',
+   }
+  }
   return {
    input: handleInput,
    resolvedChannelId: null,
@@ -101,7 +129,10 @@ export const fetchPublicChannelSnapshot = async (
    topVideos: result.topVideos || [],
    provenance: result.provenance,
   }
- } catch {
+ } catch (error) {
+  if (error instanceof PublicLookupError && error.code === "PUBLIC_LOOKUP_UNAVAILABLE" && fixturesEnabled()) {
+   return snapshotFromFixture(handleInput)
+  }
   return null
  }
 }
