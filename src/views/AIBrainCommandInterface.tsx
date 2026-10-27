@@ -1985,12 +1985,18 @@ const AIBrainCommandInterface: React.FC = () => {
 
       {promptRailOpen ? (
        <div
-        data-vt-brain-component="BrainLauncherDrawer"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="brain-prompt-library-dialog-title"
-        className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3"
+        data-vt-brain-part="launchpad-backdrop"
+        className="vt-brain-studio-workspace__drawer-backdrop"
+        onClick={(event) => { if (event.target === event.currentTarget) setPromptRailOpen(false) }}
        >
+        <div
+         data-vt-brain-component="BrainLauncherDrawer"
+         data-vt-brain-part="launchpad-panel"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="brain-prompt-library-dialog-title"
+         className="vt-brain-studio-workspace__drawer-panel grid min-h-0 grid-rows-[auto_1fr] bg-white p-3"
+        >
         <div data-vt-brain-part="mobile-launcher-heading" className="mb-2 grid gap-2 border-b-[2px] border-black pb-2">
          <div className="flex items-center justify-between gap-2">
           <h2 data-vt-brain-part="launcher-drawer-heading" id="brain-prompt-library-dialog-title" className="text-lg font-[1000] uppercase">Brain Launchpad</h2>
@@ -2004,6 +2010,7 @@ const AIBrainCommandInterface: React.FC = () => {
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Brain launchpad content" tabIndex={0}>
          {launcherMode === "prompts" ? <BrainPromptLibrary
           cards={promptCards}
+          summarize={promptCardSummary}
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
@@ -2017,17 +2024,31 @@ const AIBrainCommandInterface: React.FC = () => {
           onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          />}
         </div>
+        </div>
        </div>
       ) : null}
 
       {contextRailOpen ? (
-       <div data-vt-brain-component="BrainContextDrawer" role="dialog" aria-modal="true" aria-labelledby="brain-context-dialog-title" className="absolute inset-0 z-40 grid min-h-0 grid-rows-[auto_1fr] bg-white p-3">
+       <div
+        data-vt-brain-part="context-drawer-backdrop"
+        className="vt-brain-studio-workspace__drawer-backdrop"
+        onClick={(event) => { if (event.target === event.currentTarget) setContextRailOpen(false) }}
+       >
+        <div
+         data-vt-brain-component="BrainContextDrawer"
+         data-vt-brain-part="context-drawer-panel"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="brain-context-dialog-title"
+         className="vt-brain-studio-workspace__drawer-panel grid min-h-0 grid-rows-[auto_1fr] bg-white p-3"
+        >
         <div className="mb-2 flex items-center justify-between border-b-[2px] border-black pb-2">
          <h2 data-vt-brain-part="context-drawer-heading" id="brain-context-dialog-title" className="text-lg font-[1000] uppercase">Your Channel Context</h2>
          <StudioButton data-vt-brain-part="mobile-context-close" ref={contextCloseRef} sizeVariant="compact" tone="neutral" type="button" onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</StudioButton>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
          <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
+        </div>
         </div>
        </div>
       ) : null}

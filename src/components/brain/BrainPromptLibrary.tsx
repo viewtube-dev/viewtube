@@ -62,7 +62,11 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState("all")
-  const [openCategories, setOpenCategories] = useState<string[]>([])
+  const allCategories = useMemo(
+    () => Array.from(new Set(cards.map((card) => card.category || "general"))),
+    [cards],
+  )
+  const [openCategories, setOpenCategories] = useState<string[]>(() => allCategories)
 
   const filteredCards = useMemo(
     () => filterCreatorBrainPromptCards(cards, query, category, summarize),
@@ -87,11 +91,6 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
           Math.min(...right.map((card) => order.get(card.id) ?? 0)),
       )
   }, [filteredCards, cards])
-
-  const allCategories = useMemo(
-    () => Array.from(new Set(cards.map((card) => card.category || "general"))),
-    [cards],
-  )
 
   const categoryOptions = useMemo(
     () => [
@@ -177,6 +176,9 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
           return (
             <StudioInterModule
               key={groupCategory}
+              data-vt-brain-component="BrainPromptLibraryModule"
+              data-vt-brain-part="prompt-category-module"
+              data-prompt-category={groupCategory}
               sizeVariant="compact"
               title={<span className="uppercase">{groupCategory.replace(/[-_]/g, " ")}</span>}
               className="min-w-0 overflow-hidden"
