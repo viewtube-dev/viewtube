@@ -179,6 +179,16 @@ describe("AI Brain runtime surface integration", () => {
   expect(capabilityBrowserSource).toContain('selectedAvailability.reason')
  })
 
+ it("carries the selected prompt title into the composer and clears it on send", () => {
+  expect(promptLibrarySource).toContain('onEdit?: (prompt: string, title: string) => void')
+  expect(promptLibrarySource).toContain('onEdit(card.prompt, card.label)')
+  expect(source).toContain('const [activePromptTitle, setActivePromptTitle] = useState<string | null>(null)')
+  expect(source).toContain('activePromptTitle={activePromptTitle}')
+  expect(source).toContain('onClearActivePrompt={() => setActivePromptTitle(null)}')
+  expect(source).toContain('setActivePromptTitle(title)')
+  expect(composerDockSource).toContain('aria-label={`Active prompt ${activePromptTitle}. Activate to clear.`}')
+ })
+
  it("does not make the entire transcript a live log that re-announces the full conversation", () => {
   const viewport = chatPrimitivesSource.slice(
    chatPrimitivesSource.indexOf("export const ChatConversationViewport:"),
