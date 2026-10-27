@@ -12,6 +12,11 @@ const collapsePrimitiveSource = readFileSync(new URL("../studio-ui/primitives/St
 const toolboxSource = readFileSync(new URL("../components/Toolbox.tsx", import.meta.url), "utf8")
 
 describe("AI Brain runtime surface integration", () => {
+ it("imports the canonical square icon button group used by response rating controls", () => {
+  expect(source).toMatch(/import\\s*\\{[^}]*\\bStudioSquareIconButtonGroup\\b[^}]*\\}\\s*from "\.\.\\/studio-ui"/s)
+  expect(source).toContain("<StudioSquareIconButtonGroup")
+ })
+
  it("mounts the canonical backend runtime snapshot above the conversation workspace", () => {
   expect(source).toContain('from "../services/brain/BrainRuntimeSnapshot"')
   expect(source).toContain('from "../components/brain/BrainRuntimePanel"')
