@@ -13,6 +13,26 @@ const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8");
 const core = readFileSync("src/styles/studio-control-core.css", "utf8");
 
+
+test("canonical size tokens preserve the five-tier geometry contract", () => {
+  const tiers = {
+    supreme: { height: 60, stroke: 3, radius: 6, fontSize: 52, iconSize: 52, focusOutlineWidth: 1.95 },
+    standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, iconSize: 38, focusOutlineWidth: 1.95 },
+    compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, iconSize: 24, focusOutlineWidth: 1.3 },
+    mini: { height: 20, stroke: 1.5, radius: 3, fontSize: 17.5, iconSize: 17.5, focusOutlineWidth: 0.975 },
+    micro: { height: 12, stroke: 1.5, radius: 3, fontSize: 10, iconSize: 10, focusOutlineWidth: 0.975 },
+  };
+  for (const [tier, values] of Object.entries(tiers)) {
+    const match = tokens.match(new RegExp(tier + ":\\s*\\{([^}]+)\\}"));
+    assert.ok(match, "missing canonical " + tier + " token");
+    for (const [key, value] of Object.entries(values)) {
+      assert.match(match[1], new RegExp(key + ":\\s*" + String(value).replace(".", "\\\\.") + "(?:,|\\s)"), tier + "." + key);
+      assert.match(generated, new RegExp("--vt-studio-" + tier + "-" + key.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase()) + ":\\s*" + value + "(?:px)?;"), tier + "." + key + " generated variable");
+    }
+  }
+  assert.match(tokens, /letterSpacing:\s*-0\.02/);
+});
+
 test("side-toggle stack uses a centered overlay divider, not a half-cell border", () => {
   assert.match(css, /\.vt-studio-value-toggle__arrow-stack::after[\s\S]*?top:\s*50%[\s\S]*?translateY\(-50%\)/);
   assert.match(css, /\.vt-studio-value-toggle__arrow-stack\s*>\s*\.vt-studio-value-toggle__arrow[\s\S]*?border-bottom:\s*0\s*!important/);
