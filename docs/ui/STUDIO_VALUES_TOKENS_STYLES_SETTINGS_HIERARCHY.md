@@ -191,7 +191,7 @@ The following discrepancies were visible when comparing the target branch's `src
 
 | Concern | Later intended contract | Observed conflict to reconcile |
 |---|---|---|
-| Supreme stroke/radius | 3px / 6px Standard system | Token/index values disagree in places; the index's size table still records proportional Supreme geometry |
+| Supreme stroke/radius | 3px / 6px Standard system | TypeScript tokens and recovery CSS agree; superseded proportional values remain in historical documentation and catalog notes and must not be treated as current global defaults |
 | Mini type/icon size | 17.5px | `src/studio-ui/tokens.ts` declares 17.5px, but `studio-control-recovery-overrides.css` resets Mini type/icon to 16px; runtime cascade must be reconciled and verified |
 | Micro stroke/radius | 1.5px / 3px Mini system | Tokens and recovery CSS declare 1.5px / 3px, but the defaults index still records legacy 1px / 2px values in its normative section |
 | Micro focus outline | 0.975px (65% of the 1.5px Mini-system stroke), offset 0 | Token source and recovery CSS declare 0.975px; the defaults index still contains a legacy 0.65px Micro outline |
