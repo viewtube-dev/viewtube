@@ -13,7 +13,7 @@ const toolboxSource = readFileSync(new URL("../components/Toolbox.tsx", import.m
 
 describe("AI Brain runtime surface integration", () => {
  it("imports the canonical square icon button group used by response rating controls", () => {
-  expect(source).toMatch(/import\\s*\\{[^}]*\\bStudioSquareIconButtonGroup\\b[^}]*\\}\\s*from "\.\.\\/studio-ui"/s)
+  expect(source).toContain('StudioSquareIconButtonGroup } from "../studio-ui"')
   expect(source).toContain("<StudioSquareIconButtonGroup")
  })
 
