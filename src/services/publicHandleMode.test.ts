@@ -80,7 +80,7 @@ describe("public channel mode public ingestion and fixtures", () => {
     })
     const ingested = await fetchPublicChannelSnapshot("@public_creator")
     expect(ingested).toMatchObject({ source: "public_page", channelId: snapshot.channelId, topVideos: snapshot.topVideos })
-    expect(fetchMock).toHaveBeenCalledWith("/api/public-channel?handle=%40public_creator")
+    expect(fetchMock).toHaveBeenCalledWith("/public-channel/resolve?handle=%40public_creator", { headers: { Accept: "application/json" } })
   })
 
   it("keeps a supplied real local API key on the live path", async () => {
