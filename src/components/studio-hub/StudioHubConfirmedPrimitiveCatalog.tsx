@@ -122,7 +122,7 @@ const CanonicalSplitBadgeFamily: React.FC = () => (
       title="Split-left Badge · Standard + Compact + Micro"
       nonDefaultSettings={[
         "Informational split-left badge, not an action button.",
-        "Badge-only micro exception: 12px height, 1px stroke, 2px radius, and 10px type/icons; it is not an interactive-control size.",
+        "Informational split-left badge supports the global Micro tier: 12px height, Mini-matched 1.5px stroke / 3px radius, and 10px type/icons.",
       ]}
       provenance={<Provenance
         primitive="StudioSplitLeftBadge"
@@ -753,9 +753,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <li><strong>DROPDOWN:</strong> the trigger uses standard/compact sizing; menu rows and options are not button-press surfaces. A floating panel may have its own stationary shadow. Panel typography and stacking use dropdown-specific CSS.</li>
         <li><strong>SQUARE / CIRCLE ICON BUTTONS:</strong> share the standard/compact size lattice and default flat, stationary shell behavior. Large icon preset is default; circle buttons scale it to 80%. V1–V4 skins and documented inner-icon effects are explicit variants, not global shell behavior.</li>
         <li><strong>VAULT SPECTRUM TAG:</strong> registered 15px dense metadata chip with 2px border, 4px radius, 8px / weight-900 type, 35% white-mixed spectrum fill, and flat selected-state color treatment with no shadow, glow, or geometry offset.</li>
-        <li><strong>CLOSEABLE BADGE:</strong> follows the standard / compact / micro 44px / 28px / 12px size lattice, 3px / 2px / 1px stroke, 6px / 4px / 2px radius, and 38px / 24px / 10px type. The close action is circular and secondary-filled; no pill-ratio shell exception.</li>
+        <li><strong>CLOSEABLE BADGE:</strong> registered family exception: 20px pill height, no outer border, 16px Inter 1000 uppercase label, primary fill, and 16px circular secondary close control with primary glyph. This fixed removable-chip geometry does not redefine the five-tier lattice.</li>
         <li><strong>TAG EDITOR ACTION:</strong> registered compact 28px square plus/check action, 2px stroke and 4px radius with a no shadow under the global flat-control contract.</li>
-        <li><strong>SPLIT-LEFT BADGE MICRO DENSITY:</strong> informational badge examples include a 12px / 1px-stroke micro size in addition to standard 44px / 3px and compact 28px / 2px. Micro is a local exception, not a global control size.</li>
+        <li><strong>SPLIT-LEFT BADGE MICRO DENSITY:</strong> the informational badge uses the global Micro tier: 12px height / 1.5px stroke / 3px radius / 10px type and icons, matching the shared token contract.</li>
         <li><strong>FIELD CARET + FOCUS:</strong> native insertion caret is retained; <code>caret-shape: block</code> is requested where supported and must not be simulated with a fake overlay. Focus uses the secondary outline at 65% of the selected border width and 0px offset; verify computed styles in a rendered browser.</li>
         <li><strong>REDUCED MOTION:</strong> primitive shells have no default transitions or movement. Explicitly registered inner-icon effects must honor reduced-motion preferences.</li>
         <li><strong>VERIFICATION BOUNDARY:</strong> source text and source tests do not certify the live deployment. Verify standard/compact dimensions, effective shadows/transforms, selected/disabled/loading states, keyboard focus, dropdown stacking, narrow layouts, and reduced motion in a browser.</li>
@@ -806,7 +806,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "Non-editable, selectable display surface; no caret, editing behavior, or keyboard tab stop.",
         "Shares the canonical field border, radius, 50% resting fill, 15% focus fill, primary glyph stroke, secondary 65% focus outline, and 0.85 line-height.",
         "Content height grows with text; newlines are preserved and long words wrap.",
-      ]} provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Shared field geometry across Supreme / Standard / Compact / Mini / Micro; black text with primary glyph stroke; secondary outline at 65% of the selected border; 0.85 line-height." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      ]} provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Shared field geometry across Supreme / Standard / Compact / Mini / Micro; black text and black glyph stroke; primary inset and secondary outline at 65% of the selected border; 0.85 line-height." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>SUPREME · 24.55PX</span><StudioTextBox size="supreme" aria-label="Studio text box supreme" data-vt-library-component="StudioTextBox">Supreme read-only text uses the shared field border and focus contract.</StudioTextBox></div>
       <div className="vt-confirmed-variant is-full-row"><span>STANDARD · 18PX</span><StudioTextBox aria-label="Studio text box standard" data-vt-library-component="StudioTextBox">A read-only description that can contain as little or as much text as needed.</StudioTextBox></div>
       <div className="vt-confirmed-variant is-full-row"><span>COMPACT · 14PX</span><StudioTextBox size="compact" aria-label="Studio text box compact" data-vt-library-component="StudioTextBox">Compact display text. A second row remains aligned to the textarea line-height.</StudioTextBox></div>
