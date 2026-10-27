@@ -139,9 +139,9 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Focus fill: primary color at 15% opacity.
 - Focus text and inline text stroke: black (`#000000`), matching one another.
 - Focus caret: primary color (`--pair-a`), not black.
-- Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px / 1.3px / 0.65px standard / compact / micro), outline offset 0.
+- Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px standard / 1.3px compact / 0.975px Mini and Micro), outline offset 0.
 - Focus must not shift layout. Do not add a gap between the field and its focus outline.
-- The Micro (12px) focus outline is **0.65px** (65% of its 1px border), not 1px. Both standard controls and floating-field wrappers must consume the same tier token; no Micro-only 1px override is permitted.
+- The Micro (12px) focus outline is **0.975px** (65% of its 1.5px Mini-system border), not 0.65px. Both standard controls and floating-field wrappers must consume the same tier token; no Micro-only 1px or 0.65px override is permitted.
 
 ### Multiline textarea (registered typography exception)
 
@@ -164,7 +164,7 @@ Exceptions are allowed only when documented here, in `STUDIO_CONTROL_GLOBAL_RULE
 | Exception | Exact exception | Why it exists |
 |---|---|---|
 | Vault spectrum tag | 15px high, 2px border, 4px radius, 8px type, weight 900, 0.3px letter spacing; alphabetical spectrum fill mixed 35% with white; resolved spectrum text/border color | Dense asset-vault metadata chip with an established spectrum-color identity |
-| Closeable badge | Not a global-rule exception: standard/compact/micro 44/28/12px height, 3/2/1px border, 6/4/2px radius, 38/24/10px type, weight 1000, uppercase, black text, primary fill; circular close action uses secondary fill | Must follow global size/color/type rules; explicitly no 999px pill geometry |
+| Closeable badge | Named family exception: 20px pill height, no outer border, 16px Inter 1000 uppercase label, primary fill, 16px secondary close control with primary glyph | Dense removable metadata chip; this fixed geometry does not redefine the global five-tier lattice |
 | Tag editor plus/check action | Compact 28px face, 2px stroke, 4px radius, no shadow | Dense inline tag-editing affordance; action remains square |
 | Textarea typography | 18px standard / 14px compact, 0.5px / 0.35px text stroke, default line-height (`1`), min-height 92px, vertical resize | Multiline reading/writing needs a separate text scale and taller surface |
 | Prominent action button | Supreme 60px by default; standard/compact variants use shared tier tokens; flat shell, no shadow | Workflow emphasis is a component role, not a separate 56px geometry tier |
