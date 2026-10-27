@@ -24,8 +24,6 @@ import {
 import { Toolbox } from "../components/Toolbox"
 import { BrainComposerDock } from "../components/brain/BrainComposerDock"
 import { BrainPromptLibrary, promptCardSummary } from "../components/brain/BrainPromptLibrary"
-export { filterCreatorBrainPromptCards } from "../components/brain/BrainPromptLibrary"
-export { BrainPromptLibrary, promptCardSummary }
 import { useVisualViewportHeight } from "../components/brain/useVisualViewportHeight"
 import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioInterModule, StudioTextArea } from "../studio-ui"
 import { useBrain } from "../context/useBrain"
@@ -124,6 +122,9 @@ import type {
  CreatorBrainResponse,
  CreatorInitialInsight,
 } from "../types"
+
+export { filterCreatorBrainPromptCards } from "../components/brain/BrainPromptLibrary"
+export { BrainPromptLibrary, promptCardSummary }
 
 export type AIBrainTurnReadiness = {
  dataStatus: AIBrainEvidencePack["dataStatus"]
