@@ -147,6 +147,13 @@ describe("AI Brain runtime surface integration", () => {
  })
 
 
+ it("uses the same answer-first hierarchy for interrupted and completed assistant turns", () => {
+  const interruptedEntry = source.slice(source.indexOf('data-vt-brain-component="BrainInterruptedResponseEntry"'), source.indexOf('const rawModules: AIBrainAnswerModule[]'))
+  expect(interruptedEntry).toContain('title="ANSWER"')
+  expect(interruptedEntry).not.toContain('title="VIEWTUBE COPILOT"')
+  expect(source).toContain('data-vt-brain-component="BrainAssistantChatEntry"')
+ })
+
  it("opens a useful prompt category on entry and the chosen category after filtering", () => {
   expect(promptLibrarySource).toContain('useState<string[]>(() => {')
   expect(promptLibrarySource).toContain('const firstCategory = cards[0]?.category || "general"')
