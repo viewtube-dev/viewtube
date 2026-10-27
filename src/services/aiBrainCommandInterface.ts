@@ -1,3 +1,4 @@
+import type { ChannelContextProfile } from "../context/ChannelContextProfile"
 import type {
  AuthState,
  AIBrainConversationTurn,
@@ -216,6 +217,7 @@ export type AIBrainContextInput = {
  } | null
  recentConversationTurns?: AIBrainConversationTurn[]
  creatorGrowthContext?: CreatorGrowthContext | null
+ channelContext?: ChannelContextProfile | null
  requestText?: string
  evidencePackOverride?: AIBrainEvidencePack
  now?: Date
@@ -1921,6 +1923,50 @@ export const buildCreatorBrainLocalFallback = (
  ].join(" ")
 }
 
+const buildChannelContextInstruction = (profile?: ChannelContextProfile | null): string => {
+ if (!profile) return ""
+ const sections: string[] = []
+ const add = (label: string, value: unknown) => {
+  const values = Array.isArray(value)
+   ? value.map((item) => String(item ?? "").trim()).filter(Boolean)
+   : typeof value === "string" && value.trim() ? [value.trim()] : []
+  if (values.length) sections.push(`${label}: ${values.join("; ")}`)
+ }
+ add("Channel name", profile.identity.name)
+ add("Channel description", profile.identity.description)
+ add("Primary niche", profile.identity.niche)
+ add("Sub-niches", profile.identity.subNiches)
+ add("Competitors or inspiration channels", profile.identity.competitors)
+ add("Primary goal", profile.goals.primaryGoal)
+ add("12-month success definition", profile.goals.successDefinition)
+ add("Goal priority order", profile.goals.priorityRanking)
+ add("Products or services supported", profile.goals.offers)
+ add("Preferred viewer action", profile.goals.primaryCTA)
+ add("Ideal viewer", profile.audience.idealViewer)
+ add("Viewer problem", profile.audience.problem)
+ add("Audience experience level", profile.audience.experienceLevel)
+ add("Desired viewer transformation", profile.audience.transformation)
+ add("Priority audience segments", profile.audience.segments)
+ add("Content types", profile.content.types)
+ add("Publishing frequency", profile.content.frequency)
+ add("Best-performing formats (creator-reported)", profile.content.bestFormats)
+ add("Priority themes", profile.content.priorityThemes)
+ add("Themes to avoid", profile.content.blockedThemes)
+ add("Brand voice", profile.brand.voice)
+ add("Style influences", profile.brand.influences)
+ if (typeof profile.brand.creativity === "number" && Number.isFinite(profile.brand.creativity)) {
+  add("Requested creativity (1–10)", profile.brand.creativity)
+ }
+ add("Creator-permitted evidence sources (preference)", profile.intelligence.sources)
+ add("Requested AI capabilities (preference)", profile.intelligence.capabilities)
+ if (!sections.length) return ""
+ return [
+  "SAVED CHANNEL CONTEXT (creator-provided; not independently verified):",
+  ...sections,
+  "Use these answers as personalization context, not as proof of channel performance or public facts. Treat creator-reported formats as unverified unless evidence confirms them. Respect the creator's blocked themes and stated priorities. Source/capability selections are preferences for planning, not a substitute for runtime authorization or tool availability. If newer explicit instructions conflict, ask for clarification or follow the newer instruction when appropriate.",
+ ].join("\n")
+}
+
 export const buildAIBrainSystemPrompt = (input: AIBrainContextInput): string => {
  const baseSnapshot = buildAIBrainContextSnapshot(input)
  const snapshot = input.evidencePackOverride
@@ -1975,6 +2021,8 @@ export const buildAIBrainSystemPrompt = (input: AIBrainContextInput): string => 
   "11. Reason about the RELATIONSHIPS between metrics, not single numbers. Views, subscribers gained, likes, comments, watch time, average view duration, CTR, and revenue move together in patterns: high views but few subscribers gained is a discovery win that failed to convert; strong watch time with weak CTR is a packaging problem, not a content problem; high comments and likes per view signal an engaged audience worth building a series around; high RPM on a topic means lean into it. Use these correlations across the creator's OWN videos to explain what actually drives their success and what to do next.",
   "12. Treat Shorts as the top-of-funnel discovery and subscriber engine, and long-form as where watch time and revenue are earned. When relevant, show the funnel explicitly: Shorts pull in new viewers, convert them to subscribers, subscribers return for long-form, long-form builds watch time and revenue. Recommend cutting Shorts from proven long-form moments, using each Short's hook to route viewers to the fuller video, and making long-form that pays off what a breakout Short promised. Name the creator's actual videos when you do.",
   snapshot.inferredProfile.contextBlock ? `\nINFERRED CHANNEL PROFILE:\n${snapshot.inferredProfile.contextBlock}` : "",
+  "",
+  buildChannelContextInstruction(input.channelContext),
   "",
   "CREATOR-SAFE BRAIN CONTEXT:",
   JSON.stringify(creatorPromptContext, null, 2),
