@@ -32,7 +32,6 @@ export interface PublicChannelSnapshot {
 }
 
 type PublicLookupResponse = {
- code?: string
  ok: boolean
  code?: string
  message?: string
