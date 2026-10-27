@@ -29,6 +29,13 @@ The existing `BrainOrchestrator` now loads the saved channel context and supplie
 
 The context is counted against the existing memory/context budget. Existing Brain User Controls and capability registry remain the authorities for technical access; the creator's selected capability preferences are not treated as permission escalation.
 
-## Integration boundary
+## Canonical runtime integration
 
-The draft referenced `src/core/context/types` and `src/core/bootstrap/registerDefaultCapabilities.ts`, but those exact paths were not present on the target branch during implementation inspection. This change therefore defines a narrow local graph projection and does not invent or register a parallel capability registry. Capability bootstrap integration must use the actual canonical registry once its current owner/path is verified.
+- `src/services/brain/BrainOrchestrator.ts` reads `loadAiBrainContext().channelContext` and passes it to `buildBrainContextPack` on the initial and retry paths.
+- `src/services/brain/BrainContextBroker.ts` injects the profile only when personalization is enabled and the saved channel name matches the active channel label. It marks the section `USER_PROVIDED`, does not present it as verified public evidence, and records mismatch/disabled omission reasons.
+- The existing `src/services/brain/BrainCapabilityRegistry.ts` already owns the static capability definitions, including `channel-profile`. Creator-requested capability preferences remain personalization guidance and do not grant runtime authorization. No duplicate bootstrap or capability registry is introduced.
+- The supplied draft's `src/core/context/types`, `src/core/capabilities/publicCapabilities`, and `src/core/bootstrap/registerDefaultCapabilities.ts` paths are not the canonical owners in this target branch.
+
+## Phase 2 validation
+
+Focused tests now cover graph projection, case-insensitive node/edge deduplication, safe fallback labels, required field paths, creativity range validation, and the existing broker's channel-name mismatch and personalization gates. CI/build/browser verification is still required before merge.
