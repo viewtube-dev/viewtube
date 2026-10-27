@@ -1518,7 +1518,7 @@ const formatIntentModules = (input: {
    moduleFor(
     "best-video-autopsy",
     "Best Video Autopsy",
-    topVideo?.title
+    topVideo?.title && hasPerformanceEvidence
      ? `${titleExample}${topVideo.metrics.views !== null ? ` is the strongest available video signal here with ${topVideo.metrics.views.toLocaleString()} views.` : " is the strongest available video signal here."} Treat it as the control sample for topic, promise, pacing, and packaging.`
      : topVideo?.title
       ? `Public metadata includes ${titleExample}, but titles and publish dates alone cannot identify a best-performing video. Sync performance metrics to compare winners.`
