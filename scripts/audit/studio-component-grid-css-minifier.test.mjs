@@ -7,7 +7,7 @@ const gridCss = readFileSync("src/styles/studio-component-grid.css", "utf8")
 test("component grid CSS never uses custom properties inside nth-child An+B selectors", () => {
   assert.doesNotMatch(
     gridCss,
-    /:nth-(?:last-)?child\([^)]*\bvar\s*\(/,
+    /:nth-(?:last-)?child\([^{}]*\bvar\s*\(/,
     "CSS custom properties cannot parameterize the An+B selector grammar and break Lightning CSS minification",
   )
 })
