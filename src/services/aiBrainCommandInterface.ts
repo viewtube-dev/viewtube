@@ -1,4 +1,5 @@
 import type { ChannelContextProfile } from "../context/ChannelContextProfile"
+import { resolveChannelContextForActiveChannel } from "../context/channelContextScope"
 import type {
  AuthState,
  AIBrainConversationTurn,
@@ -2026,7 +2027,7 @@ export const buildAIBrainSystemPrompt = (input: AIBrainContextInput): string => 
   "12. Treat Shorts as the top-of-funnel discovery and subscriber engine, and long-form as where watch time and revenue are earned. When relevant, show the funnel explicitly: Shorts pull in new viewers, convert them to subscribers, subscribers return for long-form, long-form builds watch time and revenue. Recommend cutting Shorts from proven long-form moments, using each Short's hook to route viewers to the fuller video, and making long-form that pays off what a breakout Short promised. Name the creator's actual videos when you do.",
   snapshot.inferredProfile.contextBlock ? `\nINFERRED CHANNEL PROFILE:\n${snapshot.inferredProfile.contextBlock}` : "",
   "",
-  buildChannelContextInstruction(input.channelContext),
+  buildChannelContextInstruction(resolveChannelContextForActiveChannel(input.channelContext, snapshot.channel.label)),
   "",
   "CREATOR-SAFE BRAIN CONTEXT:",
   JSON.stringify(creatorPromptContext, null, 2),
