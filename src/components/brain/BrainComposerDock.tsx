@@ -1,5 +1,6 @@
 import React, { useCallback } from "react"
 import { Send, Zap } from "lucide-react"
+import { TOOLBOX_PALETTE } from "../../styles/toolboxPalette"
 import {
   StudioButton,
   StudioChatComposerDock,
@@ -29,6 +30,12 @@ export type BrainComposerDockProps = {
   maxFieldPx?: number
   className?: string
 }
+
+const actionStyle = (primary: number, secondary: number): React.CSSProperties =>
+  ({
+    "--vt-studio-control-accent": TOOLBOX_PALETTE[primary],
+    "--vt-studio-control-secondary": TOOLBOX_PALETTE[secondary],
+  }) as React.CSSProperties
 
 const focusComposer = (node: HTMLTextAreaElement | null) => {
   if (!node) return
