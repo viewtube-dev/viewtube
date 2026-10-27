@@ -11,10 +11,33 @@ import { TOOLBOX_PALETTE } from "../../styles/toolboxPalette"
 import type { CreatorBrainPromptCard } from "../../services/aiBrainCommandInterface"
 import "./brain-tool-surface.css"
 
-/** Prefer shared summaries from the view module when re-exported; fallback to prompt text. */
+/** Short creator-facing summaries used in collapsed prompt rows and search. */
+const PROMPT_CARD_SUMMARIES: Record<string, string> = {
+  "analyze-channel-niche": "Find your niche and fuzzy edges.",
+  "niche-growth-ideas": "Choose adjacent topics that still fit.",
+  "analyze-formats": "Compare views, retention, and revenue.",
+  "seo-script-drafter": "Draft a concept, hook, description, and tags.",
+  "format-strategy": "Plan five repeatable uploads.",
+  "clarify-channel-goals": "Confirm goals, audience, and direction.",
+  "revenue-levers": "Find practical 30-day revenue moves.",
+  "audience-language": "Identify audience interests and wording.",
+  "why-views-changed": "Diagnose momentum and choose three moves.",
+  "best-video-autopsy": "Explain and replicate your best video.",
+  "title-thumbnail-test": "Create the next title and thumbnail test.",
+  "daily-oracle": "Get today’s priority, quick win, and action.",
+  "pinned-comments": "Engagement pinned comments for your top 10 videos.",
+  "ten-video-ideas": "10 new titles and topics from your best long-form.",
+  "shorts-funnel-plan": "Turn Shorts viewers into subscribers and long-form watch time.",
+  "shorts-from-longform": "Find the best Short moments in your long-form videos.",
+  "metric-correlations": "See what drives success across your metrics.",
+  "uploader-assets": "Optimized title, description, and tags for your next video.",
+  "thumbnail-brief": "A fresh, on-brand thumbnail concept for your next video.",
+}
+
 export type PromptCardSummaryFn = (card: CreatorBrainPromptCard) => string
 
-const defaultSummary = (card: CreatorBrainPromptCard) => card.prompt
+export const promptCardSummary: PromptCardSummaryFn = (card) =>
+  PROMPT_CARD_SUMMARIES[card.id] || card.prompt
 
 const PROMPT_MODULE_COLOR_PAIRS = Array.from({ length: 12 }, (_, index) => [
   TOOLBOX_PALETTE[index],
@@ -25,7 +48,7 @@ export const filterCreatorBrainPromptCards = (
   cards: CreatorBrainPromptCard[],
   query: string,
   category = "all",
-  summarize: PromptCardSummaryFn = defaultSummary,
+  summarize: PromptCardSummaryFn = promptCardSummary,
 ): CreatorBrainPromptCard[] => {
   const normalized = query.trim().toLowerCase()
   return cards.filter((card) => {
@@ -57,7 +80,7 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
   headingId = "brain-prompt-library-title",
   onPrompt,
   onEdit,
-  summarize = defaultSummary,
+  summarize = promptCardSummary,
 }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [query, setQuery] = useState("")
