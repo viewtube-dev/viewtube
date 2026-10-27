@@ -9,7 +9,7 @@ const normalizeHandle = (input) => {
     return { handle: match[1] || null, channelId: match[2] || null, legacyName: match[3] || match[4] || null, legacyType: match[3] ? "c" : match[4] ? "user" : null };
   } catch {
     const bare = value.replace(/^@+/, "").split(/[/?#]/)[0];
-    return /^[\w.-]{1,100}$/.test(bare) ? { handle: bare, channelId: null, legacyName: null } : null;
+    return /^UC[\w-]{20,}$/.test(bare) ? { handle: null, channelId: bare, legacyName: null, legacyType: null } : /^[\w.-]{1,100}$/.test(bare) ? { handle: bare, channelId: null, legacyName: null, legacyType: null } : null;
   }
 };
 
