@@ -1,0 +1,386 @@
+/**
+ * Brain Hub shell layout.
+ * Geometry for split-rail comes from studio-control-split / StudioSplitRailAccordion.css.
+ * This file only owns Brain Hub page structure.
+ */
+
+.vt-brain-hub-shell {
+  --brain-hub-gap: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 12px 16px;
+  gap: var(--brain-hub-gap);
+  background: #f7f7f5;
+  color: #000;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+/* —— Title —— */
+.vt-brain-hub-shell__header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vt-brain-hub-shell__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 3px solid #000;
+  border-radius: 6px;
+  background: #b8f54a;
+}
+
+.vt-brain-hub-shell__glyph {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 3px solid #000;
+  border-radius: 6px;
+  background: #9b6dff;
+  color: #000;
+  flex: 0 0 auto;
+}
+
+.vt-brain-hub-shell__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 1000;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* —— Primary nav (split-rail host) —— */
+.vt-brain-hub-primary-nav {
+  width: 100%;
+  /* Active aliases when studio core is present */
+  --pair-a: #7ec8ff;
+  --pair-b: #f0a060;
+}
+
+/* Fallback split-rail if studio accordion CSS not yet imported */
+.vt-brain-hub-primary-nav.vt-studio-split-rail-accordion {
+  --sra-size: var(--vt-studio-control-height, 28px);
+  --sra-stroke: var(--vt-studio-control-stroke, 2px);
+  --sra-face: calc(var(--sra-size) - 2 * var(--sra-stroke));
+  --sra-duration: 280ms;
+  --sra-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: var(--sra-size);
+  overflow: hidden;
+  border: var(--sra-stroke) solid #000;
+  border-radius: 6px;
+  background: var(--pair-a, #7ec8ff);
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.vt-brain-hub-primary-nav[data-size="standard"] {
+  --sra-size: var(--vt-studio-standard-height, 44px);
+  --sra-stroke: var(--vt-studio-standard-stroke, 3px);
+}
+
+.vt-brain-hub-primary-nav .vt-studio-split-rail-accordion__item {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: stretch;
+  min-width: 0;
+  height: 100%;
+  transition: flex-grow var(--sra-duration) var(--sra-ease);
+}
+
+.vt-brain-hub-primary-nav .vt-studio-split-rail-accordion__item[data-active="true"] {
+  flex: 1 1 0;
+}
+
+.vt-brain-hub-primary-nav [data-vt-studio-split-rail-icon] {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  flex: 0 0 var(--sra-face);
+  width: var(--sra-face);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--pair-b, #f0a060);
+  color: #000;
+  cursor: pointer;
+  box-shadow: inset calc(-1 * var(--sra-stroke)) 0 0 #000;
+}
+
+.vt-brain-hub-primary-nav
+  .vt-studio-split-rail-accordion__item:last-child:not([data-active="true"])
+  [data-vt-studio-split-rail-icon] {
+  box-shadow: none;
+}
+
+.vt-brain-hub-primary-nav [data-vt-studio-split-rail-icon-face] {
+  display: grid;
+  place-items: center;
+  width: 86%;
+  height: 86%;
+}
+
+.vt-brain-hub-primary-nav [data-vt-studio-split-rail-icon-face] svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.vt-brain-hub-primary-nav .vt-studio-split-rail-accordion__content {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--sra-duration) var(--sra-ease);
+}
+
+.vt-brain-hub-primary-nav
+  .vt-studio-split-rail-accordion__item[data-active="true"]
+  .vt-studio-split-rail-accordion__content {
+  clip-path: inset(0 0 0 0);
+}
+
+.vt-brain-hub-primary-nav
+  .vt-studio-split-rail-accordion__item[data-active="true"]:not(:last-child)
+  .vt-studio-split-rail-accordion__content {
+  box-shadow: inset calc(-1 * var(--sra-stroke)) 0 0 #000;
+}
+
+.vt-brain-hub-primary-nav [data-vt-studio-split-rail-label] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  font-size: 14px;
+  font-weight: 1000;
+  color: #000;
+  white-space: nowrap;
+}
+
+.vt-brain-hub-primary-nav[data-size="standard"] [data-vt-studio-split-rail-label] {
+  font-size: 20px;
+}
+
+/* —— Utility row —— */
+.vt-brain-hub-utility-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.vt-brain-hub-utility-btn {
+  box-sizing: border-box;
+  height: var(--vt-studio-compact-height, 28px);
+  padding: 0;
+  border: 2px solid #000;
+  border-radius: 4px;
+  background: #7ec8ff;
+  color: #000;
+  font-weight: 1000;
+  font-size: 12px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.vt-brain-hub-utility-btn > [data-vt-studio-button-face] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 0 10px;
+}
+
+.vt-brain-hub-utility-btn__icon {
+  display: grid;
+  place-items: center;
+  line-height: 0;
+}
+
+.vt-brain-hub-utility-btn:focus-visible {
+  outline: 2px solid #f0a060;
+  outline-offset: 0;
+}
+
+/* —— Status —— */
+.vt-brain-hub-shell__status {
+  padding: 10px 12px;
+  border: 2px solid #000;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.vt-brain-hub-shell__status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vt-brain-hub-shell__status-key {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.vt-brain-hub-shell__status-val {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.vt-brain-hub-shell__status-val.is-warn {
+  color: #c45a00;
+}
+
+.vt-brain-hub-shell__status-detail {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #444;
+  line-height: 1.35;
+}
+
+/* —— Panel / messages —— */
+.vt-brain-hub-shell__panel {
+  flex: 1 1 auto;
+  min-height: 120px;
+  overflow: auto;
+}
+
+/* —— Composer —— */
+.vt-brain-hub-composer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.vt-brain-hub-composer__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.vt-brain-hub-composer__row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.vt-brain-hub-composer__input {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 56px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 3px solid #000;
+  border-radius: 6px;
+  background: #dff3ff;
+  color: #000;
+  font: 700 15px/1.35 Inter, ui-sans-serif, system-ui, sans-serif;
+  resize: vertical;
+}
+
+.vt-brain-hub-composer__input::placeholder {
+  color: #3a6a88;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.vt-brain-hub-composer__input:focus-visible {
+  outline: 2px solid #f0a060;
+  outline-offset: 0;
+}
+
+.vt-brain-hub-composer__send {
+  box-sizing: border-box;
+  flex: 0 0 48px;
+  width: 48px;
+  border: 3px solid #000;
+  border-radius: 6px;
+  background: #7ec8ff;
+  color: #000;
+  cursor: pointer;
+}
+
+.vt-brain-hub-composer__send > [data-vt-studio-button-face] {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.vt-brain-hub-composer__send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vt-brain-hub-composer__send:focus-visible {
+  outline: 2px solid #f0a060;
+  outline-offset: 0;
+}
+
+.vt-brain-hub-composer__hint {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+}
+
+@media (min-width: 768px) {
+  .vt-brain-hub-shell {
+    padding: 16px 20px 24px;
+    gap: 12px;
+  }
+
+  .vt-brain-hub-shell__title {
+    font-size: 34px;
+  }
+
+  .vt-brain-hub-utility-btn {
+    height: var(--vt-studio-standard-height, 44px);
+    border-width: 3px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-brain-hub-primary-nav .vt-studio-split-rail-accordion__item,
+  .vt-brain-hub-primary-nav .vt-studio-split-rail-accordion__content {
+    transition: none;
+  }
+}
