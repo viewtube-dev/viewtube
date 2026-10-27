@@ -8,7 +8,7 @@ import {
   StudioTextInput,
 } from "../../studio-ui"
 import { TOOLBOX_PALETTE } from "../../styles/toolboxPalette"
-import type { CreatorBrainPromptCard } from "../../services/aiBrainCommandInterface"
+import type { CreatorBrainPromptCard } from "../../types"
 import "./brain-tool-surface.css"
 
 /** Short creator-facing summaries used in collapsed prompt rows and search. */
