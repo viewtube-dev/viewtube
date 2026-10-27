@@ -47,7 +47,7 @@ describe("public channel mode public ingestion and fixtures", () => {
     storage.set("vt_public_handle_fixtures", "1")
     const resolved = await resolvePublicChannel("@unknown_channel")
     expect(resolved.resolvedChannelId).toBeNull()
-    expect(resolved.reason).toContain("no fixture") || expect(resolved.reason).toContain("Public channel ingestion")
+    expect(resolved.reason).toMatch(/no fixture|Public channel ingestion/i)
     expect(await fetchPublicChannelSnapshot("@unknown_channel")).toBeNull()
   })
 
