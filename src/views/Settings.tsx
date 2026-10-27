@@ -25,7 +25,7 @@ import {
   setStoredIngestMode,
   type IngestMode,
 } from "../services/productArchitecture"
-import { fetchPublicChannelSnapshot, resolvePublicChannel } from "../services/publicHandleMode"
+import { fetchPublicChannelSnapshot, persistPublicHandleForIngestion, resolvePublicChannel } from "../services/publicHandleMode"
 import type { SubscriptionPlanId } from "../services/subscriptionPlans"
 import { SettingsHelpSection } from "./settings/SettingsHelpSection"
 import { ChannelContextSettingsSection } from "./settings/ChannelContextSettingsSection"
@@ -174,13 +174,23 @@ const Settings: React.FC = () => {
         ? { resolvedChannelId: snapshot.channelId, resolvedHandle: snapshot.handle, channelTitle: snapshot.title, reason: null }
         : await resolvePublicChannel(handleInput)
       if (!result.resolvedChannelId) {
-        setHandleStatus(result.reason || "Channel not resolved.")
+        const pendingHandle = persistPublicHandleForIngestion(handleInput)
+        if (pendingHandle) {
+          setIngestMode("public_handle")
+          setStoredIngestMode("public_handle")
+          setHandleStatus(
+            `Saved ${pendingHandle} as the public ingestion source. Channel metadata could not be resolved yet: ${result.reason || "public resolver unavailable"}. No login is required; retry Resolve when the public-page resolver is available. No channel ID or analytics were fabricated.`,
+          )
+          return
+        }
+        setHandleStatus(result.reason || "Enter a valid YouTube handle or channel URL.")
         return
       }
       setIngestMode("public_handle")
       setStoredIngestMode("public_handle")
       localStorage.setItem("vt_public_channel_id", result.resolvedChannelId)
       if (result.resolvedHandle) localStorage.setItem("vt_public_channel_handle", result.resolvedHandle)
+      localStorage.setItem("vt_public_channel_input", handleInput.trim())
       if (snapshot) localStorage.setItem("vt_public_channel_snapshot", JSON.stringify(snapshot))
       setHandleStatus(
         `Selected public channel: ${result.channelTitle || "Channel"} · ${snapshot?.topVideos.length || 0} recent public videos ingested. ${snapshot?.source === "public_page" ? "No login or YouTube Data API key used." : result.reason || "Public source only."}`,
