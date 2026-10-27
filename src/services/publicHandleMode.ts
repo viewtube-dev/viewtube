@@ -49,6 +49,36 @@ const extractHandleLike = (input: string): string | null => {
  return trimmed
 }
 
+
+/**
+ * Persist a public handle as a selected ingestion source even when public
+ * metadata resolution is temporarily unavailable (for example, a missing
+ * Data API key and an unavailable public-page resolver). This deliberately
+ * does not invent a channel ID or claim that metadata was fetched.
+ */
+export const persistPublicHandleForIngestion = (input: string): string | null => {
+ const candidate = extractHandleLike(input)
+ if (!candidate) return null
+ const trimmed = input.trim()
+ const isChannelId = /^UC[a-zA-Z0-9_-]{20,}$/.test(candidate)
+ const isHandle = /^@?[a-zA-Z0-9._-]{2,100}$/.test(candidate)
+ let isYoutubeChannelUrl = false
+ try {
+  const url = new URL(trimmed)
+  isYoutubeChannelUrl =
+   (url.hostname === "youtube.com" || url.hostname.endsWith(".youtube.com") || url.hostname === "www.youtube.com") &&
+   (/^\/@[a-zA-Z0-9._-]+$/.test(url.pathname) || /^\/channel\/UC[a-zA-Z0-9_-]{20,}$/.test(url.pathname) || /^\/(c|user)\/[a-zA-Z0-9._-]+$/.test(url.pathname))
+ } catch {
+  // Handle or channel ID input, not a URL.
+ }
+ if (!isChannelId && !isHandle && !isYoutubeChannelUrl) return null
+ const normalized = candidate.startsWith("@") ? candidate : isChannelId ? candidate : `@${candidate}`
+ localStorage.setItem("vt_public_channel_handle", normalized)
+ localStorage.setItem("vt_public_channel_input", trimmed)
+ localStorage.setItem("vt_ingest_mode", "public_handle")
+ return normalized
+}
+
 const toNum = (value: unknown): number | null => {
  if (typeof value === "number" && Number.isFinite(value)) return value
  if (typeof value === "string") {
