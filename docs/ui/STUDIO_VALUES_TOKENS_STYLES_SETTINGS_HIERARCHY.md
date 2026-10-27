@@ -52,7 +52,7 @@ When levels disagree, follow the higher level and repair the lower-level impleme
 - Existing Studio contract index: `docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md`
 - Existing Component Library ownership reference: `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md`
 
-**Repository audit note (2026-10-27):** the TypeScript token contract, recovery stylesheet, and older defaults index are not fully aligned. Mini is 17.5px in tokens but 16px in recovery CSS; Micro's 1.5px / 3px geometry is in tokens and recovery CSS but older normative documentation still says 1px / 2px. Treat these as verified source/document drift, not proof that the rendered page is corrected.
+**Repository reconciliation (2026-10-27):** TypeScript tokens are the size authority; generated CSS is emitted from them; `studio-control-system.css` owns the shared tier selectors. Core and recovery stylesheets no longer redeclare the global five-tier geometry. Mini and Micro use `-0.02em`; Micro inherits Mini's stroke/radius/outline system while retaining its 12px height and 10px type/icon size.
 
 ## 3. Definitions
 
@@ -192,9 +192,9 @@ The following discrepancies were visible when comparing the target branch's `src
 | Concern | Later intended contract | Observed conflict to reconcile |
 |---|---|---|
 | Supreme stroke/radius | 3px / 6px Standard system | TypeScript tokens and recovery CSS agree; superseded proportional values remain in historical documentation and catalog notes and must not be treated as current global defaults |
-| Mini type/icon size | 17.5px | `src/studio-ui/tokens.ts` declares 17.5px, but `studio-control-recovery-overrides.css` resets Mini type/icon to 16px; runtime cascade must be reconciled and verified |
-| Micro stroke/radius | 1.5px / 3px Mini system | Tokens and recovery CSS declare 1.5px / 3px, but the defaults index still records legacy 1px / 2px values in its normative section |
-| Micro focus outline | 0.975px (65% of the 1.5px Mini-system stroke), offset 0 | Token source and recovery CSS declare 0.975px; the defaults index still contains a legacy 0.65px Micro outline |
+| Mini type/icon size | 17.5px | Token source and generated CSS declare 17.5px; system selector consumes generated variables | Source aligned; runtime verification outstanding |
+| Micro stroke/radius | 1.5px / 3px Mini system | Tokens, generated CSS, and system selector align; duplicate tier declarations removed from core/recovery | Source aligned; runtime verification outstanding |
+| Micro focus outline | 0.975px (65% of the 1.5px Mini-system stroke), offset 0 | Token and generated CSS values are consumed by the system selector | Source aligned; runtime verification outstanding |
 | Focused text fields | Black outer border and black text/glyph stroke; primary inset remains; secondary outline | Verify all field selectors and textarea variants; any primary outer/focus stroke is a regression |
 | TextBox | Black text and glyph stroke; primary inset; secondary outline | Verify no inherited generic primary glyph rule overrides the TextBox contract |
 | Catalog authority | Real production exports; catalog CSS only arranges specimens | Audit every specimen for direct production imports and prevent lookalike implementations |
@@ -289,12 +289,12 @@ A catalog row is evidence of registration and wiring, not by itself evidence of 
 
 ### Verified implementation/documentation conflicts
 
-- `src/studio-ui/tokens.ts` defines Mini as 20px / 1.5px stroke / 3px radius / 17.5px type and icon; `src/styles/studio-control-recovery-overrides.css` currently resets Mini type/icon to 16px.
-- TypeScript tokens and recovery CSS define Micro as 12px / 1.5px stroke / 3px radius / 10px type and icon, with a 0.975px focus outline. Older normative rows in the defaults index still contain the superseded 1px / 2px / 0.65px interpretation.
-- TypeScript Micro letter spacing is `-0.01em`, while the global contract says `-0.02em`. Normalize the token or explicitly register Micro as a named exception; do not leave the difference implicit.
-- `src/styles/studio-control-entry.css` imports the recovery stylesheet after the other imported control styles, then defines split-input rules later in the same file. Cascade ownership must be described by actual order and selector scope.
+- `src/studio-ui/tokens.ts` defines Mini as 20px / 1.5px stroke / 3px radius / 17.5px type and icon. Generated CSS now reflects 17.5px; core/recovery no longer redeclare the tier.
+- Micro is 12px / 1.5px stroke / 3px radius / 10px type and icon, with a 0.975px outline. It shares Mini's stroke/radius/outline and global `-0.02em` letter-spacing.
+- Micro uses the global `-0.02em` letter-spacing token; no Micro-specific exception is registered.
+- `StudioSplitTextInput` imports `src/styles/studio-split-text-input.css` for shell anatomy. Shared typography and field states remain owned by `studio-control-fields.css`; the entry stylesheet no longer carries split-input-specific rules.
 - Editable fields use primary text/stroke and a primary inset at rest; focused fields switch text/stroke to black while retaining the primary inset and using a secondary outline at 65% of border width. TextBox remains black text/stroke with primary inset and secondary outline. The border, inset, and outline are independent layers.
 
 ### Verification boundary
 
-Source inspection covered the three target documents, token definitions, public export barrel, shared control implementation, confirmed catalog, and control stylesheet entry/recovery layers. No build, automated tests, computed-style capture, assistive-technology run, or desktop/mobile browser screenshot was executed in this documentation pass. These remain outstanding.
+Source inspection and source/test updates covered the three target documents, tokens, generated CSS, system/core/recovery stylesheets, split-input stylesheet ownership, and parity tests. Automated tests, typecheck, build, computed-style capture, assistive-technology run, and desktop/mobile browser screenshots remain outstanding because this pass used remote repository editing without a runnable checkout.
