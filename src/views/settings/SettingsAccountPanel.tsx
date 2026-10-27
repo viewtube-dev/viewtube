@@ -82,11 +82,11 @@ export const SettingsAccountPanel: React.FC<SettingsAccountPanelProps> = ({
       collapsible
       isOpenInitial={canResolvePublicHandle}
       persistenceId="settings-account-public-channel"
-      helpText="Basic can resolve limited public analytics from a channel handle or URL without OAuth."
+      helpText="Connect a public channel by handle without signing in or supplying a YouTube Data API key. Public page and RSS data only; private analytics and video statistics are not available."
     >
       <SubToolboxStack density="dense">
         <SubToolboxFieldLabel htmlFor="settings-public-channel" level="l1">
-          Channel handle or URL
+          Public channel handle or URL
         </SubToolboxFieldLabel>
         <div className="grid min-w-0 gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
           <StudioInput
