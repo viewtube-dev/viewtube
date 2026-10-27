@@ -57,8 +57,10 @@ This is a composition redesign, not a replacement of Brain's domain runtime.
 
 ## Regression coverage added in this phase
 
-- AIBrainStudioWorkspace.contract.test.ts guards the page region hooks, responsive rail behavior, bounded conversation/composer contract, safe-area handling, and reduced-motion support.
+- AIBrainStudioWorkspace.contract.test.ts guards the page region hooks, responsive rail behavior (including the intermediate two-column breakpoint), bounded conversation/composer contract, safe-area handling, and reduced-motion support.
 - BrainComposerDock.contract.test.ts guards the default and focused Studio textarea field states.
+- AIBrainStudioChrome.contract.test.ts guards the answer-first response hierarchy against repeating the Copilot brand in both the outer module and response header.
+- AIBrainCommandInterface.test.tsx updates the existing rendered-page assertion for the new AI Brain title.
 
 ## Verification status
 
