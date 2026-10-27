@@ -2342,6 +2342,7 @@ const useStudioCounterHold = (
 
 /** Independent button-only counter primitives. These deliberately do not compose either legacy stepper. */
 export interface StudioCounterProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
+  [key: `data-${string}`]: string | undefined;
   value: number;
   onValueChange: (value: number) => void;
   min?: number;
@@ -2923,6 +2924,7 @@ export const StudioDoubleSplitBadge: React.FC<StudioDoubleSplitBadgeProps> = ({ 
 StudioDoubleSplitBadge.displayName = "StudioDoubleSplitBadge";
 
 export interface StudioDoubleSplitSliderProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
+  [key: `data-${string}`]: string | undefined;
   value: number;
   onValueChange: (value: number) => void;
   min?: number;
