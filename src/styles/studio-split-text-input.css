@@ -57,7 +57,7 @@
   box-sizing: border-box;
   min-width: 0;
   width: 0;
-  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+  height: calc(var(--vt-studio-control-height, 44px) - 3 * var(--vt-studio-control-stroke, 3px));
   min-height: 0;
   margin: 0;
   padding: 0 var(--vt-studio-space-unit, 4px);
@@ -82,7 +82,7 @@
 
 .vt-studio-split-text-input__field:focus,
 .vt-studio-split-text-input__field:focus-visible {
-  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+  height: calc(var(--vt-studio-control-height, 44px) - 3 * var(--vt-studio-control-stroke, 3px));
   border-color: var(--vt-field-primary, var(--pair-a, #36e0f6)) !important;
   outline: none !important;
   outline-offset: 0 !important;
