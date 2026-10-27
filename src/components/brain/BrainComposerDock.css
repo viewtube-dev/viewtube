@@ -50,7 +50,7 @@
 
 .vt-brain-composer-dock .vt-studio-chat-composer-dock__field-row {
   display: grid;
-  grid-template-columns: minmax(0, 4.3fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 4.4fr) minmax(0, 1fr);
   gap: 4px;
   align-items: stretch;
   min-width: 0;
@@ -200,7 +200,7 @@
   }
 
   .vt-brain-composer-dock .vt-studio-chat-composer-dock__field-row {
-    grid-template-columns: minmax(0, 4.3fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 4.4fr) minmax(0, 1fr);
   }
 
   .vt-brain-composer-dock .vt-brain-composer-input {
