@@ -1,7 +1,6 @@
 /**
- * ViewTube Brain composer — focused, tactile, responsive presentation layer.
- * All interactive controls remain the approved Studio primitives; this file only
- * composes their layout and visual hierarchy.
+ * Brain composer layout only. Control geometry and interaction remain owned by
+ * Studio Controls primitives.
  */
 .vt-brain-composer-dock {
   --brain-composer-ink: #000000;
@@ -12,29 +11,17 @@
   min-width: 0;
   color: var(--brain-composer-ink);
   background: var(--brain-composer-paper);
-  border: 2px solid var(--brain-composer-ink);
-  border-radius: 6px;
-  overflow: clip;
 }
 
-.vt-brain-composer-dock[data-vt-composer-layout="toolbar-actions"] {
+.vt-brain-composer-dock[data-vt-composer-layout="inline-actions"] {
   width: 100%;
   min-width: 0;
-  gap: 0;
+  gap: 6px;
   border: 0;
   border-top: 2px solid #000000;
   border-radius: 0;
   overflow: visible;
   background: var(--brain-composer-paper);
-}
-
-.vt-brain-composer-dock .vt-brain-composer-tool-rail {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  width: 100%;
-  min-width: 0;
 }
 
 .vt-brain-composer-dock .vt-brain-composer-hint {
@@ -48,14 +35,30 @@
   letter-spacing: .01em;
 }
 
+.vt-brain-composer-dock .vt-studio-chat-composer-dock__field-row {
+  display: grid;
+  grid-template-columns: minmax(0, 4.2fr) minmax(0, 1fr);
+  gap: 4px;
+  align-items: stretch;
+  min-width: 0;
+  width: 100%;
+}
+
+.vt-brain-composer-dock .vt-studio-chat-composer-dock__field {
+  display: flex;
+  min-width: 0;
+  width: 100%;
+  align-items: stretch;
+}
+
 .vt-brain-composer-dock .vt-brain-composer-input {
   display: block;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   min-height: 68px;
-  max-height: min(30vh, 220px);
-  padding: 14px 14px 12px;
+  max-height: var(--vt-composer-dock-max-field, 144px);
+  padding: 10px 12px;
   border: var(--vt-studio-control-stroke, 3px) solid #000000 !important;
   border-radius: var(--vt-studio-control-radius, 6px) !important;
   outline: 0;
@@ -64,8 +67,8 @@
   -webkit-text-stroke: 1px var(--pair-a, #36e0f6);
   font-size: 16px;
   font-weight: 1000;
-  line-height: 1.45;
-  letter-spacing: -.012em;
+  line-height: 1.4;
+  letter-spacing: -.02em;
   box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--pair-a, #36e0f6) !important;
   resize: none;
   overflow-y: auto;
@@ -94,87 +97,60 @@
   cursor: progress;
 }
 
-.vt-brain-composer-dock .vt-brain-composer-tool {
+.vt-brain-composer-dock .vt-brain-composer-actions {
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  align-self: stretch;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
   min-width: 0;
-  min-height: 30px;
-  border-radius: 4px;
+  min-height: 68px;
+}
+
+.vt-brain-composer-dock .vt-brain-composer-action {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0 !important;
+  padding-inline: 2px;
+  overflow: hidden;
   white-space: nowrap;
 }
 
-.vt-brain-composer-dock .vt-brain-composer-tool__content {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+.vt-brain-composer-dock .vt-brain-composer-action > * {
   min-width: 0;
 }
 
-.vt-brain-composer-dock .vt-brain-composer-tool__icon {
-  display: inline-flex;
+.vt-brain-composer-dock .vt-brain-composer-action svg {
   flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
 }
 
-.vt-brain-composer-dock .vt-brain-composer-tool:focus-visible,
-.vt-brain-composer-dock .vt-brain-composer-journal:focus-visible,
-.vt-brain-composer-dock .vt-brain-composer-send:focus-visible {
-  outline: 2px solid var(--brain-composer-ink);
-  outline-offset: 2px;
-  z-index: 1;
-}
-
-.vt-brain-composer-dock .vt-brain-composer-send {
-  min-width: 100px;
-  min-height: 44px;
-  border-radius: 6px;
-  font-weight: 850;
-}
-
-.vt-brain-composer-dock .vt-brain-composer-send__content {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.vt-brain-composer-dock .vt-brain-composer-send:disabled {
+.vt-brain-composer-dock .vt-brain-composer-action:disabled {
   opacity: .48;
   cursor: not-allowed;
 }
 
-.vt-brain-composer-dock .vt-brain-composer-journal {
-  min-width: 36px;
-  min-height: 30px;
-}
-
 @media (max-width: 520px) {
-  .vt-brain-composer-dock {
-    border-radius: 8px;
+  .vt-brain-composer-dock .vt-studio-chat-composer-dock__field-row {
+    grid-template-columns: minmax(0, 4.2fr) minmax(0, 1fr);
   }
 
   .vt-brain-composer-dock .vt-brain-composer-input {
-    min-height: 64px;
-    padding: 12px 10px 10px;
+    min-height: 68px;
+    padding: 10px 8px;
     font-size: 16px;
   }
 
-  .vt-brain-composer-dock .vt-brain-composer-tool {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  .vt-brain-composer-dock .vt-brain-composer-tool__content {
-    gap: 4px;
-  }
-
-  .vt-brain-composer-dock .vt-brain-composer-send {
-    min-width: 84px;
+  .vt-brain-composer-dock .vt-brain-composer-action {
+    padding-inline: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vt-brain-composer-dock .vt-brain-composer-tool {
+  .vt-brain-composer-dock .vt-brain-composer-action {
     transition: none;
   }
 }
