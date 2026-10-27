@@ -35,5 +35,5 @@ export const CHANNEL_CONTEXT_QUESTIONS: ChannelContextQuestion[] = [
   { id: "style_influences", category: "brand", title: "Which creators have a similar style?", required: false, contextField: "brand.influences", evidenceWeight: 0.7 },
   { id: "creativity_scale", category: "brand", title: "How creative should AI be on a 1–10 scale?", required: true, contextField: "brand.creativity", evidenceWeight: 0.7 },
   { id: "allowed_sources", category: "intelligence", title: "Which evidence sources may AI use?", required: true, contextField: "intelligence.sources", evidenceWeight: 1 },
-  { id: "enabled_capabilities", category: "intelligence", title: "Which AI capabilities should be enabled?", required: true, contextField: "intelligence.capabilities", evidenceWeight: 1 },
+  { id: "enabled_capabilities", category: "intelligence", title: "Which AI capabilities should the Brain prioritize?", required: true, contextField: "intelligence.capabilities", evidenceWeight: 1 },
 ]
