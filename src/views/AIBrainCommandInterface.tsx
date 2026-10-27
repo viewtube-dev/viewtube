@@ -773,7 +773,7 @@ const CreatorResponseCard: React.FC<{
   return (
    <StudioInterModule
     data-vt-brain-component="BrainInterruptedResponseEntry"
-    title="ANSWER"
+    title="RESPONSE INTERRUPTED"
     startIcon={<Brain aria-hidden="true" />}
     sizeVariant="compact"
     defaultOpen
@@ -2009,10 +2009,10 @@ const AIBrainCommandInterface: React.FC = () => {
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => {
+          onEdit={(prompt, title) => {
            setPromptRailOpen(false)
            setInput(prompt)
-           setActivePromptTitle(promptCards.find((card) => card.prompt === prompt)?.label || "Custom prompt")
+           setActivePromptTitle(title || "Custom prompt")
            requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions))
           }}
          /> : <BrainCapabilityBrowser
