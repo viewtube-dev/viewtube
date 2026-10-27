@@ -31,3 +31,16 @@
 .vt-studio-component-grid[data-corners="square"] [data-vt-studio-control="true"],
 .vt-studio-component-grid[data-corners="square"] [data-vt-studio-control="true"] * { border-radius: 0 !important; }
 .vt-studio-component-grid[data-corners="radius"] [data-vt-studio-control="true"] { border-radius: var(--scg-radius); }
+
+/* Grid can provide tier tokens to composite wrappers (notably DoubleSideToggle). */
+.vt-studio-component-grid[data-size] .vt-studio-value-toggle--double {
+  --vt-studio-control-height: var(--scg-height);
+  --vt-studio-control-stroke: var(--scg-stroke);
+  --vt-studio-control-radius: var(--scg-radius);
+}
+.vt-studio-component-grid-specimen-pair { display: flex; flex-direction: column; gap: 20px; }
+.vt-studio-component-grid-specimen-pair__label { margin: 0 0 8px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #444; }
+@media (min-width: 720px) {
+  .vt-studio-component-grid-specimen-pair { flex-direction: row; align-items: flex-start; }
+  .vt-studio-component-grid-specimen-pair > div { flex: 1 1 0; min-width: 0; }
+}
