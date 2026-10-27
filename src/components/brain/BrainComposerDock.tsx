@@ -145,7 +145,6 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
           title={busy ? "Brain is working" : "Send message"}
           onClick={onSend}
           className="vt-brain-composer-send"
-          style={actionStyle(7, 5)}
         >
           <span className="vt-brain-composer-send__content">
             {busy ? <Zap size={18} aria-hidden="true" /> : <Send size={18} aria-hidden="true" />}
