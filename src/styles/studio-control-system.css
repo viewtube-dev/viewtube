@@ -207,8 +207,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] > svg {
   display: block;
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
+  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
   color: #000;
   stroke: #000;
 }
@@ -5236,8 +5236,8 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 [data-vt-studio-button-icon] > svg {
   display: block;
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
+  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
   flex: 0 0 auto;
 }
 .vt-studio-split-shell,
@@ -5433,8 +5433,8 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-value-toggle__arrow:disabled { opacity: .35; cursor: not-allowed; }
 .vt-studio-value-toggle__arrow:focus-visible { outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 0; }
 .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  display: block; width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%); stroke-width: 2.5;
+  display: block; width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
+  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%); stroke-width: 2.5;
   transform-origin: center;
 }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
@@ -5582,8 +5582,8 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 
 [data-vt-studio-control] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
   display: block;
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
+  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
   flex: 0 0 auto;
   transform-origin: center;
 }
