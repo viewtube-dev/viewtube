@@ -826,7 +826,7 @@ const CreatorResponseCard: React.FC<{
  return (
   <StudioInterModule
    data-vt-brain-component="BrainAssistantChatEntry"
-   title="VIEWTUBE COPILOT"
+   title="ANSWER"
    startIcon={<Brain aria-hidden="true" />}
    sizeVariant="compact"
    defaultOpen
