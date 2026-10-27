@@ -8,7 +8,8 @@ import {
   StudioTextInput,
 } from "../../studio-ui"
 import { TOOLBOX_PALETTE } from "../../styles/toolboxPalette"
-import type { CreatorBrainPromptCard } from "../../services/aiBrainCommandInterface"
+import { buildCreatorBrainPromptCards } from "../../services/aiBrainCommandInterface"
+type CreatorBrainPromptCard = ReturnType<typeof buildCreatorBrainPromptCards>[number]
 import "./brain-tool-surface.css"
 
 /** Prefer shared summaries from the view module when re-exported; fallback to prompt text. */
