@@ -75,7 +75,7 @@ const cacheSet = (key, value, ttl) => {
 const resolveChannel = async (input, apiKey, fetchImpl) => {
   const parsed = normalizePublicChannelInput(input)
   if (!parsed) return { ok: false, code: "INVALID_CHANNEL_INPUT", message: "Enter a valid YouTube channel handle, channel URL, or channel ID." }
-  const key = cacheKey(parsed.value)
+  const key = cacheKey(`${parsed.kind}:${parsed.value}`)
   const cached = cache.get(key)
   if (cached && cached.expiresAt > Date.now()) return cached.value
   if (cached) cache.delete(key)
@@ -146,6 +146,11 @@ export const handlePublicChannelResolveRoute = async (req, res, options = {}) =>
   if (now - bucket.start >= RATE_WINDOW_MS) { bucket.start = now; bucket.count = 0 }
   bucket.count += 1
   rateBuckets.set(clientKey, bucket)
+  if (rateBuckets.size > 1000) {
+    for (const [key, value] of rateBuckets) {
+      if (now - value.start >= RATE_WINDOW_MS) rateBuckets.delete(key)
+    }
+  }
   if (bucket.count > MAX_REQUESTS_PER_WINDOW) return json(res, 429, { ok: false, code: "RATE_LIMITED", message: "Too many public channel lookups. Try again shortly." })
   if (req.method !== "POST") return json(res, 405, { ok: false, code: "METHOD_NOT_ALLOWED" })
   if (!apiKey) return json(res, 503, { ok: false, code: "PUBLIC_LOOKUP_UNAVAILABLE", message: "Public channel lookup is not configured on the server." })
