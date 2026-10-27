@@ -8,7 +8,7 @@
 
 ## Studio Controls size-tier authority — 2026-10-20
 
-The production size ladder is **Supreme 60px / Standard 44px / Compact 28px / Mini 20px / Micro 12px**. Mini is a first-class tier with 1.5px stroke, 3px radius, and 17.5px typography/icon size. The canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` emits `src/styles/studio-control-vars.generated.css`; production geometry is applied by `src/styles/studio-control-system.css` and the family-specific styles. Supreme dimensional tokens scale Standard by 60/44 while preserving typography ratios, color roles, and flat-shell behavior. Mini has explicit 20px height / 1.5px stroke / 3px radius and is not interpolated from neighboring tiers. Micro has an explicit 12px height and is not derived from half Compact. Mini and Micro remain family-aware and must not be added to a component whose inner geometry cannot fit. The Confirmed Primitive Library may show a tier only after the production API and rendered behavior support it.
+The intended production size ladder is **Supreme 60px / Standard 44px / Compact 28px / Mini 20px / Micro 12px**. Mini is a first-class tier with 1.5px stroke, 3px radius, and 17.5px typography/icon size in TypeScript tokens; recovery CSS currently sets its type/icon to 16px, so rendered parity remains an open defect. The canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` emits `src/styles/studio-control-vars.generated.css`; production geometry is applied by `src/styles/studio-control-system.css` and the family-specific styles. Supreme dimensional tokens scale Standard by 60/44 while preserving typography ratios, color roles, and flat-shell behavior. Mini has explicit 20px height / 1.5px stroke / 3px radius and is not interpolated from neighboring tiers. Micro has an explicit 12px height and is not derived from half Compact. Mini and Micro remain family-aware and must not be added to a component whose inner geometry cannot fit. The Confirmed Primitive Library may show a tier only after the production API and rendered behavior support it.
 
 `ToolboxUIReferenceLibrary.tsx` is the Studio Hub entry point and shell. It must not maintain an independent subset of component examples.
 
@@ -475,3 +475,32 @@ The confirmed Double Side Toggle now supports only **V1** (visible center divide
 - Keyboard focus is represented by one outline around the outer component perimeter. Nested arrow controls do not draw focus outlines across the center divider.
 - `StudioInterModule` Standard, Compact, and Micro specimens must fill the parent shell's available width. The parent body must not retain horizontal padding that prevents Compact/Micro headers and rails from meeting the same inner edges as Standard.
 - Focused regression assertions are in `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.test.tsx`. Run the tests and a browser keyboard/visual check before certifying the focus geometry and responsive widths.
+
+
+## Studio Controls expanded primitive catalog — 2026-10-27
+
+### Current canonical specimen set
+
+`src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` is the current Confirmed Primitive Library entry point verified during this audit. Its representative section contains full-width Standard specimens for: `StudioButton`, `StudioSplitLeftButton`, `StudioDoubleSplitButton`, `StudioTwoLineButton`, `StudioSplitTwoLineButton`, `StudioDropdown`, `StudioLegendMultiDropdown`, `StudioSplitLeftDropdown`, `StudioArrowToggle`, `StudioBarToggle`, `StudioWordToggle`, `StudioVerticalWordToggle`, `StudioNumberInput`, `StudioTextInput`, `StudioUsernameInput`, `StudioSplitLeftInput`, `StudioSplitTextInput`, `StudioTextArea`, `StudioTextBox`, `StudioSideToggle`, `StudioDoubleSideToggle`, `StudioCounter`, `StudioSideCounter`, `StudioLeftCounter`, and `StudioDoubleSplitSlider`. The catalog imports `StudioSplitTextInput` from its dedicated production module; `StudioSplitAccordion` is also a dedicated production primitive with its own stylesheet and tests.
+
+The representative list is a source/provenance ledger, not a guarantee that every tier or state is visually certified. Catalog captions and exception notes must match the actual export API and token/CSS support; catalog-only CSS must not repair control-face geometry.
+
+### Component-family documentation rules
+
+- **Buttons:** distinguish single-face, split-left, double-split, two-line, and split two-line anatomy; list public size/variant props and state behavior from production API.
+- **Dropdowns:** distinguish simple trailing-chevron, multi-select/legend, and split-left with a leading secondary rail; document keyboard selection and focus ownership.
+- **Toggles:** keep arrow/bar/word/vertical-word/side/double-side/value-toggle semantics distinct; record bidirectional cycling and active/inactive fills only where source implements them.
+- **Fields:** document editable single-line, split-shell input, textarea, and read-only TextBox separately. Record outer border, inset stroke, fill, text/glyph stroke, caret, outline, and label mode independently.
+- **Counters/sliders:** document action rails, value area, separators, min/max behavior, keyboard operation, and supported tiers.
+- **Accordions/modules:** record split layout, trigger semantics, keyboard navigation, inactive panel visibility, reduced-motion behavior, and whether the family is standalone or composed.
+
+### Size and styling drift requiring follow-up
+
+- TypeScript tokens specify Mini type/icon at 17.5px; recovery CSS sets both to 16px.
+- Tokens and recovery CSS specify Micro 1.5px stroke / 3px radius / 0.975px focus outline, while older normative text records 1px / 2px / 0.65px.
+- TypeScript Micro letter spacing is `-0.01em`, unlike the shared `-0.02em` contract; register or resolve this difference.
+- The three Studio contract documents must agree on intended rules and separately report implementation status. Documentation must not mark a source defect as fixed.
+
+### Verification status — 2026-10-27
+
+Source paths and imports were inspected. Browser visual certification, computed-style verification, keyboard/assistive-technology testing, typecheck, and build have not been run in this documentation pass. Do not describe the new representatives as fully certified until those checks are complete.
