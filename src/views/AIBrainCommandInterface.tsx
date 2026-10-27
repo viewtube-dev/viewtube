@@ -919,6 +919,15 @@ const AIBrainCommandInterface: React.FC = () => {
   emitSignal,
  } = brainContext
  const [input, setInput] = useState("")
+ useEffect(() => {
+  const requestedDraft = searchParams.get("draft")
+  if (!requestedDraft) return
+  setInput(requestedDraft)
+  const next = new URLSearchParams(searchParams)
+  next.delete("draft")
+  next.delete("tab")
+  setSearchParams(next, { replace: true })
+ }, [searchParams, setSearchParams])
  const { height: mobileViewportHeight, keyboardOpen } = useVisualViewportHeight(true)
  const [journalInput, setJournalInput] = useState("")
  const [busy, setBusy] = useState(false)
