@@ -17,7 +17,7 @@ const invoke = async (handle: string) => {
     json(payload: unknown) { body = payload; return this },
   }
   await handler(req as never, res as never)
-  return { statusCode, body: body as Record<string, any> }
+  return { statusCode, body: body as { resolution?: { resolvedChannelId?: string; resolvedHandle?: string; channelTitle?: string }; snapshot?: { source?: string; channelId?: string; topVideos?: Array<{ videoId: string; title: string }> }; error?: string } }
 }
 
 describe("public channel ingestion endpoint", () => {
