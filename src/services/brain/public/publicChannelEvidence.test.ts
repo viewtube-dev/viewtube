@@ -25,7 +25,7 @@ const snapshot: PublicChannelSnapshot = {
 describe("buildPublicChannelEvidenceRecords", () => {
   it("uses the canonical evidence record contract and public provenance", () => {
     const records = buildPublicChannelEvidenceRecords(snapshot)
-    expect(records.length).toBe(8)
+    expect(records.length).toBe(9)
     expect(records.every(isEvidenceRecord)).toBe(true)
     expect(records.every((record) => record.owner === "research")).toBe(true)
     expect(records.every((record) => record.provenance.sourceRoute === "/api/public-channel/resolve")).toBe(true)
@@ -43,8 +43,19 @@ describe("buildPublicChannelEvidenceRecords", () => {
 
   it("keeps each video metric linked to its public video reference", () => {
     const records = buildPublicChannelEvidenceRecords(snapshot).filter((record) => record.videoId === "abc123")
-    expect(records).toHaveLength(4)
+    expect(records).toHaveLength(5)
     expect(records.every((record) => record.sourceRef === "https://www.youtube.com/watch?v=abc123")).toBe(true)
     expect(records.every((record) => record.channelId === snapshot.channelId)).toBe(true)
   })
+  it("clearly marks fixture records as synthetic rather than live analytics", () => {
+    const fixtureSnapshot: PublicChannelSnapshot = {
+      ...snapshot,
+      channelId: "UC_FIXTURE_THEMOTIONVIS",
+      provenance: { source: "fixture", evidenceMode: "public_handle", privateMetricsIncluded: false },
+    }
+    const records = buildPublicChannelEvidenceRecords(fixtureSnapshot)
+    expect(records.every((record) => record.provenance.sourceRoute === "local://public-handle-fixtures")).toBe(true)
+    expect(records.every((record) => record.limitations?.some((item) => item.includes("SYNTHETIC FIXTURE DATA")))).toBe(true)
+  })
+
 })
