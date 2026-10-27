@@ -10,7 +10,7 @@ export const STUDIO_GLOBAL_DEFAULTS = {
   textTransform: "uppercase" as const,
   letterSpacing: -0.02,
   lineHeight: 1,
-  textareaLineHeight: 1,
+  textareaLineHeight: 0.85,
   fieldDefaultTextColor: "primary" as const,
   fieldDefaultGlyphStrokeColor: "primary" as const,
   textFieldDefaults: {
