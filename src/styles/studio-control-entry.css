@@ -14,8 +14,59 @@
 @import "./studio-control-recovery-overrides.css";
 
 /* Split input shell owns the only perimeter and rail dividers; inner input is borderless. */
-.vt-studio-split-text-input{padding:0;background:var(--vt-field-fill-rest);box-shadow:none}
-.vt-studio-split-text-input__field{box-sizing:border-box;flex:1 1 auto;min-width:0;width:0;height:100%;min-height:0;margin:0;border:0!important;border-radius:0!important;box-shadow:none!important;outline:none;background:transparent;color:var(--vt-field-text);-webkit-text-fill-color:var(--vt-field-text);-webkit-text-stroke-color:var(--vt-field-text-stroke);-webkit-text-stroke-width:var(--vt-field-text-stroke-width);caret-color:var(--vt-field-text);font-size:var(--vt-studio-control-font-size);font-weight:1000;line-height:1;text-transform:uppercase;padding:0 4px}
-.vt-studio-split-text-input:focus-within{outline:var(--vt-field-focus-outline);outline-offset:0;background:var(--vt-field-fill-focus);box-shadow:none}
-.vt-studio-split-text-input:focus-within .vt-studio-split-text-input__field{color:var(--vt-field-text-focus);-webkit-text-fill-color:var(--vt-field-text-focus);-webkit-text-stroke-color:var(--vt-field-text-stroke-focus);caret-color:var(--vt-field-caret-focus)}
+/* Split inputs have one black shell perimeter. The native input owns no perimeter:
+   three edge gradients provide the persistent primary inset without adding box dimensions.
+   The left edge is intentionally omitted because the rail divider occupies that seam. */
+.vt-studio-split-text-input {
+  position: relative;
+  padding: 0;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  background: var(--vt-field-fill-rest);
+  box-shadow: none;
+}
+.vt-studio-split-text-input__field {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: 0;
+  width: 0;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none;
+  background-color: var(--vt-field-fill-rest);
+  background-image:
+    linear-gradient(var(--vt-field-primary), var(--vt-field-primary)),
+    linear-gradient(var(--vt-field-primary), var(--vt-field-primary)),
+    linear-gradient(var(--vt-field-primary), var(--vt-field-primary));
+  background-size: 100% var(--vt-studio-control-stroke, 3px), 100% var(--vt-studio-control-stroke, 3px), var(--vt-studio-control-stroke, 3px) 100%;
+  background-position: top left, bottom left, top right;
+  background-repeat: no-repeat;
+  color: var(--vt-field-text);
+  -webkit-text-fill-color: var(--vt-field-text);
+  -webkit-text-stroke-color: var(--vt-field-text-stroke);
+  -webkit-text-stroke-width: var(--vt-field-text-stroke-width);
+  caret-color: var(--vt-field-text);
+  font-size: var(--vt-studio-control-font-size);
+  font-weight: 1000;
+  line-height: 1;
+  text-transform: uppercase;
+  padding: 0 4px;
+}
+.vt-studio-split-text-input:focus-within {
+  outline: var(--vt-field-focus-outline);
+  outline-offset: 0;
+  background: var(--vt-field-fill-focus);
+  box-shadow: none;
+}
+.vt-studio-split-text-input:focus-within .vt-studio-split-text-input__field {
+  background-color: var(--vt-field-fill-focus);
+  color: var(--vt-field-text-focus);
+  -webkit-text-fill-color: var(--vt-field-text-focus);
+  -webkit-text-stroke-color: var(--vt-field-text-stroke-focus);
+  caret-color: var(--vt-field-caret-focus);
+}
 
