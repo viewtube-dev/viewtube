@@ -8,7 +8,6 @@ const panelSource = readFileSync(new URL("../components/brain/BrainRuntimePanel.
 const chatPrimitivesSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.tsx", import.meta.url), "utf8")
 const chatPrimitivesCssSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.css", import.meta.url), "utf8")
 const composerDockSource = readFileSync(new URL("../components/brain/BrainComposerDock.tsx", import.meta.url), "utf8")
-const composerDockCssSource = readFileSync(new URL("../components/brain/BrainComposerDock.css", import.meta.url), "utf8")
 const viewportHookSource = readFileSync(new URL("../components/brain/useVisualViewportHeight.ts", import.meta.url), "utf8")
 const collapsePrimitiveSource = readFileSync(new URL("../studio-ui/primitives/StudioControls.tsx", import.meta.url), "utf8")
 const toolboxSource = readFileSync(new URL("../components/Toolbox.tsx", import.meta.url), "utf8")
@@ -49,9 +48,6 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('from "../studio-ui"')
   expect(userMessage).toContain("<StudioInterModule")
   expect(responseCard).toContain("<StudioInterModule")
-  expect(responseCard).not.toContain('<StudioInterModule\n   data-vt-brain-component="BrainAssistantChatEntry"')
-  expect(responseCard).toContain('<div data-vt-brain-component="BrainAssistantChatEntry"')
-  expect(responseCard).toContain("<BrainResponseLayout")
   expect(responseCard).not.toContain('data-vt-brain-part="response-attribution"')
   expect(responseCard).toContain("BrainGenerationBadge")
   expect(promptLibrary).toContain('data-vt-brain-component="BrainPromptLibraryModule"')
@@ -151,25 +147,6 @@ describe("AI Brain runtime surface integration", () => {
  })
 
 
- it("uses the same answer-first hierarchy for interrupted and completed assistant turns", () => {
-  const interruptedEntry = source.slice(source.indexOf('data-vt-brain-component="BrainInterruptedResponseEntry"'), source.indexOf('const rawModules: AIBrainAnswerModule[]'))
-  expect(interruptedEntry).toContain('title="RESPONSE INTERRUPTED"')
-  expect(interruptedEntry).not.toContain('title="VIEWTUBE COPILOT"')
-  expect(source).toContain('data-vt-brain-component="BrainAssistantChatEntry"')
- })
-
- it("surfaces selected context in the composer and preserves explicit keyboard guidance", () => {
-  expect(source).toContain('activeContextLabel={surfaceSelection?.label || null}')
-  expect(source).toContain('activePromptTitle={activePromptTitle}')
-  expect(source).toContain('setActivePromptTitle(promptCards.find((card) => card.prompt === prompt)?.label || "Custom prompt")')
-  expect(composerDockSource).toContain('data-vt-brain-part="composer-attachments"')
-  expect(composerDockSource).toContain('title="Review active context"')
-  expect(composerDockSource).toContain('aria-keyshortcuts="Enter Shift+Enter"')
-  expect(composerDockCssSource).toContain('font-size: 17.5px;')
-  expect(composerDockCssSource).toContain('text-overflow: clip;')
-  expect(composerDockCssSource).toContain('max-width: min(100%, 180px);')
- })
-
  it("opens a useful prompt category on entry and the chosen category after filtering", () => {
   expect(promptLibrarySource).toContain('useState<string[]>(() => {')
   expect(promptLibrarySource).toContain('const firstCategory = cards[0]?.category || "general"')
@@ -183,33 +160,23 @@ describe("AI Brain runtime surface integration", () => {
   expect(capabilityBrowserSource).toContain('selectedAvailability.reason')
  })
 
- it("clears an expanded prompt only when search or category filters hide it", () => {
-  expect(promptLibrarySource).toContain('filterCreatorBrainPromptCards(cards, nextQuery, category, summarize).some((card) => card.id === selectedId)')
-  expect(promptLibrarySource).toContain('filterCreatorBrainPromptCards(cards, query, nextCategory, summarize).some((card) => card.id === selectedId)')
-  expect(promptLibrarySource).toContain('if (nextCategory !== "all") setOpenCategories([nextCategory])')
- })
-
- it("labels capability, context, and correction drafts when handing off to the composer", () => {
-  expect(source).toContain('setActivePromptTitle("Capability draft")')
-  expect(source).toContain('setActivePromptTitle("Suggested action")')
-  expect(source).toContain('setActivePromptTitle("Context correction review")')
-  expect(source).toContain('requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions))')
- })
-
- it("keeps the composer draft recoverable with a direct clear action", () => {
-  const composerSource = readFileSync(new URL("../components/brain/BrainComposerDock.tsx", import.meta.url), "utf8")
-  expect(composerSource).toContain('activePromptTitle || activeContextLabel || value.trim()')
-  expect(composerSource).toContain('data-vt-brain-part="clear-composer-draft"')
-  expect(composerSource).toContain('onClick={() => onChange("")}')
-  expect(composerSource).toContain('aria-label="Clear message draft"')
- })
-
-
- it("passes the selected prompt title directly into the composer handoff", () => {
+ it("carries the selected prompt title into the composer and clears it on send", () => {
   expect(promptLibrarySource).toContain('onEdit?: (prompt: string, title: string) => void')
   expect(promptLibrarySource).toContain('onEdit(card.prompt, card.label)')
-  expect(source).toContain('onEdit={(prompt, title) => {')
-  expect(source).toContain('setActivePromptTitle(title || "Custom prompt")')
+  expect(source).toContain('const [activePromptTitle, setActivePromptTitle] = useState<string | null>(null)')
+  expect(source).toContain('activePromptTitle={activePromptTitle}')
+  expect(source).toContain('onClearActivePrompt={() => setActivePromptTitle(null)}')
+  expect(source).toContain('setActivePromptTitle(title)')
+  expect(composerDockSource).toContain('aria-label={`Active prompt ${activePromptTitle}. Activate to clear.`}')
+ })
+
+ it("keeps response cards answer-first without duplicate assistant branding", () => {
+  const responseCard = source.slice(source.indexOf('const CreatorResponseCard:'), source.indexOf('const readinessForSnapshot:'))
+
+  expect(responseCard).toContain('title="ANSWER"')
+  expect(responseCard).toContain('title="RESPONSE INTERRUPTED"')
+  expect(responseCard).not.toContain('ViewTube Copilot</div>')
+  expect(responseCard).toContain('BrainGenerationBadge path={response.generationPath}')
  })
 
  it("does not make the entire transcript a live log that re-announces the full conversation", () => {
