@@ -1458,7 +1458,7 @@ describe("StudioSplitTextInput transparent-panel composition", () => {
 
   it("uses a transparent split panel and an inset primary-border input without a second focus outline", () => {
     const css = readStudioControlCss();
-    const shellStart = css.lastIndexOf(".vt-studio-split-text-input {");
+    const shellStart = css.lastIndexOf(".vt-studio-split-shell.vt-studio-split-text-input {");
     const fieldStart = css.lastIndexOf(".vt-studio-split-text-input__field {");
     const focusStart = css.lastIndexOf(".vt-studio-split-text-input:focus-within");
     expect(shellStart).toBeGreaterThanOrEqual(0);
