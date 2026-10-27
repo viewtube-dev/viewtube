@@ -554,7 +554,7 @@ export const BrainPromptLibrary: React.FC<{
       const isOpen = openCategories.includes(groupCategory)
       // Keep category colors tied to the complete registry order, not the filtered
       // result, so searching or selecting a category never recolors the library.
-      const categoryIndex = Math.max(0, allCategories.indexOf(groupCategory as (typeof allCategories)[number]))
+      const categoryIndex = Math.max(0, allCategories.findIndex((category) => category === groupCategory))
       const categoryPair = PROMPT_MODULE_COLOR_PAIRS[categoryIndex % PROMPT_MODULE_COLOR_PAIRS.length]
       return (
        <StudioInterModule
