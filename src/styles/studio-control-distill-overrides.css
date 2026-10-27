@@ -318,27 +318,52 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 
 
 /* Final regression-recovery contract: this file loads last in studio-control-entry.css. */
-/* All Studio text fields keep a primary inline glyph stroke in every state. */
-html body input[data-vt-studio-control="true"],
-html body textarea[data-vt-studio-control="true"],
-html body [data-vt-studio-control="true"] textarea,
-html body .vt-studio-text-box[data-vt-studio-control="true"] {
-  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
-}
+/* Editable fields use primary glyph strokes; read-only TextBox is the explicit exception. */
 html body input[data-vt-studio-control="true"],
 html body textarea[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] textarea {
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
   color: var(--vt-field-text, #000);
   -webkit-text-fill-color: var(--vt-field-text, #000);
 }
-/* TextBox keeps its black perimeter; only its inner glyph stroke is primary. */
+/* Read-only TextBox intentionally keeps black text and black glyph stroke.
+   Its secondary outline (orange in the current palette) is a separate outer stroke. */
 html body .vt-studio-text-box[data-vt-studio-control="true"],
 html body .vt-studio-text-box[data-vt-studio-control="true"][data-size] {
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  -webkit-text-stroke-color: #000 !important;
+  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px)) !important;
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
+}
+
+/* Side and double-side toggle faces are solid primary like counter value faces.
+   Arrow button cells use the same solid secondary fill, black glyphs and shared divider. */
+html body .vt-studio-value-toggle--side .vt-studio-value-toggle__face,
+html body .vt-studio-value-toggle--double .vt-studio-value-toggle__face {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+}
+html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack,
+html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow-stack {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+}
+html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow,
+html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
+html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow svg,
+html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow svg {
+  color: #000 !important;
+  stroke: #000 !important;
+}
+/* Keep the horizontal split between the two arrow buttons a single black stroke. */
+html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack::after {
+  background: #000 !important;
 }
 /* Split rails: outer-face 1×1, full shell height — no inset square, no vertical gap.
    (Replaces PR #923 distill rules that used align-self:center + height-2*stroke.) */
