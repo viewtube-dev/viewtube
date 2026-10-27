@@ -1,4 +1,4 @@
-import { resolveActiveBrainProject, type BrainProjectContextCandidate } from "../services/brain/resolveActiveBrainProject"
+import { resolveActiveBrainProject, type BrainProjectContextCandidate } from "./brainProjectContext"
 
 export type BrainReviewHandoffProject = BrainProjectContextCandidate & {
   contentBuildId?: string | null
