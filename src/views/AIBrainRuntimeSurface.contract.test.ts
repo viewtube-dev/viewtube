@@ -160,6 +160,15 @@ describe("AI Brain runtime surface integration", () => {
   expect(capabilityBrowserSource).toContain('selectedAvailability.reason')
  })
 
+ it("keeps response cards answer-first without duplicate assistant branding", () => {
+  const responseCard = source.slice(source.indexOf('const CreatorResponseCard:'), source.indexOf('const readinessForSnapshot:'))
+
+  expect(responseCard).toContain('title="ANSWER"')
+  expect(responseCard).toContain('title="RESPONSE INTERRUPTED"')
+  expect(responseCard).not.toContain('ViewTube Copilot</div>')
+  expect(responseCard).toContain('BrainGenerationBadge path={response.generationPath}')
+ })
+
  it("does not make the entire transcript a live log that re-announces the full conversation", () => {
   const viewport = chatPrimitivesSource.slice(
    chatPrimitivesSource.indexOf("export const ChatConversationViewport:"),
