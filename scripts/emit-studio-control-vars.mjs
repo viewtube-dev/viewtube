@@ -21,7 +21,7 @@ function readSizeValue(source, property) {
   if (!match) throw new Error(`Missing Studio size token: ${property}`);
   return Number(match[1]);
 }
-const focusWidthRatio = Number(tokenSource.match(/focusOutlineWidthRatio:\\s*([\\d.]+)/)?.[1]);
+const focusWidthRatio = Number(tokenSource.match(/focusOutlineWidthRatio:\s*([\d.]+)/)?.[1]);
 if (!Number.isFinite(focusWidthRatio) || focusWidthRatio <= 0) {
   throw new Error("Missing canonical Studio focusOutlineWidthRatio");
 }
