@@ -74,7 +74,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('firstLine="PROMPT" secondLine="LIBRARY" aria-label="Prompt Library"')
   expect(source).toContain('firstLine="CAPABILITIES" secondLine="BROWSER" aria-label="Capabilities"')
   expect(chatPrimitivesCssSource).toContain(".brain-launcher-mode-switch [data-vt-studio-button-line]")
-  expect(promptLibraryCssSource).toContain(".brain-prompt-library-shell > .vt-studio-inter-module__head .vt-studio-inter-module__title")
+  expect(chatPrimitivesCssSource).toContain(".brain-prompt-library-shell > .vt-studio-inter-module__head .vt-studio-inter-module__title")
   expect(promptLibrary).toContain("order.get(card.id)")
   expect(chatPrimitivesSource).toContain("touch-pan-y")
   expect(source).toContain("max-xl:h-[100dvh]")
