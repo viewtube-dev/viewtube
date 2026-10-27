@@ -170,8 +170,8 @@
   z-index: 1;
 }
 
-.vt-brain-composer-dock .vt-brain-composer-send {
-  min-width: 100px;
+.vt-brain-composer-dock .vt-brain-composer-action > .vt-brain-composer-send {
+  min-width: 0;
   min-height: 44px;
   border-radius: 6px;
   font-weight: 850;
