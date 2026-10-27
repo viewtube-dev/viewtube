@@ -153,7 +153,7 @@ describe("AI Brain runtime surface integration", () => {
 
  it("uses the same answer-first hierarchy for interrupted and completed assistant turns", () => {
   const interruptedEntry = source.slice(source.indexOf('data-vt-brain-component="BrainInterruptedResponseEntry"'), source.indexOf('const rawModules: AIBrainAnswerModule[]'))
-  expect(interruptedEntry).toContain('title="ANSWER"')
+  expect(interruptedEntry).toContain('title="RESPONSE INTERRUPTED"')
   expect(interruptedEntry).not.toContain('title="VIEWTUBE COPILOT"')
   expect(source).toContain('data-vt-brain-component="BrainAssistantChatEntry"')
  })
@@ -202,6 +202,14 @@ describe("AI Brain runtime surface integration", () => {
   expect(composerSource).toContain('data-vt-brain-part="clear-composer-draft"')
   expect(composerSource).toContain('onClick={() => onChange("")}')
   expect(composerSource).toContain('aria-label="Clear message draft"')
+ })
+
+
+ it("passes the selected prompt title directly into the composer handoff", () => {
+  expect(promptLibrarySource).toContain('onEdit?: (prompt: string, title: string) => void')
+  expect(promptLibrarySource).toContain('onEdit(card.prompt, card.label)')
+  expect(source).toContain('onEdit={(prompt, title) => {')
+  expect(source).toContain('setActivePromptTitle(title || "Custom prompt")')
  })
 
  it("does not make the entire transcript a live log that re-announces the full conversation", () => {
