@@ -1,14 +1,21 @@
-import { afterEach, describe, expect, it, vi } from "vitest"
-
-vi.mock("./publicHandleMode", () => ({}))
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { fixturesEnabled, resolveFromFixture, snapshotFromFixture } from "./publicHandleMode.fixtures"
 
 describe("public handle fixtures", () => {
+  const storage = new Map<string, string>()
+  beforeEach(() => {
+    storage.clear()
+    vi.stubGlobal("localStorage", {
+      getItem: (key: string) => storage.get(key) ?? null,
+      setItem: (key: string, value: string) => storage.set(key, String(value)),
+      removeItem: (key: string) => storage.delete(key),
+      clear: () => storage.clear(),
+    })
+  })
   afterEach(() => {
     vi.unstubAllEnvs()
     vi.unstubAllGlobals()
-    localStorage.clear()
   })
 
   it("resolves the allowlisted handles and aliases", () => {
