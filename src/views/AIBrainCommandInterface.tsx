@@ -827,7 +827,15 @@ const CreatorResponseCard: React.FC<{
  )
 
  return (
-  <div data-vt-brain-component="BrainAssistantChatEntry" className="min-w-0 w-full">
+  <StudioInterModule
+   data-vt-brain-component="BrainAssistantChatEntry"
+   title="ANSWER"
+   startIcon={<Brain aria-hidden="true" />}
+   sizeVariant="compact"
+   defaultOpen
+   className="shrink-0"
+   style={{ background: "#ffffff", "--vt-studio-control-accent": "#ffffff", "--vt-studio-control-secondary": TOOLBOX_PALETTE[5] } as React.CSSProperties}
+  >
   <BrainResponseLayout
    title={sanitizeCreatorFacingBrainCopy(response.headline)}
    className="w-full max-w-none shrink-0 border-0 bg-white"
@@ -894,7 +902,7 @@ const CreatorResponseCard: React.FC<{
     <BrainAnswerModuleGrid modules={modules} compact />
    </BrainAnswerFirst>
   </BrainResponseLayout>
-  </div>
+  </StudioInterModule>
  )
 }
 
@@ -1927,20 +1935,16 @@ const AIBrainCommandInterface: React.FC = () => {
           />} />}
          composer={<div className="vt-brain-studio-workspace__composer vt-brain-chat-column__dock"><BrainComposerDock
            value={input}
-           onChange={(nextValue) => {
-            setInput(nextValue)
-            if (!nextValue.trim()) setActivePromptTitle(null)
-           }}
+           onChange={setInput}
+           activePromptTitle={activePromptTitle}
+           onClearActivePrompt={() => setActivePromptTitle(null)}
            onSend={() => { void handleSend() }}
            busy={busy}
            status={busy ? "loading" : undefined}
-           activePromptTitle={activePromptTitle}
-           onClearActivePrompt={() => setActivePromptTitle(null)}
            onOpenPrompts={() => { setContextRailOpen(false); setLauncherMode("prompts"); setPromptRailOpen(true) }}
            onOpenCapabilities={() => { setContextRailOpen(false); setLauncherMode("capabilities"); setPromptRailOpen(true) }}
            onOpenContext={() => { setPromptRailOpen(false); setContextRailOpen(true) }}
            onOpenJournal={() => setJournalOpen(true)}
-           activeContextLabel={surfaceSelection?.label || null}
            promptLauncherRef={promptLauncherRef}
            contextLauncherRef={contextLauncherRef}
            composerRef={composerRef}
@@ -1981,7 +1985,7 @@ const AIBrainCommandInterface: React.FC = () => {
         )}
        </div>
        <aside data-vt-brain-workspace-part="right-context" aria-label="Creator context and recommended actions" className="vt-brain-studio-workspace__context-rail hidden min-h-0 overflow-y-auto xl:block">
-        <BrainContextRail channelId={channelId} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setInput(prompt); setActivePromptTitle("Suggested action"); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
+        <BrainContextRail channelId={channelId} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
        </aside>
       </div>
 
@@ -2009,19 +2013,14 @@ const AIBrainCommandInterface: React.FC = () => {
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt, title) => {
-           setPromptRailOpen(false)
-           setInput(prompt)
-           setActivePromptTitle(title || "Custom prompt")
-           requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions))
-          }}
+          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          /> : <BrainCapabilityBrowser
           snapshot={snapshot}
           controls={brainControls}
           busy={busy}
           headingId="brain-capability-browser-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); setActivePromptTitle("Capability draft"); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
+          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          />}
         </div>
        </div>
@@ -2034,7 +2033,7 @@ const AIBrainCommandInterface: React.FC = () => {
          <StudioButton data-vt-brain-part="mobile-context-close" ref={contextCloseRef} sizeVariant="compact" tone="neutral" type="button" onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</StudioButton>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
-         <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); setActivePromptTitle("Suggested action"); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
+         <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
         </div>
        </div>
       ) : null}
@@ -2046,7 +2045,6 @@ const AIBrainCommandInterface: React.FC = () => {
         onClose={() => setContextCorrectionItem(null)}
         onApplied={() => {
          setInput(`Verify that the governed correction for context item ${contextCorrectionItem.sourceId} is reflected in the next answer. If the refreshed context does not contain it, show the unresolved conflict instead of assuming it was applied.`)
-         setActivePromptTitle("Context correction review")
          window.setTimeout(() => composerRef.current?.focus(), 0)
         }}
        />
