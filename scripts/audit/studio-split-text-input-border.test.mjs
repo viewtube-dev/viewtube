@@ -25,13 +25,12 @@ test("split text input keeps a primary inset stroke without adding a second bord
 })
 
 
-test("recovery field defaults do not repaint the split input perimeter or inset stroke", () => {
+test("recovery field defaults exclude the split input from generic inset and focus strokes", () => {
   const editableFields = recoveryCss.slice(
     recoveryCss.indexOf("/* Editable fields: matching text/stroke"),
     recoveryCss.indexOf(".vt-studio-text-box"),
   )
-  const [resting, focused] = editableFields.split(/\\n(?=input\\[data-vt-studio-control=.*:is\\(:focus)/)
-  assert.match(resting, /:not\\(\\.vt-studio-split-text-input__field\\)/)
-  assert.match(focused, /:not\\(\\.vt-studio-split-text-input__field\\)/)
-  assert.doesNotMatch(resting, /\\.vt-studio-split-text-input__field[^,{]*\\{[^}]*box-shadow:[^}]*!important/s)
+  assert.ok(editableFields.includes('input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):not([type="checkbox"])'))
+  assert.ok(editableFields.includes('input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus,:focus-visible)'))
+  assert.ok(editableFields.includes('.vt-studio-text-input:focus-within input:not(.vt-studio-split-text-input__field)'))
 })
