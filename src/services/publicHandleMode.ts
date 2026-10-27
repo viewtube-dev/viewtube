@@ -25,7 +25,7 @@ export interface PublicChannelSnapshot {
   commentCount: number | null
  }>
  provenance?: {
-  source: "youtube_data_api_public"
+  source: "youtube_data_api_public" | "fixture"
   evidenceMode: "public_handle"
   privateMetricsIncluded: false
  }
