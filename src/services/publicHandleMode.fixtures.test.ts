@@ -1,0 +1,40 @@
+import { afterEach, describe, expect, it, vi } from "vitest"
+
+vi.mock("./publicHandleMode", () => ({}))
+
+import { fixturesEnabled, resolveFromFixture, snapshotFromFixture } from "./publicHandleMode.fixtures"
+
+describe("public handle fixtures", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+    vi.unstubAllGlobals()
+    localStorage.clear()
+  })
+
+  it("resolves the allowlisted handles and aliases", () => {
+    vi.stubEnv("DEV", "true")
+    expect(resolveFromFixture("@THEMOTIONVIS")?.title).toBe("The Motion Vis (fixture)")
+    expect(snapshotFromFixture("themotionvis")?.channelId).toBe("UC_FIXTURE_THEMOTIONVIS")
+    expect(resolveFromFixture("@viewtube_demo")?.title).toBe("ViewTube Demo (fixture)")
+    expect(resolveFromFixture("demo")?.channelId).toBe("UC_FIXTURE_VIEWTUBE_DEMO")
+  })
+
+  it("does not resolve unknown handles when fixtures are enabled", () => {
+    vi.stubEnv("DEV", "true")
+    expect(resolveFromFixture("@not_allowlisted")).toBeNull()
+  })
+
+  it("can be enabled explicitly in local storage", () => {
+    localStorage.setItem("vt_public_handle_fixtures", "1")
+    expect(fixturesEnabled()).toBe(true)
+    expect(snapshotFromFixture("@themotionvis")?.provenance?.source).toBe("fixture")
+  })
+
+  it("does not enable fixtures by default in production", () => {
+    vi.stubEnv("DEV", "false")
+    vi.stubEnv("VITE_PUBLIC_HANDLE_FIXTURES", "")
+    localStorage.removeItem("vt_public_handle_fixtures")
+    expect(fixturesEnabled()).toBe(false)
+    expect(snapshotFromFixture("@themotionvis")).toBeNull()
+  })
+})
