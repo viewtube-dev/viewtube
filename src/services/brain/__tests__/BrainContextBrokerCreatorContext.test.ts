@@ -252,4 +252,34 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(result.budget.omittedSections).toContain("channel_context_channel_name_mismatch")
  })
 
+ it("respects the existing personalization control for saved channel context", () => {
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "Plan my content",
+   channelContext: {
+    identity: { name: "History Channel", niche: "Private niche preference" },
+    goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+   },
+   creatorContext: {
+    version: "vt-creator-context-v1",
+    channelId: "channel-1",
+    controls: { ...DEFAULT_BRAIN_USER_CONTROLS, personalization: false, allowAnalytics: false },
+    profile: null,
+    channelKnowledge: null,
+    styleProfile: null,
+    project: null,
+    surface: null,
+    selection: null,
+    evidenceRefs: [],
+    provenance: { profileLoadedAt: null, selectionUpdatedAt: null, projectSource: null },
+   } as any,
+  })
+
+  expect(result.systemInstruction).not.toContain("Private niche preference")
+  expect(result.budget.omittedSections).toContain("creator_personalization_disabled")
+ })
+
 })
