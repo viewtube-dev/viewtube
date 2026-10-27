@@ -10,6 +10,7 @@ import { handleYouTubeAcquireRoute } from "./youtube-acquisition.mjs";
 import { getReleaseMetadata } from "./release-metadata.mjs";
 import { getAuthenticatedViewtubeUserId, handleAccountRoute } from "./account-auth.mjs";
 import { routeSimpleAuth } from "./simple-auth-route.mjs";
+import publicChannelHandler from "../api/public-channel.mjs";
 import {
   appendAiCreditLedgerEntry,
   claimWebhookEvent,
@@ -720,6 +721,21 @@ const server = http.createServer(async (req, res) => {
 
     if (await routeSimpleAuth({ req, res, method, pathname, parsedUrl })) {
       console.log(`[billing] Matched: ${method} ${pathname}`);
+      return;
+    }
+
+    if (method === "GET" && pathname === "/public-channel/resolve") {
+      let statusCode = 200;
+      const publicChannelResponse = {
+        status(code) { statusCode = code; return this; },
+        json(payload) { return json(res, statusCode, payload); },
+        setHeader(name, value) { res.setHeader(name, value); },
+      };
+      await publicChannelHandler({
+        method,
+        url: req.url,
+        query: { handle: parsedUrl.searchParams.get("handle") || "" },
+      }, publicChannelResponse);
       return;
     }
 
