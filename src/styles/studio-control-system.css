@@ -6518,3 +6518,81 @@ button[data-vt-studio-button="true"].vt-studio-split-right-button:is([data-selec
 button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-selected="true"],[aria-pressed="true"]) [data-vt-studio-split-rail] {
   background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));
 }
+
+
+/* 2026-10-27 repair: intermodules are full-bleed within their owning content
+   region. Keep the 4px Studio spacing token for intentional composition gaps;
+   do not apply it as an extra inset inside the intermodule anatomy. */
+[data-vt-studio-inter-host="true"],
+.vt-confirmed-intermodule-host,
+.vt-confirmed-variant [data-vt-studio-inter-host="true"] {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  padding-inline: 0 !important;
+  margin-inline: 0 !important;
+}
+
+.vt-studio-inter-module {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+}
+
+.vt-studio-inter-module__head {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+}
+
+.vt-studio-inter-module__body {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin-inline: 0 !important;
+}
+
+/* Keep the header's height and bottom rule invariant across disclosure states.
+   In the collapsed state, the header rule becomes the shell's bottom edge;
+   suppress only the shell's bottom border to avoid a doubled stroke. */
+.vt-studio-collapsing-split-module {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
+.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+}
+
+.vt-studio-collapsing-split-module:not([open]) {
+  border-bottom: 0 !important;
+}
+
+.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
+.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+}
+
+.vt-studio-collapsing-split-module[open] {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000;
+}
+
+/* The two-line family may have a taller content-driven header, but its box
+   sizing and border must not change when the native details element toggles. */
+.vt-studio-two-line-module > summary.vt-studio-collapsing-split-module__head {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
