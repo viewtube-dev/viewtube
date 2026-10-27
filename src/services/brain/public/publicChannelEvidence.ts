@@ -96,7 +96,16 @@ export const buildPublicChannelEvidenceRecords = (
         videoId: video.videoId,
         metric: "video_title",
         value: video.title,
-        observedAt: video.publishedAt || observedAt,
+        observedAt,
+        sourceRef: videoRef,
+      }),
+      observedRecord({
+        id: evidenceId(channelId, video.videoId, "video_published_at"),
+        channelId,
+        videoId: video.videoId,
+        metric: "video_published_at",
+        value: video.publishedAt,
+        observedAt,
         sourceRef: videoRef,
       }),
       observedRecord({
