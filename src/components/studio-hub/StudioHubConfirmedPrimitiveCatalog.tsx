@@ -709,9 +709,13 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   return "Controls"
 }
 
+const isSwitchToggleChoiceFamily = (title: string) =>
+  /Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|Studio(?:Switch|Radio|Checkbox|XCheckbox|Choice|WordToggle|VerticalWordToggle|ArrowToggle|SideToggle|DoubleSideToggle|BarToggle)(?: ·|$)/.test(title)
+
 const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const nodes = React.Children.toArray(children)
   const defaults: React.ReactNode[] = []
+  const switchToggleFamilies: React.ReactNode[] = []
   const grouped = new Map<ConfirmedCatalogFamilyName, React.ReactNode[]>(
     CONFIRMED_CATALOG_FAMILIES.map((family) => [family, []]),
   )
@@ -720,8 +724,21 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
       defaults.push(node)
       continue
     }
+    const title = React.isValidElement(node) && typeof (node.props as { title?: unknown }).title === "string"
+      ? (node.props as { title: string }).title
+      : ""
+    if (isSwitchToggleChoiceFamily(title)) {
+      switchToggleFamilies.push(node)
+      continue
+    }
     grouped.get(classifyConfirmedCatalogItem(node))?.push(node)
   }
+  const controls = grouped.get("Controls") ?? []
+  controls.unshift(
+    <ConfirmedFamilyModule key="switch-toggle-choice-family" title="Switches / Toggles / Radio / Checkbox" className="vt-confirmed-family-group vt-confirmed-switch-toggle-family">
+      {switchToggleFamilies}
+    </ConfirmedFamilyModule>,
+  )
   return (
     <div className="vt-confirmed-catalog">
       {defaults}
