@@ -67,17 +67,22 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setIsValidating(false);
       return true;
     } catch (error: any) {
+      // Saving a BYOK credential is separate from verifying Google's current
+      // model catalog. Catalog/model availability errors must not prevent users
+      // from adding a key, whether signed in or signed out. Keep the credential
+      // local and clearly report that verification could not be completed.
+      setApiKey(trimmedKey);
       const status = Number(error?.status ?? error?.code);
       const message = String(error?.message ?? '');
-      if (status === 400 || status === 401 || status === 403 || /api key|unauthorized|permission denied|invalid argument/i.test(message)) {
-        setValidationError('Gemini could not validate this API key. Check the key and its Google AI Studio API access, then try again.');
-      } else if (status === 404 || /not found|not supported/i.test(message)) {
-        setValidationError('Google could not load the Gemini model catalog for this key. Check that the Gemini API is enabled for the key, then try again.');
+      if (status === 400 || status === 401 || /api key|unauthorized|invalid api key|authentication/i.test(message)) {
+        setValidationError('Key saved locally, but Google could not verify it. Check that the API key is correct and Gemini API access is enabled.');
+      } else if (status === 403 || /permission denied|forbidden/i.test(message)) {
+        setValidationError('Key saved locally, but Google denied verification. Check API access and project permissions.');
       } else {
-        setValidationError('Gemini connection failed. Check your network and Google AI Studio API access, then try again.');
+        setValidationError('Key saved locally. Google could not verify the connection right now; you can retry or test it when using an AI feature.');
       }
       setIsValidating(false);
-      return false;
+      return true;
     }
   };
 
