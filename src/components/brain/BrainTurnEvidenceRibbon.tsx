@@ -34,8 +34,17 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
 }) => {
   const preparedCount = evidencePack.items.length
   const preparedEvidenceIds = new Set(evidencePack.items.map((item) => item.id))
-  const resolvedCitations = new Set(citedEvidenceIds.filter((id) => preparedEvidenceIds.has(id)))
-  const unresolvedCitationIds = new Set(citedEvidenceIds.filter((id) => !preparedEvidenceIds.has(id)))
+  // Brain response evidenceIds identify typed EvidenceRecords, while the
+  // evidence pack has its own item IDs. Treat either as a resolved reference,
+  // but only trust record IDs when the persisted record manifest was verified.
+  const verifiedRecordIds = new Set(
+    evidenceIntegrityStatus === "verified" && Array.isArray(evidenceRecords)
+      ? evidenceRecords.map((record) => record.id)
+      : [],
+  )
+  const resolvableEvidenceIds = new Set([...preparedEvidenceIds, ...verifiedRecordIds])
+  const resolvedCitations = new Set(citedEvidenceIds.filter((id) => resolvableEvidenceIds.has(id)))
+  const unresolvedCitationIds = new Set(citedEvidenceIds.filter((id) => !resolvableEvidenceIds.has(id)))
   const citedCount = resolvedCitations.size
   const unresolvedCitationCount = unresolvedCitationIds.size
   const capturedAt = evidencePack.capturedAt
