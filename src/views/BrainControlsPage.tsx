@@ -11,7 +11,7 @@ import { BRAIN_USER_CONTROLS_STORAGE_KEY, DEFAULT_BRAIN_USER_CONTROLS, clearBrai
 import { readBrainEngineControls, resetBrainEngineControls, writeBrainEngineControls, type BrainEngineControls } from "../services/brain/BrainEngineControls"
 import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS, BRAIN_CAPABILITY_REGISTRY } from "../services/brain/BrainCapabilityRegistry"
 import type { BrainCapabilityDefinition } from "../types"
-import { StudioButton, StudioInterModule, StudioTopSplitModule } from "../studio-ui"
+import { StudioButton, StudioCollapsingTwoLineModule, StudioInterModule, StudioTopSplitModule } from "../studio-ui"
 import { capabilityPromptFor } from "../components/brain/BrainCapabilityBrowser"
 
 type Settings = { policy: BrainUserControls; engines: BrainEngineControls }
