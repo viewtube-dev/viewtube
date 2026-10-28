@@ -934,3 +934,35 @@ describe("confirmed primitive library family organization", () => {
     expect(systemStyles).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
   });
 });
+
+
+describe("confirmed primitive library organization", () => {
+  it("declares deliberate family groups with choice controls first", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const familyList = catalog.slice(catalog.indexOf("const CONFIRMED_CATALOG_FAMILIES"), catalog.indexOf("const classifyConfirmedCatalogItem"));
+    expect(familyList.indexOf('"Switches / Toggles / Radio / Checkbox"')).toBeLessThan(familyList.indexOf('"Buttons"'));
+    for (const family of ['"Badges"', '"Dropdowns"', '"Text Fields"', '"Counters & Sliders"', '"Modules & Frames"', '"Tags & Metadata"', '"Chat & Compositions"']) {
+      expect(familyList).toContain(family);
+    }
+  });
+
+  it("routes related primitives to their intended family before fallback rules", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const classify = catalog.slice(catalog.indexOf("const classifyConfirmedCatalogItem"), catalog.indexOf("const ConfirmedCatalogFamilyGroups"));
+    expect(classify.indexOf('return "Switches / Toggles / Radio / Checkbox"')).toBeLessThan(classify.indexOf("if (/Button ·"));
+    expect(classify).toContain('return "Counters & Sliders"');
+    expect(classify).toContain('return "Badges"');
+    expect(classify).toContain('return "Modules & Frames"');
+  });
+
+  it("keeps direct representatives unique and excludes composite showcase grids", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const start = catalog.indexOf('data-vt-confirmed-representatives="true"');
+    const end = catalog.indexOf("</Family>", start);
+    const representatives = catalog.slice(start, end);
+    const componentIds = [...representatives.matchAll(/data-vt-library-component="([^"]+)"/g)].map(match => match[1]);
+    expect(componentIds).not.toContain("StudioComponentGrid:standard");
+    expect(new Set(componentIds).size).toBe(componentIds.length);
+    expect(representatives).toContain('sizeVariant="standard"');
+  });
+});
