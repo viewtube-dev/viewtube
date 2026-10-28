@@ -316,7 +316,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   ]
   return (
     <Family
-      title="Representatives · One Standard Specimen Per Primitive"
+      title="Direct Imported Primitive Representatives · Standard"
       nonDefaultSettings={[
         "Each row contains one live production primitive at its standard size; examples are imported from their production owners rather than recreated as catalog-only lookalikes.",
         "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
@@ -755,17 +755,32 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
       defaults.push(node)
       continue
     }
+    const title = React.isValidElement(node) && typeof (node.props as { title?: unknown }).title === "string"
+      ? (node.props as { title: string }).title
+      : ""
+    if (isSwitchToggleChoiceFamily(title)) {
+      switchToggleFamilies.push(node)
+      continue
+    }
     grouped.get(classifyConfirmedCatalogItem(node))?.push(node)
   }
+  const controls = grouped.get("Controls") ?? []
+  controls.unshift(
+    <ConfirmedFamilyModule key="switch-toggle-choice-family" title="Switches / Toggles / Radio / Checkbox" className="vt-confirmed-family-group vt-confirmed-switch-toggle-family">
+      {switchToggleFamilies}
+    </ConfirmedFamilyModule>,
+  )
   return (
     <div className="vt-confirmed-catalog">
       {defaults}
       <div className="vt-confirmed-family-grid">
-        {CONFIRMED_CATALOG_FAMILIES.map((family) => (
-          <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group">
-            {grouped.get(family)}
-          </ConfirmedFamilyModule>
-        ))}
+        {CONFIRMED_CATALOG_FAMILIES
+          .filter((family) => (grouped.get(family)?.length ?? 0) > 0)
+          .map((family) => (
+            <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group">
+              {grouped.get(family)}
+            </ConfirmedFamilyModule>
+          ))}
       </div>
     </div>
   )
@@ -784,7 +799,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
     { value: "explore", label: "EXPLORE" },
   ]
   return (
-    <>
+    <ConfirmedCatalogFamilyGroups>
       <Family title="Split Text Input · Vertical Geometry Comparison" nonDefaultSettings={[
         "Compare the current 0px-padding baseline, an explicit 4px padding reference, half that reference (2px), and username-matched inner height.",
         "Type into each field and focus/blur it to inspect the primary border, glyph baseline, and lower-edge clipping.",
@@ -833,7 +848,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
       <Family title="StudioLeftCounter · Standard" nonDefaultSettings={["Left-action counter variant with the same 2:1 numeric display as the standard counter."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>STANDARD · LEFT ACTION RAIL</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter dedicated specimen" /></div>
       </Family>
-    </>
+    </ConfirmedCatalogFamilyGroups>
   )
 }
 
@@ -1482,7 +1497,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </StudioInterModule>
       </div>
     </Family>
-    <ConfirmedIndividualPrimitiveSections />
+    
     <Family
       title="Collapsing Split Module · Standard + Compact"
       nonDefaultSettings={[
@@ -1554,6 +1569,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
   </ConfirmedCatalogFamilyGroups>
+    <ConfirmedIndividualPrimitiveSections />
+    <ConfirmedAdditionalPrimitiveSections />
   </>
 )
 
@@ -1569,7 +1586,7 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
   const [doubleLeft, setDoubleLeft] = React.useState("SOURCE")
   const [doubleRight, setDoubleRight] = React.useState("TARGET")
   const [barValue, setBarValue] = React.useState(40)
-  return <>
+  return <ConfirmedCatalogFamilyGroups>
     <Family title="StudioResponseMetaRow · Compact" nonDefaultSettings={[
       "Compact response title and metadata composition with optional status, metadata, and trailing slots.",
       "Wraps long labels on narrow widths and composes existing status/actions rather than implementing parallel controls.",
