@@ -76,7 +76,6 @@ Verified by reading the current target-branch source and lockfile:
 
 Not yet verified:
 - exhaustive target-SHA repository-wide call-site/model ID list;
-- exhaustive target-SHA repository-wide call-site/model ID list;
 - the API version actually used by all runtime entry points;
 - live availability of listed model IDs;
 - real-key generation success;
