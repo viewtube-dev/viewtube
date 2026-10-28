@@ -72,7 +72,6 @@ const Settings: React.FC = () => {
   const activePanel = resolveSettingsPanel(query.get("panel"))
   const entitlement = getCurrentEntitlement()
   const isBasicPlan = entitlement.subscriptionPlanId === "basic"
-  const canViewGeminiKey = entitlement.tier === "large" || isOwnerEmail(currentEmail)
   const showInternalOpsLink = isOwnerEmail(currentEmail)
   const profileName = account.snapshot.profile.displayName || authState.channelName || ""
   const profileHandle = account.snapshot.google.channelHandle || authState.channelHandle || ""
@@ -311,7 +310,6 @@ const Settings: React.FC = () => {
         activePanel={activePanel}
         billingStatus={billingStatus}
         canResolvePublicHandle={isBasicPlan}
-        canViewGeminiKey={canViewGeminiKey}
         channelConnection={{ ...channelConnection, isConnected: connected, settingsLabel: account.label, state: account.pending ? "authorizing" : channelConnection.state }}
         currentEmail={currentEmail}
         currentHandleValue={displayedChannelHandle}
