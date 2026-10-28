@@ -290,7 +290,9 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
  const previous = loadAiBrainContext()
  const updatedAt = new Date().toISOString()
  const migratedProfile = syncLegacyAnswersToChannelContext(previous.channelContext, previous, true)
- const canonicalProfile = next.channelContext || syncLegacyAnswersToChannelContext(migratedProfile, next)
+ // Treat channelContext as canonical while projecting explicitly supplied legacy intake answers into it.
+ // Older intake surfaces and the full questionnaire therefore share one durable profile and one local key.
+ const canonicalProfile = syncLegacyAnswersToChannelContext(next.channelContext || migratedProfile, next)
  const normalized = normalizeContext({
   ...previous,
   ...next,
