@@ -6,6 +6,7 @@ import {
  hasCompletedAiBrainContext,
  loadAiBrainContext,
  saveAiBrainContext,
+ saveChannelContextProfile,
  shouldShowAiBrainIntake,
 } from "../aiBrainContext"
 import {
@@ -16,6 +17,10 @@ import {
  INITIAL_CREATOR_INSIGHT_DEFINITIONS,
  buildInitialCreatorInsights,
 } from "../aiBrainInitialInsights"
+import { CHANNEL_CONTEXT_QUESTIONS } from "../../context/channelContextQuestions"
+import type { ChannelContextProfile } from "../../context/ChannelContextProfile"
+import { buildCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../brain/CreatorAnswerEvidence"
+import type { AIBrainEvidencePack } from "../../types"
 import {
  buildBrainAudienceEvidencePacket,
  selectBrainAudienceEvidenceTargets,
@@ -81,6 +86,59 @@ describe("AI Brain creator intelligence rebuild", () => {
 
   expect(hasCompletedAiBrainContext()).toBe(true)
   expect(shouldShowAiBrainIntake(true)).toBe(false)
+ })
+
+
+ it("persists every canonical questionnaire answer locally and projects each answer into evidence", () => {
+  const profile: ChannelContextProfile = {
+   identity: {}, goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+  }
+  const mutable = profile as unknown as Record<string, Record<string, unknown>>
+  const arrayFields = new Set(["subNiches", "competitors", "priorityRanking", "offers", "segments", "types", "bestFormats", "priorityThemes", "blockedThemes", "influences", "sources", "capabilities"])
+  CHANNEL_CONTEXT_QUESTIONS.forEach((question) => {
+   const [section, field] = question.contextField.split(".")
+   mutable[section][field] = field === "creativity"
+    ? 8
+    : arrayFields.has(field)
+     ? [`answer-${question.id}`]
+     : `answer-${question.id}`
+  })
+
+  const saved = saveChannelContextProfile(profile)
+  const restored = loadAiBrainContext()
+  expect(JSON.parse(storage.getItem("vt_ai_brain_context_v1") || "{}").channelContext).toEqual(saved.channelContext)
+  expect(restored.channelContext).toEqual(saved.channelContext)
+
+  const records = buildCreatorAnswerEvidenceRecords(restored, "channel-test-1")
+  expect(records).toHaveLength(CHANNEL_CONTEXT_QUESTIONS.length)
+  expect(records.every((record) => record.owner === "creator-confirmed" && record.epistemicState === "USER_PROVIDED")).toBe(true)
+  expect(records.map((record) => record.id)).toContain("creator-answer:channel-test-1:channelContext.identity.name")
+  expect(records.map((record) => record.id)).toContain("creator-answer:channel-test-1:channelContext.intelligence.capabilities")
+
+  const pack = {
+   evidenceIds: ["analytics:video-1"],
+   items: [{ id: "analytics:video-1", label: "Video one", source: "video analytics" }],
+  } as unknown as AIBrainEvidencePack
+  const merged = mergeCreatorAnswerEvidenceIntoPack(pack, records)
+  expect(merged.evidenceIds).toContain(records[0].id)
+  expect(merged.items).toHaveLength(1 + CHANNEL_CONTEXT_QUESTIONS.length)
+  expect(merged.items.find((item) => item.id === records[0].id)?.source).toBe("creator-provided profile")
+ })
+
+ it("bridges legacy intake answers into the same canonical profile without dropping other questionnaire answers", () => {
+  const saved = saveChannelContextProfile({
+   identity: { name: "My Channel", description: "A clear description", niche: "History", subNiches: ["Naval history"] },
+   goals: { primaryGoal: "Grow loyal viewers", successDefinition: "Publish better weekly videos" },
+   audience: { idealViewer: "Curious adults" },
+   content: { priorityThemes: ["Research"] },
+   brand: { voice: "Clear and grounded" },
+   intelligence: { capabilities: ["strategy"] },
+  })
+  const updated = saveAiBrainContext({ ...saved, channelDescription: "I make cinematic history explainers.", source: "wizard" })
+  expect(updated.channelContext.identity.description).toBe("I make cinematic history explainers.")
+  expect(updated.channelContext.identity.subNiches).toEqual(["Naval history"])
+  expect(updated.channelContext.content.priorityThemes).toEqual(["Research"])
+  expect(updated.channelDescription).toBe("I make cinematic history explainers.")
  })
 
  it("selects quota-aware audience evidence targets by long, Shorts, and recent winners", () => {
