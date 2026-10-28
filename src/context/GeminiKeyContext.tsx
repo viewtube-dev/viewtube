@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { normalizeGeminiModelId, resolveGeminiModel } from '@/services/geminiModelGovernance';
 
 // Do NOT static-import @google/genai — it's a ~50 kB gzip module and this
 // provider mounts at App boot, which used to force every route (Dashboard,
@@ -30,6 +31,16 @@ export const chooseGeminiValidationModel = (models: GeminiModelDescriptor[]): st
       normalized: model.name!.toLowerCase(),
     }));
 
+  const preferred = normalizeGeminiModelId(
+    resolveGeminiModel({ preference: 'gemini-3.1-flash-lite', capability: 'text' }).served,
+  );
+  const canonicalMatch = candidates.find((candidate) =>
+    normalizeGeminiModelId(candidate.name) === preferred
+  );
+  if (canonicalMatch) return canonicalMatch.name;
+
+  // The canonical preference is not guaranteed to be listed for this key/region.
+  // Use the live discovery result as a bounded validation-only fallback.
   candidates.sort((a, b) => {
     const score = (name: string) =>
       (name.includes('flash') ? 100 : 0) +
