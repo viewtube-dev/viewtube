@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { resolveBrainRetryInput, type BrainGenerationInputSnapshot } from "./BrainRetryContinuity"
+import { resolveBrainRetryInput, resolveBrainModelInputSnapshot, type BrainGenerationInputSnapshot } from "./BrainRetryContinuity"
 
 type Snapshot = { evidenceIds: string[]; revision: string }
 const input = (revision: string): BrainGenerationInputSnapshot<Snapshot> => ({
@@ -40,5 +40,66 @@ describe("resolveBrainRetryInput", () => {
 
   expect(result.continuity).toBe("legacy_context_reconstructed")
   expect(result.generationInput).toEqual(current)
+ })
+})
+
+
+describe("resolveBrainModelInputSnapshot", () => {
+ const saved = {
+  systemInstruction: "exact original system instruction",
+  history: [{ role: "user", content: "original history" }],
+  userText: "original question",
+  evidenceRecords: [{ id: "analytics-1", value: 42 }],
+  creatorAnswerEvidenceRecords: [{ id: "creator-answer-1", value: "goal" }],
+ }
+
+ it("restores the complete original model-visible snapshot for saved-evidence generation-only retries", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true,
+   generationOnly: true,
+   mode: "saved",
+   continuity: "original_input_restored",
+   saved,
+  })).toEqual(saved)
+ })
+
+ it("does not restore saved model input for ordinary generation", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: false, generationOnly: true, mode: "saved",
+   continuity: "original_input_restored", saved,
+  })).toBeUndefined()
+ })
+
+ it("does not restore saved model input for retries that are not generation-only", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: false, mode: "saved",
+   continuity: "original_input_restored", saved,
+  })).toBeUndefined()
+ })
+
+ it("rebuilds model input for fresh-evidence retries", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: true, mode: "fresh",
+   continuity: "original_input_restored", saved,
+  })).toBeUndefined()
+ })
+
+ it("does not label reconstructed legacy context as the original model input", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: true, mode: "saved",
+   continuity: "legacy_context_reconstructed", saved,
+  })).toBeUndefined()
+ })
+
+ it("does not restore when the saved snapshot is missing or lacks a system instruction", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: true, mode: "saved",
+   continuity: "original_input_restored",
+  })).toBeUndefined()
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: true, mode: "saved",
+   continuity: "original_input_restored",
+   saved: { ...saved, systemInstruction: undefined },
+  })).toBeUndefined()
  })
 })

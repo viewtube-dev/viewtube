@@ -45,3 +45,36 @@ export const resolveBrainRetryInput = <TSnapshot,>(input: {
  // context only as a compatibility fallback and never label it as the original.
  return { generationInput: input.current, continuity: "legacy_context_reconstructed" }
 }
+
+
+/** Exact model-visible payload captured for a completed or interrupted turn. */
+export interface BrainModelInputSnapshot<TRecord = unknown> {
+ systemInstruction?: string
+ history?: unknown[]
+ userText?: unknown
+ evidenceRecords?: TRecord[]
+ creatorAnswerEvidenceRecords?: TRecord[]
+}
+
+/**
+ * Resolve whether a retry may reuse the exact model-visible input.
+ * Fresh-evidence retries and legacy/reconstructed turns must rebuild it.
+ */
+export const resolveBrainModelInputSnapshot = <TRecord,>(input: {
+ retryTurn: boolean
+ generationOnly: boolean
+ mode: BrainRetryEvidenceMode
+ continuity?: BrainRetryContextContinuity
+ saved?: BrainModelInputSnapshot<TRecord> | null
+}): BrainModelInputSnapshot<TRecord> | undefined => {
+ const saved = input.saved
+ if (!input.retryTurn
+  || !input.generationOnly
+  || input.mode === "fresh"
+  || input.continuity !== "original_input_restored"
+  || !saved
+  || typeof saved.systemInstruction !== "string") {
+  return undefined
+ }
+ return saved
+}

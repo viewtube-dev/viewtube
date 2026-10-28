@@ -186,3 +186,16 @@ Follow-up — channel-scoped creator-answer eligibility:
 - Legacy global profile data remains label-gated; an unnamed or mismatched legacy record is not assigned to an active channel.
 - Added regression cases in `src/services/brain/CreatorAnswerEvidence.test.ts` for scoped profiles with blank names and legacy label matching.
 - Verification is still pending: GitHub reports no workflow runs for the commit. Current combined statuses show Vercel build-rate-limit failures, which do not establish a code test result. Do not treat the phase as certified until focused Vitest, typecheck, production build and browser restore/channel-switch checks are run.
+
+
+## Follow-up slice — turn-level evidence continuity verification (2026-10-28)
+
+**Implementation slice:** make the saved-model-input retry gate explicit and independently testable, without introducing a second conversation/evidence store.
+
+- Added `resolveBrainModelInputSnapshot` to the existing `BrainRetryContinuity` module. It permits exact model-visible snapshot reuse only for generation-only retries using saved evidence when continuity is `original_input_restored` and the saved system instruction is present.
+- Routed `BrainOrchestrator` through that resolver for the original system instruction, model history, analytics evidence records, and creator-answer evidence records. Fresh-evidence retries and legacy reconstructed turns continue to rebuild context.
+- Added regression tests for exact snapshot restoration and negative cases: ordinary generation, non-generation-only retry, fresh evidence, legacy reconstruction, and absent/incomplete saved snapshots.
+- Added an IndexedDB-backed conversation-store regression that records original and retry model-input snapshots, completes a provider-error fallback turn, and verifies both snapshots and interaction receipts survive canonical thread restoration.
+- Existing canonical `model_input_snapshot` / `retry_model_input_snapshot` interaction receipts and turn metadata remain the persistence owner. No external data refresh or publishing side effect is replayed by this resolver.
+
+**Verification status:** source changes and regression cases are committed to the feature branch, but the focused Vitest suite, typecheck, and production build have not been executed in this GitHub-only pass. Do not mark this capability phase certified until those checks run. Next verification must cover normal answer, provider-error fallback, restored conversation reload, saved-evidence retry, and fresh-evidence retry, then inspect source-link handling for missing, stale, and partial evidence.

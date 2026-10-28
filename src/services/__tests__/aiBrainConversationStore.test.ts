@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest"
 import type { AIBrainQuestionAnswer, CreatorBrainLearningQuestion, CreatorBrainResponse } from "../../types"
 import {
  answerAIBrainQuestionModule,
+ recordAIBrainTurnInteraction,
+ getAIBrainConversationTurn,
  reconcileBrainLearningQuestions,
  retryAIBrainTurn,
  beginAIBrainTurn,
@@ -46,6 +48,59 @@ const questionFixture: CreatorBrainLearningQuestion = {
 }
 
 describe("aiBrainConversationStore", () => {
+ it("preserves original and latest retry model-input snapshots through fallback completion and thread restore", async () => {
+  const pending = await beginAIBrainTurn({
+   channelId: "channel-evidence-continuity",
+   userText: "Why did my latest upload underperform?",
+   metadata: { source: "brain_orchestrator" },
+  })
+  const originalSnapshot = {
+   systemInstruction: "Original system instruction with analytics evidence.",
+   history: [{ role: "user", content: "Earlier creator question" }],
+   userText: "Why did my latest upload underperform?",
+   evidenceRecords: [{ id: "analytics-evidence-original", metric: "views", value: 1200 }],
+   creatorAnswerEvidenceRecords: [{ id: "creator-answer-original", metric: "goal", value: "subscribers" }],
+  }
+  const retrySnapshot = {
+   systemInstruction: "Retry system instruction with fresh evidence.",
+   history: [{ role: "user", content: "Retry context" }],
+   userText: "Why did my latest upload underperform?",
+   evidenceRecords: [{ id: "analytics-evidence-retry", metric: "views", value: 900 }],
+   creatorAnswerEvidenceRecords: [{ id: "creator-answer-retry", metric: "goal", value: "watch time" }],
+  }
+
+  await recordAIBrainTurnInteraction(pending.id, {
+   type: "model_input_snapshot",
+   direction: "outbound",
+   detail: { modelInputSnapshot: originalSnapshot },
+  })
+  await recordAIBrainTurnInteraction(pending.id, {
+   type: "retry_model_input_snapshot",
+   direction: "outbound",
+   detail: { modelInputSnapshot: retrySnapshot, retryEvidenceMode: "fresh" },
+  })
+  await completeAIBrainTurn({
+   turnId: pending.id,
+   status: "fallback",
+   assistantText: "I couldn't finish the evidence-backed answer, but your turn is saved.",
+   metadata: { fallbackReason: "provider_error" },
+  })
+
+  const saved = await getAIBrainConversationTurn(pending.id)
+  const restored = await resumeAIBrainThread("channel-evidence-continuity")
+  const restoredTurn = restored.turns.find((turn) => turn.id === pending.id)
+  const interactionLog = saved?.metadata?.interactionLog as Array<Record<string, unknown>>
+
+  expect(saved?.status).toBe("fallback")
+  expect(saved?.metadata?.fallbackReason).toBe("provider_error")
+  expect(saved?.metadata?.originalModelInputSnapshot).toEqual(originalSnapshot)
+  expect(saved?.metadata?.latestRetryModelInputSnapshot).toEqual(retrySnapshot)
+  expect(interactionLog.map((event) => event.type)).toContain("model_input_snapshot")
+  expect(interactionLog.map((event) => event.type)).toContain("retry_model_input_snapshot")
+  expect(interactionLog.map((event) => event.type)).toContain("assistant_response")
+  expect(restoredTurn?.metadata?.originalModelInputSnapshot).toEqual(originalSnapshot)
+  expect(restoredTurn?.metadata?.latestRetryModelInputSnapshot).toEqual(retrySnapshot)
+ })
  it("persists a pending turn before generation and completes the same record", async () => {
   const pending = await beginAIBrainTurn({
    channelId: "channel-lifecycle",
