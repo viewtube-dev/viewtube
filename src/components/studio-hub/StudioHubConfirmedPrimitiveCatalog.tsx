@@ -109,7 +109,7 @@ const CanonicalControlFamilies: React.FC = () => {
         </div>
         <div className="vt-confirmed-choice-examples">
           {(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-choice-example-row" key={"switch-"+shape} aria-label={shape + " switch examples"}>{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " switch " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div>)}
-          {([{Component:StudioRadio,label:"radio button",shape:"round" as const},{Component:StudioCheckbox,label:"checkmark checkbox",shape:"rect" as const},{Component:StudioXCheckbox,label:"X checkbox",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-choice-example-row" key={item.label} aria-label={item.label + " examples"}>{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div> })}
+          {([{Component:StudioRadio,label:"radio button",shape:"round" as const},{Component:StudioCheckbox,label:"checkmark checkbox",shape:"rect" as const},{Component:StudioXCheckbox,label:"X checkbox",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-choice-example-row" key={item.label} aria-label={item.label + " examples"}>{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><div data-vt-library-component={item.label === "radio button" ? "StudioRadio" : item.label === "checkmark checkbox" ? "StudioCheckbox" : "StudioXCheckbox"}><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div></div> })}</div> })}
         </div>
       </div>
     </Family>
@@ -165,12 +165,12 @@ const CanonicalSplitBadgeFamily: React.FC = () => (
           <div className="is-four">{["A", "B", "C", "D"].map(label => <StudioSplitLeftBadge key={label} icon={<Check aria-hidden="true" />} sizeVariant="micro">{label}</StudioSplitLeftBadge>)}</div>
         </div>
         <span>SPLIT-RIGHT BADGE · SHARED FOUNDATION</span>
-        <StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="standard">RIGHT ALIGNED RAIL</StudioSplitRightBadge>
+        <div data-vt-library-component="StudioSplitRightBadge"><StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="standard">RIGHT ALIGNED RAIL</StudioSplitRightBadge></div>
         <span>DOUBLE-SPLIT BADGE · SHARED FOUNDATION</span>
-        <StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard">CENTERED LABEL</StudioDoubleSplitBadge>
+        <div data-vt-library-component="StudioDoubleSplitBadge"><StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard">CENTERED LABEL</StudioDoubleSplitBadge></div>
         <span>COMPACT + MICRO VARIANTS</span>
-        <StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="compact">COMPACT RIGHT</StudioSplitRightBadge>
-        <StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="micro">MICRO DOUBLE</StudioDoubleSplitBadge>
+        <div data-vt-library-component="StudioSplitRightBadge"><StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="compact">COMPACT RIGHT</StudioSplitRightBadge></div>
+        <div data-vt-library-component="StudioDoubleSplitBadge"><StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="micro">MICRO DOUBLE</StudioDoubleSplitBadge></div>
       </div>
     </Family>
   </>
@@ -196,25 +196,25 @@ const CanonicalWordToggleFamily: React.FC = () => {
       <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">
         <div className="vt-confirmed-control-row">
           <strong>WORD TOGGLE · STANDARD</strong>
-          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-standard" data-control-size="44">{WORD_TOGGLE_SKINS.map((skin,col) => <div key={skin.skin}><StudioWordToggle size="44" skin={skin.skin} value={words[col]} words={col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, col, value)} aria-label={"Standard word toggle variant " + (col + 1)} /></div>)}</div>
+          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-standard" data-vt-library-component="StudioWordToggle" data-control-size="44">{WORD_TOGGLE_SKINS.map((skin,col) => <div key={skin.skin}><StudioWordToggle size="44" skin={skin.skin} value={words[col]} words={col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, col, value)} aria-label={"Standard word toggle variant " + (col + 1)} /></div>)}</div>
         </div>
         <div className="vt-confirmed-control-row">
           <strong>WORD TOGGLE · COMPACT</strong>
-          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={"Compact word toggle variant " + (col + 1)} /></div> })}</div>
+          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-vt-library-component="StudioWordToggle" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={"Compact word toggle variant " + (col + 1)} /></div> })}</div>
         </div>
         <div className="vt-confirmed-control-row">
           <strong>WORD TOGGLE · SUPREME</strong>
-          <div className="vt-confirmed-control-variants" data-control-size="60"><StudioWordToggle size="60" value={supremeWord} words={["WRITE", "CREATE"]} onValueChange={setSupremeWord} aria-label="Supreme word toggle specimen" /></div>
+          <div className="vt-confirmed-control-variants" data-vt-library-component="StudioWordToggle" data-control-size="60"><StudioWordToggle size="60" value={supremeWord} words={["WRITE", "CREATE"]} onValueChange={setSupremeWord} aria-label="Supreme word toggle specimen" /></div>
         </div>
         <div className="vt-confirmed-control-row">
           <strong>WORD TOGGLE · MINI</strong>
-          <div className="vt-confirmed-control-variants" data-control-size="20"><StudioWordToggle size="20" value={miniWord} words={["OFF", "ON"]} onValueChange={setMiniWord} aria-label="Mini word toggle specimen" /></div>
+          <div className="vt-confirmed-control-variants" data-vt-library-component="StudioWordToggle" data-control-size="20"><StudioWordToggle size="20" value={miniWord} words={["OFF", "ON"]} onValueChange={setMiniWord} aria-label="Mini word toggle specimen" /></div>
         </div>
       </div>
     </div>
     <div className="vt-confirmed-toggle-subfamily">
       <strong>VERTICAL WORD TOGGLE · SUPREME + STANDARD + COMPACT + MINI + MICRO</strong>
-      <div className="vt-confirmed-vertical-word-toggle-family">
+      <div className="vt-confirmed-vertical-word-toggle-family" data-vt-library-component="StudioVerticalWordToggle">
         <div className="vt-confirmed-vertical-word-toggle-size-row">
           <strong>STANDARD · SINGLE COLUMN</strong>
           <div className="vt-confirmed-vertical-word-toggle-standard">
@@ -1752,8 +1752,8 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
         <StudioArrowToggle value={arrowStd} options={options} onValueChange={setArrowStd} ariaLabel="Arrow toggle specimen" />
         <span>SIDE TOGGLE · DEFAULT RIGHT / V2 LEFT</span>
         <div style={{ display: "grid", gap: 4 }}>
-          <StudioSideToggle value={sideStd} options={["LOW", "MID", "HIGH"]} onValueChange={setSideStd} />
-          <StudioSideToggle value={sideLeftCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideLeftCmp} arrowSide="left" size="compact" />
+          <div data-vt-library-component="StudioSideToggle"><StudioSideToggle value={sideStd} options={["LOW", "MID", "HIGH"]} onValueChange={setSideStd} /></div>
+          <div data-vt-library-component="StudioSideToggle"><StudioSideToggle value={sideLeftCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideLeftCmp} arrowSide="left" size="compact" /></div>
         </div>
         <span>DOUBLE SIDE TOGGLE · V1 / V2 × THREE RIGHT-FACE APPEARANCES</span>
         <div style={{ display: "grid", gap: 4 }}>
@@ -1764,7 +1764,7 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
             { variant: "v2", appearance: "primary", label: "V2 · PRIMARY RIGHT" },
             { variant: "v2", appearance: "secondary", label: "V2 · SECONDARY RIGHT" },
             { variant: "v2", appearance: "black-primary-text", label: "V2 · BLACK / PRIMARY TEXT RIGHT" },
-          ] as const).map(({ variant, appearance, label }, index) => <div key={variant + "-" + appearance} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 2 }}>
+          ] as const).map(({ variant, appearance, label }, index) => <div key={variant + "-" + appearance} data-vt-library-component="StudioDoubleSideToggle" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 2 }}>
             <small>{label}</small>
             <StudioDoubleSideToggle variant={variant} rightAppearance={appearance}
               size={index >= 3 ? "compact" : "standard"}
@@ -1773,12 +1773,12 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
           </div>)}
         </div>
         <span>BAR TOGGLE · {levelStd}%</span>
-        <StudioBarToggle value={levelStd} onValueChange={setLevelStd} ariaLabel="Bar toggle specimen" />
+        <div data-vt-library-component="StudioBarToggle"><StudioBarToggle value={levelStd} onValueChange={setLevelStd} ariaLabel="Bar toggle specimen" /></div>
         <span>COMPACT SPECIMENS</span>
         <div style={{ display: "grid", gap: 4 }}>
           <StudioArrowToggle size="compact" value={arrowCmp} options={options} onValueChange={setArrowCmp} />
-          <StudioSideToggle size="compact" value={sideCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideCmp} />
-          <StudioBarToggle size="compact" value={levelCmp} onValueChange={setLevelCmp} />
+          <div data-vt-library-component="StudioSideToggle"><StudioSideToggle size="compact" value={sideCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideCmp} /></div>
+          <div data-vt-library-component="StudioBarToggle"><StudioBarToggle size="compact" value={levelCmp} onValueChange={setLevelCmp} /></div>
         </div>
       </div>
     </Family>
