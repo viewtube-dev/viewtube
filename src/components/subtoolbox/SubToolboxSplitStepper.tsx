@@ -23,7 +23,9 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   level = "l1", size = "standard", disabled = false, ariaLabel = "Value",
   className, style, ...props
 }) => {
-  const valueRef = useRef(value)\n  valueRef.current = value\n  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const valueRef = useRef(value)
+  valueRef.current = value
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const repeatTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const startedAt = useRef(0)
   const heldDirection = useRef<-1 | 1>(1)
@@ -36,7 +38,9 @@ export const SubToolboxSplitStepper: React.FC<SubToolboxSplitStepperProps> = ({
   useEffect(() => stopHold, [stopHold])
 
   const change = useCallback((direction: -1 | 1) => {
-    const next = Math.min(max, Math.max(min, valueRef.current + direction * step))\n    valueRef.current = next\n    onValueChange(next)
+    const next = Math.min(max, Math.max(min, valueRef.current + direction * step))
+    valueRef.current = next
+    onValueChange(next)
   }, [max, min, onValueChange, step, value])
 
   const scheduleRepeat = useCallback(() => {
