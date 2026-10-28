@@ -89,7 +89,7 @@ describe("Studio value toggle primitives", () => {
     const track = container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
     vi.spyOn(track, "getBoundingClientRect").mockReturnValue({ width: 272 } as DOMRect);
     act(() => {
-      notify?.([{ target: track, contentRect: { width: 260 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver);
+      notify?.([{ target: track, contentRect: { width: 260 } as DOMRectReadOnly } as unknown as ResizeObserverEntry], {} as ResizeObserver);
     });
     expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(20);
     expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(10);
@@ -108,14 +108,14 @@ describe("Studio value toggle primitives", () => {
     const compact = mount(<StudioBarToggle value={50} size="compact" onValueChange={() => {}} />);
     const compactTrack = compact.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
     vi.spyOn(compactTrack, "getBoundingClientRect").mockReturnValue({ width: 264 } as DOMRect);
-    act(() => notify?.([{ target: compactTrack, contentRect: { width: 256 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
+    act(() => notify?.([{ target: compactTrack, contentRect: { width: 256 } as DOMRectReadOnly } as unknown as ResizeObserverEntry], {} as ResizeObserver));
     expect(compact.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(32);
     expect(compact.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(16);
 
     const micro = mount(<StudioBarToggle value={50} size="micro" onValueChange={() => {}} />);
     const microTrack = micro.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
     vi.spyOn(microTrack, "getBoundingClientRect").mockReturnValue({ width: 164 } as DOMRect);
-    act(() => notify?.([{ target: microTrack, contentRect: { width: 160 } as DOMRectReadOnly } as ResizeObserverEntry], {} as ResizeObserver));
+    act(() => notify?.([{ target: microTrack, contentRect: { width: 160 } as DOMRectReadOnly } as unknown as ResizeObserverEntry], {} as ResizeObserver));
     expect(micro.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(40);
     expect(micro.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(20);
   });
@@ -155,7 +155,7 @@ describe("Studio value toggle primitives", () => {
   });
 
   it("reserves each side's longest word in Double Side Toggle content-width variants", () => {
-    const { container } = mount(<StudioDoubleSideToggle variant="v3"
+    const { container } = mount(<StudioDoubleSideToggle variant="v2"
       left={{ options: ["A", "SOURCE NAME"], value: "A", onValueChange: () => {} }}
       right={{ options: ["X", "DESTINATION"], value: "X", onValueChange: () => {} }} />);
     expect(container.querySelectorAll('.vt-studio-value-toggle__face[data-content-width="true"]')).toHaveLength(2);
