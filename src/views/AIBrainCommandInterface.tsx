@@ -34,7 +34,6 @@ import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
 import {
- AI_BRAIN_INTAKE_QUESTIONS,
  dismissAiBrainIntake,
  loadAiBrainContext,
  saveAiBrainContext,
