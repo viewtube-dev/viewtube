@@ -274,4 +274,48 @@ describe("CreatorContextResolver", () => {
  })
 
 
+ it("includes the channel-scoped creator answers in the resolved context envelope", async () => {
+  const creatorAnswers = {
+   channelDescription: "Documentaries about overlooked history",
+   mainTopicFocus: "Military history",
+   audienceDescription: "Curious adult learners",
+   successDefinition: "Grow returning viewers",
+   mainYoutubeGoal: "Increase returning viewers",
+   recurringSeriesName: "History in Motion",
+   recurringSeriesDescription: "One turning point per episode",
+   biggestWeakness: "Inconsistent publishing",
+   mostSuccessfulVideo: "The Siege of Vienna",
+   signupReason: "Improve channel decisions",
+   whatNext: "Grow returning viewers",
+   primaryGoal: "views",
+   audienceNiche: "Military history",
+   oneMonthGoals: [],
+   completedAt: "2026-10-28T00:00:00.000Z",
+   deferredAt: null,
+   updatedAt: "2026-10-28T00:00:00.000Z",
+   source: "wizard",
+   version: 2,
+   channelContext: {
+    identity: { name: "History Channel", niche: "Military history" },
+    goals: { primaryGoal: "Increase returning viewers" },
+    audience: { idealViewer: "Curious adult learners" },
+    content: {}, brand: {}, intelligence: {},
+   },
+  }
+  const deps: CreatorContextResolverDependencies = {
+   readControls: () => ({ ...DEFAULT_BRAIN_USER_CONTROLS }),
+   loadProfile: vi.fn(async () => profile),
+   loadCreatorAnswers: vi.fn(() => creatorAnswers as any),
+   buildKnowledge: vi.fn(() => knowledge as any),
+   resolveStyle: vi.fn(() => null),
+   buildProject: vi.fn(() => null),
+  }
+
+  const result = await resolveCreatorContext({ channelId: "channel-1", query: "Plan next upload" }, deps)
+
+  expect(result.creatorAnswers?.channelContext.identity.niche).toBe("Military history")
+  expect(result.creatorAnswers?.channelDescription).toBe("Documentaries about overlooked history")
+  expect(deps.loadCreatorAnswers).toHaveBeenCalledWith("channel-1")
+ })
+
 })
