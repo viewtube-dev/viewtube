@@ -425,4 +425,37 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(result.systemInstruction).not.toContain("creator-answer:channel-2:channelContext.identity.niche")
  })
 
+
+ it("fails closed for creator-answer evidence when no active channel ID is available", () => {
+  const result = buildBrainContextPack({
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "Plan my content",
+   channelContext: {
+    identity: { name: "History Channel", niche: "Historical explainers" },
+    goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+   },
+   creatorAnswerEvidenceRecords: [{
+    id: "creator-answer:channel-1:channelContext.identity.niche",
+    owner: "creator-confirmed",
+    sourceRef: "ai-brain-context:channelContext.identity.niche",
+    sourceSnapshotId: "2026-10-27T10:00:00.000Z",
+    channelId: "channel-1",
+    metric: null,
+    value: "SHOULD NOT BE USED WITHOUT ACTIVE CHANNEL SCOPE",
+    unit: null,
+    freshness: "fresh",
+    epistemicState: "USER_PROVIDED",
+    confidence: 1,
+    observedAt: "2026-10-27T10:00:00.000Z",
+    limitations: ["Creator answer; not independently verified."],
+    provenance: { evidenceIds: ["creator-answer:channel-1:channelContext.identity.niche"] },
+   }] as any,
+  })
+
+  expect(result.systemInstruction).not.toContain("SHOULD NOT BE USED WITHOUT ACTIVE CHANNEL SCOPE")
+  expect(result.budget.omittedSections).toContain("creator_answer_evidence_channel_mismatch")
+ })
+
 })
