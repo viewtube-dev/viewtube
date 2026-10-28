@@ -106,7 +106,7 @@ import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
-import { buildCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../services/brain/CreatorAnswerEvidence"
+import { buildScopedCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
 import { formatEvidenceRecordForPrompt, type EvidenceRecord } from "../services/brain/EvidenceRecord"
 import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, type PromptEvidenceIntegrityStatus } from "../services/brain/PromptEvidenceIntegrity"
@@ -1316,7 +1316,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    turnGrowthContext = buildCreatorGrowthContext(turnSnapshot, recentTurns, learningEntries)
    const creatorContext = loadAiBrainContext()
-   const creatorAnswerEvidence = buildCreatorAnswerEvidenceRecords(creatorContext, channelId)
+   const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, authState.channelName || authState.channelHandle || null)
    turnSnapshot = {
     ...turnSnapshot,
     evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence),
@@ -1791,7 +1791,7 @@ const AIBrainCommandInterface: React.FC = () => {
   const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" })
   setIntakeContext(saved)
   setIntakeSaveStatus("Unified creator profile saved locally.")
-  const intakeEvidenceRecords = buildCreatorAnswerEvidenceRecords(saved, channelId)
+  const intakeEvidenceRecords = buildScopedCreatorAnswerEvidenceRecords(saved, channelId, authState.channelName || authState.channelHandle || null)
   updateBrain({
    creatorPreferences: {
     what_next_goal: saved.mainYoutubeGoal || saved.successDefinition || saved.whatNext,
