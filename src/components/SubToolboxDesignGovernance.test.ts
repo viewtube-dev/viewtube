@@ -934,3 +934,63 @@ describe("confirmed primitive library family organization", () => {
     expect(systemStyles).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
   });
 });
+
+
+describe("confirmed primitive library organization", () => {
+  it("does not duplicate family-module variants as separate individual cards", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const start = catalog.indexOf("const ConfirmedIndividualPrimitiveSections");
+    const end = catalog.indexOf("const ConfirmedStudioValueToggleFamily", start);
+    const individual = catalog.slice(start, end);
+    for (const title of [
+      "StudioSwitch · Standard", "StudioRadio · Standard", "StudioCheckbox · Standard",
+      "StudioXCheckbox · Standard", "StudioWordToggle · Standard", "StudioVerticalWordToggle · Standard",
+      "StudioSplitRightBadge · Standard", "StudioDoubleSplitBadge · Standard",
+      "StudioArrowToggle · Standard", "StudioSideToggle · Standard",
+      "StudioDoubleSideToggle · Standard", "StudioBarToggle · Standard",
+    ]) {
+      expect(individual).not.toContain(title);
+    }
+    expect(catalog).toContain('title="Switches, Radios & Checkboxes"');
+    expect(catalog).toContain('title="Word Toggles · Standard + Compact + Vertical"');
+    expect(catalog).toContain('title="Split-left Badge · Standard + Compact + Micro"');
+    expect(catalog).toContain('title="Arrow / Side / Double Side / Bar Toggles"');
+  });
+
+  it("declares deliberate family groups with choice controls first", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const familyList = catalog.slice(catalog.indexOf("const CONFIRMED_CATALOG_FAMILIES"), catalog.indexOf("const classifyConfirmedCatalogItem"));
+    expect(familyList.indexOf('"Switches / Toggles / Radio / Checkbox"')).toBeLessThan(familyList.indexOf('"Buttons"'));
+    for (const family of ['"Badges"', '"Dropdowns"', '"Text Fields"', '"Counters & Sliders"', '"Modules & Frames"', '"Tags & Metadata"', '"Chat & Compositions"']) {
+      expect(familyList).toContain(family);
+    }
+  });
+
+  it("routes related primitives to their intended family before fallback rules", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const classify = catalog.slice(catalog.indexOf("const classifyConfirmedCatalogItem"), catalog.indexOf("const ConfirmedCatalogFamilyGroups"));
+    expect(classify.indexOf('return "Switches / Toggles / Radio / Checkbox"')).toBeLessThan(classify.indexOf("if (/Button ·"));
+    expect(classify).toContain('return "Counters & Sliders"');
+    expect(classify).toContain('return "Badges"');
+    expect(classify).toContain('return "Modules & Frames"');
+  });
+
+  it("routes text fields and tags into their dedicated groups", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const classify = catalog.slice(catalog.indexOf("const classifyConfirmedCatalogItem"), catalog.indexOf("const ConfirmedCatalogFamilyGroups"));
+    expect(classify).toContain("StudioTextInput|StudioTextArea|StudioTextBox");
+    expect(classify).toContain("StudioCloseableBadge");
+    expect(classify).toContain('return "Tags & Metadata"');
+  });
+
+  it("keeps direct representatives unique and excludes composite showcase grids", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const start = catalog.indexOf('data-vt-confirmed-representatives="true"');
+    const end = catalog.indexOf("</Family>", start);
+    const representatives = catalog.slice(start, end);
+    const componentIds = [...representatives.matchAll(/data-vt-library-component="([^"]+)"/g)].map(match => match[1]);
+    expect(componentIds).not.toContain("StudioComponentGrid:standard");
+    expect(new Set(componentIds).size).toBe(componentIds.length);
+    expect(representatives).toContain('sizeVariant="standard"');
+  });
+});

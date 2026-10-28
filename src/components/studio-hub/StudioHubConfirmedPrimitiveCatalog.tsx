@@ -4,7 +4,6 @@ import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
-import { StudioComponentGridSpecimenPair } from "../../studio-ui/primitives/StudioComponentGridSpecimen"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
@@ -342,16 +341,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextArea"><span>Text Area · STANDARD</span><StudioTextArea sizeVariant="standard" rows={3} aria-label="Text area standard specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextBox"><span>Text Box · STANDARD</span><StudioTextBox size="standard" aria-label="Text box standard specimen">Read-only text rendered by the production StudioTextBox primitive.</StudioTextBox></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCounter"><span>Studio Counter · STANDARD</span><StudioCounter size="standard" value={counterValue} onValueChange={setCounterValue} min={0} max={100} ariaLabel="Studio counter standard specimen" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGrid:standard" key="standard">
-          <span>Component Grid · STANDARD · RADIUS + SQUARE</span>
-          <StudioComponentGridSpecimenPair
-            size="standard"
-            leftCounter={<StudioLeftCounter size="standard" value={counterValue} onValueChange={setCounterValue} min={0} max={100} ariaLabel="standard grid left counter" />}
-            dropdown={<StudioDropdown sizeVariant="standard" ariaLabel="standard grid dropdown" defaultValue="balanced" options={dropdownOptions} />}
-            doubleSideToggle={<StudioDoubleSideToggle size="standard" left={{ value: doubleLeft, options: ["SOURCE", "INPUT"], onValueChange: setDoubleLeft, ariaLabel: "standard grid left side" }} right={{ value: doubleRight, options: ["TARGET", "OUTPUT"], onValueChange: setDoubleRight, ariaLabel: "standard grid right side" }} />}
-          />
-        </div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordCounter"><span>Left Word Counter · STANDARD</span><StudioLeftWordCounter size="standard" value={leftWordValue} onValueChange={setLeftWordValue} ariaLabel="Studio left word counter standard specimen" /></div>
+                <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordCounter"><span>Left Word Counter · STANDARD</span><StudioLeftWordCounter size="standard" value={leftWordValue} onValueChange={setLeftWordValue} ariaLabel="Studio left word counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitSlider"><span>Double Split Slider · STANDARD</span><StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Double split slider standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioActionButton"><span>Action Button · STANDARD</span><StudioActionButton sizeVariant="standard" aria-label="Action button standard specimen">PRIMARY ACTION</StudioActionButton></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton"><span>Icon Button · STANDARD</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" sizeVariant="standard" /></div>
@@ -694,35 +684,64 @@ const ConfirmedStudioDropdownFamily: React.FC = () => {
 }
 
 type ConfirmedCatalogFamilyName =
-  | "Text Fields"
+  | "Switches / Toggles / Radio / Checkbox"
   | "Buttons"
-  | "Modules & Frames"
+  | "Badges"
   | "Dropdowns"
-  | "Controls"
-  | "Text Controls"
-  | "Compositions"
+  | "Text Fields"
+  | "Counters & Sliders"
+  | "Modules & Frames"
+  | "Tags & Metadata"
+  | "Chat & Compositions"
+  | "Other Controls"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
-  "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
-  "Controls", "Text Controls", "Compositions",
+  "Switches / Toggles / Radio / Checkbox",
+  "Buttons",
+  "Badges",
+  "Dropdowns",
+  "Text Fields",
+  "Counters & Sliders",
+  "Modules & Frames",
+  "Tags & Metadata",
+  "Chat & Compositions",
+  "Other Controls",
 ]
 
 const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
-  if (!React.isValidElement(node)) return "Controls"
+  if (!React.isValidElement(node)) return "Other Controls"
   const props = node.props as { title?: unknown }
   const title = typeof props.title === "string" ? props.title : ""
   const componentType = node.type as { displayName?: string; name?: string }
   const componentName = typeof node.type === "function"
     ? (componentType.displayName || componentType.name || "")
     : ""
-  if (/Studio Text Input|Studio Text Area|Studio Text Box|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
-  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "ConfirmedStudioSplitButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
-  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
+
+  // Choice primitives share one top-level family; check this before broad button rules.
+  if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle|StudioChoice/.test(title)
+    || componentName === "CanonicalControlFamilies"
+    || componentName === "CanonicalWordToggleFamily"
+    || componentName === "ConfirmedStudioValueToggleFamily") {
+    return "Switches / Toggles / Radio / Checkbox"
+  }
+
+  if (/Split-left Badge|Split-right Badge|Double-split Badge|Brain Status LED Badges|Status \/ navigation|StudioBrainStatusBadge|StudioBrainStatusIndicator|StudioLedBadgeTab|StudioSplitLeftBadge|StudioSplitRightBadge|StudioDoubleSplitBadge/.test(title)
+    || componentName === "CanonicalSplitBadgeFamily") return "Badges"
+  if (/Studio Text Input|Studio Text Area|Studio Text Box|StudioTextInput|StudioTextArea|StudioTextBox|UsernameInput|SplitLeftInput|SearchInput|NumberInput|Split Text Input|StudioSplitTextInput/.test(title)) return "Text Fields"
+  if (/StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|Double Split Slider|Side Counter|Left Word Counter|Slider/.test(title)
+    || componentName === "ConfirmedStudioCounterFamily"
+    || componentName === "ConfirmedStudioDoubleSplitSliderFamily"
+    || componentName === "ConfirmedStudioSideCounterFamily"
+    || componentName === "ConfirmedStudioLeftWordCounterFamily"
+    || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Counters & Sliders"
   if (/Dropdown/.test(title) || componentName === "ConfirmedStudioDropdownFamily") return "Dropdowns"
-  if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftWordCounter|StudioLeftWordSlider|StudioChoice|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily" || componentName === "ConfirmedStudioLeftWordCounterFamily" || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Controls"
-  if (/Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|SpectrumTag|TagEditor|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
-  if (/Publishing Card|Brain Status LED Badges/.test(title)) return "Compositions"
-  return "Controls"
+  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton/.test(title)
+    || componentName === "ConfirmedStudioButtonFamily"
+    || componentName === "ConfirmedStudioSplitButtonFamily") return "Buttons"
+  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
+  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag/.test(title)) return "Tags & Metadata"
+  if (/Publishing Card|StudioChatResponseShell|StudioChatActionGroup|StudioResponseMetaRow/.test(title)) return "Chat & Compositions"
+  return "Other Controls"
 }
 
 const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -1600,45 +1619,19 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
     <Family title="StudioDoubleSplitButton · Standard" nonDefaultSettings={["Individual double-split button specimen using the production button and split-shell foundation."]} provenance={<Provenance primitive="StudioDoubleSplitButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · leading and trailing square rails" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton"><span>STANDARD · DOUBLE-SPLIT BUTTON</span><StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Standard double-split button specimen">DOUBLE SPLIT</StudioDoubleSplitButton></div>
     </Family>
-    <Family title="StudioCollapsingSplitModule · Standard" nonDefaultSettings={["Individual collapsible split-module specimen; nested module compositions remain separate from the representative strip."]} provenance={<Provenance primitive="StudioCollapsingSplitModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · double split rails · collapsible content" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule"><span>STANDARD · COLLAPSING SPLIT MODULE</span><StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen><span>Collapsible module body content.</span></StudioCollapsingSplitModule></div>
-    </Family>
-    <Family title="StudioSwitch · Standard" nonDefaultSettings={["Individual canonical switch specimen; the combined matrix above remains a palette comparison reference."]} provenance={<Provenance primitive="StudioSwitch" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · canonical switch skins" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSwitch"><span>STANDARD · ROUND SWITCH</span><StudioSwitch shape="round" skin="solid" checked={switchValue} onClick={() => setSwitchValue(value => !value)} aria-label="Standard switch specimen" /></div>
-    </Family>
-    <Family title="StudioRadio · Standard" nonDefaultSettings={["Individual canonical radio specimen."]} provenance={<Provenance primitive="StudioRadio" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · canonical choice skins" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioRadio"><span>STANDARD · RADIO</span><StudioRadio shape="round" skin="solid" checked={radioValue} onClick={() => setRadioValue(value => !value)} aria-label="Standard radio specimen" /></div>
-    </Family>
-    <Family title="StudioCheckbox · Standard" nonDefaultSettings={["Individual canonical checkmark checkbox specimen."]} provenance={<Provenance primitive="StudioCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · canonical choice skins" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCheckbox"><span>STANDARD · CHECKMARK</span><StudioCheckbox shape="rect" skin="solid" checked={checkboxValue} onClick={() => setCheckboxValue(value => !value)} aria-label="Standard checkbox specimen" /></div>
-    </Family>
-    <Family title="StudioXCheckbox · Standard" nonDefaultSettings={["Individual canonical X checkbox specimen."]} provenance={<Provenance primitive="StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · canonical choice skins" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioXCheckbox"><span>STANDARD · X CHECKBOX</span><StudioXCheckbox shape="rect" skin="solid" checked={xCheckboxValue} onClick={() => setXCheckboxValue(value => !value)} aria-label="Standard X checkbox specimen" /></div>
-    </Family>
-    <Family title="StudioWordToggle · Standard" nonDefaultSettings={["Individual horizontal word-toggle specimen; alternate size and skin matrices remain in the combined comparison section."]} provenance={<Provenance primitive="StudioWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · primary/secondary paired face" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioWordToggle"><span>STANDARD · WORD TOGGLE</span><StudioWordToggle size="44" skin="solid" value={wordValue} words={["OFF", "ON"]} onValueChange={setWordValue} aria-label="Standard word toggle specimen" /></div>
-    </Family>
-    <Family title="StudioVerticalWordToggle · Standard" nonDefaultSettings={["Individual vertical word-toggle specimen; compact and micro variants remain in the combined comparison section."]} provenance={<Provenance primitive="StudioVerticalWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · content-driven stacked height" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioVerticalWordToggle"><span>STANDARD · VERTICAL WORD TOGGLE</span><StudioVerticalWordToggle sizeVariant="standard" variant="primary-secondary" value={verticalWordValue} words={["OFF", "ON"]} onValueChange={setVerticalWordValue} aria-label="Standard vertical word toggle specimen" /></div>
-    </Family>
-    <Family title="StudioSplitRightBadge · Standard" nonDefaultSettings={["Individual split-right badge specimen; palette and size comparisons remain in the badge comparison section."]} provenance={<Provenance primitive="StudioSplitRightBadge" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · fixed trailing rail" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightBadge"><span>STANDARD · SPLIT-RIGHT BADGE</span><StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="standard">SETTINGS</StudioSplitRightBadge></div>
-    </Family>
-    <Family title="StudioDoubleSplitBadge · Standard" nonDefaultSettings={["Individual double-split badge specimen; palette and size comparisons remain in the badge comparison section."]} provenance={<Provenance primitive="StudioDoubleSplitBadge" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · leading and trailing rails" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitBadge"><span>STANDARD · DOUBLE-SPLIT BADGE</span><StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard">STATUS</StudioDoubleSplitBadge></div>
-    </Family>
-    <Family title="StudioArrowToggle · Standard" nonDefaultSettings={["Individual arrow-toggle specimen; additional value and size variants remain in the comparison section."]} provenance={<Provenance primitive="StudioArrowToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · controlled selection" imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle"><span>STANDARD · ARROW TOGGLE</span><StudioArrowToggle size="standard" value={arrowValue} options={["ONE", "TWO", "THREE"]} onValueChange={setArrowValue} ariaLabel="Standard arrow toggle specimen" /></div>
-    </Family>
-    <Family title="StudioSideToggle · Standard" nonDefaultSettings={["Individual side-toggle specimen; left-rail and compact variants remain in the comparison section."]} provenance={<Provenance primitive="StudioSideToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · controlled selection" imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideToggle"><span>STANDARD · SIDE TOGGLE</span><StudioSideToggle size="standard" value={sideValue} options={["LOW", "MID", "HIGH"]} onValueChange={setSideValue} ariaLabel="Standard side toggle specimen" /></div>
-    </Family>
-    <Family title="StudioDoubleSideToggle · Standard" nonDefaultSettings={["Individual double-side-toggle specimen; divider and right-face appearance variants remain in the comparison section."]} provenance={<Provenance primitive="StudioDoubleSideToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · independent left and right selection" imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSideToggle"><span>STANDARD · DOUBLE SIDE TOGGLE</span><StudioDoubleSideToggle size="standard" left={{ value: doubleLeft, options: ["SOURCE", "INPUT"], onValueChange: setDoubleLeft, ariaLabel: "Double-side left specimen" }} right={{ value: doubleRight, options: ["TARGET", "OUTPUT"], onValueChange: setDoubleRight, ariaLabel: "Double-side right specimen" }} /></div>
-    </Family>
-    <Family title="StudioBarToggle · Standard" nonDefaultSettings={["Individual bar-toggle specimen; compact and value variants remain in the comparison section."]} provenance={<Provenance primitive="StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · ten fixed-width value bars" imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>STANDARD · BAR TOGGLE</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} barCount={10} ariaLabel="Standard bar toggle specimen" /></div>
-    </Family>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <ConfirmedAdditionalPrimitiveSections />
   </>
 }
