@@ -311,110 +311,110 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
     <section className="vt-confirmed-primitive-grid-overview" data-vt-confirmed-primitive-grid="true" aria-labelledby="vt-confirmed-primitive-grid-title">
       <h2 id="vt-confirmed-primitive-grid-title">Primitive Grid · Live Production Components</h2>
       <p>Top-level quick reference: real production primitives across action, split, field, choice, counter, slider, and toggle designs. The complete standard representative inventory and detailed family variants follow below.</p>
-      <StudioComponentGrid cols={3} rows={6} size="standard" aria-label="Confirmed Studio primitive grid">
-        <StudioComponentGridCell col={1} row={1}>
+      <StudioComponentGrid cols={1} rows={18} size="standard" aria-label="Confirmed Studio primitive grid">
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioButton">
             <span>BUTTON</span>
             <StudioButton sizeVariant="standard" aria-label="Grid specimen button" onClick={() => setButtonPressed(value => !value)}>{buttonPressed ? "SELECTED" : "STUDIO BUTTON"}</StudioButton>
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={2} row={1}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSplitLeftButton">
             <span>SPLIT BUTTON</span>
             <StudioSplitLeftButton sizeVariant="standard" icon={<Sparkles aria-hidden="true" />} aria-label="Grid specimen split button" onClick={() => setSplitButtonPressed(value => !value)}>{splitButtonPressed ? "SELECTED" : "SPLIT LEFT"}</StudioSplitLeftButton>
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={3} row={1}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDropdown">
             <span>DROPDOWN</span>
             <StudioDropdown sizeVariant="standard" ariaLabel="Grid specimen dropdown" defaultValue="balanced" options={[{ value: "balanced", label: "BALANCED" }, { value: "focused", label: "FOCUSED" }, { value: "expanded", label: "EXPANDED" }]} />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={1} row={2}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioTextInput">
             <span>TEXT INPUT</span>
             <StudioTextInput sizeVariant="standard" aria-label="Grid specimen text input" placeholder="TYPE HERE" />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={2} row={2}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioTextArea">
             <span>TEXT AREA</span>
             <StudioTextArea sizeVariant="standard" rows={2} aria-label="Grid specimen text area" placeholder="TYPE HERE" />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={3} row={2}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioCounter">
             <span>COUNTER</span>
             <StudioCounter size="standard" value={counterValue} onValueChange={setCounterValue} min={0} max={100} ariaLabel="Grid specimen counter" />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={1} row={3}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSideCounter">
             <span>SIDE COUNTER</span>
             <StudioSideCounter value={sideCounterValue} onValueChange={setSideCounterValue} size="standard" min={0} max={100} ariaLabel="Grid specimen side counter" />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={2} row={3}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDoubleSplitSlider">
             <span>DOUBLE SPLIT SLIDER</span>
             <StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Grid specimen double split slider" />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={3} row={3}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioArrowToggle">
             <span>ARROW TOGGLE</span>
             <StudioArrowToggle size="standard" value={arrowValue} options={options} onValueChange={setArrowValue} ariaLabel="Grid specimen arrow toggle" />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={1} row={4}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDoubleSplitButton">
             <span>DOUBLE SPLIT BUTTON</span>
             <StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Grid specimen double split button">DOUBLE SPLIT</StudioDoubleSplitButton>
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={2} row={4}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSplitLeftDropdown">
             <span>SPLIT-LEFT DROPDOWN</span>
             <StudioSplitLeftDropdown sizeVariant="standard" ariaLabel="Grid specimen split-left dropdown" defaultValue="balanced" options={[{ value: "balanced", label: "BALANCED" }, { value: "focused", label: "FOCUSED" }, { value: "expanded", label: "EXPANDED" }]} />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={3} row={4}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioLegendMultiDropdown">
             <span>MULTI-SELECT DROPDOWN</span>
             <StudioLegendMultiDropdown label="FORMAT" sizeVariant="standard" defaultValue={["videos"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }, { value: "live", label: "LIVE" }]} />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={1} row={5}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDoubleSplitBadge">
             <span>DOUBLE SPLIT BADGE</span>
             <StudioDoubleSplitBadge sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />}>FILE STATUS</StudioDoubleSplitBadge>
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={2} row={5}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioWordToggle">
             <span>WORD TOGGLE</span>
             <StudioWordToggle size="standard" value={wordValue} words={["OFF", "ON"]} onValueChange={setWordValue} aria-label="Grid specimen word toggle" />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={3} row={5}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSwitch">
             <span>SWITCH</span>
             <StudioSwitch checked={switchValue} aria-label="Grid specimen switch" onClick={() => setSwitchValue(value => !value)} />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={1} row={6}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioUploadFrame">
             <span>UPLOAD FRAME</span>
             <StudioUploadFrame prompt="UPLOAD MEDIA" aria-label="Grid specimen upload frame" />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={2} row={6}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSplitAccordion">
             <span>SPLIT ACCORDION</span>
             <StudioSplitAccordion sizeVariant="standard" accessibleLabel="Grid specimen split accordion" items={[{ accessibleLabel: "DETAILS", icon: <Info aria-hidden="true" />, content: <p>Accordion content preview.</p> }]} />
           </div>
         </StudioComponentGridCell>
-        <StudioComponentGridCell col={3} row={6}>
+        <StudioComponentGridCell col={1} row={++row}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioInterModule">
             <span>INTERMODULE</span>
             <StudioInterModule title="DETAILS" sizeVariant="standard" defaultOpen><p>Intermodule preview.</p></StudioInterModule>
