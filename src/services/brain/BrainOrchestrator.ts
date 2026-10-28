@@ -45,6 +45,7 @@ import { BRAIN_CONTEXT_RESOLVER_VERSION } from "./BrainContextResolution"
 import type { CanonicalIntelligenceEvidenceBundle } from "../analytics-canon"
 import { resolveEvidenceIntelligence, type EvidenceIntelligenceEnvelope } from "./EvidenceIntelligenceResolver"
 import { buildBrainEvidenceRecordQuality } from "./BrainEvidenceQuality"
+import { fingerprintBrainEvidenceRecords } from "./BrainEvidenceQuality"
 import { getEvidenceRecordsActuallyRendered, selectEvidenceRecordsForPrompt, type EvidenceRecord } from "./EvidenceRecord"
 import { collectKnownNumbers, parseNumericToken } from "./numericClaims"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
@@ -834,6 +835,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     evidenceRecords: renderedEvidenceRecords,
     creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
     creatorAnswerEvidenceRecordIds: renderedCreatorAnswerEvidenceRecords.map((record) => record.id),
+    creatorAnswerEvidenceFingerprint: fingerprintBrainEvidenceRecords(renderedCreatorAnswerEvidenceRecords),
     evidenceRecordQuality: renderedEvidenceRecords.length
      ? buildBrainEvidenceRecordQuality(renderedEvidenceRecords, { expectedChannelId: input.channelId })
      : null,
@@ -944,6 +946,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     evidenceRecords: renderedEvidenceRecords,
     creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
     creatorAnswerEvidenceRecordIds: renderedCreatorAnswerEvidenceRecords.map((record) => record.id),
+    creatorAnswerEvidenceFingerprint: fingerprintBrainEvidenceRecords(renderedCreatorAnswerEvidenceRecords),
     evidenceRecordQuality: renderedEvidenceRecords.length
      ? buildBrainEvidenceRecordQuality(renderedEvidenceRecords, { expectedChannelId: input.channelId })
      : null,
