@@ -54,7 +54,7 @@ export const buildCreatorAnswerEvidenceRecords = (
    epistemicState: "USER_PROVIDED",
    confidence: 1,
    observedAt: context.updatedAt || context.completedAt || null,
-   limitations: ["Records the creator's answer; not independently verified public or analytics evidence."],
+   limitations: ["Creator-stated answer (" + label + "); not independently verified public or analytics evidence."],
    provenance: {
     evidenceIds: [id],
     sourceRoute: "settings/ai/channel-context",
