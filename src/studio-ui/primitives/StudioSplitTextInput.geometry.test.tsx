@@ -36,6 +36,13 @@ describe("StudioSplitTextInput geometry comparison variants", () => {
   })
 
   it("changes only field padding or field height while preserving the rail's centered geometry", () => {
+    const html = renderToStaticMarkup(
+      <>
+        <StudioSplitTextInput aria-label="Baseline" geometryVariant="current" leftIcon={<svg viewBox="0 0 24 24" />} />
+        <StudioSplitTextInput aria-label="Half padding" geometryVariant="half-vertical-padding" leftIcon={<svg viewBox="0 0 24 24" />} />
+        <StudioSplitTextInput aria-label="Username height" geometryVariant="username-height" leftIcon={<svg viewBox="0 0 24 24" />} />
+      </>,
+    )
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-split-text-input.css"), "utf8")
     const railStart = css.indexOf(".vt-studio-split-text-input > .vt-studio-split-shell__rail")
     const railEnd = css.indexOf(".vt-studio-split-text-input[data-vt-studio-split=\"right\"]")
