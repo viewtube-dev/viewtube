@@ -598,6 +598,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  questionTrace.recordPromptVersion("contextResolver", BRAIN_CONTEXT_RESOLVER_VERSION)
  questionTrace.recordPromptVersion("outputSchema", BRAIN_OUTPUT_SCHEMA_VERSION)
  let renderedEvidenceRecords = [] as typeof promptEvidenceRecords
+ let renderedCreatorAnswerEvidenceRecords = [] as typeof creatorAnswerEvidenceRecords
  try {
   if (!input.retryGenerationOnly && capabilities.some((capability) => capability.id === "niche-knowledge")) {
    nicheKnowledge = await (input.nicheResolver || resolveNicheKnowledge)({
@@ -649,18 +650,22 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    algorithmIntelligence,
    creatorContext,
    channelContext: savedChannelContext,
+   creatorAnswerEvidenceRecords,
   })
   renderedEvidenceRecords = promptEvidenceRecords.filter((record) =>
    context.systemInstruction.includes(record.id),
   )
+  renderedCreatorAnswerEvidenceRecords = creatorAnswerEvidenceRecords.filter((record) =>
+   context.systemInstruction.includes(record.id),
+  )
   questionTrace.recordEvidence({
-   returned: renderedEvidenceRecords.map((record) => record.id),
+   returned: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id),
    missing: [],
-   records: renderedEvidenceRecords,
+   records: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords],
   })
   questionTrace.recordContext({
    tokensEstimated: context.budget.estimatedInputTokens,
-   sectionsIncluded: ["system_instruction", ...(renderedEvidenceRecords.length ? ["analytics_evidence_records"] : [])],
+   sectionsIncluded: ["system_instruction", ...(renderedEvidenceRecords.length ? ["analytics_evidence_records"] : []), ...(renderedCreatorAnswerEvidenceRecords.length ? ["creator_answer_evidence_records"] : [])],
    sectionsDropped: [...context.budget.omittedSections],
   })
 
@@ -681,7 +686,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
     questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
    }
-   response = fromStructuredOutput(output, input.snapshot, renderedEvidenceRecords)
+   response = fromStructuredOutput(output, input.snapshot, [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords])
    response = { ...response, modules: formatCreatorGrowthModules(response, input.growthContext, input.userText) }
    status = "complete"
    generationPath = "model"
@@ -717,7 +722,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
      modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
      questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
     }
-    const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot, renderedEvidenceRecords)
+    const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot, [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords])
     const repairedCandidate = {
      ...repairedResponse,
      modules: formatCreatorGrowthModules(repairedResponse, input.growthContext, input.userText),
@@ -757,7 +762,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   }
   response = {
    ...response,
-   evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 20),
+   evidenceIds: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 50),
    evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
    generationPath,
    ...(fallbackReason ? { fallbackReason } : {}),
@@ -783,7 +788,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: [...renderedEvidenceRecords, ...creatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 100),
+    evidenceIds: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 100),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -818,8 +823,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     modelIdentityStatus,
     evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 50),
     evidenceRecords: renderedEvidenceRecords,
-    creatorAnswerEvidenceRecords,
-    creatorAnswerEvidenceRecordIds: creatorAnswerEvidenceRecords.map((record) => record.id),
+    creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
+    creatorAnswerEvidenceRecordIds: renderedCreatorAnswerEvidenceRecords.map((record) => record.id),
     evidenceRecordQuality,
     promptEvidenceRecordIds: renderedEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
