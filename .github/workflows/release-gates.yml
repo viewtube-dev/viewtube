@@ -61,6 +61,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run test:public-page-resolver
       - run: npm run test:vault-operation-store
       - run: npm run test:focused
       - run: npm run account:test
