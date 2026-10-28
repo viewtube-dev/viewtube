@@ -12,6 +12,7 @@ const read = (path) => {
 }
 
 const entry = read("src/styles/studio-control-entry.css")
+const splitInput = read("src/styles/studio-split-text-input.css")
 const overrides = read("src/styles/studio-control-distill-overrides.css")
 const recovery = read("src/styles/studio-control-recovery-overrides.css")
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
@@ -34,7 +35,7 @@ const checks = [
   ["stacked toggle divider is centered", overrides.includes(".vt-studio-value-toggle__arrow-stack::after") && overrides.includes("top: 50%") && overrides.includes("translateY(-50%)")],
   ["side-toggle rails reuse Side Counter arrow metrics", system.includes(".vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg") && system.includes("width: 14px;") && system.includes("width: 42px;") && system.includes("width: 30px;") && system.includes("width: 15px;")],
   ["side-toggle arrow stack has one horizontal divider owner", !system.includes(".vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow + .vt-studio-value-toggle__arrow") && system.includes(".vt-studio-value-toggle__arrow-stack::after")],
-  ["split text input has no second inset border in resting or focus state", entry.includes(".vt-studio-split-text-input{padding:0;background:var(--vt-field-fill-rest);box-shadow:none}") && entry.includes(".vt-studio-split-text-input:focus-within{outline:var(--vt-field-focus-outline);outline-offset:0;background:var(--vt-field-fill-focus);box-shadow:none}") && files["src/styles/studio-control-recovery-overrides.css"].content.includes(".vt-studio-split-text-input:focus-within { outline: var(--vt-field-focus-outline) !important; outline-offset: 0; box-shadow: none !important; }")],
+  ["split text input keeps one shell border and one field inset border", splitInput.includes(".vt-studio-split-shell.vt-studio-split-text-input {") && splitInput.includes("box-shadow: none;") && splitInput.includes(".vt-studio-split-text-input__field {") && splitInput.includes("border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary") && splitInput.includes("box-shadow: none !important;") && splitInput.includes(".vt-studio-split-text-input__field:focus") && splitInput.includes("outline: none !important;")],
   ["catalog uses canonical StudioTopSplitModule", catalog.includes("StudioTopSplitModule") && controls.includes("StudioTopSplitModule")],
   ["catalog uses canonical StudioSquareIconButtonGroup", catalog.includes("StudioSquareIconButtonGroup") && controls.includes("StudioSquareIconButtonGroup")],
   ["Brain Status Badge has its own production representative row", catalog.includes('data-vt-library-component="StudioBrainStatusBadge"') && catalog.includes('<StudioBrainStatusBadge label="READY" tone="green" appearance="tinted" />')],
