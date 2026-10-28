@@ -470,8 +470,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
      direction: "inbound",
      at: new Date().toISOString(),
      evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 100),
-     evidencePackSnapshot: input.snapshot.evidencePack,
-     evidenceRecords: [],
+     evidenceRequestSpec: input.snapshot.evidencePack.requestSpec,
     }],
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
@@ -499,7 +498,6 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     retryEvidenceMode: input.retryEvidenceMode || "saved",
     retryContextContinuity,
     generationInputSnapshot: retryResolution.generationInput,
-    evidencePackSnapshot: retryResolution.generationInput.snapshot.evidencePack,
    },
   })
   input = {
