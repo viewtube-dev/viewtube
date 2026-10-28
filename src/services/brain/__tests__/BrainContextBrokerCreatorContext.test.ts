@@ -269,6 +269,19 @@ describe("BrainContextBroker creator-context convergence", () => {
     identity: { name: "History Channel", niche: "Historical explainers" },
     goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
    },
+   creatorContext: {
+    version: "vt-creator-context-v1",
+    channelId: "channel-1",
+    controls: { ...DEFAULT_BRAIN_USER_CONTROLS, personalization: true, allowAnalytics: false },
+    profile: null,
+    channelKnowledge: null,
+    styleProfile: null,
+    project: null,
+    surface: null,
+    selection: null,
+    evidenceRefs: [],
+    provenance: { profileLoadedAt: null, selectionUpdatedAt: null, projectSource: null },
+   } as any,
    creatorAnswerEvidenceRecords: records,
   })
   expect(result.systemInstruction).toContain(target.id)
