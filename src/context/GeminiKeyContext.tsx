@@ -1,11 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getVaultKey, setVaultKey } from '../services/keyVault';
 
-// Do NOT static-import @google/genai — it's a ~50 kB gzip module and this
-// provider mounts at App boot, which used to force every route (Dashboard,
-// Editor, Analytics) to preload the Gemini SDK before first paint. The SDK
-// is only reachable via `validateAndSaveKey`, which fires on user action, so
-// a dynamic import there defers the cost until the moment it's needed.
-
+// Keep the SDK out of the initial bundle; load it only when the user validates a key.
 interface GeminiKeyContextType {
   apiKey: string | null;
   setApiKey: (key: string) => void;
@@ -22,47 +18,61 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  // Load key from localStorage on mount
+  // The local key vault is shared by settings and Gemini runtime consumers.
+  // It is deliberately independent of ViewTube's login/account state.
   useEffect(() => {
-    const storedKey = localStorage.getItem('vt_gemini_api_key');
-    if (storedKey) {
-      setApiKeyState(storedKey);
-    }
+    const storedKey = getVaultKey('gemini');
+    if (storedKey) setApiKeyState(storedKey);
   }, []);
 
   const setApiKey = (key: string) => {
-    localStorage.setItem('vt_gemini_api_key', key);
+    setVaultKey('gemini', key);
     setApiKeyState(key);
   };
 
   const clearApiKey = () => {
-    localStorage.removeItem('vt_gemini_api_key');
+    setVaultKey('gemini', '');
     setApiKeyState(null);
   };
 
   const validateAndSaveKey = async (key: string): Promise<boolean> => {
+    const trimmedKey = key.trim();
+    if (!trimmedKey) {
+      setValidationError('Enter a Gemini API key.');
+      return false;
+    }
+
     setIsValidating(true);
     setValidationError(null);
     try {
-      // Validate by making a tiny request
+      // Do not validate against a guessed model ID. Model availability varies by
+      // key and API release; a successful authenticated model-catalog request
+      // verifies API-key access without rejecting the key due to one model 404.
       const { GoogleGenAI } = await import('@google/genai');
-      const ai = new GoogleGenAI({ apiKey: key });
-      const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
-        contents: 'reply with exactly "OK"',
-      });
-
-      if (response.text) {
-        setApiKey(key);
-        setIsValidating(false);
-        return true;
+      const ai = new GoogleGenAI({ apiKey: trimmedKey });
+      const listedModels = await ai.models.list();
+      // Consume the async iterator so authentication/network errors are observed.
+      for await (const _model of listedModels) {
+        // The catalog may be different for each key; no particular model is required.
       }
-      throw new Error("Invalid response from Gemini");
-    } catch (error: any) {
-      console.error('Gemini API Key validation failed:', error);
-      setValidationError(error.message || 'Failed to validate API key. Please check the key and try again.');
-      setIsValidating(false);
+
+      setApiKey(trimmedKey);
+      return true;
+    } catch (error: unknown) {
+      const providerError = error as { status?: number; code?: number | string; message?: string } | null;
+      const status = Number(providerError?.status ?? providerError?.code);
+      const message = String(providerError?.message ?? '');
+
+      if (status === 400 || status === 401 || status === 403 || /api key|unauthorized|permission denied|invalid argument/i.test(message)) {
+        setValidationError('Gemini could not validate this API key. Check the key and its Google AI Studio API access, then try again.');
+      } else if (status === 404 || /not found|not supported/i.test(message)) {
+        setValidationError('Google could not load the Gemini model catalog for this key. Check that the Gemini API is enabled for the key, then try again.');
+      } else {
+        setValidationError('Gemini connection failed. Check your network and Google AI Studio API access, then try again.');
+      }
       return false;
+    } finally {
+      setIsValidating(false);
     }
   };
 
