@@ -975,6 +975,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [draftPromptOrigin, setDraftPromptOrigin] = useState<{ promptId: string; promptVersion: string; action: "edited" } | null>(null)
  const composerDraftHydrationRef = useRef<string | null>(null)
  const composerDraftSkipSaveRef = useRef<string | null>(null)
+ const initialRequestedDraftRef = useRef(searchParams.get("draft"))
  useEffect(() => {
   const requestedDraft = searchParams.get("draft")
   if (!requestedDraft) return
@@ -1025,7 +1026,8 @@ const AIBrainCommandInterface: React.FC = () => {
 
  const channelId = authState.channelId || authState.channelHandle || null
  useEffect(() => {
-  const requestedDraft = searchParams.get("draft")
+  const requestedDraft = initialRequestedDraftRef.current
+  initialRequestedDraftRef.current = null
   const savedDraft = requestedDraft ? null : readBrainComposerDraft(channelId)
   setInput(requestedDraft ?? savedDraft?.text ?? "")
   setActivePromptTitle(savedDraft?.activePromptTitle ?? null)
