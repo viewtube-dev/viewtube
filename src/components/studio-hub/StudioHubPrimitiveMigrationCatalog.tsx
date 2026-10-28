@@ -440,7 +440,7 @@ const PrimitiveMigrationControl: React.FC<{
     )
   }
 
-if (name === "Studio Button Family") {
+  if (name === "Studio Button Family") {
     return (
       <div className="vt-catalog-button-family" role="group" aria-label="Standard button family">
         <div className="vt-catalog-family-variant"><span>PRIMARY</span><PrimaryButton level={level}>SAVE</PrimaryButton></div>
@@ -452,160 +452,6 @@ if (name === "Studio Button Family") {
       </div>
     )
   }
-
-
-  if (name === "Loader Family") {
-    return (
-      <div className="vt-catalog-family-variants" role="group" aria-label="Loader variants">
-        <div className="vt-catalog-family-variant"><span>SPINNER</span><SubToolboxLoader level={level} variant="spinner" label="LOADING" /></div>
-        <div className="vt-catalog-family-variant"><span>PROGRESS</span><SubToolboxLoader level={level} variant="progress" label="LOADING" /></div>
-        <div className="vt-catalog-family-variant"><span>SPLIT</span><SubToolboxLoader level={level} variant="split" label="LOADING" /></div>
-        <div className="vt-catalog-family-variant"><span>ORBIT</span><SubToolboxLoader level={level} variant="orbit" label="LOADING" /></div>
-        <div className="vt-catalog-family-variant"><span>BARS</span><SubToolboxLoader level={level} variant="bars" label="LOADING" /></div>
-      </div>
-    )
-  }
-
-  if (name === "Tooltip Family") {
-    return (
-      <div className="vt-catalog-family-variants" role="group" aria-label="Tooltip variants">
-        <div className="vt-catalog-family-variant"><span>STANDARD</span><SubToolboxTooltip level={level} content="TOOLTIP" /></div>
-        <div className="vt-catalog-family-variant"><span>DARK</span><SubToolboxTooltip level={level} variant="dark" content="TOOLTIP" /></div>
-        <div className="vt-catalog-family-variant"><span>COLOR</span><SubToolboxTooltip level={level} variant="color" content="TOOLTIP" /></div>
-        <div className="vt-catalog-family-variant"><span>VISUAL KEY</span><SubToolboxLegendTooltip level={level} title="VISUAL KEY" triggerLabel="KEY" items={[{ label: "READY", detail: "Complete and available", color: "#3FEE56", icon: <Check /> }, { label: "IN REVIEW", detail: "Needs creator attention", color: "#FFDA47", icon: <Lightbulb /> }, { label: "MEDIA", detail: "Visual or asset reference", color: "#36E0F6", icon: <Image /> }]} /></div>
-      </div>
-    )
-  }
-
-  if (name === "Skeleton Family") {
-    return (
-      <div className="vt-catalog-family-variants" role="group" aria-label="Skeleton loading variants">
-        <div className="vt-catalog-family-variant"><span>LINES</span><SubToolboxSkeleton level={level} lines={3} /></div>
-        <div className="vt-catalog-family-variant"><span>COMPACT</span><SubToolboxSkeleton level={level} variant="compact" /></div>
-        <div className="vt-catalog-family-variant"><span>MEDIA 16:9</span><SubToolboxSkeleton level={level} variant="media" ratio="16:9" /></div>
-      </div>
-    )
-  }
-
-  if (name === "Data Stats Family") {
-    return (
-      <div className="vt-catalog-family-variants" role="group" aria-label="Data stats variants">
-        <div className="vt-catalog-family-variant"><span>STANDARD</span><SubToolboxDataStats level={level} label="TOTAL VIEWS" value="128,442" delta="+12.4%" variant="standard" /></div>
-        <div className="vt-catalog-family-variant"><span>TWO COLOR</span><SubToolboxDataStats level={level} label="VIEWS" value="128K" delta="+12%" variant="two-color" /></div>
-        <div className="vt-catalog-family-variant"><span>MONOCHROME</span><SubToolboxDataStats level={level} label="WATCH TIME" value="4.8K" delta="+8%" variant="monochrome" /></div>
-        <div className="vt-catalog-family-variant"><span>TINY</span><SubToolboxDataStats level={level} label="CTR" value="5.8%" variant="tiny" /></div>
-      </div>
-    )
-  }
-
-  if (name === "Scrollbar Family") {
-    return (
-      <div className="vt-catalog-family-variants" role="group" aria-label="Scrollbar orientations">
-        <div className="vt-catalog-family-variant"><span>HORIZONTAL</span><SubToolboxScrollbar level={level} orientation="horizontal" value={scrollPos} onValueChange={setScrollPos} /></div>
-        <div className="vt-catalog-family-variant"><span>VERTICAL</span><SubToolboxScrollbar level={level} orientation="vertical" value={scrollPos} onValueChange={setScrollPos} /></div>
-      </div>
-    )
-  }
-
-  if (name === "LED Family") {
-    return (
-      <div className="vt-catalog-family-variants" role="group" aria-label="LED indicator variants">
-        <div className="vt-catalog-family-variant"><span>STATUS LED</span><SubToolboxLed level={level} active label="ACTIVE" /></div>
-        <div className="vt-catalog-family-variant"><span>LED DOT</span><SubToolboxLedDot level={level} active label="Active status light" /></div>
-      </div>
-    )
-  }
-
-  if (name === "Toolbox Header Family") {
-    return (
-      <div className="vt-catalog-family-variants" role="group" aria-label="Toolbox and SubToolbox header variants">
-        <div className="vt-catalog-family-variant"><span>TOOLBOX RAIL</span><div style={{height:80,display:"flex"}}><ToolboxHeaderIconRail level="toolbox" backgroundColor="var(--pair-b)"><Settings2 /></ToolboxHeaderIconRail></div></div>
-        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX RAIL</span><div style={{height:56,display:"flex"}}><ToolboxHeaderIconRail level="subtoolbox" backgroundColor="var(--pair-b)"><Settings2 /></ToolboxHeaderIconRail></div></div>
-        <div className="vt-catalog-family-variant"><span>TOOLBOX TITLE</span><ToolboxHeaderTitle level="toolbox">VIDEO MANAGER</ToolboxHeaderTitle></div>
-        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX TITLE</span><ToolboxHeaderTitle level="subtoolbox">VIDEO DETAILS</ToolboxHeaderTitle></div>
-        <div className="vt-catalog-family-variant"><span>TOOLBOX HELP</span><div style={{height:80}}><ToolboxHeaderHelpButton level="toolbox" aria-label="Toolbox help" /></div></div>
-        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX HELP</span><div style={{height:56}}><ToolboxHeaderHelpButton level="subtoolbox" aria-label="Subtoolbox help" /></div></div>
-        <div className="vt-catalog-family-variant"><span>TOOLBOX COLLAPSE</span><div style={{height:80}}><ToolboxHeaderCollapseButton level="toolbox" open icon={<X />} aria-label="Collapse toolbox" /></div></div>
-        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX COLLAPSE</span><div style={{height:56}}><ToolboxHeaderCollapseButton level="subtoolbox" open icon={<X />} aria-label="Collapse subtoolbox" /></div></div>
-        <div className="vt-catalog-family-variant"><span>TOOLBOX TOGGLE</span><ToolboxHeaderToggle value={headerMode} onValueChange={setHeaderMode} options={[{value:"A",label:"ON"},{value:"B",label:"OFF"}]} /></div>
-        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX TOGGLE</span><ToolboxHeaderToggle level="subtoolbox" value={headerMode} onValueChange={setHeaderMode} options={[{value:"A",label:"A"},{value:"B",label:"B"}]} /></div>
-      </div>
-    )
-  }
-
-  return null
-}
-
-export interface StudioHubPrimitiveMigrationCatalogProps {
-  paletteIndex?: number
-}
-
-export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigrationCatalogProps> = ({
-  paletteIndex = 7,
-}) => (
-  <section
-    className="vt-primitive-migration-catalog"
-    aria-labelledby="studio-hub-primitive-migration-catalog-title"
-    data-palette-index={paletteIndex}
-    data-vt-catalog-track="definitive-component-library"
-  >
-    <header className="vt-complete-catalog-heading">
-      <div>
-        <Lightbulb />
-        <div>
-          <h2 id="studio-hub-primitive-migration-catalog-title">Definitive Component Library</h2>
-          <p>Confirmed canonical production primitives only. Each family is shown once at the standard component size; shared tokens define the uniform default style, while compound components retain their intrinsic geometry.</p>
-        </div>
-      </div>
-      <strong>{STUDIO_HUB_MIGRATED_FAMILIES.length} COMPONENT FAMILIES · ONE STANDARD SIZE EACH</strong>
-    </header>
-
-    <div className="vt-definitive-token-strip" aria-label="Confirmed default component tokens">
-      <span><b>HEIGHT</b> 44px</span>
-      <span><b>STROKE</b> 3px</span>
-      <span><b>RADIUS</b> 6px</span>
-      <span><b>SHADOW</b> FLAT · 0</span>
-      <span><b>TYPE</b> Inter · 1000</span>
-      <span><b>TEXT</b> Uppercase · −0.02em · 1 line</span>
-    </div>
-
-    <div className="vt-complete-catalog-grid">
-      {STUDIO_HUB_MIGRATED_FAMILIES.map((name, index) => (
-        <div
-          className="vt-primitive-migration-family"
-          key={name}
-          data-vt-family={name}
-          data-vt-migration-state="primitive"
-          data-vt-preview-mode={getCatalogPreviewGeometry(name).mode}
-          data-vt-preview-portrait={getCatalogPreviewGeometry(name).portraitStack ? "stack" : "grid"}
-        >
-          <SubToolbox
-            title={`${String(index + 1).padStart(2, "0")} ${name}`}
-            icon={<Settings2 />}
-            paletteIndex={paletteIndex + index}
-            collapsible
-            isOpenInitial
-            overflowVisible
-            contentClassName="p-3"
-          >
-            <div className="vt-catalog-levels">
-              {[STANDARD_LEVEL].map((level) => (
-                <DemoShell level={level} geometry={getCatalogPreviewGeometry(name)} key={level}>
-                  <PrimitiveMigrationControl name={name} level={level} />
-                </DemoShell>
-              ))}
-            </div>
-          </SubToolbox>
-        </div>
-      ))}
-    </div>
-  </section>
-)
-
-export default StudioHubPrimitiveMigrationCatalog
-
-  // Primitive track rule: only production primitives + shared CSS render here.
-  // Unmigrated hardcoded families remain exclusively in the frozen baseline.
 
   // Primitive track rule: only production primitives + shared CSS render here.
   // Unmigrated hardcoded families remain exclusively in the frozen baseline.
@@ -638,6 +484,7 @@ export default StudioHubPrimitiveMigrationCatalog
         <StudioDoubleSplitButton sizeVariant="standard" leftIcon={<ChevronLeft />} rightIcon={<ChevronRight />} aria-label="Double split button">DOUBLE</StudioDoubleSplitButton>
         <StudioTwoLineButton sizeVariant="standard" firstLine="PRIMARY" secondLine="SECOND LINE" aria-label="Two-line button" />
         <StudioSplitTwoLineButton sizeVariant="standard" icon={<ChevronLeft />} firstLine="PRIMARY" secondLine="SECOND LINE" aria-label="Two-line split button" />
+        <StudioSplitLeftButton sizeVariant="standard" icon={<ChevronLeft />} aria-label="Disabled split button" disabled>DISABLED</StudioSplitLeftButton>
         <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Split-left, split-right, double-split, two-line, and two-line split stay together in this family. The representative size is standard.</p></details>
       </div>
     )
@@ -1335,6 +1182,80 @@ export default StudioHubPrimitiveMigrationCatalog
     return <ToolboxHeaderToggle level="subtoolbox" value={headerMode} onValueChange={setHeaderMode} options={[{ value: "A", label: "A" }, { value: "B", label: "B" }]} />
   }
 
+
+  if (name === "Loader Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Loader variants">
+        <div className="vt-catalog-family-variant"><span>SPINNER</span><SubToolboxLoader level={level} variant="spinner" label="LOADING" /></div>
+        <div className="vt-catalog-family-variant"><span>PROGRESS</span><SubToolboxLoader level={level} variant="progress" label="LOADING" /></div>
+        <div className="vt-catalog-family-variant"><span>SPLIT</span><SubToolboxLoader level={level} variant="split" label="LOADING" /></div>
+        <div className="vt-catalog-family-variant"><span>ORBIT</span><SubToolboxLoader level={level} variant="orbit" label="LOADING" /></div>
+        <div className="vt-catalog-family-variant"><span>BARS</span><SubToolboxLoader level={level} variant="bars" label="LOADING" /></div>
+      </div>
+    )
+  }
+  if (name === "Tooltip Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Tooltip variants">
+        <div className="vt-catalog-family-variant"><span>STANDARD</span><SubToolboxTooltip level={level} content="TOOLTIP" /></div>
+        <div className="vt-catalog-family-variant"><span>DARK</span><SubToolboxTooltip level={level} variant="dark" content="TOOLTIP" /></div>
+        <div className="vt-catalog-family-variant"><span>COLOR</span><SubToolboxTooltip level={level} variant="color" content="TOOLTIP" /></div>
+        <div className="vt-catalog-family-variant"><span>VISUAL KEY</span><SubToolboxLegendTooltip level={level} title="VISUAL KEY" triggerLabel="KEY" items={[{ label: "READY", detail: "Complete and available", color: "#3FEE56", icon: <Check /> }, { label: "IN REVIEW", detail: "Needs creator attention", color: "#FFDA47", icon: <Lightbulb /> }, { label: "MEDIA", detail: "Visual or asset reference", color: "#36E0F6", icon: <Image /> }]} /></div>
+      </div>
+    )
+  }
+  if (name === "Skeleton Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Skeleton loading variants">
+        <div className="vt-catalog-family-variant"><span>LINES</span><SubToolboxSkeleton level={level} lines={3} /></div>
+        <div className="vt-catalog-family-variant"><span>COMPACT</span><SubToolboxSkeleton level={level} variant="compact" /></div>
+        <div className="vt-catalog-family-variant"><span>MEDIA 16:9</span><SubToolboxSkeleton level={level} variant="media" ratio="16:9" /></div>
+      </div>
+    )
+  }
+  if (name === "Data Stats Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Data stats variants">
+        <div className="vt-catalog-family-variant"><span>STANDARD</span><SubToolboxDataStats level={level} label="TOTAL VIEWS" value="128,442" delta="+12.4%" variant="standard" /></div>
+        <div className="vt-catalog-family-variant"><span>TWO COLOR</span><SubToolboxDataStats level={level} label="VIEWS" value="128K" delta="+12%" variant="two-color" /></div>
+        <div className="vt-catalog-family-variant"><span>MONOCHROME</span><SubToolboxDataStats level={level} label="WATCH TIME" value="4.8K" delta="+8%" variant="monochrome" /></div>
+        <div className="vt-catalog-family-variant"><span>TINY</span><SubToolboxDataStats level={level} label="CTR" value="5.8%" variant="tiny" /></div>
+      </div>
+    )
+  }
+  if (name === "Scrollbar Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Scrollbar orientations">
+        <div className="vt-catalog-family-variant"><span>HORIZONTAL</span><SubToolboxScrollbar level={level} orientation="horizontal" value={scrollPos} onValueChange={setScrollPos} /></div>
+        <div className="vt-catalog-family-variant"><span>VERTICAL</span><SubToolboxScrollbar level={level} orientation="vertical" value={scrollPos} onValueChange={setScrollPos} /></div>
+      </div>
+    )
+  }
+  if (name === "LED Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="LED indicator variants">
+        <div className="vt-catalog-family-variant"><span>STATUS LED</span><SubToolboxLed level={level} active label="ACTIVE" /></div>
+        <div className="vt-catalog-family-variant"><span>LED DOT</span><SubToolboxLedDot level={level} active label="Active status light" /></div>
+      </div>
+    )
+  }
+  if (name === "Toolbox Header Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Toolbox and SubToolbox header variants">
+        <div className="vt-catalog-family-variant"><span>TOOLBOX RAIL</span><div style={{height:80,display:"flex"}}><ToolboxHeaderIconRail level="toolbox" backgroundColor="var(--pair-b)"><Settings2 /></ToolboxHeaderIconRail></div></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX RAIL</span><div style={{height:56,display:"flex"}}><ToolboxHeaderIconRail level="subtoolbox" backgroundColor="var(--pair-b)"><Settings2 /></ToolboxHeaderIconRail></div></div>
+        <div className="vt-catalog-family-variant"><span>TOOLBOX TITLE</span><ToolboxHeaderTitle level="toolbox">VIDEO MANAGER</ToolboxHeaderTitle></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX TITLE</span><ToolboxHeaderTitle level="subtoolbox">VIDEO DETAILS</ToolboxHeaderTitle></div>
+        <div className="vt-catalog-family-variant"><span>TOOLBOX HELP</span><div style={{height:80}}><ToolboxHeaderHelpButton level="toolbox" aria-label="Toolbox help" /></div></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX HELP</span><div style={{height:56}}><ToolboxHeaderHelpButton level="subtoolbox" aria-label="Subtoolbox help" /></div></div>
+        <div className="vt-catalog-family-variant"><span>TOOLBOX COLLAPSE</span><div style={{height:80}}><ToolboxHeaderCollapseButton level="toolbox" open icon={<X />} aria-label="Collapse toolbox" /></div></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX COLLAPSE</span><div style={{height:56}}><ToolboxHeaderCollapseButton level="subtoolbox" open icon={<X />} aria-label="Collapse subtoolbox" /></div></div>
+        <div className="vt-catalog-family-variant"><span>TOOLBOX TOGGLE</span><ToolboxHeaderToggle value={headerMode} onValueChange={setHeaderMode} options={[{value:"A",label:"ON"},{value:"B",label:"OFF"}]} /></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX TOGGLE</span><ToolboxHeaderToggle level="subtoolbox" value={headerMode} onValueChange={setHeaderMode} options={[{value:"A",label:"A"},{value:"B",label:"B"}]} /></div>
+      </div>
+    )
+  }
+
   return null
 }
 
@@ -1365,10 +1286,10 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
     <div className="vt-definitive-token-strip" aria-label="Confirmed default component tokens">
       <span><b>HEIGHT</b> 44px</span>
       <span><b>STROKE</b> 3px</span>
-      <span><b>RADIUS</b> 8px</span>
-      <span><b>SHADOW</b> 4px</span>
+      <span><b>RADIUS</b> 6px</span>
+      <span><b>SHADOW</b> FLAT · 0</span>
       <span><b>TYPE</b> Inter · 1000</span>
-      <span><b>TEXT</b> Uppercase · −0.035em · 0.86 line</span>
+      <span><b>TEXT</b> Uppercase · −0.02em · 1 line</span>
     </div>
 
     <div className="vt-complete-catalog-grid">
