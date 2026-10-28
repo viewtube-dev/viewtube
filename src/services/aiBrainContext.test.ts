@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { syncLegacyAnswersToChannelContext } from "./aiBrainContext"
+import { syncChannelContextToLegacyAnswers, syncLegacyAnswersToChannelContext } from "./aiBrainContext"
 import type { ChannelContextProfile } from "../context/ChannelContextProfile"
 
 const profile: ChannelContextProfile = {
@@ -36,5 +36,27 @@ describe("Creator Brain intake convergence", () => {
   expect(result.identity.description).toBe("Updated description")
   expect(result.identity.niche).toBe("Historical explainers")
   expect(result.audience.idealViewer).toBe("Curious history fans")
+ })
+ it("projects canonical profile answers back to every legacy compatibility field", () => {
+  const result = syncChannelContextToLegacyAnswers({
+   channelDescription: "", mainTopicFocus: "", audienceDescription: "", successDefinition: "", mainYoutubeGoal: "",
+   recurringSeriesName: "", recurringSeriesDescription: "", biggestWeakness: "", mostSuccessfulVideo: "", signupReason: "",
+   whatNext: "", primaryGoal: "views", audienceNiche: "", oneMonthGoals: [], completedAt: null, deferredAt: null, updatedAt: null,
+   source: "system", version: 2, channelContext: profile,
+  }, {
+   ...profile,
+   identity: { ...profile.identity, description: "A channel about overlooked history" },
+   goals: { ...profile.goals, primaryGoal: "Grow subscribers", successDefinition: "Build a loyal audience" },
+   content: { ...profile.content, recurringSeriesName: "History in Motion", recurringSeriesDescription: "A turning-point documentary", biggestWeakness: "Consistency", mostSuccessfulVideo: "The Siege of Vienna" },
+   intelligence: { ...profile.intelligence, signupReason: "Improve strategy" },
+  })
+  expect(result.channelDescription).toBe("A channel about overlooked history")
+  expect(result.mainYoutubeGoal).toBe("Grow subscribers")
+  expect(result.successDefinition).toBe("Build a loyal audience")
+  expect(result.recurringSeriesName).toBe("History in Motion")
+  expect(result.recurringSeriesDescription).toBe("A turning-point documentary")
+  expect(result.biggestWeakness).toBe("Consistency")
+  expect(result.mostSuccessfulVideo).toBe("The Siege of Vienna")
+  expect(result.signupReason).toBe("Improve strategy")
  })
 })
