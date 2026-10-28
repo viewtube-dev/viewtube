@@ -833,7 +833,15 @@ const CreatorIntakeWizard: React.FC<{
  onSave: () => void
  onDefer: () => void
 }> = ({ context, onChange, saveStatus, onSave, onDefer }) => {
- const [questionIndex, setQuestionIndex] = useState(0)
+ const [questionIndex, setQuestionIndex] = useState(() => {
+  const firstUnanswered = CHANNEL_CONTEXT_QUESTIONS.findIndex((item) => {
+   const answer = readCreatorProfileField(context.channelContext, item.contextField)
+   if (Array.isArray(answer)) return answer.length === 0
+   if (item.contextField === "brand.creativity") return typeof answer !== "number" || answer < 1 || answer > 10
+   return answer === undefined || answer === null || String(answer).trim().length === 0
+  })
+  return firstUnanswered < 0 ? 0 : firstUnanswered
+ })
  const question = CHANNEL_CONTEXT_QUESTIONS[questionIndex]
  const lastQuestion = questionIndex === CHANNEL_CONTEXT_QUESTIONS.length - 1
  const rawValue = readCreatorProfileField(context.channelContext, question.contextField)
