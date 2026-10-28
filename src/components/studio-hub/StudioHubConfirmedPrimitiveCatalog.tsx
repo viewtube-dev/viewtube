@@ -316,7 +316,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   ]
   return (
     <Family
-      title="Representatives · One Standard Specimen Per Primitive"
+      title="Direct Imported Primitive Representatives · Standard"
       nonDefaultSettings={[
         "Each row contains one live production primitive at its standard size; examples are imported from their production owners rather than recreated as catalog-only lookalikes.",
         "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
@@ -684,32 +684,26 @@ const ConfirmedStudioDropdownFamily: React.FC = () => {
 }
 
 type ConfirmedCatalogFamilyName =
-  | "Switches / Toggles / Radio / Checkbox"
-  | "Buttons"
-  | "Badges"
-  | "Dropdowns"
   | "Text Fields"
+  | "Buttons & Badges"
+  | "Dropdowns"
+  | "Controls"
   | "Counters & Sliders"
   | "Modules & Frames"
-  | "Tags & Metadata"
-  | "Chat & Compositions"
-  | "Other Controls"
+  | "Compositions"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
-  "Switches / Toggles / Radio / Checkbox",
-  "Buttons",
-  "Badges",
-  "Dropdowns",
   "Text Fields",
+  "Buttons & Badges",
+  "Dropdowns",
+  "Controls",
   "Counters & Sliders",
   "Modules & Frames",
-  "Tags & Metadata",
-  "Chat & Compositions",
-  "Other Controls",
+  "Compositions",
 ]
 
 const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
-  if (!React.isValidElement(node)) return "Other Controls"
+  if (!React.isValidElement(node)) return "Compositions"
   const props = node.props as { title?: unknown }
   const title = typeof props.title === "string" ? props.title : ""
   const componentType = node.type as { displayName?: string; name?: string }
@@ -722,11 +716,11 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     || componentName === "CanonicalControlFamilies"
     || componentName === "CanonicalWordToggleFamily"
     || componentName === "ConfirmedStudioValueToggleFamily") {
-    return "Switches / Toggles / Radio / Checkbox"
+    return "Controls"
   }
 
   if (/Split-left Badge|Split-right Badge|Double-split Badge|Brain Status LED Badges|Status \/ navigation|StudioBrainStatusBadge|StudioBrainStatusIndicator|StudioLedBadgeTab|StudioSplitLeftBadge|StudioSplitRightBadge|StudioDoubleSplitBadge/.test(title)
-    || componentName === "CanonicalSplitBadgeFamily") return "Badges"
+    || componentName === "CanonicalSplitBadgeFamily") return "Buttons & Badges"
   if (/Studio Text Input|Studio Text Area|Studio Text Box|StudioTextInput|StudioTextArea|StudioTextBox|UsernameInput|SplitLeftInput|SearchInput|NumberInput|Split Text Input|StudioSplitTextInput/.test(title)) return "Text Fields"
   if (/StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|Double Split Slider|Side Counter|Left Word Counter|Slider/.test(title)
     || componentName === "ConfirmedStudioCounterFamily"
@@ -737,11 +731,11 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Dropdown/.test(title) || componentName === "ConfirmedStudioDropdownFamily") return "Dropdowns"
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton/.test(title)
     || componentName === "ConfirmedStudioButtonFamily"
-    || componentName === "ConfirmedStudioSplitButtonFamily") return "Buttons"
+    || componentName === "ConfirmedStudioSplitButtonFamily") return "Buttons & Badges"
   if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
-  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag/.test(title)) return "Tags & Metadata"
-  if (/Publishing Card|StudioChatResponseShell|StudioChatActionGroup|StudioResponseMetaRow/.test(title)) return "Chat & Compositions"
-  return "Other Controls"
+  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag/.test(title)) return "Compositions"
+  if (/Publishing Card|StudioChatResponseShell|StudioChatActionGroup|StudioResponseMetaRow/.test(title)) return "Compositions"
+  return "Compositions"
 }
 
 const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({ children }) => {
