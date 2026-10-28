@@ -678,35 +678,64 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 }
 
 type ConfirmedCatalogFamilyName =
-  | "Text Fields"
+  | "Switches / Toggles / Radio / Checkbox"
   | "Buttons"
-  | "Modules"
+  | "Badges"
   | "Dropdowns"
-  | "Controls"
-  | "Text Controls"
-  | "Compositions"
+  | "Text Fields"
+  | "Counters & Sliders"
+  | "Modules"
+  | "Tags & Metadata"
+  | "Chat & Compositions"
+  | "Other Controls"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
-  "Text Fields", "Buttons", "Modules", "Dropdowns",
-  "Controls", "Text Controls", "Compositions",
+  "Switches / Toggles / Radio / Checkbox",
+  "Buttons",
+  "Badges",
+  "Dropdowns",
+  "Text Fields",
+  "Counters & Sliders",
+  "Modules",
+  "Tags & Metadata",
+  "Chat & Compositions",
+  "Other Controls",
 ]
 
 const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
-  if (!React.isValidElement(node)) return "Controls"
+  if (!React.isValidElement(node)) return "Other Controls"
   const props = node.props as { title?: unknown }
   const title = typeof props.title === "string" ? props.title : ""
   const componentType = node.type as { displayName?: string; name?: string }
   const componentName = typeof node.type === "function"
     ? (componentType.displayName || componentType.name || "")
     : ""
-  if (/Studio Text Input|Studio Text Area|Studio Text Box|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
-  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
-  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules"
+
+  // Keep interactive choice primitives together, ahead of the broader button/control
+  // rules so toggles and check controls cannot drift into unrelated families.
+  if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle/.test(title)
+    || componentName === "CanonicalControlFamilies"
+    || componentName === "CanonicalWordToggleFamily"
+    || componentName === "ConfirmedStudioValueToggleFamily") {
+    return "Switches / Toggles / Radio / Checkbox"
+  }
+
+  if (/Split-left Badge|Split-right Badge|Double-split Badge|Brain Status LED Badges|Status \/ navigation|StudioBrainStatusBadge|StudioBrainStatusIndicator|StudioLedBadgeTab/.test(title)
+    || componentName === "CanonicalSplitBadgeFamily") return "Badges"
+  if (/Studio Text Input|Studio Text Area|Studio Text Box|UsernameInput|SplitLeftInput|SearchInput|NumberInput|Split Text Input/.test(title)) return "Text Fields"
+  if (/StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|Double Split Slider|Side Counter|Left Word Counter/.test(title)
+    || componentName === "ConfirmedStudioCounterFamily"
+    || componentName === "ConfirmedStudioDoubleSplitSliderFamily"
+    || componentName === "ConfirmedStudioSideCounterFamily"
+    || componentName === "ConfirmedStudioLeftWordCounterFamily"
+    || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Counters & Sliders"
   if (/Dropdown/.test(title)) return "Dropdowns"
-  if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftWordCounter|StudioLeftWordSlider|StudioChoice|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily" || componentName === "ConfirmedStudioLeftWordCounterFamily" || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Controls"
-  if (/Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|SpectrumTag|TagEditor|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
-  if (/Publishing Card|Brain Status LED Badges/.test(title)) return "Compositions"
-  return "Controls"
+  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton|StudioChoice/.test(title)
+    || componentName === "ConfirmedStudioButtonFamily") return "Buttons"
+  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|StudioCollapsingSplitModule|Response Meta Row/.test(title)) return "Modules"
+  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|Ranked Metadata Tag/.test(title)) return "Tags & Metadata"
+  if (/Publishing Card|Brain Status LED Badges|StudioChatResponseShell|StudioChatActionGroup|StudioResponseMetaRow/.test(title)) return "Chat & Compositions"
+  return "Other Controls"
 }
 
 const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({ children }) => {
