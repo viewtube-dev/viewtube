@@ -269,7 +269,7 @@ export const buildBrainContextPack = (input: {
    ].filter(Boolean).join("\\n"), 2600)
   : ""
  const creatorAnswerEvidence = controls.personalization && channelContextMatchesChannel && input.creatorAnswerEvidenceRecords?.length
-  ? clip(input.creatorAnswerEvidenceRecords.map(formatEvidenceRecordForPrompt).join("\\n"), 3200)
+  ? clip(input.creatorAnswerEvidenceRecords.map(formatEvidenceRecordForPrompt).join("\n"), 3200)
   : ""
  const knowledge = clip(buildRelevantNicheKnowledgeContext(input.nicheKnowledge || null, input.userText, 2200), 2200)
  const research = clip(input.currentResearch || "", 1800)
