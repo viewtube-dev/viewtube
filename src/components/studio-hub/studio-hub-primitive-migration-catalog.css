@@ -200,3 +200,50 @@
     grid-column: auto;
   }
 }
+
+
+/* The choice-control family is one full-width module. Individual controls are
+   grouped as specimens here; the canonical primitives retain all anatomy. */
+.vt-primitive-migration-catalog .vt-primitive-migration-family:has(.vt-catalog-choice-family) {
+  width: 100%;
+  min-width: 0;
+}
+.vt-primitive-migration-catalog .vt-catalog-demo:has(.vt-catalog-choice-family) {
+  width: 100%;
+  max-width: 100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-choice-family {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-primitive-migration-catalog .vt-catalog-choice-specimen {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+.vt-primitive-migration-catalog .vt-catalog-choice-specimen > span {
+  font: 1000 10px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-primitive-migration-catalog .vt-catalog-choice-specimen > :not(span) {
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  .vt-primitive-migration-catalog .vt-catalog-choice-family {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+@media (max-width: 360px) {
+  .vt-primitive-migration-catalog .vt-catalog-choice-family {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
