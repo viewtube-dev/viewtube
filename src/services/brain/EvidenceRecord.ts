@@ -122,6 +122,18 @@ export const formatEvidenceRecordForPrompt = (record: EvidenceRecord): string =>
  * Bound the single evidence array before both prompt rendering and quality grading.
  * The broker must render this array without a second, independent clipping step.
  */
+/**
+ * Return only records whose complete canonical prompt representation survived
+ * context-section selection. Matching IDs alone is unsafe: an ID can occur in
+ * another section, or at the start of an evidence line clipped by the budget.
+ */
+export const getEvidenceRecordsActuallyRendered = (
+ systemInstruction: string,
+ records: EvidenceRecord[],
+): EvidenceRecord[] => records.filter((record) =>
+ systemInstruction.includes(formatEvidenceRecordForPrompt(record)),
+)
+
 export const selectEvidenceRecordsForPrompt = (
  records: EvidenceRecord[],
  options: { maximumRecords?: number; maximumCharacters?: number } = {},
