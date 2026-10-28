@@ -37,6 +37,7 @@ import {
  dismissAiBrainIntake,
  loadAiBrainContext,
  saveAiBrainContext,
+ saveChannelContextProfile,
  shouldShowAiBrainIntake,
  type AiBrainContext,
 } from "../services/aiBrainContext"
@@ -828,9 +829,10 @@ const readCreatorProfileField = (profile: ChannelContextProfile, path: string): 
 const CreatorIntakeWizard: React.FC<{
  context: AiBrainContext
  onChange: (context: AiBrainContext) => void
+ saveStatus?: string
  onSave: () => void
  onDefer: () => void
-}> = ({ context, onChange, onSave, onDefer }) => {
+}> = ({ context, onChange, saveStatus, onSave, onDefer }) => {
  const [questionIndex, setQuestionIndex] = useState(0)
  const question = CHANNEL_CONTEXT_QUESTIONS[questionIndex]
  const lastQuestion = questionIndex === CHANNEL_CONTEXT_QUESTIONS.length - 1
@@ -911,7 +913,7 @@ const CreatorIntakeWizard: React.FC<{
     </label>
    </div>
    <div className="grid shrink-0 gap-3 border-t-[4px] border-black bg-white p-3 sm:grid-cols-[1fr_auto] sm:items-center">
-    <p className="text-xs font-bold leading-4 text-black/65">Answers are stored in the shared Creator Brain profile and labeled as creator-provided—not independently verified analytics.</p>
+    <p className="text-xs font-bold leading-4 text-black/65" role="status" aria-live="polite">{saveStatus || "Answers save to the shared local Creator Brain profile as you type; they are creator-provided, not independently verified analytics."}</p>
     <div className="grid grid-cols-2 gap-2 sm:flex">
      <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={onDefer}>SKIP FOR NOW</StudioButton>
      <StudioSplitLeftButton sizeVariant="compact" icon={<ChevronLeft aria-hidden="true" />} type="button" onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))} disabled={questionIndex === 0}>PREVIOUS</StudioSplitLeftButton>
