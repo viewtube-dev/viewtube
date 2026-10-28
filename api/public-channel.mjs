@@ -65,7 +65,7 @@ const decodeHtml = (value) => String(value || "")
   .replace(/&#x([\da-f]+);/gi, (_, number) => String.fromCodePoint(parseInt(number, 16)));
 
 const attribute = (tag, name) => {
-  const escaped = name.replace(/[.*+?^\${}()|[\]\\]/g, "\\$&");
+  const escaped = name;
   const match = String(tag).match(new RegExp("(?:^|\\s)" + escaped + "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))", "i"));
   return match ? (match[1] ?? match[2] ?? match[3] ?? "") : null;
 };
