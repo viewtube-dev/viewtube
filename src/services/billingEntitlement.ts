@@ -1,4 +1,5 @@
 import type { SubscriptionPlanId } from "./subscriptionPlans"
+import { getGeminiModel, normalizeGeminiModelId } from "./geminiModelGovernance"
 
 export type LaunchTier = "free" | "medium" | "large"
 export type CreditLedgerEntryType =
@@ -76,6 +77,7 @@ export interface MeterQuoteResponse {
  creditDebitEstimate: number
  canRun: boolean
  availableCredits: number
+ pricingKnown: boolean
 }
 
 export interface MeterChargeEvent {
@@ -181,18 +183,6 @@ export const TOPUP_DEFINITIONS: TopupDefinition[] = [
  { sku: "topup_25", priceUsd: 25, creditAmount: 50_000 },
 ]
 
-const GEMINI_MODEL_RATES_USD_PER_1K: Record<string, { input: number; output: number }> = {
- "gemini-3.1-pro-preview": { input: 0.0035, output: 0.0105 },
- "gemini-3.1-flash-lite": { input: 0.0001, output: 0.0003 },
- "gemini-3.1-flash-image-preview": { input: 0.001, output: 0.005 },
- "gemini-3-flash-preview": { input: 0.0004, output: 0.0012 },
- "gemini-3.1-pro": { input: 0.0035, output: 0.0105 },
- "gemini-3.1-flash": { input: 0.00035, output: 0.00105 },
- "gemini-3.0-pro": { input: 0.003, output: 0.009 },
- "gemini-3.0-flash": { input: 0.0003, output: 0.0009 },
-}
-
-
 const TIER_RANK: Record<LaunchTier, number> = { free: 0, medium: 1, large: 2 }
 const DEFAULT_AUTO_RECHARGE: AutoRechargeConfig = {
  enabled: false,
@@ -252,8 +242,10 @@ const getPlanDefinition = (planId: SubscriptionPlanId): PlanDefinition =>
  PLAN_DEFINITIONS.find((plan) => plan.id === planId) || PLAN_DEFINITIONS[0]
 
 const modelRatesFor = (modelId: string) => {
- const rates = GEMINI_MODEL_RATES_USD_PER_1K[modelId] || GEMINI_MODEL_RATES_USD_PER_1K["gemini-3.1-flash"]
- return rates
+ const pricing = getGeminiModel(normalizeGeminiModelId(modelId))?.pricing
+ return pricing
+  ? { input: pricing.inputUsdPer1k, output: pricing.outputUsdPer1k, known: true }
+  : { input: 0, output: 0, known: false }
 }
 
 const ensureCompatibilityFields = (state: EntitlementState): EntitlementState => ({
