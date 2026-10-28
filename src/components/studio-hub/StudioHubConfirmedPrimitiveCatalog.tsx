@@ -302,6 +302,7 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
   const [sideCounterValue, setSideCounterValue] = React.useState(36)
   const [sliderValue, setSliderValue] = React.useState(58)
   const [buttonPressed, setButtonPressed] = React.useState(false)
+  const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)
   const [arrowValue, setArrowValue] = React.useState("ONE")
   const options = ["ONE", "TWO", "THREE"] as const
   return (
@@ -318,7 +319,7 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
         <StudioComponentGridCell col={2} row={1}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSplitLeftButton">
             <span>SPLIT BUTTON</span>
-            <StudioSplitLeftButton sizeVariant="standard" icon={<Sparkles aria-hidden="true" />} aria-label="Grid specimen split button">SPLIT LEFT</StudioSplitLeftButton>
+            <StudioSplitLeftButton sizeVariant="standard" icon={<Sparkles aria-hidden="true" />} aria-label="Grid specimen split button" onClick={() => setSplitButtonPressed(value => !value)}>{splitButtonPressed ? "SELECTED" : "SPLIT LEFT"}</StudioSplitLeftButton>
           </div>
         </StudioComponentGridCell>
         <StudioComponentGridCell col={3} row={1}>
