@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import { BRAIN_CAPABILITY_REGISTRY, BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS } from "../services/brain/BrainCapabilityRegistry"
 import { getBrainCapabilityGroups } from "./BrainControlsPage"
 import { capabilityPromptFor } from "../components/brain/BrainCapabilityBrowser"
+import { isCreatorAnswerProfileEligible } from "../services/brain/CreatorAnswerEvidence"
 
 describe("Brain controls capability discovery", () => {
   it("surfaces every registered capability exactly once", () => {
@@ -18,6 +19,27 @@ describe("Brain controls capability discovery", () => {
       expect(prompt).toContain(capability.description)
       expect(prompt).toContain("Do not claim this capability ran")
     }
+  })
+
+  it("uses channel-scoped profiles without requiring a display name", () => {
+    expect(isCreatorAnswerProfileEligible({
+      channelScoped: true,
+      profileName: "",
+      activeChannelLabel: "My Channel",
+    })).toBe(true)
+  })
+
+  it("only accepts an unscoped legacy profile when its name matches the active channel", () => {
+    expect(isCreatorAnswerProfileEligible({
+      channelScoped: false,
+      profileName: "My Channel",
+      activeChannelLabel: "@my   channel",
+    })).toBe(true)
+    expect(isCreatorAnswerProfileEligible({
+      channelScoped: false,
+      profileName: "Another Channel",
+      activeChannelLabel: "My Channel",
+    })).toBe(false)
   })
 
   it("provides a discoverable title, description, intents, and invocation limit for every capability", () => {

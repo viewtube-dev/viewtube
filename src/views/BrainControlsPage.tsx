@@ -4,7 +4,7 @@ import { useBrain } from "../context/useBrain"
 import { CHANNEL_CONTEXT_QUESTIONS } from "../context/channelContextQuestions"
 import { scoreContext } from "../context/ChannelContextScoring"
 import { loadAiBrainContext } from "../services/aiBrainContext"
-import { buildCreatorAnswerEvidenceRecords } from "../services/brain/CreatorAnswerEvidence"
+import { buildCreatorAnswerEvidenceRecords, isCreatorAnswerProfileEligible } from "../services/brain/CreatorAnswerEvidence"
 import { BrainScopeSummary } from "../components/brain/BrainScopeSummary"
 import { BrainSettingsSwitch, BrainSettingsRange } from "../components/brain/BrainSettingsControls"
 import { BRAIN_USER_CONTROLS_STORAGE_KEY, DEFAULT_BRAIN_USER_CONTROLS, clearBrainUserControlOverride, readBrainUserControls, writeBrainUserControls, type BrainUserControls } from "../services/brain/BrainUserControls"
@@ -62,11 +62,22 @@ const Card: React.FC<{ title: string; eyebrow?: string; children: React.ReactNod
     </StudioTopSplitModule>
   )
 }
-export const getBrainCapabilityGroups = () => [
-  { title: "Channel intelligence", ids: ["channel-profile", "signal-anomaly-intelligence", "statistics-intelligence", "algorithm-intelligence", "analytics-diagnosis", "top-performer-mining"] },
-  { title: "Creator strategy", ids: ["audience-promise", "goal-coach", "daily-oracle", "journal-memory"] },
-  { title: "Discovery + publishing", ids: ["seo-opportunity", "niche-knowledge", "current-grounding", "content-generation"] },
-].map(group => ({ ...group, capabilities: group.ids.map(id => BRAIN_CAPABILITY_REGISTRY.find(item => item.id === id)).filter((item): item is BrainCapabilityDefinition => Boolean(item)) }))
+export const getBrainCapabilityGroups = () => {
+  const groups = [
+    { title: "Channel intelligence", ids: ["channel-profile", "signal-anomaly-intelligence", "statistics-intelligence", "algorithm-intelligence", "analytics-diagnosis", "top-performer-mining"] },
+    { title: "Creator strategy", ids: ["audience-promise", "goal-coach", "daily-oracle", "journal-memory"] },
+    { title: "Discovery + publishing", ids: ["seo-opportunity", "niche-knowledge", "current-grounding", "content-generation"] },
+  ].map(group => ({
+    title: group.title,
+    capabilities: group.ids
+      .map(id => BRAIN_CAPABILITY_REGISTRY.find(item => item.id === id))
+      .filter((item): item is BrainCapabilityDefinition => Boolean(item)),
+  }))
+  const assignedIds = new Set(groups.flatMap(group => group.capabilities.map(capability => capability.id)))
+  const unassigned = BRAIN_CAPABILITY_REGISTRY.filter(capability => !assignedIds.has(capability.id))
+  if (unassigned.length) groups.push({ title: "Other registered capabilities", capabilities: unassigned })
+  return groups.filter(group => group.capabilities.length > 0)
+}
 
 const readProfileValue = (profile: ReturnType<typeof loadAiBrainContext>["channelContext"], path: string): unknown =>
   path.split(".").reduce<unknown>((value, key) =>
@@ -74,9 +85,6 @@ const readProfileValue = (profile: ReturnType<typeof loadAiBrainContext>["channe
 const displayProfileValue = (value: unknown): string =>
   Array.isArray(value) ? value.map(item => String(item ?? "").trim()).filter(Boolean).join(", ")
     : value === undefined || value === null ? "" : String(value).trim()
-const normalizeChannelName = (value: unknown): string =>
-  String(value || "").trim().toLocaleLowerCase().replace(/\s+/g, " ")
-
 const CapabilityInventory: React.FC = () => {
   const navigate = useNavigate()
   const groups = getBrainCapabilityGroups()
@@ -107,12 +115,14 @@ export default function BrainControlsPage() {
   const { authState } = useBrain()
   const navigate = useNavigate()
   const channelId = authState.channelId || authState.channelHandle || null
+  const creatorProfileChannelId = authState.channelId || null
+  const activeChannelLabel = authState.channelName || null
   const [draft, setDraft] = useState(() => loadSettings(channelId))
   const [saved, setSaved] = useState(() => loadSettings(channelId))
   const [loadedScope, setLoadedScope] = useState(channelId)
   const [resetPending, setResetPending] = useState(false)
   const [status, setStatus] = useState("")
-  const [creatorProfile, setCreatorProfile] = useState(() => loadAiBrainContext())
+  const [creatorProfile, setCreatorProfile] = useState(() => loadAiBrainContext(creatorProfileChannelId, activeChannelLabel))
   const scopeReady = loadedScope === channelId
   const dirty = resetPending || brainSettingsDiffer(draft, saved)
   const reload = () => {
@@ -130,14 +140,15 @@ export default function BrainControlsPage() {
     return () => window.removeEventListener("beforeunload", warn)
   }, [dirty])
   useEffect(() => {
-    const refreshCreatorProfile = () => setCreatorProfile(loadAiBrainContext())
+    const refreshCreatorProfile = () => setCreatorProfile(loadAiBrainContext(creatorProfileChannelId, activeChannelLabel))
+    refreshCreatorProfile()
     window.addEventListener("vt_creator_channel_context_updated", refreshCreatorProfile)
     window.addEventListener("storage", refreshCreatorProfile)
     return () => {
       window.removeEventListener("vt_creator_channel_context_updated", refreshCreatorProfile)
       window.removeEventListener("storage", refreshCreatorProfile)
     }
-  }, [])
+  }, [creatorProfileChannelId, activeChannelLabel])
   const editPolicy = (key: keyof BrainUserControls, value: boolean) => { setDraft(old => ({ ...old, policy: { ...old.policy, [key]: value } })); setResetPending(false); setStatus("") }
   const editEngine = (key: keyof BrainEngineControls, value: boolean | number) => { setDraft(old => ({ ...old, engines: { ...old.engines, [key]: value } })); setResetPending(false); setStatus("") }
   const save = () => {
@@ -157,13 +168,16 @@ export default function BrainControlsPage() {
   const rows = (items: PolicyRow[]) => items.map(([key, label, detail]) => <BrainSettingsSwitch key={key} checked={draft.policy[key]} onChange={value => editPolicy(key, value)} label={label} detail={detail} />)
   const contextScore = scoreContext(creatorProfile.channelContext)
   const answeredQuestions = CHANNEL_CONTEXT_QUESTIONS.filter(question => Boolean(displayProfileValue(readProfileValue(creatorProfile.channelContext, question.contextField))))
-  const activeChannelName = normalizeChannelName(authState.channelName)
-  const profileChannelName = normalizeChannelName(creatorProfile.channelContext.identity.name)
-  const profileMatchesActiveChannel = Boolean(activeChannelName && profileChannelName && activeChannelName === profileChannelName)
-  // Match the runtime's channel scope for evidence IDs without changing the
-  // existing channel-settings scope used by the controls above.
-  const creatorEvidenceChannelId = authState.channelHandle || authState.channelId || null
-  const creatorAnswerEvidence = profileMatchesActiveChannel && creatorEvidenceChannelId
+  // Evidence IDs must use the same stable channel ID as BrainOrchestrator.
+  // A scoped profile is trusted by scope; only an unscoped legacy profile needs
+  // an exact active-channel label match before its answers can be used.
+  const creatorEvidenceChannelId = authState.channelId || null
+  const creatorProfileEligibleForScope = isCreatorAnswerProfileEligible({
+    channelScoped: Boolean(creatorEvidenceChannelId),
+    profileName: creatorProfile.channelContext.identity.name,
+    activeChannelLabel,
+  })
+  const creatorAnswerEvidence = creatorProfileEligibleForScope && creatorEvidenceChannelId
     ? buildCreatorAnswerEvidenceRecords(creatorProfile, creatorEvidenceChannelId)
     : []
   const evidenceIds = new Set(creatorAnswerEvidence.map(record => record.id))
@@ -208,9 +222,11 @@ export default function BrainControlsPage() {
             </div>
           </div>
           <p className="text-xs font-bold leading-5">
-            {profileMatchesActiveChannel
-              ? `${creatorAnswerEvidence.length} creator-answer evidence records are scoped to ${creatorProfile.channelContext.identity.name}. The Brain may use them as USER_PROVIDED context; they are not verified analytics.`
-              : "Your answers are kept in this browser. To attach them to this channel's evidence, set the exact active channel name in the creator profile first."}
+            {creatorProfileEligibleForScope && creatorEvidenceChannelId
+              ? `${creatorAnswerEvidence.length} creator-answer evidence records are scoped to ${creatorProfile.channelContext.identity.name || activeChannelLabel || "the selected channel"}. The Brain may use them as USER_PROVIDED context; they are not verified analytics.`
+              : creatorProfileEligibleForScope
+                ? "The legacy profile matches this channel, but a stable channel ID is required to create evidence references."
+                : "Your answers are kept in this browser. To attach them to this channel's evidence, set the exact active channel name in the creator profile first."}
           </p>
           <div className="grid gap-2 sm:grid-cols-2">
             <StudioButton type="button" sizeVariant="standard" tone="neutral" onClick={() => navigate("/settings?panel=ai")}>EDIT CREATOR PROFILE</StudioButton>
