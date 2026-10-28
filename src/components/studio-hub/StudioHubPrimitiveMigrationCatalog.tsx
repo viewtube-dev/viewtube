@@ -106,7 +106,7 @@ import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVaria
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
-import { StudioSplitLeftButton, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame, StudioSideCounter, StudioLeftWordCounter, StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSplitRightButton, StudioDoubleSplitButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame, StudioSideCounter, StudioCounter, StudioLeftCounter, StudioLeftWordCounter, StudioDoubleSplitSlider, StudioLeftWordSlider, StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -121,6 +121,8 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Destructive Button",
   "Square Icon Button",
   "Split Left Button",
+  "Studio Counter Family",
+  "Studio Slider Family",
   "Head Tail Action",
   "Split Menu",
   "Dropdown",
@@ -476,6 +478,37 @@ const PrimitiveMigrationControl: React.FC<{
   // Unmigrated hardcoded families remain exclusively in the frozen baseline.
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button") {
     return <PrimaryButton level={level} tone={name === "Destructive Button" ? "danger" : name === "Neutral Button" || name === "Secondary Button" ? "neutral" : "accent"}>{name.replace(" Button", "")}</PrimaryButton>
+  }
+  if (name === "Split Left Button") {
+    return (
+      <div className="vt-catalog-split-button-family">
+        <StudioSplitLeftButton sizeVariant="standard" icon={<ChevronLeft />} aria-label="Split left button">LEFT</StudioSplitLeftButton>
+        <StudioSplitRightButton sizeVariant="standard" icon={<ChevronRight />} aria-label="Split right button">RIGHT</StudioSplitRightButton>
+        <StudioDoubleSplitButton sizeVariant="standard" leftIcon={<ChevronLeft />} rightIcon={<ChevronRight />} aria-label="Double split button">DOUBLE</StudioDoubleSplitButton>
+        <StudioTwoLineButton sizeVariant="standard" aria-label="Two-line button"><span>PRIMARY</span><span>SECOND LINE</span></StudioTwoLineButton>
+        <StudioSplitTwoLineButton sizeVariant="standard" leftIcon={<ChevronLeft />} aria-label="Two-line split button"><span>PRIMARY</span><span>SECOND LINE</span></StudioSplitTwoLineButton>
+        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Split-left, split-right, double-split, two-line, and two-line split stay together in this family. The representative size is standard.</p></details>
+      </div>
+    )
+  }
+  if (name === "Studio Counter Family") {
+    return (
+      <div className="vt-catalog-counter-family">
+        <StudioSideCounter size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Side counter" />
+        <StudioCounter size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Double-side counter" />
+        <StudioLeftCounter size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Left counter" />
+        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Side, double-side, and left-rail counter layouts share the same counter typography, size tokens, hold behavior, and focus treatment.</p></details>
+      </div>
+    )
+  }
+  if (name === "Studio Slider Family") {
+    return (
+      <div className="vt-catalog-slider-family">
+        <StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Double split slider" />
+        <StudioLeftWordSlider size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Word slider" />
+        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Numeric and word-value sliders share the split rails and center track; primary is the active fill and secondary is reserved for split rails.</p></details>
+      </div>
+    )
   }
   if (name === "Square Icon Button") {
     return <SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Settings" />
