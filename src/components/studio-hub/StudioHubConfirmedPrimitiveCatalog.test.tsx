@@ -636,3 +636,71 @@ describe("confirmed primitive family section boundaries", () => {
     expect(root).toContain("</ConfirmedCatalogFamilyGroups>")
   })
 })
+
+
+describe("confirmed primitive representative coverage", () => {
+  it("renders a named production representative for each core Studio control and response primitive", () => {
+    const markup = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    for (const primitive of [
+      "StudioButton",
+      "StudioSplitLeftButton",
+      "StudioSplitRightButton",
+      "StudioDoubleSplitButton",
+      "StudioTwoLineButton",
+      "StudioSplitTwoLineButton",
+      "StudioActionButton",
+      "StudioIconButton",
+      "StudioSquareIconButton",
+      "StudioSquareIconButtonGroup",
+      "StudioCircleIconButton",
+      "StudioPlayPauseButton",
+      "StudioSwitch",
+      "StudioChoice",
+      "StudioRadio",
+      "StudioCheckbox",
+      "StudioXCheckbox",
+      "StudioNumberInput",
+      "StudioTextInput",
+      "StudioTextArea",
+      "StudioTextBox",
+      "StudioUsernameInput",
+      "StudioSplitLeftInput",
+      "StudioSplitTextInput",
+      "StudioDropdown",
+      "StudioLegendMultiDropdown",
+      "StudioSplitLeftDropdown",
+      "StudioArrowToggle",
+      "StudioBarToggle",
+      "StudioWordToggle",
+      "StudioVerticalWordToggle",
+      "StudioSideToggle",
+      "StudioDoubleSideToggle",
+      "StudioCounter",
+      "StudioSideCounter",
+      "StudioLeftCounter",
+      "StudioLeftWordCounter",
+      "StudioLeftWordSlider",
+      "StudioDoubleSplitSlider",
+      "StudioSplitLeftBadge",
+      "StudioSplitRightBadge",
+      "StudioDoubleSplitBadge",
+      "StudioSpectrumTag",
+      "StudioCloseableBadge",
+      "StudioBrainStatusBadge",
+      "StudioBrainStatusIndicator",
+      "StudioTagEditor",
+      "StudioUploadFrame",
+      "StudioInterModule",
+      "StudioTwoLineInterModule",
+      "StudioTopSplitModule",
+      "StudioCollapsingSplitModule",
+      "StudioCollapsingTwoLineModule",
+      "StudioSplitAccordion",
+      "StudioResponseMetaRow",
+      "StudioChatResponseShell",
+      "StudioChatActionGroup",
+    ]) {
+      expect(markup, primitive).toContain(`data-vt-library-component="${primitive}"`)
+    }
+  })
+})
