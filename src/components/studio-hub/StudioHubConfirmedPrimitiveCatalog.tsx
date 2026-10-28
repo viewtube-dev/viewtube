@@ -1571,7 +1571,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioSplitAccordion" tsx="src/studio-ui/primitives/StudioSplitAccordion.tsx" css="src/styles/studio-split-accordion.css" tokens="44px / 28px / 12px · secondary icon rails · primary content panels · buildTri staggered train" imports={["src/studio-ui/primitives/StudioSplitAccordion.tsx", "src/styles/studio-split-accordion.css", "src/components/studio-hub/StudioSplitAccordionCatalogSpecimens.tsx"]} />}
     >
-      <div className="w-full min-w-0 max-w-none" style={{ width: "100%", minWidth: 0, maxWidth: "none", gridTemplateColumns: "minmax(0, 1fr)" }}>
+      <div className="w-full min-w-0 max-w-none" data-vt-library-component="StudioSplitAccordion" style={{ width: "100%", minWidth: 0, maxWidth: "none", gridTemplateColumns: "minmax(0, 1fr)" }}>
         <StudioSplitAccordionCatalogSpecimens />
       </div>
     </Family>
@@ -1588,6 +1588,21 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <StudioInterModule className="vt-studio-inter-host--bleed" title="PROMPT LIBRARY" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen>
           <p className="vt-confirmed-intermodule-prompt">A standard-size intermodule keeps its content aligned to the shared parent edges.</p>
         </StudioInterModule>
+      </div>
+    </Family>
+    <Family
+      title="Two-Line InterModule · Standard"
+      nonDefaultSettings={[
+        "Dedicated production two-line header with title and description, separate from the single-line intermodule primitive.",
+        "Uses the same flush rails and shared Studio control tokens; content remains caller-owned.",
+      ]}
+      provenance={<Provenance primitive="StudioTwoLineInterModule" tsx="src/studio-ui/primitives/StudioInterModule.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · two-line title/description header · shared Studio control tokens" imports={["src/studio-ui/primitives/StudioInterModule.tsx"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineInterModule">
+        <span>TWO-LINE INTERMODULE · STANDARD</span>
+        <StudioTwoLineInterModule title="CHANNEL SETTINGS" description="Identity and publishing preferences" startIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard" defaultOpen>
+          <p className="vt-confirmed-intermodule-prompt">A two-line module keeps the title and its supporting description in the same production header.</p>
+        </StudioTwoLineInterModule>
       </div>
     </Family>
     <Family
