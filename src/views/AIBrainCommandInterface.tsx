@@ -970,6 +970,7 @@ const AIBrainCommandInterface: React.FC = () => {
   emitSignal,
  } = brainContext
  const [input, setInput] = useState("")
+ const [draftPromptOrigin, setDraftPromptOrigin] = useState<{ promptId: string; promptVersion: string; action: "edited" } | null>(null)
  useEffect(() => {
   const requestedDraft = searchParams.get("draft")
   if (!requestedDraft) return
@@ -1291,8 +1292,12 @@ const AIBrainCommandInterface: React.FC = () => {
   updateBrain({ activeProjectId: null })
  }
 
- const handleSend = async (override?: string) => {
+ const handleSend = async (
+  override?: string,
+  selectedPromptOrigin?: { promptId: string; promptVersion: string; action: "sent" | "edited" },
+) => {
   const userText = override ?? input
+  const promptOrigin = selectedPromptOrigin || (override === undefined ? draftPromptOrigin || undefined : undefined)
   if (!userText.trim() || busy || requestInFlightRef.current) return
   if (shouldShowAiBrainIntake(authState.isAuthenticated, channelId)) {
    setIntakeContext(loadAiBrainContext(channelId))
@@ -1302,6 +1307,7 @@ const AIBrainCommandInterface: React.FC = () => {
   requestInFlightRef.current = true
   shouldFollowConversationRef.current = true
   setInput("")
+  setDraftPromptOrigin(null)
   if (composerRef.current) composerRef.current.style.height = "52px"
   setBusy(true)
   const userMessage: ChatMessage = { id: makeMessageId(), role: "user", text: userText }
@@ -1364,6 +1370,7 @@ const AIBrainCommandInterface: React.FC = () => {
      plannedPublishAt: activeProject.publishDate || null,
     } : null,
     userText,
+    ...(promptOrigin ? { promptOrigin } : {}),
     snapshot: turnSnapshot,
     systemPrompt,
     growthContext: turnGrowthContext,
@@ -1397,6 +1404,7 @@ const AIBrainCommandInterface: React.FC = () => {
      answerModules: response.modules,
      metadata: {
       source: "local_fallback",
+      ...(promptOrigin ? { promptOrigin } : {}),
       evidencePackSnapshot: turnSnapshot.evidencePack,
       dataReadinessSnapshot: readinessForSnapshot(turnSnapshot),
       generationInputSnapshot: {
@@ -1976,8 +1984,8 @@ const AIBrainCommandInterface: React.FC = () => {
           summarize={promptCardSummary}
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
-          onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
+          onPrompt={(prompt, card) => { setPromptRailOpen(false); void handleSend(prompt, card ? { promptId: card.id, promptVersion: "1", action: "sent" } : undefined) }}
+          onEdit={(prompt, card) => { setPromptRailOpen(false); setInput(prompt); setDraftPromptOrigin(card ? { promptId: card.id, promptVersion: "1", action: "edited" } : null); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          /> : <BrainCapabilityBrowser
           snapshot={snapshot}
           controls={brainControls}
