@@ -1332,9 +1332,6 @@ const AIBrainCommandInterface: React.FC = () => {
     creatorGrowthContext: turnGrowthContext,
     channelContext: creatorContext.channelContext,
    })
-   const systemPrompt = creatorAnswerEvidence.length
-    ? `${baseSystemPrompt}\n\nCREATOR-PROVIDED PROFILE EVIDENCE\nThe following records are the creator's own saved answers. Treat them as USER_PROVIDED context, not independently verified analytics. Cite the evidence IDs when relying on an answer, preserve channel scope, and do not convert preferences or self-reports into measured performance claims.\n${creatorAnswerEvidence.map(formatEvidenceRecordForPrompt).join("\n")}`
-    : baseSystemPrompt
    const historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
    if (channelId) {
@@ -1488,10 +1485,8 @@ const AIBrainCommandInterface: React.FC = () => {
      creatorGrowthContext: turnGrowthContext,
      channelContext: creatorContext.channelContext,
     })
-    const systemPrompt = creatorAnswerEvidence.length
-     ? `${baseSystemPrompt}\n\nCREATOR-PROVIDED PROFILE EVIDENCE\nThe following records are the creator's own saved answers. Treat them as USER_PROVIDED context, not independently verified analytics. Cite the evidence IDs when relying on an answer, preserve channel scope, and do not convert preferences or self-reports into measured performance claims.\n${creatorAnswerEvidence.map(formatEvidenceRecordForPrompt).join("\n")}`
-     : baseSystemPrompt
-    const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
+        const systemPrompt = baseSystemPrompt
+const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
     const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
 
     const result = await runBrainTask({
