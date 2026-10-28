@@ -5,10 +5,9 @@ import { describe, expect, it, vi } from "vitest"
 import { SettingsAiPanel } from "./SettingsAiPanel"
 
 describe("SettingsAiPanel", () => {
-  it("keeps Brain and model controls compact and accepts the existing model selector", () => {
+  it("keeps Brain, model and API-key controls available without an entitlement gate", () => {
     const html = renderToStaticMarkup(
       <SettingsAiPanel
-        canViewGeminiKey={false}
         geminiKey=""
         showKey={false}
         settingsSaveStatus={null}
@@ -23,15 +22,16 @@ describe("SettingsAiPanel", () => {
     expect(html).toContain("Creator Brain")
     expect(html).toContain("Model Runtime")
     expect(html).toContain("Model Selector")
+    expect(html).toContain("API Key / BYOK")
+    expect(html).toContain("settings-gemini-key")
     expect(html).toContain('data-vt-control-level="l1"')
     expect(html).not.toContain("Model orchestration")
     expect(html).not.toContain("Bring your own key")
   })
 
-  it("reveals BYOK controls only when the existing entitlement rule allows it", () => {
+  it("renders BYOK controls and saved status without an account-plan prop", () => {
     const html = renderToStaticMarkup(
       <SettingsAiPanel
-        canViewGeminiKey
         geminiKey="secret"
         showKey={false}
         settingsSaveStatus="API key saved."
