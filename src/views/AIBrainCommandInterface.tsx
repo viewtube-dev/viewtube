@@ -1321,7 +1321,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    turnGrowthContext = buildCreatorGrowthContext(turnSnapshot, recentTurns, learningEntries)
    const creatorContext = loadAiBrainContext(channelId)
-   const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, authState.channelName || authState.channelHandle || null)
+   const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, turnSnapshot.channel.label)
    turnSnapshot = { ...turnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence) }
    const systemPrompt = buildAIBrainSystemPrompt({
     brain,
@@ -1465,7 +1465,7 @@ const AIBrainCommandInterface: React.FC = () => {
      ? { ...freshSnapshot, evidencePack: message.evidencePack }
      : freshSnapshot
     const creatorContext = loadAiBrainContext(channelId)
-    const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, authState.channelName || authState.channelHandle || null)
+    const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, turnSnapshot.channel.label)
     const turnSnapshot = { ...baseTurnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(baseTurnSnapshot.evidencePack, creatorAnswerEvidence) }
     const turnGrowthContext = buildCreatorGrowthContext(
      turnSnapshot,
@@ -1784,7 +1784,7 @@ const AIBrainCommandInterface: React.FC = () => {
   const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" }, channelId)
   setIntakeContext(saved)
   setIntakeSaveStatus("Unified creator profile saved locally.")
-  const intakeEvidenceRecords = buildScopedCreatorAnswerEvidenceRecords(saved, channelId, authState.channelName || authState.channelHandle || null)
+  const intakeEvidenceRecords = buildScopedCreatorAnswerEvidenceRecords(saved, channelId, snapshot.channel.label)
   updateBrain({
    creatorPreferences: {
     what_next_goal: saved.mainYoutubeGoal || saved.successDefinition || saved.whatNext,
