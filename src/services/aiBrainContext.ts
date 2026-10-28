@@ -324,8 +324,17 @@ export const saveAiBrainContext = (next: AiBrainContextInput, channelId?: string
  const previous = loadAiBrainContext(channelId, next.channelContext?.identity?.name)
  const updatedAt = new Date().toISOString()
  const migratedProfile = syncLegacyAnswersToChannelContext(previous.channelContext, previous, true)
- // Treat the structured profile as canonical, while projecting explicitly supplied legacy intake answers into it.
- const canonicalProfile = syncLegacyAnswersToChannelContext(next.channelContext || migratedProfile, next)
+ // Legacy intake surfaces sometimes submit a full stale profile object. Only project legacy
+ // fields that actually changed in this save, so unchanged aliases cannot overwrite newer
+ // canonical questionnaire answers.
+ const legacyPatch: AiBrainContextInput = {}
+ for (const question of AI_BRAIN_INTAKE_QUESTIONS) {
+  const key = question.id
+  if (!Object.prototype.hasOwnProperty.call(next, key)) continue
+  if (clean((next as Record<string, unknown>)[key]) === clean((previous as Record<string, unknown>)[key])) continue
+  ;(legacyPatch as Record<string, unknown>)[key] = (next as Record<string, unknown>)[key]
+ }
+ const canonicalProfile = syncLegacyAnswersToChannelContext(next.channelContext || migratedProfile, legacyPatch)
  const normalized = normalizeContext({
   ...previous,
   ...next,
