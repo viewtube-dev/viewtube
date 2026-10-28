@@ -39,7 +39,7 @@ describe("ChannelContextSettingsSection local persistence", () => {
 
     firstRender.unmount()
     render(<ChannelContextSettingsSection />)
-    expect(screen.getByLabelText(/What is your channel name\?/i)).toHaveValue("History Lab")
+    expect((screen.getByLabelText(/What is your channel name\\?/i) as HTMLInputElement).value).toBe("History Lab")
   })
 
   it("persists textarea answers and array answers through the same Creator Brain profile", () => {
