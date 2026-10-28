@@ -37,6 +37,8 @@ describe("subtoolbox design governance", () => {
     expect(families).toContain('"Switches / Toggles / Radio / Checkbox",');
     expect(families).toContain('"Studio Counter Family",');
     expect(families).toContain('"Studio Slider Family",');
+    expect(families).toContain('"Studio Dropdown Family",');
+    for (const grouped of ['"Dropdown",', '"Top Title Dropdown",', '"Legend Multi Dropdown",', '"Tone / Tension / Cinematic Dropdown",']) expect(families).not.toContain(grouped);
     expect(styles).not.toContain("!important");
     expect(styles).toContain("--vt-subtoolbox-shell-box-shadow: none;");
     expect(styles).toContain("--vt-subtoolbox-content-border: 0;");
