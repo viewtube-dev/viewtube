@@ -5,7 +5,7 @@ import type { StudioControlSize } from "../tokens"
 export type StudioSplitTextInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> & {
   sizeVariant?: StudioControlSize
   /** Temporary geometry selector for comparing vertical alignment and clipping behavior. */
-  geometryVariant?: "current" | "padding-reference" | "half-vertical-padding" | "username-height"
+  geometryVariant?: "current" | "half-vertical-padding" | "username-height"
   split?: "left" | "right" | "double"
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
