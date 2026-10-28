@@ -1,5 +1,6 @@
 import { isEvidenceRecord, type EvidenceRecord } from "./EvidenceRecord"
 import {
+ fingerprintBrainEvidenceRecords,
  isBrainEvidenceRecordQualityInSync,
  type BrainEvidenceRecordQualityReport,
 } from "./BrainEvidenceQuality"
@@ -28,6 +29,28 @@ export const getPromptEvidenceIntegrityStatus = (
  const records = rawRecords as EvidenceRecord[]
  const ids = rawIds as string[]
  if (records.length !== ids.length || !records.every((record, index) => record.id === ids[index])) return "mismatch"
+
+ // Creator-profile answers are also rendered into the prompt. Verify their
+ // content fingerprint separately so a valid analytics manifest cannot mask
+ // changed or missing creator-answer evidence.
+ const creatorEvidenceFields = [
+  "creatorAnswerEvidenceRecords",
+  "creatorAnswerEvidenceRecordIds",
+  "creatorAnswerEvidenceFingerprint",
+ ]
+ const hasCreatorEvidenceManifest = creatorEvidenceFields.some((field) => Object.prototype.hasOwnProperty.call(metadata, field))
+ if (hasCreatorEvidenceManifest) {
+  if (!Array.isArray(metadata.creatorAnswerEvidenceRecords)
+   || !Array.isArray(metadata.creatorAnswerEvidenceRecordIds)
+   || typeof metadata.creatorAnswerEvidenceFingerprint !== "string") return "mismatch"
+  const creatorRecords = metadata.creatorAnswerEvidenceRecords as unknown[]
+  const creatorIds = metadata.creatorAnswerEvidenceRecordIds as unknown[]
+  if (!creatorRecords.every(isEvidenceRecord)
+   || !creatorIds.every((id) => typeof id === "string")
+   || creatorRecords.length !== creatorIds.length
+   || !creatorRecords.every((record, index) => record.id === creatorIds[index])) return "mismatch"
+  if (fingerprintBrainEvidenceRecords(creatorRecords as EvidenceRecord[]) !== metadata.creatorAnswerEvidenceFingerprint) return "mismatch"
+ }
 
  // Empty prompt evidence is a valid, explicit selection. There is no record
  // payload to fingerprint, so the manifest and empty record list are sufficient.
