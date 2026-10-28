@@ -5413,7 +5413,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 /* Studio value-toggle family: canonical primitive styles; no motion or shadow. */
 .vt-studio-value-toggle {
   --vt-toggle-text: #000;
-  --vt-toggle-fill: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   --vt-toggle-icon: #000;
   --vt-toggle-icon-fill: transparent;
   display: flex; align-items: stretch; gap: 0; min-width: 0; width: 100%; box-sizing: border-box;
@@ -6270,6 +6270,26 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
   outline-offset: 0;
 }
 \n
+/* Shared slider contract: the active track/center stays primary; split rails are secondary. */
+[data-vt-studio-slider] {
+  background-color: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+}
+[data-vt-studio-slider] input[type="range"] {
+  --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  accent-color: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+}
+[data-vt-studio-slider] input[type="range"]::-moz-range-progress {
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+}
+[data-vt-studio-slider] [data-vt-studio-split-rail],
+.vt-studio-value-toggle__double-side [data-vt-studio-split-rail],
+.vt-studio-side-counter [data-vt-studio-split-rail] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-value-toggle[data-vt-studio-value-toggle="side"] {
+  --vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+}
+
 /* Geometry invariants shared by the counter and split-control families. */
 .vt-studio-counter__value,
 .vt-studio-side-counter__value {
