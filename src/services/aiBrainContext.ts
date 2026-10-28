@@ -260,7 +260,7 @@ export const loadAiBrainContext = (
  if (legacy && sameChannelLabel(legacy.channelContext.identity.name, label)) {
   try {
    localStorage.setItem(key, JSON.stringify(legacy))
-   localStorage.setItem(scopedKey(COMPLETED_KEY, channelId), legacy.completedAt ? "true" : "false")
+   localStorage.setItem(scopedKey(COMPLETED_KEY, channelId), legacy.completedAt || localStorage.getItem(COMPLETED_KEY) === "true" ? "true" : "false")
   } catch {
    // Keep the original legacy record untouched if browser storage is unavailable.
   }
