@@ -1496,16 +1496,17 @@ describe("StudioSplitTextInput transparent-panel composition", () => {
 
 
 describe("canonical detached Studio dropdown menu", () => {
-  it("keeps the open menu separated, fully rounded, and white behind unselected rows", () => {
+  it("keeps the open menu detached, top-rounded, and white behind unselected rows", () => {
     const css = readStudioControlCss();
-    const start = css.lastIndexOf("/* Canonical detached dropdown contract.");
+    const start = css.lastIndexOf("/* Canonical open dropdown menu contract");
     expect(start).toBeGreaterThanOrEqual(0);
     const contract = css.slice(start);
-    expect(contract).toContain("top: calc(100% + 4px) !important");
-    expect(contract).toContain("border-radius: var(--vt-studio-control-radius, 6px) !important");
-    expect(contract).toContain("background: #fff !important");
+    expect(contract).toContain("top: calc(100% + 8px)");
+    expect(contract).toContain("border-radius: var(--vt-studio-control-radius, 6px) var(--vt-studio-control-radius, 6px) 0 0");
+    expect(contract).toContain("background: #fff");
     expect(contract).toContain(".vt-studio-dropdown-menu > .vt-studio-dropdown-option");
-    expect(contract).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important");
+    expect(contract).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))");
+    expect(contract).toContain("margin-bottom: 3px");
   });
 });
 
