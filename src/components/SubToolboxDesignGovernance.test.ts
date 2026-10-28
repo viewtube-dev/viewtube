@@ -870,5 +870,8 @@ describe("Studio control family grouping and split-slider palette defaults", () 
     expect(slider).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
     expect(slider).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
     expect(slider).not.toContain("color-mix(in srgb, var(--vt-studio-slider-left-fill) 50%, #fff)");
+    const valueRule = slider.match(/\\.vt-studio-double-split-slider \\.vt-studio-double-split-slider__value \\{[^}]*\\}/s)?.[0] ?? "";
+    expect(valueRule).toContain("color: #000;");
+    expect(valueRule).toContain("font-size: var(--vt-studio-control-font-size, 38px);");
   });
 });
