@@ -92,7 +92,7 @@ test("double-side divider is centered and the confirmed catalog mixes compact an
 });
 
 test("bar toggle uses adaptive width counts, proportional fill, and size-specific borderless bars", () => {
-  assert.match(toggles, /function barCountFromWidth\\(widthPx: number, size: string\\)/);
+  assert.match(toggles, /function barCountFromWidth\(widthPx: number, size: string\)/);
   assert.match(toggles, /barCountFromWidth\(width, size\)/);
   assert.match(toggles, /Math\.floor\(\(inner \+ metrics\.gap\) \/ \(metrics\.bar \+ metrics\.gap\)\)/);
   assert.match(toggles, /Math\.max\(4, Math\.min\(40, count \|\| 4\)\)/);
@@ -153,7 +153,7 @@ test("top direct-representative module covers the full explicitly exported contr
     "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
     "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioTagEditor", "StudioUploadFrame",
   ]) {
-    assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"\\b`), `${primitive} needs a direct top-module specimen`);
+    assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"`), `${primitive} needs a direct top-module specimen`);
   }
   assert.doesNotMatch(representative, /data-vt-library-component="(?:StudioCollapsingSplitModule|StudioCollapsingTwoLineModule|StudioInterModule|StudioSplitAccordion)"/);
 });
