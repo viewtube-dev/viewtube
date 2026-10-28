@@ -115,25 +115,13 @@ const STANDARD_LEVEL: StudioHubComponentLevel = "l1"
 
 export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Switches / Toggles / Radio / Checkbox",
-  "Primary Button",
-  "Secondary Button",
-  "Neutral Button",
-  "Destructive Button",
-  "Square Icon Button",
-  "Split Left Button",
-  "Head Tail Action",
-  "Split Menu",
-  "Dropdown",
-  "Top Title Dropdown",
-  "Legend Multi Dropdown",
-  "Tone / Tension / Cinematic Dropdown",
+  "Buttons",
+  "Dropdowns & Menus",
   "Nested Square Choice",
   "Tag-Adjacent Split Action Row",
   "Multi-Section Script Bar",
   "Ranked Metadata Tag",
   "Education Timestamp Notes",
-  "Select Menu",
-  "Context Menu",
   "Studio Text Input",
   "Studio Text Area",
   "Text Input",
@@ -208,8 +196,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Vault Audio Asset",
   "Vault Document Asset",
   "Tree View",
-  "Disabled Button",
-  "Disabled Split Button",
   "Two Color Data Stats",
   "Monochrome Data Stats",
   "Tiny Data Stats",
@@ -468,6 +454,36 @@ const PrimitiveMigrationControl: React.FC<{
           <span>CONTROLLER SWITCH</span>
           <SubToolboxControllerSwitch level={level} pressed={controllerOn} onClick={() => setControllerOn((value) => !value)} />
         </div>
+      </div>
+    )
+  }
+
+  if (name === "Buttons") {
+    return (
+      <div className="vt-catalog-family-variants vt-catalog-button-family" role="group" aria-label="Button primitive family">
+        <div className="vt-catalog-family-variant"><span>PRIMARY</span><PrimaryButton level={level}>SAVE</PrimaryButton></div>
+        <div className="vt-catalog-family-variant"><span>SECONDARY</span><PrimaryButton level={level} tone="neutral">CANCEL</PrimaryButton></div>
+        <div className="vt-catalog-family-variant"><span>DESTRUCTIVE</span><PrimaryButton level={level} tone="danger">DELETE</PrimaryButton></div>
+        <div className="vt-catalog-family-variant"><span>SPLIT LEFT</span><StudioSplitLeftButton heightVariant="44" icon={<Settings2 />}>SETTINGS</StudioSplitLeftButton></div>
+        <div className="vt-catalog-family-variant"><span>SQUARE ICON</span><SubToolboxIconButton level={level} icon={<Settings2 />} ariaLabel="Button settings" /></div>
+        <div className="vt-catalog-family-variant"><span>DISABLED</span><PrimaryButton level={level} disabled>UNAVAILABLE</PrimaryButton></div>
+        <div className="vt-catalog-family-variant"><span>DISABLED SPLIT</span><StudioSplitLeftButton heightVariant="44" icon={<Settings2 />} disabled>UNAVAILABLE</StudioSplitLeftButton></div>
+        <p className="vt-catalog-family-note">One standard-size representative family. Tone, icon, split-rail, and disabled states are variations—not separate library representatives.</p>
+      </div>
+    )
+  }
+  if (name === "Dropdowns & Menus") {
+    const options = ["OPTION 1", "OPTION 2", "OPTION 3"].map((option) => ({ value: option, label: option }))
+    return (
+      <div className="vt-catalog-family-variants vt-catalog-dropdown-family" role="group" aria-label="Dropdown and menu primitive family">
+        <div className="vt-catalog-family-variant"><span>SIMPLE DROPDOWN</span><SubToolboxMenu level={level} variant="dropdown" value={menuChoice} options={options} onValueChange={setMenuChoice} triggerLabel="MENU" triggerIcon={<MoreHorizontal />} chevronIcon={<ChevronDown />} ariaLabel="Simple dropdown" /></div>
+        <div className="vt-catalog-family-variant"><span>SPLIT MENU</span><SubToolboxSplitDropdown level={level} value={menuChoice} options={options.map((option) => ({...option, icon:<Menu />}))} onChange={setMenuChoice} icon={<Menu />} chevron={<ChevronDown />} ariaLabel="Split menu" /></div>
+        <div className="vt-catalog-family-variant"><span>TOP-TITLE DROPDOWN</span><SubToolboxTopTitleDropdown level={level} label="PRIVACY" value={menuChoice} options={["PUBLIC","UNLISTED","PRIVATE"].map((option) => ({value:option,label:option}))} onValueChange={setMenuChoice} ariaLabel="Publishing dropdown" /></div>
+        <div className="vt-catalog-family-variant"><span>MULTI-SELECT</span><StudioLegendMultiDropdown level={level} label="FILTERS" options={["VIDEOS","SHORTS","LIVE"].map((option) => ({value:option,label:option}))} value={legendFilters} onChange={setLegendFilters} sizeVariant="standard" placeholder="ANY" clearLabel="CLEAR ALL" /></div>
+        <div className="vt-catalog-family-variant"><span>SELECT MENU</span><SubToolboxMenu level={level} variant="select" value={menuChoice} options={options} onValueChange={setMenuChoice} triggerLabel={menuChoice} ariaLabel="Select menu" /></div>
+        <div className="vt-catalog-family-variant"><span>CONTEXT MENU</span><SubToolboxMenu level={level} variant="context" value={menuChoice} options={options} onValueChange={setMenuChoice} triggerLabel="MORE" ariaLabel="Context menu" /></div>
+        <div className="vt-catalog-family-variant"><span>TONE / STYLE</span><SubToolboxDropdownControl label="TONE / TENSION / STYLE" value={toneChoice} options={["TONE","TENSION","CINEMATIC"]} onChange={setToneChoice} tone="pink" className="w-full" /></div>
+        <p className="vt-catalog-family-note">Menu trigger, split trigger, title-label, multi-select, select, context, and tone variants stay together here. Each uses its production primitive.</p>
       </div>
     )
   }
