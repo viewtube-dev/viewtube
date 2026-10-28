@@ -727,11 +727,13 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
     <div className="vt-confirmed-catalog">
       {defaults}
       <div className="vt-confirmed-family-grid">
-        {CONFIRMED_CATALOG_FAMILIES.map((family) => (
-          <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group">
-            {grouped.get(family)}
-          </ConfirmedFamilyModule>
-        ))}
+        {CONFIRMED_CATALOG_FAMILIES
+          .filter((family) => (grouped.get(family)?.length ?? 0) > 0)
+          .map((family) => (
+            <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group">
+              {grouped.get(family)}
+            </ConfirmedFamilyModule>
+          ))}
       </div>
     </div>
   )
