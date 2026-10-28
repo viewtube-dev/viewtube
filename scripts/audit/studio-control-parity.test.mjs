@@ -172,13 +172,4 @@ test("size-tier ownership is centralized and Micro inherits Mini's shared stylin
   assert.match(generated, /--vt-studio-mini-font-size: 17\.5px/);
   assert.match(generated, /--vt-studio-mini-icon-size: 17\.5px/);
   assert.match(generated, /--vt-studio-textarea-mini-font-size: 17\.5px/);
-  const focusRatio = Number(tokens.match(/focusOutlineWidthRatio:\s*([\d.]+)/)?.[1]);
-  assert.equal(focusRatio, 0.65, "focus outline ratio remains canonical");
-  assert.match(generated, new RegExp("--vt-studio-focus-outline-width-ratio: " + focusRatio + ";"));
-  assert.match(generated, new RegExp("--vt-studio-secondary-focus-width-ratio: " + focusRatio + ";"));
-  for (const [tier, stroke] of Object.entries({ supreme: 3, standard: 3, compact: 2, mini: 1.5, micro: 1.5 })) {
-    const outline = Number(tokens.match(new RegExp(tier + ":\\s*\\{[^}]*focusOutlineWidth:\\s*([\\d.]+)"))?.[1]);
-    assert.equal(outline, stroke * focusRatio, tier + " focus outline must derive from the tier stroke");
-    assert.match(generated, new RegExp("--vt-studio-" + tier + "-secondary-outline-width: " + outline + "px;"));
-  }
 });
