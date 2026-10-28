@@ -1,7 +1,6 @@
 import React from "react"
 import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
 import { MiniSubToolbox, SubToolbox, SubToolboxDropdownControl } from "../Toolbox"
-import { StudioSideCounter, StudioLeftWordCounter } from "../../studio-ui/primitives/StudioControls"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
   SubToolboxAlert,
@@ -103,7 +102,7 @@ import {
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
-import { StudioSplitLeftButton, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame, StudioSideCounter, StudioLeftWordCounter } from "../../studio-ui/primitives/StudioControls"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
