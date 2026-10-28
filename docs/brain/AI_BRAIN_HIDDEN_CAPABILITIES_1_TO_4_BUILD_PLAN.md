@@ -36,6 +36,8 @@ The first implementation slice is committed on the target branch:
 
 This does not complete capability 2. Remaining work includes verifying that evidence displayed in each answer is the exact turn-bound model input across normal, fallback, retry, and restored turns; exercising evidence links and quality/missingness UI; and running focused tests, typecheck/build, and browser checks. The current execution environment could not reach GitHub for a local checkout, so the new test suite has not been executed here.
 
+Follow-up slice — saved evidence quality parity: `BrainOrchestrator` now fingerprints the exact prompt-rendered record subset when persisting normal and orchestration-fallback turns, rather than attaching the pre-render selection's quality report to a potentially smaller rendered set. Added a regression case proving a report for a larger set is rejected and a report rebuilt for the persisted subset verifies. This code is committed but has not been run locally; CI/test confirmation is still required.
+
 **Task 0.1**
 - Read the linked Brain plans and [Studio hierarchy](../ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md) and [Component Library source of truth](../ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md).
 - Trace context → evidence → capability → model → result UI.
