@@ -279,10 +279,14 @@ export const syncLegacyAnswersToChannelContext = (
 export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext => {
  const previous = loadAiBrainContext()
  const updatedAt = new Date().toISOString()
- const payload = normalizeContext({
+ const canonicalProfile = next.channelContext || syncLegacyAnswersToChannelContext(
+  previous.channelContext,
+  { ...previous, ...next } as AiBrainContextInput,
+ )
+ const normalized = normalizeContext({
   ...previous,
   ...next,
-  channelContext: syncLegacyAnswersToChannelContext(next.channelContext || previous.channelContext, next),
+  channelContext: canonicalProfile,
   whatNext: clean(next.whatNext ?? next.mainYoutubeGoal ?? previous.whatNext),
   primaryGoal: normalizePrimaryGoal(next.primaryGoal || previous.primaryGoal),
   audienceNiche: clean(next.audienceNiche ?? next.mainTopicFocus ?? previous.audienceNiche),
@@ -293,6 +297,7 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
   source: next.source || "wizard",
   version: 2,
  })
+ const payload = syncChannelContextToLegacyAnswers(normalized, canonicalProfile)
  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
  localStorage.setItem(COMPLETED_KEY, "true")
  localStorage.removeItem(DISMISSED_KEY)
