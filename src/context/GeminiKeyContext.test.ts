@@ -24,9 +24,11 @@ describe("Gemini API-key validation contract", () => {
   });
 
   it("maps provider failures to creator-safe messages instead of displaying raw SDK errors", () => {
-    expect(source).toContain("Gemini could not validate this API key.");
-    expect(source).toContain("Google could not load the Gemini model catalog");
-    expect(source).toContain("Gemini connection failed.");
+    expect(source).toContain("Key saved locally, but Google could not verify it.");
+    expect(source).toContain("Key saved locally, but Google denied verification.");
+    expect(source).toContain("Key saved locally. Google could not verify the connection right now");
+    expect(source).toContain("setApiKey(trimmedKey);");
+    expect(source).toContain("return true;");
     expect(source).not.toContain("setValidationError(error.message");
   });
 });
