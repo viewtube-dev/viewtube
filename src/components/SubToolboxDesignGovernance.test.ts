@@ -889,3 +889,24 @@ describe("Studio primary defaults and shared split geometry", () => {
     expect(sharedSlider).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
   });
 });
+
+
+describe("confirmed primitive library organization", () => {
+  it("declares the family groups in a deliberate top-down order", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const familyList = catalog.slice(catalog.indexOf("const CONFIRMED_CATALOG_FAMILIES"), catalog.indexOf("const classifyConfirmedCatalogItem"));
+    expect(familyList.indexOf('"Switches / Toggles / Radio / Checkbox"')).toBeLessThan(familyList.indexOf('"Buttons"'));
+    expect(familyList).toContain('"Badges"');
+    expect(familyList).toContain('"Counters & Sliders"');
+    expect(familyList).toContain('"Tags & Metadata"');
+    expect(familyList).toContain('"Chat & Compositions"');
+  });
+
+  it("routes toggle and choice families before broad button/control fallbacks", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const classify = catalog.slice(catalog.indexOf("const classifyConfirmedCatalogItem"), catalog.indexOf("const ConfirmedCatalogFamilyGroups"));
+    expect(classify.indexOf('return "Switches / Toggles / Radio / Checkbox"')).toBeLessThan(classify.indexOf("if (/Button ·"));
+    expect(classify).toContain('return "Counters & Sliders"');
+    expect(classify).toContain('return "Badges"');
+  });
+});
