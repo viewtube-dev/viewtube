@@ -678,6 +678,23 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  questionTrace.recordPromptVersion("outputSchema", BRAIN_OUTPUT_SCHEMA_VERSION)
  let renderedEvidenceRecords = [] as typeof promptEvidenceRecords
  let renderedCreatorAnswerEvidenceRecords = [] as typeof creatorAnswerEvidenceRecords
+ const originalModelInputSnapshot = pending.metadata?.originalModelInputSnapshot as {
+  systemInstruction?: string
+  history?: any[]
+  userText?: string
+  evidenceRecords?: EvidenceRecord[]
+  creatorAnswerEvidenceRecords?: EvidenceRecord[]
+ } | undefined
+ const restoreOriginalModelInput = Boolean(
+  input.retryTurnId
+  && input.retryGenerationOnly
+  && input.retryEvidenceMode !== "fresh"
+  && retryContextContinuity === "original_input_restored"
+  && originalModelInputSnapshot
+  && typeof originalModelInputSnapshot.systemInstruction === "string"
+ )
+ let modelSystemInstruction: string | undefined
+ let modelHistory: any[] | undefined
  try {
   if (!input.retryGenerationOnly && capabilities.some((capability) => capability.id === "niche-knowledge")) {
    nicheKnowledge = await (input.nicheResolver || resolveNicheKnowledge)({
@@ -734,8 +751,18 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   // Only retain evidence whose full canonical prompt representation survived
   // section selection and the context budget. An ID substring is not proof that
   // the record itself was supplied to the model.
-  renderedEvidenceRecords = getEvidenceRecordsActuallyRendered(context.systemInstruction, promptEvidenceRecords)
-  renderedCreatorAnswerEvidenceRecords = getEvidenceRecordsActuallyRendered(context.systemInstruction, creatorAnswerEvidenceRecords)
+  renderedEvidenceRecords = restoreOriginalModelInput && Array.isArray(originalModelInputSnapshot?.evidenceRecords)
+   ? originalModelInputSnapshot.evidenceRecords
+   : getEvidenceRecordsActuallyRendered(context.systemInstruction, promptEvidenceRecords)
+  renderedCreatorAnswerEvidenceRecords = restoreOriginalModelInput && Array.isArray(originalModelInputSnapshot?.creatorAnswerEvidenceRecords)
+   ? originalModelInputSnapshot.creatorAnswerEvidenceRecords
+   : getEvidenceRecordsActuallyRendered(context.systemInstruction, creatorAnswerEvidenceRecords)
+  modelSystemInstruction = restoreOriginalModelInput
+   ? originalModelInputSnapshot?.systemInstruction
+   : context.systemInstruction
+  modelHistory = restoreOriginalModelInput && Array.isArray(originalModelInputSnapshot?.history)
+   ? originalModelInputSnapshot.history
+   : (input.history || []).slice(-8)
   questionTrace.recordEvidence({
    returned: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id),
    missing: [],
@@ -754,9 +781,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   let repairOutcome: BrainRepairOutcome = { attempted: false, succeeded: false, reasons: [] }
   if (input.allowModel) {
    const output = await withTimeout((input.modelGenerator || defaultBrainModelGateway.generateStructuredResponse)({
-    history: (input.history || []).slice(-8),
+    history: modelHistory || (input.history || []).slice(-8),
     userText: input.userText,
-    systemInstruction: context.systemInstruction,
+    systemInstruction: modelSystemInstruction || context.systemInstruction,
    }), BRAIN_MODEL_TIMEOUT_MS)
    if (output.modelIdentity) {
     requestedModel = output.modelIdentity.requestedModel
@@ -904,6 +931,25 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
     creatorAnswerEvidenceRecordIds: renderedCreatorAnswerEvidenceRecords.map((record) => record.id),
     creatorAnswerEvidenceFingerprint: fingerprintBrainEvidenceRecords(renderedCreatorAnswerEvidenceRecords),
+    ...(input.retryTurnId
+     ? {
+       retryModelInputSnapshot: {
+        systemInstruction: modelSystemInstruction || context.systemInstruction,
+        history: modelHistory || (input.history || []).slice(-8),
+        userText: input.userText,
+        evidenceRecords: renderedEvidenceRecords,
+        creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
+       },
+      }
+     : {
+       originalModelInputSnapshot: {
+        systemInstruction: modelSystemInstruction || context.systemInstruction,
+        history: modelHistory || (input.history || []).slice(-8),
+        userText: input.userText,
+        evidenceRecords: renderedEvidenceRecords,
+        creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
+       },
+      }),
     evidenceRecordQuality: renderedEvidenceRecords.length
      ? buildBrainEvidenceRecordQuality(renderedEvidenceRecords, { expectedChannelId: input.channelId })
      : null,
