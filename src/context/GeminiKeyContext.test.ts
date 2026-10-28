@@ -11,7 +11,7 @@ const source = fs.readFileSync(
 describe("Gemini API-key validation contract", () => {
   it("discovers a model supported by the current key instead of hard-coding a model ID", () => {
     expect(source).toContain("await ai.models.list()");
-    expect(source).toContain("supportedActions?.includes('generateContent')");
+    expect(source).toContain("(model.supportedActions ?? model.supportedGenerationMethods)?.includes('generateContent')");
     expect(source).toContain("model,");
     expect(source).not.toContain("model: 'gemini-1.5-flash'");
     expect(source).not.toContain("model: 'gemini-3.1-flash'");
