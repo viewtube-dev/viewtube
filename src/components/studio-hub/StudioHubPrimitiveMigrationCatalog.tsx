@@ -102,12 +102,11 @@ import {
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
-import { StudioSplitLeftButton, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame, StudioSideCounter, StudioLeftWordCounter } from "../../studio-ui/primitives/StudioControls"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
-import { StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame, StudioSideCounter, StudioLeftWordCounter, StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
