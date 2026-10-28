@@ -106,9 +106,9 @@ import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
-import { buildCreatorAnswerEvidenceRecords } from "../services/brain/CreatorAnswerEvidence"
+import { buildCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
-import type { EvidenceRecord } from "../services/brain/EvidenceRecord"
+import { formatEvidenceRecordForPrompt, type EvidenceRecord } from "../services/brain/EvidenceRecord"
 import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, type PromptEvidenceIntegrityStatus } from "../services/brain/PromptEvidenceIntegrity"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
@@ -1315,7 +1315,13 @@ const AIBrainCommandInterface: React.FC = () => {
     requestText: userText,
    })
    turnGrowthContext = buildCreatorGrowthContext(turnSnapshot, recentTurns, learningEntries)
-   const systemPrompt = buildAIBrainSystemPrompt({
+   const creatorContext = loadAiBrainContext()
+   const creatorAnswerEvidence = buildCreatorAnswerEvidenceRecords(creatorContext, channelId)
+   turnSnapshot = {
+    ...turnSnapshot,
+    evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence),
+   }
+   const baseSystemPrompt = buildAIBrainSystemPrompt({
     brain,
     authState,
     channelConnection,
@@ -1324,8 +1330,11 @@ const AIBrainCommandInterface: React.FC = () => {
     recentConversationTurns: recentTurns,
     requestText: userText,
     creatorGrowthContext: turnGrowthContext,
-    channelContext: loadAiBrainContext().channelContext,
+    channelContext: creatorContext.channelContext,
    })
+   const systemPrompt = creatorAnswerEvidence.length
+    ? `${baseSystemPrompt}\n\nCREATOR-PROVIDED PROFILE EVIDENCE\nThe following records are the creator's own saved answers. Treat them as USER_PROVIDED context, not independently verified analytics. Cite the evidence IDs when relying on an answer, preserve channel scope, and do not convert preferences or self-reports into measured performance claims.\n${creatorAnswerEvidence.map(formatEvidenceRecordForPrompt).join("\n")}`
+    : baseSystemPrompt
    const historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
    if (channelId) {
@@ -1368,7 +1377,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: readPromptEvidenceRecords(result.turn.metadata), evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: [...readPromptEvidenceRecords(result.turn.metadata), ...creatorAnswerEvidence], evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -1453,15 +1462,21 @@ const AIBrainCommandInterface: React.FC = () => {
      recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
      requestText: userText,
     })
-    const turnSnapshot = !useFreshEvidence && message.evidencePack
+    const baseTurnSnapshot = !useFreshEvidence && message.evidencePack
      ? { ...freshSnapshot, evidencePack: message.evidencePack }
      : freshSnapshot
+    const creatorContext = loadAiBrainContext()
+    const creatorAnswerEvidence = buildCreatorAnswerEvidenceRecords(creatorContext, channelId)
+    const turnSnapshot = {
+     ...baseTurnSnapshot,
+     evidencePack: mergeCreatorAnswerEvidenceIntoPack(baseTurnSnapshot.evidencePack, creatorAnswerEvidence),
+    }
     const turnGrowthContext = buildCreatorGrowthContext(
      turnSnapshot,
      recentTurns.filter((turn) => turn.id !== message.id),
      learningEntries,
     )
-    const systemPrompt = buildAIBrainSystemPrompt({
+    const baseSystemPrompt = buildAIBrainSystemPrompt({
      brain,
      authState,
      channelConnection,
@@ -1469,10 +1484,13 @@ const AIBrainCommandInterface: React.FC = () => {
      brainOnboardingSnapshot: onboardingSnapshot,
      recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
      requestText: userText,
-     evidencePackOverride: !useFreshEvidence ? message.evidencePack : undefined,
+     evidencePackOverride: !useFreshEvidence ? turnSnapshot.evidencePack : undefined,
      creatorGrowthContext: turnGrowthContext,
-     channelContext: loadAiBrainContext().channelContext,
+     channelContext: creatorContext.channelContext,
     })
+    const systemPrompt = creatorAnswerEvidence.length
+     ? `${baseSystemPrompt}\n\nCREATOR-PROVIDED PROFILE EVIDENCE\nThe following records are the creator's own saved answers. Treat them as USER_PROVIDED context, not independently verified analytics. Cite the evidence IDs when relying on an answer, preserve channel scope, and do not convert preferences or self-reports into measured performance claims.\n${creatorAnswerEvidence.map(formatEvidenceRecordForPrompt).join("\n")}`
+     : baseSystemPrompt
     const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
     const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
 
@@ -1508,7 +1526,7 @@ const AIBrainCommandInterface: React.FC = () => {
        turnStatus: result.turn.status,
        originalUserText: result.turn.rawUserMessage ?? userText,
        evidencePack: turnSnapshot.evidencePack,
-       evidenceRecords: readPromptEvidenceRecords(result.turn.metadata),
+       evidenceRecords: [...readPromptEvidenceRecords(result.turn.metadata), ...creatorAnswerEvidence],
        evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata),
        readiness: readinessForSnapshot(turnSnapshot),
        contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined,
