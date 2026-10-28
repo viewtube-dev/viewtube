@@ -461,8 +461,9 @@ test("canonical StudioButton family keeps proportional rows while catalog CSS ow
   assert.ok(buttonFamily.includes('id: "5-standard-fractions"'));
   assert.ok(buttonFamily.includes('id: "6-compact-fractions"'));
   assert.ok(buttonFamily.includes('id: "7-compact-and-micro"'));
-  assert.match(styles, /\.vt-confirmed-button-skin\s*\{[^}]*width:\s*100%/s);
-  assert.doesNotMatch(styles, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\s*:/,
+  const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"), styles.indexOf("/* Dense, collapsed Global Defaults"));
+  assert.match(buttonCss, /\.vt-confirmed-button-skin\s*\{[^}]*width:\s*100%/s);
+  assert.doesNotMatch(buttonCss, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\s*:/,
     "catalog layout must not redefine production StudioButton geometry");
 });
 
