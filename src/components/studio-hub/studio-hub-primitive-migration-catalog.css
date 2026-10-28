@@ -20,11 +20,9 @@
 
 /* Component Library only: family SubToolboxes keep the colored header but do
    not draw a second heavy card around the comparison examples. */
-.vt-primitive-migration-catalog .vt-primitive-migration-family [data-vt-subtoolbox="true"]{
-  box-shadow:none!important;
-}
-.vt-primitive-migration-catalog .vt-primitive-migration-family [data-vt-subtoolbox="true"] > div:first-child{
-  border:0!important;
+.vt-primitive-migration-catalog .vt-primitive-migration-family {
+  --vt-subtoolbox-shell-box-shadow: none;
+  --vt-subtoolbox-content-border: 0;
 }
 
 /* The comparison grid owns placement. The primitive owns its own width. */
@@ -268,4 +266,59 @@
 .vt-primitive-migration-catalog .vt-catalog-variants p {
   max-width: 34rem;
   margin: 6px 0 0;
+}
+
+/* Related canonical Studio variants are presented together inside each family module. */
+.vt-catalog-split-button-family,
+.vt-catalog-counter-family,
+.vt-catalog-slider-family {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+.vt-catalog-split-button-family > button,
+.vt-catalog-counter-family > *,
+.vt-catalog-slider-family > * {
+  min-width: 0;
+  width: 100%;
+}
+.vt-catalog-split-button-family .vt-catalog-variants,
+.vt-catalog-counter-family .vt-catalog-variants,
+.vt-catalog-slider-family .vt-catalog-variants {
+  grid-column: 1 / -1;
+}
+@media (min-width: 760px) {
+  .vt-catalog-counter-family,
+  .vt-catalog-slider-family {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .vt-catalog-counter-family .vt-catalog-variants,
+  .vt-catalog-slider-family .vt-catalog-variants {
+    grid-column: 1 / -1;
+  }
+}
+
+.vt-catalog-dropdown-family {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+.vt-catalog-dropdown-family > * {
+  width: 100%;
+  min-width: 0;
+}
+.vt-catalog-dropdown-family .vt-catalog-variants {
+  grid-column: 1 / -1;
+}
+@media (min-width: 760px) {
+  .vt-catalog-dropdown-family {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .vt-catalog-dropdown-family .vt-catalog-variants {
+    grid-column: 1 / -1;
+  }
 }
