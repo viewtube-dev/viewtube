@@ -54,6 +54,7 @@ import { resolveCreatorContext } from "./CreatorContextResolver"
 import { loadAiBrainContext } from "../aiBrainContext"
 import { buildCreatorAnswerEvidenceRecords } from "./CreatorAnswerEvidence"
 import { readBrainSurfaceSelection } from "./BrainSurfaceSelection"
+import { resolveBrainRetryInput, type BrainGenerationInputSnapshot, type BrainRetryContextContinuity } from "./BrainRetryContinuity"
 import {
  cacheCurrentNicheResearch,
  readCachedCurrentNicheResearch,
@@ -350,6 +351,7 @@ export interface RunBrainTurnInput {
  userText: string
  retryTurnId?: string
  retryGenerationOnly?: boolean
+ retryEvidenceMode?: "saved" | "fresh"
  snapshot: AIBrainContextSnapshot
  systemPrompt: string
  growthContext: CreatorGrowthContext
@@ -411,8 +413,23 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  let requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
  let servedModel: string | null = null
  let modelIdentityStatus: "served_known" | "requested_known_served_not_exposed" | "generator_identity_unavailable" | "model_disabled" = input.allowModel === false ? "model_disabled" : requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
+ const generationInputSnapshot: BrainGenerationInputSnapshot<AIBrainContextSnapshot> = {
+  snapshot: input.snapshot,
+  systemPrompt: input.systemPrompt,
+  growthContext: input.growthContext,
+  recentTurns: input.recentTurns || [],
+  history: input.history || [],
+  projectId: input.projectId || input.project?.id || null,
+  project: input.project || null,
+  projects: input.projects || [],
+  visibleContext: input.visibleContext || null,
+  artifactRefs: input.artifactRefs || [],
+ }
  const pending = input.retryTurnId
-  ? await retryAIBrainTurn(input.retryTurnId)
+  ? await retryAIBrainTurn(input.retryTurnId, {
+    mode: input.retryEvidenceMode || "saved",
+    evidenceIds: input.snapshot.evidencePack.evidenceIds,
+   })
   : await beginAIBrainTurn({
    channelId: input.channelId,
    userText: input.userText,
@@ -438,11 +455,51 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
      },
      warnings: input.snapshot.vtSync.warnings,
     },
+    generationInputSnapshot,
+    interactionLog: [{
+     id: makeId("brain_interaction"),
+     type: "creator_input",
+     direction: "inbound",
+     at: new Date().toISOString(),
+     text: input.userText,
+    }, {
+     id: makeId("brain_interaction"),
+     type: "evidence_snapshot",
+     direction: "inbound",
+     at: new Date().toISOString(),
+     evidenceIds: input.snapshot.evidencePack.evidenceIds.slice(0, 100),
+     evidencePackSnapshot: input.snapshot.evidencePack,
+     evidenceRecords: [],
+    }],
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
     taskProfileId: taskProfile.id },
   })
+ let retryContextContinuity: BrainRetryContextContinuity | undefined
+ if (input.retryTurnId && input.retryGenerationOnly) {
+  const saved = pending.metadata?.generationInputSnapshot as BrainGenerationInputSnapshot<AIBrainContextSnapshot> | undefined
+  const current = generationInputSnapshot
+  const retryResolution = resolveBrainRetryInput({
+   mode: input.retryEvidenceMode || "saved",
+   saved,
+   current,
+  })
+  retryContextContinuity = retryResolution.continuity
+  input = {
+   ...input,
+   snapshot: retryResolution.generationInput.snapshot,
+   systemPrompt: retryResolution.generationInput.systemPrompt,
+   growthContext: retryResolution.generationInput.growthContext as CreatorGrowthContext,
+   recentTurns: retryResolution.generationInput.recentTurns as AIBrainConversationTurn[] | undefined,
+   history: retryResolution.generationInput.history,
+   projectId: retryResolution.generationInput.projectId,
+   project: retryResolution.generationInput.project as Project | null | undefined,
+   projects: retryResolution.generationInput.projects as Project[] | undefined,
+   visibleContext: retryResolution.generationInput.visibleContext,
+   artifactRefs: retryResolution.generationInput.artifactRefs,
+  }
+ }
  const capabilities = selectBrainCapabilities({ channelId: input.channelId, userText: input.userText, snapshot: input.snapshot })
  const capabilityIds = capabilities.map((capability) => capability.id)
  const brainIntent = inferBrainIntent(input.userText)
@@ -850,6 +907,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     repairAttempted: repairOutcome.attempted,
     repairSucceeded: repairOutcome.succeeded,
     repaired: repairOutcome.attempted,
+    ...(retryContextContinuity ? { retryContextContinuity, retryEvidenceMode: input.retryEvidenceMode || "saved" } : {}),
    },
   })
   try {
@@ -920,6 +978,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     repairReasons: [],
     repairAttempted: false,
     repairSucceeded: false,
+    ...(retryContextContinuity ? { retryContextContinuity, retryEvidenceMode: input.retryEvidenceMode || "saved" } : {}),
    },
   })
   const turn = await completeAIBrainTurn({
