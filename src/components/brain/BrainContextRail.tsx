@@ -46,6 +46,7 @@ const Panel: React.FC<{ title: string; children: React.ReactNode }> = ({
  */
 export const BrainContextRail: React.FC<{
  channelId?: string | null
+ channelHandle?: string | null
  snapshot: AIBrainContextSnapshot
  growthContext: CreatorGrowthContext
  insights: CreatorInitialInsight[]
@@ -59,6 +60,7 @@ export const BrainContextRail: React.FC<{
  compactGrid?: boolean
 }> = ({
  channelId = null,
+ channelHandle = null,
  snapshot,
  growthContext,
  insights,
@@ -82,7 +84,7 @@ export const BrainContextRail: React.FC<{
  const goalIsSaved = Boolean(goal && !/not set|tell me what matters/i.test(goal))
  const channelFocusIsSaved = Boolean(snapshot.brain.coreConcept.trim() || snapshot.brain.targetNiche.trim() || snapshot.inferredProfile.niche)
  const styleNotesAreSaved = Boolean(snapshot.brain.contentDNA.trim())
- const channelContext = loadAiBrainContext().channelContext
+ const channelContext = loadAiBrainContext(channelId, snapshot.channel.label, [channelHandle]).channelContext
  const contextScore = scoreContext(channelContext)
  const recommendedContextQuestions = CHANNEL_CONTEXT_QUESTIONS
   .filter((question) => question.required && contextScore.missingFields.includes(question.contextField))
