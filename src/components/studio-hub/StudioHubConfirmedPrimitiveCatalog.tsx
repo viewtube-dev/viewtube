@@ -762,7 +762,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
           </div>
           <div style={{ display: "grid", gap: 4 }}>
             <strong>4PX VERTICAL PADDING REFERENCE</strong>
-            <StudioSplitTextInput geometryVariant="padding-reference" sizeVariant="standard" aria-label="Four pixel vertical padding reference split text input geometry" placeholder="TYPE HERE" defaultValue="CREATOR" leftIcon={<Home size={24} aria-hidden="true"} />} />
+            <StudioSplitTextInput geometryVariant="padding-reference" sizeVariant="standard" aria-label="Four pixel vertical padding reference split text input geometry" placeholder="TYPE HERE" defaultValue="CREATOR" leftIcon={<Home size={24} aria-hidden="true" />} />
           </div>
           <div style={{ display: "grid", gap: 4 }}>
             <strong>HALF OF 4PX VERTICAL PADDING · 2PX</strong>
