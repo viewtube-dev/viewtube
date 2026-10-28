@@ -59,4 +59,10 @@ describe("Creator Brain intake convergence", () => {
   expect(result.mostSuccessfulVideo).toBe("The Siege of Vienna")
   expect(result.signupReason).toBe("Improve strategy")
  })
+ it("uses legacy audienceNiche only as a fallback when mainTopicFocus is absent", () => {
+  const result = syncLegacyAnswersToChannelContext(profile, { audienceNiche: "Napoleonic history" })
+  expect(result.identity.niche).toBe("Napoleonic history")
+  expect(result.identity.description).toBeUndefined()
+  expect(result.goals.primaryGoal).toBe("Grow a loyal audience")
+ })
 })
