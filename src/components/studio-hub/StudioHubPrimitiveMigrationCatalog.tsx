@@ -468,7 +468,7 @@ const PrimitiveMigrationControl: React.FC<{
       <div className="vt-catalog-button-family" role="group" aria-label="Standard button family">
         <div className="vt-catalog-family-variant"><span>PRIMARY</span><PrimaryButton level={level}>SAVE</PrimaryButton></div>
         <div className="vt-catalog-family-variant"><span>SECONDARY</span><PrimaryButton level={level} tone="neutral">CANCEL</PrimaryButton></div>
-        <div className="vt-catalog-family-variant"><span>NEUTRAL</span><PrimaryButton level={level} tone="neutral">OPEN</PrimaryButton></div>
+        <div className="vt-catalog-family-variant"><span>NEUTRAL</span><PrimaryButton level={level} tone="ink">OPEN</PrimaryButton></div>
         <div className="vt-catalog-family-variant"><span>DESTRUCTIVE</span><PrimaryButton level={level} tone="danger">DELETE</PrimaryButton></div>
         <div className="vt-catalog-family-variant"><span>DISABLED</span><PrimaryButton level={level} disabled>UNAVAILABLE</PrimaryButton></div>
         <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Primary, secondary, neutral, destructive, and disabled are tones/states of the same standard button system. Split and square-icon buttons remain in their own geometry families.</p></details>
