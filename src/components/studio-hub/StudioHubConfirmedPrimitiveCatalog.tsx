@@ -679,18 +679,28 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 
 type ConfirmedCatalogFamilyName =
   | "Text Fields"
-  | "Buttons"
-  | "Modules"
+  | "Buttons & Badges"
   | "Dropdowns"
   | "Controls"
-  | "Text Controls"
+  | "Counters & Sliders"
+  | "Modules & Frames"
   | "Compositions"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
-  "Text Fields", "Buttons", "Modules", "Dropdowns",
-  "Controls", "Text Controls", "Compositions",
+  "Text Fields",
+  "Buttons & Badges",
+  "Dropdowns",
+  "Controls",
+  "Counters & Sliders",
+  "Modules & Frames",
+  "Compositions",
 ]
 
+/**
+ * Keep each catalog section in a deliberate family. The family wrapper is
+ * intentionally based on section titles/component identities, not broad
+ * fallback regexes that silently dump unrelated sections into Controls.
+ */
 const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
   if (!React.isValidElement(node)) return "Controls"
   const props = node.props as { title?: unknown }
@@ -699,13 +709,36 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   const componentName = typeof node.type === "function"
     ? (componentType.displayName || componentType.name || "")
     : ""
-  if (/Studio Text Input|Studio Text Area|Studio Text Box|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
-  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
-  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules"
-  if (/Dropdown/.test(title)) return "Dropdowns"
-  if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftWordCounter|StudioLeftWordSlider|StudioChoice|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily" || componentName === "ConfirmedStudioLeftWordCounterFamily" || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Controls"
-  if (/Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|SpectrumTag|TagEditor|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
-  if (/Publishing Card|Brain Status LED Badges/.test(title)) return "Compositions"
+
+  if (/Studio Text Input|Studio Text Area|Studio Text Box|Split Text Input|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) {
+    return "Text Fields"
+  }
+  if (/Dropdown|Multi Selection|Single Selection/.test(title)) return "Dropdowns"
+  if (/StudioCounter|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|StudioDoubleSplitSlider|Counter ·|Slider ·/.test(title)
+    || componentName === "ConfirmedStudioCounterFamily"
+    || componentName === "ConfirmedStudioSideCounterFamily"
+    || componentName === "ConfirmedStudioLeftWordCounterFamily"
+    || componentName === "ConfirmedStudioLeftWordSliderFamily"
+    || componentName === "ConfirmedStudioDoubleSplitSliderFamily") {
+    return "Counters & Sliders"
+  }
+  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) {
+    return "Modules & Frames"
+  }
+  if (/Publishing Card|Brain Status|Chat Response|Chat Action|Status \/ navigation/.test(title)) {
+    return "Compositions"
+  }
+  if (/Button|Badge|Spectrum Tag|Closeable Badge|Tag Editor/.test(title)
+    || componentName === "ConfirmedStudioButtonFamily"
+    || componentName === "CanonicalSplitBadgeFamily") {
+    return "Buttons & Badges"
+  }
+  if (/Switches, Radios & Checkboxes|Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|StudioChoice|Global Rules Exceptions|Toggle/.test(title)
+    || componentName === "CanonicalControlFamilies"
+    || componentName === "CanonicalWordToggleFamily"
+    || componentName === "ConfirmedStudioValueToggleFamily") {
+    return "Controls"
+  }
   return "Controls"
 }
 
