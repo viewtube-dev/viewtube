@@ -146,7 +146,7 @@ const readStoredContext = (key: string): AiBrainContext | null => {
 }
 
 const sameChannelLabel = (left?: string | null, right?: string | null): boolean => {
- const normalize = (value?: string | null) => String(value || "").trim().replace(/^@/, "").replace(/\\s+/g, " ").toLocaleLowerCase()
+ const normalize = (value?: string | null) => String(value || "").trim().replace(/^@/, "").replace(/\s+/g, " ").toLocaleLowerCase()
  return Boolean(normalize(left) && normalize(left) === normalize(right))
 }
 
