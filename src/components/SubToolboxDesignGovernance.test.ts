@@ -889,3 +889,48 @@ describe("Studio primary defaults and shared split geometry", () => {
     expect(sharedSlider).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
   });
 });
+
+describe("confirmed primitive library family organization", () => {
+  it("keeps split button and dropdown variants in family modules, not duplicate representative rows", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const start = catalog.indexOf('<div className="vt-confirmed-direct-primitive-rows"');
+    const end = catalog.indexOf("</Family>", start);
+    const representatives = catalog.slice(start, end);
+    for (const variant of ["StudioSplitLeftButton", "StudioDoubleSplitButton", "StudioTwoLineButton", "StudioSplitTwoLineButton", "StudioSplitRightButton", "StudioSplitLeftDropdown", "StudioLegendMultiDropdown", "StudioSplitRightBadge", "StudioDoubleSplitBadge", "StudioSideCounter", "StudioLeftCounter", "StudioLeftWordSlider", "StudioSideToggle", "StudioDoubleSideToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle", "StudioRadio", "StudioCheckbox", "StudioXCheckbox"]) {
+      expect(representatives).not.toContain('data-vt-library-component="' + variant + '"');
+    }
+    expect(catalog).toContain("<ConfirmedStudioSplitButtonFamily />");
+    expect(catalog).toContain("<ConfirmedStudioDropdownFamily />");
+    expect(catalog).toContain('title="Split Button Family · Left / Right / Double / Two-Line"');
+    expect(catalog).toContain('title="Dropdown Family · Standard / Split-Left / Multi-Select"');
+    const counterFamily = catalog.slice(catalog.indexOf("const ConfirmedStudioCounterFamily"), catalog.indexOf("const ConfirmedStudioDoubleSplitSliderFamily", catalog.indexOf("const ConfirmedStudioCounterFamily")) );
+    expect(counterFamily).toContain("<ConfirmedStudioSideCounterFamily />");
+    expect(catalog).not.toMatch(/<ConfirmedStudioDoubleSplitSliderFamily \/>\\s*<ConfirmedStudioSideCounterFamily \/>/);
+
+    for (const representative of ["StudioButton", "StudioDropdown", "StudioArrowToggle", "StudioCounter", "StudioLeftWordCounter", "StudioDoubleSplitSlider", "StudioSplitLeftBadge"]) {
+      expect(representatives.match(new RegExp('data-vt-library-component="' + representative + '"', "g"))?.length).toBe(1);
+    }
+  });
+
+  it("keeps the migration catalog's switch, radio, and checkbox specimens together without important overrides", () => {
+    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
+    const styles = source("src/components/studio-hub/studio-hub-primitive-migration-catalog.css");
+    const families = catalog.slice(catalog.indexOf("export const STUDIO_HUB_MIGRATED_FAMILIES"), catalog.indexOf("] as const"));
+    for (const duplicate of ['"Toggle",', '"Vertical Word Toggle",', '"Checkbox",', '"Radio",', '"Segmented Choice",', '"Settings Switch",', '"Controller Switch",', '"Dropdown",', '"Top Title Dropdown",', '"Legend Multi Dropdown",', '"Tone / Tension / Cinematic Dropdown",']) {
+      expect(families).not.toContain(duplicate);
+    }
+    expect(families).toContain('"Switches / Toggles / Radio / Checkbox",');
+    expect(families).toContain('"Studio Counter Family",');
+    expect(families).toContain('"Studio Slider Family",');
+    expect(families).toContain('"Studio Dropdown Family",');
+    expect(styles).not.toContain("!important");
+    expect(styles).toContain("--vt-subtoolbox-shell-box-shadow: none;");
+    expect(styles).toContain("--vt-subtoolbox-content-border: 0;");
+    const systemStyles = source("src/styles/studio-control-system.css");
+    expect(systemStyles).toContain("--vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+    expect(systemStyles).toContain(".vt-studio-double-split-slider .vt-studio-double-split-slider__rail {");
+    expect(systemStyles).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
+    expect(systemStyles).toContain(".vt-studio-double-split-slider input[type=\"range\"] {");
+    expect(systemStyles).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+  });
+});
