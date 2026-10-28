@@ -106,7 +106,8 @@ import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from ".
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
 import { buildCreatorAnswerEvidenceRecords } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
-import { isEvidenceRecord, type EvidenceRecord } from "../services/brain/EvidenceRecord"
+import type { EvidenceRecord } from "../services/brain/EvidenceRecord"
+import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, type PromptEvidenceIntegrityStatus } from "../services/brain/PromptEvidenceIntegrity"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
  clearBrainSurfaceSelection,
@@ -175,38 +176,6 @@ export type ChatMessage = {
  contextMayBeStale?: boolean
 }
 
-/**
- * Read only the exact typed evidence array recorded as rendered to the model.
- * If IDs or record contracts disagree, omit the detailed provenance rather than
- * displaying a different evidence set as though it were the prompt input.
- */
-export type PromptEvidenceIntegrityStatus = "verified" | "unavailable" | "mismatch"
-
-/**
- * Distinguish legacy turns with no manifest from a present-but-invalid prompt
- * evidence manifest. Only the latter is an integrity failure.
- */
-export const getPromptEvidenceIntegrityStatus = (
- metadata: Record<string, unknown> | undefined,
-): PromptEvidenceIntegrityStatus => {
- if (!metadata || !Object.prototype.hasOwnProperty.call(metadata, "promptEvidenceRecordIds")) return "unavailable"
- if (!Array.isArray(metadata.promptEvidenceRecordIds) || !Array.isArray(metadata.evidenceRecords)) return "mismatch"
- const rawRecords: unknown[] = metadata.evidenceRecords
- const rawIds: unknown[] = metadata.promptEvidenceRecordIds
- if (!rawRecords.every(isEvidenceRecord) || !rawIds.every((id) => typeof id === "string")) return "mismatch"
- const records = rawRecords as EvidenceRecord[]
- const ids = rawIds as string[]
- return records.length === ids.length && records.every((record, index) => record.id === ids[index])
-  ? "verified"
-  : "mismatch"
-}
-
-export const readPromptEvidenceRecords = (
- metadata: Record<string, unknown> | undefined,
-): EvidenceRecord[] | undefined => {
- if (getPromptEvidenceIntegrityStatus(metadata) !== "verified") return undefined
- return metadata!.evidenceRecords as EvidenceRecord[]
-}
 
 export type BrainCreatorContextSnapshot = {
  version: string | null
