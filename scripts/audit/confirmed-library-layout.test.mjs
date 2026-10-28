@@ -341,7 +341,7 @@ test("confirmed composite controls are represented in the production catalog", (
   for (const name of ["StudioPlayPauseButton", "StudioCircleIconButton", "StudioUsernameInput"]) {
     assert.ok(catalog.includes(name), `catalog includes ${name}`);
     assert.ok(catalog.includes(`data-vt-library-component="${name}"`), `${name} has a library specimen marker`);
-    assert.match(controls, new RegExp(`export const ${name}\\b`), `${name} is a production export`);
+    assert.match(controls, new RegExp(`export const ${name}\b`), `${name} is a production export`);
   }
   assert.match(catalog, /Play\/Pause Split-left Button · 44px \+ 28px/);
   assert.match(catalog, /Circle Icon Button · 44px \+ 28px/);
@@ -516,11 +516,11 @@ test("StudioSplitTextInput is a real exported primitive with a full-width standa
 });
 
 
-test("confirmed primitive grid is visible first and covers the core Studio design families", () => {
+test("confirmed primitive grid is visible first and covers core and advanced Studio designs", () => {
   const top = catalog.slice(catalog.indexOf("export const StudioHubConfirmedPrimitiveCatalog"));
   assert.match(top, /<ConfirmedPrimitiveGridOverview\s*\/>\s*<ConfirmedDirectPrimitiveRows\s*\/>/);
   const grid = catalog.match(/const ConfirmedPrimitiveGridOverview:[^]*?\n}\n\nconst ConfirmedDirectPrimitiveRows/)?.[0] ?? "";
-  assert.match(grid, /<StudioComponentGrid cols=\{3\} rows=\{3\} size="standard"/);
+  assert.match(grid, /<StudioComponentGrid cols=\{3\} rows=\{6\} size="standard"/);
   for (const primitive of [
     "StudioButton",
     "StudioSplitLeftButton",
@@ -531,6 +531,15 @@ test("confirmed primitive grid is visible first and covers the core Studio desig
     "StudioSideCounter",
     "StudioDoubleSplitSlider",
     "StudioArrowToggle",
+    "StudioDoubleSplitButton",
+    "StudioSplitLeftDropdown",
+    "StudioLegendMultiDropdown",
+    "StudioDoubleSplitBadge",
+    "StudioWordToggle",
+    "StudioSwitch",
+    "StudioUploadFrame",
+    "StudioSplitAccordion",
+    "StudioInterModule",
   ]) assert.ok(grid.includes(`data-vt-library-component="${primitive}"`), `top grid is missing ${primitive}`);
   assert.ok(grid.includes("const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)"));
   assert.ok(grid.includes("onClick={() => setSplitButtonPressed(value => !value)}"));

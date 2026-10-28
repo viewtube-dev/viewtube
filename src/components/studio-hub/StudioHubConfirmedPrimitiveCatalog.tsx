@@ -303,13 +303,15 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
   const [sliderValue, setSliderValue] = React.useState(58)
   const [buttonPressed, setButtonPressed] = React.useState(false)
   const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)
+  const [wordValue, setWordValue] = React.useState(false)
+  const [switchValue, setSwitchValue] = React.useState(false)
   const [arrowValue, setArrowValue] = React.useState("ONE")
   const options = ["ONE", "TWO", "THREE"] as const
   return (
     <section className="vt-confirmed-primitive-grid-overview" data-vt-confirmed-primitive-grid="true" aria-labelledby="vt-confirmed-primitive-grid-title">
       <h2 id="vt-confirmed-primitive-grid-title">Primitive Grid · Live Production Components</h2>
       <p>Top-level quick reference: real production primitives across action, split, field, choice, counter, slider, and toggle designs. The complete standard representative inventory and detailed family variants follow below.</p>
-      <StudioComponentGrid cols={3} rows={3} size="standard" aria-label="Confirmed Studio primitive grid">
+      <StudioComponentGrid cols={3} rows={6} size="standard" aria-label="Confirmed Studio primitive grid">
         <StudioComponentGridCell col={1} row={1}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioButton">
             <span>BUTTON</span>
@@ -362,6 +364,60 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioArrowToggle">
             <span>ARROW TOGGLE</span>
             <StudioArrowToggle size="standard" value={arrowValue} options={options} onValueChange={setArrowValue} ariaLabel="Grid specimen arrow toggle" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={1} row={4}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDoubleSplitButton">
+            <span>DOUBLE SPLIT BUTTON</span>
+            <StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Grid specimen double split button">DOUBLE SPLIT</StudioDoubleSplitButton>
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={2} row={4}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSplitLeftDropdown">
+            <span>SPLIT-LEFT DROPDOWN</span>
+            <StudioSplitLeftDropdown sizeVariant="standard" ariaLabel="Grid specimen split-left dropdown" defaultValue="balanced" options={[{ value: "balanced", label: "BALANCED" }, { value: "focused", label: "FOCUSED" }, { value: "expanded", label: "EXPANDED" }]} />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={3} row={4}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioLegendMultiDropdown">
+            <span>MULTI-SELECT DROPDOWN</span>
+            <StudioLegendMultiDropdown label="FORMAT" sizeVariant="standard" defaultValue={["videos"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }, { value: "live", label: "LIVE" }]} />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={1} row={5}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDoubleSplitBadge">
+            <span>DOUBLE SPLIT BADGE</span>
+            <StudioDoubleSplitBadge sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />}>FILE STATUS</StudioDoubleSplitBadge>
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={2} row={5}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioWordToggle">
+            <span>WORD TOGGLE</span>
+            <StudioWordToggle size="standard" value={wordValue} words={["OFF", "ON"]} onValueChange={setWordValue} aria-label="Grid specimen word toggle" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={3} row={5}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSwitch">
+            <span>SWITCH</span>
+            <StudioSwitch checked={switchValue} aria-label="Grid specimen switch" onClick={() => setSwitchValue(value => !value)} />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={1} row={6}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioUploadFrame">
+            <span>UPLOAD FRAME</span>
+            <StudioUploadFrame prompt="UPLOAD MEDIA" aria-label="Grid specimen upload frame" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={2} row={6}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSplitAccordion">
+            <span>SPLIT ACCORDION</span>
+            <StudioSplitAccordion sizeVariant="standard" accessibleLabel="Grid specimen split accordion" items={[{ accessibleLabel: "DETAILS", icon: <Info aria-hidden="true" />, content: <p>Accordion content preview.</p> }]} />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={3} row={6}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioInterModule">
+            <span>INTERMODULE</span>
+            <StudioInterModule title="DETAILS" sizeVariant="standard" defaultOpen><p>Intermodule preview.</p></StudioInterModule>
           </div>
         </StudioComponentGridCell>
       </StudioComponentGrid>
@@ -434,7 +490,6 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideCounter"><span>Side Counter · STANDARD</span><StudioSideCounter value={sideCounterValue} onValueChange={setSideCounterValue} size="standard" min={0} max={100} ariaLabel="Side counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>Left Counter · STANDARD</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter standard specimen" /></div>
                 <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordCounter"><span>Left Word Counter · STANDARD</span><StudioLeftWordCounter size="standard" value={leftWordValue} onValueChange={setLeftWordValue} ariaLabel="Studio left word counter standard specimen" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordSlider"><span>Left Word Slider · STANDARD</span><StudioLeftWordSlider size="standard" value={leftWordSliderValue} onValueChange={setLeftWordSliderValue} ariaLabel="Left word slider standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitSlider"><span>Double Split Slider · STANDARD</span><StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Double split slider standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioActionButton"><span>Action Button · STANDARD</span><StudioActionButton sizeVariant="standard" aria-label="Action button standard specimen">PRIMARY ACTION</StudioActionButton></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton"><span>Icon Button · STANDARD</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" sizeVariant="standard" /></div>
@@ -477,6 +532,12 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUploadFrame"><span>Upload Frame · STANDARD REPRESENTATIVE</span><StudioUploadFrame prompt="UPLOAD IMAGE OR VIDEO" aria-label="Upload frame standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusIndicator"><span>Brain Status Indicator · STANDARD</span><StudioBrainStatusIndicator status="running" label="BRAIN RUNNING" pulse={false} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusBadge"><span>Brain Status Badge · STANDARD</span><StudioBrainStatusBadge label="READY" tone="green" appearance="tinted" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule"><span>InterModule · STANDARD REPRESENTATIVE</span><StudioInterModule className="vt-studio-inter-host--bleed" title="INTERMODULE" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen><p className="vt-confirmed-intermodule-prompt">Production intermodule with its rails extending to the containing module's inner borders.</p></StudioInterModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineInterModule"><span>Two-Line InterModule · STANDARD</span><StudioTwoLineInterModule title="CHANNEL SETTINGS" description="Identity and publishing preferences" startIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard" defaultOpen><p>Two-line production intermodule specimen.</p></StudioTwoLineInterModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTopSplitModule"><span>Top Split Module · STANDARD</span><StudioTopSplitModule title="MODULE HEADER" split="double" startIcon={<Home aria-hidden="true" />} endIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard"><p>Production top-split module body.</p></StudioTopSplitModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule"><span>Collapsing Split Module · STANDARD · OPEN</span><StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen><p>Expanded body separated from its header by the required horizontal divider.</p><StudioInterModule title="INNER SECTION" sizeVariant="standard" defaultOpen><p>Inner section content.</p></StudioInterModule></StudioCollapsingSplitModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingTwoLineModule"><span>Collapsing Two-Line Module · STANDARD</span><StudioCollapsingTwoLineModule title="CREATOR SETTINGS" description="Identity and publishing preferences" split="double" sizeVariant="standard" defaultOpen><p>Two-line collapsible module body.</p></StudioCollapsingTwoLineModule></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion"><span>Split Accordion · STANDARD</span><StudioSplitAccordion sizeVariant="standard" accessibleLabel="Confirmed split accordion" items={[{accessibleLabel:"OVERVIEW",icon:<Home aria-hidden="true" />,content:<p>Overview section content.</p>},{accessibleLabel:"SETTINGS",icon:<Settings2 aria-hidden="true" />,content:<p>Settings section content.</p>},{accessibleLabel:"STATUS",icon:<Info aria-hidden="true" />,content:<p>Status section content.</p>}]} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioResponseMetaRow"><span>Response Meta Row · COMPACT</span><StudioResponseMetaRow title="ANSWER SUMMARY" status={<StudioBrainStatusBadge label="VERIFIED" tone="green" appearance="tinted" />} metadata={<span>3 SOURCES</span>} trailing={<span>OPEN DETAILS</span>} sizeVariant="compact" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatResponseShell"><span>Chat Response Shell · COMPACT</span><StudioChatResponseShell metadata={<StudioResponseMetaRow title="ANSWER SUMMARY" metadata={<span>3 SOURCES</span>} sizeVariant="compact" />} actions={<StudioChatActionGroup><StudioButton sizeVariant="compact">COPY</StudioButton><StudioButton sizeVariant="compact">RETRY</StudioButton></StudioChatActionGroup>}><p>Answer-first response content using the production shell.</p></StudioChatResponseShell></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatActionGroup"><span>Chat Action Group · COMPACT</span><StudioChatActionGroup aria-label="Chat action group specimen"><StudioButton sizeVariant="compact" onClick={() => undefined}>COPY</StudioButton><StudioButton sizeVariant="compact" onClick={() => undefined}>RETRY</StudioButton></StudioChatActionGroup></div>
@@ -1571,7 +1632,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioSplitAccordion" tsx="src/studio-ui/primitives/StudioSplitAccordion.tsx" css="src/styles/studio-split-accordion.css" tokens="44px / 28px / 12px · secondary icon rails · primary content panels · buildTri staggered train" imports={["src/studio-ui/primitives/StudioSplitAccordion.tsx", "src/styles/studio-split-accordion.css", "src/components/studio-hub/StudioSplitAccordionCatalogSpecimens.tsx"]} />}
     >
-      <div className="w-full min-w-0 max-w-none" data-vt-library-component="StudioSplitAccordion" style={{ width: "100%", minWidth: 0, maxWidth: "none", gridTemplateColumns: "minmax(0, 1fr)" }}>
+      <div className="w-full min-w-0 max-w-none" style={{ width: "100%", minWidth: 0, maxWidth: "none", gridTemplateColumns: "minmax(0, 1fr)" }}>
         <StudioSplitAccordionCatalogSpecimens />
       </div>
     </Family>
@@ -1588,21 +1649,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <StudioInterModule className="vt-studio-inter-host--bleed" title="PROMPT LIBRARY" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen>
           <p className="vt-confirmed-intermodule-prompt">A standard-size intermodule keeps its content aligned to the shared parent edges.</p>
         </StudioInterModule>
-      </div>
-    </Family>
-    <Family
-      title="Two-Line InterModule · Standard"
-      nonDefaultSettings={[
-        "Dedicated production two-line header with title and description, separate from the single-line intermodule primitive.",
-        "Uses the same flush rails and shared Studio control tokens; content remains caller-owned.",
-      ]}
-      provenance={<Provenance primitive="StudioTwoLineInterModule" tsx="src/studio-ui/primitives/StudioInterModule.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · two-line title/description header · shared Studio control tokens" imports={["src/studio-ui/primitives/StudioInterModule.tsx"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineInterModule">
-        <span>TWO-LINE INTERMODULE · STANDARD</span>
-        <StudioTwoLineInterModule title="CHANNEL SETTINGS" description="Identity and publishing preferences" startIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard" defaultOpen>
-          <p className="vt-confirmed-intermodule-prompt">A two-line module keeps the title and its supporting description in the same production header.</p>
-        </StudioTwoLineInterModule>
       </div>
     </Family>
     <Family
