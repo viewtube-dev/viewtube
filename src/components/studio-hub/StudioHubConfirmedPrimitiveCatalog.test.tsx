@@ -636,3 +636,24 @@ describe("confirmed primitive family section boundaries", () => {
     expect(root).toContain("</ConfirmedCatalogFamilyGroups>")
   })
 })
+
+
+describe("confirmed primitive representative coverage", () => {
+  it("renders a named production representative for the previously unregistered control families", () => {
+    const markup = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    for (const primitive of [
+      "StudioRadio",
+      "StudioCheckbox",
+      "StudioXCheckbox",
+      "StudioSplitRightBadge",
+      "StudioDoubleSplitBadge",
+      "StudioWordToggle",
+      "StudioVerticalWordToggle",
+      "StudioSideToggle",
+      "StudioDoubleSideToggle",
+      "StudioBarToggle",
+    ]) {
+      expect(markup, primitive).toContain(`data-vt-library-component="${primitive}"`)
+    }
+  })
+})
