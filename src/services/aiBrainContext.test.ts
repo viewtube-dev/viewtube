@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { syncChannelContextToLegacyAnswers, syncLegacyAnswersToChannelContext } from "./aiBrainContext"
+import { loadAiBrainContext, saveChannelContextProfile, syncChannelContextToLegacyAnswers, syncLegacyAnswersToChannelContext } from "./aiBrainContext"
 import type { ChannelContextProfile } from "../context/ChannelContextProfile"
 
 const profile: ChannelContextProfile = {
@@ -75,5 +75,24 @@ describe("Creator Brain intake convergence", () => {
   expect(migrated.identity.description).toBe("Canonical description")
   expect(migrated.identity.niche).toBe("Canonical niche")
   expect(migrated.audience.idealViewer).toBe("Old audience")
+ })
+ it("persists every canonical intake answer locally and restores it after reload", () => {
+  localStorage.clear()
+  const completeProfile: ChannelContextProfile = {
+   identity: { name: "History Channel", description: "Long-form history documentaries", niche: "Military history", subNiches: ["Naval history"], competitors: ["HistoryLab"] },
+   goals: { primaryGoal: "Grow returning viewers", successDefinition: "Build a loyal audience", priorityRanking: ["retention", "views"], offers: ["Membership"], primaryCTA: "Subscribe" },
+   audience: { idealViewer: "Curious adults", experienceLevel: "Enthusiast", transformation: "Understand history", problem: "Too much shallow coverage", segments: ["Students"] },
+   content: { types: ["Long-form"], frequency: "Weekly", bestFormats: ["Documentary"], priorityThemes: ["Turning points"], blockedThemes: ["Graphic detail"], recurringSeriesName: "History in Motion", recurringSeriesDescription: "One turning point per episode", biggestWeakness: "Inconsistent publishing", mostSuccessfulVideo: "The Siege of Vienna" },
+   brand: { voice: "Measured and curious", influences: ["Documentary makers"], creativity: 7 },
+   intelligence: { sources: ["Public videos", "Creator answers"], capabilities: ["Strategy"], signupReason: "Improve channel decisions" },
+  }
+  saveChannelContextProfile(completeProfile)
+  const raw = localStorage.getItem("vt_ai_brain_context_v1")
+  expect(raw).not.toBeNull()
+  expect(JSON.parse(raw || "{}").channelContext).toEqual(completeProfile)
+  expect(loadAiBrainContext().channelContext).toEqual(completeProfile)
+  expect(loadAiBrainContext().channelDescription).toBe("Long-form history documentaries")
+  expect(loadAiBrainContext().recurringSeriesName).toBe("History in Motion")
+  expect(loadAiBrainContext().signupReason).toBe("Improve channel decisions")
  })
 })
