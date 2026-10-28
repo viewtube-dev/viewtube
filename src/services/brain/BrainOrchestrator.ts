@@ -22,6 +22,7 @@ import {
  beginAIBrainTurn,
  retryAIBrainTurn,
  completeAIBrainTurn,
+ recordAIBrainTurnInteraction,
  formatCreatorGrowthModules,
  sanitizeCreatorFacingBrainCopy,
 } from "../aiBrainConversationStore"
@@ -486,6 +487,16 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    current,
   })
   retryContextContinuity = retryResolution.continuity
+  await recordAIBrainTurnInteraction(pending.id, {
+   type: "retry_generation_input",
+   direction: "inbound",
+   detail: {
+    retryEvidenceMode: input.retryEvidenceMode || "saved",
+    retryContextContinuity,
+    generationInputSnapshot: retryResolution.generationInput,
+    evidencePackSnapshot: retryResolution.generationInput.snapshot.evidencePack,
+   },
+  })
   input = {
    ...input,
    snapshot: retryResolution.generationInput.snapshot,
