@@ -324,7 +324,8 @@ export const saveAiBrainContext = (next: AiBrainContextInput, channelId?: string
  const previous = loadAiBrainContext(channelId, next.channelContext?.identity?.name)
  const updatedAt = new Date().toISOString()
  const migratedProfile = syncLegacyAnswersToChannelContext(previous.channelContext, previous, true)
- const canonicalProfile = next.channelContext || syncLegacyAnswersToChannelContext(migratedProfile, next)
+ // Treat the structured profile as canonical, while projecting explicitly supplied legacy intake answers into it.
+ const canonicalProfile = syncLegacyAnswersToChannelContext(next.channelContext || migratedProfile, next)
  const normalized = normalizeContext({
   ...previous,
   ...next,
