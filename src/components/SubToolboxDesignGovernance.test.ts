@@ -20,6 +20,13 @@ const studioControlStyles = () => [
 ].map((file) => source("src/styles/" + file)).join("\n")
 
 describe("subtoolbox design governance", () => {
+  it("keeps Studio toggle and slider defaults on the canonical primary/secondary tokens", () => {
+    const css = source("src/styles/studio-control-system.css");
+    expect(css).toContain("--vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+    expect(css).toContain("accent-color: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+    expect(css).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
+  });
+
   it("keeps the definitive library free of duplicate standalone choice cards and important overrides", () => {
     const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
     const styles = source("src/components/studio-hub/studio-hub-primitive-migration-catalog.css");
