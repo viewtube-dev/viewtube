@@ -235,6 +235,14 @@ export const loadAiBrainContext = (): AiBrainContext => {
  }
 }
 
+/** Notify other Brain surfaces that the one canonical local creator profile changed. */
+const notifyCreatorContextUpdated = (context: AiBrainContext): void => {
+ if (typeof window === "undefined") return
+ window.dispatchEvent(new CustomEvent("vt_creator_channel_context_updated", {
+  detail: { updatedAt: context.updatedAt, completedAt: context.completedAt },
+ }))
+}
+
 export const syncLegacyAnswersToChannelContext = (
  profile: ChannelContextProfile,
  input: AiBrainContextInput,
@@ -301,6 +309,7 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
  localStorage.setItem(COMPLETED_KEY, "true")
  localStorage.removeItem(DISMISSED_KEY)
+ notifyCreatorContextUpdated(payload)
  return payload
 }
 
@@ -333,6 +342,7 @@ export const saveChannelContextProfile = (channelContext: ChannelContextProfile)
  })
  const payload = syncChannelContextToLegacyAnswers(normalized, channelContext)
  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+ notifyCreatorContextUpdated(payload)
  return payload
 }
 
