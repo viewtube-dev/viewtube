@@ -19,7 +19,8 @@ describe("Gemini API-key validation contract", () => {
   it("uses shared local key storage and accepts keys independently of ViewTube login", () => {
     expect(source).toContain("import { getVaultKey, setVaultKey } from '../services/keyVault'");
     expect(source).toContain("getVaultKey('gemini')");
-    expect(source).toContain("setVaultKey('gemini', trimmedKey)");
+    expect(source).toContain("setApiKey(trimmedKey)");
+    expect(source).toContain("setVaultKey('gemini', key)");
     expect(source).toContain("setVaultKey('gemini', '')");
     expect(source).not.toContain("useUnifiedAccount");
     expect(source).not.toContain("isAuthenticated");
