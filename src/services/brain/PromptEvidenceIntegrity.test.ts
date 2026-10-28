@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { buildBrainEvidenceRecordQuality } from "./BrainEvidenceQuality"
+import { buildBrainEvidenceRecordQuality, fingerprintBrainEvidenceRecords } from "./BrainEvidenceQuality"
 import type { EvidenceRecord } from "./EvidenceRecord"
 import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords } from "./PromptEvidenceIntegrity"
 
@@ -18,12 +18,15 @@ const record = (overrides: Partial<EvidenceRecord> = {}): EvidenceRecord => ({
  ...overrides,
 })
 
-const metadataFor = (records: EvidenceRecord[]) => ({
+const metadataFor = (records: EvidenceRecord[], creatorRecords: EvidenceRecord[] = []) => ({
  promptEvidenceRecordIds: records.map((item) => item.id),
  evidenceRecords: records,
  evidenceRecordQuality: records.length
   ? buildBrainEvidenceRecordQuality(records, { expectedChannelId: "channel-1" })
   : null,
+ creatorAnswerEvidenceRecords: creatorRecords,
+ creatorAnswerEvidenceRecordIds: creatorRecords.map((item) => item.id),
+ creatorAnswerEvidenceFingerprint: fingerprintBrainEvidenceRecords(creatorRecords),
 })
 
 describe("PromptEvidenceIntegrity", () => {
@@ -42,6 +45,27 @@ describe("PromptEvidenceIntegrity", () => {
 
   expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("mismatch")
   expect(readPromptEvidenceRecords(metadata)).toBeUndefined()
+ })
+
+ it("rejects changed creator-answer evidence even when analytics evidence remains valid", () => {
+  const creatorEvidence = record({
+   id: "creator-answer:channel-1:audience",
+   owner: "creator-context",
+   sourceRef: "creator-profile:audience",
+   value: "new creators",
+  })
+  const metadata = metadataFor([record()], [creatorEvidence])
+  metadata.creatorAnswerEvidenceRecords[0] = { ...creatorEvidence, value: "changed audience" }
+
+  expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("mismatch")
+  expect(readPromptEvidenceRecords(metadata)).toBeUndefined()
+ })
+
+ it("rejects a missing creator-answer evidence manifest when creator records are present", () => {
+  const metadata = metadataFor([record()], [record({ id: "creator-answer:channel-1:goal" })])
+  delete metadata.creatorAnswerEvidenceFingerprint
+
+  expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("mismatch")
  })
 
  it("requires the quality fingerprint to match only the records persisted as prompt-rendered", () => {
