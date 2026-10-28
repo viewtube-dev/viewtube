@@ -17,7 +17,10 @@ This file tracks duplicate Gemini policy sources before consolidation. Do not tr
 | Metering | `src/services/billingEntitlement.ts` | Separate rate map; unknown IDs use a default Flash rate | Registry-linked pricing metadata; explicit unknown-rate handling |
 | Provider architecture guard | `src/services/brain/__tests__/brainProviderArchitectureGuard.test.ts` | Scans direct provider calls with an exception allowlist | Guard all consumers to canonical facade, exceptions reviewed |
 | Custom-key tests | `src/services/__tests__/geminiCustomKeyAccess.test.ts` | Tests custom-key access using a mocked SDK | Keep and extend as facade integration coverage |
-| SDK dependency | `package.json` + lockfile | `@google/genai: ^1.46.0` declared; lockfile resolution not recorded in this audit | Dependency policy + lockfile evidence |
+| Brain core consumer | `src/services/brain/Core.ts` | Direct `models.generateContent` through shared client | Migrate to canonical facade |
+| Collaboration consumer | `src/services/CollabEngine.ts` | Direct `models.generateContent` through shared client | Migrate to canonical facade |
+| Comment operator consumer | `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx` | Direct `models.generateContent` through shared client | Migrate to canonical facade |
+| SDK dependency | `package.json` + `package-lock.json` | Declared range `^1.46.0`; lockfile resolves exactly `1.46.0` | Dependency policy + lockfile evidence |
 
 ## Drift to resolve
 
@@ -66,14 +69,14 @@ Record path, exported entry point, capability, key source, model source, setting
 
 ## Evidence status
 
-Verified by reading the current target-branch source:
+Verified by reading the current target-branch source and lockfile:
 - the six source files listed in the inventory;
-- the declared `@google/genai` package range in `package.json`;
+- the declared `@google/genai` package range in `package.json` and lockfile-resolved version `1.46.0`;
 - the presence of a provider architecture guard and custom-key access tests.
 
 Not yet verified:
-- exact lockfile-resolved SDK version;
-- exhaustive repository-wide call-site/model ID list;
+- exhaustive target-SHA repository-wide call-site/model ID list;
+- exhaustive target-SHA repository-wide call-site/model ID list;
 - the API version actually used by all runtime entry points;
 - live availability of listed model IDs;
 - real-key generation success;
