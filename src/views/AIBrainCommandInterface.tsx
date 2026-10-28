@@ -106,10 +106,10 @@ import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
-import { buildCreatorAnswerEvidenceRecords } from "../services/brain/CreatorAnswerEvidence"
+import { buildScopedCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
 import type { EvidenceRecord } from "../services/brain/EvidenceRecord"
-import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, type PromptEvidenceIntegrityStatus } from "../services/brain/PromptEvidenceIntegrity"
+import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, readCreatorAnswerEvidenceRecords, type PromptEvidenceIntegrityStatus } from "../services/brain/PromptEvidenceIntegrity"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
  clearBrainSurfaceSelection,
@@ -1179,7 +1179,7 @@ const AIBrainCommandInterface: React.FC = () => {
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
-     evidenceRecords: readPromptEvidenceRecords(turn.metadata),
+     evidenceRecords: [...(readPromptEvidenceRecords(turn.metadata) || []), ...(readCreatorAnswerEvidenceRecords(turn.metadata) || [])],
      evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(turn.metadata),
      readiness: turn.metadata?.dataReadinessSnapshot && typeof turn.metadata.dataReadinessSnapshot === "object"
       ? turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness
@@ -1326,6 +1326,9 @@ const AIBrainCommandInterface: React.FC = () => {
     requestText: userText,
    })
    turnGrowthContext = buildCreatorGrowthContext(turnSnapshot, recentTurns, learningEntries)
+   const creatorContext = loadAiBrainContext(channelId, turnSnapshot.channel.label)
+   const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, turnSnapshot.channel.label)
+   turnSnapshot = { ...turnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence) }
    const systemPrompt = buildAIBrainSystemPrompt({
     brain,
     authState,
@@ -1380,7 +1383,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: readPromptEvidenceRecords(result.turn.metadata), evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: [...(readPromptEvidenceRecords(result.turn.metadata) || []), ...(readCreatorAnswerEvidenceRecords(result.turn.metadata) || [])], evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -1466,9 +1469,12 @@ const AIBrainCommandInterface: React.FC = () => {
      recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
      requestText: userText,
     })
-    const turnSnapshot = !useFreshEvidence && message.evidencePack
+    const baseTurnSnapshot = !useFreshEvidence && message.evidencePack
      ? { ...freshSnapshot, evidencePack: message.evidencePack }
      : freshSnapshot
+    const creatorContext = loadAiBrainContext(channelId, snapshot.channel.label)
+    const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, snapshot.channel.label)
+    const turnSnapshot = { ...baseTurnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(baseTurnSnapshot.evidencePack, creatorAnswerEvidence) }
     const turnGrowthContext = buildCreatorGrowthContext(
      turnSnapshot,
      recentTurns.filter((turn) => turn.id !== message.id),
@@ -1482,7 +1488,7 @@ const AIBrainCommandInterface: React.FC = () => {
      brainOnboardingSnapshot: onboardingSnapshot,
      recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
      requestText: userText,
-     evidencePackOverride: !useFreshEvidence ? message.evidencePack : undefined,
+     evidencePackOverride: !useFreshEvidence ? turnSnapshot.evidencePack : undefined,
      creatorGrowthContext: turnGrowthContext,
      channelContext: loadAiBrainContext(channelId, snapshot.channel.label).channelContext,
     })
@@ -1521,7 +1527,7 @@ const AIBrainCommandInterface: React.FC = () => {
        turnStatus: result.turn.status,
        originalUserText: result.turn.rawUserMessage ?? userText,
        evidencePack: turnSnapshot.evidencePack,
-       evidenceRecords: readPromptEvidenceRecords(result.turn.metadata),
+       evidenceRecords: [...(readPromptEvidenceRecords(result.turn.metadata) || []), ...(readCreatorAnswerEvidenceRecords(result.turn.metadata) || [])],
        evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata),
        readiness: readinessForSnapshot(turnSnapshot),
        contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined,
@@ -1786,7 +1792,7 @@ const AIBrainCommandInterface: React.FC = () => {
   const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" }, channelId)
   setIntakeContext(saved)
   setIntakeSaveStatus("Unified creator profile saved locally.")
-  const intakeEvidenceRecords = buildCreatorAnswerEvidenceRecords(saved, channelId)
+  const intakeEvidenceRecords = buildScopedCreatorAnswerEvidenceRecords(saved, channelId, snapshot.channel.label)
   updateBrain({
    creatorPreferences: {
     what_next_goal: saved.mainYoutubeGoal || saved.successDefinition || saved.whatNext,
