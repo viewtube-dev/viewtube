@@ -713,6 +713,14 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Studio Text Input|Studio Text Area|Studio Text Box|Split Text Input|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) {
     return "Text Fields"
   }
+  // These stateful section components each own a coherent family of specimens.
+  // They must be classified by identity because React.Children.toArray cannot
+  // inspect the elements returned by a component without rendering it.
+  if (/ConfirmedStudio(ValueToggleFamily)/.test(componentName)) return "Controls"
+  if (/ConfirmedStudio(CounterFamily|SideCounterFamily|LeftWordCounterFamily|LeftWordSliderFamily|DoubleSplitSliderFamily)/.test(componentName)) {
+    return "Counters & Sliders"
+  }
+  if (/ConfirmedStudioButtonFamily|CanonicalSplitBadgeFamily/.test(componentName)) return "Buttons & Badges"
   if (/Dropdown|Multi Selection|Single Selection/.test(title)) return "Dropdowns"
   if (/StudioCounter|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|StudioDoubleSplitSlider|Counter ·|Slider ·/.test(title)
     || componentName === "ConfirmedStudioCounterFamily"
