@@ -2358,7 +2358,8 @@ export interface StudioLeftCounterProps extends StudioCounterProps {
   displayValue?: React.ReactNode;
 }
 
-export type StudioLeftWordCounterProps = Omit<StudioCounterProps, "min" | "max" | "step">;
+export type StudioLeftWordVariant = "default" | "color-cycle";
+export type StudioLeftWordCounterProps = Omit<StudioCounterProps, "min" | "max" | "step"> & { variant?: StudioLeftWordVariant };
 export type StudioLeftWordSliderProps = Omit<StudioDoubleSplitSliderProps, "min" | "max" | "step" | "leftControls">;
 
 export const STUDIO_LEFT_WORD_OPTIONS = ["ONE", "TWO", "THREE", "FOUR"] as const;
@@ -2482,7 +2483,7 @@ StudioLeftCounter.displayName = "StudioLeftCounter";
 
 /** Four-state word cycle built on the canonical StudioLeftCounter interaction mechanics. */
 export const StudioLeftWordCounter: React.FC<StudioLeftWordCounterProps> = ({
-  value, onValueChange, size = "standard", className, disabled = false, ariaLabel = "Word",
+  value, onValueChange, size = "standard", className, disabled = false, ariaLabel = "Word", variant = "default",
   ...props
 }) => {
   const wordIndex = normalizeStudioLeftWordIndex(value);
@@ -2503,6 +2504,7 @@ export const StudioLeftWordCounter: React.FC<StudioLeftWordCounterProps> = ({
       displayValue={STUDIO_LEFT_WORD_OPTIONS[wordIndex - 1]}
       className={studioClasses("vt-studio-left-word-counter", className)}
       data-vt-studio-word-index={String(wordIndex)}
+      data-vt-studio-word-variant={variant}
       data-vt-library-component="StudioLeftWordCounter"
     />
   );
