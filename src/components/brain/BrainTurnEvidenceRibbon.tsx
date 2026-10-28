@@ -33,9 +33,17 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
   className = "",
 }) => {
   const preparedCount = evidencePack.items.length
+  // The prompt evidence records are the canonical IDs actually supplied to the model.
+  // They can differ from display IDs in the broader evidence pack; only trust record
+  // IDs when the saved prompt-evidence manifest has been verified.
+  const verifiedRecords = evidenceIntegrityStatus === "verified" ? evidenceRecords : undefined
   const preparedEvidenceIds = new Set(evidencePack.items.map((item) => item.id))
-  const resolvedCitations = new Set(citedEvidenceIds.filter((id) => preparedEvidenceIds.has(id)))
-  const unresolvedCitationIds = new Set(citedEvidenceIds.filter((id) => !preparedEvidenceIds.has(id)))
+  const trustedEvidenceIds = new Set([
+    ...preparedEvidenceIds,
+    ...(verifiedRecords || []).map((record) => record.id),
+  ])
+  const resolvedCitations = new Set(citedEvidenceIds.filter((id) => trustedEvidenceIds.has(id)))
+  const unresolvedCitationIds = new Set(citedEvidenceIds.filter((id) => !trustedEvidenceIds.has(id)))
   const citedCount = resolvedCitations.size
   const unresolvedCitationCount = unresolvedCitationIds.size
   const capturedAt = evidencePack.capturedAt
@@ -58,7 +66,6 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
         : noPreparedEvidence
           ? "No evidence selected"
           : "Evidence ready"
-  const verifiedRecords = evidenceIntegrityStatus === "verified" ? evidenceRecords : undefined
   const staleCount =
     verifiedRecords?.filter((record) => record.freshness === "stale" || record.epistemicState === "STALE").length ?? 0
   const missingCount =
@@ -127,7 +134,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
             className="break-words text-[10px] font-bold leading-4 text-black/70"
           >
             {unresolvedCitationCount} response citation{unresolvedCitationCount === 1 ? "" : "s"} did not match the
-            prepared evidence list and {unresolvedCitationCount === 1 ? "is" : "are"} not counted as cited.
+            prepared evidence list or verified prompt records and {unresolvedCitationCount === 1 ? "is" : "are"} not counted as cited.
           </p>
         ) : null}
 
