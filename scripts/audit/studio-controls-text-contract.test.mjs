@@ -32,10 +32,10 @@ test("Studio button labels use the shared clipped-text default, never ellipsis",
   assert.doesNotMatch(overridesCss, /text-overflow:\s*ellipsis/i)
 })
 
-test("StudioTextBox uses black glyphs, a primary inset stroke, and no shadow", () => {
+test("StudioTextBox uses black glyphs, a primary inset stroke, and a secondary outline", () => {
   assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*-webkit-text-stroke-color:\s*#000\s*!important;[^}]*\}/s)
-  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke\) var\(--vt-field-primary\)/s)
-  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*box-shadow:\s*none/s)
+  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke\) var\(--vt-field-inline-stroke\) !important;/s)
+  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*outline:\s*var\(--vt-field-focus-outline\) !important;/s)
 })
 
 test("focused textarea keeps a secondary outline without a primary focus text stroke", () => {
