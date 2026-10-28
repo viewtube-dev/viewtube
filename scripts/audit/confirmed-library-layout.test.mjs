@@ -514,3 +514,25 @@ test("StudioSplitTextInput is a real exported primitive with a full-width standa
   assert.ok(catalog.includes('data-vt-library-component="StudioSplitTextInput"'));
   assert.ok(catalog.includes('aria-label="Split text input standard specimen"'));
 });
+
+
+test("confirmed primitive grid is visible first and shows live canonical control families", () => {
+  const overview = catalog.match(/const ConfirmedPrimitiveGridOverview:[^]*?\n}\n\nconst ConfirmedDirectPrimitiveRows/)?.[0] ?? "";
+  assert.ok(overview.length > 500, "the top primitive overview must remain implemented");
+  assert.match(overview, /Primitive Grid · Live Production Components/);
+  assert.match(overview, /<StudioComponentGrid cols={2} rows={3} size="standard"/);
+  for (const primitive of [
+    'data-vt-library-component="StudioButton"',
+    'data-vt-library-component="StudioDropdown"',
+    'data-vt-library-component="StudioCounter"',
+    'data-vt-library-component="StudioDoubleSplitSlider"',
+    'data-vt-library-component="StudioSplitLeftButton"',
+    'data-vt-library-component="StudioTextInput"',
+  ]) assert.ok(overview.includes(primitive), primitive);
+  const exportStart = catalog.indexOf("export const StudioHubConfirmedPrimitiveCatalog");
+  const gridMount = catalog.indexOf("<ConfirmedPrimitiveGridOverview />", exportStart);
+  const representativesMount = catalog.indexOf("<ConfirmedDirectPrimitiveRows />", exportStart);
+  assert.ok(gridMount >= 0 && representativesMount > gridMount, "the grid must render before the detailed representative rows");
+  assert.match(styles, /\.vt-confirmed-primitive-grid-overview\s*\{[^}]*display:\s*grid/s);
+  assert.match(styles, /\.vt-confirmed-primitive-grid-cell\s*\{[^}]*width:\s*100%/s);
+});
