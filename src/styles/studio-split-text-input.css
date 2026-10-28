@@ -146,12 +146,7 @@
    confirms which variant fits the border box without clipping. */
 /* Put the variant directly on the field: this makes the experimental geometry
    independent of shell selector precedence and shared split-layout rules. */
-.vt-studio-split-text-input__field[data-geometry-variant="padding-reference"] {
-  padding-block: var(--vt-studio-space-unit, 4px);
-}
-
 .vt-studio-split-text-input__field[data-geometry-variant="half-vertical-padding"] {
-  /* Half of the explicit 4px diagnostic reference; production baseline is 0px. */
   padding-block: calc(var(--vt-studio-space-unit, 4px) / 2);
 }
 
