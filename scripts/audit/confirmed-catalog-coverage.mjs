@@ -45,8 +45,8 @@ const checks = [
   ["catalog imports disclosure styles", catalog.includes('import "../../styles/studio-confirmed-catalog-modules.css"') && catalogStyles.includes(".vt-confirmed-primitive-summary")],
   ["module components are exported", moduleFile.includes("ConfirmedFamilyModule") && moduleFile.includes("ConfirmedPrimitiveModule") && index.includes("ConfirmedDefaultsModule")],
   ["all seven requested family groups are declared", [
-    "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
-    "Controls", "Text Controls", "Compositions",
+    "Text Fields", "Buttons & Badges", "Dropdowns", "Controls",
+    "Counters & Sliders", "Modules & Frames", "Compositions",
   ].every((family) => catalog.includes(`"${family}"`)) && catalog.includes("CONFIRMED_CATALOG_FAMILIES")],
   ["global defaults render before the seven family groups", catalog.indexOf("{defaults}") >= 0 && catalog.indexOf("{defaults}") < catalog.indexOf("vt-confirmed-family-grid")],
 
