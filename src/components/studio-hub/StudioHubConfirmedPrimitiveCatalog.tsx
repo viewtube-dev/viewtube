@@ -703,7 +703,7 @@ const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
 ]
 
 const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
-  if (!React.isValidElement(node)) return "Other Controls"
+  if (!React.isValidElement(node)) return "Compositions"
   const props = node.props as { title?: unknown }
   const title = typeof props.title === "string" ? props.title : ""
   const componentType = node.type as { displayName?: string; name?: string }
