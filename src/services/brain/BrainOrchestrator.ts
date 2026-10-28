@@ -45,7 +45,7 @@ import { BRAIN_CONTEXT_RESOLVER_VERSION } from "./BrainContextResolution"
 import type { CanonicalIntelligenceEvidenceBundle } from "../analytics-canon"
 import { resolveEvidenceIntelligence, type EvidenceIntelligenceEnvelope } from "./EvidenceIntelligenceResolver"
 import { buildBrainEvidenceRecordQuality } from "./BrainEvidenceQuality"
-import { selectEvidenceRecordsForPrompt, type EvidenceRecord } from "./EvidenceRecord"
+import { getEvidenceRecordsActuallyRendered, selectEvidenceRecordsForPrompt, type EvidenceRecord } from "./EvidenceRecord"
 import { collectKnownNumbers, parseNumericToken } from "./numericClaims"
 import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess"
 import { readBrainEngineControls } from "./BrainEngineControls"
@@ -652,12 +652,11 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    channelContext: savedChannelContext,
    creatorAnswerEvidenceRecords,
   })
-  renderedEvidenceRecords = promptEvidenceRecords.filter((record) =>
-   context.systemInstruction.includes(record.id),
-  )
-  renderedCreatorAnswerEvidenceRecords = creatorAnswerEvidenceRecords.filter((record) =>
-   context.systemInstruction.includes(record.id),
-  )
+  // Only retain evidence whose full canonical prompt representation survived
+  // section selection and the context budget. An ID substring is not proof that
+  // the record itself was supplied to the model.
+  renderedEvidenceRecords = getEvidenceRecordsActuallyRendered(context.systemInstruction, promptEvidenceRecords)
+  renderedCreatorAnswerEvidenceRecords = getEvidenceRecordsActuallyRendered(context.systemInstruction, creatorAnswerEvidenceRecords)
   questionTrace.recordEvidence({
    returned: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id),
    missing: [],
