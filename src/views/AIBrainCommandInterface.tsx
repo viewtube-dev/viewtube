@@ -1328,9 +1328,6 @@ const AIBrainCommandInterface: React.FC = () => {
    turnGrowthContext = buildCreatorGrowthContext(turnSnapshot, recentTurns, learningEntries)
    const creatorContext = loadAiBrainContext(channelId)
    const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, authState.channelName || authState.channelHandle || null)
-   turnSnapshot = { ...turnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence) }
-   const creatorContext = loadAiBrainContext(channelId)
-   const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, authState.channelName || authState.channelHandle || null)
    turnSnapshot = {
     ...turnSnapshot,
     evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence),
@@ -1478,7 +1475,7 @@ const AIBrainCommandInterface: React.FC = () => {
     const baseTurnSnapshot = !useFreshEvidence && message.evidencePack
      ? { ...freshSnapshot, evidencePack: message.evidencePack }
      : freshSnapshot
-    const creatorContext = loadAiBrainContext()
+    const creatorContext = loadAiBrainContext(channelId)
     const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(
      creatorContext,
      channelId,
