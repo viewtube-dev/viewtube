@@ -957,6 +957,9 @@ describe("Confirmed primitive library family organization", () => {
     expect(catalog).toContain("SubToolboxRangeSlider");
     expect(catalog).toContain("ToolboxHeaderCollapseButton");
     expect(catalog).toContain("SubToolboxLegendTooltip");
+    const familyCss = source("src/components/studio-hub/studio-hub-primitive-migration-catalog.css");
+    expect(familyCss.match(/\[data-vt-family="Studio Button Family"\]/g)).toHaveLength(2);
+    expect(familyCss).not.toContain("letter-spacing: -.035em");
   });
 });
 describe("Confirmed primitive library canonical defaults", () => {
