@@ -337,6 +337,36 @@ export const formatCreatorGrowthModules = (
  return fallbackModules.slice(0, 3)
 }
 
+/** Read a canonical saved turn without creating a second persistence path. */
+export const getAIBrainConversationTurn = async (turnId: string): Promise<AIBrainConversationTurn | null> =>
+ getAIBrainConversationTurnDB(turnId)
+
+/** Append a local interaction receipt to the canonical turn metadata in IndexedDB. */
+export const recordAIBrainTurnInteraction = async (
+ turnId: string,
+ event: { type: string; direction: "inbound" | "outbound" | "local"; detail?: Record<string, unknown> },
+): Promise<AIBrainConversationTurn> => {
+ const existing = await getAIBrainConversationTurnDB(turnId)
+ if (!existing) throw new Error(`AI Brain turn not found: ${turnId}`)
+ const currentLog = Array.isArray(existing.metadata?.interactionLog)
+  ? existing.metadata.interactionLog as Array<Record<string, unknown>>
+  : []
+ const receipt = {
+  id: makeId("brain_interaction"),
+  type: event.type,
+  direction: event.direction,
+  at: nowIso(),
+  ...(event.detail || {}),
+ }
+ const updated: AIBrainConversationTurn = {
+  ...existing,
+  updatedAt: nowIso(),
+  metadata: { ...(existing.metadata || {}), interactionLog: [...currentLog, receipt] },
+ }
+ await saveAIBrainConversationTurnDB(updated)
+ return updated
+}
+
 export const saveAIBrainConversationTurn = async (input: {
  channelId?: string | null
  userText: string
@@ -409,7 +439,10 @@ export const beginAIBrainTurn = async (input: {
  return turn
 }
 
-export const retryAIBrainTurn = async (turnId: string): Promise<AIBrainConversationTurn> => {
+export const retryAIBrainTurn = async (
+ turnId: string,
+ options: { mode?: "saved" | "fresh"; evidenceIds?: string[] } = {},
+): Promise<AIBrainConversationTurn> => {
  const existing = await getAIBrainConversationTurnDB(turnId)
  if (!existing) throw new Error(`AI Brain turn not found: ${turnId}`)
  if (existing.status !== "interrupted") {
@@ -418,6 +451,21 @@ export const retryAIBrainTurn = async (turnId: string): Promise<AIBrainConversat
 
  const updatedAt = nowIso()
  const retryCount = Number(existing.metadata?.retryCount || 0) + 1
+ const mode = options.mode || "saved"
+ const retryAttempts = Array.isArray(existing.metadata?.retryAttempts)
+  ? existing.metadata.retryAttempts as Array<Record<string, unknown>>
+  : []
+ const interactionLog = Array.isArray(existing.metadata?.interactionLog)
+  ? existing.metadata.interactionLog as Array<Record<string, unknown>>
+  : []
+ const retryEvent = {
+  id: makeId("brain_interaction"),
+  type: "generation_retry",
+  direction: "local",
+  at: updatedAt,
+  evidenceMode: mode,
+  evidenceIds: (options.evidenceIds || []).slice(0, 100),
+ }
  const turn: AIBrainConversationTurn = {
   ...existing,
   updatedAt,
@@ -427,7 +475,14 @@ export const retryAIBrainTurn = async (turnId: string): Promise<AIBrainConversat
   answerModules: [],
   citations: undefined,
   evaluation: undefined,
-  metadata: { ...(existing.metadata || {}), retryCount, lastRetryAt: updatedAt },
+  metadata: {
+   ...(existing.metadata || {}),
+   retryCount,
+   lastRetryAt: updatedAt,
+   retryEvidenceMode: mode,
+   retryAttempts: [...retryAttempts, { ...retryEvent }],
+   interactionLog: [...interactionLog, retryEvent],
+  },
  }
  await saveAIBrainConversationTurnDB(turn)
 
@@ -463,6 +518,24 @@ export const completeAIBrainTurn = async (input: {
   response: input.response || input.assistantText,
   learningEntryIds: input.learningEntryIds || existing.learningEntryIds,
  })
+ const existingMetadata = existing.metadata || {}
+ const mergedMetadata = { ...existingMetadata, ...(input.metadata || {}) }
+ const interactionLog = Array.isArray(existingMetadata.interactionLog)
+  ? existingMetadata.interactionLog as Array<Record<string, unknown>>
+  : []
+ const outboundEvent = {
+  id: makeId("brain_interaction"),
+  type: "assistant_response",
+  direction: "outbound",
+  at: updatedAt,
+  status: input.status,
+  text: input.assistantText,
+  responseId: input.response?.id || null,
+  evidenceIds: Array.isArray(mergedMetadata.evidenceIds) ? mergedMetadata.evidenceIds : [],
+  promptEvidenceRecordIds: Array.isArray(mergedMetadata.promptEvidenceRecordIds) ? mergedMetadata.promptEvidenceRecordIds : [],
+  creatorAnswerEvidenceRecordIds: Array.isArray(mergedMetadata.creatorAnswerEvidenceRecordIds) ? mergedMetadata.creatorAnswerEvidenceRecordIds : [],
+  evidenceIntegrityStatus: typeof mergedMetadata.evidenceIntegrityStatus === "string" ? mergedMetadata.evidenceIntegrityStatus : "recorded_with_turn_metadata",
+ }
  const turn: AIBrainConversationTurn = {
   ...existing,
   updatedAt,
@@ -476,7 +549,7 @@ export const completeAIBrainTurn = async (input: {
   citations: input.citations,
   evaluation: input.evaluation,
   digest,
-  metadata: { ...(existing.metadata || {}), ...(input.metadata || {}) },
+  metadata: { ...mergedMetadata, interactionLog: [...interactionLog, outboundEvent] },
  }
  await saveAIBrainConversationTurnDB(turn)
 
