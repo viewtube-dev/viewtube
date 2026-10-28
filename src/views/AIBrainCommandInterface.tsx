@@ -988,14 +988,14 @@ const AIBrainCommandInterface: React.FC = () => {
  // loads on refresh. When a channel has no saved turns (first-time users, and the
  // static-render tests), start hydrated so the launchpad shows immediately.
  const [hydrated, setHydrated] = useState(
-  () => !aiBrainThreadHasTurnsHint(authState.channelHandle || authState.channelId || null),
+  () => !aiBrainThreadHasTurnsHint(authState.channelId || authState.channelHandle || null),
  )
  const [learningEntries, setLearningEntries] = useState<AIBrainLearningEntry[]>([])
  const [recentTurns, setRecentTurns] = useState<AIBrainConversationTurn[]>([])
  const [questionAnswers, setQuestionAnswers] = useState<AIBrainQuestionAnswer[]>([])
  const [onboardingSnapshot, setOnboardingSnapshot] = useState<BrainOnboardingSnapshot | null>(null)
  const [intakeOpen, setIntakeOpen] = useState(false)
- const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext(authState.channelHandle || authState.channelId || null))
+ const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext(authState.channelId || authState.channelHandle || null))
  const [intakeSaveStatus, setIntakeSaveStatus] = useState("Answers save locally as you type.")
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
@@ -1018,7 +1018,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const askSeededRef = useRef(false)
  const canUseGemini = hasGeminiKey()
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
- const channelId = authState.channelHandle || authState.channelId || null
+ const channelId = authState.channelId || authState.channelHandle || null
  useEffect(() => {
   setIntakeContext(loadAiBrainContext(channelId))
   setIntakeSaveStatus("Loaded this channel's locally saved profile.")
