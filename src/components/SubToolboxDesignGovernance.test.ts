@@ -858,6 +858,9 @@ describe("Studio control family grouping and split-slider palette defaults", () 
     expect(catalog).toContain("SubToolboxCheckControl");
     expect(catalog).toContain("SubToolboxRadioControl");
     expect(catalog).toContain("SubToolboxControllerSwitch");
+    expect(catalog).toContain('"Studio Left Word Counter"');
+    expect(catalog).toContain("<StudioLeftWordCounter size=\"standard\"");
+    expect(catalog).toContain("Secondary value fill: add the");
   });
 
   it("uses secondary split sections and a solid primary center for the double-split slider", () => {
