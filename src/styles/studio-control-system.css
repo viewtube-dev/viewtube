@@ -6715,3 +6715,11 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-sp
   border-top-left-radius: var(--vt-studio-compact-radius, 4px) !important;
   border-top-right-radius: var(--vt-studio-compact-radius, 4px) !important;
 }
+
+
+/* The secondary ring's outer radius meets the primary ring's inner radius:
+   border radius is measured on the border box, so subtract the inset and
+   primary stroke, not the secondary stroke a second time. */
+.vt-studio-upload-frame__inset::after {
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke)));
+}
