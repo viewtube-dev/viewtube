@@ -1493,3 +1493,39 @@ describe("StudioSplitTextInput transparent-panel composition", () => {
     expect(css.slice(focusStart, focusStart + 1000)).toContain("outline: none");
   });
 });
+
+
+describe("canonical detached Studio dropdown menu", () => {
+  it("keeps the open menu separated, fully rounded, and white behind unselected rows", () => {
+    const css = readStudioControlCss();
+    const start = css.lastIndexOf("/* Canonical detached dropdown contract.");
+    expect(start).toBeGreaterThanOrEqual(0);
+    const contract = css.slice(start);
+    expect(contract).toContain("top: calc(100% + 4px) !important");
+    expect(contract).toContain("border-radius: var(--vt-studio-control-radius, 6px) !important");
+    expect(contract).toContain("background: #fff !important");
+    expect(contract).toContain(".vt-studio-dropdown-menu > .vt-studio-dropdown-option");
+    expect(contract).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important");
+  });
+});
+
+describe("upload frame connected perimeter radii", () => {
+  it("connects the outer gradient, inset primary ring, and secondary ring", () => {
+    const css = readStudioControlCss();
+    const gradientStart = css.lastIndexOf(".vt-studio-upload-frame::before {");
+    const insetStart = css.lastIndexOf(".vt-studio-upload-frame__inset {");
+    const secondaryStart = css.lastIndexOf(".vt-studio-upload-frame__inset::after {");
+    expect(gradientStart).toBeGreaterThanOrEqual(0);
+    expect(insetStart).toBeGreaterThan(gradientStart);
+    expect(secondaryStart).toBeGreaterThan(insetStart);
+    const gradient = css.slice(gradientStart, insetStart);
+    const inset = css.slice(insetStart, secondaryStart);
+    const secondary = css.slice(secondaryStart, secondaryStart + 500);
+    expect(gradient).toContain("inset: var(--vt-studio-upload-frame-stroke)");
+    expect(gradient).toContain("var(--vt-studio-upload-frame-radius) - var(--vt-studio-upload-frame-stroke)");
+    expect(inset).toContain("inset: calc(2 * var(--vt-studio-upload-frame-stroke))");
+    expect(inset).toContain("var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke)");
+    expect(secondary).toContain("var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke)");
+    expect(secondary).not.toContain("var(--vt-upload-secondary-stroke)))");
+  });
+});
