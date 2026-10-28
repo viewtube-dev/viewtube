@@ -12,7 +12,6 @@ import {
 import { StudioInput } from "../../studio-ui"
 
 export interface SettingsAiPanelProps {
-  canViewGeminiKey: boolean
   geminiKey: string
   showKey: boolean
   settingsSaveStatus: string | null
@@ -24,7 +23,6 @@ export interface SettingsAiPanelProps {
 }
 
 export const SettingsAiPanel: React.FC<SettingsAiPanelProps> = ({
-  canViewGeminiKey,
   geminiKey,
   showKey,
   settingsSaveStatus,
@@ -84,8 +82,7 @@ export const SettingsAiPanel: React.FC<SettingsAiPanelProps> = ({
       </SubToolboxStack>
     </SubToolbox>
 
-    {canViewGeminiKey ? (
-      <SubToolbox
+    <SubToolbox
         title="API Key / BYOK"
         icon={<KeyRound />}
         paletteIndex={4}
@@ -140,7 +137,6 @@ export const SettingsAiPanel: React.FC<SettingsAiPanelProps> = ({
             ) : null}
           </SubToolboxStack>
         </form>
-      </SubToolbox>
-    ) : null}
+    </SubToolbox>
   </div>
 )
