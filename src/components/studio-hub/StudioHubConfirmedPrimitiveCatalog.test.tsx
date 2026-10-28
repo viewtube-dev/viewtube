@@ -115,7 +115,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(classifier).toMatch(/StudioCounter\|StudioSideCounter\|StudioLeftCounter\|StudioLeftWordCounter/)
     expect(classifier).toMatch(/Dropdown\|Multi Selection\|Single Selection/)
     expect(classifier).toMatch(/WordToggle\|ArrowToggle\|SideToggle\|BarToggle/)
-    expect(s).not.toContain('"Text Controls"')
+    expect(source).not.toContain('"Text Controls"')
     expect(html).toContain("Collapsing Split Module · Standard + Compact")
     expect(html).toContain("Collapsing Two-Line Module · Standard")
     expect(html).toContain("InterModule · Standard")
