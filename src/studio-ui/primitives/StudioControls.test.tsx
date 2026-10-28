@@ -1412,12 +1412,20 @@ describe("Studio left word counter and word slider", () => {
     });
   });
 
+  it("keeps the default word counter primary-filled and opts into color cycling only by variant", () => {
+    const defaultHtml = renderToStaticMarkup(<StudioLeftWordCounter value={2} onValueChange={() => undefined} ariaLabel="Default word counter" />);
+    const colorHtml = renderToStaticMarkup(<StudioLeftWordCounter value={2} onValueChange={() => undefined} variant="color-cycle" ariaLabel="Color-cycle word counter" />);
+    expect(defaultHtml).toContain('data-vt-studio-word-variant="default"');
+    expect(colorHtml).toContain('data-vt-studio-word-variant="color-cycle"');
+  });
+
   it("renders the four-state left counter using the existing counter shell", () => {
     const html = renderToStaticMarkup(
       <StudioLeftWordCounter value={3} onValueChange={() => undefined} ariaLabel="Word counter test" />,
     );
     expect(html).toContain('data-vt-library-component="StudioLeftWordCounter"');
     expect(html).toContain('data-vt-studio-word-index="3"');
+    expect(html).toContain('data-vt-studio-word-variant="default"');
     expect(html).toContain(">THREE</span>");
     expect(html).toContain('aria-label="Increase Word counter test"');
     expect(html).toContain('aria-label="Decrease Word counter test"');
@@ -1445,9 +1453,10 @@ describe("Studio left word counter and word slider", () => {
 
   it("defines palette-state and slider geometry rules in the dedicated stylesheet", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-word-counter.css"), "utf8");
-    expect(css).toContain('[data-vt-studio-word-index="2"]');
-    expect(css).toContain('[data-vt-studio-word-index="3"]');
-    expect(css).toContain('[data-vt-studio-word-index="4"]');
+    expect(css).toContain('[data-vt-studio-word-variant="color-cycle"][data-vt-studio-word-index="2"]');
+    expect(css).toContain('[data-vt-studio-word-variant="color-cycle"][data-vt-studio-word-index="3"]');
+    expect(css).toContain('[data-vt-studio-word-variant="color-cycle"][data-vt-studio-word-index="4"]');
+    expect(css).toContain(".vt-studio-left-word-counter .vt-studio-side-counter__value");
     expect(css).toContain(".vt-studio-left-word-slider");
     expect(css).toContain("prefers-reduced-motion");
   });

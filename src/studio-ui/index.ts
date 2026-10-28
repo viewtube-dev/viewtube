@@ -74,6 +74,7 @@ export type {
   StudioLeftWordCounterProps,
   StudioLeftWordSliderProps,
   StudioLeftWord,
+  StudioLeftWordVariant,
   StudioControlTone,
   StudioIconButtonProps,
   StudioSplitLeftButtonProps,
