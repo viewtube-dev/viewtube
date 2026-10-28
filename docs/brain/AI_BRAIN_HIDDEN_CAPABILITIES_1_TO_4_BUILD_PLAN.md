@@ -38,6 +38,8 @@ This does not complete capability 2. Remaining work includes verifying that evid
 
 Follow-up slice — saved evidence quality parity: `BrainOrchestrator` now fingerprints the exact prompt-rendered record subset when persisting normal and orchestration-fallback turns, rather than attaching the pre-render selection's quality report to a potentially smaller rendered set. Added a regression case proving a report for a larger set is rejected and a report rebuilt for the persisted subset verifies. This code is committed but has not been run locally; CI/test confirmation is still required.
 
+Follow-up slice — creator-answer evidence integrity: creator-profile evidence is also rendered into the model prompt, so it now receives its own persisted content fingerprint and ordered ID manifest. `PromptEvidenceIntegrity` verifies this manifest alongside analytics evidence; a changed creator-profile value or a missing fingerprint marks the turn as mismatched rather than allowing the analytics manifest alone to make the whole turn look verified. Regression tests cover both cases. Verification remains pending because this environment cannot run the repository's test/build commands.
+
 **Task 0.1**
 - Read the linked Brain plans and [Studio hierarchy](../ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md) and [Component Library source of truth](../ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md).
 - Trace context → evidence → capability → model → result UI.
