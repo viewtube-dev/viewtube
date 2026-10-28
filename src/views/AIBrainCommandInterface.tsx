@@ -1315,6 +1315,8 @@ const AIBrainCommandInterface: React.FC = () => {
   setMessages((current) => [...current, userMessage])
   let turnSnapshot: AIBrainContextSnapshot = snapshot
   let turnGrowthContext = creatorGrowthContext
+  let systemPrompt: string | null = null
+  let historyPayload: any[] | null = null
   try {
    turnSnapshot = buildAIBrainContextSnapshot({
     brain,
@@ -1329,7 +1331,7 @@ const AIBrainCommandInterface: React.FC = () => {
    const creatorContext = loadAiBrainContext(channelId, turnSnapshot.channel.label, [authState.channelHandle])
    const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, turnSnapshot.channel.label)
    turnSnapshot = { ...turnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence) }
-   const systemPrompt = buildAIBrainSystemPrompt({
+   systemPrompt = buildAIBrainSystemPrompt({
     brain,
     authState,
     channelConnection,
@@ -1340,7 +1342,7 @@ const AIBrainCommandInterface: React.FC = () => {
     creatorGrowthContext: turnGrowthContext,
     channelContext: loadAiBrainContext(channelId, snapshot.channel.label, [authState.channelHandle]).channelContext,
    })
-   const historyPayload = buildBrainConversationHistory(recentTurns)
+   historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
    if (channelId) {
     const communicationControls = readBrainUserControls(channelId)
@@ -1410,13 +1412,13 @@ const AIBrainCommandInterface: React.FC = () => {
       ...(promptOrigin ? { promptOrigin } : {}),
       evidencePackSnapshot: turnSnapshot.evidencePack,
       dataReadinessSnapshot: readinessForSnapshot(turnSnapshot),
-      generationInputSnapshot: {
+      ...(systemPrompt ? { generationInputSnapshot: {
        snapshot: turnSnapshot,
        systemPrompt,
        growthContext: turnGrowthContext,
-       recentTurns: recentTurns.filter((turn) => turn.id !== message.id),
-       history: historyPayload,
-      },
+       recentTurns,
+       ...(historyPayload ? { history: historyPayload } : {}),
+      } } : {}),
       interactionLog: [{
        id: makeMessageId(),
        type: "creator_input",
