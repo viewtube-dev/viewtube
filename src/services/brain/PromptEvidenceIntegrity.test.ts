@@ -61,6 +61,13 @@ describe("PromptEvidenceIntegrity", () => {
   expect(readPromptEvidenceRecords(metadata)).toBeUndefined()
  })
 
+ it("accepts historical empty creator-answer evidence without a fingerprint", () => {
+  const metadata = metadataFor([record()])
+  metadata.creatorAnswerEvidenceFingerprint = undefined as unknown as string
+
+  expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("verified")
+ })
+
  it("rejects a missing creator-answer evidence manifest when creator records are present", () => {
   const metadata = metadataFor([record()], [record({ id: "creator-answer:channel-1:goal" })])
   metadata.creatorAnswerEvidenceFingerprint = undefined as unknown as string
