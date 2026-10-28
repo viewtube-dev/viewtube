@@ -2,6 +2,18 @@ import type { AiBrainContext } from "../aiBrainContext"
 import { CHANNEL_CONTEXT_QUESTIONS } from "../../context/channelContextQuestions"
 import type { EvidenceRecord } from "./EvidenceRecord"
 
+export const isCreatorAnswerProfileEligible = (input: {
+ channelScoped: boolean
+ profileName?: string | null
+ activeChannelLabel?: string | null
+}): boolean => {
+ if (input.channelScoped) return true
+ const normalizeLabel = (value?: string | null): string =>
+  String(value || "").trim().replace(/^@/, "").replace(/\\s+/g, " ").toLocaleLowerCase()
+ const profileName = normalizeLabel(input.profileName)
+ return Boolean(profileName && profileName === normalizeLabel(input.activeChannelLabel))
+}
+
 const clean = (value: unknown): string => {
  if (Array.isArray(value)) return value.map((item) => String(item ?? "").trim()).filter(Boolean).join(", ")
  if (typeof value === "number" || typeof value === "boolean") return String(value)
