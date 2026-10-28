@@ -76,6 +76,9 @@ export const GeminiKeySettings: React.FC<{
                 <div>
                   <h4 className="font-medium text-green-900 dark:text-green-100">API Key is active</h4>
                   <p className="text-sm text-green-700/80 dark:text-green-300/80">Your key ends in ••••{apiKey.slice(-4)}</p>
+                  {validationError && (
+                    <p role="status" className="mt-2 text-sm text-amber-700 dark:text-amber-300">{validationError}</p>
+                  )}
                 </div>
               </div>
               <Button variant="destructive" onClick={handleClear} className="w-full sm:w-auto">
