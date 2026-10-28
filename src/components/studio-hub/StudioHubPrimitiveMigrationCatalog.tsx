@@ -1,7 +1,6 @@
 import React from "react"
 import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
 import { MiniSubToolbox, SubToolbox, SubToolboxDropdownControl } from "../Toolbox"
-import { StudioSideCounter } from "../../studio-ui/primitives/StudioControls"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
   SubToolboxAlert,
@@ -103,12 +102,11 @@ import {
   ToolboxHeaderToggle,
 } from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxKpiCard, SubToolboxSplitDropdown } from "../subtoolbox/SubToolboxSplitPrimitives"
-import { StudioSplitLeftButton, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame } from "../../studio-ui/primitives/StudioControls"
 import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVariant } from "../subtoolbox/VaultAssetModule"
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
-import { StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame, StudioSideCounter, StudioLeftWordCounter, StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -116,6 +114,7 @@ type StudioHubComponentLevel = ToolboxControlLevel
 const STANDARD_LEVEL: StudioHubComponentLevel = "l1"
 
 export const STUDIO_HUB_MIGRATED_FAMILIES = [
+  "Switches / Toggles / Radio / Checkbox",
   "Primary Button",
   "Secondary Button",
   "Neutral Button",
@@ -147,14 +146,9 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Number Field",
   "Input Action",
   "Stepper",
+  "Studio Left Word Counter",
   "Slider",
   "Range Slider",
-  "Toggle",
-  "Vertical Word Toggle",
-  "Settings Switch",
-  "Checkbox",
-  "Radio",
-  "Segmented Choice",
   "Button Group",
   "Tag",
   "Removable Tag",
@@ -193,7 +187,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Disclosure",
   "Divider",
   "Pagination",
-  "Controller Switch",
   "LED Light",
   "Icon Rail Control",
   "Hover Card",
@@ -279,13 +272,8 @@ type CatalogPreviewGeometry = {
 }
 
 const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogPreviewGeometry>> = {
+  "Switches / Toggles / Radio / Checkbox": { mode: "compound", inlineUnits: 8.2, portraitStack: true },
   "Square Icon Button": { mode: "fixed" },
-  "Toggle": { mode: "fixed" },
-  "Vertical Word Toggle": { mode: "compound", inlineUnits: 2.5, portraitStack: true },
-  "Settings Switch": { mode: "fixed" },
-  "Checkbox": { mode: "fixed" },
-  "Radio": { mode: "fixed" },
-  "Controller Switch": { mode: "fixed" },
   "LED Dot": { mode: "fixed" },
   "Knob Dial": { mode: "fixed" },
   "Media Control Button": { mode: "fixed" },
@@ -306,7 +294,7 @@ const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogP
   "Split Search": { mode: "compound", inlineUnits: 5.15, portraitStack: true },
   "Input Action": { mode: "compound", inlineUnits: 4.7, portraitStack: true },
   "Stepper": { mode: "compound", inlineUnits: 3.2, portraitStack: true },
-  "Segmented Choice": { mode: "compound", inlineUnits: 4.2, portraitStack: true },
+  "Studio Left Word Counter": { mode: "compound", inlineUnits: 3.2, portraitStack: true },
   "Button Group": { mode: "compound", inlineUnits: 4.1, portraitStack: true },
   "Progress Value": { mode: "compound", inlineUnits: 4.8, portraitStack: true },
   "Pagination": { mode: "compound", inlineUnits: 4.6, portraitStack: true },
@@ -396,6 +384,7 @@ const PrimitiveMigrationControl: React.FC<{
   level: StudioHubComponentLevel
 }> = ({ name, level }) => {
   const [stepperValue, setStepperValue] = React.useState(5)
+  const [wordCounterValue, setWordCounterValue] = React.useState(1)
   const [toggleOn, setToggleOn] = React.useState(true)
   const [settingsOn, setSettingsOn] = React.useState(true)
   const [checkboxOn, setCheckboxOn] = React.useState(true)
@@ -446,6 +435,43 @@ const PrimitiveMigrationControl: React.FC<{
     return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
   }, [])
 
+  // Keep all binary and segmented choice controls discoverable together.
+  // Each preview is the actual production primitive, not a catalog imitation.
+  if (name === "Switches / Toggles / Radio / Checkbox") {
+    return (
+      <div className="vt-catalog-choice-family" role="group" aria-label="Switches, toggles, radio buttons, and checkboxes">
+        <div className="vt-catalog-choice-specimen">
+          <span>TOGGLE</span>
+          <SubToolboxToggleSwitch level={level} pressed={toggleOn} aria-label="Toggle" onClick={() => setToggleOn((value) => !value)} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>WORD TOGGLE</span>
+          <SubToolboxSegmentedToggle level={level} options={[{ value: "show", label: "SHOW" }, { value: "hide", label: "HIDE" }]} value={toggleOn ? "show" : "hide"} onValueChange={(value) => setToggleOn(value === "show")} ariaLabel="Word toggle" />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>SETTINGS SWITCH</span>
+          <SubToolboxSettingsSwitch level={level} pressed={settingsOn} aria-label="Settings switch" onClick={() => setSettingsOn((value) => !value)} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>CHECKBOX</span>
+          <SubToolboxCheckControl level={level} checked={checkboxOn} aria-label="Checkbox" onClick={() => setCheckboxOn((value) => !value)} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>RADIO</span>
+          <SubToolboxRadioControl level={level} checked={radioOn} aria-label="Radio" onClick={() => setRadioOn((value) => !value)} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>SEGMENTED CHOICE</span>
+          <SubToolboxSegmentedToggle level={level} style={{ ["--vt-segment-count" as string]: 3 } as React.CSSProperties} options={[{ value: "A", label: "A" }, { value: "B", label: "B" }, { value: "C", label: "C" }]} value={segmentChoice} onValueChange={setSegmentChoice} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>CONTROLLER SWITCH</span>
+          <SubToolboxControllerSwitch level={level} pressed={controllerOn} onClick={() => setControllerOn((value) => !value)} />
+        </div>
+      </div>
+    )
+  }
+
   // Primitive track rule: only production primitives + shared CSS render here.
   // Unmigrated hardcoded families remain exclusively in the frozen baseline.
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button") {
@@ -468,6 +494,17 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "Stepper") {
     return <StudioSideCounter size={level === "l2" ? "compact" : "standard"} value={stepperValue} onValueChange={setStepperValue} ariaLabel="Demo value" />
+  }
+  if (name === "Studio Left Word Counter") {
+    return (
+      <div className="vt-catalog-word-counter-family">
+        <StudioLeftWordCounter size="standard" value={wordCounterValue} onValueChange={setWordCounterValue} ariaLabel="Word counter" />
+        <details className="vt-catalog-variants">
+          <summary>VARIANTS</summary>
+          <p>Secondary value fill: add the <code>is-reversed</code> class. The representative above stays primary-filled with black text.</p>
+        </details>
+      </div>
+    )
   }
   if (name === "Toggle") {
     return <SubToolboxToggleSwitch level={level} pressed={toggleOn} aria-label="Toggle" onClick={() => setToggleOn((value) => !value)} />

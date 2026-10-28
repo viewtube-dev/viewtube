@@ -113,41 +113,40 @@
 }
 
 
-/* Vertical word toggle is a real library preview, not a horizontal control
-   squeezed into a portrait card. */
-.vt-primitive-migration-catalog .vt-catalog-vertical-word-toggle {
-  display: flex !important;
-  flex-direction: column !important;
-  width: 100%;
-  min-width: 0;
-  gap: 4px;
-}
-.vt-primitive-migration-catalog .vt-catalog-vertical-word-toggle > button {
-  display: flex;
-  width: 100%;
-  min-width: 0;
-  min-height: 32px;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 8px;
-  text-align: center;
-}
-.vt-primitive-migration-catalog .vt-catalog-demo:has(.vt-catalog-vertical-word-toggle) {
-  width: min(100%, calc(var(--vt-catalog-level-height) * 2.5));
-}
-@media (max-width: 520px) and (orientation: portrait) {
-  .vt-primitive-migration-catalog .vt-catalog-vertical-word-toggle > button {
-    min-height: 36px;
-  }
-}
-
-
 /* Library typography parity: first thirteen primitive families use the exact
    StudioButton type voice instead of each demo inheriting a legacy label size. */
-.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(-n+13) {
+.vt-primitive-migration-catalog .vt-primitive-migration-family:is(
+  [data-vt-family="Primary Button"],
+  [data-vt-family="Secondary Button"],
+  [data-vt-family="Neutral Button"],
+  [data-vt-family="Destructive Button"],
+  [data-vt-family="Square Icon Button"],
+  [data-vt-family="Split Left Button"],
+  [data-vt-family="Head Tail Action"],
+  [data-vt-family="Split Menu"],
+  [data-vt-family="Dropdown"],
+  [data-vt-family="Top Title Dropdown"],
+  [data-vt-family="Legend Multi Dropdown"],
+  [data-vt-family="Tone / Tension / Cinematic Dropdown"],
+  [data-vt-family="Nested Square Choice"]
+) {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(-n+13) :is(
+.vt-primitive-migration-catalog .vt-primitive-migration-family:is(
+  [data-vt-family="Primary Button"],
+  [data-vt-family="Secondary Button"],
+  [data-vt-family="Neutral Button"],
+  [data-vt-family="Destructive Button"],
+  [data-vt-family="Square Icon Button"],
+  [data-vt-family="Split Left Button"],
+  [data-vt-family="Head Tail Action"],
+  [data-vt-family="Split Menu"],
+  [data-vt-family="Dropdown"],
+  [data-vt-family="Top Title Dropdown"],
+  [data-vt-family="Legend Multi Dropdown"],
+  [data-vt-family="Tone / Tension / Cinematic Dropdown"],
+  [data-vt-family="Nested Square Choice"]
+) :is(
   button, [role="button"], [data-vt-studio-split-label],
   .vt-subtoolbox-split-dropdown-label, .vt-subtoolbox-top-title-dropdown-title,
   .vt-subtoolbox-top-title-dropdown-value b, .vt-subtoolbox-menu-label b
@@ -157,17 +156,17 @@
   letter-spacing: -.035em;
   text-transform: uppercase;
 }
-.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(11) .vt-subtoolbox-top-title-dropdown-panel {
+.vt-primitive-migration-catalog .vt-primitive-migration-family[data-vt-family="Top Title Dropdown"] .vt-subtoolbox-top-title-dropdown-panel {
   min-width: max-content;
   max-width: calc(100vw - 16px);
 }
-.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(11) .vt-subtoolbox-top-title-dropdown-panel > button {
+.vt-primitive-migration-catalog .vt-primitive-migration-family[data-vt-family="Top Title Dropdown"] .vt-subtoolbox-top-title-dropdown-panel > button {
   font-weight: 1000;
   letter-spacing: -.025em;
   white-space: normal;
   overflow-wrap: anywhere;
 }
-.vt-primitive-migration-catalog .vt-primitive-migration-family:nth-child(11) .vt-subtoolbox-top-title-dropdown-check {
+.vt-primitive-migration-catalog .vt-primitive-migration-family[data-vt-family="Top Title Dropdown"] .vt-subtoolbox-top-title-dropdown-check {
   font-size: 20px;
   font-weight: 1000;
 }
@@ -199,4 +198,74 @@
   .vt-primitive-migration-catalog .vt-primitive-migration-family[data-vt-family="Legend Multi Dropdown"] .vt-catalog-demo.is-l0 {
     grid-column: auto;
   }
+}
+
+
+/* The choice-control family is one full-width module. Individual controls are
+   grouped as specimens here; the canonical primitives retain all anatomy. */
+.vt-primitive-migration-catalog .vt-primitive-migration-family:has(.vt-catalog-choice-family) {
+  width: 100%;
+  min-width: 0;
+}
+.vt-primitive-migration-catalog .vt-catalog-demo:has(.vt-catalog-choice-family) {
+  width: 100%;
+  max-width: 100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-choice-family {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-primitive-migration-catalog .vt-catalog-choice-specimen {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+.vt-primitive-migration-catalog .vt-catalog-choice-specimen > span {
+  font: 1000 10px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-primitive-migration-catalog .vt-catalog-choice-specimen > :not(span) {
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  .vt-primitive-migration-catalog .vt-catalog-choice-family {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+@media (max-width: 360px) {
+  .vt-primitive-migration-catalog .vt-catalog-choice-family {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+.vt-primitive-migration-catalog .vt-catalog-word-counter-family {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-variants {
+  max-width: 100%;
+  font: 800 11px/1.3 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+.vt-primitive-migration-catalog .vt-catalog-variants summary {
+  cursor: pointer;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+}
+.vt-primitive-migration-catalog .vt-catalog-variants p {
+  max-width: 34rem;
+  margin: 6px 0 0;
 }
