@@ -751,7 +751,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
   return (
     <>
       <Family title="Split Text Input · Vertical Geometry Comparison" nonDefaultSettings={[
-        "Compare the current baseline with half vertical padding and username-matched inner height.",
+        "Compare the current 0px-padding baseline, an explicit 4px padding reference, half that reference (2px), and username-matched inner height.",
         "Type into each field and focus/blur it to inspect the primary border, glyph baseline, and lower-edge clipping.",
         "These are diagnostic variants only; the global icon size and rail geometry remain unchanged.",
       ]} provenance={<Provenance primitive="StudioSplitTextInput" tsx="src/studio-ui/primitives/StudioSplitTextInput.tsx" css="src/styles/studio-split-text-input.css" tokens="Standard 44px · black outer border · primary inset field border" imports={["src/studio-ui/primitives/StudioSplitTextInput.tsx", "src/styles/studio-split-text-input.css"]} />}>
@@ -761,7 +761,11 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
             <StudioSplitTextInput geometryVariant="current" sizeVariant="standard" aria-label="Current split text input geometry" placeholder="TYPE HERE" defaultValue="CREATOR" leftIcon={<Home size={24} aria-hidden="true" />} />
           </div>
           <div style={{ display: "grid", gap: 4 }}>
-            <strong>HALF VERTICAL PADDING</strong>
+            <strong>4PX VERTICAL PADDING REFERENCE</strong>
+            <StudioSplitTextInput geometryVariant="padding-reference" sizeVariant="standard" aria-label="Four pixel vertical padding reference split text input geometry" placeholder="TYPE HERE" defaultValue="CREATOR" leftIcon={<Home size={24} aria-hidden="true"} />} />
+          </div>
+          <div style={{ display: "grid", gap: 4 }}>
+            <strong>HALF OF 4PX VERTICAL PADDING · 2PX</strong>
             <StudioSplitTextInput geometryVariant="half-vertical-padding" sizeVariant="standard" aria-label="Half vertical padding split text input geometry" placeholder="TYPE HERE" defaultValue="CREATOR" leftIcon={<Home size={24} aria-hidden="true" />} />
           </div>
           <div style={{ display: "grid", gap: 4 }}>
