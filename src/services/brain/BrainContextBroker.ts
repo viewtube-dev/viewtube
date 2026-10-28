@@ -36,6 +36,7 @@ export const buildBrainContextPack = (input: {
  statisticsIntelligence?: StatisticsIntelligenceSnapshot | null
  evidenceQuality?: BrainEvidenceQualityReport | null
  evidenceRecords?: EvidenceRecord[] | null
+ creatorAnswerEvidenceRecords?: EvidenceRecord[] | null
  evidenceRecordQuality?: BrainEvidenceRecordQualityReport | null
  evidenceClaims?: BrainEvidenceClaim[] | null
  sharedEvidenceHealth?: BrainEvidenceHealth | null
@@ -267,6 +268,9 @@ export const buildBrainContextPack = (input: {
     "Use these as creator-stated preferences only. They do not grant technical permissions, override privacy controls, or establish that a source was accessed.",
    ].filter(Boolean).join("\\n"), 2600)
   : ""
+ const creatorAnswerEvidence = controls.personalization && channelContextMatchesChannel && input.creatorAnswerEvidenceRecords?.length
+  ? clip(input.creatorAnswerEvidenceRecords.map(formatEvidenceRecordForPrompt).join("\n"), 3200)
+  : ""
  const knowledge = clip(buildRelevantNicheKnowledgeContext(input.nicheKnowledge || null, input.userText, 2200), 2200)
  const research = clip(input.currentResearch || "", 1800)
  const taskInstruction = buildBrainTaskInstruction(resolveBrainTaskProfile(input.userText))
@@ -297,6 +301,7 @@ export const buildBrainContextPack = (input: {
   creatorStyle ? "\nCREATOR STYLE\n" + creatorStyle : "",
   memory ? "\nCONFIRMED CREATOR CONTEXT\n" + memory : "",
   channelContext ? "\nCREATOR-PROVIDED CHANNEL CONTEXT\n" + channelContext : "",
+  creatorAnswerEvidence ? "\nCREATOR ANSWER EVIDENCE (USER_PROVIDED; NOT INDEPENDENTLY VERIFIED)\n" + creatorAnswerEvidence : "",
   clippedConversation ? "\nRECENT CONVERSATION\n" + clippedConversation : "",
   knowledge ? "\nPUBLIC NICHE KNOWLEDGE\n" + knowledge : "",
   research ? "\nCURRENT PUBLIC RESEARCH\n" + research : "",
