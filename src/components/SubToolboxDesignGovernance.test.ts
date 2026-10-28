@@ -560,7 +560,7 @@ describe("subtoolbox design governance", () => {
 
  it("keeps the definitive component library to one standard size and confirmed tokens", () => {
   const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx")
-  const catalogCss = source("src/components/studio-hub/studio-hub-complete-primitive-catalog.css")
+  const catalogCss = source("src/components/studio-hub/studio-hub-primitive-migration-catalog.css")
   const tokens = source("src/components/subtoolbox/tokens.ts")
 
   expect(catalog).toContain('data-vt-catalog-track="definitive-component-library"')
