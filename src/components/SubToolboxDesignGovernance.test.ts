@@ -922,5 +922,11 @@ describe("confirmed primitive library family organization", () => {
     expect(styles).not.toContain("!important");
     expect(styles).toContain("--vt-subtoolbox-shell-box-shadow: none;");
     expect(styles).toContain("--vt-subtoolbox-content-border: 0;");
+    const systemStyles = source("src/styles/studio-control-system.css");
+    expect(systemStyles).toContain("--vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+    expect(systemStyles).toContain(".vt-studio-double-split-slider .vt-studio-double-split-slider__rail {");
+    expect(systemStyles).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
+    expect(systemStyles).toContain(".vt-studio-double-split-slider input[type=\"range\"] {");
+    expect(systemStyles).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
   });
 });
