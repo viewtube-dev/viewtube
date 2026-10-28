@@ -41,15 +41,19 @@ export const getPromptEvidenceIntegrityStatus = (
  const hasCreatorEvidenceManifest = creatorEvidenceFields.some((field) => Object.prototype.hasOwnProperty.call(metadata, field))
  if (hasCreatorEvidenceManifest) {
   if (!Array.isArray(metadata.creatorAnswerEvidenceRecords)
-   || !Array.isArray(metadata.creatorAnswerEvidenceRecordIds)
-   || typeof metadata.creatorAnswerEvidenceFingerprint !== "string") return "mismatch"
+   || !Array.isArray(metadata.creatorAnswerEvidenceRecordIds)) return "mismatch"
   const creatorRecords = metadata.creatorAnswerEvidenceRecords as unknown[]
   const creatorIds = metadata.creatorAnswerEvidenceRecordIds as unknown[]
   if (!creatorRecords.every(isEvidenceRecord)
    || !creatorIds.every((id) => typeof id === "string")
    || creatorRecords.length !== creatorIds.length
    || !creatorRecords.every((record, index) => record.id === creatorIds[index])) return "mismatch"
-  if (fingerprintBrainEvidenceRecords(creatorRecords as EvidenceRecord[]) !== metadata.creatorAnswerEvidenceFingerprint) return "mismatch"
+  // Historical turns may contain an explicit empty creator-evidence list but
+  // predate its fingerprint. Empty lists need no content fingerprint; non-empty
+  // lists do, because IDs alone cannot prove their contents are unchanged.
+  if (creatorRecords.length > 0 && typeof metadata.creatorAnswerEvidenceFingerprint !== "string") return "mismatch"
+  if (typeof metadata.creatorAnswerEvidenceFingerprint === "string"
+   && fingerprintBrainEvidenceRecords(creatorRecords as EvidenceRecord[]) !== metadata.creatorAnswerEvidenceFingerprint) return "mismatch"
  }
 
  // Empty prompt evidence is a valid, explicit selection. There is no record
