@@ -276,7 +276,7 @@ describe("Studio Hub Component Library mobile regression", () => {
     const publicIndex = read("src/studio-ui/index.ts")
     const expectedRows = [
       "StudioButton", "StudioSplitLeftButton", "StudioDoubleSplitButton",
-      "StudioTwoLineButton", "StudioSplitTwoLineButton", "StudioSimpleDropdown",
+      "StudioTwoLineButton", "StudioSplitTwoLineButton", "StudioDropdown",
       "StudioLegendMultiDropdown", "StudioSplitLeftDropdown", "StudioArrowToggle",
       "StudioBarToggle", "StudioWordToggle", "StudioTextInput", "StudioTextArea",
       "StudioTextBox", "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter",
