@@ -273,13 +273,8 @@ type CatalogPreviewGeometry = {
 }
 
 const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogPreviewGeometry>> = {
+  "Switches / Toggles / Radio / Checkbox": { mode: "compound", inlineUnits: 8.2, portraitStack: true },
   "Square Icon Button": { mode: "fixed" },
-  "Toggle": { mode: "fixed" },
-  "Vertical Word Toggle": { mode: "compound", inlineUnits: 2.5, portraitStack: true },
-  "Settings Switch": { mode: "fixed" },
-  "Checkbox": { mode: "fixed" },
-  "Radio": { mode: "fixed" },
-  "Controller Switch": { mode: "fixed" },
   "LED Dot": { mode: "fixed" },
   "Knob Dial": { mode: "fixed" },
   "Media Control Button": { mode: "fixed" },
@@ -300,7 +295,6 @@ const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogP
   "Split Search": { mode: "compound", inlineUnits: 5.15, portraitStack: true },
   "Input Action": { mode: "compound", inlineUnits: 4.7, portraitStack: true },
   "Stepper": { mode: "compound", inlineUnits: 3.2, portraitStack: true },
-  "Segmented Choice": { mode: "compound", inlineUnits: 4.2, portraitStack: true },
   "Button Group": { mode: "compound", inlineUnits: 4.1, portraitStack: true },
   "Progress Value": { mode: "compound", inlineUnits: 4.8, portraitStack: true },
   "Pagination": { mode: "compound", inlineUnits: 4.6, portraitStack: true },
