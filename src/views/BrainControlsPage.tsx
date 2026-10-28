@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useBrain } from "../context/useBrain"
 import { CHANNEL_CONTEXT_QUESTIONS } from "../context/channelContextQuestions"
 import { scoreContext } from "../context/ChannelContextScoring"
