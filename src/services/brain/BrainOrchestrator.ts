@@ -51,6 +51,7 @@ import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess
 import { readBrainEngineControls } from "./BrainEngineControls"
 import { resolveCreatorContext } from "./CreatorContextResolver"
 import { loadAiBrainContext } from "../aiBrainContext"
+import { buildCreatorAnswerEvidenceRecords } from "./CreatorAnswerEvidence"
 import { readBrainSurfaceSelection } from "./BrainSurfaceSelection"
 import {
  cacheCurrentNicheResearch,
@@ -467,7 +468,16 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   ? evidenceIntelligence?.audienceIntelligence || null
   : null
  const surfaceSelection = readBrainSurfaceSelection()
- const savedChannelContext = loadAiBrainContext().channelContext
+ const savedAiBrainContext = loadAiBrainContext()
+ const savedChannelContext = savedAiBrainContext.channelContext
+ const normalizeChannelName = (value: unknown): string => String(value || "").trim().toLocaleLowerCase().replace(/ +/g, " ")
+ const savedProfileMatchesActiveChannel = Boolean(
+  normalizeChannelName(savedChannelContext.identity.name)
+  && normalizeChannelName(savedChannelContext.identity.name) === normalizeChannelName(input.snapshot.channel.label),
+ )
+ const creatorAnswerEvidenceRecords = savedProfileMatchesActiveChannel
+  ? buildCreatorAnswerEvidenceRecords(savedAiBrainContext, input.channelId)
+  : []
  const creatorContext = await resolveCreatorContext({
   channelId: input.channelId,
   query: input.userText,
@@ -574,6 +584,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   algorithmIntelligence,
   creatorContext,
   channelContext: savedChannelContext,
+  creatorAnswerEvidenceRecords,
  })
  const questionTrace = beginBrainTrace({ kind: "question", channelId: input.channelId || null })
  questionTrace.setIntent({ intent: taskProfile.id, taskProfileId: taskProfile.id })
@@ -772,7 +783,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     requestedModel,
     servedModel: null,
     modelIdentityStatus,
-    evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 50),
+    evidenceIds: [...renderedEvidenceRecords, ...creatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 100),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
@@ -807,6 +818,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     modelIdentityStatus,
     evidenceIds: renderedEvidenceRecords.map((record) => record.id).slice(0, 50),
     evidenceRecords: renderedEvidenceRecords,
+    creatorAnswerEvidenceRecords,
+    creatorAnswerEvidenceRecordIds: creatorAnswerEvidenceRecords.map((record) => record.id),
     evidenceRecordQuality,
     promptEvidenceRecordIds: renderedEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
