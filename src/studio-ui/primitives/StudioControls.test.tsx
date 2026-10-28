@@ -1493,3 +1493,18 @@ describe("StudioSplitTextInput transparent-panel composition", () => {
     expect(css.slice(focusStart, focusStart + 1000)).toContain("outline: none");
   });
 });
+
+
+describe("canonical detached Studio dropdown menu", () => {
+  it("keeps the open menu separated, rounded on all corners, and white behind unselected rows", () => {
+    const css = readStudioControlCss();
+    const start = css.lastIndexOf("/* Canonical open dropdown menu contract");
+    expect(start).toBeGreaterThanOrEqual(0);
+    const contract = css.slice(start);
+    expect(contract).toContain('top: calc(100% + 4px) !important');
+    expect(contract).toContain('border-radius: var(--vt-studio-control-radius, 6px) !important');
+    expect(contract).toContain('background: #fff !important');
+    expect(contract).toContain('.vt-studio-dropdown-menu > .vt-studio-dropdown-option');
+    expect(contract).toContain('background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important');
+  });
+});
