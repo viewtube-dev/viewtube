@@ -446,7 +446,7 @@ test("StudioButton library module applies the canonical 4px grid rhythm without 
 
 
 test("confirmed primitive catalog exposes current representative and family modules", () => {
-  assert.match(catalog, /title="Representatives · One Standard Specimen Per Primitive"/);
+  assert.match(catalog, /title="Direct Imported Primitive Representatives · Standard"/);
   assert.match(catalog, /const ConfirmedStudioButtonFamily/);
   assert.match(catalog, /id: "1-supreme-full"/);
   assert.match(catalog, /id: "7-compact-and-micro"/);
