@@ -64,6 +64,7 @@ import {
  completeAIBrainTurn,
  sanitizeCreatorFacingBrainCopy,
  aiBrainThreadHasTurnsHint,
+ recordAIBrainTurnInteraction,
 } from "../services/aiBrainConversationStore"
 import {
  buildBrainQuickActions,
@@ -105,10 +106,10 @@ import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
-import { buildCreatorAnswerEvidenceRecords } from "../services/brain/CreatorAnswerEvidence"
+import { buildScopedCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
 import type { EvidenceRecord } from "../services/brain/EvidenceRecord"
-import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, type PromptEvidenceIntegrityStatus } from "../services/brain/PromptEvidenceIntegrity"
+import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, readCreatorAnswerEvidenceRecords, type PromptEvidenceIntegrityStatus } from "../services/brain/PromptEvidenceIntegrity"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
  clearBrainSurfaceSelection,
@@ -175,6 +176,7 @@ export type ChatMessage = {
  }
  turnStatus?: AIBrainConversationTurn["status"]
  contextMayBeStale?: boolean
+ retryContextContinuity?: "original_input_restored" | "fresh_evidence_retry" | "legacy_context_reconstructed"
 }
 
 
@@ -620,7 +622,18 @@ const CreatorResponseCard: React.FC<{
    header={
     <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
      <div className="flex flex-wrap items-start justify-between gap-1">
-      <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
+      <div className="min-w-0">
+       <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
+       {message.retryContextContinuity ? (
+        <div data-vt-brain-part="retry-provenance" role="status" className="mt-1 text-[9px] font-black uppercase tracking-[0.08em]">
+         {message.retryContextContinuity === "original_input_restored"
+          ? "Retry · original saved input restored"
+          : message.retryContextContinuity === "fresh_evidence_retry"
+           ? "Retry · fresh evidence snapshot"
+           : "Retry · legacy context reconstructed"}
+        </div>
+       ) : null}
+      </div>
       {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
      </div>
      <BrainResponseSectionHeader
@@ -957,6 +970,7 @@ const AIBrainCommandInterface: React.FC = () => {
   emitSignal,
  } = brainContext
  const [input, setInput] = useState("")
+ const [draftPromptOrigin, setDraftPromptOrigin] = useState<{ promptId: string; promptVersion: string; action: "edited" } | null>(null)
  useEffect(() => {
   const requestedDraft = searchParams.get("draft")
   if (!requestedDraft) return
@@ -974,14 +988,14 @@ const AIBrainCommandInterface: React.FC = () => {
  // loads on refresh. When a channel has no saved turns (first-time users, and the
  // static-render tests), start hydrated so the launchpad shows immediately.
  const [hydrated, setHydrated] = useState(
-  () => !aiBrainThreadHasTurnsHint(authState.channelHandle || authState.channelId || null),
+  () => !aiBrainThreadHasTurnsHint(authState.channelId || authState.channelHandle || null),
  )
  const [learningEntries, setLearningEntries] = useState<AIBrainLearningEntry[]>([])
  const [recentTurns, setRecentTurns] = useState<AIBrainConversationTurn[]>([])
  const [questionAnswers, setQuestionAnswers] = useState<AIBrainQuestionAnswer[]>([])
  const [onboardingSnapshot, setOnboardingSnapshot] = useState<BrainOnboardingSnapshot | null>(null)
  const [intakeOpen, setIntakeOpen] = useState(false)
- const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext())
+ const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext(authState.channelId || authState.channelHandle || null))
  const [intakeSaveStatus, setIntakeSaveStatus] = useState("Answers save locally as you type.")
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
@@ -1004,7 +1018,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const askSeededRef = useRef(false)
  const canUseGemini = hasGeminiKey()
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
- const channelId = authState.channelHandle || authState.channelId || null
+ const channelId = authState.channelId || authState.channelHandle || null
  const [brainControls, setBrainControls] = useState(() => readBrainUserControls(channelId))
  const runtimeSnapshot = useMemo(
   () => readBrainRuntimeSnapshot({
@@ -1027,6 +1041,11 @@ const AIBrainCommandInterface: React.FC = () => {
    }),
   [brain, authState, channelConnection, onboardingSnapshot, recentTurns],
  )
+ useEffect(() => {
+  setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
+  setIntakeSaveStatus("Loaded this channel's locally saved profile.")
+ }, [channelId, snapshot.channel.label])
+
  const creatorGrowthContext = useMemo(
   () => buildCreatorGrowthContext(snapshot, recentTurns, learningEntries),
   [snapshot, recentTurns, learningEntries],
@@ -1090,15 +1109,15 @@ const AIBrainCommandInterface: React.FC = () => {
  useEffect(() => {
   const query = new URLSearchParams(location.search)
   if (query.get("intake") === "1") {
-   setIntakeContext(loadAiBrainContext())
+   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
    setIntakeOpen(true)
    return
   }
-  if (shouldShowAiBrainIntake(authState.isAuthenticated)) {
-   setIntakeContext(loadAiBrainContext())
+  if (shouldShowAiBrainIntake(authState.isAuthenticated, channelId)) {
+   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
    setIntakeOpen(true)
   }
- }, [authState.isAuthenticated, location.search])
+ }, [authState.isAuthenticated, location.search, channelId, snapshot.channel.label])
 
  const refreshLearning = async () => {
   try {
@@ -1149,6 +1168,7 @@ const AIBrainCommandInterface: React.FC = () => {
      handoff: null,
      originalUserText: turn.rawUserMessage ?? turn.userText,
      turnStatus: turn.status,
+     retryContextContinuity: typeof turn.metadata?.retryContextContinuity === "string" ? turn.metadata.retryContextContinuity as ChatMessage["retryContextContinuity"] : undefined,
      contextMayBeStale: Boolean(
       turn.metadata?.dataReadinessSnapshot &&
       typeof turn.metadata.dataReadinessSnapshot === "object" &&
@@ -1159,7 +1179,7 @@ const AIBrainCommandInterface: React.FC = () => {
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
-     evidenceRecords: readPromptEvidenceRecords(turn.metadata),
+     evidenceRecords: [...(readPromptEvidenceRecords(turn.metadata) || []), ...(readCreatorAnswerEvidenceRecords(turn.metadata) || [])],
      evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(turn.metadata),
      readiness: turn.metadata?.dataReadinessSnapshot && typeof turn.metadata.dataReadinessSnapshot === "object"
       ? turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness
@@ -1272,17 +1292,22 @@ const AIBrainCommandInterface: React.FC = () => {
   updateBrain({ activeProjectId: null })
  }
 
- const handleSend = async (override?: string) => {
+ const handleSend = async (
+  override?: string,
+  selectedPromptOrigin?: { promptId: string; promptVersion: string; action: "sent" | "edited" },
+) => {
   const userText = override ?? input
+  const promptOrigin = selectedPromptOrigin || (override === undefined ? draftPromptOrigin || undefined : undefined)
   if (!userText.trim() || busy || requestInFlightRef.current) return
-  if (shouldShowAiBrainIntake(authState.isAuthenticated)) {
-   setIntakeContext(loadAiBrainContext())
+  if (shouldShowAiBrainIntake(authState.isAuthenticated, channelId)) {
+   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
    setIntakeOpen(true)
    return
   }
   requestInFlightRef.current = true
   shouldFollowConversationRef.current = true
   setInput("")
+  setDraftPromptOrigin(null)
   if (composerRef.current) composerRef.current.style.height = "52px"
   setBusy(true)
   const userMessage: ChatMessage = { id: makeMessageId(), role: "user", text: userText }
@@ -1301,6 +1326,9 @@ const AIBrainCommandInterface: React.FC = () => {
     requestText: userText,
    })
    turnGrowthContext = buildCreatorGrowthContext(turnSnapshot, recentTurns, learningEntries)
+   const creatorContext = loadAiBrainContext(channelId, turnSnapshot.channel.label)
+   const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, turnSnapshot.channel.label)
+   turnSnapshot = { ...turnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence) }
    const systemPrompt = buildAIBrainSystemPrompt({
     brain,
     authState,
@@ -1310,7 +1338,7 @@ const AIBrainCommandInterface: React.FC = () => {
     recentConversationTurns: recentTurns,
     requestText: userText,
     creatorGrowthContext: turnGrowthContext,
-    channelContext: loadAiBrainContext().channelContext,
+    channelContext: loadAiBrainContext(channelId, snapshot.channel.label).channelContext,
    })
    const historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
@@ -1345,6 +1373,7 @@ const AIBrainCommandInterface: React.FC = () => {
      plannedPublishAt: activeProject.publishDate || null,
     } : null,
     userText,
+    ...(promptOrigin ? { promptOrigin } : {}),
     snapshot: turnSnapshot,
     systemPrompt,
     growthContext: turnGrowthContext,
@@ -1354,7 +1383,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: readPromptEvidenceRecords(result.turn.metadata), evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: [...(readPromptEvidenceRecords(result.turn.metadata) || []), ...(readCreatorAnswerEvidenceRecords(result.turn.metadata) || [])], evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -1368,9 +1397,49 @@ const AIBrainCommandInterface: React.FC = () => {
     generationPath: "basic_guidance" as const,
     fallbackReason: "provider_error" as const,
    }
+   let fallbackTurn: AIBrainConversationTurn | null = null
+   try {
+    fallbackTurn = await saveAIBrainConversationTurn({
+     channelId,
+     userText,
+     assistantText: fallbackText,
+     response,
+     answerModules: response.modules,
+     metadata: {
+      source: "local_fallback",
+      ...(promptOrigin ? { promptOrigin } : {}),
+      evidencePackSnapshot: turnSnapshot.evidencePack,
+      dataReadinessSnapshot: readinessForSnapshot(turnSnapshot),
+      generationInputSnapshot: {
+       snapshot: turnSnapshot,
+       systemPrompt,
+       growthContext: turnGrowthContext,
+       recentTurns: recentTurns.filter((turn) => turn.id !== message.id),
+       history: historyPayload,
+      },
+      interactionLog: [{
+       id: makeMessageId(),
+       type: "creator_input",
+       direction: "inbound",
+       at: new Date().toISOString(),
+       text: userText,
+      }],
+     },
+    })
+   } catch (persistenceError) {
+    console.warn("[AIBrain] Local fallback could not be persisted:", persistenceError)
+   }
    setMessages((current) => [
     ...current,
-    { id: makeMessageId(), role: "model", text: fallbackText, response, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
+    {
+     id: fallbackTurn?.id || makeMessageId(),
+     role: "model",
+     text: fallbackText,
+     response,
+     evidencePack: turnSnapshot.evidencePack,
+     readiness: readinessForSnapshot(turnSnapshot),
+     turnStatus: fallbackTurn?.status,
+    },
    ])
   } finally {
    requestInFlightRef.current = false
@@ -1400,9 +1469,12 @@ const AIBrainCommandInterface: React.FC = () => {
      recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
      requestText: userText,
     })
-    const turnSnapshot = !useFreshEvidence && message.evidencePack
+    const baseTurnSnapshot = !useFreshEvidence && message.evidencePack
      ? { ...freshSnapshot, evidencePack: message.evidencePack }
      : freshSnapshot
+    const creatorContext = loadAiBrainContext(channelId, snapshot.channel.label)
+    const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, snapshot.channel.label)
+    const turnSnapshot = { ...baseTurnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(baseTurnSnapshot.evidencePack, creatorAnswerEvidence) }
     const turnGrowthContext = buildCreatorGrowthContext(
      turnSnapshot,
      recentTurns.filter((turn) => turn.id !== message.id),
@@ -1416,9 +1488,9 @@ const AIBrainCommandInterface: React.FC = () => {
      brainOnboardingSnapshot: onboardingSnapshot,
      recentConversationTurns: recentTurns.filter((turn) => turn.id !== message.id),
      requestText: userText,
-     evidencePackOverride: !useFreshEvidence ? message.evidencePack : undefined,
+     evidencePackOverride: !useFreshEvidence ? turnSnapshot.evidencePack : undefined,
      creatorGrowthContext: turnGrowthContext,
-     channelContext: loadAiBrainContext().channelContext,
+     channelContext: loadAiBrainContext(channelId, snapshot.channel.label).channelContext,
     })
     const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
     const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
@@ -1445,6 +1517,7 @@ const AIBrainCommandInterface: React.FC = () => {
      history: historyPayload,
      allowModel: canUseGemini,
      retryGenerationOnly: true,
+     retryEvidenceMode: useFreshEvidence ? "fresh" : "saved",
     })
     setMessages((current) => current.map((item) => item.id === result.turn.id
      ? {
@@ -1454,11 +1527,12 @@ const AIBrainCommandInterface: React.FC = () => {
        turnStatus: result.turn.status,
        originalUserText: result.turn.rawUserMessage ?? userText,
        evidencePack: turnSnapshot.evidencePack,
-       evidenceRecords: readPromptEvidenceRecords(result.turn.metadata),
+       evidenceRecords: [...(readPromptEvidenceRecords(result.turn.metadata) || []), ...(readCreatorAnswerEvidenceRecords(result.turn.metadata) || [])],
        evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata),
        readiness: readinessForSnapshot(turnSnapshot),
        contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined,
-       contextMayBeStale: false,
+       contextMayBeStale: result.turn.metadata?.retryContextContinuity === "legacy_context_reconstructed",
+       retryContextContinuity: typeof result.turn.metadata?.retryContextContinuity === "string" ? result.turn.metadata.retryContextContinuity as ChatMessage["retryContextContinuity"] : undefined,
       }
      : item,
     ))
@@ -1510,6 +1584,20 @@ const AIBrainCommandInterface: React.FC = () => {
     contentBuildId: activeProject?.contentBuildId || null,
     selectedContentId,
    })
+   try {
+    await recordAIBrainTurnInteraction(message.id, {
+     type: "review_handoff_queued",
+     direction: "outbound",
+     detail: {
+      target,
+      handoffId: handoff.recordId,
+      evidenceIds: message.response?.evidenceIds || message.evidencePack?.evidenceIds || [],
+      reviewOnly: true,
+     },
+    })
+   } catch (persistenceError) {
+    console.warn("[AIBrain] Review handoff was queued but its local interaction receipt could not be saved:", persistenceError)
+   }
    setMessages((current) => current.map((item) => item.id === message.id ? { ...item, handoff } : item))
   } catch (error) {
    console.warn("[AIBrain] Review-only handoff could not be queued:", error)
@@ -1566,6 +1654,20 @@ const AIBrainCommandInterface: React.FC = () => {
    } catch {
     // Local fallback responses may not have a persisted canonical turn ID.
    }
+  }
+  try {
+   await recordAIBrainTurnInteraction(message.id, {
+    type: "creator_feedback",
+    direction: "inbound",
+    detail: {
+     rating,
+     feedbackAt,
+     responseId: message.response?.id || null,
+     evidenceIds: message.response?.evidenceIds || [],
+    },
+   })
+  } catch (persistenceError) {
+   console.warn("[AIBrain] Feedback was saved but its local interaction receipt could not be appended:", persistenceError)
   }
   await refreshConversationTurns()
   if (rating === "ask_follow_up") {
@@ -1678,7 +1780,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const handleIntakeContextChange = (next: AiBrainContext) => {
   setIntakeContext(next)
   try {
-   const saved = saveChannelContextProfile(next.channelContext)
+   const saved = saveChannelContextProfile(next.channelContext, channelId)
    setIntakeContext(saved)
    setIntakeSaveStatus("Saved locally in this browser.")
   } catch {
@@ -1687,10 +1789,10 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  const handleSaveIntake = () => {
-  const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" })
+  const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" }, channelId)
   setIntakeContext(saved)
   setIntakeSaveStatus("Unified creator profile saved locally.")
-  const intakeEvidenceRecords = buildCreatorAnswerEvidenceRecords(saved, channelId)
+  const intakeEvidenceRecords = buildScopedCreatorAnswerEvidenceRecords(saved, channelId, snapshot.channel.label)
   updateBrain({
    creatorPreferences: {
     what_next_goal: saved.mainYoutubeGoal || saved.successDefinition || saved.whatNext,
@@ -1742,7 +1844,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  const handleDeferIntake = () => {
-  dismissAiBrainIntake()
+  dismissAiBrainIntake(channelId)
   setIntakeOpen(false)
   navigate("/ai-brain", { replace: true })
  }
@@ -1888,8 +1990,8 @@ const AIBrainCommandInterface: React.FC = () => {
           summarize={promptCardSummary}
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
-          onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
+          onPrompt={(prompt, card) => { setPromptRailOpen(false); void handleSend(prompt, card ? { promptId: card.id, promptVersion: "1", action: "sent" } : undefined) }}
+          onEdit={(prompt, card) => { setPromptRailOpen(false); setInput(prompt); setDraftPromptOrigin(card ? { promptId: card.id, promptVersion: "1", action: "edited" } : null); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          /> : <BrainCapabilityBrowser
           snapshot={snapshot}
           controls={brainControls}

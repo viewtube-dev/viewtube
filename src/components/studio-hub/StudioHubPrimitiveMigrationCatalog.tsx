@@ -115,24 +115,25 @@ const STANDARD_LEVEL: StudioHubComponentLevel = "l1"
 
 export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Switches / Toggles / Radio / Checkbox",
-  "Primary Button",
-  "Secondary Button",
-  "Neutral Button",
-  "Destructive Button",
+  "Studio Button Family",
   "Square Icon Button",
   "Split Left Button",
   "Studio Dropdown Family",
   "Studio Counter Family",
   "Studio Slider Family",
+  "Loader Family",
+  "Tooltip Family",
+  "Skeleton Family",
+  "Data Stats Family",
+  "Scrollbar Family",
+  "LED Family",
+  "Toolbox Header Family",
   "Head Tail Action",
-  "Split Menu",
   "Nested Square Choice",
   "Tag-Adjacent Split Action Row",
   "Multi-Section Script Bar",
   "Ranked Metadata Tag",
   "Education Timestamp Notes",
-  "Select Menu",
-  "Context Menu",
   "Studio Text Input",
   "Studio Text Area",
   "Text Input",
@@ -144,10 +145,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Split Search",
   "Number Field",
   "Input Action",
-  "Stepper",
-  "Studio Left Word Counter",
-  "Slider",
-  "Range Slider",
   "Button Group",
   "Tag",
   "Removable Tag",
@@ -159,7 +156,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Progress Value",
   "KPI",
   "Stat Card",
-  "Tooltip",
   "Knob Dial",
   "Alphabetical Spectrum Tags",
   "Field Label",
@@ -179,14 +175,11 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Dialog",
   "Drawer",
   "Calendar",
-  "Loader",
-  "Skeleton",
   "Toast",
   "Popover",
   "Disclosure",
   "Divider",
   "Pagination",
-  "LED Light",
   "Icon Rail Control",
   "Hover Card",
   "Meter",
@@ -196,9 +189,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Carousel",
   "Command Palette",
   "Metric Strip",
-  "Horizontal Scrollbar",
-  "Vertical Scrollbar",
-  "Data Stats Module",
   "Upload Frame",
   "Vault Landscape Asset",
   "Vault Landscape Swapped Asset",
@@ -207,34 +197,9 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Vault Audio Asset",
   "Vault Document Asset",
   "Tree View",
-  "Disabled Button",
-  "Disabled Split Button",
-  "Two Color Data Stats",
-  "Monochrome Data Stats",
-  "Tiny Data Stats",
-  "Tooltip Dark",
-  "Tooltip Color",
   "Dashboard Pill Tags",
   "Aspect Ratio Frame",
   "Toolbar",
-  "Toolbox Header Icon Rail",
-  "SubToolbox Header Icon Rail",
-  "Toolbox Header Title",
-  "SubToolbox Header Title",
-  "Toolbox Header Help",
-  "SubToolbox Header Help",
-  "Toolbox Header Collapse",
-  "SubToolbox Header Collapse",
-  "Toolbox Header Toggle",
-  "SubToolbox Header Toggle",
-  "LED Dot",
-  "Loader Progress",
-  "Loader Split",
-  "Loader Orbit",
-  "Loader Bars",
-  "Tooltip Visual Key",
-  "Skeleton Compact",
-  "Skeleton Media",
   "Media Control Button",
   "Media Play Toggle",
   "Media Seek Bar",
@@ -394,6 +359,7 @@ const PrimitiveMigrationControl: React.FC<{
   const [segmentChoice, setSegmentChoice] = React.useState("A")
   const [groupChoice, setGroupChoice] = React.useState("ONE")
   const [menuChoice, setMenuChoice] = React.useState("OPTION 1")
+  const [privacyChoice, setPrivacyChoice] = React.useState("PUBLIC")
   const [legendFilters, setLegendFilters] = React.useState<string[]>(["VIDEOS"])
   const [toneChoice, setToneChoice] = React.useState("CINEMATIC")
   const [nestedChoice, setNestedChoice] = React.useState("HOOK")
@@ -476,18 +442,37 @@ const PrimitiveMigrationControl: React.FC<{
 
   // Primitive track rule: only production primitives + shared CSS render here.
   // Unmigrated hardcoded families remain exclusively in the frozen baseline.
+  if (name === "Studio Button Family") {
+    return (
+      <div className="vt-catalog-button-family" role="group" aria-label="Standard button family">
+        <div className="vt-catalog-family-variant"><span>PRIMARY</span><PrimaryButton level={level}>SAVE</PrimaryButton></div>
+        <div className="vt-catalog-family-variant"><span>SECONDARY</span><PrimaryButton level={level} tone="neutral">CANCEL</PrimaryButton></div>
+        <div className="vt-catalog-family-variant"><span>NEUTRAL</span><PrimaryButton level={level} tone="ink">OPEN</PrimaryButton></div>
+        <div className="vt-catalog-family-variant"><span>DESTRUCTIVE</span><PrimaryButton level={level} tone="danger">DELETE</PrimaryButton></div>
+        <div className="vt-catalog-family-variant"><span>DISABLED</span><PrimaryButton level={level} disabled>UNAVAILABLE</PrimaryButton></div>
+        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Primary, secondary, neutral, destructive, and disabled are tones/states of the same standard button system. Split and square-icon buttons remain in their own geometry families.</p></details>
+      </div>
+    )
+  }
+
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button") {
     return <PrimaryButton level={level} tone={name === "Destructive Button" ? "danger" : name === "Neutral Button" || name === "Secondary Button" ? "neutral" : "accent"}>{name.replace(" Button", "")}</PrimaryButton>
   }
   if (name === "Studio Dropdown Family") {
     const options = ["OPTION 1", "OPTION 2", "OPTION 3"].map((option) => ({ value: option, label: option }));
     const filterOptions = ["VIDEOS", "SHORTS", "LIVE", "PLAYLISTS"].map((option) => ({ value: option, label: option }));
+    const privacyOptions = ["PUBLIC", "UNLISTED", "PRIVATE"].map((option) => ({ value: option, label: option }));
     return (
-      <div className="vt-catalog-dropdown-family">
-        <StudioDropdown sizeVariant="standard" value={menuChoice} options={options} onChange={setMenuChoice} ariaLabel="Standard dropdown" placeholder="CHOOSE" />
-        <StudioSplitLeftDropdown sizeVariant="standard" value={menuChoice} options={options} onChange={setMenuChoice} ariaLabel="Split-left dropdown" placeholder="CHOOSE" />
-        <StudioLegendMultiDropdown level={level} label="MULTI SELECT" options={filterOptions} value={legendFilters} onChange={setLegendFilters} sizeVariant="standard" placeholder="ANY" clearLabel="CLEAR ALL" />
-        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Standard, split-left, multi-select, and title/tone dropdown presentations belong to one dropdown family. The canonical standard representative uses the standard size.</p></details>
+      <div className="vt-catalog-dropdown-family" role="group" aria-label="Dropdown and menu primitive family">
+        <div className="vt-catalog-family-variant"><span>SIMPLE</span><StudioDropdown sizeVariant="standard" value={menuChoice} options={options} onChange={setMenuChoice} ariaLabel="Standard dropdown" placeholder="CHOOSE" /></div>
+        <div className="vt-catalog-family-variant"><span>SPLIT LEFT</span><StudioSplitLeftDropdown sizeVariant="standard" value={menuChoice} options={options} onChange={setMenuChoice} ariaLabel="Split-left dropdown" placeholder="CHOOSE" /></div>
+        <div className="vt-catalog-family-variant"><span>SPLIT MENU</span><SubToolboxSplitDropdown level={level} value={menuChoice} options={options.map((option) => ({ ...option, icon: <Menu /> }))} onChange={setMenuChoice} icon={<Menu />} chevron={<ChevronDown />} ariaLabel="Split menu" /></div>
+        <div className="vt-catalog-family-variant"><span>TITLE LABEL</span><SubToolboxTopTitleDropdown level={level} label="PRIVACY" value={privacyChoice} options={privacyOptions} onValueChange={setPrivacyChoice} ariaLabel="Publishing dropdown" /></div>
+        <div className="vt-catalog-family-variant"><span>MULTI-SELECT</span><StudioLegendMultiDropdown level={level} label="MULTI SELECT" options={filterOptions} value={legendFilters} onChange={setLegendFilters} sizeVariant="standard" placeholder="ANY" clearLabel="CLEAR ALL" /></div>
+        <div className="vt-catalog-family-variant"><span>SELECT MENU</span><SubToolboxMenu level={level} variant="select" value={menuChoice} options={options} onValueChange={setMenuChoice} triggerLabel={menuChoice} ariaLabel="Select menu" /></div>
+        <div className="vt-catalog-family-variant"><span>CONTEXT MENU</span><SubToolboxMenu level={level} variant="context" value={menuChoice} options={options} onValueChange={setMenuChoice} triggerLabel="MORE" ariaLabel="Context menu" /></div>
+        <div className="vt-catalog-family-variant"><span>TONE / STYLE</span><SubToolboxDropdownControl label="TONE / TENSION / STYLE" value={toneChoice} options={["TONE", "TENSION", "CINEMATIC"]} onChange={setToneChoice} tone="pink" className="w-full" /></div>
+        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Simple, split-left, split menu, title-label, multi-select, select, context, and tone/style variants belong together. All specimens use their production primitives.</p></details>
       </div>
     )
   }
@@ -505,20 +490,23 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "Studio Counter Family") {
     return (
-      <div className="vt-catalog-counter-family">
-        <StudioSideCounter size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Side counter" />
-        <StudioCounter size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Double-side counter" />
-        <StudioLeftCounter size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Left counter" />
-        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Side, double-side, and left-rail counter layouts share the same counter typography, size tokens, hold behavior, and focus treatment.</p></details>
+      <div className="vt-catalog-counter-family" role="group" aria-label="Counter primitive family">
+        <div className="vt-catalog-family-variant"><span>SIDE COUNTER</span><StudioSideCounter size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Side counter" /></div>
+        <div className="vt-catalog-family-variant"><span>DOUBLE-SIDE</span><StudioCounter size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Double-side counter" /></div>
+        <div className="vt-catalog-family-variant"><span>LEFT COUNTER</span><StudioLeftCounter size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Left counter" /></div>
+        <div className="vt-catalog-family-variant"><span>WORD COUNTER</span><StudioLeftWordCounter size="standard" value={wordCounterValue} onValueChange={setWordCounterValue} ariaLabel="Word counter" /></div>
+        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Side, double-side, left-rail, and word-option counters share the standard counter family. Numeric counter rails use secondary fill; the word counter defaults to primary fill with black text. Background alternatives belong here rather than as duplicate representatives.</p></details>
       </div>
     )
   }
   if (name === "Studio Slider Family") {
     return (
-      <div className="vt-catalog-slider-family">
-        <StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Double split slider" />
-        <StudioLeftWordSlider size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Word slider" />
-        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Numeric and word-value sliders share the split rails and center track; primary is the active fill and secondary is reserved for split rails.</p></details>
+      <div className="vt-catalog-slider-family" role="group" aria-label="Slider primitive family">
+        <div className="vt-catalog-family-variant"><span>VALUE SLIDER</span><SubToolboxSlider level={level} value={sliderValue} onValueChange={setSliderValue} railIcon={<span>S</span>} onReset={() => setSliderValue(62)} /></div>
+        <div className="vt-catalog-family-variant"><span>RANGE SLIDER</span><SubToolboxRangeSlider level={level} low={rangeLow} high={rangeHigh} onLowChange={setRangeLow} onHighChange={setRangeHigh} railIcon={<SlidersHorizontal />} onReset={() => { setRangeLow(22); setRangeHigh(76) }} /></div>
+        <div className="vt-catalog-family-variant"><span>DOUBLE-SPLIT</span><StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Double split slider" /></div>
+        <div className="vt-catalog-family-variant"><span>WORD VALUE</span><StudioLeftWordSlider size="standard" value={sliderValue} onValueChange={setSliderValue} ariaLabel="Word slider" /></div>
+        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Single-value, range, double-split, and word-value sliders live in one family. Active center fill is primary; split sections and rails are secondary.</p></details>
       </div>
     )
   }
@@ -1191,6 +1179,85 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "SubToolbox Header Toggle") {
     return <ToolboxHeaderToggle level="subtoolbox" value={headerMode} onValueChange={setHeaderMode} options={[{ value: "A", label: "A" }, { value: "B", label: "B" }]} />
+  }
+
+  if (name === "Loader Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Loader variants">
+        <div className="vt-catalog-family-variant"><span>SPINNER</span><SubToolboxLoader level={level} variant="spinner" label="LOADING" /></div>
+        <div className="vt-catalog-family-variant"><span>PROGRESS</span><SubToolboxLoader level={level} variant="progress" label="LOADING" /></div>
+        <div className="vt-catalog-family-variant"><span>SPLIT</span><SubToolboxLoader level={level} variant="split" label="LOADING" /></div>
+        <div className="vt-catalog-family-variant"><span>ORBIT</span><SubToolboxLoader level={level} variant="orbit" label="LOADING" /></div>
+        <div className="vt-catalog-family-variant"><span>BARS</span><SubToolboxLoader level={level} variant="bars" label="LOADING" /></div>
+      </div>
+    )
+  }
+
+  if (name === "Tooltip Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Tooltip variants">
+        <div className="vt-catalog-family-variant"><span>STANDARD</span><SubToolboxTooltip level={level} content="TOOLTIP" /></div>
+        <div className="vt-catalog-family-variant"><span>DARK</span><SubToolboxTooltip level={level} variant="dark" content="TOOLTIP" /></div>
+        <div className="vt-catalog-family-variant"><span>COLOR</span><SubToolboxTooltip level={level} variant="color" content="TOOLTIP" /></div>
+        <div className="vt-catalog-family-variant"><span>VISUAL KEY</span><SubToolboxLegendTooltip level={level} title="VISUAL KEY" triggerLabel="KEY" items={[{ label: "READY", detail: "Complete and available", color: "#3FEE56", icon: <Check /> }, { label: "IN REVIEW", detail: "Needs creator attention", color: "#FFDA47", icon: <Lightbulb /> }, { label: "MEDIA", detail: "Visual or asset reference", color: "#36E0F6", icon: <Image /> }]} /></div>
+      </div>
+    )
+  }
+
+  if (name === "Skeleton Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Skeleton loading variants">
+        <div className="vt-catalog-family-variant"><span>LINES</span><SubToolboxSkeleton level={level} lines={3} /></div>
+        <div className="vt-catalog-family-variant"><span>COMPACT</span><SubToolboxSkeleton level={level} variant="compact" /></div>
+        <div className="vt-catalog-family-variant"><span>MEDIA 16:9</span><SubToolboxSkeleton level={level} variant="media" ratio="16:9" /></div>
+      </div>
+    )
+  }
+
+  if (name === "Data Stats Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Data stats variants">
+        <div className="vt-catalog-family-variant"><span>STANDARD</span><SubToolboxDataStats level={level} label="TOTAL VIEWS" value="128,442" delta="+12.4%" variant="standard" /></div>
+        <div className="vt-catalog-family-variant"><span>TWO COLOR</span><SubToolboxDataStats level={level} label="VIEWS" value="128K" delta="+12%" variant="two-color" /></div>
+        <div className="vt-catalog-family-variant"><span>MONOCHROME</span><SubToolboxDataStats level={level} label="WATCH TIME" value="4.8K" delta="+8%" variant="monochrome" /></div>
+        <div className="vt-catalog-family-variant"><span>TINY</span><SubToolboxDataStats level={level} label="CTR" value="5.8%" variant="tiny" /></div>
+      </div>
+    )
+  }
+
+  if (name === "Scrollbar Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Scrollbar orientations">
+        <div className="vt-catalog-family-variant"><span>HORIZONTAL</span><SubToolboxScrollbar level={level} orientation="horizontal" value={scrollPos} onValueChange={setScrollPos} /></div>
+        <div className="vt-catalog-family-variant"><span>VERTICAL</span><SubToolboxScrollbar level={level} orientation="vertical" value={scrollPos} onValueChange={setScrollPos} /></div>
+      </div>
+    )
+  }
+
+  if (name === "LED Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="LED indicator variants">
+        <div className="vt-catalog-family-variant"><span>STATUS LED</span><SubToolboxLed level={level} active label="ACTIVE" /></div>
+        <div className="vt-catalog-family-variant"><span>LED DOT</span><SubToolboxLedDot level={level} active label="Active status light" /></div>
+      </div>
+    )
+  }
+
+  if (name === "Toolbox Header Family") {
+    return (
+      <div className="vt-catalog-family-variants" role="group" aria-label="Toolbox and SubToolbox header variants">
+        <div className="vt-catalog-family-variant"><span>TOOLBOX RAIL</span><div style={{height:80,display:"flex"}}><ToolboxHeaderIconRail level="toolbox" backgroundColor="var(--pair-b)"><Settings2 /></ToolboxHeaderIconRail></div></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX RAIL</span><div style={{height:56,display:"flex"}}><ToolboxHeaderIconRail level="subtoolbox" backgroundColor="var(--pair-b)"><Settings2 /></ToolboxHeaderIconRail></div></div>
+        <div className="vt-catalog-family-variant"><span>TOOLBOX TITLE</span><ToolboxHeaderTitle level="toolbox">VIDEO MANAGER</ToolboxHeaderTitle></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX TITLE</span><ToolboxHeaderTitle level="subtoolbox">VIDEO DETAILS</ToolboxHeaderTitle></div>
+        <div className="vt-catalog-family-variant"><span>TOOLBOX HELP</span><div style={{height:80}}><ToolboxHeaderHelpButton level="toolbox" aria-label="Toolbox help" /></div></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX HELP</span><div style={{height:56}}><ToolboxHeaderHelpButton level="subtoolbox" aria-label="Subtoolbox help" /></div></div>
+        <div className="vt-catalog-family-variant"><span>TOOLBOX COLLAPSE</span><div style={{height:80}}><ToolboxHeaderCollapseButton level="toolbox" open icon={<X />} aria-label="Collapse toolbox" /></div></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX COLLAPSE</span><div style={{height:56}}><ToolboxHeaderCollapseButton level="subtoolbox" open icon={<X />} aria-label="Collapse subtoolbox" /></div></div>
+        <div className="vt-catalog-family-variant"><span>TOOLBOX TOGGLE</span><ToolboxHeaderToggle value={headerMode} onValueChange={setHeaderMode} options={[{value:"A",label:"ON"},{value:"B",label:"OFF"}]} /></div>
+        <div className="vt-catalog-family-variant"><span>SUBTOOLBOX TOGGLE</span><ToolboxHeaderToggle level="subtoolbox" value={headerMode} onValueChange={setHeaderMode} options={[{value:"A",label:"A"},{value:"B",label:"B"}]} /></div>
+      </div>
+    )
   }
 
   return null

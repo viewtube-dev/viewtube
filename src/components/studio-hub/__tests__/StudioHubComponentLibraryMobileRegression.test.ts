@@ -5,6 +5,24 @@ import { describe, expect, it } from "vitest"
 const read = (path: string) => readFileSync(resolve(process.cwd(), path), "utf8")
 
 describe("Studio Hub Component Library mobile regression", () => {
+  it("shows the live canonical primitive grid before the representative inventory", () => {
+    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+    const grid = read("src/studio-ui/primitives/StudioComponentGrid.tsx")
+    const styles = read("src/components/studio-hub/studio-hub-primitive-catalogs.css")
+
+    expect(catalog).toContain('import { StudioComponentGrid, StudioComponentGridCell } from "../../studio-ui/primitives/StudioComponentGrid"')
+    expect(catalog).toContain('data-vt-confirmed-primitive-grid="true"')
+    expect(catalog).toContain('aria-label="Confirmed Studio primitive grid"')
+    expect(catalog).toContain('data-vt-library-component="StudioButton"')
+    expect(catalog).toContain('data-vt-library-component="StudioDropdown"')
+    expect(catalog).toContain('data-vt-library-component="StudioCounter"')
+    expect(catalog).toContain('data-vt-library-component="StudioDoubleSplitSlider"')
+    expect(catalog.indexOf("<ConfirmedPrimitiveGridOverview />")).toBeLessThan(catalog.indexOf("<ConfirmedDirectPrimitiveRows />"))
+    expect(grid).toContain('data-vt-studio-component-grid="true"')
+    expect(styles).toContain(".vt-confirmed-primitive-grid-overview")
+    expect(styles).toContain(".vt-confirmed-primitive-grid-cell")
+  })
+
   it("mounts frozen and primitive-migration catalogs from the production library wrapper", () => {
     const library = read("src/components/ToolboxUIReferenceLibrary.tsx")
     expect(library).toContain('import { StudioHubCompletePrimitiveCatalog }')
@@ -276,7 +294,7 @@ describe("Studio Hub Component Library mobile regression", () => {
     const publicIndex = read("src/studio-ui/index.ts")
     const expectedRows = [
       "StudioButton", "StudioSplitLeftButton", "StudioDoubleSplitButton",
-      "StudioTwoLineButton", "StudioSplitTwoLineButton", "StudioSimpleDropdown",
+      "StudioTwoLineButton", "StudioSplitTwoLineButton", "StudioDropdown",
       "StudioLegendMultiDropdown", "StudioSplitLeftDropdown", "StudioArrowToggle",
       "StudioBarToggle", "StudioWordToggle", "StudioTextInput", "StudioTextArea",
       "StudioTextBox", "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter",
@@ -294,6 +312,17 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(catalog).toContain('id: "overview"')
     expect(catalog).toContain('id: "settings"')
     expect(catalog).toContain('id: "details"')
+  })
+
+
+  it("groups switch, toggle, radio, and checkbox variant modules under one Controls family module", () => {
+    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+    expect(catalog).toContain('title="Switches / Toggles / Radio / Checkbox"')
+    expect(catalog).toContain("const switchToggleFamilies: React.ReactNode[] = []")
+    expect(catalog).toContain("if (isSwitchToggleChoiceFamily(title))")
+    expect(catalog).toContain("switchToggleFamilies.push(node)")
+    expect(catalog).toContain('const controls = grouped.get("Controls") ?? []')
+    expect(catalog).toContain("controls.unshift(")
   })
 
 })

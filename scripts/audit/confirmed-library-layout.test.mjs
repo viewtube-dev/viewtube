@@ -446,7 +446,7 @@ test("StudioButton library module applies the canonical 4px grid rhythm without 
 
 
 test("confirmed primitive catalog exposes current representative and family modules", () => {
-  assert.match(catalog, /title="Representatives · One Standard Specimen Per Primitive"/);
+  assert.match(catalog, /title="Direct Imported Primitive Representatives · Standard"/);
   assert.match(catalog, /const ConfirmedStudioButtonFamily/);
   assert.match(catalog, /id: "1-supreme-full"/);
   assert.match(catalog, /id: "7-compact-and-micro"/);
@@ -513,4 +513,23 @@ test("StudioSplitTextInput is a real exported primitive with a full-width standa
   assert.ok(publicIndex.includes("StudioSplitTextInput"));
   assert.ok(catalog.includes('data-vt-library-component="StudioSplitTextInput"'));
   assert.ok(catalog.includes('aria-label="Split text input standard specimen"'));
+});
+
+
+test("confirmed primitive grid is visible first and covers the core Studio design families", () => {
+  const top = catalog.slice(catalog.indexOf("export const StudioHubConfirmedPrimitiveCatalog"));
+  assert.match(top, /<ConfirmedPrimitiveGridOverview\s*\/>\s*<ConfirmedDirectPrimitiveRows\s*\/>/);
+  const grid = catalog.match(/const ConfirmedPrimitiveGridOverview:[^]*?\n}\n\nconst ConfirmedDirectPrimitiveRows/)?.[0] ?? "";
+  assert.match(grid, /<StudioComponentGrid cols={3} rows={3} size="standard"/);
+  for (const primitive of [
+    "StudioButton",
+    "StudioSplitLeftButton",
+    "StudioDropdown",
+    "StudioTextInput",
+    "StudioTextArea",
+    "StudioCounter",
+    "StudioSideCounter",
+    "StudioDoubleSplitSlider",
+    "StudioArrowToggle",
+  ]) assert.ok(grid.includes(`data-vt-library-component="${primitive}"`), `top grid is missing ${primitive}`);
 });

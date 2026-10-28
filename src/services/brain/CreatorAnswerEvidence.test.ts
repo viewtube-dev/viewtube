@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from "vitest"
 import { loadAiBrainContext, saveChannelContextProfile } from "../aiBrainContext"
 import { CHANNEL_CONTEXT_QUESTIONS } from "../../context/channelContextQuestions"
 import type { ChannelContextProfile } from "../../context/ChannelContextProfile"
-import { buildCreatorAnswerEvidenceRecords } from "./CreatorAnswerEvidence"
+import { buildCreatorAnswerEvidenceRecords, isCreatorAnswerProfileEligible } from "./CreatorAnswerEvidence"
 
 afterEach(() => localStorage.clear())
 
@@ -30,6 +30,32 @@ describe("creator intake evidence convergence", () => {
     expect(first.find(record => record.id === "creator-answer:channel-123:channelContext.identity.name")?.value).toBe("History Channel")
     expect(first.find(record => record.id === "creator-answer:channel-123:channelContext.brand.creativity")?.value).toBe("7")
     expect(first.every(record => record.limitations.some(note => note.includes("not independently verified")))).toBe(true)
+  })
+
+  it("trusts channel-scoped profiles without requiring a display name", () => {
+    expect(isCreatorAnswerProfileEligible({
+      channelScoped: true,
+      profileName: "",
+      activeChannelLabel: "History Channel",
+    })).toBe(true)
+  })
+
+  it("rejects mismatched legacy profiles but accepts normalized matching labels", () => {
+    expect(isCreatorAnswerProfileEligible({
+      channelScoped: false,
+      profileName: "Cooking Channel",
+      activeChannelLabel: "History Channel",
+    })).toBe(false)
+    expect(isCreatorAnswerProfileEligible({
+      channelScoped: false,
+      profileName: "@History   Channel",
+      activeChannelLabel: "history channel",
+    })).toBe(true)
+    expect(isCreatorAnswerProfileEligible({
+      channelScoped: false,
+      profileName: "",
+      activeChannelLabel: "History Channel",
+    })).toBe(false)
   })
 
   it("does not emit evidence for an unanswered field or without an explicit channel scope", () => {

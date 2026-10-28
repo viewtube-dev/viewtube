@@ -151,3 +151,38 @@ Items 1–4 have source-backed classifications; intended paths are reachable via
 
 
 Follow-up slice — citation resolution: `BrainTurnEvidenceRibbon` now resolves response citation IDs against either the prepared evidence-pack item IDs or the verified typed prompt-record IDs. It does not trust typed record IDs when integrity is unavailable or mismatched. Added component regression cases for both verified and mismatched manifests. This fixes a false-unresolved path where the response cited typed `EvidenceRecord` IDs while the ribbon compared only evidence-pack item IDs.
+## Follow-up slice — local interaction journal and retry input continuity
+
+The canonical IndexedDB conversation-turn store remains the only persistence owner. No parallel database or interaction store was added.
+
+- New `src/services/brain/BrainRetryContinuity.ts` and its focused test specify three explicit retry outcomes: `original_input_restored`, `fresh_evidence_retry`, and `legacy_context_reconstructed`.
+- New turns persist a serializable `generationInputSnapshot` in the existing turn metadata. Before generation starts, the exact outbound `systemInstruction`, bounded model history, creator input, and the evidence records rendered into that instruction are checkpointed to the same turn. The original prompt snapshot is retained for interrupted retries.
+- A saved-evidence retry restores the saved generation inputs and, when the original model-input snapshot exists, reuses its exact system instruction, history, and evidence records rather than treating rebuilt current context as original input.
+- A fresh-evidence retry uses the newly assembled inputs and records its mode and input snapshot in the turn's interaction log. Legacy turns without a saved prompt snapshot are explicitly marked as reconstructed rather than verified original-input replays.
+- Inbound interactions and outbound responses are appended to the existing turn metadata. Retry attempts, prompt/evidence snapshots, creator feedback, and review-only handoff receipts are also recorded locally against the canonical turn. Question-module answers and feedback-created turns receive inbound receipts automatically.
+- The non-success orchestration fallback now avoids creating a new learning entry when `retryGenerationOnly` is true, preventing retry from replaying that learning side effect.
+- Local provider-error fallbacks are saved as canonical conversation turns instead of existing only in React component state.
+
+**Local persistence scope:** IndexedDB stores this history on the current mobile or desktop browser/device. This does not imply automatic cross-device synchronization, and browser data clearing/quota/eviction policies can still affect retention.
+
+**Verification status:** `BrainRetryContinuity.test.ts` was added, but this execution path could not run the repository's test runner, typecheck, production build, or mobile/desktop browser checks. CI and runtime verification remain required; do not treat this slice as test-passing until those checks actually run.
+## Follow-up slice — channel-scoped profile persistence and prompt handoff provenance
+
+- `aiBrainContext.ts` now keys saved creator/channel context, completion, and dismissal state by the stable active channel ID when one is available. Switching channels loads that channel's profile rather than reusing the last global profile.
+- The old global profile is retained. It is copied into a channel-scoped key only when its saved channel name matches the active channel label; mismatched or unscoped legacy profile data is not silently assigned to another channel.
+- The Brain intake saves to the active channel scope while editing and loads again on channel switches. Brain prompt construction and `BrainOrchestrator` read the same channel-scoped owner.
+- `CreatorContextResolver` now includes `creatorAnswers` from the same canonical local profile loader when personalization is enabled, allowing downstream consumers to inspect the saved intake through the resolver envelope rather than creating another store.
+- `BrainPromptLibrary` actions now pass the selected canonical card identity to callers. Send-to-chat records prompt ID/version/action in the canonical turn metadata; Edit First retains that origin as a working-copy marker until the draft is sent. Shared prompt definitions are not mutated.
+- Added `aiBrainContext.test.ts` coverage for channel isolation and safe legacy migration, `CreatorContextResolver.test.ts` coverage for profile flow through the envelope, and `BrainPromptLibrary.test.ts` coverage for filtering and edit isolation.
+- Interaction receipts now refer to evidence IDs/request spec while the full evidence pack and exact model-input records remain in canonical turn metadata, avoiding duplicate large snapshots in the journal.
+
+**Storage contract:** conversation/evidence/interaction history uses the existing local IndexedDB conversation store; the creator intake uses channel-scoped browser local storage. Both are local to the current browser/device on mobile or desktop and do not automatically synchronize between devices. Clearing site data, browser eviction, storage quota, or private-browsing restrictions can affect retention.
+
+**Verification status:** changes and focused tests are committed, but this session has not run Vitest, typecheck, production build, or real mobile/desktop browser tests. Treat runtime and CI verification as pending.
+
+
+Follow-up — channel-scoped creator-answer eligibility:
+- The Brain no longer requires a display-name field to be populated before using creator answers loaded from the active channel-scoped profile key. The prior label check incorrectly dropped valid profile answers when a channel-scoped profile had no `identity.name`.
+- Legacy global profile data remains label-gated; an unnamed or mismatched legacy record is not assigned to an active channel.
+- Added regression cases in `src/services/brain/CreatorAnswerEvidence.test.ts` for scoped profiles with blank names and legacy label matching.
+- Verification is still pending: GitHub reports no workflow runs for the commit. Current combined statuses show Vercel build-rate-limit failures, which do not establish a code test result. Do not treat the phase as certified until focused Vitest, typecheck, production build and browser restore/channel-switch checks are run.

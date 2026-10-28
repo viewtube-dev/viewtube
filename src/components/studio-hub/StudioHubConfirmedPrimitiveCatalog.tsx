@@ -4,6 +4,7 @@ import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
+import { StudioComponentGrid, StudioComponentGridCell } from "../../studio-ui/primitives/StudioComponentGrid"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
@@ -295,6 +296,78 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
  * primitive per standard-size row. Keep the samples intentionally unadorned so
  * the component under test—not a catalog lookalike—owns its rendering.
  */
+/** A visible, top-of-library composition grid using real production primitives. */
+const ConfirmedPrimitiveGridOverview: React.FC = () => {
+  const [counterValue, setCounterValue] = React.useState(24)
+  const [sideCounterValue, setSideCounterValue] = React.useState(36)
+  const [sliderValue, setSliderValue] = React.useState(58)
+  const [buttonPressed, setButtonPressed] = React.useState(false)
+  const [arrowValue, setArrowValue] = React.useState("ONE")
+  const options = ["ONE", "TWO", "THREE"] as const
+  return (
+    <section className="vt-confirmed-primitive-grid-overview" data-vt-confirmed-primitive-grid="true" aria-labelledby="vt-confirmed-primitive-grid-title">
+      <h2 id="vt-confirmed-primitive-grid-title">Primitive Grid · Live Production Components</h2>
+      <p>Top-level quick reference: real production primitives across action, split, field, choice, counter, slider, and toggle designs. The complete standard representative inventory and detailed family variants follow below.</p>
+      <StudioComponentGrid cols={3} rows={3} size="standard" aria-label="Confirmed Studio primitive grid">
+        <StudioComponentGridCell col={1} row={1}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioButton">
+            <span>BUTTON</span>
+            <StudioButton sizeVariant="standard" aria-label="Grid specimen button" onClick={() => setButtonPressed(value => !value)}>{buttonPressed ? "SELECTED" : "STUDIO BUTTON"}</StudioButton>
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={2} row={1}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSplitLeftButton">
+            <span>SPLIT BUTTON</span>
+            <StudioSplitLeftButton sizeVariant="standard" icon={<Sparkles aria-hidden="true" />} aria-label="Grid specimen split button">SPLIT LEFT</StudioSplitLeftButton>
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={3} row={1}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDropdown">
+            <span>DROPDOWN</span>
+            <StudioDropdown sizeVariant="standard" ariaLabel="Grid specimen dropdown" defaultValue="balanced" options={[{ value: "balanced", label: "BALANCED" }, { value: "focused", label: "FOCUSED" }, { value: "expanded", label: "EXPANDED" }]} />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={1} row={2}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioTextInput">
+            <span>TEXT INPUT</span>
+            <StudioTextInput sizeVariant="standard" aria-label="Grid specimen text input" placeholder="TYPE HERE" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={2} row={2}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioTextArea">
+            <span>TEXT AREA</span>
+            <StudioTextArea sizeVariant="standard" rows={2} aria-label="Grid specimen text area" placeholder="TYPE HERE" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={3} row={2}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioCounter">
+            <span>COUNTER</span>
+            <StudioCounter size="standard" value={counterValue} onValueChange={setCounterValue} min={0} max={100} ariaLabel="Grid specimen counter" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={1} row={3}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSideCounter">
+            <span>SIDE COUNTER</span>
+            <StudioSideCounter value={sideCounterValue} onValueChange={setSideCounterValue} size="standard" min={0} max={100} ariaLabel="Grid specimen side counter" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={2} row={3}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDoubleSplitSlider">
+            <span>DOUBLE SPLIT SLIDER</span>
+            <StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Grid specimen double split slider" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={3} row={3}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioArrowToggle">
+            <span>ARROW TOGGLE</span>
+            <StudioArrowToggle size="standard" value={arrowValue} options={options} onValueChange={setArrowValue} ariaLabel="Grid specimen arrow toggle" />
+          </div>
+        </StudioComponentGridCell>
+      </StudioComponentGrid>
+    </section>
+  )
+}
+
 const ConfirmedDirectPrimitiveRows: React.FC = () => {
   const [arrowValue, setArrowValue] = React.useState("ONE")
   const [barValue, setBarValue] = React.useState(40)
@@ -316,7 +389,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   ]
   return (
     <Family
-      title="Representatives · One Standard Specimen Per Primitive"
+      title="Direct Imported Primitive Representatives · Standard"
       nonDefaultSettings={[
         "Each row contains one live production primitive at its standard size; examples are imported from their production owners rather than recreated as catalog-only lookalikes.",
         "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
@@ -331,6 +404,8 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
     >
       <div className="vt-confirmed-direct-primitive-rows" data-vt-confirmed-representatives="true" aria-label="Canonical primitive representatives">
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioButton"><span>Studio Button · STANDARD</span><StudioButton sizeVariant="standard" aria-label="Studio button standard specimen">STUDIO BUTTON</StudioButton></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineButton"><span>Two Lines Button · STANDARD</span><StudioTwoLineButton sizeVariant="standard" firstLine="TWO LINE" secondLine="BUTTON" aria-label="Two lines button standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTwoLineButton"><span>Two Lines Split Button · STANDARD</span><StudioSplitTwoLineButton sizeVariant="standard" icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label="Two lines split button standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdown"><span>Studio Dropdown · STANDARD</span><StudioDropdown sizeVariant="standard" ariaLabel="Studio dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle"><span>Arrow Toggle · STANDARD</span><StudioArrowToggle size="standard" value={arrowValue} options={options} onValueChange={setArrowValue} ariaLabel="Arrow toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioNumberInput"><span>Number Input · STANDARD</span><StudioNumberInput aria-label="Number input specimen" defaultValue={42} sizeVariant="standard" /></div>
@@ -684,32 +759,26 @@ const ConfirmedStudioDropdownFamily: React.FC = () => {
 }
 
 type ConfirmedCatalogFamilyName =
-  | "Switches / Toggles / Radio / Checkbox"
-  | "Buttons"
-  | "Badges"
-  | "Dropdowns"
   | "Text Fields"
+  | "Buttons & Badges"
+  | "Dropdowns"
+  | "Controls"
   | "Counters & Sliders"
   | "Modules & Frames"
-  | "Tags & Metadata"
-  | "Chat & Compositions"
-  | "Other Controls"
+  | "Compositions"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
-  "Switches / Toggles / Radio / Checkbox",
-  "Buttons",
-  "Badges",
-  "Dropdowns",
   "Text Fields",
+  "Buttons & Badges",
+  "Dropdowns",
+  "Controls",
   "Counters & Sliders",
   "Modules & Frames",
-  "Tags & Metadata",
-  "Chat & Compositions",
-  "Other Controls",
+  "Compositions",
 ]
 
 const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
-  if (!React.isValidElement(node)) return "Other Controls"
+  if (!React.isValidElement(node)) return "Compositions"
   const props = node.props as { title?: unknown }
   const title = typeof props.title === "string" ? props.title : ""
   const componentType = node.type as { displayName?: string; name?: string }
@@ -722,11 +791,11 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     || componentName === "CanonicalControlFamilies"
     || componentName === "CanonicalWordToggleFamily"
     || componentName === "ConfirmedStudioValueToggleFamily") {
-    return "Switches / Toggles / Radio / Checkbox"
+    return "Controls"
   }
 
   if (/Split-left Badge|Split-right Badge|Double-split Badge|Brain Status LED Badges|Status \/ navigation|StudioBrainStatusBadge|StudioBrainStatusIndicator|StudioLedBadgeTab|StudioSplitLeftBadge|StudioSplitRightBadge|StudioDoubleSplitBadge/.test(title)
-    || componentName === "CanonicalSplitBadgeFamily") return "Badges"
+    || componentName === "CanonicalSplitBadgeFamily") return "Buttons & Badges"
   if (/Studio Text Input|Studio Text Area|Studio Text Box|StudioTextInput|StudioTextArea|StudioTextBox|UsernameInput|SplitLeftInput|SearchInput|NumberInput|Split Text Input|StudioSplitTextInput/.test(title)) return "Text Fields"
   if (/StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|Double Split Slider|Side Counter|Left Word Counter|Slider/.test(title)
     || componentName === "ConfirmedStudioCounterFamily"
@@ -737,16 +806,20 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Dropdown/.test(title) || componentName === "ConfirmedStudioDropdownFamily") return "Dropdowns"
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton/.test(title)
     || componentName === "ConfirmedStudioButtonFamily"
-    || componentName === "ConfirmedStudioSplitButtonFamily") return "Buttons"
+    || componentName === "ConfirmedStudioSplitButtonFamily") return "Buttons & Badges"
   if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
-  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag/.test(title)) return "Tags & Metadata"
-  if (/Publishing Card|StudioChatResponseShell|StudioChatActionGroup|StudioResponseMetaRow/.test(title)) return "Chat & Compositions"
-  return "Other Controls"
+  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag/.test(title)) return "Compositions"
+  if (/Publishing Card|StudioChatResponseShell|StudioChatActionGroup|StudioResponseMetaRow/.test(title)) return "Compositions"
+  return "Compositions"
 }
+
+const isSwitchToggleChoiceFamily = (title: string): boolean =>
+  /^(?:Switches, Radios & Checkboxes|Word Toggles · Standard \+ Compact \+ Vertical|Arrow \/ Side \/ Double Side \/ Bar Toggles)$/.test(title)
 
 const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const nodes = React.Children.toArray(children)
   const defaults: React.ReactNode[] = []
+  const switchToggleFamilies: React.ReactNode[] = []
   const grouped = new Map<ConfirmedCatalogFamilyName, React.ReactNode[]>(
     CONFIRMED_CATALOG_FAMILIES.map((family) => [family, []]),
   )
@@ -755,17 +828,34 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
       defaults.push(node)
       continue
     }
+    const title = React.isValidElement(node) && typeof (node.props as { title?: unknown }).title === "string"
+      ? (node.props as { title: string }).title
+      : ""
+    if (isSwitchToggleChoiceFamily(title)) {
+      switchToggleFamilies.push(node)
+      continue
+    }
     grouped.get(classifyConfirmedCatalogItem(node))?.push(node)
+  }
+  const controls = grouped.get("Controls") ?? []
+  if (switchToggleFamilies.length > 0) {
+    controls.unshift(
+      <ConfirmedFamilyModule key="switch-toggle-choice-family" title="Switches / Toggles / Radio / Checkbox" className="vt-confirmed-family-group vt-confirmed-switch-toggle-family">
+        {switchToggleFamilies}
+      </ConfirmedFamilyModule>,
+    )
   }
   return (
     <div className="vt-confirmed-catalog">
       {defaults}
       <div className="vt-confirmed-family-grid">
-        {CONFIRMED_CATALOG_FAMILIES.map((family) => (
-          <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group">
-            {grouped.get(family)}
-          </ConfirmedFamilyModule>
-        ))}
+        {CONFIRMED_CATALOG_FAMILIES
+          .filter((family) => (grouped.get(family)?.length ?? 0) > 0)
+          .map((family) => (
+            <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group">
+              {grouped.get(family)}
+            </ConfirmedFamilyModule>
+          ))}
       </div>
     </div>
   )
@@ -784,7 +874,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
     { value: "explore", label: "EXPLORE" },
   ]
   return (
-    <>
+    <ConfirmedCatalogFamilyGroups>
       <Family title="Split Text Input · Vertical Geometry Comparison" nonDefaultSettings={[
         "Compare the current 0px-padding baseline, an explicit 4px padding reference, half that reference (2px), and username-matched inner height.",
         "Type into each field and focus/blur it to inspect the primary border, glyph baseline, and lower-edge clipping.",
@@ -833,13 +923,14 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
       <Family title="StudioLeftCounter · Standard" nonDefaultSettings={["Left-action counter variant with the same 2:1 numeric display as the standard counter."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>STANDARD · LEFT ACTION RAIL</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter dedicated specimen" /></div>
       </Family>
-    </>
+    </ConfirmedCatalogFamilyGroups>
   )
 }
 
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <>
     <div className="vt-confirmed-catalog">
+      <ConfirmedPrimitiveGridOverview />
       <ConfirmedDirectPrimitiveRows />
     </div>
     <ConfirmedCatalogFamilyGroups>
@@ -1482,7 +1573,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </StudioInterModule>
       </div>
     </Family>
-    <ConfirmedIndividualPrimitiveSections />
     <Family
       title="Collapsing Split Module · Standard + Compact"
       nonDefaultSettings={[
@@ -1554,6 +1644,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
   </ConfirmedCatalogFamilyGroups>
+    <ConfirmedIndividualPrimitiveSections />
+    <ConfirmedAdditionalPrimitiveSections />
   </>
 )
 
@@ -1569,7 +1661,7 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
   const [doubleLeft, setDoubleLeft] = React.useState("SOURCE")
   const [doubleRight, setDoubleRight] = React.useState("TARGET")
   const [barValue, setBarValue] = React.useState(40)
-  return <>
+  return <ConfirmedCatalogFamilyGroups>
     <Family title="StudioResponseMetaRow · Compact" nonDefaultSettings={[
       "Compact response title and metadata composition with optional status, metadata, and trailing slots.",
       "Wraps long labels on narrow widths and composes existing status/actions rather than implementing parallel controls.",
@@ -1632,8 +1724,7 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
     
     
     
-    <ConfirmedAdditionalPrimitiveSections />
-  </>
+  </ConfirmedCatalogFamilyGroups>
 }
 
 const ConfirmedStudioValueToggleFamily: React.FC = () => {

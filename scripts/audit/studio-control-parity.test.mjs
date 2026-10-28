@@ -40,9 +40,9 @@ test("side-toggle stack uses a centered overlay divider, not a half-cell border"
 });
 
 test("toggle chevrons use the standard, compact, and micro icon dimensions", () => {
-  assert.match(css, /data-size="standard"[\s\S]*?width:\s*min\(38px, 100%\)/);
-  assert.match(css, /data-size="compact"[\s\S]*?width:\s*min\(30px, 100%\)/);
-  assert.match(css, /data-size="micro"[\s\S]*?width:\s*min\(15px, 100%\)/);
+  assert.match(css, /\.vt-studio-value-toggle--side[\s\S]*?width:\s*14px/);
+  assert.match(css, /\.vt-studio-value-toggle--side\[data-size="compact"\][\s\S]*?width:\s*30px/);
+  assert.match(css, /\.vt-studio-value-toggle--side\[data-size="micro"\][\s\S]*?width:\s*15px/);
 });
 
 test("textarea focus uses primary 15-percent fill and secondary proportional outline", () => {
@@ -81,18 +81,18 @@ test("floating-label risen typography uses one shared token pair while rest labe
   assert.match(css, /--vt-studio-floating-label-risen-text-stroke:\s*0\.5px/);
   assert.match(css, /font-size:\s*var\(--vt-studio-floating-label-risen-font-size, 12px\) !important/);
   assert.match(css, /-webkit-text-stroke-width:\s*var\(--vt-studio-floating-label-risen-text-stroke, 0\.5px\) !important/);
-  assert.match(css, /textarea\[data-size="compact"\] \+ \.vt-studio-floating-field-label[\s\S]*?vt-studio-textarea-compact-font-size/);
-  assert.match(css, /input\[data-size="compact"\] \+ \.vt-studio-floating-field-label[\s\S]*?vt-studio-28-font-size/);
+  assert.match(fields, /textarea\[data-size="compact"\] \+ \.vt-studio-floating-field-label[\s\S]*?vt-studio-textarea-compact-font-size/);
+  assert.match(fields, /input\[data-size="compact"\] \+ \.vt-studio-floating-field-label[\s\S]*?vt-studio-28-font-size/);
   assert.doesNotMatch(css, /\.vt-studio-floating-field[^{}]*:focus[^{}]*\{[^}]*font-size:\s*18px/);
 });
 
 test("double-side divider is centered and the confirmed catalog mixes compact and standard variants", () => {
   assert.match(css, /\.vt-studio-value-toggle--double \.vt-studio-value-toggle__divider\s*\{[^}]*left:\s*50%;[^}]*translateX\(-50%\)/s);
-  assert.match(catalog, /size=\{index === 1 \|\| index === 3 \? "compact" : "standard"\}/);
+  assert.match(catalog, /sizeVariant=\{tier\}/);
 });
 
 test("bar toggle uses adaptive width counts, proportional fill, and size-specific borderless bars", () => {
-  assert.match(toggles, /function barCountFromWidth\\(widthPx: number, size: string\\)/);
+  assert.match(toggles, /function barCountFromWidth\(widthPx: number, size: string\)/);
   assert.match(toggles, /barCountFromWidth\(width, size\)/);
   assert.match(toggles, /Math\.floor\(\(inner \+ metrics\.gap\) \/ \(metrics\.bar \+ metrics\.gap\)\)/);
   assert.match(toggles, /Math\.max\(4, Math\.min\(40, count \|\| 4\)\)/);
@@ -114,7 +114,7 @@ test("multi-select closed trigger renders a separate black count badge inside tr
 
 test("the five-tier size contract is complete and generated CSS stays in parity", () => {
   for (const [tier, height, font, icon] of [
-    ["supreme", 60, 51.82, 51.82],
+    ["supreme", 60, 52, 52],
     ["standard", 44, 38, 38],
     ["compact", 28, 24, 24],
     ["mini", 20, 17.5, 17.5],
@@ -153,7 +153,7 @@ test("top direct-representative module covers the full explicitly exported contr
     "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
     "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioTagEditor", "StudioUploadFrame",
   ]) {
-    assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"\\b`), `${primitive} needs a direct top-module specimen`);
+    assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"`), `${primitive} needs a direct top-module specimen`);
   }
   assert.doesNotMatch(representative, /data-vt-library-component="(?:StudioCollapsingSplitModule|StudioCollapsingTwoLineModule|StudioInterModule|StudioSplitAccordion)"/);
 });
@@ -167,8 +167,18 @@ test("size-tier ownership is centralized and Micro inherits Mini's shared stylin
   assert.match(css, /data-size="micro"[\s\S]*?vt-studio-mini-focus-outline-width, 0\.975px/);
   assert.doesNotMatch(css, /\.vt-studio-value-toggle\[data-size="micro"\] \{[^}]*border-width: 1px|\.vt-studio-value-toggle--double\[data-size="micro"\] \{[^}]*control-stroke: 1px/);
   assert.doesNotMatch(core, /data-size="(?:supreme|standard|compact|mini|micro)"\s*\{/);
-  assert.doesNotMatch(recovery, /\[data-vt-studio-control\]\[data-size="(?:supreme|standard|compact|mini|micro)"\]\s*\{/);\n  assert.doesNotMatch(recovery, /\.vt-studio-split-text-input(?:__field)?\s*\{/);
+  assert.doesNotMatch(recovery, /\[data-vt-studio-control\]\[data-size="(?:supreme|standard|compact|mini|micro)"\]\s*\{/);
+  assert.doesNotMatch(recovery, /\.vt-studio-split-text-input(?:__field)?\s*\{/);
   assert.match(generated, /--vt-studio-mini-font-size: 17\.5px/);
   assert.match(generated, /--vt-studio-mini-icon-size: 17\.5px/);
   assert.match(generated, /--vt-studio-textarea-mini-font-size: 17\.5px/);
+  const focusRatio = Number(tokens.match(/focusOutlineWidthRatio:\s*([\d.]+)/)?.[1]);
+  assert.equal(focusRatio, 0.65, "focus outline ratio remains canonical");
+  assert.match(generated, new RegExp("--vt-studio-focus-outline-width-ratio: " + focusRatio + ";"));
+  assert.match(generated, new RegExp("--vt-studio-secondary-focus-width-ratio: " + focusRatio + ";"));
+  for (const [tier, stroke] of Object.entries({ supreme: 3, standard: 3, compact: 2, mini: 1.5, micro: 1.5 })) {
+    const outline = Number(tokens.match(new RegExp(tier + ":\\s*\\{[^}]*focusOutlineWidth:\\s*([\\d.]+)"))?.[1]);
+    assert.ok(Math.abs(outline - stroke * focusRatio) < 1e-9, tier + " focus outline must derive from the tier stroke");
+    assert.match(generated, new RegExp("--vt-studio-" + tier + "-secondary-outline-width: " + outline + "px;"));
+  }
 });

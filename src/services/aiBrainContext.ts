@@ -133,6 +133,23 @@ const STORAGE_KEY = "vt_ai_brain_context_v1"
 const COMPLETED_KEY = "vt_ai_brain_context_completed_v1"
 const DISMISSED_KEY = "vt_ai_brain_context_dismissed_v1"
 
+const scopedKey = (key: string, channelId?: string | null): string =>
+ channelId ? `${key}:channel:${encodeURIComponent(channelId.trim().toLocaleLowerCase())}` : key
+
+const readStoredContext = (key: string): AiBrainContext | null => {
+ try {
+  const raw = localStorage.getItem(key)
+  return raw ? normalizeContext(JSON.parse(raw) as Partial<AiBrainContext>) : null
+ } catch {
+  return null
+ }
+}
+
+const sameChannelLabel = (left?: string | null, right?: string | null): boolean => {
+ const normalize = (value?: string | null) => String(value || "").trim().replace(/^@/, "").replace(/\s+/g, " ").toLocaleLowerCase()
+ return Boolean(normalize(left) && normalize(left) === normalize(right))
+}
+
 const defaultGoalTargets = (): AiBrainGoalTarget[] => [
  { metric: "views", label: "Views", currentValue: null, recommendedTarget: null, userTarget: null, rationale: "Set a realistic one-month view target once the Brain sees your current pace.", source: "default" },
  { metric: "subscribers", label: "Subscribers", currentValue: null, recommendedTarget: null, userTarget: null, rationale: "Use a subscriber target that matches your view volume and conversion rate.", source: "default" },
@@ -225,14 +242,31 @@ const normalizeContext = (parsed: Partial<AiBrainContext> = {}): AiBrainContext 
  }
 }
 
-export const loadAiBrainContext = (): AiBrainContext => {
- try {
-  const raw = localStorage.getItem(STORAGE_KEY)
-  if (!raw) return defaultContext
-  return normalizeContext(JSON.parse(raw) as Partial<AiBrainContext>)
- } catch {
-  return defaultContext
+/**
+ * Load the profile for one channel. Legacy global data is only migrated when
+ * its saved channel name exactly matches the active channel label; it is never
+ * silently assigned to a different channel.
+ */
+export const loadAiBrainContext = (
+ channelId?: string | null,
+ activeChannelLabel?: string | null,
+): AiBrainContext => {
+ if (!channelId) return readStoredContext(STORAGE_KEY) || defaultContext
+ const key = scopedKey(STORAGE_KEY, channelId)
+ const scoped = readStoredContext(key)
+ if (scoped) return scoped
+ const legacy = readStoredContext(STORAGE_KEY)
+ const label = activeChannelLabel || channelId
+ if (legacy && sameChannelLabel(legacy.channelContext.identity.name, label)) {
+  try {
+   localStorage.setItem(key, JSON.stringify(legacy))
+   localStorage.setItem(scopedKey(COMPLETED_KEY, channelId), legacy.completedAt || localStorage.getItem(COMPLETED_KEY) === "true" ? "true" : "false")
+  } catch {
+   // Keep the original legacy record untouched if browser storage is unavailable.
+  }
+  return legacy
  }
+ return defaultContext
 }
 
 /** Notify other Brain surfaces that the canonical local creator profile changed. */
@@ -286,11 +320,24 @@ export const syncLegacyAnswersToChannelContext = (
  return next
 }
 
-export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext => {
- const previous = loadAiBrainContext()
+export const saveAiBrainContext = (next: AiBrainContextInput, channelId?: string | null): AiBrainContext => {
+ const previous = loadAiBrainContext(channelId, next.channelContext?.identity?.name)
  const updatedAt = new Date().toISOString()
  const migratedProfile = syncLegacyAnswersToChannelContext(previous.channelContext, previous, true)
- const canonicalProfile = next.channelContext || syncLegacyAnswersToChannelContext(migratedProfile, next)
+ // Legacy intake surfaces sometimes submit a full stale profile object. Only project legacy
+ // fields that actually changed in this save, so unchanged aliases cannot overwrite newer
+ // canonical questionnaire answers.
+ const legacyPatch: AiBrainContextInput = {}
+ const nextRecord = next as unknown as Record<string, unknown>
+ const previousRecord = previous as unknown as Record<string, unknown>
+ const legacyPatchRecord = legacyPatch as unknown as Record<string, unknown>
+ for (const question of AI_BRAIN_INTAKE_QUESTIONS) {
+  const key = question.id
+  if (!Object.prototype.hasOwnProperty.call(next, key)) continue
+  if (clean(nextRecord[key]) === clean(previousRecord[key])) continue
+  legacyPatchRecord[key] = nextRecord[key]
+ }
+ const canonicalProfile = syncLegacyAnswersToChannelContext(next.channelContext || migratedProfile, legacyPatch)
  const normalized = normalizeContext({
   ...previous,
   ...next,
@@ -306,9 +353,9 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
   version: 2,
  })
  const payload = syncChannelContextToLegacyAnswers(normalized, canonicalProfile)
- localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
- localStorage.setItem(COMPLETED_KEY, "true")
- localStorage.removeItem(DISMISSED_KEY)
+ localStorage.setItem(scopedKey(STORAGE_KEY, channelId), JSON.stringify(payload))
+ localStorage.setItem(scopedKey(COMPLETED_KEY, channelId), "true")
+ localStorage.removeItem(scopedKey(DISMISSED_KEY, channelId))
  notifyCreatorContextUpdated(payload)
  return payload
 }
@@ -333,34 +380,34 @@ export const syncChannelContextToLegacyAnswers = (
  audienceNiche: clean(channelContext.identity.niche),
 })
 
-export const saveChannelContextProfile = (channelContext: ChannelContextProfile): AiBrainContext => {
- const previous = loadAiBrainContext()
+export const saveChannelContextProfile = (channelContext: ChannelContextProfile, channelId?: string | null): AiBrainContext => {
+ const previous = loadAiBrainContext(channelId, channelContext.identity.name)
  const normalized = normalizeContext({
   ...previous,
   channelContext,
   updatedAt: new Date().toISOString(),
  })
  const payload = syncChannelContextToLegacyAnswers(normalized, channelContext)
- localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+ localStorage.setItem(scopedKey(STORAGE_KEY, channelId), JSON.stringify(payload))
  notifyCreatorContextUpdated(payload)
  return payload
 }
 
-export const hasCompletedAiBrainContext = (): boolean =>
- localStorage.getItem(COMPLETED_KEY) === "true" || Boolean(loadAiBrainContext().completedAt)
+export const hasCompletedAiBrainContext = (channelId?: string | null): boolean =>
+ localStorage.getItem(scopedKey(COMPLETED_KEY, channelId)) === "true" || Boolean(loadAiBrainContext(channelId).completedAt)
 
-export const shouldShowAiBrainIntake = (isAuthenticated: boolean): boolean => {
+export const shouldShowAiBrainIntake = (isAuthenticated: boolean, channelId?: string | null): boolean => {
  if (!isAuthenticated) return false
- if (hasCompletedAiBrainContext()) return false
- if (localStorage.getItem(DISMISSED_KEY) === "true") return false
+ if (hasCompletedAiBrainContext(channelId)) return false
+ if (localStorage.getItem(scopedKey(DISMISSED_KEY, channelId)) === "true") return false
  const hasSignupEmail = clean(localStorage.getItem("vt_signup_email")).length > 0
  const hasKnownEmail = clean(localStorage.getItem("vt_known_user_email")).length > 0
  return hasSignupEmail || hasKnownEmail
 }
 
-export const dismissAiBrainIntake = (): void => {
- const current = loadAiBrainContext()
+export const dismissAiBrainIntake = (channelId?: string | null): void => {
+ const current = loadAiBrainContext(channelId)
  const deferredAt = new Date().toISOString()
- localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, deferredAt, updatedAt: deferredAt }))
- localStorage.setItem(DISMISSED_KEY, "true")
+ localStorage.setItem(scopedKey(STORAGE_KEY, channelId), JSON.stringify({ ...current, deferredAt, updatedAt: deferredAt }))
+ localStorage.setItem(scopedKey(DISMISSED_KEY, channelId), "true")
 }

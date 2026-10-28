@@ -137,3 +137,8 @@ Discover current package scripts and run focused settings/public-handle/context-
 
 ## 8. Definition of done
 Items 18–20 have source-backed classifications; settings/public mode connect to real owners; keyless behavior is accurately described and tested; resume uses canonical records; context remains scoped; no duplicate stores are added; tests/build and observed responsive/accessibility checks are recorded; missing underlying implementation is split out rather than hidden by a UI patch.
+## Follow-up — local channel profile scope
+
+`src/services/aiBrainContext.ts` now supports channel-scoped local profile, completion, and dismissal keys. The Brain workspace uses the stable channel ID first, reloads the profile when the active channel changes, and passes that same scope through intake saves and prompt construction. Legacy global data is retained and only copied into a channel scope when its saved profile name matches the active label. `CreatorContextResolver` exposes the saved creator answers through its canonical envelope while personalization is enabled.
+
+Persistence remains local to the browser/device. This is not cross-device sync, and browser data clearing, storage quotas, eviction, and private browsing can affect retention. Automated tests/typecheck/build and mobile/desktop runtime verification are still pending.

@@ -114,10 +114,7 @@
 /* Library typography parity: first thirteen primitive families use the exact
    StudioButton type voice instead of each demo inheriting a legacy label size. */
 .vt-primitive-migration-catalog .vt-primitive-migration-family:is(
-  [data-vt-family="Primary Button"],
-  [data-vt-family="Secondary Button"],
-  [data-vt-family="Neutral Button"],
-  [data-vt-family="Destructive Button"],
+  [data-vt-family="Studio Button Family"],
   [data-vt-family="Square Icon Button"],
   [data-vt-family="Split Left Button"],
   [data-vt-family="Head Tail Action"],
@@ -131,10 +128,7 @@
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 .vt-primitive-migration-catalog .vt-primitive-migration-family:is(
-  [data-vt-family="Primary Button"],
-  [data-vt-family="Secondary Button"],
-  [data-vt-family="Neutral Button"],
-  [data-vt-family="Destructive Button"],
+  [data-vt-family="Studio Button Family"],
   [data-vt-family="Square Icon Button"],
   [data-vt-family="Split Left Button"],
   [data-vt-family="Head Tail Action"],
@@ -151,7 +145,7 @@
 ) {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-weight: 1000;
-  letter-spacing: -.035em;
+  letter-spacing: -.02em;
   text-transform: uppercase;
 }
 .vt-primitive-migration-catalog .vt-primitive-migration-family[data-vt-family="Top Title Dropdown"] .vt-subtoolbox-top-title-dropdown-panel {
@@ -320,5 +314,132 @@
   }
   .vt-catalog-dropdown-family .vt-catalog-variants {
     grid-column: 1 / -1;
+  }
+}
+
+
+/* Family modules use one shared, full-width specimen grid. */
+.vt-primitive-migration-catalog .vt-catalog-button-family,
+.vt-primitive-migration-catalog .vt-catalog-dropdown-family,
+.vt-primitive-migration-catalog .vt-catalog-counter-family,
+.vt-primitive-migration-catalog .vt-catalog-slider-family,
+.vt-primitive-migration-catalog .vt-catalog-split-button-family {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-variant {
+  display: grid;
+  grid-template-columns: minmax(108px, .65fr) minmax(0, 1.35fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-variant > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  font-size: 11px;
+  font-weight: 1000;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-variant > :last-child {
+  width: 100%;
+  min-width: 0;
+}
+@media (min-width: 760px) {
+  .vt-primitive-migration-catalog .vt-catalog-button-family,
+  .vt-primitive-migration-catalog .vt-catalog-dropdown-family,
+  .vt-primitive-migration-catalog .vt-catalog-counter-family,
+  .vt-primitive-migration-catalog .vt-catalog-slider-family,
+  .vt-primitive-migration-catalog .vt-catalog-split-button-family {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  .vt-primitive-migration-catalog .vt-catalog-family-variant {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}
+
+/* Shared layout for additional variant families in the confirmed catalog. */
+.vt-primitive-migration-catalog .vt-catalog-family-variants {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+@media (min-width: 760px) {
+  .vt-primitive-migration-catalog .vt-catalog-family-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Family modules use one shared, full-width specimen grid. */
+.vt-primitive-migration-catalog .vt-catalog-button-family,
+.vt-primitive-migration-catalog .vt-catalog-dropdown-family,
+.vt-primitive-migration-catalog .vt-catalog-counter-family,
+.vt-primitive-migration-catalog .vt-catalog-slider-family,
+.vt-primitive-migration-catalog .vt-catalog-split-button-family {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-variant {
+  display: grid;
+  grid-template-columns: minmax(108px, .65fr) minmax(0, 1.35fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-variant > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  font-size: 11px;
+  font-weight: 1000;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-variant > :last-child {
+  width: 100%;
+  min-width: 0;
+}
+@media (min-width: 760px) {
+  .vt-primitive-migration-catalog .vt-catalog-button-family,
+  .vt-primitive-migration-catalog .vt-catalog-dropdown-family,
+  .vt-primitive-migration-catalog .vt-catalog-counter-family,
+  .vt-primitive-migration-catalog .vt-catalog-slider-family,
+  .vt-primitive-migration-catalog .vt-catalog-split-button-family {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  .vt-primitive-migration-catalog .vt-catalog-family-variant {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}
+
+/* Shared layout for additional variant families in the confirmed catalog. */
+.vt-primitive-migration-catalog .vt-catalog-family-variants {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+@media (min-width: 760px) {
+  .vt-primitive-migration-catalog .vt-catalog-family-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

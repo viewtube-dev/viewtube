@@ -64,8 +64,8 @@ export type BrainPromptLibraryProps = {
   cards: CreatorBrainPromptCard[]
   busy?: boolean
   headingId?: string
-  onPrompt: (prompt: string) => void
-  onEdit?: (prompt: string) => void
+  onPrompt: (prompt: string, card?: CreatorBrainPromptCard) => void
+  onEdit?: (prompt: string, card?: CreatorBrainPromptCard) => void
   /** Optional; pass `promptCardSummary` from AIBrainCommandInterface for richer blurbs */
   summarize?: PromptCardSummaryFn
 }
@@ -261,7 +261,7 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
                             }
                             onClick={(event) => {
                               event.stopPropagation()
-                              onEdit(card.prompt)
+                              onEdit(card.prompt, card)
                               setSelectedId(null)
                             }}
                           />
@@ -281,7 +281,7 @@ export const BrainPromptLibrary: React.FC<BrainPromptLibraryProps> = ({
                           }
                           onClick={(event) => {
                             event.stopPropagation()
-                            onPrompt(card.prompt)
+                            onPrompt(card.prompt, card)
                             setSelectedId(null)
                           }}
                         />

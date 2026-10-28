@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { buildBrainEvidenceRecordQuality, fingerprintBrainEvidenceRecords } from "./BrainEvidenceQuality"
 import type { EvidenceRecord } from "./EvidenceRecord"
-import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords } from "./PromptEvidenceIntegrity"
+import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, readCreatorAnswerEvidenceRecords } from "./PromptEvidenceIntegrity"
 
 const record = (overrides: Partial<EvidenceRecord> = {}): EvidenceRecord => ({
  id: "evidence-1",
@@ -36,6 +36,7 @@ describe("PromptEvidenceIntegrity", () => {
 
   expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("verified")
   expect(readPromptEvidenceRecords(metadata)).toEqual(records)
+  expect(readCreatorAnswerEvidenceRecords(metadata)).toEqual(metadata.creatorAnswerEvidenceRecords as EvidenceRecord[])
  })
 
  it("rejects changed record content even when the record ID is unchanged", () => {
@@ -59,6 +60,7 @@ describe("PromptEvidenceIntegrity", () => {
 
   expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("mismatch")
   expect(readPromptEvidenceRecords(metadata)).toBeUndefined()
+  expect(readCreatorAnswerEvidenceRecords(metadata)).toBeUndefined()
  })
 
  it("accepts historical empty creator-answer evidence without a fingerprint", () => {
