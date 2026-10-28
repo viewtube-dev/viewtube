@@ -299,6 +299,26 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
  return payload
 }
 
+export const syncChannelContextToLegacyAnswers = (
+ context: AiBrainContext,
+ channelContext: ChannelContextProfile,
+): AiBrainContext => ({
+ ...context,
+ channelContext,
+ channelDescription: clean(channelContext.identity.description),
+ mainTopicFocus: clean(channelContext.identity.niche),
+ audienceDescription: clean(channelContext.audience.idealViewer),
+ successDefinition: clean(channelContext.goals.successDefinition),
+ mainYoutubeGoal: clean(channelContext.goals.primaryGoal),
+ recurringSeriesName: clean(channelContext.content.recurringSeriesName),
+ recurringSeriesDescription: clean(channelContext.content.recurringSeriesDescription),
+ biggestWeakness: clean(channelContext.content.biggestWeakness),
+ mostSuccessfulVideo: clean(channelContext.content.mostSuccessfulVideo),
+ signupReason: clean(channelContext.intelligence.signupReason),
+ whatNext: clean(channelContext.goals.successDefinition),
+ audienceNiche: clean(channelContext.identity.niche),
+})
+
 export const saveChannelContextProfile = (channelContext: ChannelContextProfile): AiBrainContext => {
  const previous = loadAiBrainContext()
  const normalized = normalizeContext({
@@ -306,21 +326,7 @@ export const saveChannelContextProfile = (channelContext: ChannelContextProfile)
   channelContext,
   updatedAt: new Date().toISOString(),
  })
- const payload: AiBrainContext = {
-  ...normalized,
-  channelDescription: clean(channelContext.identity.description),
-  mainTopicFocus: clean(channelContext.identity.niche),
-  audienceDescription: clean(channelContext.audience.idealViewer),
-  successDefinition: clean(channelContext.goals.successDefinition),
-  mainYoutubeGoal: clean(channelContext.goals.primaryGoal),
-  recurringSeriesName: clean(channelContext.content.recurringSeriesName),
-  recurringSeriesDescription: clean(channelContext.content.recurringSeriesDescription),
-  biggestWeakness: clean(channelContext.content.biggestWeakness),
-  mostSuccessfulVideo: clean(channelContext.content.mostSuccessfulVideo),
-  signupReason: clean(channelContext.intelligence.signupReason),
-  whatNext: clean(channelContext.goals.successDefinition),
-  audienceNiche: clean(channelContext.identity.niche),
- }
+ const payload = syncChannelContextToLegacyAnswers(normalized, channelContext)
  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
  return payload
 }
