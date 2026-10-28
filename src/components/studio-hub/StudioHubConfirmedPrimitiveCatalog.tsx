@@ -479,12 +479,6 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUploadFrame"><span>Upload Frame · STANDARD REPRESENTATIVE</span><StudioUploadFrame prompt="UPLOAD IMAGE OR VIDEO" aria-label="Upload frame standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusIndicator"><span>Brain Status Indicator · STANDARD</span><StudioBrainStatusIndicator status="running" label="BRAIN RUNNING" pulse={false} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBrainStatusBadge"><span>Brain Status Badge · STANDARD</span><StudioBrainStatusBadge label="READY" tone="green" appearance="tinted" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule"><span>InterModule · STANDARD REPRESENTATIVE</span><StudioInterModule className="vt-studio-inter-host--bleed" title="INTERMODULE" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen><p className="vt-confirmed-intermodule-prompt">Production intermodule with its rails extending to the containing module's inner borders.</p></StudioInterModule></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineInterModule"><span>Two-Line InterModule · STANDARD</span><StudioTwoLineInterModule title="CHANNEL SETTINGS" description="Identity and publishing preferences" startIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard" defaultOpen><p>Two-line production intermodule specimen.</p></StudioTwoLineInterModule></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTopSplitModule"><span>Top Split Module · STANDARD</span><StudioTopSplitModule title="MODULE HEADER" split="double" startIcon={<Home aria-hidden="true" />} endIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard"><p>Production top-split module body.</p></StudioTopSplitModule></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule"><span>Collapsing Split Module · STANDARD · OPEN</span><StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen><p>Expanded body separated from its header by the required horizontal divider.</p><StudioInterModule title="INNER SECTION" sizeVariant="standard" defaultOpen><p>Inner section content.</p></StudioInterModule></StudioCollapsingSplitModule></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingTwoLineModule"><span>Collapsing Two-Line Module · STANDARD</span><StudioCollapsingTwoLineModule title="CREATOR SETTINGS" description="Identity and publishing preferences" split="double" sizeVariant="standard" defaultOpen><p>Two-line collapsible module body.</p></StudioCollapsingTwoLineModule></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion"><span>Split Accordion · STANDARD</span><StudioSplitAccordion sizeVariant="standard" accessibleLabel="Confirmed split accordion" items={[{accessibleLabel:"OVERVIEW",icon:<Home aria-hidden="true" />,content:<p>Overview section content.</p>},{accessibleLabel:"SETTINGS",icon:<Settings2 aria-hidden="true" />,content:<p>Settings section content.</p>},{accessibleLabel:"STATUS",icon:<Info aria-hidden="true" />,content:<p>Status section content.</p>}]} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioResponseMetaRow"><span>Response Meta Row · COMPACT</span><StudioResponseMetaRow title="ANSWER SUMMARY" status={<StudioBrainStatusBadge label="VERIFIED" tone="green" appearance="tinted" />} metadata={<span>3 SOURCES</span>} trailing={<span>OPEN DETAILS</span>} sizeVariant="compact" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatResponseShell"><span>Chat Response Shell · COMPACT</span><StudioChatResponseShell metadata={<StudioResponseMetaRow title="ANSWER SUMMARY" metadata={<span>3 SOURCES</span>} sizeVariant="compact" />} actions={<StudioChatActionGroup><StudioButton sizeVariant="compact">COPY</StudioButton><StudioButton sizeVariant="compact">RETRY</StudioButton></StudioChatActionGroup>}><p>Answer-first response content using the production shell.</p></StudioChatResponseShell></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatActionGroup"><span>Chat Action Group · COMPACT</span><StudioChatActionGroup aria-label="Chat action group specimen"><StudioButton sizeVariant="compact" onClick={() => undefined}>COPY</StudioButton><StudioButton sizeVariant="compact" onClick={() => undefined}>RETRY</StudioButton></StudioChatActionGroup></div>
@@ -1253,7 +1247,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioTopSplitModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · left/right/double/none header rails · default/accent tone · white body" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTopSplitModule" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 8, minWidth: 0 }}>
         <StudioTopSplitModule title="LEFT RAIL" split="left" startIcon={<Home size={18} aria-hidden="true" />} sizeVariant="standard">
           <p style={{ margin: 0, padding: 8 }}>Header rail at start; content stays white.</p>
         </StudioTopSplitModule>
@@ -1591,7 +1584,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioInterModule" tsx="src/studio-ui/primitives/StudioInterModule.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · shared Studio control tokens · nested module content" imports={["src/studio-ui/primitives/StudioInterModule.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule">
         <span>INTERMODULE · STANDARD</span>
         <StudioInterModule className="vt-studio-inter-host--bleed" title="PROMPT LIBRARY" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen>
           <p className="vt-confirmed-intermodule-prompt">A standard-size intermodule keeps its content aligned to the shared parent edges.</p>
@@ -1606,7 +1598,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioCollapsingSplitModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · shared split-shell geometry." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule">
         <span>44px STANDARD</span>
         <StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen>
           <span>Standard collapsible module body content.</span>
@@ -1627,7 +1618,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioCollapsingTwoLineModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Standard 44px shell with a two-line title/description content exception." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingTwoLineModule">
         <span>STANDARD · TWO-LINE HEADER</span>
         <StudioCollapsingTwoLineModule title="CREATOR SETTINGS" description="Channel identity, defaults, and publishing preferences." split="double" sizeVariant="standard" defaultOpen={false}>
           <p>Two-line module body content rendered by the production primitive.</p>
