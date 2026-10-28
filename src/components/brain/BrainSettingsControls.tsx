@@ -13,5 +13,5 @@ export const BrainSettingsSwitch = ({ checked, onChange, label, detail }: { chec
 
 export const BrainSettingsRange = ({ label, detail, value, min, max, step = 1, onChange }: { label: string; detail: string; value: number; min: number; max: number; step?: number; onChange: (value: number) => void }) => {
   const id = React.useId()
-  return <div className="py-3"><label htmlFor={id} className="block text-sm font-bold">{label}: {Number(value.toFixed(2))}</label><p id={`${id}-detail`} className="mt-1 text-sm text-black/75">{detail}</p><StudioCounter ariaLabel={label} value={value} onValueChange={onChange} min={min} max={max} step={step} size="standard" className="mt-2 w-full" /></div>
+  return <div className="py-3"><p className="block text-sm font-bold">{label}: {Number(value.toFixed(2))}</p><p id={`${id}-detail`} className="mt-1 text-sm text-black/75">{detail} Use the Studio minus/plus controls; press and hold to adjust faster.</p><StudioCounter ariaLabel={label} aria-describedby={`${id}-detail`} value={value} onValueChange={onChange} min={min} max={max} step={step} size="standard" className="mt-2 w-full" /></div>
 }
