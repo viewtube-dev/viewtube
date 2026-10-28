@@ -166,3 +166,16 @@ The canonical IndexedDB conversation-turn store remains the only persistence own
 **Local persistence scope:** IndexedDB stores this history on the current mobile or desktop browser/device. This does not imply automatic cross-device synchronization, and browser data clearing/quota/eviction policies can still affect retention.
 
 **Verification status:** `BrainRetryContinuity.test.ts` was added, but this execution path could not run the repository's test runner, typecheck, production build, or mobile/desktop browser checks. CI and runtime verification remain required; do not treat this slice as test-passing until those checks actually run.
+## Follow-up slice — channel-scoped profile persistence and prompt handoff provenance
+
+- `aiBrainContext.ts` now keys saved creator/channel context, completion, and dismissal state by the stable active channel ID when one is available. Switching channels loads that channel's profile rather than reusing the last global profile.
+- The old global profile is retained. It is copied into a channel-scoped key only when its saved channel name matches the active channel label; mismatched or unscoped legacy profile data is not silently assigned to another channel.
+- The Brain intake saves to the active channel scope while editing and loads again on channel switches. Brain prompt construction and `BrainOrchestrator` read the same channel-scoped owner.
+- `CreatorContextResolver` now includes `creatorAnswers` from the same canonical local profile loader when personalization is enabled, allowing downstream consumers to inspect the saved intake through the resolver envelope rather than creating another store.
+- `BrainPromptLibrary` actions now pass the selected canonical card identity to callers. Send-to-chat records prompt ID/version/action in the canonical turn metadata; Edit First retains that origin as a working-copy marker until the draft is sent. Shared prompt definitions are not mutated.
+- Added `aiBrainContext.test.ts` coverage for channel isolation and safe legacy migration, `CreatorContextResolver.test.ts` coverage for profile flow through the envelope, and `BrainPromptLibrary.test.ts` coverage for filtering and edit isolation.
+- Interaction receipts now refer to evidence IDs/request spec while the full evidence pack and exact model-input records remain in canonical turn metadata, avoiding duplicate large snapshots in the journal.
+
+**Storage contract:** conversation/evidence/interaction history uses the existing local IndexedDB conversation store; the creator intake uses channel-scoped browser local storage. Both are local to the current browser/device on mobile or desktop and do not automatically synchronize between devices. Clearing site data, browser eviction, storage quota, or private-browsing restrictions can affect retention.
+
+**Verification status:** changes and focused tests are committed, but this session has not run Vitest, typecheck, production build, or real mobile/desktop browser tests. Treat runtime and CI verification as pending.
