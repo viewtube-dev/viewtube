@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { resolveBrainRetryInput, type BrainGenerationInputSnapshot } from "./BrainRetryContinuity"
+import { resolveBrainRetryInput, resolveBrainModelInputSnapshot, type BrainGenerationInputSnapshot } from "./BrainRetryContinuity"
 
 type Snapshot = { evidenceIds: string[]; revision: string }
 const input = (revision: string): BrainGenerationInputSnapshot<Snapshot> => ({
@@ -53,8 +53,7 @@ describe("resolveBrainModelInputSnapshot", () => {
   creatorAnswerEvidenceRecords: [{ id: "creator-answer-1", value: "goal" }],
  }
 
- it("restores the complete original model-visible snapshot for saved-evidence generation-only retries", async () => {
-  const { resolveBrainModelInputSnapshot } = await import("./BrainRetryContinuity")
+ it("restores the complete original model-visible snapshot for saved-evidence generation-only retries", () => {
   expect(resolveBrainModelInputSnapshot({
    retryTurn: true,
    generationOnly: true,
@@ -64,23 +63,41 @@ describe("resolveBrainModelInputSnapshot", () => {
   })).toEqual(saved)
  })
 
- it.each([
-  ["ordinary generation", { retryTurn: false, generationOnly: true, mode: "saved" as const, continuity: "original_input_restored" as const }],
-  ["non-generation retry", { retryTurn: true, generationOnly: false, mode: "saved" as const, continuity: "original_input_restored" as const }],
-  ["fresh evidence", { retryTurn: true, generationOnly: true, mode: "fresh" as const, continuity: "original_input_restored" as const }],
-  ["legacy reconstruction", { retryTurn: true, generationOnly: true, mode: "saved" as const, continuity: "legacy_context_reconstructed" as const }],
-  ["missing snapshot", { retryTurn: true, generationOnly: true, mode: "saved" as const, continuity: "original_input_restored" as const }],
- ])("does not reuse saved model input for %s", (_label, options) => {
-  const { resolveBrainModelInputSnapshot } = require("./BrainRetryContinuity") as typeof import("./BrainRetryContinuity")
-  expect(resolveBrainModelInputSnapshot({ ...options, saved: _label === "missing snapshot" ? undefined : saved })).toBeUndefined()
+ it("does not restore saved model input for ordinary generation", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: false, generationOnly: true, mode: "saved",
+   continuity: "original_input_restored", saved,
+  })).toBeUndefined()
  })
 
- it("rejects a saved payload without a string system instruction", async () => {
-  const { resolveBrainModelInputSnapshot } = await import("./BrainRetryContinuity")
+ it("does not restore saved model input for retries that are not generation-only", () => {
   expect(resolveBrainModelInputSnapshot({
-   retryTurn: true,
-   generationOnly: true,
-   mode: "saved",
+   retryTurn: true, generationOnly: false, mode: "saved",
+   continuity: "original_input_restored", saved,
+  })).toBeUndefined()
+ })
+
+ it("rebuilds model input for fresh-evidence retries", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: true, mode: "fresh",
+   continuity: "original_input_restored", saved,
+  })).toBeUndefined()
+ })
+
+ it("does not label reconstructed legacy context as the original model input", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: true, mode: "saved",
+   continuity: "legacy_context_reconstructed", saved,
+  })).toBeUndefined()
+ })
+
+ it("does not restore when the saved snapshot is missing or lacks a system instruction", () => {
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: true, mode: "saved",
+   continuity: "original_input_restored",
+  })).toBeUndefined()
+  expect(resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: true, mode: "saved",
    continuity: "original_input_restored",
    saved: { ...saved, systemInstruction: undefined },
   })).toBeUndefined()
