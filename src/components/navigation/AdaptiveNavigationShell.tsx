@@ -364,7 +364,6 @@ export const AdaptiveNavigationShell: React.FC<AdaptiveNavigationShellProps> = (
   const creditPercent = unlimited
     ? 100
     : Math.max(0, Math.min(100, Math.round((Math.max(0, entitlement.creditBalance) / creditCap) * 100)))
-  const canSeeApiKeys = entitlement.subscriptionPlanId === "executive" || isOwnerEmail(knownEmail())
   const applicationMenuRecentItems = useMemo<ApplicationMenuRecentItem[]>(() => {
     if (!accountOpen && !quickSwitcherOpen) return []
 
@@ -803,7 +802,6 @@ export const AdaptiveNavigationShell: React.FC<AdaptiveNavigationShellProps> = (
       creditPercent={creditPercent}
       channelSyncing={channelConnection.state === "syncing"}
       recentItems={applicationMenuRecentItems}
-      canSeeApiKeys={canSeeApiKeys}
       onConnected={() => go("/account#workspace-data")}
       onLegacyAccountAction={onLegacyAccountAction}
       onOpenGeminiSettings={() => {
