@@ -29,7 +29,7 @@ describe("creator intake evidence convergence", () => {
     expect(first.map(record => record.id)).toEqual(second.map(record => record.id))
     expect(first.find(record => record.id === "creator-answer:channel-123:channelContext.identity.name")?.value).toBe("History Channel")
     expect(first.find(record => record.id === "creator-answer:channel-123:channelContext.brand.creativity")?.value).toBe("7")
-    expect(first.every(record => record.limitations.some(note => note.includes("not independently verified")))).toBe(true)
+    expect(first.every(record => (record.limitations ?? []).some(note => note.includes("not independently verified")))).toBe(true)
   })
 
   it("trusts channel-scoped profiles without requiring a display name", () => {
