@@ -532,4 +532,7 @@ test("confirmed primitive grid is visible first and covers the core Studio desig
     "StudioDoubleSplitSlider",
     "StudioArrowToggle",
   ]) assert.ok(grid.includes(`data-vt-library-component="${primitive}"`), `top grid is missing ${primitive}`);
+  assert.match(grid, /const \[splitButtonPressed, setSplitButtonPressed\] = React\.useState\(false\)/);
+  assert.match(grid, /onClick=\{\(\) => setSplitButtonPressed\(value => !value\)\}/);
+  assert.match(grid, /\{splitButtonPressed \? "SELECTED" : "SPLIT LEFT"\}/);
 });
