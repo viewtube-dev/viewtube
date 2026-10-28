@@ -151,3 +151,18 @@ Items 1–4 have source-backed classifications; intended paths are reachable via
 
 
 Follow-up slice — citation resolution: `BrainTurnEvidenceRibbon` now resolves response citation IDs against either the prepared evidence-pack item IDs or the verified typed prompt-record IDs. It does not trust typed record IDs when integrity is unavailable or mismatched. Added component regression cases for both verified and mismatched manifests. This fixes a false-unresolved path where the response cited typed `EvidenceRecord` IDs while the ribbon compared only evidence-pack item IDs.
+## Follow-up slice — local interaction journal and retry input continuity
+
+The canonical IndexedDB conversation-turn store remains the only persistence owner. No parallel database or interaction store was added.
+
+- New `src/services/brain/BrainRetryContinuity.ts` and its focused test specify three explicit retry outcomes: `original_input_restored`, `fresh_evidence_retry`, and `legacy_context_reconstructed`.
+- New turns persist a serializable `generationInputSnapshot` in the existing turn metadata. Before generation starts, the exact outbound `systemInstruction`, bounded model history, creator input, and the evidence records rendered into that instruction are checkpointed to the same turn. The original prompt snapshot is retained for interrupted retries.
+- A saved-evidence retry restores the saved generation inputs and, when the original model-input snapshot exists, reuses its exact system instruction, history, and evidence records rather than treating rebuilt current context as original input.
+- A fresh-evidence retry uses the newly assembled inputs and records its mode and input snapshot in the turn's interaction log. Legacy turns without a saved prompt snapshot are explicitly marked as reconstructed rather than verified original-input replays.
+- Inbound interactions and outbound responses are appended to the existing turn metadata. Retry attempts, prompt/evidence snapshots, creator feedback, and review-only handoff receipts are also recorded locally against the canonical turn. Question-module answers and feedback-created turns receive inbound receipts automatically.
+- The non-success orchestration fallback now avoids creating a new learning entry when `retryGenerationOnly` is true, preventing retry from replaying that learning side effect.
+- Local provider-error fallbacks are saved as canonical conversation turns instead of existing only in React component state.
+
+**Local persistence scope:** IndexedDB stores this history on the current mobile or desktop browser/device. This does not imply automatic cross-device synchronization, and browser data clearing/quota/eviction policies can still affect retention.
+
+**Verification status:** `BrainRetryContinuity.test.ts` was added, but this execution path could not run the repository's test runner, typecheck, production build, or mobile/desktop browser checks. CI and runtime verification remain required; do not treat this slice as test-passing until those checks actually run.
