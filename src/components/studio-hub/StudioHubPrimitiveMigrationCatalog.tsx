@@ -106,7 +106,7 @@ import { VaultAssetModule, type VaultAssetModuleKind, type VaultAssetModuleVaria
 import { TagRankTag } from "../metadata/TagRankTag"
 import { EducationTimestampNotes } from "../metadata/EducationTimestampNotes"
 import { SubToolboxNestedSquareChoice, SubToolboxTagActionRow } from "../subtoolbox/SubToolboxCompoundPrimitives"
-import { StudioSplitLeftButton, StudioSplitRightButton, StudioDoubleSplitButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame, StudioSideCounter, StudioCounter, StudioLeftCounter, StudioLeftWordCounter, StudioDoubleSplitSlider, StudioLeftWordSlider, StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitLeftButton, StudioSplitRightButton, StudioDoubleSplitButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioDropdown, StudioSplitLeftDropdown, StudioSquareIconButton, StudioLegendMultiDropdown, StudioUploadFrame, StudioSideCounter, StudioCounter, StudioLeftCounter, StudioLeftWordCounter, StudioDoubleSplitSlider, StudioLeftWordSlider, StudioTextInput, StudioInput, StudioNumberInput, StudioTextArea } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-migration-catalog.css"
 
 type StudioHubComponentLevel = ToolboxControlLevel
@@ -121,14 +121,11 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Destructive Button",
   "Square Icon Button",
   "Split Left Button",
+  "Studio Dropdown Family",
   "Studio Counter Family",
   "Studio Slider Family",
   "Head Tail Action",
   "Split Menu",
-  "Dropdown",
-  "Top Title Dropdown",
-  "Legend Multi Dropdown",
-  "Tone / Tension / Cinematic Dropdown",
   "Nested Square Choice",
   "Tag-Adjacent Split Action Row",
   "Multi-Section Script Bar",
@@ -274,6 +271,7 @@ type CatalogPreviewGeometry = {
 }
 
 const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogPreviewGeometry>> = {
+  "Studio Dropdown Family": { mode: "compound", inlineUnits: 6.5, portraitStack: true },
   "Studio Counter Family": { mode: "compound", inlineUnits: 5.8, portraitStack: true },
   "Studio Slider Family": { mode: "compound", inlineUnits: 5.8, portraitStack: true },
   "Switches / Toggles / Radio / Checkbox": { mode: "compound", inlineUnits: 8.2, portraitStack: true },
@@ -480,6 +478,18 @@ const PrimitiveMigrationControl: React.FC<{
   // Unmigrated hardcoded families remain exclusively in the frozen baseline.
   if (name === "Primary Button" || name === "Secondary Button" || name === "Neutral Button" || name === "Destructive Button") {
     return <PrimaryButton level={level} tone={name === "Destructive Button" ? "danger" : name === "Neutral Button" || name === "Secondary Button" ? "neutral" : "accent"}>{name.replace(" Button", "")}</PrimaryButton>
+  }
+  if (name === "Studio Dropdown Family") {
+    const options = ["OPTION 1", "OPTION 2", "OPTION 3"].map((option) => ({ value: option, label: option }));
+    const filterOptions = ["VIDEOS", "SHORTS", "LIVE", "PLAYLISTS"].map((option) => ({ value: option, label: option }));
+    return (
+      <div className="vt-catalog-dropdown-family">
+        <StudioDropdown sizeVariant="standard" value={menuChoice} options={options} onChange={setMenuChoice} ariaLabel="Standard dropdown" placeholder="CHOOSE" />
+        <StudioSplitLeftDropdown sizeVariant="standard" value={menuChoice} options={options} onChange={setMenuChoice} ariaLabel="Split-left dropdown" placeholder="CHOOSE" />
+        <StudioLegendMultiDropdown level={level} label="MULTI SELECT" options={filterOptions} value={legendFilters} onChange={setLegendFilters} sizeVariant="standard" placeholder="ANY" clearLabel="CLEAR ALL" />
+        <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Standard, split-left, multi-select, and title/tone dropdown presentations belong to one dropdown family. The canonical standard representative uses the standard size.</p></details>
+      </div>
+    )
   }
   if (name === "Split Left Button") {
     return (
