@@ -3,7 +3,7 @@
 ## Canonical behavior
 
 - The browser sends public channel inputs to the server-side resolver; it does not call YouTube Data API endpoints or place a stored API key in a request URL.
-- The server accepts bare handles, @handles, channel IDs, and supported YouTube channel URLs (/ @handle, /channel/ID, /c/name, /user/name).
+- The server accepts bare handles, @handles, channel IDs, and supported YouTube channel URLs (/@handle, /channel/ID, /c/name, /user/name).
 - Upstream requests are restricted to allowlisted YouTube hosts, time out, and reject responses redirected to other hosts.
 - Public page metadata resolves a channel ID and optional title/handle; the public RSS feed supplies recent upload IDs, titles, and publish timestamps.
 - Public-page snapshots deliberately leave subscriber, video, and view statistics unavailable. Public RSS does not supply those statistics.
