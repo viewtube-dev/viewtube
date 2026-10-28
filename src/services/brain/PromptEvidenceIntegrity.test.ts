@@ -1,0 +1,70 @@
+import { describe, expect, it } from "vitest"
+import { buildBrainEvidenceRecordQuality } from "./BrainEvidenceQuality"
+import type { EvidenceRecord } from "./EvidenceRecord"
+import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords } from "./PromptEvidenceIntegrity"
+
+const record = (overrides: Partial<EvidenceRecord> = {}): EvidenceRecord => ({
+ id: "evidence-1",
+ owner: "analytics-canon",
+ sourceRef: "analytics:videos:1",
+ sourceSnapshotId: "snapshot-1",
+ channelId: "channel-1",
+ metric: "views",
+ value: 120,
+ freshness: "fresh",
+ epistemicState: "OBSERVED",
+ availability: "available",
+ provenance: { evidenceIds: ["snapshot-1:videos:1"], sourceRoute: "/analytics" },
+ ...overrides,
+})
+
+const metadataFor = (records: EvidenceRecord[]) => ({
+ promptEvidenceRecordIds: records.map((item) => item.id),
+ evidenceRecords: records,
+ evidenceRecordQuality: records.length
+  ? buildBrainEvidenceRecordQuality(records, { expectedChannelId: "channel-1" })
+  : null,
+})
+
+describe("PromptEvidenceIntegrity", () => {
+ it("verifies the exact ordered prompt records when IDs and fingerprint agree", () => {
+  const records = [record()]
+  const metadata = metadataFor(records)
+
+  expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("verified")
+  expect(readPromptEvidenceRecords(metadata)).toEqual(records)
+ })
+
+ it("rejects changed record content even when the record ID is unchanged", () => {
+  const original = record()
+  const metadata = metadataFor([original])
+  metadata.evidenceRecords[0] = { ...original, value: 999 }
+
+  expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("mismatch")
+  expect(readPromptEvidenceRecords(metadata)).toBeUndefined()
+ })
+
+ it("rejects record IDs that differ from the recorded prompt manifest", () => {
+  const metadata = metadataFor([record()])
+  metadata.promptEvidenceRecordIds = ["another-evidence-id"]
+
+  expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("mismatch")
+ })
+
+ it("treats an explicitly recorded empty evidence selection as verified", () => {
+  expect(getPromptEvidenceIntegrityStatus(metadataFor([]))).toBe("verified")
+  expect(readPromptEvidenceRecords(metadataFor([]))).toEqual([])
+ })
+
+ it("keeps legacy turns without an evidence manifest unavailable", () => {
+  expect(getPromptEvidenceIntegrityStatus({ evidenceRecords: [record()] })).toBe("unavailable")
+  expect(readPromptEvidenceRecords({ evidenceRecords: [record()] })).toBeUndefined()
+ })
+
+ it("rejects non-empty evidence records without a quality fingerprint", () => {
+  const metadata = metadataFor([record()])
+  metadata.evidenceRecordQuality = null
+
+  expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("mismatch")
+ })
+})
