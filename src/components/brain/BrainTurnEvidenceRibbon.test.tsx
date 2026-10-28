@@ -206,6 +206,27 @@ describe("BrainTurnEvidenceRibbon", () => {
   expect(html).not.toContain("Unverified claim text")
  })
 
+ it("resolves typed evidence-record citations when the saved manifest is verified", () => {
+  const html = render({
+   evidencePack: pack({ items: [{ id: "different-pack-id", source: "analytics", label: "Prepared item" } as AIBrainEvidencePack["items"][number] }),
+   evidenceIntegrityStatus: "verified",
+   evidenceRecords: [record({ id: "typed-record-id" })],
+   citedEvidenceIds: ["typed-record-id"],
+  })
+  expect(html).toContain("1 cited")
+  expect(html).not.toContain("unresolved citation")
+ })
+
+ it("does not resolve typed evidence-record citations when the saved manifest mismatches", () => {
+  const html = render({
+   evidencePack: pack({ items: [{ id: "different-pack-id", source: "analytics", label: "Prepared item" } as AIBrainEvidencePack["items"][number] }),
+   evidenceIntegrityStatus: "mismatch",
+   evidenceRecords: undefined,
+   citedEvidenceIds: ["typed-record-id"],
+  })
+  expect(html).toContain("1 unresolved citation")
+ })
+
  it("counts only citations that resolve to the prepared evidence list", () => {
   const html = render({
    evidencePack: pack(),
