@@ -235,9 +235,18 @@ export const loadAiBrainContext = (): AiBrainContext => {
  }
 }
 
+/** Notify other Brain surfaces that the canonical local creator profile changed. */
+const notifyCreatorContextUpdated = (context: AiBrainContext): void => {
+ if (typeof window === "undefined") return
+ window.dispatchEvent(new CustomEvent("vt_creator_channel_context_updated", {
+  detail: { updatedAt: context.updatedAt, completedAt: context.completedAt },
+ }))
+}
+
 export const syncLegacyAnswersToChannelContext = (
  profile: ChannelContextProfile,
  input: AiBrainContextInput,
+ preserveExisting = false,
 ): ChannelContextProfile => {
  const next: ChannelContextProfile = {
   ...profile,
@@ -265,12 +274,13 @@ export const syncLegacyAnswersToChannelContext = (
   if (!Object.prototype.hasOwnProperty.call(inputRecord, key)) return
   const [section, field] = path.split(".")
   const sectionRecord = next[section as keyof ChannelContextProfile] as Record<string, unknown>
+  if (preserveExisting && clean(sectionRecord[field])) return
   sectionRecord[field] = clean(inputRecord[key])
  })
- if (!Object.prototype.hasOwnProperty.call(inputRecord, "mainTopicFocus") && Object.prototype.hasOwnProperty.call(inputRecord, "audienceNiche")) {
+ if (!clean(inputRecord.mainTopicFocus) && clean(inputRecord.audienceNiche) && (!preserveExisting || !clean(next.identity.niche))) {
   next.identity.niche = clean(inputRecord.audienceNiche)
  }
- if (!Object.prototype.hasOwnProperty.call(inputRecord, "successDefinition") && Object.prototype.hasOwnProperty.call(inputRecord, "whatNext")) {
+ if (!clean(inputRecord.successDefinition) && clean(inputRecord.whatNext) && (!preserveExisting || !clean(next.goals.successDefinition))) {
   next.goals.successDefinition = clean(inputRecord.whatNext)
  }
  return next
@@ -279,7 +289,8 @@ export const syncLegacyAnswersToChannelContext = (
 export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext => {
  const previous = loadAiBrainContext()
  const updatedAt = new Date().toISOString()
- const canonicalProfile = next.channelContext || syncLegacyAnswersToChannelContext(previous.channelContext, next)
+ const migratedProfile = syncLegacyAnswersToChannelContext(previous.channelContext, previous, true)
+ const canonicalProfile = next.channelContext || syncLegacyAnswersToChannelContext(migratedProfile, next)
  const normalized = normalizeContext({
   ...previous,
   ...next,
@@ -298,6 +309,7 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
  localStorage.setItem(COMPLETED_KEY, "true")
  localStorage.removeItem(DISMISSED_KEY)
+ notifyCreatorContextUpdated(payload)
  return payload
 }
 
@@ -330,6 +342,7 @@ export const saveChannelContextProfile = (channelContext: ChannelContextProfile)
  })
  const payload = syncChannelContextToLegacyAnswers(normalized, channelContext)
  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+ notifyCreatorContextUpdated(payload)
  return payload
 }
 

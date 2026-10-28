@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { buildBrainContextPack } from "../BrainContextBroker"
+import { formatEvidenceRecordForPrompt } from "../EvidenceRecord"
 import { DEFAULT_BRAIN_USER_CONTROLS } from "../BrainUserControls"
 import { buildBrainEvidenceRecordQuality } from "../BrainEvidenceQuality"
 
@@ -233,6 +234,58 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(result.systemInstruction).toContain("Historical explainers")
   expect(result.systemInstruction).toContain("USER_PROVIDED")
   expect(result.systemInstruction).toContain("not verified public evidence")
+ })
+
+ it("selects relevant complete creator evidence records instead of truncating the evidence line", () => {
+  const records = Array.from({ length: 12 }, (_, index) => {
+   const id = index === 11
+    ? "creator-answer:channel-1:channelContext.audience.transformation"
+    : `creator-answer:channel-1:channelContext.content.types${index}`
+   return {
+    id,
+    owner: "creator-confirmed",
+    sourceRef: `ai-brain-context:${id}`,
+    sourceSnapshotId: "2026-10-27T10:00:00.000Z",
+    channelId: "channel-1",
+    metric: null,
+    value: index === 11 ? "Help viewers understand complex topics" : `Creator answer detail ${index} ${"long descriptive context ".repeat(5)}`,
+    unit: null,
+    freshness: "fresh",
+    epistemicState: "USER_PROVIDED",
+    confidence: 1,
+    observedAt: "2026-10-27T10:00:00.000Z",
+    limitations: ["Creator answer; not independently verified."],
+    provenance: { evidenceIds: [id], sourceRoute: "settings/ai/channel-context", sourceVersion: "creator-context-unification-v1" },
+   }
+  }) as any[]
+  const target = records[11]
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "audience transformation",
+   channelContext: {
+    identity: { name: "History Channel", niche: "Historical explainers" },
+    goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+   },
+   creatorContext: {
+    version: "vt-creator-context-v1",
+    channelId: "channel-1",
+    controls: { ...DEFAULT_BRAIN_USER_CONTROLS, personalization: true, allowAnalytics: false },
+    profile: null,
+    channelKnowledge: null,
+    styleProfile: null,
+    project: null,
+    surface: null,
+    selection: null,
+    evidenceRefs: [],
+    provenance: { profileLoadedAt: null, selectionUpdatedAt: null, projectSource: null },
+   } as any,
+   creatorAnswerEvidenceRecords: records,
+  })
+  expect(result.systemInstruction).toContain(target.id)
+  expect(result.systemInstruction).toContain(formatEvidenceRecordForPrompt(target))
  })
 
  it("does not inject channel context when the saved profile names another channel", () => {

@@ -21,6 +21,31 @@ import { fingerprintBrainEvidenceRecords, isBrainEvidenceRecordQualityInSync, ty
 
 const clip = (value: string, maximum: number): string => value.slice(0, Math.max(0, maximum))
 
+const selectCreatorAnswerEvidenceForPrompt = (
+ records: EvidenceRecord[],
+ userText: string,
+ maximumCharacters = 3200,
+): string => {
+ const terms = new Set(userText.toLocaleLowerCase().replace(/[^a-z0-9]+/g, " ").split(/\s+/).filter((term) => term.length > 2))
+ const ranked = records.map((record, index) => {
+  const field = record.id.replace(/^creator-answer:[^:]+:/, "").replace(/[._]/g, " ").toLocaleLowerCase()
+  const value = String(record.value ?? "").toLocaleLowerCase()
+  const score = [...terms].reduce((total, term) => total + (field.includes(term) ? 3 : 0) + (value.includes(term) ? 1 : 0), 0)
+  return { record, index, score }
+ }).sort((left, right) => right.score - left.score || left.index - right.index)
+ const selected: string[] = []
+ let characters = 0
+ for (const { record } of ranked) {
+  const rendered = formatEvidenceRecordForPrompt(record)
+  const nextCharacters = characters + (selected.length ? 1 : 0) + rendered.length
+  // Skip oversized records rather than clipping a provenance line in half.
+  if (nextCharacters > maximumCharacters) continue
+  selected.push(rendered)
+  characters = nextCharacters
+ }
+ return selected.join("\n")
+}
+
 export const buildBrainContextPack = (input: {
  channelId?: string | null
  capabilityIds?: string[]
@@ -269,7 +294,7 @@ export const buildBrainContextPack = (input: {
    ].filter(Boolean).join("\\n"), 2600)
   : ""
  const creatorAnswerEvidence = controls.personalization && channelContextMatchesChannel && input.creatorAnswerEvidenceRecords?.length
-  ? clip(input.creatorAnswerEvidenceRecords.map(formatEvidenceRecordForPrompt).join("\n"), 3200)
+  ? selectCreatorAnswerEvidenceForPrompt(input.creatorAnswerEvidenceRecords, input.userText, 3200)
   : ""
  const knowledge = clip(buildRelevantNicheKnowledgeContext(input.nicheKnowledge || null, input.userText, 2200), 2200)
  const research = clip(input.currentResearch || "", 1800)

@@ -37,6 +37,7 @@ import {
  dismissAiBrainIntake,
  loadAiBrainContext,
  saveAiBrainContext,
+ saveChannelContextProfile,
  shouldShowAiBrainIntake,
  type AiBrainContext,
 } from "../services/aiBrainContext"
@@ -828,10 +829,19 @@ const readCreatorProfileField = (profile: ChannelContextProfile, path: string): 
 const CreatorIntakeWizard: React.FC<{
  context: AiBrainContext
  onChange: (context: AiBrainContext) => void
+ saveStatus?: string
  onSave: () => void
  onDefer: () => void
-}> = ({ context, onChange, onSave, onDefer }) => {
- const [questionIndex, setQuestionIndex] = useState(0)
+}> = ({ context, onChange, saveStatus, onSave, onDefer }) => {
+ const [questionIndex, setQuestionIndex] = useState(() => {
+  const firstUnanswered = CHANNEL_CONTEXT_QUESTIONS.findIndex((item) => {
+   const answer = readCreatorProfileField(context.channelContext, item.contextField)
+   if (Array.isArray(answer)) return answer.length === 0
+   if (item.contextField === "brand.creativity") return typeof answer !== "number" || answer < 1 || answer > 10
+   return answer === undefined || answer === null || String(answer).trim().length === 0
+  })
+  return firstUnanswered < 0 ? 0 : firstUnanswered
+ })
  const question = CHANNEL_CONTEXT_QUESTIONS[questionIndex]
  const lastQuestion = questionIndex === CHANNEL_CONTEXT_QUESTIONS.length - 1
  const rawValue = readCreatorProfileField(context.channelContext, question.contextField)
@@ -911,7 +921,7 @@ const CreatorIntakeWizard: React.FC<{
     </label>
    </div>
    <div className="grid shrink-0 gap-3 border-t-[4px] border-black bg-white p-3 sm:grid-cols-[1fr_auto] sm:items-center">
-    <p className="text-xs font-bold leading-4 text-black/65">Answers are stored in the shared Creator Brain profile and labeled as creator-provided—not independently verified analytics.</p>
+    <p className="text-xs font-bold leading-4 text-black/65" role="status" aria-live="polite">{saveStatus || "Answers save to the shared local Creator Brain profile as you type; they are creator-provided, not independently verified analytics."}</p>
     <div className="grid grid-cols-2 gap-2 sm:flex">
      <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={onDefer}>SKIP FOR NOW</StudioButton>
      <StudioSplitLeftButton sizeVariant="compact" icon={<ChevronLeft aria-hidden="true" />} type="button" onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))} disabled={questionIndex === 0}>PREVIOUS</StudioSplitLeftButton>
@@ -972,6 +982,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [onboardingSnapshot, setOnboardingSnapshot] = useState<BrainOnboardingSnapshot | null>(null)
  const [intakeOpen, setIntakeOpen] = useState(false)
  const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext())
+ const [intakeSaveStatus, setIntakeSaveStatus] = useState("Answers save locally as you type.")
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
 
@@ -1664,10 +1675,22 @@ const AIBrainCommandInterface: React.FC = () => {
   })()
  }
 
+ const handleIntakeContextChange = (next: AiBrainContext) => {
+  setIntakeContext(next)
+  try {
+   const saved = saveChannelContextProfile(next.channelContext)
+   setIntakeContext(saved)
+   setIntakeSaveStatus("Saved locally in this browser.")
+  } catch {
+   setIntakeSaveStatus("Local save failed. Check browser storage availability.")
+  }
+ }
+
  const handleSaveIntake = () => {
   const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" })
-  const intakeEvidenceRecords = buildCreatorAnswerEvidenceRecords(saved, channelId)
   setIntakeContext(saved)
+  setIntakeSaveStatus("Unified creator profile saved locally.")
+  const intakeEvidenceRecords = buildCreatorAnswerEvidenceRecords(saved, channelId)
   updateBrain({
    creatorPreferences: {
     what_next_goal: saved.mainYoutubeGoal || saved.successDefinition || saved.whatNext,
@@ -1741,7 +1764,8 @@ const AIBrainCommandInterface: React.FC = () => {
     {intakeOpen ? (
      <CreatorIntakeWizard
       context={intakeContext}
-      onChange={setIntakeContext}
+      onChange={handleIntakeContextChange}
+      saveStatus={intakeSaveStatus}
       onSave={handleSaveIntake}
       onDefer={handleDeferIntake}
      />
