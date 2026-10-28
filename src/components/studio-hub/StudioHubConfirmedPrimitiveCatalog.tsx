@@ -417,7 +417,7 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
   const [microReversed, setMicroReversed] = React.useState(7)
   return (
     <Family
-      title="StudioCounter · Supreme + Standard + Compact + Mini + Micro"
+      title="Studio Counter Family · Double-Side / Side / Left"
       nonDefaultSettings={[
         "Independent button-only counter; no legacy stepper composition.",
         "Each size pairs the primary right-side rail with an opposite-palette left-side rail.",
@@ -434,6 +434,7 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
           <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-counter-pair"><StudioCounter value={microPrimary} onValueChange={setMicroPrimary} size="micro" min={0} max={100} ariaLabel="Micro counter" /><StudioCounter className="is-reversed" value={microReversed} onValueChange={setMicroReversed} size="micro" min={0} max={100} ariaLabel="Micro counter secondary palette" /></div></div>
         </div>
       </div>
+      <ConfirmedStudioSideCounterFamily />
     </Family>
   )
 }
@@ -1431,7 +1432,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <ConfirmedStudioValueToggleFamily />
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
-    <ConfirmedStudioSideCounterFamily />
     <ConfirmedStudioLeftWordCounterFamily />
     <ConfirmedStudioLeftWordSliderFamily />
     <Family
