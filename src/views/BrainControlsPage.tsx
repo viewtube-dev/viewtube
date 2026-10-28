@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useBrain } from "../context/useBrain"
 import { BrainScopeSummary } from "../components/brain/BrainScopeSummary"
 import { BrainSettingsSwitch, BrainSettingsRange } from "../components/brain/BrainSettingsControls"
