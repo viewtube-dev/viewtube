@@ -994,7 +994,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [questionAnswers, setQuestionAnswers] = useState<AIBrainQuestionAnswer[]>([])
  const [onboardingSnapshot, setOnboardingSnapshot] = useState<BrainOnboardingSnapshot | null>(null)
  const [intakeOpen, setIntakeOpen] = useState(false)
- const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext())
+ const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext(authState.channelHandle || authState.channelId || null))
  const [intakeSaveStatus, setIntakeSaveStatus] = useState("Answers save locally as you type.")
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
@@ -1018,6 +1018,11 @@ const AIBrainCommandInterface: React.FC = () => {
  const canUseGemini = hasGeminiKey()
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
  const channelId = authState.channelHandle || authState.channelId || null
+ useEffect(() => {
+  setIntakeContext(loadAiBrainContext(channelId))
+  setIntakeSaveStatus("Loaded this channel's locally saved profile.")
+ }, [channelId])
+
  const [brainControls, setBrainControls] = useState(() => readBrainUserControls(channelId))
  const runtimeSnapshot = useMemo(
   () => readBrainRuntimeSnapshot({
@@ -1761,7 +1766,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const handleIntakeContextChange = (next: AiBrainContext) => {
   setIntakeContext(next)
   try {
-   const saved = saveChannelContextProfile(next.channelContext)
+   const saved = saveChannelContextProfile(next.channelContext, channelId)
    setIntakeContext(saved)
    setIntakeSaveStatus("Saved locally in this browser.")
   } catch {
@@ -1770,7 +1775,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  const handleSaveIntake = () => {
-  const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" })
+  const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" }, channelId)
   setIntakeContext(saved)
   setIntakeSaveStatus("Unified creator profile saved locally.")
   const intakeEvidenceRecords = buildCreatorAnswerEvidenceRecords(saved, channelId)
@@ -1825,7 +1830,7 @@ const AIBrainCommandInterface: React.FC = () => {
  }
 
  const handleDeferIntake = () => {
-  dismissAiBrainIntake()
+  dismissAiBrainIntake(channelId)
   setIntakeOpen(false)
   navigate("/ai-brain", { replace: true })
  }
