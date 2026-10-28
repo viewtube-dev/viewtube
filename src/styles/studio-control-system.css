@@ -6662,3 +6662,33 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-sp
   border-bottom-color: transparent !important;
   box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
 }
+
+
+/* Canonical open dropdown menu contract — single-select parity with Legend Multi.
+   Keep a visible gap, rounded corners on every side, a pair-A panel, and white
+   unselected option faces with secondary selected/active states. */
+.vt-studio-dropdown-menu {
+  top: calc(100% + 4px) !important;
+  border-radius: var(--vt-studio-control-radius, 6px) !important;
+  background: #fff !important;
+  padding: 4px !important;
+}
+.vt-studio-dropdown-menu > .vt-studio-dropdown-option {
+  background: #fff !important;
+  color: #000 !important;
+  border-radius: var(--vt-studio-control-radius, 6px) !important;
+  margin-bottom: 3px !important;
+}
+.vt-studio-dropdown-menu > .vt-studio-dropdown-option:last-child {
+  margin-bottom: 0 !important;
+}
+.vt-studio-dropdown-menu > .vt-studio-dropdown-option[data-active="true"]:not([data-selected="true"]),
+.vt-studio-dropdown-menu > .vt-studio-dropdown-option:hover:not(:disabled):not([data-selected="true"]),
+.vt-studio-dropdown-menu > .vt-studio-dropdown-option:focus-visible:not([data-selected="true"]) {
+  background: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 22%, #fff) !important;
+}
+.vt-studio-dropdown-menu > .vt-studio-dropdown-option[data-selected="true"],
+.vt-studio-dropdown-menu > .vt-studio-dropdown-option[aria-selected="true"] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
