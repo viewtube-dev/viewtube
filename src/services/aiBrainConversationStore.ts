@@ -415,6 +415,27 @@ export const beginAIBrainTurn = async (input: {
  const threadId = defaultThreadId(channelId)
  const existingThread = (await listAIBrainConversationThreadsDB(channelId))
   .find((thread) => thread.id === threadId)
+ const suppliedInteractionLog = Array.isArray(input.metadata?.interactionLog)
+  ? input.metadata.interactionLog as Array<Record<string, unknown>>
+  : []
+ const hasInputReceipt = suppliedInteractionLog.some((event) =>
+  event.type === "creator_input" && event.direction === "inbound" && event.text === input.userText,
+ )
+ const source = String(input.metadata?.source || "")
+ const inboundType = source === "feedback"
+  ? "creator_feedback"
+  : source === "question_module"
+   ? "creator_answer"
+   : "creator_input"
+ const interactionLog = hasInputReceipt
+  ? suppliedInteractionLog
+  : [...suppliedInteractionLog, {
+   id: makeId("brain_interaction"),
+   type: inboundType,
+   direction: "inbound",
+   at: createdAt,
+   text: input.userText,
+  }]
  const turn: AIBrainConversationTurn = {
   id: makeId("ai_brain_turn"),
   threadId,
@@ -429,7 +450,7 @@ export const beginAIBrainTurn = async (input: {
   answerModules: [],
   questionAnswers: [],
   learningEntryIds: [],
-  metadata: input.metadata,
+  metadata: { ...(input.metadata || {}), interactionLog },
  }
  const thread: AIBrainConversationThread = existingThread || {
   id: threadId,
