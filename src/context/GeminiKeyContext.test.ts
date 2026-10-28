@@ -35,6 +35,13 @@ describe("chooseGeminiValidationModel", () => {
     ])).toBe("gemini-flash");
   });
 
+  it("prefers the canonical registry model when the active key exposes it", () => {
+    expect(chooseGeminiValidationModel([
+      { name: "models/gemini-3.1-pro-preview", supportedGenerationMethods: ["generateContent"] },
+      { name: "models/gemini-3.1-flash-lite", supportedGenerationMethods: ["generateContent"] },
+    ])).toBe("gemini-3.1-flash-lite");
+  });
+
   it("returns null when no Gemini model supports generateContent", () => {
     expect(chooseGeminiValidationModel([
       { name: "models/gemini-embedding", supportedActions: ["embedContent"] },
