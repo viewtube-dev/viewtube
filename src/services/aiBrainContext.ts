@@ -235,7 +235,7 @@ export const loadAiBrainContext = (): AiBrainContext => {
  }
 }
 
-const syncLegacyAnswersToChannelContext = (
+export const syncLegacyAnswersToChannelContext = (
  profile: ChannelContextProfile,
  input: AiBrainContextInput,
 ): ChannelContextProfile => {
@@ -260,7 +260,7 @@ const syncLegacyAnswersToChannelContext = (
   { key: "mostSuccessfulVideo", path: "content.mostSuccessfulVideo" },
   { key: "signupReason", path: "intelligence.signupReason" },
  ]
- const inputRecord = input as Record<string, unknown>
+ const inputRecord = input as unknown as Record<string, unknown>
  fields.forEach(({ key, path }) => {
   if (!Object.prototype.hasOwnProperty.call(inputRecord, key)) return
   const [section, field] = path.split(".")
