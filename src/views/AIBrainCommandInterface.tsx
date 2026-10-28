@@ -1683,7 +1683,6 @@ const AIBrainCommandInterface: React.FC = () => {
   setIntakeContext(saved)
   setIntakeSaveStatus("Unified creator profile saved locally.")
   const intakeEvidenceRecords = buildCreatorAnswerEvidenceRecords(saved, channelId)
-  setIntakeContext(saved)
   updateBrain({
    creatorPreferences: {
     what_next_goal: saved.mainYoutubeGoal || saved.successDefinition || saved.whatNext,
