@@ -1,3 +1,5 @@
+import fs from "node:fs"
+import path from "node:path"
 import { describe, expect, it } from "vitest"
 import {
   APPLICATION_MENU_DESTINATIONS,
@@ -28,5 +30,23 @@ describe("application menu contract", () => {
   it("returns the grouped inventory for an empty query and no rows for an unknown query", () => {
     expect(searchApplicationMenuDestinations(" ")).toHaveLength(APPLICATION_MENU_DESTINATIONS.length)
     expect(searchApplicationMenuDestinations("destination-that-does-not-exist")).toEqual([])
+  })
+})
+
+describe("Gemini key setup access", () => {
+  it("keeps AI & Integrations available without an account-plan or owner gate", () => {
+    const menuSource = fs.readFileSync(
+      path.resolve(process.cwd(), "src/components/navigation/ApplicationAccountMenu.tsx"),
+      "utf8",
+    )
+    const navSource = fs.readFileSync(
+      path.resolve(process.cwd(), "src/components/navigation/AdaptiveNavigationShell.tsx"),
+      "utf8",
+    )
+
+    expect(APPLICATION_MENU_DESTINATIONS.some((destination) => destination.id === "ai-integrations")).toBe(true)
+    expect(menuSource).not.toContain("group.id === \"account\" && canSeeApiKeys")
+    expect(navSource).not.toContain("const canSeeApiKeys =")
+    expect(navSource).not.toContain("canSeeApiKeys={canSeeApiKeys}")
   })
 })

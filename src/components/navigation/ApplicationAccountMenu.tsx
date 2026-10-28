@@ -50,7 +50,6 @@ interface ApplicationAccountMenuProps {
   creditPercent: number
   channelSyncing: boolean
   recentItems: readonly ApplicationMenuRecentItem[]
-  canSeeApiKeys: boolean
   onConnected: () => void
   onLegacyAccountAction: () => void | Promise<void>
   onOpenGeminiSettings: () => void
@@ -96,7 +95,6 @@ export const ApplicationAccountMenu = forwardRef<HTMLDivElement, ApplicationAcco
   creditPercent,
   channelSyncing,
   recentItems,
-  canSeeApiKeys,
   onConnected,
   onLegacyAccountAction,
   onOpenGeminiSettings,
@@ -265,7 +263,7 @@ export const ApplicationAccountMenu = forwardRef<HTMLDivElement, ApplicationAcco
                 >
                   <h3 id={`vt-menu-group-${group.id}`}>{group.label}</h3>
                   {destinations.map(renderDestination)}
-                  {group.id === "account" && canSeeApiKeys ? (
+                  {group.id === "account" ? (
                     <button type="button" className="vt-application-menu__destination" onClick={() => onNavigate("/account")}>
                       <span className="vt-application-menu__destination-icon"><KeyRound aria-hidden /></span>
                       <span className="vt-application-menu__destination-copy"><strong>API Keys</strong><small>Manage developer access keys</small></span>
