@@ -27,7 +27,15 @@ These are candidate footholds, not proof of completeness or disconnection. Inspe
 - Tool handoffs remain review-only unless an existing approved-action contract says otherwise. Retry generation only; never replay external side effects automatically.
 - Use real Studio exports/tokens, keyboard and screen-reader support, visible focus, responsive behavior and reduced-motion support.
 
-## Phase 0 — Source/reachability baseline
+## Progress note — capability 2 first slice
+
+The first implementation slice is committed on the target branch:
+- `src/services/brain/PromptEvidenceIntegrity.ts` centralizes saved-turn evidence verification and requires content-fingerprint parity for non-empty prompt evidence.
+- `src/views/AIBrainCommandInterface.tsx` now uses that shared helper, so evidence detail is not presented as verified based on IDs alone.
+- `src/services/brain/PromptEvidenceIntegrity.test.ts` covers unchanged IDs with changed content, manifest mismatch, empty evidence, legacy metadata, and missing fingerprint.
+
+This does not complete capability 2. Remaining work includes verifying that evidence displayed in each answer is the exact turn-bound model input across normal, fallback, retry, and restored turns; exercising evidence links and quality/missingness UI; and running focused tests, typecheck/build, and browser checks. The current execution environment could not reach GitHub for a local checkout, so the new test suite has not been executed here.
+
 **Task 0.1**
 - Read the linked Brain plans and [Studio hierarchy](../ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md) and [Component Library source of truth](../ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md).
 - Trace context → evidence → capability → model → result UI.
