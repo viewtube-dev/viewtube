@@ -93,7 +93,7 @@ describe("buildCreatorAnswerEvidenceRecords", () => {
   expect(canonicalRecords.map((record) => record.id)).toEqual(
    CHANNEL_CONTEXT_QUESTIONS.map((question) => "creator-answer:channel-1:channelContext." + question.contextField),
   )
-  expect(canonicalRecords.every((record) => record.value.length > 0 && record.epistemicState === "USER_PROVIDED")).toBe(true)
+  expect(canonicalRecords.every((record) => record.value !== null && record.value !== undefined && String(record.value).length > 0 && record.epistemicState === "USER_PROVIDED")).toBe(true)
  })
 
  it("does not emit evidence without an active channel scope", () => {
