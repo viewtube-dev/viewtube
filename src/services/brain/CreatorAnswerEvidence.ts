@@ -9,7 +9,7 @@ export const isCreatorAnswerProfileEligible = (input: {
 }): boolean => {
  if (input.channelScoped) return true
  const normalizeLabel = (value?: string | null): string =>
-  String(value || "").trim().replace(/^@/, "").replace(/\\s+/g, " ").toLocaleLowerCase()
+  String(value || "").trim().replace(/^@/, "").replace(/\s+/g, " ").toLocaleLowerCase()
  const profileName = normalizeLabel(input.profileName)
  return Boolean(profileName && profileName === normalizeLabel(input.activeChannelLabel))
 }
