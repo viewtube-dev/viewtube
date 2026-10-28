@@ -87,3 +87,12 @@ export const readPromptEvidenceRecords = (
  if (getPromptEvidenceIntegrityStatus(metadata) !== "verified") return undefined
  return metadata?.evidenceRecords as EvidenceRecord[]
 }
+
+/** Restore creator-answer records only from the same verified turn manifest. */
+export const readCreatorAnswerEvidenceRecords = (
+ metadata: Record<string, unknown> | undefined,
+): EvidenceRecord[] | undefined => {
+ if (getPromptEvidenceIntegrityStatus(metadata) !== "verified") return undefined
+ const records = metadata?.creatorAnswerEvidenceRecords
+ return Array.isArray(records) && records.every(isEvidenceRecord) ? records as EvidenceRecord[] : []
+}
