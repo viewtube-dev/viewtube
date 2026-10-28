@@ -36,6 +36,7 @@ export const StudioSplitTextInput = React.forwardRef<HTMLInputElement, StudioSpl
           data-vt-studio-control="true"
           data-size={sizeVariant}
           data-vt-studio-field-kind="text-input"
+          data-geometry-variant={geometryVariant}
           className="vt-studio-split-text-input__field"
           {...props}
         />
