@@ -269,10 +269,10 @@ export const syncLegacyAnswersToChannelContext = (
   if (preserveExisting && clean(sectionRecord[field])) return
   sectionRecord[field] = clean(inputRecord[key])
  })
- if (!Object.prototype.hasOwnProperty.call(inputRecord, "mainTopicFocus") && Object.prototype.hasOwnProperty.call(inputRecord, "audienceNiche")) {
+ if (!clean(inputRecord.mainTopicFocus) && clean(inputRecord.audienceNiche) && (!preserveExisting || !clean(next.identity.niche))) {
   next.identity.niche = clean(inputRecord.audienceNiche)
  }
- if (!Object.prototype.hasOwnProperty.call(inputRecord, "successDefinition") && Object.prototype.hasOwnProperty.call(inputRecord, "whatNext")) {
+ if (!clean(inputRecord.successDefinition) && clean(inputRecord.whatNext) && (!preserveExisting || !clean(next.goals.successDefinition))) {
   next.goals.successDefinition = clean(inputRecord.whatNext)
  }
  return next
