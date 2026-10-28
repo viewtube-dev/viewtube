@@ -728,7 +728,7 @@ export const SubToolbox: React.FC<SubToolboxProps> = ({
       className={`vt-toolbox w-full relative flex flex-col transition-all ${SHELL_COLLAPSE_TRANSITION} ${collapsible && !open ? "self-start" : ""} ${shellClassName}`}
       style={{
         borderRadius: `var(--vt-subtoolbox-radius, ${SUB_TOOLBOX_RADIUS}px)`,
-        boxShadow: `var(--vt-subtoolbox-shadow-offset, ${SUB_TOOLBOX_SHADOW}px) var(--vt-subtoolbox-shadow-offset, ${SUB_TOOLBOX_SHADOW}px) 0 0 var(--vt-subtoolbox-shell-shadow)`,
+        boxShadow: `var(--vt-subtoolbox-shell-box-shadow, var(--vt-subtoolbox-shadow-offset, ${SUB_TOOLBOX_SHADOW}px) var(--vt-subtoolbox-shadow-offset, ${SUB_TOOLBOX_SHADOW}px) 0 0 var(--vt-subtoolbox-shell-shadow))`,
         ["--vt-subtoolbox-header" as any]: headerHex,
         ["--vt-subtoolbox-shell-shadow" as any]: shadowColor,
         ...style,
@@ -737,7 +737,7 @@ export const SubToolbox: React.FC<SubToolboxProps> = ({
       <div
         className={`w-full bg-white relative flex flex-col flex-1 min-h-0 ${overflowVisible ? "" : "overflow-hidden"}`}
         style={{
-          border: `var(--vt-subtoolbox-stroke, ${SUB_TOOLBOX_STROKE}px) solid black`,
+          border: `var(--vt-subtoolbox-content-border, var(--vt-subtoolbox-stroke, ${SUB_TOOLBOX_STROKE}px) solid black)`,
           borderRadius: `var(--vt-subtoolbox-radius, ${SUB_TOOLBOX_RADIUS}px)`,
           isolation: "isolate",
         }}
