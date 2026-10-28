@@ -151,7 +151,7 @@ export const resolvePublicChannel = async (handleInput: string): Promise<PublicC
       return {
         input: handleInput,
         resolvedChannelId: channelId,
-        resolvedHandle: withHandlePrefix(resolution?.resolvedHandle || payload?.snapshot?.handle || candidate),
+        resolvedHandle: withHandlePrefix(resolution?.resolvedHandle || payload?.snapshot?.handle || (candidate.startsWith("UC") ? null : candidate)),
         channelTitle: resolution?.channelTitle || payload?.snapshot?.title || null,
         reason: null,
       }
@@ -180,7 +180,7 @@ export const fetchPublicChannelSnapshot = async (handleInput: string): Promise<P
       return {
         ...snapshot,
         source: "public_page",
-        handle: withHandlePrefix(snapshot.handle || payload?.resolution?.resolvedHandle || candidate),
+        handle: withHandlePrefix(snapshot.handle || payload?.resolution?.resolvedHandle || (candidate.startsWith("UC") ? null : candidate)),
         title: snapshot.title || payload?.resolution?.channelTitle || null,
         subscriberCount: null,
         videoCount: null,
