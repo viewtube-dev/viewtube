@@ -34,7 +34,7 @@ describe("StudioTextBox size-aware primary inline stroke defaults", () => {
     const textBox = css.slice(start, end);
     expect(textBox).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000");
     expect(textBox).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
-    expect(textBox).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--pair-a, #36e0f6));");
+    expect(textBox).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;");
     expect(textBox).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
     expect(textBox).toContain("color: #000");
     expect(textBox).toContain("line-height: var(--vt-studio-textarea-line-height, .85)");
@@ -315,7 +315,7 @@ describe("standalone Studio text fields", () => {
     expect(block).toContain("color: #000;");
     expect(block).toContain("-webkit-text-fill-color: #000;");
     expect(block).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
-    expect(css).toContain("-webkit-text-stroke-color: var(--vt-field-primary");
+    expect(block).not.toContain("var(--vt-field-primary");
     expect(css).not.toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
     expect(css).not.toContain("-webkit-text-stroke-color: var(--vt-field-text-focus, #000);");
   });

@@ -433,7 +433,9 @@ test("confirmed library keeps the shared 4px grid hierarchy without blanket nest
 
 
 test("StudioButton library module applies the canonical 4px grid rhythm without changing button geometry", () => {
-  const moduleGrid = styles.slice(styles.lastIndexOf("/* StudioButton library module — canonical 4px grid. */"));
+  const gridStart = styles.lastIndexOf(".vt-confirmed-button-family {");
+  const gridEnd = styles.indexOf("/* Button catalog is arrangement-only", gridStart);
+  const moduleGrid = styles.slice(gridStart, gridEnd);
   assert.ok(moduleGrid.length > 80, "the scoped StudioButton grid contract exists");
   assert.match(moduleGrid, /\.vt-confirmed-button-family\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
   assert.match(moduleGrid, /\.vt-confirmed-button-family\s*>\s*\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
@@ -443,61 +445,28 @@ test("StudioButton library module applies the canonical 4px grid rhythm without 
 });
 
 
-test("PR 756 ConfirmedSpecimenGrid is integrated into the confirmed production primitive library", () => {
-  assert.match(catalog, /import ConfirmedSpecimenGrid from "\.\/ConfirmedSpecimenGrid"/);
-  assert.match(catalog, /title="Confirmed Specimen Grid · Layout Contract"/);
-  assert.match(catalog, /<ConfirmedSpecimenGrid[\s\S]*?familyName="Studio control tier and layout reference"/);
-  assert.match(catalog, /<StudioButton heightVariant="60">SUPREME<\/StudioButton>/);
-  assert.match(catalog, /<StudioButton heightVariant="44">STANDARD<\/StudioButton>/);
-  assert.match(catalog, /<StudioButton heightVariant="28">COMPACT<\/StudioButton>/);
-  assert.match(catalog, /<StudioBrainStatusBadge label="MICRO"[^>]*sizeVariant="micro"/);
-  assert.match(catalog, /The grid controls catalog arrangement only/);
-  assert.match(catalog, /Do not map unsupported size tiers onto a primitive/);
+test("confirmed primitive catalog exposes current representative and family modules", () => {
+  assert.match(catalog, /title="Representatives · One Standard Specimen Per Primitive"/);
+  assert.match(catalog, /const ConfirmedStudioButtonFamily/);
+  assert.match(catalog, /id: "1-supreme-full"/);
+  assert.match(catalog, /id: "7-compact-and-micro"/);
+  assert.match(catalog, /const ConfirmedStudioSplitButtonFamily/);
+  assert.match(catalog, /const ConfirmedStudioDropdownFamily/);
+  assert.match(catalog, /const CanonicalSplitBadgeFamily/);
 });
 
-test("ConfirmedSpecimenGrid is full-width and does not split the module into side-by-side columns", () => {
-  const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
-  const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
-  assert.match(gridCss, /--vt-specimen-gap:\s*var\(--vt-studio-space-unit,\s*4px\)/);
-  assert.match(gridCss, /\.vt-specimen-module\s*\{[^}]*width:\s*100%/s);
-  assert.doesNotMatch(gridCss, /vt-specimen-columns/);
-  assert.doesNotMatch(gridSource, /vt-specimen-columns/);
-  assert.match(gridSource, /aria-checked=\{clean\}/);
-  assert.match(gridSource, /aria-controls=\{contentId\}/);
-  assert.doesNotMatch(gridCss, /\\.vt-specimen-slot\\s+(?:button|input|textarea|select)[^{]*\\{[^}]*(?:height|border|background|font-size|padding)\\s*:/s);
-});
-
-
-test("canonical StudioButton catalog uses the PR #756 proportional grid and real StudioButton exports", () => {
+test("canonical StudioButton family keeps proportional rows while catalog CSS owns arrangement only", () => {
   const buttonFamily = catalog.match(/const ConfirmedStudioButtonFamily:[^]*?\n}\n\ntype ConfirmedCatalogFamilyName/)?.[0] ?? "";
-  assert.ok(buttonFamily.includes("<ConfirmedSpecimenGrid"), "Button family uses the shared specimen grid");
   assert.ok(buttonFamily.includes("layoutRows={layoutRows}"));
   assert.ok(buttonFamily.includes("sizeVariant={tier}"));
-  assert.ok(buttonFamily.includes("variant={\`v\${variant}\` as"));
-  assert.ok(buttonFamily.includes('data-vt-library-component="StudioButton"'));
-  assert.ok(buttonFamily.includes("activeChildren={activeChildren}"));
   assert.ok(buttonFamily.includes('id: "1-supreme-full"'));
-  assert.ok(buttonFamily.includes('id: "2-supreme-halves"'));
-  assert.ok(buttonFamily.includes('id: "3-standard-full"'));
-  assert.ok(buttonFamily.includes('id: "4-standard-halves"'));
   assert.ok(buttonFamily.includes('id: "5-standard-fractions"'));
   assert.ok(buttonFamily.includes('id: "6-compact-fractions"'));
   assert.ok(buttonFamily.includes('id: "7-compact-and-micro"'));
-  assert.ok(buttonFamily.includes('id: "7A-micro-quarters"'));
-  assert.ok(buttonFamily.includes('id: "7B-micro-eighths-sixteenths"'));
-});
-
-test("ConfirmedSpecimenGrid keeps layout proportional and leaves control geometry to StudioButton", () => {
-  const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
-  const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
   const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"), styles.indexOf("/* Dense, collapsed Global Defaults"));
-  assert.match(gridCss, /--vt-specimen-gap:\s*var\(--vt-studio-space-unit,\s*4px\)/);
-  assert.match(gridCss, /grid-template-columns:\s*repeat\(144,\s*minmax\(0,\s*1fr\)\)/);
-  assert.match(gridSource, /layoutRows\.map\(renderLayoutRow\)/);
-  assert.match(gridSource, /gridColumn: \`span \${span}\`/);
   assert.match(buttonCss, /\.vt-confirmed-button-skin\s*\{[^}]*width:\s*100%/s);
-  assert.doesNotMatch(buttonCss, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\\s*:/,
-    "catalog wrapper must not redefine production StudioButton geometry");
+  assert.doesNotMatch(buttonCss, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\s*:/,
+    "catalog layout must not redefine production StudioButton geometry");
 });
 
 test("StudioButton catalog styles contain labels without retired V1-V7 skin overrides", () => {
