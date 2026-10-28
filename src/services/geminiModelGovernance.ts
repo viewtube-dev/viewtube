@@ -99,6 +99,21 @@ export const normalizeGeminiModelId = (modelId: string): string => {
 export const getGeminiModel = (modelId: string): GeminiModelMetadata | undefined =>
   GEMINI_MODEL_REGISTRY[normalizeGeminiModelId(modelId)]
 
+/** Canonicalizes legacy/provider model names without claiming live availability. */
+export const canonicalizeGeminiModelId = (modelId: string): string => {
+  const normalized = normalizeGeminiModelId(modelId)
+  if (GEMINI_MODEL_REGISTRY[normalized]) return normalized
+  const lower = normalized.toLowerCase()
+  if (lower.includes("image")) return "gemini-3.1-flash-image-preview"
+  if (lower.includes("pro")) return "gemini-3.1-pro-preview"
+  if (lower.includes("lite")) return "gemini-3.1-flash-lite"
+  if (lower.includes("flash") && (lower.includes("3.0") || lower.includes("3-flash"))) {
+    return "gemini-3-flash-preview"
+  }
+  if (lower.includes("flash")) return "gemini-3.1-flash-lite"
+  return "gemini-3.1-flash-lite"
+}
+
 export type GeminiSubstitutionReason =
   | "honoured" | "capability_requires_model" | "capability_policy_override"
 
