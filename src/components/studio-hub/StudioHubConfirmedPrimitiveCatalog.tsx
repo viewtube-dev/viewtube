@@ -109,7 +109,7 @@ const CanonicalControlFamilies: React.FC = () => {
         </div>
         <div className="vt-confirmed-choice-examples">
           {(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-choice-example-row" key={"switch-"+shape} aria-label={shape + " switch examples"}>{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " switch " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div>)}
-          {([{Component:StudioRadio,label:"radio button",shape:"round" as const,identity:"StudioRadio" as const},{Component:StudioCheckbox,label:"checkmark checkbox",shape:"rect" as const,identity:"StudioCheckbox" as const},{Component:StudioXCheckbox,label:"X checkbox",shape:"rect" as const,identity:"StudioXCheckbox" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-choice-example-row" key={item.label} aria-label={item.label + " examples"}>{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; const specimen = <ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} />; return <div key={skin.skin}>{item.identity === "StudioRadio" ? <div data-vt-library-component="StudioRadio">{specimen}</div> : item.identity === "StudioCheckbox" ? <div data-vt-library-component="StudioCheckbox">{specimen}</div> : <div data-vt-library-component="StudioXCheckbox">{specimen}</div>}</div> })}</div> })}
+          {([{Component:StudioRadio,label:"radio button",shape:"round" as const},{Component:StudioCheckbox,label:"checkmark checkbox",shape:"rect" as const},{Component:StudioXCheckbox,label:"X checkbox",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-choice-example-row" key={item.label} aria-label={item.label + " examples"}>{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; const specimen = <ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} />; return <div key={skin.skin}>{item.label === "radio button" ? <div data-vt-library-component="StudioRadio">{specimen}</div> : item.label === "checkmark checkbox" ? <div data-vt-library-component="StudioCheckbox">{specimen}</div> : <div data-vt-library-component="StudioXCheckbox">{specimen}</div>}</div> })}</div> })} })}
         </div>
       </div>
     </Family>
@@ -300,7 +300,6 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
 const ConfirmedPrimitiveGridOverview: React.FC = () => {
   const [counterValue, setCounterValue] = React.useState(24)
   const [sideCounterValue, setSideCounterValue] = React.useState(36)
-  const [leftCounterValue, setLeftCounterValue] = React.useState(18)
   const [sliderValue, setSliderValue] = React.useState(58)
   const [buttonPressed, setButtonPressed] = React.useState(false)
   const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)
@@ -371,6 +370,9 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
 }
 
 const ConfirmedDirectPrimitiveRows: React.FC = () => {
+  const [splitLeftPressed, setSplitLeftPressed] = React.useState(false)
+  const [splitRightPressed, setSplitRightPressed] = React.useState(false)
+  const [doubleSplitPressed, setDoubleSplitPressed] = React.useState(false)
   const [arrowValue, setArrowValue] = React.useState("ONE")
   const [barValue, setBarValue] = React.useState(40)
   const [wordValue, setWordValue] = React.useState(false)
@@ -380,6 +382,8 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   const [doubleRight, setDoubleRight] = React.useState("TARGET")
   const [counterValue, setCounterValue] = React.useState(24)
   const [sideCounterValue, setSideCounterValue] = React.useState(36)
+  const [leftCounterValue, setLeftCounterValue] = React.useState(18)
+  const [leftCounterValue, setLeftCounterValue] = React.useState(18)
   const [leftWordValue, setLeftWordValue] = React.useState(1)
   const [leftWordSliderValue, setLeftWordSliderValue] = React.useState(3)
   const [sliderValue, setSliderValue] = React.useState(58)
@@ -411,6 +415,9 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
     >
       <div className="vt-confirmed-direct-primitive-rows" data-vt-confirmed-representatives="true" aria-label="Canonical primitive representatives">
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioButton"><span>Studio Button · STANDARD</span><StudioButton sizeVariant="standard" aria-label="Studio button standard specimen">STUDIO BUTTON</StudioButton></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftButton"><span>Split Left Button · STANDARD</span><StudioSplitLeftButton sizeVariant="standard" icon={<Sparkles aria-hidden="true" />} aria-label="Split left button standard specimen" onClick={() => setSplitLeftPressed(value => !value)}>{splitLeftPressed ? "SELECTED" : "SPLIT LEFT"}</StudioSplitLeftButton></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightButton"><span>Split Right Button · STANDARD</span><StudioSplitRightButton sizeVariant="standard" icon={<Settings2 aria-hidden="true" />} aria-label="Split right button standard specimen" onClick={() => setSplitRightPressed(value => !value)}>{splitRightPressed ? "SELECTED" : "SPLIT RIGHT"}</StudioSplitRightButton></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton"><span>Double Split Button · STANDARD</span><StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Double split button standard specimen" onClick={() => setDoubleSplitPressed(value => !value)}>{doubleSplitPressed ? "SELECTED" : "DOUBLE SPLIT"}</StudioDoubleSplitButton></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineButton"><span>Two Lines Button · STANDARD</span><StudioTwoLineButton sizeVariant="standard" firstLine="TWO LINE" secondLine="BUTTON" aria-label="Two lines button standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTwoLineButton"><span>Two Lines Split Button · STANDARD</span><StudioSplitTwoLineButton sizeVariant="standard" icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label="Two lines split button standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdown"><span>Studio Dropdown · STANDARD</span><StudioDropdown sizeVariant="standard" ariaLabel="Studio dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
@@ -419,12 +426,19 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton"><span>Double-split Button · STANDARD</span><StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Double-split button standard specimen">DOUBLE SPLIT</StudioDoubleSplitButton></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown"><span>Multi-select Dropdown · STANDARD</span><StudioLegendMultiDropdown sizeVariant="standard" label="FORMAT" defaultValue={["videos"]} options={multiOptions} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftDropdown"><span>Split-left Dropdown · STANDARD</span><StudioSplitLeftDropdown sizeVariant="standard" defaultValue="balanced" options={dropdownOptions} ariaLabel="Split-left dropdown standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown"><span>Legend Multi Dropdown · STANDARD</span><StudioLegendMultiDropdown sizeVariant="standard" label="FORMAT" defaultValue={["videos"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }, { value: "live", label: "LIVE" }]} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftDropdown"><span>Split Left Dropdown · STANDARD</span><StudioSplitLeftDropdown sizeVariant="standard" defaultValue="balanced" options={dropdownOptions} ariaLabel="Split-left dropdown standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle"><span>Arrow Toggle · STANDARD</span><StudioArrowToggle size="standard" value={arrowValue} options={options} onValueChange={setArrowValue} ariaLabel="Arrow toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>Bar Toggle · STANDARD</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} ariaLabel="Bar toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioWordToggle"><span>Word Toggle · STANDARD</span><StudioWordToggle size="standard" value={wordValue} words={["OFF", "ON"]} onValueChange={setWordValue} aria-label="Word toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioVerticalWordToggle"><span>Vertical Word Toggle · STANDARD</span><StudioVerticalWordToggle sizeVariant="standard" variant="primary-secondary" value={verticalWordValue} words={["OFF", "ON"]} onValueChange={setVerticalWordValue} aria-label="Vertical word toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideToggle"><span>Side Toggle · STANDARD</span><StudioSideToggle size="standard" value={sideValue} options={["LOW", "MID", "HIGH"]} onValueChange={setSideValue} ariaLabel="Side toggle standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSideToggle"><span>Double-side Toggle · STANDARD</span><StudioDoubleSideToggle variant="v1" rightAppearance="primary" size="standard" left={{ value: doubleLeft, options: ["SOURCE", "INPUT"], onValueChange: setDoubleLeft, ariaLabel: "Double-side left specimen" }} right={{ value: doubleRight, options: ["TARGET", "OUTPUT"], onValueChange: setDoubleRight, ariaLabel: "Double-side right specimen" }} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>Bar Toggle · STANDARD</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} ariaLabel="Bar toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioWordToggle"><span>Word Toggle · STANDARD</span><StudioWordToggle size="standard" value={wordValue} words={["OFF", "ON"]} onValueChange={setWordValue} aria-label="Word toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioVerticalWordToggle"><span>Vertical Word Toggle · STANDARD</span><StudioVerticalWordToggle sizeVariant="standard" value={verticalWordValue} words={["OFF", "ON"]} onValueChange={setVerticalWordValue} aria-label="Vertical word toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideToggle"><span>Side Toggle · STANDARD</span><StudioSideToggle size="standard" value={sideValue} options={["LOW", "MID", "HIGH"]} onValueChange={setSideValue} ariaLabel="Side toggle standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSideToggle"><span>Double Side Toggle · STANDARD</span><StudioDoubleSideToggle variant="v1" rightAppearance="primary" size="standard" left={{ value: doubleLeft, options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: setDoubleLeft, ariaLabel: "Double side toggle left" }} right={{ value: doubleRight, options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: setDoubleRight, ariaLabel: "Double side toggle right" }} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioNumberInput"><span>Number Input · STANDARD</span><StudioNumberInput aria-label="Number input specimen" defaultValue={42} sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInput"><span>Text Input · STANDARD</span><StudioTextInput sizeVariant="standard" aria-label="Text input standard specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>Username Split Input · STANDARD</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Username split input standard specimen" placeholder="CREATOR NAME" /></div>
@@ -436,11 +450,16 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideCounter"><span>Side Counter · STANDARD</span><StudioSideCounter size="standard" value={sideCounterValue} onValueChange={setSideCounterValue} min={0} max={100} ariaLabel="Side counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>Left Counter · STANDARD</span><StudioLeftCounter size="standard" value={leftCounterValue} onValueChange={setLeftCounterValue} min={0} max={100} ariaLabel="Left counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordSlider"><span>Left Word Slider · STANDARD</span><StudioLeftWordSlider size="standard" value={leftWordSliderValue} onValueChange={setLeftWordSliderValue} ariaLabel="Left word slider standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideCounter"><span>Side Counter · STANDARD</span><StudioSideCounter value={sideCounterValue} onValueChange={setSideCounterValue} size="standard" min={0} max={100} ariaLabel="Side counter standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>Left Counter · STANDARD</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter standard specimen" /></div>
                 <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordCounter"><span>Left Word Counter · STANDARD</span><StudioLeftWordCounter size="standard" value={leftWordValue} onValueChange={setLeftWordValue} ariaLabel="Studio left word counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitSlider"><span>Double Split Slider · STANDARD</span><StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Double split slider standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioActionButton"><span>Action Button · STANDARD</span><StudioActionButton sizeVariant="standard" aria-label="Action button standard specimen">PRIMARY ACTION</StudioActionButton></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton"><span>Icon Button · STANDARD</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChoice"><span>Choice Control · STANDARD</span><StudioChoice kind="radio" skin="solid" checked={false} aria-label="Choice control standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioRadio"><span>Radio · STANDARD</span><StudioRadio shape="round" skin="solid" checked={false} aria-label="Radio standard specimen" onClick={() => {}} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCheckbox"><span>Checkbox · STANDARD</span><StudioCheckbox shape="rect" skin="solid" checked={false} aria-label="Checkbox standard specimen" onClick={() => {}} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioXCheckbox"><span>X Checkbox · STANDARD</span><StudioXCheckbox shape="rect" skin="solid" checked={false} aria-label="X checkbox standard specimen" onClick={() => {}} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSquareIconButton"><span>Square Icon Button · STANDARD</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" aria-label="Square icon button standard specimen" sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCircleIconButton"><span>Circle Icon Button · STANDARD</span><StudioCircleIconButton icon={<Check aria-hidden="true" />} label="CONFIRM" aria-label="Circle icon button standard specimen" sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSquareIconButtonGroup"><span>Square Icon Button Group · STANDARD</span><StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Standard icon button group"><StudioSquareIconButton icon={<Check aria-hidden="true" />} label="CONFIRM" aria-label="Confirm" sizeVariant="standard" /><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" aria-label="Settings" sizeVariant="standard" /></StudioSquareIconButtonGroup></div>
@@ -452,6 +471,8 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftBadge"><span>Split Left Badge · STANDARD</span><StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="standard">READY</StudioSplitLeftBadge></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightBadge"><span>Split-right Badge · STANDARD</span><StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="standard">SETTINGS</StudioSplitRightBadge></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitBadge"><span>Double-split Badge · STANDARD</span><StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard">READY</StudioDoubleSplitBadge></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightBadge"><span>Split Right Badge · STANDARD</span><StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="standard">RIGHT RAIL</StudioSplitRightBadge></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitBadge"><span>Double Split Badge · STANDARD</span><StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard">CENTERED</StudioDoubleSplitBadge></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSpectrumTag"><span>Spectrum Tag · STANDARD REPRESENTATIVE</span><StudioSpectrumTag label="CREATOR" spectrumKey="CREATOR" selected={false} ariaLabel="Spectrum tag standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCloseableBadge"><span>Closeable Badge · STANDARD REPRESENTATIVE</span><StudioCloseableBadge label="CREATOR" entering={false} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLedBadgeTab">
@@ -1247,6 +1268,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioTopSplitModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · left/right/double/none header rails · default/accent tone · white body" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
     >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTopSplitModule" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 8, minWidth: 0 }}>
         <StudioTopSplitModule title="LEFT RAIL" split="left" startIcon={<Home size={18} aria-hidden="true" />} sizeVariant="standard">
           <p style={{ margin: 0, padding: 8 }}>Header rail at start; content stays white.</p>
         </StudioTopSplitModule>
@@ -1584,6 +1606,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioInterModule" tsx="src/studio-ui/primitives/StudioInterModule.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · shared Studio control tokens · nested module content" imports={["src/studio-ui/primitives/StudioInterModule.tsx"]} />}
     >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInterModule">
         <span>INTERMODULE · STANDARD</span>
         <StudioInterModule className="vt-studio-inter-host--bleed" title="PROMPT LIBRARY" startIcon={<Home aria-hidden="true" />} sizeVariant="standard" defaultOpen>
           <p className="vt-confirmed-intermodule-prompt">A standard-size intermodule keeps its content aligned to the shared parent edges.</p>
@@ -1598,6 +1621,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioCollapsingSplitModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · shared split-shell geometry." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule">
         <span>44px STANDARD</span>
         <StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen>
           <span>Standard collapsible module body content.</span>
@@ -1618,6 +1642,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioCollapsingTwoLineModule" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Standard 44px shell with a two-line title/description content exception." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingTwoLineModule">
         <span>STANDARD · TWO-LINE HEADER</span>
         <StudioCollapsingTwoLineModule title="CREATOR SETTINGS" description="Channel identity, defaults, and publishing preferences." split="double" sizeVariant="standard" defaultOpen={false}>
           <p>Two-line module body content rendered by the production primitive.</p>
