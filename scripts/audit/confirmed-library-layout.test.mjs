@@ -341,7 +341,7 @@ test("confirmed composite controls are represented in the production catalog", (
   for (const name of ["StudioPlayPauseButton", "StudioCircleIconButton", "StudioUsernameInput"]) {
     assert.ok(catalog.includes(name), `catalog includes ${name}`);
     assert.ok(catalog.includes(`data-vt-library-component="${name}"`), `${name} has a library specimen marker`);
-    assert.match(controls, new RegExp(`export const ${name}\b`), `${name} is a production export`);
+    assert.match(controls, new RegExp(`export const ${name}\\b`), `${name} is a production export`);
   }
   assert.match(catalog, /Play\/Pause Split-left Button · 44px \+ 28px/);
   assert.match(catalog, /Circle Icon Button · 44px \+ 28px/);
