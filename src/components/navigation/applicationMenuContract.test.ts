@@ -43,10 +43,21 @@ describe("Gemini key setup access", () => {
       path.resolve(process.cwd(), "src/components/navigation/AdaptiveNavigationShell.tsx"),
       "utf8",
     )
+    const settingsSource = fs.readFileSync(
+      path.resolve(process.cwd(), "src/views/Settings.tsx"),
+      "utf8",
+    )
+    const aiPanelSource = fs.readFileSync(
+      path.resolve(process.cwd(), "src/views/settings/SettingsAiPanel.tsx"),
+      "utf8",
+    )
 
     expect(APPLICATION_MENU_DESTINATIONS.some((destination) => destination.id === "ai-integrations")).toBe(true)
     expect(menuSource).not.toContain("canSeeApiKeys")
     expect(navSource).not.toContain("const canSeeApiKeys =")
     expect(navSource).not.toContain("canSeeApiKeys={canSeeApiKeys}")
+    expect(settingsSource).not.toContain("canViewGeminiKey")
+    expect(aiPanelSource).not.toContain("canViewGeminiKey")
+    expect(aiPanelSource).toContain("settings-gemini-key")
   })
 })
