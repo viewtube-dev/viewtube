@@ -51,7 +51,7 @@ const isModelAvailabilityError = (error: unknown): boolean => {
   const status = Number(value?.status ?? value?.code);
   const message = String(value?.message ?? "");
   return status === 404 ||
-    /model[^\n]*(not found|not supported|unavailable)|models\/[^ ]+ is not found|not found[^\n]*model/i.test(message);
+    /model[^\n]*(not found|not supported|not available|unavailable|does not exist)|models\/[^ ]+ is not found|not found[^\n]*model/i.test(message);
 };
 
 /**
