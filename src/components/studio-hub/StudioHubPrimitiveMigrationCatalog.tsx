@@ -378,6 +378,7 @@ const PrimitiveMigrationControl: React.FC<{
   const [segmentChoice, setSegmentChoice] = React.useState("A")
   const [groupChoice, setGroupChoice] = React.useState("ONE")
   const [menuChoice, setMenuChoice] = React.useState("OPTION 1")
+  const [privacyChoice, setPrivacyChoice] = React.useState("PUBLIC")
   const [legendFilters, setLegendFilters] = React.useState<string[]>(["VIDEOS"])
   const [toneChoice, setToneChoice] = React.useState("CINEMATIC")
   const [nestedChoice, setNestedChoice] = React.useState("HOOK")
@@ -478,7 +479,7 @@ const PrimitiveMigrationControl: React.FC<{
       <div className="vt-catalog-family-variants vt-catalog-dropdown-family" role="group" aria-label="Dropdown and menu primitive family">
         <div className="vt-catalog-family-variant"><span>SIMPLE DROPDOWN</span><SubToolboxMenu level={level} variant="dropdown" value={menuChoice} options={options} onValueChange={setMenuChoice} triggerLabel="MENU" triggerIcon={<MoreHorizontal />} chevronIcon={<ChevronDown />} ariaLabel="Simple dropdown" /></div>
         <div className="vt-catalog-family-variant"><span>SPLIT MENU</span><SubToolboxSplitDropdown level={level} value={menuChoice} options={options.map((option) => ({...option, icon:<Menu />}))} onChange={setMenuChoice} icon={<Menu />} chevron={<ChevronDown />} ariaLabel="Split menu" /></div>
-        <div className="vt-catalog-family-variant"><span>TOP-TITLE DROPDOWN</span><SubToolboxTopTitleDropdown level={level} label="PRIVACY" value={menuChoice} options={["PUBLIC","UNLISTED","PRIVATE"].map((option) => ({value:option,label:option}))} onValueChange={setMenuChoice} ariaLabel="Publishing dropdown" /></div>
+        <div className="vt-catalog-family-variant"><span>TOP-TITLE DROPDOWN</span><SubToolboxTopTitleDropdown level={level} label="PRIVACY" value={privacyChoice} options={["PUBLIC","UNLISTED","PRIVATE"].map((option) => ({value:option,label:option}))} onValueChange={setPrivacyChoice} ariaLabel="Publishing dropdown" /></div>
         <div className="vt-catalog-family-variant"><span>MULTI-SELECT</span><StudioLegendMultiDropdown level={level} label="FILTERS" options={["VIDEOS","SHORTS","LIVE"].map((option) => ({value:option,label:option}))} value={legendFilters} onChange={setLegendFilters} sizeVariant="standard" placeholder="ANY" clearLabel="CLEAR ALL" /></div>
         <div className="vt-catalog-family-variant"><span>SELECT MENU</span><SubToolboxMenu level={level} variant="select" value={menuChoice} options={options} onValueChange={setMenuChoice} triggerLabel={menuChoice} ariaLabel="Select menu" /></div>
         <div className="vt-catalog-family-variant"><span>CONTEXT MENU</span><SubToolboxMenu level={level} variant="context" value={menuChoice} options={options} onValueChange={setMenuChoice} triggerLabel="MORE" ariaLabel="Context menu" /></div>
