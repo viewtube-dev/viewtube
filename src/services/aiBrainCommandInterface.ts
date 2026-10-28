@@ -211,7 +211,7 @@ const readStoredPublicChannelSnapshot = (): PublicChannelSnapshot | null => {
   if (!raw) return null
   const value = JSON.parse(raw) as Partial<PublicChannelSnapshot>
   if (value.mode !== "public_handle" || typeof value.channelId !== "string" || !value.channelId.trim() || !Array.isArray(value.topVideos)) return null
-  return { mode: "public_handle", fetchedAt: typeof value.fetchedAt === "string" ? value.fetchedAt : "", channelId: value.channelId, handle: typeof value.handle === "string" ? value.handle : null, title: typeof value.title === "string" ? value.title : null, subscriberCount: null, videoCount: null, viewCount: null, source: value.source === "public_page" ? "public_page" : value.source === "fixture" ? "fixture" : "youtube_data_api_public",
+  return { mode: "public_handle", fetchedAt: typeof value.fetchedAt === "string" ? value.fetchedAt : "", channelId: value.channelId, handle: typeof value.handle === "string" ? value.handle : null, title: typeof value.title === "string" ? value.title : null, subscriberCount: null, videoCount: null, viewCount: null, source: value.source === "public_page" ? "public_page" : value.source === "fixture" ? "fixture" : undefined,
    topVideos: value.topVideos.filter((video) => Boolean(video && typeof video.videoId === "string" && typeof video.title === "string")).map((video) => ({ videoId: video.videoId, title: video.title, publishedAt: typeof video.publishedAt === "string" ? video.publishedAt : "", viewCount: null, likeCount: null, commentCount: null })) }
  } catch { return null }
 }
