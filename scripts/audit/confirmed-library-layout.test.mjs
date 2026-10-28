@@ -433,7 +433,9 @@ test("confirmed library keeps the shared 4px grid hierarchy without blanket nest
 
 
 test("StudioButton library module applies the canonical 4px grid rhythm without changing button geometry", () => {
-  const moduleGrid = styles.slice(styles.lastIndexOf("/* StudioButton library module — canonical 4px grid. */"));
+  const gridStart = styles.lastIndexOf(".vt-confirmed-button-family {");
+  const gridEnd = styles.indexOf("/* Button catalog is arrangement-only", gridStart);
+  const moduleGrid = styles.slice(gridStart, gridEnd);
   assert.ok(moduleGrid.length > 80, "the scoped StudioButton grid contract exists");
   assert.match(moduleGrid, /\.vt-confirmed-button-family\s*\{[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
   assert.match(moduleGrid, /\.vt-confirmed-button-family\s*>\s*\.vt-confirmed-variants\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)[^}]*gap:\s*var\(--vt-confirmed-grid-unit\)/s);
