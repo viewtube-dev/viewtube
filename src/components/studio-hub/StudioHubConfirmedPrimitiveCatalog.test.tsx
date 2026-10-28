@@ -659,3 +659,27 @@ describe("confirmed live primitive grid inventory", () => {
     }
   });
 });
+
+
+describe("confirmed primitive representative coverage", () => {
+  it("renders named production representatives for the complete control and composition families", () => {
+    const markup = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    for (const primitive of [
+      "StudioButton", "StudioSplitLeftButton", "StudioDoubleSplitButton", "StudioTwoLineButton",
+      "StudioSplitTwoLineButton", "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
+      "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioNumberInput",
+      "StudioSplitLeftInput", "StudioSplitTextInput", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
+      "StudioLeftWordCounter", "StudioDoubleSplitSlider", "StudioLeftWordSlider", "StudioSplitLeftBadge",
+      "StudioSplitRightBadge", "StudioDoubleSplitBadge", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
+      "StudioWordToggle", "StudioVerticalWordToggle", "StudioArrowToggle", "StudioSideToggle",
+      "StudioDoubleSideToggle", "StudioBarToggle", "StudioSpectrumTag", "StudioCloseableBadge",
+      "StudioTagEditor", "StudioUploadFrame", "StudioSwitch", "StudioPlayPauseButton",
+      "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
+      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule",
+      "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioBrainStatusBadge",
+      "StudioBrainStatusIndicator", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
+    ]) {
+      expect(markup, primitive).toContain(`data-vt-library-component="${primitive}"`);
+    }
+  });
+});
