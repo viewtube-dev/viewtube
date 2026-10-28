@@ -13,7 +13,7 @@ const record = (overrides: Partial<EvidenceRecord> = {}): EvidenceRecord => ({
   channelId: "channel-1",
   metric: "views",
   value: 4200,
-  unit: "views",
+  unit: null,
   freshness: "fresh",
   epistemicState: "OBSERVED",
   provenance: { evidenceIds: ["source-video-abc123"] },
