@@ -49,7 +49,7 @@ export const resolveBrainRetryInput = <TSnapshot,>(input: {
 
 /** Exact model-visible payload captured for a completed or interrupted turn. */
 export interface BrainModelInputSnapshot<TRecord = unknown> {
- systemInstruction?: unknown
+ systemInstruction?: string
  history?: unknown[]
  userText?: unknown
  evidenceRecords?: TRecord[]
