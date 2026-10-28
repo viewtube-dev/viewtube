@@ -3996,11 +3996,14 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame::before {
   position: absolute;
   z-index: 0;
-  inset: 0;
+  inset: var(--vt-studio-upload-frame-stroke);
   content: "";
   border: var(--vt-studio-upload-frame-stroke) solid transparent;
-  border-radius: inherit;
-  background: conic-gradient(from var(--vt-studio-upload-angle, 0deg), var(--vt-studio-upload-primary), color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary)), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - var(--vt-studio-upload-frame-stroke)));
+  background: conic-gradient(from var(--vt-studio-upload-angle, 0deg), var(--vt-studio-upload-primary), color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary)), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   pointer-events: none;
 }
 .vt-studio-upload-frame.is-drag { --vt-studio-upload-speed: 2.5; }
