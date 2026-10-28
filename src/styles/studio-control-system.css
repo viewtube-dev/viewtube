@@ -3983,15 +3983,25 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   aspect-ratio: 16 / 9;
   overflow: hidden;
   isolation: isolate;
-  border: 0;
+  border: var(--vt-studio-upload-frame-stroke) solid #000;
   border-radius: var(--vt-studio-upload-frame-radius);
-  background: conic-gradient(from var(--vt-studio-upload-angle, 0deg), var(--vt-studio-upload-primary), color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary)), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
+  background: #000;
   animation: vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite;
   cursor: pointer;
   container-type: inline-size;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   transform-origin: center;
+}
+.vt-studio-upload-frame::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: "";
+  border: var(--vt-studio-upload-frame-stroke) solid transparent;
+  border-radius: inherit;
+  background: conic-gradient(from var(--vt-studio-upload-angle, 0deg), var(--vt-studio-upload-primary), color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary)), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
+  pointer-events: none;
 }
 .vt-studio-upload-frame.is-drag { --vt-studio-upload-speed: 2.5; }
 .vt-studio-upload-frame:hover,
@@ -4023,11 +4033,11 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-upload-frame__inset {
   position: absolute;
-  z-index: 0;
-  inset: var(--vt-studio-upload-frame-inset);
+  z-index: 1;
+  inset: calc(2 * var(--vt-studio-upload-frame-stroke));
   overflow: hidden;
-  border: var(--vt-studio-upload-frame-stroke) solid #000;
-  border-radius: var(--vt-studio-upload-inset-radius);
+  border: 0;
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke)));
   background: #fff;
 }
 .vt-studio-upload-frame__inset::before,
@@ -4036,17 +4046,16 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   z-index: 2;
   content: "";
   pointer-events: none;
-  border-radius: inherit;
 }
 .vt-studio-upload-frame__inset::before {
   inset: 0;
   border: var(--vt-upload-primary-stroke) solid var(--vt-studio-upload-primary);
-  border-radius: max(0px, calc(var(--vt-studio-upload-inset-radius) - 1cqw));
+  border-radius: inherit;
 }
 .vt-studio-upload-frame__inset::after {
   inset: var(--vt-upload-primary-stroke);
   border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary);
-  border-radius: max(0px, calc(var(--vt-studio-upload-inset-radius) - 1cqw - var(--vt-studio-upload-frame-stroke) * 1.25));
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke) - var(--vt-upload-secondary-stroke)));
 }
 .vt-studio-upload-frame__layers { position: absolute; inset: 0; }
 .vt-studio-upload-frame__layer {
@@ -4117,112 +4126,72 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-upload-frame:hover .vt-studio-upload-frame__icon,
 .vt-studio-upload-frame.is-drag .vt-studio-upload-frame__icon { transform: scale(1.06); }
-.vt-studio-upload-frame__label {
+/* Upload metadata bar: dedicated three-zone composition, independent of split-badge primitives. */
+.vt-studio-upload-frame__file-bar {
   position: absolute;
   z-index: 7;
   bottom: 1.25cqw;
   left: 50%;
   translate: -50% 0;
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: minmax(24px, 4cqw) minmax(0, 1fr) minmax(24px, 4cqw);
   align-items: stretch;
-  justify-content: center;
-  gap: 0;
   width: max-content;
   max-width: min(80cqw, calc(100% - 8px));
+  min-height: 28px;
+  max-height: 42px;
   overflow: hidden;
   padding: 0;
   border: var(--vt-studio-upload-frame-stroke) solid #000;
+  border-radius: var(--vt-studio-upload-badge-radius);
   box-sizing: border-box;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--vt-studio-upload-primary) 50%, white);
+  background: #000;
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  height: 28px;
-  min-height: 28px;
-  max-height: 28px;
-  font-size: 12px;
+  font-size: clamp(10px, 3cqw, 12px);
   font-weight: 1000;
-  line-height: 1.1;
+  line-height: 1;
   letter-spacing: -.02em;
   text-transform: uppercase;
-  white-space: pre-line;
-  overflow-wrap: anywhere;
 }
-.vt-studio-upload-frame__badge-text {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  padding: 0 6px;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: clip;
-  overflow-wrap: anywhere;
-}
-.vt-studio-upload-frame__label[data-has-file="true"] .vt-studio-upload-frame__badge-text {
-  white-space: nowrap;
-  overflow-wrap: normal;
-  text-overflow: clip;
-}
-.vt-studio-upload-frame__badge-rail {
-  box-sizing: border-box;
+.vt-studio-upload-frame__file-action,
+.vt-studio-upload-frame__file-kind {
   display: grid;
-  flex: 0 0 24px;
-  width: 24px;
-  min-width: 24px;
   place-items: center;
-  align-self: stretch;
-  color: #000;
+  min-width: 0;
   background: var(--vt-studio-upload-primary);
 }
-.vt-studio-upload-frame__badge-rail--left {
+.vt-studio-upload-frame__file-action {
   border-right: var(--vt-studio-upload-frame-stroke) solid #000;
 }
-.vt-studio-upload-frame__badge-rail--right {
+.vt-studio-upload-frame__file-kind {
   border-left: var(--vt-studio-upload-frame-stroke) solid #000;
   background: var(--vt-studio-upload-secondary);
 }
-.vt-studio-upload-frame__badge-rail > svg {
+.vt-studio-upload-frame__file-action > svg,
+.vt-studio-upload-frame__file-kind > svg {
   display: block;
   width: 55%;
   height: 55%;
   stroke: #000;
   stroke-width: 2.5;
 }
-.vt-studio-upload-frame__filename {
-  position: absolute;
-  z-index: 7;
-  bottom: 1.25cqw;
-  left: 50%;
-  display: inline-flex;
-  align-items: stretch;
-  width: max-content;
-  max-width: 80%;
+.vt-studio-upload-frame__file-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 5px 8px;
   overflow: hidden;
-  padding: 0;
-  border: var(--vt-studio-upload-frame-stroke) solid #000;
-  box-sizing: border-box;
-  border-radius: var(--vt-studio-upload-badge-radius);
-  background: linear-gradient(100deg, var(--vt-studio-upload-primary), var(--vt-studio-upload-secondary));
-  color: #000;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 3cqw;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: -.02em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  translate: -50% 0;
-}
-.vt-studio-upload-frame__filename .vt-studio-upload-frame__badge-text {
-  overflow: hidden;
+  background: color-mix(in srgb, var(--vt-studio-upload-primary) 50%, white);
+  text-align: center;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
   text-overflow: clip;
-  white-space: nowrap;
-  padding: 0.7cqw 1cqw;
 }
-.vt-studio-upload-frame__filename .vt-studio-upload-frame__badge-rail {
-  flex-basis: 4cqw;
+.vt-studio-upload-frame__file-bar[data-has-file="true"] .vt-studio-upload-frame__file-name {
+  white-space: nowrap;
+  overflow-wrap: normal;
 }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__center {
   inset: 0;
