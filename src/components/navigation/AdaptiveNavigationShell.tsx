@@ -26,7 +26,7 @@ import { useWorkspaceUxPreferences } from "../../hooks/useWorkspaceUxPreferences
 // (tableRegistry, localSyncEngine, adapters) on every first paint even though
 // the shell only needs the lightweight snapshot reader.
 import { getVtSyncSnapshot } from "../../features/vt-sync-local/adapters/snapshot"
-import { isOwnerEmail, type EntitlementState } from "../../services/billingEntitlement"
+import { type EntitlementState } from "../../services/billingEntitlement"
 import { resolveAccountChipLabel } from "../../services/account/accountContracts"
 import { listGenerationRecords } from "../../services/generationStore"
 import { formatSyncLabel, getSyncTimestamp } from "../../services/onboardingState"
@@ -190,13 +190,6 @@ const planLabel = (planId: string): string => {
   if (planId === "creator_pro") return "Creator Pro"
   if (planId === "executive") return "Executive"
   return "Basic"
-}
-
-const knownEmail = (): string => {
-  if (typeof window === "undefined") return ""
-  const remembered = String(localStorage.getItem("vt_known_user_email") || "").trim().toLowerCase()
-  if (remembered) return remembered
-  return String(localStorage.getItem("vt_signup_email") || "").trim().toLowerCase()
 }
 
 const isMobileViewport = (): boolean =>
