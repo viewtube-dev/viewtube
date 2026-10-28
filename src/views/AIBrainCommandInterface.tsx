@@ -1321,7 +1321,7 @@ const AIBrainCommandInterface: React.FC = () => {
     ...turnSnapshot,
     evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence),
    }
-   const systemPrompt = buildAIBrainSystemPrompt({
+   const baseSystemPrompt = buildAIBrainSystemPrompt({
     brain,
     authState,
     channelConnection,
@@ -1332,6 +1332,12 @@ const AIBrainCommandInterface: React.FC = () => {
     creatorGrowthContext: turnGrowthContext,
     channelContext: creatorContext.channelContext,
    })
+   const creatorEvidencePrompt = creatorAnswerEvidence.map((record) =>
+    `- [${record.id}] ${record.sourceRef}: ${String(record.value ?? "")} (USER_PROVIDED; creator-stated, not independently verified)`,
+   ).join("\n")
+   const systemPrompt = creatorAnswerEvidence.length
+    ? `${baseSystemPrompt}\n\nCREATOR-PROVIDED PROFILE EVIDENCE\nUse these saved creator answers as channel-scoped context. They are not verified analytics; do not present them as measured facts. When relying on one, cite its evidence ID.\n${creatorEvidencePrompt}`
+    : baseSystemPrompt
    const historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
    if (channelId) {
@@ -1463,7 +1469,11 @@ const AIBrainCommandInterface: React.FC = () => {
      ? { ...freshSnapshot, evidencePack: message.evidencePack }
      : freshSnapshot
     const creatorContext = loadAiBrainContext()
-    const creatorAnswerEvidence = buildCreatorAnswerEvidenceRecords(creatorContext, channelId)
+    const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(
+     creatorContext,
+     channelId,
+     authState.channelName || authState.channelHandle || null,
+    )
     const turnSnapshot = {
      ...baseTurnSnapshot,
      evidencePack: mergeCreatorAnswerEvidenceIntoPack(baseTurnSnapshot.evidencePack, creatorAnswerEvidence),
