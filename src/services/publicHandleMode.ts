@@ -105,7 +105,10 @@ const fetchPublicPageIngestion = async (handleInput: string): Promise<PublicPage
       const response = await fetch(url, { headers: { Accept: "application/json" } })
       if (!response.ok) continue
       const payload = await response.json() as PublicPageIngestionPayload
-      if (isRealChannelId(payload.resolution?.resolvedChannelId) || isRealChannelId(payload.snapshot?.channelId)) return payload
+      const resolvedId = payload.resolution?.resolvedChannelId
+      const snapshotId = payload.snapshot?.channelId
+      if (isRealChannelId(resolvedId) && isRealChannelId(snapshotId) && resolvedId !== snapshotId) continue
+      if (isRealChannelId(resolvedId) || isRealChannelId(snapshotId)) return payload
     } catch {
       // Try the other supported deployment route; fixtures remain explicitly allowlisted.
     }
