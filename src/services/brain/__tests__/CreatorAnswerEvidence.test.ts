@@ -76,6 +76,26 @@ describe("buildCreatorAnswerEvidenceRecords", () => {
   }
  })
 
+ it("projects all populated canonical intake answers to evidence records", () => {
+  const complete = {
+   ...context,
+   channelContext: {
+    identity: { name: "History Channel", description: "History documentaries", niche: "Military history", subNiches: ["Naval history"], competitors: ["HistoryLab"] },
+    goals: { primaryGoal: "Grow returning viewers", successDefinition: "Build a loyal audience", priorityRanking: ["retention", "views"], offers: ["Membership"], primaryCTA: "Subscribe" },
+    audience: { idealViewer: "Curious adults", experienceLevel: "Enthusiast", transformation: "Understand history", problem: "Shallow coverage", segments: ["Students"] },
+    content: { types: ["Long-form"], frequency: "Weekly", bestFormats: ["Documentary"], priorityThemes: ["Turning points"], blockedThemes: ["Graphic detail"], recurringSeriesName: "History in Motion", recurringSeriesDescription: "One turning point per episode", biggestWeakness: "Inconsistent publishing", mostSuccessfulVideo: "The Siege of Vienna" },
+    brand: { voice: "Measured and curious", influences: ["Documentary makers"], creativity: 7 },
+    intelligence: { sources: ["Public videos"], capabilities: ["Strategy"], signupReason: "Improve decisions" },
+   },
+  } as AiBrainContext
+  const records = buildCreatorAnswerEvidenceRecords(complete, "channel-1")
+  const canonicalRecords = records.filter((record) => record.id.includes(":channelContext."))
+  expect(canonicalRecords.map((record) => record.id)).toEqual(
+   CHANNEL_CONTEXT_QUESTIONS.map((question) => "creator-answer:channel-1:channelContext." + question.contextField),
+  )
+  expect(canonicalRecords.every((record) => record.value.length > 0 && record.epistemicState === "USER_PROVIDED")).toBe(true)
+ })
+
  it("does not emit evidence without an active channel scope", () => {
   expect(buildCreatorAnswerEvidenceRecords(context, null)).toEqual([])
  })
