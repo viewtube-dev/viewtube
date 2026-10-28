@@ -151,6 +151,19 @@ describe("BrainTurnEvidenceRibbon", () => {
   expect(html).not.toContain("unresolved citation")
  })
 
+ it("does not trust record IDs when the saved prompt evidence manifest is mismatched", () => {
+  const recordId = "analytics:snapshot-1:video-abc:views"
+  const html = render({
+   evidencePack: pack(),
+   evidenceIntegrityStatus: "mismatch",
+   evidenceRecords: [record({ id: recordId, sourceRef: "video-abc", metric: "views" })],
+   citedEvidenceIds: [recordId],
+  })
+
+  expect(html).toContain("1 unresolved citation")
+  expect(html).toContain("Evidence could not be verified")
+ })
+
  it("keeps missing timestamps and missing evidence distinct instead of inventing freshness", () => {
   const html = render({ evidencePack: pack({ capturedAt: null, dataStatus: "missing", items: [], evidenceIds: [], missingInputs: ["Analytics connection"] }) })
   expect(html).toContain("Capture time unavailable")
