@@ -1,5 +1,6 @@
 import type { AiBrainContext } from "../aiBrainContext"
 import type { AIBrainEvidencePack } from "../../types"
+import { resolveChannelContextForActiveChannel } from "../../context/channelContextScope"
 import { CHANNEL_CONTEXT_QUESTIONS } from "../../context/channelContextQuestions"
 import type { EvidenceRecord } from "./EvidenceRecord"
 
@@ -74,6 +75,17 @@ export const buildCreatorAnswerEvidenceRecords = (
  return records
 }
 
+
+/** Fail closed when the saved profile cannot be proven to belong to the active channel. */
+export const buildScopedCreatorAnswerEvidenceRecords = (
+ context: AiBrainContext,
+ channelId: string | null | undefined,
+ activeChannelLabel: string | null | undefined,
+): EvidenceRecord[] => {
+ const scopedProfile = resolveChannelContextForActiveChannel(context.channelContext, activeChannelLabel)
+ if (!scopedProfile) return []
+ return buildCreatorAnswerEvidenceRecords({ ...context, channelContext: scopedProfile }, channelId)
+}
 
 const creatorAnswerLabel = (record: EvidenceRecord): string => {
  const prefix = "ai-brain-context:channelContext."
