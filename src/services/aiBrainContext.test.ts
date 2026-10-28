@@ -95,4 +95,39 @@ describe("Creator Brain intake convergence", () => {
   expect(loadAiBrainContext().recurringSeriesName).toBe("History in Motion")
   expect(loadAiBrainContext().signupReason).toBe("Improve channel decisions")
  })
+ it("isolates locally saved channel profiles and restores the selected channel only", () => {
+  localStorage.clear()
+  const historyProfile: ChannelContextProfile = {
+   identity: { name: "History Channel", niche: "History" },
+   goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+  }
+  const cookingProfile: ChannelContextProfile = {
+   identity: { name: "Cooking Channel", niche: "Cooking" },
+   goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+  }
+
+  saveChannelContextProfile(historyProfile, "channel-history")
+  saveChannelContextProfile(cookingProfile, "channel-cooking")
+
+  expect(loadAiBrainContext("channel-history").channelContext.identity.name).toBe("History Channel")
+  expect(loadAiBrainContext("channel-cooking").channelContext.identity.name).toBe("Cooking Channel")
+  expect(loadAiBrainContext("channel-other").channelContext.identity.name).toBeUndefined()
+  expect(localStorage.getItem("vt_ai_brain_context_v1:channel:channel-history")).not.toBeNull()
+  expect(localStorage.getItem("vt_ai_brain_context_v1:channel:channel-cooking")).not.toBeNull()
+ })
+
+ it("migrates a legacy global profile only when its name matches the active channel label", () => {
+  localStorage.clear()
+  const legacyProfile: ChannelContextProfile = {
+   identity: { name: "History Channel", niche: "History" },
+   goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+  }
+  saveChannelContextProfile(legacyProfile)
+
+  expect(loadAiBrainContext("history channel", "History Channel").channelContext.identity.name).toBe("History Channel")
+  expect(localStorage.getItem("vt_ai_brain_context_v1:channel:history%20channel")).not.toBeNull()
+  expect(loadAiBrainContext("channel-cooking", "Cooking Channel").channelContext.identity.name).toBeUndefined()
+  expect(localStorage.getItem("vt_ai_brain_context_v1")).not.toBeNull()
+ })
+
 })
