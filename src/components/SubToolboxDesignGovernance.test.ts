@@ -889,3 +889,23 @@ describe("Studio primary defaults and shared split geometry", () => {
     expect(sharedSlider).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
   });
 });
+
+
+describe("Confirmed primitive library family organization", () => {
+  it("groups button and dropdown variants into production-primitive family modules", () => {
+    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
+    const familyStart = catalog.indexOf("export const STUDIO_HUB_MIGRATED_FAMILIES");
+    const familyEnd = catalog.indexOf("] as const", familyStart);
+    const families = catalog.slice(familyStart, familyEnd);
+    expect(families).toContain('"Buttons"');
+    expect(families).toContain('"Dropdowns & Menus"');
+    for (const duplicate of ['"Primary Button"', '"Secondary Button"', '"Destructive Button"', '"Split Left Button"', '"Split Menu"', '"Top Title Dropdown"', '"Legend Multi Dropdown"', '"Disabled Button"']) {
+      expect(families).not.toContain(duplicate);
+    }
+    expect(catalog).toContain('if (name === "Buttons")');
+    expect(catalog).toContain('if (name === "Dropdowns & Menus")');
+    expect(catalog).toContain("StudioSplitLeftButton");
+    expect(catalog).toContain("StudioLegendMultiDropdown");
+    expect(catalog).toContain("SubToolboxTopTitleDropdown");
+  });
+});
