@@ -1,5 +1,5 @@
 import React from "react"
-import { StudioSwitch } from "../../studio-ui"
+import { StudioCounter, StudioSwitch } from "../../studio-ui"
 
 export const brainSettingsButtonClass = "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-black px-3 py-2 text-sm font-bold focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-50"
 
@@ -13,5 +13,5 @@ export const BrainSettingsSwitch = ({ checked, onChange, label, detail }: { chec
 
 export const BrainSettingsRange = ({ label, detail, value, min, max, step = 1, onChange }: { label: string; detail: string; value: number; min: number; max: number; step?: number; onChange: (value: number) => void }) => {
   const id = React.useId()
-  return <div className="py-3"><label htmlFor={id} className="block text-sm font-bold">{label}: {Number(value.toFixed(2))}</label><p id={`${id}-detail`} className="mt-1 text-sm text-black/75">{detail}</p><input id={id} aria-describedby={`${id}-detail`} aria-valuetext={String(Number(value.toFixed(2)))} type="range" min={min} max={max} step={step} value={value} onChange={event => onChange(Number(event.target.value))} className="mt-2 min-h-11 w-full accent-black focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black" /></div>
+  return <div className="py-3"><label htmlFor={id} className="block text-sm font-bold">{label}: {Number(value.toFixed(2))}</label><p id={`${id}-detail`} className="mt-1 text-sm text-black/75">{detail}</p><StudioCounter ariaLabel={label} value={value} onValueChange={onChange} min={min} max={max} step={step} size="standard" className="mt-2 w-full" /></div>
 }
