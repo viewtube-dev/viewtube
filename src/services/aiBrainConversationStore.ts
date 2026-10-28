@@ -358,10 +358,19 @@ export const recordAIBrainTurnInteraction = async (
   at: nowIso(),
   ...(event.detail || {}),
  }
+ const detail = event.detail || {}
+ const snapshot = detail.modelInputSnapshot
+ const rootSnapshotUpdates = event.type === "model_input_snapshot"
+  && !existing.metadata?.originalModelInputSnapshot
+  && snapshot
+  ? { originalModelInputSnapshot: snapshot }
+  : event.type === "retry_model_input_snapshot" && snapshot
+   ? { latestRetryModelInputSnapshot: snapshot }
+   : {}
  const updated: AIBrainConversationTurn = {
   ...existing,
   updatedAt: nowIso(),
-  metadata: { ...(existing.metadata || {}), interactionLog: [...currentLog, receipt] },
+  metadata: { ...(existing.metadata || {}), ...rootSnapshotUpdates, interactionLog: [...currentLog, receipt] },
  }
  await saveAIBrainConversationTurnDB(updated)
  return updated
