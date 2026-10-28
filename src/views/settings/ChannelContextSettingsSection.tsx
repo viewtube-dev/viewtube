@@ -45,8 +45,17 @@ export const ChannelContextSettingsSection: React.FC = () => {
   const score = useMemo(() => scoreContext(profile), [profile])
 
   const update = (question: ChannelContextQuestion, value: string) => {
-    setProfile((current) => writeField(current, question.contextField, parseAnswer(question, value)))
-    setSaved(false)
+    const next = writeField(profile, question.contextField, parseAnswer(question, value))
+    setProfile(next)
+    // Persist each field edit immediately so navigation or reload cannot discard
+    // answers that were already typed. This writes to the existing canonical
+    // Creator Brain profile; it does not create a second intake store.
+    try {
+      saveChannelContextProfile(next)
+      setSaved(true)
+    } catch {
+      setSaved(false)
+    }
   }
 
   const save = () => {
@@ -115,7 +124,7 @@ export const ChannelContextSettingsSection: React.FC = () => {
         </section>
       ))}
       <footer className="flex flex-wrap items-center justify-between gap-3 border-2 border-black p-3">
-        <p className="text-sm" role="status">{saved ? "Channel context saved to your Creator Brain profile." : "Changes stay local until you save."}</p>
+        <p className="text-sm" role="status">{saved ? "All answers are saved locally in this browser." : "Answers are saved locally as you edit; use Save to confirm the full profile."}</p>
         <StudioButton onClick={save}>Save channel context</StudioButton>
       </footer>
     </section>
