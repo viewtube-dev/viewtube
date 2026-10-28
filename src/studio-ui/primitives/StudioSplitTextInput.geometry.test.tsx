@@ -41,9 +41,9 @@ describe("StudioSplitTextInput geometry comparison variants", () => {
     const railEnd = css.indexOf(".vt-studio-split-text-input[data-vt-studio-split=\"right\"]")
     const railRules = css.slice(railStart, railEnd)
 
-    expect(html).toContain('class="vt-studio-split-text-input__field" data-geometry-variant="current"')
-    expect(html).toContain('class="vt-studio-split-text-input__field" data-geometry-variant="half-vertical-padding"')
-    expect(html).toContain('class="vt-studio-split-text-input__field" data-geometry-variant="username-height"')
+    expect(html).toContain('data-vt-studio-field-kind="text-input" data-geometry-variant="current"')
+    expect(html).toContain('data-vt-studio-field-kind="text-input" data-geometry-variant="half-vertical-padding"')
+    expect(html).toContain('data-vt-studio-field-kind="text-input" data-geometry-variant="username-height"')
     expect(css).toContain('.vt-studio-split-text-input__field[data-geometry-variant="half-vertical-padding"]')
     expect(css).toContain("padding-block: calc(var(--vt-studio-space-unit, 4px) / 2);")
     expect(css).toContain('.vt-studio-split-text-input__field[data-geometry-variant="username-height"]')
