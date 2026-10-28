@@ -238,6 +238,7 @@ export const loadAiBrainContext = (): AiBrainContext => {
 export const syncLegacyAnswersToChannelContext = (
  profile: ChannelContextProfile,
  input: AiBrainContextInput,
+ preserveExisting = false,
 ): ChannelContextProfile => {
  const next: ChannelContextProfile = {
   ...profile,
@@ -265,6 +266,7 @@ export const syncLegacyAnswersToChannelContext = (
   if (!Object.prototype.hasOwnProperty.call(inputRecord, key)) return
   const [section, field] = path.split(".")
   const sectionRecord = next[section as keyof ChannelContextProfile] as Record<string, unknown>
+  if (preserveExisting && clean(sectionRecord[field])) return
   sectionRecord[field] = clean(inputRecord[key])
  })
  if (!Object.prototype.hasOwnProperty.call(inputRecord, "mainTopicFocus") && Object.prototype.hasOwnProperty.call(inputRecord, "audienceNiche")) {
@@ -279,7 +281,8 @@ export const syncLegacyAnswersToChannelContext = (
 export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext => {
  const previous = loadAiBrainContext()
  const updatedAt = new Date().toISOString()
- const canonicalProfile = next.channelContext || syncLegacyAnswersToChannelContext(previous.channelContext, next)
+ const migratedProfile = syncLegacyAnswersToChannelContext(previous.channelContext, previous, true)
+ const canonicalProfile = next.channelContext || syncLegacyAnswersToChannelContext(migratedProfile, next)
  const normalized = normalizeContext({
   ...previous,
   ...next,
