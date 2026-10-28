@@ -524,7 +524,7 @@ describe("confirmed vertical word-toggle primitive", () => {
     expect(css).toContain("--vt-studio-vertical-word-font-size");
     expect(css).toContain(".vt-studio-vertical-word-toggle.is-micro");
   });
-
+});
 
 describe("responsive Studio upload frame", () => {
   it("keeps the ratio-based composition, split icon rails, and two-line upload prompt", () => {
