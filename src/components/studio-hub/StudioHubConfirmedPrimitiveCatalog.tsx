@@ -370,6 +370,7 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
 }
 
 const ConfirmedDirectPrimitiveRows: React.FC = () => {
+  const [splitLeftPressed, setSplitLeftPressed] = React.useState(false)
   const [arrowValue, setArrowValue] = React.useState("ONE")
   const [barValue, setBarValue] = React.useState(40)
   const [wordValue, setWordValue] = React.useState(false)
@@ -405,6 +406,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
     >
       <div className="vt-confirmed-direct-primitive-rows" data-vt-confirmed-representatives="true" aria-label="Canonical primitive representatives">
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioButton"><span>Studio Button · STANDARD</span><StudioButton sizeVariant="standard" aria-label="Studio button standard specimen">STUDIO BUTTON</StudioButton></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftButton"><span>Split Left Button · STANDARD</span><StudioSplitLeftButton sizeVariant="standard" icon={<Sparkles aria-hidden="true" />} aria-label="Split left button standard specimen" onClick={() => setSplitLeftPressed(value => !value)}>{splitLeftPressed ? "SELECTED" : "SPLIT LEFT"}</StudioSplitLeftButton></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineButton"><span>Two Lines Button · STANDARD</span><StudioTwoLineButton sizeVariant="standard" firstLine="TWO LINE" secondLine="BUTTON" aria-label="Two lines button standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTwoLineButton"><span>Two Lines Split Button · STANDARD</span><StudioSplitTwoLineButton sizeVariant="standard" icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label="Two lines split button standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdown"><span>Studio Dropdown · STANDARD</span><StudioDropdown sizeVariant="standard" ariaLabel="Studio dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
