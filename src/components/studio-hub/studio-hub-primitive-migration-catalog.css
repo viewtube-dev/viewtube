@@ -20,11 +20,9 @@
 
 /* Component Library only: family SubToolboxes keep the colored header but do
    not draw a second heavy card around the comparison examples. */
-.vt-primitive-migration-catalog .vt-primitive-migration-family [data-vt-subtoolbox="true"]{
-  box-shadow:none!important;
-}
-.vt-primitive-migration-catalog .vt-primitive-migration-family [data-vt-subtoolbox="true"] > div:first-child{
-  border:0!important;
+.vt-primitive-migration-catalog .vt-primitive-migration-family {
+  --vt-subtoolbox-shell-box-shadow: none;
+  --vt-subtoolbox-content-border: 0;
 }
 
 /* The comparison grid owns placement. The primitive owns its own width. */
