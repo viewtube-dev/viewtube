@@ -267,3 +267,35 @@
   max-width: 34rem;
   margin: 6px 0 0;
 }
+
+/* Related canonical Studio variants are presented together inside each family module. */
+.vt-catalog-split-button-family,
+.vt-catalog-counter-family,
+.vt-catalog-slider-family {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+.vt-catalog-split-button-family > button,
+.vt-catalog-counter-family > *,
+.vt-catalog-slider-family > * {
+  min-width: 0;
+  width: 100%;
+}
+.vt-catalog-split-button-family .vt-catalog-variants,
+.vt-catalog-counter-family .vt-catalog-variants,
+.vt-catalog-slider-family .vt-catalog-variants {
+  grid-column: 1 / -1;
+}
+@media (min-width: 760px) {
+  .vt-catalog-counter-family,
+  .vt-catalog-slider-family {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .vt-catalog-counter-family .vt-catalog-variants,
+  .vt-catalog-slider-family .vt-catalog-variants {
+    grid-column: 1 / -1;
+  }
+}
