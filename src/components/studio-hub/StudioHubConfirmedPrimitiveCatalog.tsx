@@ -4,7 +4,6 @@ import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
-import { StudioComponentGridSpecimenPair } from "../../studio-ui/primitives/StudioComponentGridSpecimen"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
@@ -354,15 +353,6 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSideToggle"><span>Double Side Toggle · STANDARD</span><StudioDoubleSideToggle size="standard" left={{ value: doubleLeft, options: ["SOURCE", "INPUT"], onValueChange: setDoubleLeft, ariaLabel: "Double side toggle left specimen" }} right={{ value: doubleRight, options: ["TARGET", "OUTPUT"], onValueChange: setDoubleRight, ariaLabel: "Double side toggle right specimen" }} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCounter"><span>Studio Counter · STANDARD</span><StudioCounter size="standard" value={counterValue} onValueChange={setCounterValue} min={0} max={100} ariaLabel="Studio counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideCounter"><span>Side Counter · STANDARD</span><StudioSideCounter size="standard" value={sideCounterValue} onValueChange={setSideCounterValue} min={0} max={100} ariaLabel="Side counter standard specimen" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGrid:standard" key="standard">
-          <span>Component Grid · STANDARD · RADIUS + SQUARE</span>
-          <StudioComponentGridSpecimenPair
-            size="standard"
-            leftCounter={<StudioLeftCounter size="standard" value={counterValue} onValueChange={setCounterValue} min={0} max={100} ariaLabel="standard grid left counter" />}
-            dropdown={<StudioDropdown sizeVariant="standard" ariaLabel="standard grid dropdown" defaultValue="balanced" options={dropdownOptions} />}
-            doubleSideToggle={<StudioDoubleSideToggle size="standard" left={{ value: doubleLeft, options: ["SOURCE", "INPUT"], onValueChange: setDoubleLeft, ariaLabel: "standard grid left side" }} right={{ value: doubleRight, options: ["TARGET", "OUTPUT"], onValueChange: setDoubleRight, ariaLabel: "standard grid right side" }} />}
-          />
-        </div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>Left Counter · STANDARD</span><StudioLeftCounter size="standard" value={sideCounterValue} onValueChange={setSideCounterValue} min={0} max={100} ariaLabel="Studio left counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordCounter"><span>Left Word Counter · STANDARD</span><StudioLeftWordCounter size="standard" value={leftWordValue} onValueChange={setLeftWordValue} ariaLabel="Studio left word counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordSlider"><span>Left Word Slider · STANDARD</span><StudioLeftWordSlider size="standard" value={leftWordSliderValue} onValueChange={setLeftWordSliderValue} ariaLabel="Studio left word slider standard specimen" /></div>
