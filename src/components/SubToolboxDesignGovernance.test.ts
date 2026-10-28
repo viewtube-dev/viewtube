@@ -875,3 +875,17 @@ describe("Studio control family grouping and split-slider palette defaults", () 
     expect(valueRule).toContain("font-size: var(--vt-studio-control-font-size, 38px);");
   });
 });
+
+
+describe("Studio primary defaults and shared split geometry", () => {
+  it("uses the primary token for value-toggle faces and active slider tracks", () => {
+    const css = source("src/styles/studio-control-system.css");
+    const toggleStart = css.indexOf("/* Studio value-toggle family: canonical primitive styles; no motion or shadow. */");
+    const toggleBlock = css.slice(toggleStart, css.indexOf(".vt-studio-value-toggle[data-size=", toggleStart));
+    expect(toggleBlock).toContain("--vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+    const sharedSlider = css.slice(css.indexOf("/* Shared slider contract: the active track/center stays primary; split rails are secondary. */"), css.indexOf("/* Geometry invariants shared by the counter and split-control families. */"));
+    expect(sharedSlider).toContain("[data-vt-studio-slider] input[type=\"range\"]");
+    expect(sharedSlider).toContain("accent-color: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+    expect(sharedSlider).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
+  });
+});
