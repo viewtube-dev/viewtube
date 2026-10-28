@@ -50,7 +50,7 @@ describe("PromptEvidenceIntegrity", () => {
  it("rejects changed creator-answer evidence even when analytics evidence remains valid", () => {
   const creatorEvidence = record({
    id: "creator-answer:channel-1:audience",
-   owner: "creator-context",
+   owner: "creator-confirmed",
    sourceRef: "creator-profile:audience",
    value: "new creators",
   })
