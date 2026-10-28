@@ -87,3 +87,12 @@ export const readPromptEvidenceRecords = (
  if (getPromptEvidenceIntegrityStatus(metadata) !== "verified") return undefined
  return metadata?.evidenceRecords as EvidenceRecord[]
 }
+
+/** Return the exact persisted creator-answer evidence snapshot only when its manifest is valid. */
+export const readCreatorAnswerEvidenceRecords = (
+ metadata: Record<string, unknown> | undefined,
+): EvidenceRecord[] | undefined => {
+ if (getPromptEvidenceIntegrityStatus(metadata) !== "verified") return undefined
+ const records = metadata?.creatorAnswerEvidenceRecords
+ return Array.isArray(records) && records.every(isEvidenceRecord) ? records as EvidenceRecord[] : []
+}
