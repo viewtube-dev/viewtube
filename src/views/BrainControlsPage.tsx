@@ -160,8 +160,11 @@ export default function BrainControlsPage() {
   const activeChannelName = normalizeChannelName(authState.channelName)
   const profileChannelName = normalizeChannelName(creatorProfile.channelContext.identity.name)
   const profileMatchesActiveChannel = Boolean(activeChannelName && profileChannelName && activeChannelName === profileChannelName)
-  const creatorAnswerEvidence = profileMatchesActiveChannel && channelId
-    ? buildCreatorAnswerEvidenceRecords(creatorProfile, channelId)
+  // Match the runtime's channel scope for evidence IDs without changing the
+  // existing channel-settings scope used by the controls above.
+  const creatorEvidenceChannelId = authState.channelHandle || authState.channelId || null
+  const creatorAnswerEvidence = profileMatchesActiveChannel && creatorEvidenceChannelId
+    ? buildCreatorAnswerEvidenceRecords(creatorProfile, creatorEvidenceChannelId)
     : []
   const evidenceIds = new Set(creatorAnswerEvidence.map(record => record.id))
   return <main className="min-h-screen bg-[#f5f5f2] text-black">
@@ -217,7 +220,7 @@ export default function BrainControlsPage() {
             <ul className="grid min-w-0 gap-1 p-2">
               {CHANNEL_CONTEXT_QUESTIONS.map(question => {
                 const answer = displayProfileValue(readProfileValue(creatorProfile.channelContext, question.contextField))
-                const evidenceId = `creator-answer:${channelId || ""}:channelContext.${question.contextField}`
+                const evidenceId = `creator-answer:${creatorEvidenceChannelId || ""}:channelContext.${question.contextField}`
                 const hasEvidence = Boolean(answer && evidenceIds.has(evidenceId))
                 return <li key={question.id} className="grid min-w-0 gap-1 border-b border-black/15 py-2 last:border-b-0">
                   <span className="text-[10px] font-black uppercase">{question.title}</span>
