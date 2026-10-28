@@ -727,7 +727,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
 
   if (/Split-left Badge|Split-right Badge|Double-split Badge|Brain Status LED Badges|Status \/ navigation|StudioBrainStatusBadge|StudioBrainStatusIndicator|StudioLedBadgeTab|StudioSplitLeftBadge|StudioSplitRightBadge|StudioDoubleSplitBadge/.test(title)
     || componentName === "CanonicalSplitBadgeFamily") return "Badges"
-  if (/Studio Text Input|Studio Text Area|Studio Text Box|UsernameInput|SplitLeftInput|SearchInput|NumberInput|Split Text Input/.test(title)) return "Text Fields"
+  if (/Studio Text Input|Studio Text Area|Studio Text Box|StudioTextInput|StudioTextArea|StudioTextBox|UsernameInput|SplitLeftInput|SearchInput|NumberInput|Split Text Input|StudioSplitTextInput/.test(title)) return "Text Fields"
   if (/StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|Double Split Slider|Side Counter|Left Word Counter|Slider/.test(title)
     || componentName === "ConfirmedStudioCounterFamily"
     || componentName === "ConfirmedStudioDoubleSplitSliderFamily"
@@ -739,7 +739,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     || componentName === "ConfirmedStudioButtonFamily"
     || componentName === "ConfirmedStudioSplitButtonFamily") return "Buttons"
   if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
-  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|Ranked Metadata Tag/.test(title)) return "Tags & Metadata"
+  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag/.test(title)) return "Tags & Metadata"
   if (/Publishing Card|StudioChatResponseShell|StudioChatActionGroup|StudioResponseMetaRow/.test(title)) return "Chat & Compositions"
   return "Other Controls"
 }
