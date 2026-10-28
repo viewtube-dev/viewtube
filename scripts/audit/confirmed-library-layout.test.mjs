@@ -514,3 +514,22 @@ test("StudioSplitTextInput is a real exported primitive with a full-width standa
   assert.ok(catalog.includes('data-vt-library-component="StudioSplitTextInput"'));
   assert.ok(catalog.includes('aria-label="Split text input standard specimen"'));
 });
+
+
+test("confirmed primitive grid is visible first and covers the core Studio design families", () => {
+  const top = catalog.slice(catalog.indexOf("export const StudioHubConfirmedPrimitiveCatalog"));
+  assert.match(top, /<ConfirmedPrimitiveGridOverview\s*\/>\s*<ConfirmedDirectPrimitiveRows\s*\/>/);
+  const grid = catalog.match(/const ConfirmedPrimitiveGridOverview:[^]*?\n}\n\nconst ConfirmedDirectPrimitiveRows/)?.[0] ?? "";
+  assert.match(grid, /<StudioComponentGrid cols={3} rows={3} size="standard"/);
+  for (const primitive of [
+    "StudioButton",
+    "StudioSplitLeftButton",
+    "StudioDropdown",
+    "StudioTextInput",
+    "StudioTextArea",
+    "StudioCounter",
+    "StudioSideCounter",
+    "StudioDoubleSplitSlider",
+    "StudioArrowToggle",
+  ]) assert.ok(grid.includes(`data-vt-library-component="${primitive}"`), `top grid is missing ${primitive}`);
+});
