@@ -103,28 +103,30 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
         activePromptTitle || value.trim() ? (
           <div className="flex min-w-0 flex-wrap items-center gap-1" data-vt-brain-part="composer-attachments" role="group" aria-label="Draft details">
             {activePromptTitle ? (
-              <StudioLedBadgeTab
-                mode="badge"
-                label={activePromptTitle}
-                tone="pink"
-                led="solid"
-                animation="steady"
-                sizeVariant="mini"
-                className="vt-brain-composer-attachment"
-                aria-label={`Draft source: ${activePromptTitle}`}
-                title="Draft source"
-              />
-              <StudioButton
-                type="button"
-                sizeVariant="compact"
-                tone="neutral"
-                data-vt-brain-part="clear-composer-source"
-                onClick={() => onClearActivePrompt?.()}
-                aria-label="Clear draft source label"
-                title="Clear draft source label"
-              >
-                Clear source
-              </StudioButton>
+              <>
+                <StudioLedBadgeTab
+                  mode="badge"
+                  label={activePromptTitle}
+                  tone="pink"
+                  led="solid"
+                  animation="steady"
+                  sizeVariant="mini"
+                  className="vt-brain-composer-attachment"
+                  aria-label={`Draft source: ${activePromptTitle}`}
+                  title="Draft source"
+                />
+                <StudioButton
+                  type="button"
+                  sizeVariant="compact"
+                  tone="neutral"
+                  data-vt-brain-part="clear-composer-source"
+                  onClick={() => onClearActivePrompt?.()}
+                  aria-label="Clear draft source label"
+                  title="Clear draft source label"
+                >
+                  Clear source
+                </StudioButton>
+              </>
             ) : null}
             {value.trim() ? (
               <StudioButton
