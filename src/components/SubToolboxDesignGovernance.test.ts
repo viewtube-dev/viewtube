@@ -960,8 +960,8 @@ describe("confirmed primitive library organization", () => {
   it("declares deliberate family groups with choice controls first", () => {
     const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
     const familyList = catalog.slice(catalog.indexOf("const CONFIRMED_CATALOG_FAMILIES"), catalog.indexOf("const classifyConfirmedCatalogItem"));
-    expect(familyList.indexOf('"Switches / Toggles / Radio / Checkbox"')).toBeLessThan(familyList.indexOf('"Buttons"'));
-    for (const family of ['"Badges"', '"Dropdowns"', '"Text Fields"', '"Counters & Sliders"', '"Modules & Frames"', '"Tags & Metadata"', '"Chat & Compositions"']) {
+    expect(familyList.indexOf('"Controls"')).toBeLessThan(familyList.indexOf('"Counters & Sliders"'));
+    for (const family of ['"Text Fields"', '"Buttons & Badges"', '"Dropdowns"', '"Controls"', '"Counters & Sliders"', '"Modules & Frames"', '"Compositions"']) {
       expect(familyList).toContain(family);
     }
   });
@@ -969,9 +969,9 @@ describe("confirmed primitive library organization", () => {
   it("routes related primitives to their intended family before fallback rules", () => {
     const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
     const classify = catalog.slice(catalog.indexOf("const classifyConfirmedCatalogItem"), catalog.indexOf("const ConfirmedCatalogFamilyGroups"));
-    expect(classify.indexOf('return "Switches / Toggles / Radio / Checkbox"')).toBeLessThan(classify.indexOf("if (/Button ·"));
+    expect(classify.indexOf('return "Controls"')).toBeLessThan(classify.indexOf("if (/Button ·"));
     expect(classify).toContain('return "Counters & Sliders"');
-    expect(classify).toContain('return "Badges"');
+    expect(classify).toContain('return "Buttons & Badges"');
     expect(classify).toContain('return "Modules & Frames"');
   });
 
@@ -980,7 +980,7 @@ describe("confirmed primitive library organization", () => {
     const classify = catalog.slice(catalog.indexOf("const classifyConfirmedCatalogItem"), catalog.indexOf("const ConfirmedCatalogFamilyGroups"));
     expect(classify).toContain("StudioTextInput|StudioTextArea|StudioTextBox");
     expect(classify).toContain("StudioCloseableBadge");
-    expect(classify).toContain('return "Tags & Metadata"');
+    expect(classify).toContain('return "Compositions"');
   });
 
   it("keeps direct representatives unique and excludes composite showcase grids", () => {
