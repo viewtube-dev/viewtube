@@ -936,6 +936,44 @@ describe("confirmed primitive library family organization", () => {
 });
 
 
+describe("Confirmed primitive library family organization", () => {
+  it("groups related button, dropdown, counter, and slider variants in family modules", () => {
+    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
+    const start = catalog.indexOf("export const STUDIO_HUB_MIGRATED_FAMILIES");
+    const end = catalog.indexOf("] as const", start);
+    const families = catalog.slice(start, end);
+    for (const family of ['"Studio Button Family"', '"Studio Dropdown Family"', '"Studio Counter Family"', '"Studio Slider Family"', '"Loader Family"', '"Tooltip Family"', '"Skeleton Family"', '"Data Stats Family"', '"Scrollbar Family"', '"LED Family"', '"Toolbox Header Family"']) {
+      expect(families).toContain(family);
+    }
+    for (const duplicate of ['"Primary Button"', '"Secondary Button"', '"Neutral Button"', '"Destructive Button"', '"Studio Left Word Counter"', '"Slider"', '"Range Slider"', '"Stepper"', '"Split Menu"', '"Select Menu"', '"Context Menu"', '"Disabled Button"', '"Disabled Split Button"', '"Loader"', '"Loader Progress"', '"Loader Split"', '"Loader Orbit"', '"Loader Bars"', '"Tooltip Dark"', '"Tooltip Color"', '"Tooltip Visual Key"', '"Skeleton Compact"', '"Skeleton Media"', '"Two Color Data Stats"', '"Monochrome Data Stats"', '"Tiny Data Stats"', '"Horizontal Scrollbar"', '"Vertical Scrollbar"', '"LED Light"', '"LED Dot"', '"Toolbox Header Icon Rail"', '"SubToolbox Header Icon Rail"', '"Toolbox Header Title"', '"SubToolbox Header Title"', '"Toolbox Header Help"', '"SubToolbox Header Help"', '"Toolbox Header Collapse"', '"SubToolbox Header Collapse"', '"Toolbox Header Toggle"', '"SubToolbox Header Toggle"']) {
+      expect(families).not.toContain(duplicate);
+    }
+    expect(catalog).toContain("StudioSplitRightButton");
+    expect(catalog).toContain("StudioDoubleSplitButton");
+    expect(catalog).toContain("StudioTwoLineButton");
+    expect(catalog).toContain("StudioSplitTwoLineButton");
+    expect(catalog).toContain("StudioLeftWordCounter");
+    expect(catalog).toContain("StudioDoubleSplitSlider");
+    expect(catalog).toContain("SubToolboxRangeSlider");
+    expect(catalog).toContain("ToolboxHeaderCollapseButton");
+    expect(catalog).toContain("SubToolboxLegendTooltip");
+    const familyCss = source("src/components/studio-hub/studio-hub-primitive-migration-catalog.css");
+    expect(familyCss.match(/\[data-vt-family="Studio Button Family"\]/g)).toHaveLength(2);
+    expect(familyCss).not.toContain("letter-spacing: -.035em");
+  });
+});
+describe("Confirmed primitive library canonical defaults", () => {
+  it("documents the canonical standard size and flat typography tokens", () => {
+    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
+    expect(catalog).toContain("<span><b>HEIGHT</b> 44px</span>");
+    expect(catalog).toContain("<span><b>STROKE</b> 3px</span>");
+    expect(catalog).toContain("<span><b>RADIUS</b> 6px</span>");
+    expect(catalog).toContain("<span><b>SHADOW</b> FLAT · 0</span>");
+    expect(catalog).toContain("Uppercase · −0.02em · 1 line");
+  });
+});
+
+
 describe("confirmed primitive library organization", () => {
   it("does not duplicate family-module variants as separate individual cards", () => {
     const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
@@ -992,39 +1030,5 @@ describe("confirmed primitive library organization", () => {
     expect(componentIds).not.toContain("StudioComponentGrid:standard");
     expect(new Set(componentIds).size).toBe(componentIds.length);
     expect(representatives).toContain('sizeVariant="standard"');
-  });
-});
-
-describe("Confirmed primitive library family organization", () => {
-  it("groups related button, dropdown, counter, and slider variants in family modules", () => {
-    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
-    const start = catalog.indexOf("export const STUDIO_HUB_MIGRATED_FAMILIES");
-    const end = catalog.indexOf("] as const", start);
-    const families = catalog.slice(start, end);
-    for (const family of ['"Studio Button Family"', '"Studio Dropdown Family"', '"Studio Counter Family"', '"Studio Slider Family"', '"Loader Family"', '"Tooltip Family"', '"Skeleton Family"', '"Data Stats Family"', '"Scrollbar Family"', '"LED Family"', '"Toolbox Header Family"']) {
-      expect(families).toContain(family);
-    }
-    for (const duplicate of ['"Primary Button"', '"Secondary Button"', '"Neutral Button"', '"Destructive Button"', '"Studio Left Word Counter"', '"Slider"', '"Range Slider"', '"Stepper"', '"Split Menu"', '"Select Menu"', '"Context Menu"', '"Disabled Button"', '"Disabled Split Button"', '"Loader"', '"Loader Progress"', '"Loader Split"', '"Loader Orbit"', '"Loader Bars"', '"Tooltip Dark"', '"Tooltip Color"', '"Tooltip Visual Key"', '"Skeleton Compact"', '"Skeleton Media"', '"Two Color Data Stats"', '"Monochrome Data Stats"', '"Tiny Data Stats"', '"Horizontal Scrollbar"', '"Vertical Scrollbar"', '"LED Light"', '"LED Dot"', '"Toolbox Header Icon Rail"', '"SubToolbox Header Icon Rail"', '"Toolbox Header Title"', '"SubToolbox Header Title"', '"Toolbox Header Help"', '"SubToolbox Header Help"', '"Toolbox Header Collapse"', '"SubToolbox Header Collapse"', '"Toolbox Header Toggle"', '"SubToolbox Header Toggle"']) {
-      expect(families).not.toContain(duplicate);
-    }
-    expect(catalog).toContain("StudioSplitRightButton");
-    expect(catalog).toContain("StudioDoubleSplitButton");
-    expect(catalog).toContain("StudioTwoLineButton");
-    expect(catalog).toContain("StudioSplitTwoLineButton");
-    expect(catalog).toContain("StudioLeftWordCounter");
-    expect(catalog).toContain("StudioDoubleSplitSlider");
-    expect(catalog).toContain("SubToolboxRangeSlider");
-    expect(catalog).toContain("ToolboxHeaderCollapseButton");
-    expect(catalog).toContain("SubToolboxLegendTooltip");
-  });
-});
-describe("Confirmed primitive library canonical defaults", () => {
-  it("documents the canonical standard size and flat typography tokens", () => {
-    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
-    expect(catalog).toContain("<span><b>HEIGHT</b> 44px</span>");
-    expect(catalog).toContain("<span><b>STROKE</b> 3px</span>");
-    expect(catalog).toContain("<span><b>RADIUS</b> 6px</span>");
-    expect(catalog).toContain("<span><b>SHADOW</b> FLAT · 0</span>");
-    expect(catalog).toContain("Uppercase · −0.02em · 1 line");
   });
 });
