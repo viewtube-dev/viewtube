@@ -1382,9 +1382,48 @@ const AIBrainCommandInterface: React.FC = () => {
     generationPath: "basic_guidance" as const,
     fallbackReason: "provider_error" as const,
    }
+   let fallbackTurn: AIBrainConversationTurn | null = null
+   try {
+    fallbackTurn = await saveAIBrainConversationTurn({
+     channelId,
+     userText,
+     assistantText: fallbackText,
+     response,
+     answerModules: response.modules,
+     metadata: {
+      source: "local_fallback",
+      evidencePackSnapshot: turnSnapshot.evidencePack,
+      dataReadinessSnapshot: readinessForSnapshot(turnSnapshot),
+      generationInputSnapshot: {
+       snapshot: turnSnapshot,
+       systemPrompt,
+       growthContext: turnGrowthContext,
+       recentTurns: recentTurns.filter((turn) => turn.id !== message.id),
+       history: historyPayload,
+      },
+      interactionLog: [{
+       id: makeMessageId(),
+       type: "creator_input",
+       direction: "inbound",
+       at: new Date().toISOString(),
+       text: userText,
+      }],
+     },
+    })
+   } catch (persistenceError) {
+    console.warn("[AIBrain] Local fallback could not be persisted:", persistenceError)
+   }
    setMessages((current) => [
     ...current,
-    { id: makeMessageId(), role: "model", text: fallbackText, response, evidencePack: turnSnapshot.evidencePack, readiness: readinessForSnapshot(turnSnapshot) },
+    {
+     id: fallbackTurn?.id || makeMessageId(),
+     role: "model",
+     text: fallbackText,
+     response,
+     evidencePack: turnSnapshot.evidencePack,
+     readiness: readinessForSnapshot(turnSnapshot),
+     turnStatus: fallbackTurn?.status,
+    },
    ])
   } finally {
    requestInFlightRef.current = false
@@ -1532,7 +1571,7 @@ const AIBrainCommandInterface: React.FC = () => {
      direction: "outbound",
      detail: {
       target,
-      handoffId: handoff.id,
+      handoffId: handoff.recordId,
       evidenceIds: message.response?.evidenceIds || message.evidencePack?.evidenceIds || [],
       reviewOnly: true,
      },
