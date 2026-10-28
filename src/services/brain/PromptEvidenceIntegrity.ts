@@ -87,3 +87,22 @@ export const readPromptEvidenceRecords = (
  if (getPromptEvidenceIntegrityStatus(metadata) !== "verified") return undefined
  return metadata?.evidenceRecords as EvidenceRecord[]
 }
+
+
+/** Restore creator-provided profile evidence only when its saved manifest verifies. */
+export const readCreatorAnswerEvidenceRecords = (
+ metadata: Record<string, unknown> | undefined,
+): EvidenceRecord[] | undefined => {
+ if (!metadata || !Array.isArray(metadata.creatorAnswerEvidenceRecords)
+  || !Array.isArray(metadata.creatorAnswerEvidenceRecordIds)) return undefined
+ const rawRecords = metadata.creatorAnswerEvidenceRecords
+ const rawIds = metadata.creatorAnswerEvidenceRecordIds
+ if (!rawRecords.every(isEvidenceRecord) || !rawIds.every((id) => typeof id === "string")) return undefined
+ const records = rawRecords as EvidenceRecord[]
+ const ids = rawIds as string[]
+ if (records.length !== ids.length || !records.every((record, index) => record.id === ids[index])) return undefined
+ if (records.length > 0 && typeof metadata.creatorAnswerEvidenceFingerprint !== "string") return undefined
+ if (typeof metadata.creatorAnswerEvidenceFingerprint === "string"
+  && fingerprintBrainEvidenceRecords(records) !== metadata.creatorAnswerEvidenceFingerprint) return undefined
+ return records
+}
