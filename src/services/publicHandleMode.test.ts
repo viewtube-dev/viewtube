@@ -83,18 +83,71 @@ describe("public channel mode public ingestion and fixtures", () => {
     expect(fetchMock).toHaveBeenCalledWith("/public-channel/resolve?handle=%40public_creator", { headers: { Accept: "application/json" } })
   })
 
-  it("keeps a supplied real local API key on the live path", async () => {
+  it("uses the server-side public resolver even when a legacy browser API key exists", async () => {
     storage.set("yt_public_api_key", "test-real-key")
+    const payload = {
+      resolution: { resolvedChannelId: "UC1234567890123456789012", resolvedHandle: "@themotionvis", channelTitle: "Public channel", reason: null },
+      snapshot: {
+        mode: "public_handle",
+        source: "public_page",
+        fetchedAt: "2026-10-27T12:00:00.000Z",
+        channelId: "UC1234567890123456789012",
+        handle: "@themotionvis",
+        title: "Public channel",
+        subscriberCount: null,
+        videoCount: null,
+        viewCount: null,
+        topVideos: [],
+      },
+    }
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(payload))
+    vi.stubGlobal("fetch", fetchMock)
+
+    const resolved = await resolvePublicChannel("@themotionvis")
+    const snapshot = await fetchPublicChannelSnapshot("@themotionvis")
+
+    expect(resolved).toMatchObject({ resolvedChannelId: payload.snapshot.channelId, channelTitle: "Public channel", reason: null })
+    expect(snapshot).toMatchObject({ source: "public_page", channelId: payload.snapshot.channelId })
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(fetchMock.mock.calls.every(([url]) => String(url).includes("/public-channel/resolve"))).toBe(true)
+    expect(fetchMock.mock.calls.some(([url]) => String(url).includes("googleapis.com"))).toBe(false)
+    expect(fetchMock.mock.calls.some(([url]) => String(url).includes("test-real-key"))).toBe(false)
+  })
+
+  it("does not accept fixture channel IDs returned by the live resolver as real channels", async () => {
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse({
-      items: [{ id: { channelId: "UC1234567890123456789012" }, snippet: { title: "Live channel", customUrl: "@themotionvis" } }],
+      resolution: { resolvedChannelId: "UC_FIXTURE_THEMOTIONVIS", resolvedHandle: "@fake", channelTitle: "Fixture", reason: null },
+      snapshot: { channelId: "UC_FIXTURE_THEMOTIONVIS" },
     }))
     vi.stubGlobal("fetch", fetchMock)
-    const resolved = await resolvePublicChannel("@themotionvis")
-    expect(resolved.channelTitle).toBe("Live channel")
-    expect(resolved.resolvedChannelId).toBe("UC1234567890123456789012")
-    expect(resolved.reason).toBeNull()
-    expect(fetchMock).toHaveBeenCalledTimes(1)
-    expect(String(fetchMock.mock.calls[0][0])).toContain("key=test-real-key")
+
+    const resolved = await resolvePublicChannel("@not-a-real-channel")
+
+    expect(resolved.resolvedChannelId).toBeNull()
+    expect(resolved.reason).toContain("Public channel ingestion is unavailable")
+  })
+
+  it("rejects resolver payloads whose resolution and snapshot belong to different channels", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse({
+      resolution: { resolvedChannelId: "UC1234567890123456789012", resolvedHandle: "@creator_a", channelTitle: "Creator A", reason: null },
+      snapshot: {
+        mode: "public_handle",
+        source: "public_page",
+        fetchedAt: "2026-10-27T12:00:00.000Z",
+        channelId: "UC9876543210987654321098",
+        handle: "@creator_b",
+        title: "Creator B",
+        subscriberCount: null,
+        videoCount: null,
+        viewCount: null,
+        topVideos: [],
+      },
+    }))
+    vi.stubGlobal("fetch", fetchMock)
+
+    expect(await fetchPublicChannelSnapshot("@creator_a")).toBeNull()
+    const resolved = await resolvePublicChannel("@creator_a")
+    expect(resolved.resolvedChannelId).toBeNull()
   })
 
   it("does not enable fixtures by default in production", async () => {
