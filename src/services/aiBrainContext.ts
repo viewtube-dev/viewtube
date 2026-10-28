@@ -328,11 +328,14 @@ export const saveAiBrainContext = (next: AiBrainContextInput, channelId?: string
  // fields that actually changed in this save, so unchanged aliases cannot overwrite newer
  // canonical questionnaire answers.
  const legacyPatch: AiBrainContextInput = {}
+ const nextRecord = next as unknown as Record<string, unknown>
+ const previousRecord = previous as unknown as Record<string, unknown>
+ const legacyPatchRecord = legacyPatch as unknown as Record<string, unknown>
  for (const question of AI_BRAIN_INTAKE_QUESTIONS) {
   const key = question.id
   if (!Object.prototype.hasOwnProperty.call(next, key)) continue
-  if (clean((next as Record<string, unknown>)[key]) === clean((previous as Record<string, unknown>)[key])) continue
-  ;(legacyPatch as Record<string, unknown>)[key] = (next as Record<string, unknown>)[key]
+  if (clean(nextRecord[key]) === clean(previousRecord[key])) continue
+  legacyPatchRecord[key] = nextRecord[key]
  }
  const canonicalProfile = syncLegacyAnswersToChannelContext(next.channelContext || migratedProfile, legacyPatch)
  const normalized = normalizeContext({
