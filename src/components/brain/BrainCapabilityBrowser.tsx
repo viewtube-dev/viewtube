@@ -123,7 +123,7 @@ export const BrainCapabilityBrowser: React.FC<{
   onEdit,
 }) => {
   const [query, setQuery] = useState("")
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(() => BRAIN_CAPABILITY_REGISTRY[0]?.id ?? null)
   const capabilities = useMemo(() => filterBrainCapabilities(BRAIN_CAPABILITY_REGISTRY, query), [query])
   const selected = capabilities.find((capability) => capability.id === selectedId) || null
   const selectedAvailability = selected
@@ -157,8 +157,10 @@ export const BrainCapabilityBrowser: React.FC<{
           sizeVariant="compact"
           value={query}
           onChange={(event) => {
-            setQuery(event.target.value)
-            setSelectedId(null)
+            const nextQuery = event.target.value
+            const matchingCapabilities = filterBrainCapabilities(BRAIN_CAPABILITY_REGISTRY, nextQuery)
+            setQuery(nextQuery)
+            setSelectedId(matchingCapabilities[0]?.id ?? null)
           }}
           placeholder="Search capabilities, topics, or intent…"
           className="w-full min-w-0"
