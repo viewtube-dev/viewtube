@@ -1019,11 +1019,6 @@ const AIBrainCommandInterface: React.FC = () => {
  const canUseGemini = hasGeminiKey()
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
  const channelId = authState.channelId || authState.channelHandle || null
- useEffect(() => {
-  setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
-  setIntakeSaveStatus("Loaded this channel's locally saved profile.")
- }, [channelId, snapshot.channel.label])
-
  const [brainControls, setBrainControls] = useState(() => readBrainUserControls(channelId))
  const runtimeSnapshot = useMemo(
   () => readBrainRuntimeSnapshot({
@@ -1046,6 +1041,11 @@ const AIBrainCommandInterface: React.FC = () => {
    }),
   [brain, authState, channelConnection, onboardingSnapshot, recentTurns],
  )
+ useEffect(() => {
+  setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
+  setIntakeSaveStatus("Loaded this channel's locally saved profile.")
+ }, [channelId, snapshot.channel.label])
+
  const creatorGrowthContext = useMemo(
   () => buildCreatorGrowthContext(snapshot, recentTurns, learningEntries),
   [snapshot, recentTurns, learningEntries],
