@@ -774,6 +774,26 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    sectionsDropped: [...context.budget.omittedSections],
   })
 
+  try {
+   await recordAIBrainTurnInteraction(pending.id, {
+    type: input.retryTurnId ? "retry_model_input_snapshot" : "model_input_snapshot",
+    direction: "outbound",
+    detail: {
+     modelInputSnapshot: {
+      systemInstruction: modelSystemInstruction || context.systemInstruction,
+      history: modelHistory || (input.history || []).slice(-8),
+      userText: input.userText,
+      evidenceRecords: renderedEvidenceRecords,
+      creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
+     },
+     retryEvidenceMode: input.retryTurnId ? input.retryEvidenceMode || "saved" : undefined,
+     retryContextContinuity,
+    },
+   })
+  } catch (persistenceError) {
+   console.warn("[AIBrain] Model input snapshot could not be checkpointed locally:", persistenceError)
+  }
+
   let response = buildFallback(input.userText, input.snapshot, input.growthContext)
   let status: "complete" | "fallback" = "fallback"
   let generationPath: BrainGenerationPath = "basic_guidance"
