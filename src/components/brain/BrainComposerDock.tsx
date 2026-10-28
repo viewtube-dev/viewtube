@@ -1,7 +1,9 @@
 import React, { useCallback } from "react"
 import { LayoutGrid, Send, Zap } from "lucide-react"
 import {
+  StudioButton,
   StudioChatComposerDock,
+  StudioLedBadgeTab,
   StudioSplitLeftButton,
   StudioTextArea,
 } from "../../studio-ui"
@@ -97,7 +99,42 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
           <span className="vt-brain-composer-hint">Enter to send <span aria-hidden="true">·</span> Shift+Enter for a new line</span>
         )
       }
-      chips={null}
+      chips={
+        activePromptTitle || value.trim() ? (
+          <div className="flex min-w-0 flex-wrap items-center gap-1" data-vt-brain-part="composer-attachments" role="group" aria-label="Draft details">
+            {activePromptTitle ? (
+              <StudioLedBadgeTab
+                mode="badge"
+                label={activePromptTitle}
+                tone="pink"
+                led="solid"
+                animation="steady"
+                sizeVariant="mini"
+                className="vt-brain-composer-attachment"
+                onClick={onClearActivePrompt}
+                aria-label={`Draft source: ${activePromptTitle}. Activate to clear the label.`}
+                title="Clear draft source label"
+              />
+            ) : null}
+            {value.trim() ? (
+              <StudioButton
+                type="button"
+                sizeVariant="compact"
+                tone="neutral"
+                data-vt-brain-part="clear-composer-draft"
+                onClick={() => {
+                  onChange("")
+                  onClearActivePrompt?.()
+                }}
+                aria-label="Clear message draft"
+                title="Clear the current draft"
+              >
+                Clear draft
+              </StudioButton>
+            ) : null}
+          </div>
+        ) : null
+      }
       tray={null}
       field={
         <>
