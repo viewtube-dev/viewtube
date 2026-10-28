@@ -1108,12 +1108,12 @@ const AIBrainCommandInterface: React.FC = () => {
  useEffect(() => {
   const query = new URLSearchParams(location.search)
   if (query.get("intake") === "1") {
-   setIntakeContext(loadAiBrainContext())
+   setIntakeContext(loadAiBrainContext(channelId))
    setIntakeOpen(true)
    return
   }
-  if (shouldShowAiBrainIntake(authState.isAuthenticated)) {
-   setIntakeContext(loadAiBrainContext())
+  if (shouldShowAiBrainIntake(authState.isAuthenticated, channelId)) {
+   setIntakeContext(loadAiBrainContext(channelId))
    setIntakeOpen(true)
   }
  }, [authState.isAuthenticated, location.search])
@@ -1294,8 +1294,8 @@ const AIBrainCommandInterface: React.FC = () => {
  const handleSend = async (override?: string) => {
   const userText = override ?? input
   if (!userText.trim() || busy || requestInFlightRef.current) return
-  if (shouldShowAiBrainIntake(authState.isAuthenticated)) {
-   setIntakeContext(loadAiBrainContext())
+  if (shouldShowAiBrainIntake(authState.isAuthenticated, channelId)) {
+   setIntakeContext(loadAiBrainContext(channelId))
    setIntakeOpen(true)
    return
   }
@@ -1329,7 +1329,7 @@ const AIBrainCommandInterface: React.FC = () => {
     recentConversationTurns: recentTurns,
     requestText: userText,
     creatorGrowthContext: turnGrowthContext,
-    channelContext: loadAiBrainContext().channelContext,
+    channelContext: loadAiBrainContext(channelId).channelContext,
    })
    const historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
@@ -1476,7 +1476,7 @@ const AIBrainCommandInterface: React.FC = () => {
      requestText: userText,
      evidencePackOverride: !useFreshEvidence ? message.evidencePack : undefined,
      creatorGrowthContext: turnGrowthContext,
-     channelContext: loadAiBrainContext().channelContext,
+     channelContext: loadAiBrainContext(channelId).channelContext,
     })
     const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
     const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
