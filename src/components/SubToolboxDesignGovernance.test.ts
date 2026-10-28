@@ -842,3 +842,30 @@ describe("Toolbox header word-toggle density, white track, and color fade", () =
     expect(toolboxCss).toContain('@media (prefers-reduced-motion: reduce)')
   })
 })
+
+
+describe("Studio control family grouping and split-slider palette defaults", () => {
+  it("groups switch, toggle, radio, and checkbox specimens in one first-layer family", () => {
+    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
+    const familyList = catalog.slice(catalog.indexOf("export const STUDIO_HUB_MIGRATED_FAMILIES"), catalog.indexOf("] as const") > -1 ? catalog.indexOf("] as const") : catalog.indexOf("]"));
+    expect(familyList.indexOf('"Switches / Toggles / Radio / Checkbox"')).toBeGreaterThanOrEqual(0);
+    expect(familyList.indexOf('"Switches / Toggles / Radio / Checkbox"')).toBeLessThan(familyList.indexOf('"Primary Button"'));
+    for (const duplicate of ['"Toggle"', '"Vertical Word Toggle"', '"Settings Switch"', '"Checkbox"', '"Radio"', '"Segmented Choice"', '"Controller Switch"']) {
+      expect(familyList).not.toContain(duplicate);
+    }
+    expect(catalog).toContain("SubToolboxToggleSwitch");
+    expect(catalog).toContain("SubToolboxSettingsSwitch");
+    expect(catalog).toContain("SubToolboxCheckControl");
+    expect(catalog).toContain("SubToolboxRadioControl");
+    expect(catalog).toContain("SubToolboxControllerSwitch");
+  });
+
+  it("uses secondary split sections and a solid primary center for the double-split slider", () => {
+    const css = source("src/styles/studio-control-system.css");
+    const slider = css.slice(css.indexOf("StudioDoubleSplitSlider — double-split rails"), css.indexOf(".vt-studio-double-split-slider input[type=\"range\"]::-webkit-slider-runnable-track"));
+    expect(slider).toContain(".vt-studio-double-split-slider .vt-studio-double-split-slider__rail");
+    expect(slider).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));");
+    expect(slider).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+    expect(slider).not.toContain("color-mix(in srgb, var(--vt-studio-slider-left-fill) 50%, #fff)");
+  });
+});
