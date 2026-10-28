@@ -108,8 +108,8 @@ import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from ".
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
 import { buildScopedCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
-import { formatEvidenceRecordForPrompt, type EvidenceRecord } from "../services/brain/EvidenceRecord"
-import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, type PromptEvidenceIntegrityStatus } from "../services/brain/PromptEvidenceIntegrity"
+import type { EvidenceRecord } from "../services/brain/EvidenceRecord"
+import { getPromptEvidenceIntegrityStatus, readPromptEvidenceRecords, readCreatorAnswerEvidenceRecords, type PromptEvidenceIntegrityStatus } from "../services/brain/PromptEvidenceIntegrity"
 import {
  BRAIN_SURFACE_SELECTION_EVENT,
  clearBrainSurfaceSelection,
@@ -1173,7 +1173,7 @@ const AIBrainCommandInterface: React.FC = () => {
      evidencePack: turn.metadata?.evidencePackSnapshot && typeof turn.metadata.evidencePackSnapshot === "object"
       ? turn.metadata.evidencePackSnapshot as AIBrainEvidencePack
       : undefined,
-     evidenceRecords: readPromptEvidenceRecords(turn.metadata),
+     evidenceRecords: [...(readPromptEvidenceRecords(turn.metadata) || []), ...(readCreatorAnswerEvidenceRecords(turn.metadata) || [])],
      evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(turn.metadata),
      readiness: turn.metadata?.dataReadinessSnapshot && typeof turn.metadata.dataReadinessSnapshot === "object"
       ? turn.metadata.dataReadinessSnapshot as AIBrainTurnReadiness
@@ -1321,7 +1321,7 @@ const AIBrainCommandInterface: React.FC = () => {
     ...turnSnapshot,
     evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence),
    }
-   const baseSystemPrompt = buildAIBrainSystemPrompt({
+   const systemPrompt = buildAIBrainSystemPrompt({
     brain,
     authState,
     channelConnection,
@@ -1377,7 +1377,7 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    setMessages((current) => [
     ...current,
-    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: [...readPromptEvidenceRecords(result.turn.metadata), ...creatorAnswerEvidence], evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
+    { id: result.turn.id, role: "model", text: result.turn.assistantText, response: result.response, handoff: null, originalUserText: result.turn.rawUserMessage ?? userText, evidencePack: turnSnapshot.evidencePack, evidenceRecords: [...(readPromptEvidenceRecords(result.turn.metadata) || []), ...(readCreatorAnswerEvidenceRecords(result.turn.metadata) || [])], evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata), readiness: readinessForSnapshot(turnSnapshot), contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined },
    ])
    await refreshConversationTurns()
   } catch (error) {
@@ -1526,7 +1526,7 @@ const AIBrainCommandInterface: React.FC = () => {
        turnStatus: result.turn.status,
        originalUserText: result.turn.rawUserMessage ?? userText,
        evidencePack: turnSnapshot.evidencePack,
-       evidenceRecords: [...readPromptEvidenceRecords(result.turn.metadata), ...creatorAnswerEvidence],
+       evidenceRecords: [...(readPromptEvidenceRecords(result.turn.metadata) || []), ...(readCreatorAnswerEvidenceRecords(result.turn.metadata) || [])],
        evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata),
        readiness: readinessForSnapshot(turnSnapshot),
        contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined,
