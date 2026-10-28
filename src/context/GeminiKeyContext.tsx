@@ -15,6 +15,32 @@ interface GeminiKeyContextType {
   validationError: string | null;
 }
 
+type GeminiModelDescriptor = { name?: string; supportedActions?: string[] };
+
+/** Select only models the current API key reports as supporting generateContent. */
+export const chooseGeminiValidationModel = (models: GeminiModelDescriptor[]): string | null => {
+  const candidates = models
+    .filter((model) =>
+      model.name &&
+      model.supportedActions?.includes('generateContent') &&
+      /(^|\\/)gemini/i.test(model.name)
+    )
+    .map((model) => ({
+      name: model.name!.replace(/^models\\//, ''),
+      normalized: model.name!.toLowerCase(),
+    }));
+
+  candidates.sort((a, b) => {
+    const score = (name: string) =>
+      (name.includes('flash') ? 100 : 0) +
+      (!name.includes('preview') && !name.includes('experimental') ? 20 : 0) +
+      (!name.includes('latest') ? 5 : 0);
+    return score(b.normalized) - score(a.normalized) || a.name.localeCompare(b.name);
+  });
+
+  return candidates[0]?.name ?? null;
+};
+
 const GeminiKeyContext = createContext<GeminiKeyContextType | undefined>(undefined);
 
 export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -47,8 +73,23 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       // Validate by making a tiny request
       const { GoogleGenAI } = await import('@google/genai');
       const ai = new GoogleGenAI({ apiKey: key });
+      // Model availability varies by key, region, and API release. Discover
+      // models from Google's API instead of guessing a hard-coded model ID.
+      const listedModels = await ai.models.list();
+      const availableModels: GeminiModelDescriptor[] = [];
+      for await (const model of listedModels) {
+        availableModels.push(model as GeminiModelDescriptor);
+      }
+
+      const model = chooseGeminiValidationModel(availableModels);
+      if (!model) {
+        setValidationError('Google did not report a Gemini model available for content generation with this API key. Check the key and Google AI Studio API access.');
+        setIsValidating(false);
+        return false;
+      }
+
       const response = await ai.models.generateContent({
-        model: 'gemini-3.1-flash',
+        model,
         contents: 'reply with exactly "OK"',
       });
 
