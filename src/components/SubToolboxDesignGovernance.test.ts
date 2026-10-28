@@ -909,4 +909,15 @@ describe("confirmed primitive library organization", () => {
     expect(classify).toContain('return "Counters & Sliders"');
     expect(classify).toContain('return "Badges"');
   });
+  it("keeps the representatives strip to unique direct primitive specimens", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const start = catalog.indexOf('data-vt-confirmed-representatives="true"');
+    const end = catalog.indexOf("</Family>", start);
+    const representatives = catalog.slice(start, end);
+    const componentIds = [...representatives.matchAll(/data-vt-library-component="([^"]+)"/g)].map(match => match[1]);
+    expect(componentIds).not.toContain("StudioComponentGrid:standard");
+    expect(new Set(componentIds).size).toBe(componentIds.length);
+    expect(representatives).toContain('sizeVariant="standard"');
+  });
+
 });
