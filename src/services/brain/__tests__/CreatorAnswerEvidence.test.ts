@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { buildCreatorAnswerEvidenceRecords } from "../CreatorAnswerEvidence"
+import { CHANNEL_CONTEXT_QUESTIONS } from "../../../context/channelContextQuestions"
 import type { AiBrainContext } from "../../aiBrainContext"
 
 const context = {
@@ -41,6 +42,38 @@ describe("buildCreatorAnswerEvidenceRecords", () => {
   expect(records.every((record) => record.owner === "creator-confirmed" && record.epistemicState === "USER_PROVIDED")).toBe(true)
   expect(records.every((record) => record.channelId === "channel-1" && record.provenance.evidenceIds.includes(record.id))).toBe(true)
   expect(records.every((record) => record.limitations?.some((limitation) => limitation.includes("not independently verified")))).toBe(true)
+ })
+
+ it("projects every answered intake question into channel-scoped evidence with source provenance", () => {
+  const profile = {
+   identity: { name: "History Channel" } as Record<string, unknown>,
+   goals: {} as Record<string, unknown>,
+   audience: {} as Record<string, unknown>,
+   content: {} as Record<string, unknown>,
+   brand: {} as Record<string, unknown>,
+   intelligence: {} as Record<string, unknown>,
+  }
+  const arrayFields = new Set(["subNiches", "competitors", "priorityRanking", "offers", "segments", "types", "bestFormats", "priorityThemes", "blockedThemes", "influences", "sources", "capabilities"])
+  for (const question of CHANNEL_CONTEXT_QUESTIONS) {
+   const [section, field] = question.contextField.split(".")
+   if (field === "name") continue
+   profile[section as keyof typeof profile][field] = field === "creativity"
+    ? 8
+    : arrayFields.has(field)
+     ? [`Answer for ${question.id}`]
+     : `Answer for ${question.id}`
+  }
+  const unified = { ...context, channelContext: profile } as unknown as AiBrainContext
+  const records = buildCreatorAnswerEvidenceRecords(unified, "channel-1")
+
+  for (const question of CHANNEL_CONTEXT_QUESTIONS) {
+   const record = records.find((candidate) => candidate.id === `creator-answer:channel-1:channelContext.${question.contextField}`)
+   expect(record, `missing evidence for ${question.id}`).toBeTruthy()
+   expect(record?.channelId).toBe("channel-1")
+   expect(record?.epistemicState).toBe("USER_PROVIDED")
+   expect(record?.provenance.sourceRoute).toBe("settings/ai/channel-context")
+   expect(record?.provenance.evidenceIds).toContain(record?.id)
+  }
  })
 
  it("does not emit evidence without an active channel scope", () => {

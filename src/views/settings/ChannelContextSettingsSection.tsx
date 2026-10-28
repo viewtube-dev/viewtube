@@ -42,24 +42,36 @@ const parseAnswer = (question: ChannelContextQuestion, value: string): unknown =
 export const ChannelContextSettingsSection: React.FC = () => {
   const [profile, setProfile] = useState<ChannelContextProfile>(() => loadAiBrainContext().channelContext)
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const score = useMemo(() => scoreContext(profile), [profile])
 
-  const update = (question: ChannelContextQuestion, value: string) => {
-    setProfile((current) => writeField(current, question.contextField, parseAnswer(question, value)))
-    setSaved(false)
+  const persist = (nextProfile: ChannelContextProfile) => {
+    try {
+      saveChannelContextProfile(nextProfile)
+      setSaved(true)
+      setSaveError(null)
+    } catch {
+      setSaved(false)
+      setSaveError("Local save failed. Check browser storage availability and try again.")
+    }
   }
 
-  const save = () => {
-    saveChannelContextProfile(profile)
-    setSaved(true)
+  const update = (question: ChannelContextQuestion, value: string) => {
+    const nextProfile = writeField(profile, question.contextField, parseAnswer(question, value))
+    setProfile(nextProfile)
+    // Keep the single existing Creator Brain profile current on every edit.
+    // This also synchronizes the legacy intake fields consumed by older surfaces.
+    persist(nextProfile)
   }
+
+  const save = () => persist(profile)
 
   return (
     <section className="min-w-0 space-y-4" aria-labelledby="channel-context-title">
       <header className="space-y-2">
         <p className="text-xs font-black uppercase tracking-widest">Creator Brain · Context</p>
         <h2 id="channel-context-title" className="text-2xl font-black uppercase">Teach the Brain your channel</h2>
-        <p className="max-w-3xl text-sm">Set the strategy, audience, content boundaries, and intelligence preferences that should shape future assistance. Your answers are saved with the existing Creator Brain profile.</p>
+        <p className="max-w-3xl text-sm">Set the strategy, audience, content boundaries, and intelligence preferences that should shape future assistance. Every answer is saved to this browser's existing Creator Brain profile as you type.</p>
         <p className="max-w-3xl border-l-2 border-black pl-3 text-sm">These answers personalize recommendations; they do not independently grant tool access, change privacy controls, or enable unavailable capabilities.</p>
         <div className="flex flex-wrap items-center gap-3" aria-live="polite">
           <strong className="text-lg tabular-nums">{score.completionScore}%</strong>
@@ -115,7 +127,9 @@ export const ChannelContextSettingsSection: React.FC = () => {
         </section>
       ))}
       <footer className="flex flex-wrap items-center justify-between gap-3 border-2 border-black p-3">
-        <p className="text-sm" role="status">{saved ? "Channel context saved to your Creator Brain profile." : "Changes stay local until you save."}</p>
+        <p className="text-sm" role="status" aria-live="polite">
+          {saveError || (saved ? "All answers saved locally as you type." : "Your answers have not been saved yet.")}
+        </p>
         <StudioButton onClick={save}>Save channel context</StudioButton>
       </footer>
     </section>
