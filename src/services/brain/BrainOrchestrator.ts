@@ -53,7 +53,7 @@ import { readAlgorithmIntelligenceForBrain } from "./AlgorithmIntelligenceAccess
 import { readBrainEngineControls } from "./BrainEngineControls"
 import { resolveCreatorContext } from "./CreatorContextResolver"
 import { loadAiBrainContext } from "../aiBrainContext"
-import { buildCreatorAnswerEvidenceRecords } from "./CreatorAnswerEvidence"
+import { buildCreatorAnswerEvidenceRecords, isCreatorAnswerProfileEligible } from "./CreatorAnswerEvidence"
 import { readBrainSurfaceSelection } from "./BrainSurfaceSelection"
 import { resolveBrainRetryInput, type BrainGenerationInputSnapshot, type BrainRetryContextContinuity } from "./BrainRetryContinuity"
 import {
@@ -552,12 +552,14 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  const surfaceSelection = readBrainSurfaceSelection()
  const savedAiBrainContext = loadAiBrainContext(input.channelId, input.snapshot.channel.label)
  const savedChannelContext = savedAiBrainContext.channelContext
- const normalizeChannelName = (value: unknown): string => String(value || "").trim().toLocaleLowerCase().replace(/ +/g, " ")
- const savedProfileMatchesActiveChannel = Boolean(
-  normalizeChannelName(savedChannelContext.identity.name)
-  && normalizeChannelName(savedChannelContext.identity.name) === normalizeChannelName(input.snapshot.channel.label),
- )
- const creatorAnswerEvidenceRecords = savedProfileMatchesActiveChannel
+ const creatorAnswerEvidenceRecords = isCreatorAnswerProfileEligible({
+  // loadAiBrainContext(channelId, label) reads this channel's scoped key first.
+  // A scoped profile is bound by the stable channel key; requiring a display name
+  // incorrectly discarded valid answers for profiles whose name field is blank.
+  channelScoped: Boolean(input.channelId),
+  profileName: savedChannelContext.identity.name,
+  activeChannelLabel: input.snapshot.channel.label,
+ })
   ? buildCreatorAnswerEvidenceRecords(savedAiBrainContext, input.channelId)
   : []
  const creatorContext = await resolveCreatorContext({
