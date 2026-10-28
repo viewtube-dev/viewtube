@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 
 const source = readFileSync(new URL("./AIBrainCommandInterface.tsx", import.meta.url), "utf8")
 const capabilityBrowserSource = readFileSync(new URL("../components/brain/BrainCapabilityBrowser.tsx", import.meta.url), "utf8")
+const composerDraftStoreSource = readFileSync(new URL("../services/brain/BrainComposerDraftStore.ts", import.meta.url), "utf8")
 const promptLibrarySource = readFileSync(new URL("../components/brain/BrainPromptLibrary.tsx", import.meta.url), "utf8")
 const panelSource = readFileSync(new URL("../components/brain/BrainRuntimePanel.tsx", import.meta.url), "utf8")
 const chatPrimitivesSource = readFileSync(new URL("../components/brain/BrainChatPrimitives.tsx", import.meta.url), "utf8")
@@ -171,6 +172,15 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain("activePromptTitle={activePromptTitle}")
   expect(source).toContain('setActivePromptTitle("Capability draft")')
   expect(source).toContain('setActivePromptTitle("Suggested action")')
+ })
+
+ it("restores and persists composer drafts in channel-scoped local storage", () => {
+  expect(composerDraftStoreSource).toContain('vt_ai_brain_composer_draft_v1:')
+  expect(composerDraftStoreSource).toContain('window.localStorage.getItem')
+  expect(composerDraftStoreSource).toContain('window.localStorage.setItem')
+  expect(source).toContain('readBrainComposerDraft(channelId)')
+  expect(source).toContain('writeBrainComposerDraft(channelId')
+  expect(source).toContain('composerDraftSkipSaveRef.current === channelId')
  })
 
 })
