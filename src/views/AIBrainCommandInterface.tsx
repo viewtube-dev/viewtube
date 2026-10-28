@@ -1321,7 +1321,7 @@ const AIBrainCommandInterface: React.FC = () => {
     ...turnSnapshot,
     evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence),
    }
-   const baseSystemPrompt = buildAIBrainSystemPrompt({
+   const systemPrompt = buildAIBrainSystemPrompt({
     brain,
     authState,
     channelConnection,
@@ -1332,12 +1332,6 @@ const AIBrainCommandInterface: React.FC = () => {
     creatorGrowthContext: turnGrowthContext,
     channelContext: creatorContext.channelContext,
    })
-   const creatorEvidencePrompt = creatorAnswerEvidence.map((record) =>
-    `- [${record.id}] ${record.sourceRef}: ${String(record.value ?? "")} (USER_PROVIDED; creator-stated, not independently verified)`,
-   ).join("\n")
-   const systemPrompt = creatorAnswerEvidence.length
-    ? `${baseSystemPrompt}\n\nCREATOR-PROVIDED PROFILE EVIDENCE\nUse these saved creator answers as channel-scoped context. They are not verified analytics; do not present them as measured facts. When relying on one, cite its evidence ID.\n${creatorEvidencePrompt}`
-    : baseSystemPrompt
    const historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
    if (channelId) {
@@ -1483,7 +1477,7 @@ const AIBrainCommandInterface: React.FC = () => {
      recentTurns.filter((turn) => turn.id !== message.id),
      learningEntries,
     )
-    const baseSystemPrompt = buildAIBrainSystemPrompt({
+    const systemPrompt = buildAIBrainSystemPrompt({
      brain,
      authState,
      channelConnection,
@@ -1495,12 +1489,6 @@ const AIBrainCommandInterface: React.FC = () => {
      creatorGrowthContext: turnGrowthContext,
      channelContext: creatorContext.channelContext,
     })
-    const creatorEvidencePrompt = creatorAnswerEvidence.map((record) =>
-     `- [${record.id}] ${record.sourceRef}: ${String(record.value ?? "")} (USER_PROVIDED; creator-stated, not independently verified)`,
-    ).join("\n")
-    const systemPrompt = creatorAnswerEvidence.length
-     ? `${baseSystemPrompt}\n\nCREATOR-PROVIDED PROFILE EVIDENCE\nUse these saved creator answers as channel-scoped context. They are not verified analytics; do not present them as measured facts. When relying on one, cite its evidence ID.\n${creatorEvidencePrompt}`
-     : baseSystemPrompt
     const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
     const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
 
