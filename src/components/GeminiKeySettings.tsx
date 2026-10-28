@@ -74,8 +74,8 @@ export const GeminiKeySettings: React.FC<{
               <div className="flex items-center gap-3 p-4 bg-green-50/50 dark:bg-green-900/10 border border-green-200 dark:border-green-900/50 rounded-lg">
                 <CheckCircle2 className="w-6 h-6 text-green-500" />
                 <div>
-                  <h4 className="font-medium text-green-900 dark:text-green-100">API Key is active</h4>
-                  <p className="text-sm text-green-700/80 dark:text-green-300/80">Your key ends in ••••{apiKey.slice(-4)}</p>
+                  <h4 className="font-medium text-green-900 dark:text-green-100">API Key saved locally</h4>
+                  <p className="text-sm text-green-700/80 dark:text-green-300/80">Your key ends in ••••{apiKey.slice(-4)}. You can use this key while signed in or signed out.</p>
                   {validationError && (
                     <p role="status" className="mt-2 text-sm text-amber-700 dark:text-amber-300">{validationError}</p>
                   )}
