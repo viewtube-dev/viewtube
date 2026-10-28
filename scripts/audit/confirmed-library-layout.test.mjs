@@ -520,7 +520,7 @@ test("confirmed primitive grid is visible first and covers the core Studio desig
   const top = catalog.slice(catalog.indexOf("export const StudioHubConfirmedPrimitiveCatalog"));
   assert.match(top, /<ConfirmedPrimitiveGridOverview\s*\/>\s*<ConfirmedDirectPrimitiveRows\s*\/>/);
   const grid = catalog.match(/const ConfirmedPrimitiveGridOverview:[^]*?\n}\n\nconst ConfirmedDirectPrimitiveRows/)?.[0] ?? "";
-  assert.match(grid, /<StudioComponentGrid cols={3} rows={3} size="standard"/);
+  assert.match(grid, /<StudioComponentGrid cols=\{3\} rows=\{3\} size="standard"/);
   for (const primitive of [
     "StudioButton",
     "StudioSplitLeftButton",
@@ -532,4 +532,7 @@ test("confirmed primitive grid is visible first and covers the core Studio desig
     "StudioDoubleSplitSlider",
     "StudioArrowToggle",
   ]) assert.ok(grid.includes(`data-vt-library-component="${primitive}"`), `top grid is missing ${primitive}`);
+  assert.ok(grid.includes("const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)"));
+  assert.ok(grid.includes("onClick={() => setSplitButtonPressed(value => !value)}"));
+  assert.ok(grid.includes('{splitButtonPressed ? "SELECTED" : "SPLIT LEFT"}'));
 });

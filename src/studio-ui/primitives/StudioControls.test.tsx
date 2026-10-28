@@ -79,6 +79,17 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain('aria-label="Upload media"');
     expect(html).toContain('class="vt-studio-upload-frame__layers"');
     expect(html).toContain('class="vt-studio-upload-frame__layer vt-studio-upload-frame__layer--core"');
+    expect(html).toContain('class="vt-studio-upload-frame__file-bar"');
+    expect(html).toContain('class="vt-studio-upload-frame__file-action"');
+    expect(html).toContain('class="vt-studio-upload-frame__file-name"');
+    expect(html).toContain('class="vt-studio-upload-frame__file-kind"');
+    expect(html).not.toContain('vt-studio-upload-frame__badge-rail');
+    expect(html).not.toContain('data-vt-studio-split="double"');
+    const css = readStudioControlCss();
+    expect(css).toContain('.vt-studio-upload-frame::before');
+    expect(css).toContain('mask-composite: exclude');
+    expect(css).toContain('inset: calc(2 * var(--vt-studio-upload-frame-stroke))');
+    expect(css).toContain('border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke) - var(--vt-upload-secondary-stroke)))');
     expect(html).toContain("Drag or drop");
     expect(html).toContain("Image / video here · or click to upload");
     expect(html).not.toContain("FA618A");

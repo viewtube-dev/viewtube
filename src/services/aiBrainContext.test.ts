@@ -130,4 +130,36 @@ describe("Creator Brain intake convergence", () => {
   expect(localStorage.getItem("vt_ai_brain_context_v1")).not.toBeNull()
  })
 
+ it("migrates handle-scoped answers to the stable channel ID when identity matches", () => {
+  localStorage.clear()
+  const saved = saveChannelContextProfile(profile, "@history")
+
+  const restored = loadAiBrainContext("UC_HISTORY_123", "History Channel", ["@history"])
+
+  expect(restored.channelContext).toEqual(saved.channelContext)
+  expect(JSON.parse(localStorage.getItem("vt_ai_brain_context_v1:channel:uc_history_123") || "{}").channelContext)
+   .toEqual(saved.channelContext)
+  expect(localStorage.getItem("vt_ai_brain_context_v1:channel:%40history")).not.toBeNull()
+ })
+
+ it("does not migrate a handle-scoped profile when the active channel label conflicts", () => {
+  localStorage.clear()
+  saveChannelContextProfile({ ...profile, identity: { ...profile.identity, name: "Cooking Channel" } }, "@history")
+
+  const restored = loadAiBrainContext("UC_HISTORY_123", "History Channel", ["@history"])
+
+  expect(restored.channelContext.identity.name).toBeUndefined()
+  expect(localStorage.getItem("vt_ai_brain_context_v1:channel:uc_history_123")).toBeNull()
+ })
+
+ it("keeps the canonical stable-ID profile when a stale handle profile also exists", () => {
+  localStorage.clear()
+  const canonical = saveChannelContextProfile(profile, "UC_HISTORY_123")
+  saveChannelContextProfile({ ...profile, identity: { ...profile.identity, name: "Stale handle profile" } }, "@history")
+
+  const restored = loadAiBrainContext("UC_HISTORY_123", "History Channel", ["@history"])
+
+  expect(restored.channelContext).toEqual(canonical.channelContext)
+ })
+
 })

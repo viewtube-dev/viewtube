@@ -250,11 +250,39 @@ const normalizeContext = (parsed: Partial<AiBrainContext> = {}): AiBrainContext 
 export const loadAiBrainContext = (
  channelId?: string | null,
  activeChannelLabel?: string | null,
+ fallbackChannelIds: Array<string | null | undefined> = [],
 ): AiBrainContext => {
  if (!channelId) return readStoredContext(STORAGE_KEY) || defaultContext
  const key = scopedKey(STORAGE_KEY, channelId)
  const scoped = readStoredContext(key)
  if (scoped) return scoped
+
+ // Channel connections may initially expose only a handle, then resolve a stable
+ // YouTube channel ID. Migrate that same channel's local profile forward without
+ // creating another store or deleting the recoverable source record.
+ const seenFallbackKeys = new Set<string>([key])
+ for (const fallbackId of fallbackChannelIds) {
+  if (!fallbackId) continue
+  const fallbackKey = scopedKey(STORAGE_KEY, fallbackId)
+  if (seenFallbackKeys.has(fallbackKey)) continue
+  seenFallbackKeys.add(fallbackKey)
+  const fallback = readStoredContext(fallbackKey)
+  if (!fallback) continue
+  const profileName = fallback.channelContext.identity.name
+  if (activeChannelLabel && profileName && !sameChannelLabel(profileName, activeChannelLabel)) continue
+  try {
+   localStorage.setItem(key, JSON.stringify(fallback))
+   if (localStorage.getItem(scopedKey(COMPLETED_KEY, fallbackId)) === "true") {
+    localStorage.setItem(scopedKey(COMPLETED_KEY, channelId), "true")
+   }
+  } catch {
+   // Return the recovered in-memory profile even if the browser blocks migration.
+  }
+  return fallback
+ }
+
+ // Legacy global data is only migrated when its saved channel name exactly matches
+ // the active channel label; it is never silently assigned to a different channel.
  const legacy = readStoredContext(STORAGE_KEY)
  const label = activeChannelLabel || channelId
  if (legacy && sameChannelLabel(legacy.channelContext.identity.name, label)) {
