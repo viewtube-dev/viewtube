@@ -46,4 +46,17 @@ describe("buildCreatorAnswerEvidenceRecords", () => {
  it("does not emit evidence without an active channel scope", () => {
   expect(buildCreatorAnswerEvidenceRecords(context, null)).toEqual([])
  })
+ it("deduplicates legacy aliases once the unified profile contains the same answer", () => {
+  const unified = {
+   ...context,
+   channelDescription: "History explained clearly",
+   channelContext: {
+    ...context.channelContext,
+    identity: { ...context.channelContext.identity, description: "History explained clearly" },
+   },
+  } as AiBrainContext
+  const records = buildCreatorAnswerEvidenceRecords(unified, "channel-1")
+  expect(records.map((record) => record.id)).not.toContain("creator-answer:channel-1:legacy.channelDescription")
+  expect(records.map((record) => record.id)).toContain("creator-answer:channel-1:channelContext.identity.description")
+ })
 })
