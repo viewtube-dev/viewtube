@@ -1,20 +1,22 @@
 /**
- * Studio Component Grid: composition only. Primitive CSS owns control geometry.
- * The grid's black background and fixed gap create shared, single-stroke dividers.
+ * Studio Component Grid: composition only.
+ * The grid is the sole border layer: black background + stroke-sized gaps
+ * create the outer frame and single-stroke dividers between white cells.
  */
 .vt-studio-component-grid {
   --scg-height: var(--vt-studio-control-height, 44px);
   --scg-stroke: var(--vt-studio-control-stroke, 3px);
   --scg-radius: var(--vt-studio-control-radius, 6px);
+  --scg-gap: var(--scg-stroke);
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(var(--scg-cols, 2), minmax(0, 1fr));
   grid-template-rows: repeat(var(--scg-rows, 2), var(--scg-height));
-  gap: var(--scg-stroke);
+  gap: var(--scg-gap);
   width: 100%;
   align-items: stretch;
   justify-items: stretch;
-  background: #000;
+  background-color: #000;
   border: var(--scg-stroke) solid #000;
   border-radius: var(--scg-radius);
   overflow: hidden;
@@ -66,6 +68,7 @@
   position: relative;
   margin: 0;
   padding: 0;
+  background-color: #fff;
 }
 
 .vt-studio-component-grid__cell > * {
@@ -73,12 +76,13 @@
   width: 100%;
   min-width: 0;
   height: 100%;
-  border: 0 !important;
-  border-radius: 0 !important;
   box-sizing: border-box;
+  /* Grid owns the frame and dividers; primitives must not draw competing borders. */
+  border: none !important;
+  border-radius: 0 !important;
 }
 
-/* Propagate size tokens to children */
+/* Propagate size tokens; component-local borders/radii are intentionally disabled. */
 .vt-studio-component-grid[data-size] [data-vt-studio-control="true"] {
   --vt-studio-control-height: var(--scg-height);
   --vt-studio-control-stroke: var(--scg-stroke);
@@ -95,6 +99,8 @@
   --vt-studio-control-height: var(--scg-height);
   --vt-studio-control-stroke: var(--scg-stroke);
   --vt-studio-control-radius: 0;
+  border: none !important;
+  border-radius: 0 !important;
 }
 
 /* Specimen layout */
