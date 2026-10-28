@@ -114,6 +114,19 @@ describe("public channel mode public ingestion and fixtures", () => {
     expect(fetchMock.mock.calls.some(([url]) => String(url).includes("test-real-key"))).toBe(false)
   })
 
+  it("does not accept fixture channel IDs returned by the live resolver as real channels", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse({
+      resolution: { resolvedChannelId: "UC_FIXTURE_THEMOTIONVIS", resolvedHandle: "@fake", channelTitle: "Fixture", reason: null },
+      snapshot: { channelId: "UC_FIXTURE_THEMOTIONVIS" },
+    }))
+    vi.stubGlobal("fetch", fetchMock)
+
+    const resolved = await resolvePublicChannel("@not-a-real-channel")
+
+    expect(resolved.resolvedChannelId).toBeNull()
+    expect(resolved.reason).toContain("Public channel ingestion is unavailable")
+  })
+
   it("does not enable fixtures by default in production", async () => {
     const resolved = await resolvePublicChannel("@themotionvis")
     expect(resolved.resolvedChannelId).toBeNull()
