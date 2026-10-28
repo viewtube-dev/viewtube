@@ -4450,11 +4450,52 @@ html body button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-s
 }
 .vt-studio-dropdown-menu {
   box-sizing: border-box;
-  border-style: solid;
-  border-color: #000;
-  border-width: var(--vt-studio-control-stroke, 3px);
-  border-top-left-radius: var(--vt-studio-control-radius, 6px);
-  border-top-right-radius: var(--vt-studio-control-radius, 6px);
+  top: calc(100% + 8px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  padding: 4px;
+}
+.vt-studio-dropdown-option {
+  box-sizing: border-box;
+  min-width: 0;
+  margin: 0 0 3px;
+  padding: 2px 8px;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: #fff;
+  color: #000;
+  text-align: left;
+  text-overflow: clip;
+  white-space: normal;
+}
+.vt-studio-dropdown-option:last-child {
+  margin-bottom: 0;
+}
+.vt-studio-dropdown-option[data-active="true"]:not([data-selected="true"]),
+.vt-studio-dropdown-option:hover:not(:disabled):not([data-selected="true"]),
+.vt-studio-dropdown-option:focus-visible:not([data-selected="true"]) {
+  background: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 22%, #fff);
+}
+.vt-studio-dropdown-option[data-selected="true"],
+.vt-studio-dropdown-option[aria-selected="true"] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-menu {
+  top: calc(100% + 6px);
+  padding: 3px;
+}
+.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
+  margin-bottom: 2px;
+  padding-inline: 6px;
+  border-radius: var(--vt-studio-control-radius, 4px);
+}
+.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option:last-child {
+  margin-bottom: 0;
 }
 
 /* Four canonical state-fill / indicator-shape variants shared by switches,
