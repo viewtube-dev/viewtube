@@ -13,8 +13,12 @@ test("component grid CSS never uses custom properties inside nth-child An+B sele
 })
 
 test("component grid creates single-stroke dividers with the parent gap", () => {
-  assert.match(gridCss, /\.vt-studio-component-grid\s*\{[^}]*gap:\s*var\(--scg-stroke\);/s)
-  assert.match(gridCss, /\.vt-studio-component-grid\s*\{[^}]*background:\s*#000;/s)
-  assert.match(gridCss, /\.vt-studio-component-grid__cell\s*\{[^}]*margin:\s*0;[^}]*padding:\s*0;/s)
-  assert.match(gridCss, /\.vt-studio-component-grid__cell\s*>\s*\*\s*\{[^}]*border:\s*0\s*!important;/s)
+  assert.match(gridCss, /\.vt-studio-component-grid\s*\{[^}]*gap:\s*var\(--scg-gap\);/s)
+  assert.match(gridCss, /\.vt-studio-component-grid\s*\{[^}]*--scg-gap:\s*var\(--scg-stroke\);/s)
+  assert.match(gridCss, /\.vt-studio-component-grid\s*\{[^}]*background-color:\s*#000;/s)
+  assert.match(gridCss, /\.vt-studio-component-grid\s*\{[^}]*border:\s*var\(--scg-stroke\) solid #000;/s)
+  assert.match(gridCss, /\.vt-studio-component-grid__cell\s*\{[^}]*margin:\s*0;[^}]*padding:\s*0;[^}]*background-color:\s*#fff;/s)
+  assert.match(gridCss, /\.vt-studio-component-grid__cell\s*>\s*\*\s*\{[^}]*border:\s*none\s*!important;/s)
+  assert.match(gridCss, /\.vt-studio-component-grid__cell\s*>\s*\*\s*\{[^}]*border-radius:\s*0\s*!important;/s)
+  assert.match(gridCss, /\.vt-studio-component-grid\[data-size\]\s+\.vt-studio-value-toggle--double\s*\{[^}]*border:\s*none\s*!important;[^}]*border-radius:\s*0\s*!important;/s)
 })
