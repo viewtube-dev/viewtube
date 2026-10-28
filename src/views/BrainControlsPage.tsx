@@ -65,6 +65,7 @@ export const getBrainCapabilityGroups = () => [
 ].map(group => ({ ...group, capabilities: group.ids.map(id => BRAIN_CAPABILITY_REGISTRY.find(item => item.id === id)).filter((item): item is BrainCapabilityDefinition => Boolean(item)) }))
 
 const CapabilityInventory: React.FC = () => {
+  const navigate = useNavigate()
   const groups = getBrainCapabilityGroups()
   return <div className="grid min-w-0 gap-3">
     <p className="text-sm font-bold leading-5">This is the complete registered capability catalog—not a promise that every capability is ready for every channel. Each request still checks permissions, evidence, and context.</p>
