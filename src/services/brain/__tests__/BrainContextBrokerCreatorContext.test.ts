@@ -371,4 +371,58 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(result.systemInstruction).toContain("not independently verified")
  })
 
+
+ it("never injects creator-answer evidence from a different channel", () => {
+  const records = [
+   {
+    id: "creator-answer:channel-1:channelContext.identity.niche",
+    owner: "creator-confirmed",
+    sourceRef: "ai-brain-context:channelContext.identity.niche",
+    sourceSnapshotId: "2026-10-27T10:00:00.000Z",
+    channelId: "channel-1",
+    metric: null,
+    value: "History for channel one",
+    unit: null,
+    freshness: "fresh",
+    epistemicState: "USER_PROVIDED",
+    confidence: 1,
+    observedAt: "2026-10-27T10:00:00.000Z",
+    limitations: ["Creator answer; not independently verified."],
+    provenance: { evidenceIds: ["creator-answer:channel-1:channelContext.identity.niche"] },
+   },
+   {
+    id: "creator-answer:channel-2:channelContext.identity.niche",
+    owner: "creator-confirmed",
+    sourceRef: "ai-brain-context:channelContext.identity.niche",
+    sourceSnapshotId: "2026-10-27T10:00:00.000Z",
+    channelId: "channel-2",
+    metric: null,
+    value: "PRIVATE FACT FROM ANOTHER CHANNEL",
+    unit: null,
+    freshness: "fresh",
+    epistemicState: "USER_PROVIDED",
+    confidence: 1,
+    observedAt: "2026-10-27T10:00:00.000Z",
+    limitations: ["Creator answer; not independently verified."],
+    provenance: { evidenceIds: ["creator-answer:channel-2:channelContext.identity.niche"] },
+   },
+  ] as any[]
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "Plan my content",
+   channelContext: {
+    identity: { name: "History Channel", niche: "Historical explainers" },
+    goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+   },
+   creatorAnswerEvidenceRecords: records,
+  })
+
+  expect(result.systemInstruction).toContain("History for channel one")
+  expect(result.systemInstruction).not.toContain("PRIVATE FACT FROM ANOTHER CHANNEL")
+  expect(result.systemInstruction).not.toContain("creator-answer:channel-2:channelContext.identity.niche")
+ })
+
 })
