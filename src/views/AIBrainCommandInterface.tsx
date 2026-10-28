@@ -106,6 +106,7 @@ import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import { readBrainComposerDraft, writeBrainComposerDraft } from "../services/brain/BrainComposerDraftStore"
 import { buildScopedCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
 import type { EvidenceRecord } from "../services/brain/EvidenceRecord"
@@ -970,7 +971,10 @@ const AIBrainCommandInterface: React.FC = () => {
   emitSignal,
  } = brainContext
  const [input, setInput] = useState("")
+ const [activePromptTitle, setActivePromptTitle] = useState<string | null>(null)
  const [draftPromptOrigin, setDraftPromptOrigin] = useState<{ promptId: string; promptVersion: string; action: "edited" } | null>(null)
+ const composerDraftHydrationRef = useRef<string | null>(null)
+ const composerDraftSkipSaveRef = useRef<string | null>(null)
  useEffect(() => {
   const requestedDraft = searchParams.get("draft")
   if (!requestedDraft) return
@@ -1018,7 +1022,29 @@ const AIBrainCommandInterface: React.FC = () => {
  const askSeededRef = useRef(false)
  const canUseGemini = hasGeminiKey()
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
+
  const channelId = authState.channelId || authState.channelHandle || null
+ useEffect(() => {
+  const requestedDraft = searchParams.get("draft")
+  const savedDraft = requestedDraft ? null : readBrainComposerDraft(channelId)
+  setInput(requestedDraft ?? savedDraft?.text ?? "")
+  setActivePromptTitle(savedDraft?.activePromptTitle ?? null)
+  setDraftPromptOrigin(savedDraft?.promptOrigin ?? null)
+  composerDraftHydrationRef.current = channelId
+  composerDraftSkipSaveRef.current = channelId
+ }, [channelId])
+ useEffect(() => {
+  if (composerDraftHydrationRef.current !== channelId) return
+  if (composerDraftSkipSaveRef.current === channelId) {
+   composerDraftSkipSaveRef.current = null
+   return
+  }
+  writeBrainComposerDraft(channelId, {
+   text: input,
+   activePromptTitle,
+   promptOrigin: draftPromptOrigin,
+  })
+ }, [channelId, input, activePromptTitle, draftPromptOrigin])
  const [brainControls, setBrainControls] = useState(() => readBrainUserControls(channelId))
  const runtimeSnapshot = useMemo(
   () => readBrainRuntimeSnapshot({
@@ -1307,6 +1333,7 @@ const AIBrainCommandInterface: React.FC = () => {
   requestInFlightRef.current = true
   shouldFollowConversationRef.current = true
   setInput("")
+  setActivePromptTitle(null)
   setDraftPromptOrigin(null)
   if (composerRef.current) composerRef.current.style.height = "52px"
   setBusy(true)
@@ -1914,6 +1941,8 @@ const AIBrainCommandInterface: React.FC = () => {
            onSend={() => { void handleSend() }}
            busy={busy}
            status={busy ? "loading" : undefined}
+           activePromptTitle={activePromptTitle}
+           onClearActivePrompt={() => { setActivePromptTitle(null); setDraftPromptOrigin(null) }}
            onOpenPrompts={() => { setContextRailOpen(false); setLauncherMode("prompts"); setPromptRailOpen(true) }}
            onOpenCapabilities={() => { setContextRailOpen(false); setLauncherMode("capabilities"); setPromptRailOpen(true) }}
            onOpenContext={() => { setPromptRailOpen(false); setContextRailOpen(true) }}
@@ -1958,7 +1987,7 @@ const AIBrainCommandInterface: React.FC = () => {
         )}
        </div>
        <aside data-vt-brain-workspace-part="right-context" aria-label="Creator context and recommended actions" className="vt-brain-studio-workspace__context-rail hidden min-h-0 overflow-y-auto xl:block">
-        <BrainContextRail channelId={channelId} channelHandle={authState.channelHandle} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
+        <BrainContextRail channelId={channelId} channelHandle={authState.channelHandle} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setInput(prompt); setActivePromptTitle("Suggested action"); setDraftPromptOrigin(null); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
        </aside>
       </div>
 
@@ -1993,14 +2022,14 @@ const AIBrainCommandInterface: React.FC = () => {
           busy={busy}
           headingId="brain-prompt-library-drawer-title"
           onPrompt={(prompt, card) => { setPromptRailOpen(false); void handleSend(prompt, card ? { promptId: card.id, promptVersion: "1", action: "sent" } : undefined) }}
-          onEdit={(prompt, card) => { setPromptRailOpen(false); setInput(prompt); setDraftPromptOrigin(card ? { promptId: card.id, promptVersion: "1", action: "edited" } : null); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
+          onEdit={(prompt, card) => { setPromptRailOpen(false); setInput(prompt); setActivePromptTitle(card?.label || "Custom prompt"); setDraftPromptOrigin(card ? { promptId: card.id, promptVersion: "1", action: "edited" } : null); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          /> : <BrainCapabilityBrowser
           snapshot={snapshot}
           controls={brainControls}
           busy={busy}
           headingId="brain-capability-browser-drawer-title"
           onPrompt={(prompt) => { setPromptRailOpen(false); void handleSend(prompt) }}
-          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
+          onEdit={(prompt) => { setPromptRailOpen(false); setInput(prompt); setActivePromptTitle("Capability draft"); setDraftPromptOrigin(null); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }}
          />}
         </div>
         </div>
@@ -2026,7 +2055,7 @@ const AIBrainCommandInterface: React.FC = () => {
          <StudioButton data-vt-brain-part="mobile-context-close" ref={contextCloseRef} sizeVariant="compact" tone="neutral" type="button" onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</StudioButton>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
-         <BrainContextRail channelId={channelId} channelHandle={authState.channelHandle} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
+         <BrainContextRail channelId={channelId} channelHandle={authState.channelHandle} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); setActivePromptTitle("Suggested action"); setDraftPromptOrigin(null); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
         </div>
         </div>
        </div>
