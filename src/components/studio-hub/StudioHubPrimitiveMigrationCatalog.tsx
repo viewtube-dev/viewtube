@@ -1,5 +1,5 @@
 import React from "react"
-import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
+import { Captions, Check, ChevronDown, ChevronLeft, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
 import { MiniSubToolbox, SubToolbox, SubToolboxDropdownControl } from "../Toolbox"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
@@ -274,6 +274,8 @@ type CatalogPreviewGeometry = {
 }
 
 const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogPreviewGeometry>> = {
+  "Studio Counter Family": { mode: "compound", inlineUnits: 5.8, portraitStack: true },
+  "Studio Slider Family": { mode: "compound", inlineUnits: 5.8, portraitStack: true },
   "Switches / Toggles / Radio / Checkbox": { mode: "compound", inlineUnits: 8.2, portraitStack: true },
   "Square Icon Button": { mode: "fixed" },
   "LED Dot": { mode: "fixed" },
@@ -485,8 +487,8 @@ const PrimitiveMigrationControl: React.FC<{
         <StudioSplitLeftButton sizeVariant="standard" icon={<ChevronLeft />} aria-label="Split left button">LEFT</StudioSplitLeftButton>
         <StudioSplitRightButton sizeVariant="standard" icon={<ChevronRight />} aria-label="Split right button">RIGHT</StudioSplitRightButton>
         <StudioDoubleSplitButton sizeVariant="standard" leftIcon={<ChevronLeft />} rightIcon={<ChevronRight />} aria-label="Double split button">DOUBLE</StudioDoubleSplitButton>
-        <StudioTwoLineButton sizeVariant="standard" aria-label="Two-line button"><span>PRIMARY</span><span>SECOND LINE</span></StudioTwoLineButton>
-        <StudioSplitTwoLineButton sizeVariant="standard" leftIcon={<ChevronLeft />} aria-label="Two-line split button"><span>PRIMARY</span><span>SECOND LINE</span></StudioSplitTwoLineButton>
+        <StudioTwoLineButton sizeVariant="standard" firstLine="PRIMARY" secondLine="SECOND LINE" aria-label="Two-line button" />
+        <StudioSplitTwoLineButton sizeVariant="standard" icon={<ChevronLeft />} firstLine="PRIMARY" secondLine="SECOND LINE" aria-label="Two-line split button" />
         <details className="vt-catalog-variants"><summary>VARIANTS</summary><p>Split-left, split-right, double-split, two-line, and two-line split stay together in this family. The representative size is standard.</p></details>
       </div>
     )
