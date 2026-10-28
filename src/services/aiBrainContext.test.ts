@@ -65,4 +65,15 @@ describe("Creator Brain intake convergence", () => {
   expect(result.identity.description).toBeUndefined()
   expect(result.goals.primaryGoal).toBe("Grow a loyal audience")
  })
+ it("migrates missing legacy answers but preserves established canonical values", () => {
+  const canonical = { ...profile, identity: { ...profile.identity, description: "Canonical description", niche: "Canonical niche" } }
+  const migrated = syncLegacyAnswersToChannelContext(canonical, {
+   channelDescription: "Old description",
+   mainTopicFocus: "Old niche",
+   audienceDescription: "Old audience",
+  }, true)
+  expect(migrated.identity.description).toBe("Canonical description")
+  expect(migrated.identity.niche).toBe("Canonical niche")
+  expect(migrated.audience.idealViewer).toBe("Old audience")
+ })
 })
