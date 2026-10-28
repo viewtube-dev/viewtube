@@ -934,3 +934,36 @@ describe("confirmed primitive library family organization", () => {
     expect(systemStyles).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
   });
 });
+
+
+describe("Confirmed primitive library family organization", () => {
+  it("groups related button, dropdown, counter, and slider variants in family modules", () => {
+    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
+    const start = catalog.indexOf("export const STUDIO_HUB_MIGRATED_FAMILIES");
+    const end = catalog.indexOf("] as const", start);
+    const families = catalog.slice(start, end);
+    for (const family of ['"Studio Button Family"', '"Studio Dropdown Family"', '"Studio Counter Family"', '"Studio Slider Family"']) {
+      expect(families).toContain(family);
+    }
+    for (const duplicate of ['"Primary Button"', '"Secondary Button"', '"Neutral Button"', '"Destructive Button"', '"Studio Left Word Counter"', '"Slider"', '"Range Slider"', '"Stepper"', '"Split Menu"', '"Select Menu"', '"Context Menu"', '"Disabled Button"', '"Disabled Split Button"']) {
+      expect(families).not.toContain(duplicate);
+    }
+    expect(catalog).toContain("StudioSplitRightButton");
+    expect(catalog).toContain("StudioDoubleSplitButton");
+    expect(catalog).toContain("StudioTwoLineButton");
+    expect(catalog).toContain("StudioSplitTwoLineButton");
+    expect(catalog).toContain("StudioLeftWordCounter");
+    expect(catalog).toContain("StudioDoubleSplitSlider");
+    expect(catalog).toContain("SubToolboxRangeSlider");
+  });
+});
+describe("Confirmed primitive library canonical defaults", () => {
+  it("documents the canonical standard size and flat typography tokens", () => {
+    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
+    expect(catalog).toContain("<span><b>HEIGHT</b> 44px</span>");
+    expect(catalog).toContain("<span><b>STROKE</b> 3px</span>");
+    expect(catalog).toContain("<span><b>RADIUS</b> 6px</span>");
+    expect(catalog).toContain("<span><b>SHADOW</b> FLAT · 0</span>");
+    expect(catalog).toContain("Uppercase · −0.02em · 1 line");
+  });
+});
