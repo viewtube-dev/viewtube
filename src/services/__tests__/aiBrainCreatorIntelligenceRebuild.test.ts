@@ -134,8 +134,18 @@ describe("AI Brain creator intelligence rebuild", () => {
    brand: { voice: "Clear and grounded" },
    intelligence: { capabilities: ["strategy"] },
   })
-  const updated = saveAiBrainContext({ ...saved, channelDescription: "I make cinematic history explainers.", source: "wizard" })
+  const staleLegacyPayload = {
+   ...saved,
+   mainTopicFocus: "stale legacy niche",
+   channelContext: {
+    ...saved.channelContext,
+    identity: { ...saved.channelContext.identity, niche: "Canonical niche" },
+   },
+  }
+  storage.setItem("vt_ai_brain_context_v1", JSON.stringify(staleLegacyPayload))
+  const updated = saveAiBrainContext({ ...staleLegacyPayload, channelDescription: "I make cinematic history explainers.", source: "wizard" })
   expect(updated.channelContext.identity.description).toBe("I make cinematic history explainers.")
+  expect(updated.channelContext.identity.niche).toBe("Canonical niche")
   expect(updated.channelContext.identity.subNiches).toEqual(["Naval history"])
   expect(updated.channelContext.content.priorityThemes).toEqual(["Research"])
   expect(updated.channelDescription).toBe("I make cinematic history explainers.")
