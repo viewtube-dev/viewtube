@@ -15,14 +15,14 @@ interface GeminiKeyContextType {
   validationError: string | null;
 }
 
-type GeminiModelDescriptor = { name?: string; supportedActions?: string[] };
+type GeminiModelDescriptor = { name?: string; supportedActions?: string[]; supportedGenerationMethods?: string[] };
 
 /** Select only models the current API key reports as supporting generateContent. */
 export const chooseGeminiValidationModel = (models: GeminiModelDescriptor[]): string | null => {
   const candidates = models
     .filter((model) =>
       model.name &&
-      model.supportedActions?.includes('generateContent') &&
+      (model.supportedActions ?? model.supportedGenerationMethods)?.includes('generateContent') &&
       model.name.toLowerCase().includes('gemini')
     )
     .map((model) => ({
