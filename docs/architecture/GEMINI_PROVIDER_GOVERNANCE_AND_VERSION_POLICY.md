@@ -22,7 +22,7 @@ This document records verified source-level findings and defines the Phase 1 con
 | Capability routing | `src/services/brain/modelRouting.ts` | Hardcodes model IDs by capability and can substitute the saved preference. It exposes requested/served model and substitution reason, which should be preserved and adopted by the canonical resolver. |
 | Key validation | `src/context/GeminiKeyContext.tsx` | Dynamically imports the SDK and lists models before selecting a validation candidate. This fixes hardcoded validation IDs but currently has its own selection algorithm instead of sharing the runtime registry/resolver. Stores the entered key in `localStorage`. |
 | Metering | `src/services/billingEntitlement.ts` | Maintains a separate model-rate table and default rate fallback. This can make charges inaccurate when an unlisted model or fallback is served. |
-| SDK dependency | `package.json` | Declares `@google/genai` as `^1.46.0`. The lockfile must be treated as the reproducible installed version; the range alone is not the resolved version. |
+| SDK dependency | `package.json` and `package-lock.json` | Declares `^1.46.0`; the lockfile resolves `node_modules/@google/genai` to exactly `1.46.0`. |
 | Brain/provider architecture | `src/services/brain/__tests__/brainProviderArchitectureGuard.test.ts` | Existing architecture guard and allowlist should be updated deliberately as consumers migrate, not bypassed. |
 | Existing custom-key coverage | `src/services/__tests__/geminiCustomKeyAccess.test.ts` | Existing tests mock provider calls and must remain part of the regression suite. |
 
@@ -38,7 +38,7 @@ These examples establish conflicting policy sources. They do not establish that 
 
 ### Phase 0 audit boundaries
 
-GitHub file reads and code-search excerpts identified the above hotspots. A complete inventory still requires a fresh repository-wide scan on the exact target SHA for:
+GitHub file reads, code-search excerpts, and the lockfile confirmed the above hotspots, the three additional direct-call consumers listed below, and SDK version `1.46.0`. Search indexing returned some older revisions, so a complete inventory still requires a fresh repository-wide scan on the exact target SHA for:
 - every direct `new GoogleGenAI(` and `models.generateContent` / streaming invocation;
 - embeddings, cached content, files, Live API, image/video/audio and any provider-specific tool invocation;
 - all model IDs in TypeScript, JavaScript, JSON, tests, scripts, deployment configuration and docs;
@@ -144,6 +144,11 @@ Implement the facade and registry additively first. Migrate one consumer at a ti
 - [ ] Security boundary for production credentials and BYOK explicitly decided.
 - [ ] No claim of runtime compatibility without API-backed test evidence.
 
+- `src/services/brain/Core.ts` — direct generation consumer through the shared client
+- `src/services/CollabEngine.ts` — direct generation consumer
+- `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx` — direct generation consumer
+- `package-lock.json` — resolves `@google/genai` to `1.46.0`
+
 ## Related source files
 
 - `src/services/gemini.ts`
@@ -157,4 +162,4 @@ Implement the facade and registry additively first. Migrate one consumer at a ti
 
 ## Change log
 
-- 2026-10-28: Initial Phase 0/1 audit and policy baseline authored from GitHub source inspection. Full target-SHA repository scan, local test execution, and live-key validation remain outstanding.
+- 2026-10-28: Initial Phase 0/1 audit and policy baseline authored from GitHub source inspection. A repository-wide target-SHA scan, local test execution, and live-key validation remain outstanding.
