@@ -55,7 +55,7 @@ import { resolveCreatorContext } from "./CreatorContextResolver"
 import { loadAiBrainContext } from "../aiBrainContext"
 import { buildCreatorAnswerEvidenceRecords, isCreatorAnswerProfileEligible } from "./CreatorAnswerEvidence"
 import { readBrainSurfaceSelection } from "./BrainSurfaceSelection"
-import { resolveBrainRetryInput, type BrainGenerationInputSnapshot, type BrainRetryContextContinuity } from "./BrainRetryContinuity"
+import { resolveBrainRetryInput, resolveBrainModelInputSnapshot, type BrainGenerationInputSnapshot, type BrainModelInputSnapshot, type BrainRetryContextContinuity } from "./BrainRetryContinuity"
 import {
  cacheCurrentNicheResearch,
  readCachedCurrentNicheResearch,
@@ -683,21 +683,15 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  questionTrace.recordPromptVersion("outputSchema", BRAIN_OUTPUT_SCHEMA_VERSION)
  let renderedEvidenceRecords = [] as typeof promptEvidenceRecords
  let renderedCreatorAnswerEvidenceRecords = [] as typeof creatorAnswerEvidenceRecords
- const originalModelInputSnapshot = pending.metadata?.originalModelInputSnapshot as {
-  systemInstruction?: string
-  history?: any[]
-  userText?: string
-  evidenceRecords?: EvidenceRecord[]
-  creatorAnswerEvidenceRecords?: EvidenceRecord[]
- } | undefined
- const restoreOriginalModelInput = Boolean(
-  input.retryTurnId
-  && input.retryGenerationOnly
-  && input.retryEvidenceMode !== "fresh"
-  && retryContextContinuity === "original_input_restored"
-  && originalModelInputSnapshot
-  && typeof originalModelInputSnapshot.systemInstruction === "string"
- )
+ const originalModelInputSnapshot = pending.metadata?.originalModelInputSnapshot as BrainModelInputSnapshot<EvidenceRecord> | undefined
+ const restoredModelInputSnapshot = resolveBrainModelInputSnapshot({
+  retryTurn: Boolean(input.retryTurnId),
+  generationOnly: Boolean(input.retryGenerationOnly),
+  mode: input.retryEvidenceMode || "saved",
+  continuity: retryContextContinuity,
+  saved: originalModelInputSnapshot,
+ })
+ const restoreOriginalModelInput = Boolean(restoredModelInputSnapshot)
  let modelSystemInstruction: string | undefined
  let modelHistory: any[] | undefined
  try {
@@ -756,16 +750,16 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   // Only retain evidence whose full canonical prompt representation survived
   // section selection and the context budget. An ID substring is not proof that
   // the record itself was supplied to the model.
-  renderedEvidenceRecords = restoreOriginalModelInput && Array.isArray(originalModelInputSnapshot?.evidenceRecords)
+  renderedEvidenceRecords = restoreOriginalModelInput && Array.isArray(restoredModelInputSnapshot?.evidenceRecords)
    ? originalModelInputSnapshot.evidenceRecords
    : getEvidenceRecordsActuallyRendered(context.systemInstruction, promptEvidenceRecords)
-  renderedCreatorAnswerEvidenceRecords = restoreOriginalModelInput && Array.isArray(originalModelInputSnapshot?.creatorAnswerEvidenceRecords)
+  renderedCreatorAnswerEvidenceRecords = restoreOriginalModelInput && Array.isArray(restoredModelInputSnapshot?.creatorAnswerEvidenceRecords)
    ? originalModelInputSnapshot.creatorAnswerEvidenceRecords
    : getEvidenceRecordsActuallyRendered(context.systemInstruction, creatorAnswerEvidenceRecords)
   modelSystemInstruction = restoreOriginalModelInput
-   ? originalModelInputSnapshot?.systemInstruction
+   ? restoredModelInputSnapshot?.systemInstruction
    : context.systemInstruction
-  modelHistory = restoreOriginalModelInput && Array.isArray(originalModelInputSnapshot?.history)
+  modelHistory = restoreOriginalModelInput && Array.isArray(restoredModelInputSnapshot?.history)
    ? originalModelInputSnapshot.history
    : (input.history || []).slice(-8)
   questionTrace.recordEvidence({
