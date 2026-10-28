@@ -696,14 +696,14 @@ const ConfirmedStudioDropdownFamily: React.FC = () => {
 type ConfirmedCatalogFamilyName =
   | "Text Fields"
   | "Buttons"
-  | "Modules"
+  | "Modules & Frames"
   | "Dropdowns"
   | "Controls"
   | "Text Controls"
   | "Compositions"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
-  "Text Fields", "Buttons", "Modules", "Dropdowns",
+  "Text Fields", "Buttons", "Modules & Frames", "Dropdowns",
   "Controls", "Text Controls", "Compositions",
 ]
 
@@ -717,7 +717,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     : ""
   if (/Studio Text Input|Studio Text Area|Studio Text Box|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|Badge/.test(title) || componentName === "ConfirmedStudioButtonFamily" || componentName === "ConfirmedStudioSplitButtonFamily" || componentName === "CanonicalSplitBadgeFamily") return "Buttons"
-  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules"
+  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
   if (/Dropdown/.test(title) || componentName === "ConfirmedStudioDropdownFamily") return "Dropdowns"
   if (/Switches, Radios & Checkboxes|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftWordCounter|StudioLeftWordSlider|StudioChoice|Global Rules Exceptions/.test(title) || componentName === "CanonicalControlFamilies" || componentName === "ConfirmedStudioCounterFamily" || componentName === "ConfirmedStudioDoubleSplitSliderFamily" || componentName === "ConfirmedStudioSideCounterFamily" || componentName === "ConfirmedStudioLeftWordCounterFamily" || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Controls"
   if (/Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|SpectrumTag|TagEditor|Arrow \/ Side \/ Double Side \/ Bar Toggles/.test(title) || componentName === "ConfirmedStudioValueToggleFamily" || componentName === "CanonicalWordToggleFamily") return "Text Controls"
