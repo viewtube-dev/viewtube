@@ -20,6 +20,21 @@ const studioControlStyles = () => [
 ].map((file) => source("src/styles/" + file)).join("\n")
 
 describe("subtoolbox design governance", () => {
+  it("keeps the definitive library free of duplicate standalone choice cards and important overrides", () => {
+    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
+    const styles = source("src/components/studio-hub/studio-hub-primitive-migration-catalog.css");
+    const families = catalog.slice(catalog.indexOf("export const STUDIO_HUB_MIGRATED_FAMILIES"), catalog.indexOf("] as const"));
+    for (const duplicate of ['"Toggle",', '"Vertical Word Toggle",', '"Checkbox",', '"Radio",', '"Segmented Choice",', '"Settings Switch",', '"Controller Switch",']) {
+      expect(families).not.toContain(duplicate);
+    }
+    expect(families).toContain('"Switches / Toggles / Radio / Checkbox",');
+    expect(families).toContain('"Studio Counter Family",');
+    expect(families).toContain('"Studio Slider Family",');
+    expect(styles).not.toContain("!important");
+    expect(styles).toContain("--vt-subtoolbox-shell-box-shadow: none;");
+    expect(styles).toContain("--vt-subtoolbox-content-border: 0;");
+  });
+
  it.each(productionSubtoolboxConsumers)("keeps %s on the canonical nested shell", (path) => {
   const contents = source(path)
 
