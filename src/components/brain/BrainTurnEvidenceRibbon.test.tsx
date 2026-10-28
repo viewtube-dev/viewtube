@@ -138,6 +138,19 @@ describe("BrainTurnEvidenceRibbon", () => {
   expect(html).toContain("Recent retention data")
  })
 
+ it("counts verified canonical evidence-record IDs as citations even when pack item IDs differ", () => {
+  const recordId = "analytics:snapshot-1:video-abc:views"
+  const html = render({
+   evidencePack: pack(),
+   evidenceIntegrityStatus: "verified",
+   evidenceRecords: [record({ id: recordId, sourceRef: "video-abc", metric: "views" })],
+   citedEvidenceIds: [recordId],
+  })
+
+  expect(html).toContain("1 cited")
+  expect(html).not.toContain("unresolved citation")
+ })
+
  it("keeps missing timestamps and missing evidence distinct instead of inventing freshness", () => {
   const html = render({ evidencePack: pack({ capturedAt: null, dataStatus: "missing", items: [], evidenceIds: [], missingInputs: ["Analytics connection"] }) })
   expect(html).toContain("Capture time unavailable")
