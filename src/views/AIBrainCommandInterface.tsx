@@ -64,6 +64,7 @@ import {
  completeAIBrainTurn,
  sanitizeCreatorFacingBrainCopy,
  aiBrainThreadHasTurnsHint,
+ recordAIBrainTurnInteraction,
 } from "../services/aiBrainConversationStore"
 import {
  buildBrainQuickActions,
@@ -175,6 +176,7 @@ export type ChatMessage = {
  }
  turnStatus?: AIBrainConversationTurn["status"]
  contextMayBeStale?: boolean
+ retryContextContinuity?: "original_input_restored" | "fresh_evidence_retry" | "legacy_context_reconstructed"
 }
 
 
@@ -620,7 +622,18 @@ const CreatorResponseCard: React.FC<{
    header={
     <div className="shrink-0 border-b-[2px] border-black px-3 py-2" style={{ backgroundColor: TOOLBOX_PALETTE[5] }}>
      <div className="flex flex-wrap items-start justify-between gap-1">
-      <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
+      <div className="min-w-0">
+       <div data-vt-brain-part="response-attribution" className="text-[9px] font-black uppercase tracking-[0.16em] text-black/55">ViewTube Copilot</div>
+       {message.retryContextContinuity ? (
+        <div data-vt-brain-part="retry-provenance" role="status" className="mt-1 text-[9px] font-black uppercase tracking-[0.08em]">
+         {message.retryContextContinuity === "original_input_restored"
+          ? "Retry · original saved input restored"
+          : message.retryContextContinuity === "fresh_evidence_retry"
+           ? "Retry · fresh evidence snapshot"
+           : "Retry · legacy context reconstructed"}
+        </div>
+       ) : null}
+      </div>
       {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
      </div>
      <BrainResponseSectionHeader
@@ -1149,6 +1162,7 @@ const AIBrainCommandInterface: React.FC = () => {
      handoff: null,
      originalUserText: turn.rawUserMessage ?? turn.userText,
      turnStatus: turn.status,
+     retryContextContinuity: typeof turn.metadata?.retryContextContinuity === "string" ? turn.metadata.retryContextContinuity as ChatMessage["retryContextContinuity"] : undefined,
      contextMayBeStale: Boolean(
       turn.metadata?.dataReadinessSnapshot &&
       typeof turn.metadata.dataReadinessSnapshot === "object" &&
@@ -1445,6 +1459,7 @@ const AIBrainCommandInterface: React.FC = () => {
      history: historyPayload,
      allowModel: canUseGemini,
      retryGenerationOnly: true,
+     retryEvidenceMode: useFreshEvidence ? "fresh" : "saved",
     })
     setMessages((current) => current.map((item) => item.id === result.turn.id
      ? {
@@ -1458,7 +1473,8 @@ const AIBrainCommandInterface: React.FC = () => {
        evidenceIntegrityStatus: getPromptEvidenceIntegrityStatus(result.turn.metadata),
        readiness: readinessForSnapshot(turnSnapshot),
        contextUsed: result.turn.metadata?.creatorContextSnapshot as BrainCreatorContextSnapshot | undefined,
-       contextMayBeStale: false,
+       contextMayBeStale: result.turn.metadata?.retryContextContinuity === "legacy_context_reconstructed",
+       retryContextContinuity: typeof result.turn.metadata?.retryContextContinuity === "string" ? result.turn.metadata.retryContextContinuity as ChatMessage["retryContextContinuity"] : undefined,
       }
      : item,
     ))
@@ -1510,6 +1526,20 @@ const AIBrainCommandInterface: React.FC = () => {
     contentBuildId: activeProject?.contentBuildId || null,
     selectedContentId,
    })
+   try {
+    await recordAIBrainTurnInteraction(message.id, {
+     type: "review_handoff_queued",
+     direction: "outbound",
+     detail: {
+      target,
+      handoffId: handoff.id,
+      evidenceIds: message.response?.evidenceIds || message.evidencePack?.evidenceIds || [],
+      reviewOnly: true,
+     },
+    })
+   } catch (persistenceError) {
+    console.warn("[AIBrain] Review handoff was queued but its local interaction receipt could not be saved:", persistenceError)
+   }
    setMessages((current) => current.map((item) => item.id === message.id ? { ...item, handoff } : item))
   } catch (error) {
    console.warn("[AIBrain] Review-only handoff could not be queued:", error)
@@ -1566,6 +1596,20 @@ const AIBrainCommandInterface: React.FC = () => {
    } catch {
     // Local fallback responses may not have a persisted canonical turn ID.
    }
+  }
+  try {
+   await recordAIBrainTurnInteraction(message.id, {
+    type: "creator_feedback",
+    direction: "inbound",
+    detail: {
+     rating,
+     feedbackAt,
+     responseId: message.response?.id || null,
+     evidenceIds: message.response?.evidenceIds || [],
+    },
+   })
+  } catch (persistenceError) {
+   console.warn("[AIBrain] Feedback was saved but its local interaction receipt could not be appended:", persistenceError)
   }
   await refreshConversationTurns()
   if (rating === "ask_follow_up") {
