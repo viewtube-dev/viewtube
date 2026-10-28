@@ -179,3 +179,10 @@ The canonical IndexedDB conversation-turn store remains the only persistence own
 **Storage contract:** conversation/evidence/interaction history uses the existing local IndexedDB conversation store; the creator intake uses channel-scoped browser local storage. Both are local to the current browser/device on mobile or desktop and do not automatically synchronize between devices. Clearing site data, browser eviction, storage quota, or private-browsing restrictions can affect retention.
 
 **Verification status:** changes and focused tests are committed, but this session has not run Vitest, typecheck, production build, or real mobile/desktop browser tests. Treat runtime and CI verification as pending.
+
+
+Follow-up — channel-scoped creator-answer eligibility:
+- The Brain no longer requires a display-name field to be populated before using creator answers loaded from the active channel-scoped profile key. The prior label check incorrectly dropped valid profile answers when a channel-scoped profile had no `identity.name`.
+- Legacy global profile data remains label-gated; an unnamed or mismatched legacy record is not assigned to an active channel.
+- Added regression cases in `src/services/brain/CreatorAnswerEvidence.test.ts` for scoped profiles with blank names and legacy label matching.
+- Verification is still pending: GitHub reports no workflow runs for the commit. Current combined statuses show Vercel build-rate-limit failures, which do not establish a code test result. Do not treat the phase as certified until focused Vitest, typecheck, production build and browser restore/channel-switch checks are run.
