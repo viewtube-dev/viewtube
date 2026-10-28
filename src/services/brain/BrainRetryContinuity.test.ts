@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { resolveBrainRetryInput, resolveBrainModelInputSnapshot, type BrainGenerationInputSnapshot } from "./BrainRetryContinuity"
+import { isBrainModelInputSnapshotChannelCompatible, resolveBrainRetryInput, resolveBrainModelInputSnapshot, type BrainGenerationInputSnapshot } from "./BrainRetryContinuity"
 
 type Snapshot = { evidenceIds: string[]; revision: string }
 const input = (revision: string): BrainGenerationInputSnapshot<Snapshot> => ({
@@ -103,3 +103,20 @@ describe("resolveBrainModelInputSnapshot", () => {
   })).toBeUndefined()
  })
 })
+
+describe("isBrainModelInputSnapshotChannelCompatible", () => {
+ it("allows restoring a saved prompt only for the exact same channel", () => {
+  expect(isBrainModelInputSnapshotChannelCompatible("channel-1", "channel-1")).toBe(true)
+ })
+
+ it("rejects snapshots from another channel", () => {
+  expect(isBrainModelInputSnapshotChannelCompatible("channel-1", "channel-2")).toBe(false)
+ })
+
+ it("rejects legacy or unscoped turns without explicit channel identity", () => {
+  expect(isBrainModelInputSnapshotChannelCompatible(null, "channel-1")).toBe(false)
+  expect(isBrainModelInputSnapshotChannelCompatible("channel-1", null)).toBe(false)
+  expect(isBrainModelInputSnapshotChannelCompatible(undefined, undefined)).toBe(false)
+ })
+})
+
