@@ -1508,3 +1508,24 @@ describe("canonical detached Studio dropdown menu", () => {
     expect(contract).toContain('background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important');
   });
 });
+
+
+describe("upload frame connected perimeter radii", () => {
+  it("connects the black frame, animated gradient, primary ring, and secondary ring", () => {
+    const css = readStudioControlCss();
+    const gradientStart = css.lastIndexOf(".vt-studio-upload-frame::before {");
+    const insetStart = css.lastIndexOf(".vt-studio-upload-frame__inset {");
+    const secondaryStart = css.lastIndexOf(".vt-studio-upload-frame__inset::after {");
+    expect(gradientStart).toBeGreaterThanOrEqual(0);
+    expect(insetStart).toBeGreaterThan(gradientStart);
+    expect(secondaryStart).toBeGreaterThan(insetStart);
+    const gradient = css.slice(gradientStart, insetStart);
+    const inset = css.slice(insetStart, secondaryStart);
+    const secondary = css.slice(secondaryStart, secondaryStart + 500);
+    expect(gradient).toContain("inset: var(--vt-studio-upload-frame-stroke)");
+    expect(gradient).toContain("var(--vt-studio-upload-frame-radius) - var(--vt-studio-upload-frame-stroke)");
+    expect(inset).toContain("inset: calc(2 * var(--vt-studio-upload-frame-stroke))");
+    expect(inset).toContain("var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke)");
+    expect(secondary).toContain("var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke)");
+  });
+});
