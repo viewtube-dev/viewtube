@@ -30,3 +30,23 @@ describe("application menu contract", () => {
     expect(searchApplicationMenuDestinations("destination-that-does-not-exist")).toEqual([])
   })
 })
+
+describe("Gemini key setup access", () => {
+  it("keeps AI & Integrations available without an account-plan or owner gate", async () => {
+    const fs = await import("node:fs")
+    const path = await import("node:path")
+    const menuSource = fs.readFileSync(
+      path.resolve(process.cwd(), "src/components/navigation/ApplicationAccountMenu.tsx"),
+      "utf8",
+    )
+    const navSource = fs.readFileSync(
+      path.resolve(process.cwd(), "src/components/navigation/AdaptiveNavigationShell.tsx"),
+      "utf8",
+    )
+
+    expect(APPLICATION_MENU_DESTINATIONS.some((destination) => destination.id === "ai-integrations")).toBe(true)
+    expect(menuSource).not.toContain("canSeeApiKeys")
+    expect(navSource).not.toContain("const canSeeApiKeys =")
+    expect(navSource).not.toContain("canSeeApiKeys={canSeeApiKeys}")
+  })
+})
