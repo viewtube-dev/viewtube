@@ -974,6 +974,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [onboardingSnapshot, setOnboardingSnapshot] = useState<BrainOnboardingSnapshot | null>(null)
  const [intakeOpen, setIntakeOpen] = useState(false)
  const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext())
+ const [intakeSaveStatus, setIntakeSaveStatus] = useState("Answers save locally as you type.")
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
 
@@ -1666,8 +1667,21 @@ const AIBrainCommandInterface: React.FC = () => {
   })()
  }
 
+ const handleIntakeContextChange = (next: AiBrainContext) => {
+  setIntakeContext(next)
+  try {
+   const saved = saveChannelContextProfile(next.channelContext)
+   setIntakeContext(saved)
+   setIntakeSaveStatus("Saved locally in this browser.")
+  } catch {
+   setIntakeSaveStatus("Local save failed. Check browser storage availability.")
+  }
+ }
+
  const handleSaveIntake = () => {
   const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" })
+  setIntakeContext(saved)
+  setIntakeSaveStatus("Unified creator profile saved locally.")
   const intakeEvidenceRecords = buildCreatorAnswerEvidenceRecords(saved, channelId)
   setIntakeContext(saved)
   updateBrain({
@@ -1743,7 +1757,8 @@ const AIBrainCommandInterface: React.FC = () => {
     {intakeOpen ? (
      <CreatorIntakeWizard
       context={intakeContext}
-      onChange={setIntakeContext}
+      onChange={handleIntakeContextChange}
+      saveStatus={intakeSaveStatus}
       onSave={handleSaveIntake}
       onDefer={handleDeferIntake}
      />
