@@ -127,6 +127,29 @@ describe("public channel mode public ingestion and fixtures", () => {
     expect(resolved.reason).toContain("Public channel ingestion is unavailable")
   })
 
+  it("rejects resolver payloads whose resolution and snapshot belong to different channels", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse({
+      resolution: { resolvedChannelId: "UC1234567890123456789012", resolvedHandle: "@creator_a", channelTitle: "Creator A", reason: null },
+      snapshot: {
+        mode: "public_handle",
+        source: "public_page",
+        fetchedAt: "2026-10-27T12:00:00.000Z",
+        channelId: "UC9876543210987654321098",
+        handle: "@creator_b",
+        title: "Creator B",
+        subscriberCount: null,
+        videoCount: null,
+        viewCount: null,
+        topVideos: [],
+      },
+    }))
+    vi.stubGlobal("fetch", fetchMock)
+
+    expect(await fetchPublicChannelSnapshot("@creator_a")).toBeNull()
+    const resolved = await resolvePublicChannel("@creator_a")
+    expect(resolved.resolvedChannelId).toBeNull()
+  })
+
   it("does not enable fixtures by default in production", async () => {
     const resolved = await resolvePublicChannel("@themotionvis")
     expect(resolved.resolvedChannelId).toBeNull()
