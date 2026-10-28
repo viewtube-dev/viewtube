@@ -281,7 +281,7 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
  const updatedAt = new Date().toISOString()
  const canonicalProfile = next.channelContext || syncLegacyAnswersToChannelContext(
   previous.channelContext,
-  { ...previous, ...next } as AiBrainContextInput,
+  next,
  )
  const normalized = normalizeContext({
   ...previous,
