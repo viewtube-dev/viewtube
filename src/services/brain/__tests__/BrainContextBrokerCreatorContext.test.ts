@@ -282,4 +282,40 @@ describe("BrainContextBroker creator-context convergence", () => {
   expect(result.budget.omittedSections).toContain("creator_personalization_disabled")
  })
 
+
+ it("includes creator intake answers as channel-scoped USER_PROVIDED evidence", () => {
+  const answerRecord = {
+   id: "creator-answer:channel-1:channelContext.identity.niche",
+   owner: "creator-confirmed",
+   sourceRef: "ai-brain-context:channelContext.identity.niche",
+   sourceSnapshotId: "2026-10-27T10:00:00.000Z",
+   channelId: "channel-1",
+   metric: null,
+   value: "Historical explainers",
+   unit: null,
+   freshness: "fresh",
+   epistemicState: "USER_PROVIDED",
+   confidence: 1,
+   observedAt: "2026-10-27T10:00:00.000Z",
+   limitations: ["Creator answer; not independently verified."],
+   provenance: { evidenceIds: ["creator-answer:channel-1:channelContext.identity.niche"], sourceRoute: "settings/ai/channel-context", sourceVersion: "creator-context-unification-v1" },
+  } as any
+  const result = buildBrainContextPack({
+   channelId: "channel-1",
+   systemPrompt: "SYSTEM",
+   snapshot,
+   recentTurns: [],
+   userText: "Plan my content",
+   channelContext: {
+    identity: { name: "History Channel", niche: "Historical explainers" },
+    goals: {}, audience: {}, content: {}, brand: {}, intelligence: {},
+   },
+   creatorAnswerEvidenceRecords: [answerRecord],
+  })
+  expect(result.systemInstruction).toContain("CREATOR ANSWER EVIDENCE")
+  expect(result.systemInstruction).toContain(answerRecord.id)
+  expect(result.systemInstruction).toContain("state=USER_PROVIDED")
+  expect(result.systemInstruction).toContain("not independently verified")
+ })
+
 })
