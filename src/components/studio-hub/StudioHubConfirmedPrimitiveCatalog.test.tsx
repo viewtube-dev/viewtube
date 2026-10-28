@@ -636,3 +636,26 @@ describe("confirmed primitive family section boundaries", () => {
     expect(root).toContain("</ConfirmedCatalogFamilyGroups>")
   })
 })
+
+
+describe("confirmed live primitive grid inventory", () => {
+  it("keeps the live grid at the top and exposes the missing split, multi-select, badge, toggle, upload, accordion, and module designs", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf("const ConfirmedPrimitiveGridOverview");
+    const end = source.indexOf("const ConfirmedDirectPrimitiveRows", start);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    const grid = source.slice(start, end);
+    expect(grid).toContain('data-vt-confirmed-primitive-grid="true"');
+    expect(grid).toContain("<StudioComponentGrid cols={3} rows={6}");
+    for (const primitive of [
+      "StudioButton", "StudioSplitLeftButton", "StudioDropdown", "StudioTextInput", "StudioTextArea",
+      "StudioCounter", "StudioSideCounter", "StudioDoubleSplitSlider", "StudioArrowToggle",
+      "StudioDoubleSplitButton", "StudioSplitLeftDropdown", "StudioLegendMultiDropdown",
+      "StudioDoubleSplitBadge", "StudioWordToggle", "StudioSwitch", "StudioUploadFrame",
+      "StudioSplitAccordion", "StudioInterModule",
+    ]) {
+      expect(grid).toContain(`data-vt-library-component="${primitive}"`);
+    }
+  });
+});
