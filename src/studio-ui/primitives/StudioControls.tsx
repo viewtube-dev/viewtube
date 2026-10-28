@@ -2854,10 +2854,10 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
       </span>
-      <span className="vt-studio-upload-frame__label" data-vt-studio-split="double" data-has-file={selectedName ? "true" : "false"} aria-live="polite">
-        <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--left" aria-hidden="true"><Upload /></span>
-        <span className="vt-studio-upload-frame__badge-text">{selectedName || prompt}</span>
-        <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--right" aria-hidden="true"><ImageIcon /></span>
+      <span className="vt-studio-upload-frame__file-bar" data-has-file={selectedName ? "true" : "false"} aria-live="polite">
+        <span className="vt-studio-upload-frame__file-action" aria-hidden="true"><Upload /></span>
+        <span className="vt-studio-upload-frame__file-name">{selectedName || prompt}</span>
+        <span className="vt-studio-upload-frame__file-kind" aria-hidden="true"><ImageIcon /></span>
       </span>
     </label>
   );
