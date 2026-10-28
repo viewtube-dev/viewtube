@@ -713,7 +713,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
 
   // Keep interactive choice primitives together, ahead of the broader button/control
   // rules so toggles and check controls cannot drift into unrelated families.
-  if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle/.test(title)
+  if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle|StudioChoice|StudioSplitLeftBadge|StudioSplitRightBadge|StudioDoubleSplitBadge/.test(title)
     || componentName === "CanonicalControlFamilies"
     || componentName === "CanonicalWordToggleFamily"
     || componentName === "ConfirmedStudioValueToggleFamily") {
@@ -730,7 +730,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     || componentName === "ConfirmedStudioLeftWordCounterFamily"
     || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Counters & Sliders"
   if (/Dropdown/.test(title)) return "Dropdowns"
-  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton|StudioChoice/.test(title)
+  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton/.test(title)
     || componentName === "ConfirmedStudioButtonFamily") return "Buttons"
   if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|StudioCollapsingSplitModule|Response Meta Row/.test(title)) return "Modules"
   if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|Ranked Metadata Tag/.test(title)) return "Tags & Metadata"
