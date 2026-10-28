@@ -687,66 +687,26 @@ type ConfirmedCatalogFamilyName =
   | "Compositions"
 
 const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
-  "Text Fields",
-  "Buttons & Badges",
-  "Dropdowns",
-  "Controls",
-  "Counters & Sliders",
-  "Modules & Frames",
-  "Compositions",
+  "Text Fields", "Buttons & Badges", "Dropdowns", "Controls",
+  "Counters & Sliders", "Modules & Frames", "Compositions",
 ]
 
-/**
- * Keep each catalog section in a deliberate family. The family wrapper is
- * intentionally based on section titles/component identities, not broad
- * fallback regexes that silently dump unrelated sections into Controls.
- */
 const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
   if (!React.isValidElement(node)) return "Controls"
   const props = node.props as { title?: unknown }
   const title = typeof props.title === "string" ? props.title : ""
   const componentType = node.type as { displayName?: string; name?: string }
-  const componentName = typeof node.type === "function"
-    ? (componentType.displayName || componentType.name || "")
-    : ""
-
-  if (/Studio Text Input|Studio Text Area|Studio Text Box|Split Text Input|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) {
-    return "Text Fields"
-  }
-  // These stateful section components each own a coherent family of specimens.
-  // They must be classified by identity because React.Children.toArray cannot
-  // inspect the elements returned by a component without rendering it.
+  const componentName = typeof node.type === "function" ? (componentType.displayName || componentType.name || "") : ""
   if (/ConfirmedStudio(ValueToggleFamily)/.test(componentName)) return "Controls"
-  if (/ConfirmedStudio(CounterFamily|SideCounterFamily|LeftWordCounterFamily|LeftWordSliderFamily|DoubleSplitSliderFamily)/.test(componentName)) {
-    return "Counters & Sliders"
-  }
+  if (/ConfirmedStudio(CounterFamily|SideCounterFamily|LeftWordCounterFamily|LeftWordSliderFamily|DoubleSplitSliderFamily)/.test(componentName)) return "Counters & Sliders"
   if (/ConfirmedStudioButtonFamily|CanonicalSplitBadgeFamily/.test(componentName)) return "Buttons & Badges"
+  if (/Studio Text Input|Studio Text Area|Studio Text Box|Split Text Input|UsernameInput|SplitLeftInput|SearchInput|NumberInput/.test(title)) return "Text Fields"
   if (/Dropdown|Multi Selection|Single Selection/.test(title)) return "Dropdowns"
-  if (/StudioCounter|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|StudioDoubleSplitSlider|Counter ·|Slider ·/.test(title)
-    || componentName === "ConfirmedStudioCounterFamily"
-    || componentName === "ConfirmedStudioSideCounterFamily"
-    || componentName === "ConfirmedStudioLeftWordCounterFamily"
-    || componentName === "ConfirmedStudioLeftWordSliderFamily"
-    || componentName === "ConfirmedStudioDoubleSplitSliderFamily") {
-    return "Counters & Sliders"
-  }
-  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) {
-    return "Modules & Frames"
-  }
-  if (/Publishing Card|Brain Status|Chat Response|Chat Action|Status \/ navigation/.test(title)) {
-    return "Compositions"
-  }
-  if (/Button|Badge|Spectrum Tag|Closeable Badge|Tag Editor/.test(title)
-    || componentName === "ConfirmedStudioButtonFamily"
-    || componentName === "CanonicalSplitBadgeFamily") {
-    return "Buttons & Badges"
-  }
-  if (/Switches, Radios & Checkboxes|Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|StudioChoice|Global Rules Exceptions|Toggle/.test(title)
-    || componentName === "CanonicalControlFamilies"
-    || componentName === "CanonicalWordToggleFamily"
-    || componentName === "ConfirmedStudioValueToggleFamily") {
-    return "Controls"
-  }
+  if (/StudioCounter|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|StudioDoubleSplitSlider|Counter ·|Slider ·/.test(title)) return "Counters & Sliders"
+  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
+  if (/Publishing Card|Brain Status|Chat Response|Chat Action|Status \/ navigation/.test(title)) return "Compositions"
+  if (/Button|Badge|Spectrum Tag|Closeable Badge|Tag Editor/.test(title)) return "Buttons & Badges"
+  if (/Switches, Radios & Checkboxes|Word Toggles|WordToggle|ArrowToggle|SideToggle|BarToggle|StudioChoice|Toggle/.test(title)) return "Controls"
   return "Controls"
 }
 
@@ -790,7 +750,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
     { value: "explore", label: "EXPLORE" },
   ]
   return (
-    <ConfirmedCatalogFamilyGroups>
+    <>
       <Family title="Split Text Input · Vertical Geometry Comparison" nonDefaultSettings={[
         "Compare the current 0px-padding baseline, an explicit 4px padding reference, half that reference (2px), and username-matched inner height.",
         "Type into each field and focus/blur it to inspect the primary border, glyph baseline, and lower-edge clipping.",
@@ -839,7 +799,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
       <Family title="StudioLeftCounter · Standard" nonDefaultSettings={["Left-action counter variant with the same 2:1 numeric display as the standard counter."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>STANDARD · LEFT ACTION RAIL</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter dedicated specimen" /></div>
       </Family>
-    </ConfirmedCatalogFamilyGroups>
+    </>
   )
 }
 
@@ -1487,7 +1447,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </StudioInterModule>
       </div>
     </Family>
-    
+    <ConfirmedIndividualPrimitiveSections />
     <Family
       title="Collapsing Split Module · Standard + Compact"
       nonDefaultSettings={[
@@ -1559,8 +1519,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
   </ConfirmedCatalogFamilyGroups>
-    <ConfirmedIndividualPrimitiveSections />
-    <ConfirmedAdditionalPrimitiveSections />
   </>
 )
 
@@ -1576,7 +1534,7 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
   const [doubleLeft, setDoubleLeft] = React.useState("SOURCE")
   const [doubleRight, setDoubleRight] = React.useState("TARGET")
   const [barValue, setBarValue] = React.useState(40)
-  return <ConfirmedCatalogFamilyGroups>
+  return <>
     <Family title="StudioResponseMetaRow · Compact" nonDefaultSettings={[
       "Compact response title and metadata composition with optional status, metadata, and trailing slots.",
       "Wraps long labels on narrow widths and composes existing status/actions rather than implementing parallel controls.",
@@ -1665,8 +1623,8 @@ const ConfirmedIndividualPrimitiveSections: React.FC = () => {
     <Family title="StudioBarToggle · Standard" nonDefaultSettings={["Individual bar-toggle specimen; compact and value variants remain in the comparison section."]} provenance={<Provenance primitive="StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · ten fixed-width value bars" imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>STANDARD · BAR TOGGLE</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} barCount={10} ariaLabel="Standard bar toggle specimen" /></div>
     </Family>
-    
-  </ConfirmedCatalogFamilyGroups>
+    <ConfirmedAdditionalPrimitiveSections />
+  </>
 }
 
 const ConfirmedStudioValueToggleFamily: React.FC = () => {
