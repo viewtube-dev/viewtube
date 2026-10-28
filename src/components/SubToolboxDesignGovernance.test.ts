@@ -957,3 +957,15 @@ describe("Confirmed primitive library family organization", () => {
     expect(catalog).toContain("SubToolboxRangeSlider");
   });
 });
+
+
+describe("Confirmed primitive library canonical defaults", () => {
+  it("documents the canonical standard size and flat typography tokens", () => {
+    const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
+    expect(catalog).toContain("<span><b>HEIGHT</b> 44px</span>");
+    expect(catalog).toContain("<span><b>STROKE</b> 3px</span>");
+    expect(catalog).toContain("<span><b>RADIUS</b> 6px</span>");
+    expect(catalog).toContain("<span><b>SHADOW</b> FLAT · 0</span>");
+    expect(catalog).toContain("Uppercase · −0.02em · 1 line");
+  });
+});
