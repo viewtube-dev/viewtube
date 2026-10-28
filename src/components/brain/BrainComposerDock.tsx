@@ -111,10 +111,20 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
                 animation="steady"
                 sizeVariant="mini"
                 className="vt-brain-composer-attachment"
-                onClick={onClearActivePrompt}
-                aria-label={`Draft source: ${activePromptTitle}. Activate to clear the label.`}
-                title="Clear draft source label"
+                aria-label={`Draft source: ${activePromptTitle}`}
+                title="Draft source"
               />
+              <StudioButton
+                type="button"
+                sizeVariant="compact"
+                tone="neutral"
+                data-vt-brain-part="clear-composer-source"
+                onClick={() => onClearActivePrompt?.()}
+                aria-label="Clear draft source label"
+                title="Clear draft source label"
+              >
+                Clear source
+              </StudioButton>
             ) : null}
             {value.trim() ? (
               <StudioButton
