@@ -170,6 +170,7 @@ describe("AI Brain runtime surface integration", () => {
   expect(composerDockSource).toContain('data-vt-brain-part="composer-attachments"')
   expect(composerDockSource).toContain('data-vt-brain-part="clear-composer-draft"')
   expect(source).toContain('activePromptTitle={activePromptTitle}')
+  expect(source).toContain('setDraftPromptOrigin(null) })}')
   expect(source).toContain('setActivePromptTitle("Capability draft")')
   expect(source).toContain('setActivePromptTitle("Suggested action")')
  })
