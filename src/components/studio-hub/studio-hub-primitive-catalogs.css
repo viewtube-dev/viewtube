@@ -3405,3 +3405,14 @@
   width: 100%;
   min-width: 0;
 }
+
+
+/* Confirmed Studio overview: keep the canonical live component grid visible before the long-form inventory. */
+.vt-confirmed-primitive-grid-overview{display:grid;gap:8px;margin:0 0 12px;padding:12px;border:3px solid #000;border-radius:6px;background:#fff;min-width:0}
+.vt-confirmed-primitive-grid-overview>h2{margin:0;font-size:18px;line-height:1;text-transform:uppercase;font-weight:1000;letter-spacing:-.02em;color:#000}
+.vt-confirmed-primitive-grid-overview>p{margin:0;font-size:12px;line-height:1.25;font-weight:800;color:#000}
+.vt-confirmed-primitive-grid-overview .vt-studio-component-grid{min-width:0;width:100%}
+.vt-confirmed-primitive-grid-cell{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:4px;min-width:0;width:100%;height:100%}
+.vt-confirmed-primitive-grid-cell>span{font-size:10px;line-height:1;font-weight:1000;letter-spacing:-.02em;text-transform:uppercase;color:#000}
+.vt-confirmed-primitive-grid-cell>:is(button,[role="button"],[data-vt-studio-control="true"],.vt-studio-dropdown){min-width:0;max-width:100%;width:100%}
+@media(max-width:520px){.vt-confirmed-primitive-grid-overview{padding:8px}.vt-confirmed-primitive-grid-overview>h2{font-size:16px}}
