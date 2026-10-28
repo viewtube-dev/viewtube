@@ -116,6 +116,7 @@ type StudioHubComponentLevel = ToolboxControlLevel
 const STANDARD_LEVEL: StudioHubComponentLevel = "l1"
 
 export const STUDIO_HUB_MIGRATED_FAMILIES = [
+  "Switches / Toggles / Radio / Checkbox",
   "Primary Button",
   "Secondary Button",
   "Neutral Button",
@@ -149,12 +150,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Stepper",
   "Slider",
   "Range Slider",
-  "Toggle",
-  "Vertical Word Toggle",
-  "Settings Switch",
-  "Checkbox",
-  "Radio",
-  "Segmented Choice",
   "Button Group",
   "Tag",
   "Removable Tag",
@@ -193,7 +188,6 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Disclosure",
   "Divider",
   "Pagination",
-  "Controller Switch",
   "LED Light",
   "Icon Rail Control",
   "Hover Card",
@@ -279,13 +273,8 @@ type CatalogPreviewGeometry = {
 }
 
 const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogPreviewGeometry>> = {
+  "Switches / Toggles / Radio / Checkbox": { mode: "compound", inlineUnits: 8.2, portraitStack: true },
   "Square Icon Button": { mode: "fixed" },
-  "Toggle": { mode: "fixed" },
-  "Vertical Word Toggle": { mode: "compound", inlineUnits: 2.5, portraitStack: true },
-  "Settings Switch": { mode: "fixed" },
-  "Checkbox": { mode: "fixed" },
-  "Radio": { mode: "fixed" },
-  "Controller Switch": { mode: "fixed" },
   "LED Dot": { mode: "fixed" },
   "Knob Dial": { mode: "fixed" },
   "Media Control Button": { mode: "fixed" },
@@ -306,7 +295,6 @@ const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogP
   "Split Search": { mode: "compound", inlineUnits: 5.15, portraitStack: true },
   "Input Action": { mode: "compound", inlineUnits: 4.7, portraitStack: true },
   "Stepper": { mode: "compound", inlineUnits: 3.2, portraitStack: true },
-  "Segmented Choice": { mode: "compound", inlineUnits: 4.2, portraitStack: true },
   "Button Group": { mode: "compound", inlineUnits: 4.1, portraitStack: true },
   "Progress Value": { mode: "compound", inlineUnits: 4.8, portraitStack: true },
   "Pagination": { mode: "compound", inlineUnits: 4.6, portraitStack: true },
@@ -445,6 +433,43 @@ const PrimitiveMigrationControl: React.FC<{
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#36E0F6"/><stop offset="1" stop-color="#FF7F6B"/></linearGradient></defs><rect width="640" height="360" fill="url(#g)"/><circle cx="160" cy="120" r="54" fill="white" fill-opacity=".7"/><path d="M60 300 230 150l85 75 120-120 145 195Z" fill="black" fill-opacity=".22"/><text x="320" y="325" text-anchor="middle" font-family="Arial" font-weight="900" font-size="34">VIEWTUBE VAULT</text></svg>`
     return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
   }, [])
+
+  // Keep all binary and segmented choice controls discoverable together.
+  // Each preview is the actual production primitive, not a catalog imitation.
+  if (name === "Switches / Toggles / Radio / Checkbox") {
+    return (
+      <div className="vt-catalog-choice-family" role="group" aria-label="Switches, toggles, radio buttons, and checkboxes">
+        <div className="vt-catalog-choice-specimen">
+          <span>TOGGLE</span>
+          <SubToolboxToggleSwitch level={level} pressed={toggleOn} aria-label="Toggle" onClick={() => setToggleOn((value) => !value)} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>WORD TOGGLE</span>
+          <SubToolboxSegmentedToggle level={level} options={[{ value: "show", label: "SHOW" }, { value: "hide", label: "HIDE" }]} value={toggleOn ? "show" : "hide"} onValueChange={(value) => setToggleOn(value === "show")} ariaLabel="Word toggle" />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>SETTINGS SWITCH</span>
+          <SubToolboxSettingsSwitch level={level} pressed={settingsOn} aria-label="Settings switch" onClick={() => setSettingsOn((value) => !value)} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>CHECKBOX</span>
+          <SubToolboxCheckControl level={level} checked={checkboxOn} aria-label="Checkbox" onClick={() => setCheckboxOn((value) => !value)} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>RADIO</span>
+          <SubToolboxRadioControl level={level} checked={radioOn} aria-label="Radio" onClick={() => setRadioOn((value) => !value)} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>SEGMENTED CHOICE</span>
+          <SubToolboxSegmentedToggle level={level} style={{ ["--vt-segment-count" as string]: 3 } as React.CSSProperties} options={[{ value: "A", label: "A" }, { value: "B", label: "B" }, { value: "C", label: "C" }]} value={segmentChoice} onValueChange={setSegmentChoice} />
+        </div>
+        <div className="vt-catalog-choice-specimen">
+          <span>CONTROLLER SWITCH</span>
+          <SubToolboxControllerSwitch level={level} pressed={controllerOn} onClick={() => setControllerOn((value) => !value)} />
+        </div>
+      </div>
+    )
+  }
 
   // Primitive track rule: only production primitives + shared CSS render here.
   // Unmigrated hardcoded families remain exclusively in the frozen baseline.
