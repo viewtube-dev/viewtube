@@ -148,3 +148,6 @@ Record only checks actually run.
 
 ## Definition of done
 Items 1–4 have source-backed classifications; intended paths are reachable via real UI; evidence/context provenance is preserved; prompt origin/version is retained where supported; no parallel system is introduced; tests/build and observed responsive/accessibility checks are documented; known failures and rollback boundary are reported.
+
+
+Follow-up slice — citation resolution: `BrainTurnEvidenceRibbon` now resolves response citation IDs against either the prepared evidence-pack item IDs or the verified typed prompt-record IDs. It does not trust typed record IDs when integrity is unavailable or mismatched. Added component regression cases for both verified and mismatched manifests. This fixes a false-unresolved path where the response cited typed `EvidenceRecord` IDs while the ribbon compared only evidence-pack item IDs.
