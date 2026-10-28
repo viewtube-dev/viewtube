@@ -44,6 +44,21 @@ describe("PromptEvidenceIntegrity", () => {
   expect(readPromptEvidenceRecords(metadata)).toBeUndefined()
  })
 
+ it("requires the quality fingerprint to match only the records persisted as prompt-rendered", () => {
+  const first = record()
+  const second = record({ id: "evidence-2", sourceRef: "analytics:videos:2", value: 240 })
+  const metadata = metadataFor([first, second])
+
+  // The broker may omit records that do not survive context selection. Saving
+  // the original quality report beside only the rendered subset is not valid.
+  metadata.evidenceRecords = [first]
+  metadata.promptEvidenceRecordIds = [first.id]
+  expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("mismatch")
+
+  metadata.evidenceRecordQuality = buildBrainEvidenceRecordQuality([first], { expectedChannelId: "channel-1" })
+  expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("verified")
+ })
+ 
  it("rejects record IDs that differ from the recorded prompt manifest", () => {
   const metadata = metadataFor([record()])
   metadata.promptEvidenceRecordIds = ["another-evidence-id"]
