@@ -849,7 +849,7 @@ describe("Studio control family grouping and split-slider palette defaults", () 
     const catalog = source("src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx");
     const familyList = catalog.slice(catalog.indexOf("export const STUDIO_HUB_MIGRATED_FAMILIES"), catalog.indexOf("] as const") > -1 ? catalog.indexOf("] as const") : catalog.indexOf("]"));
     expect(familyList.indexOf('"Switches / Toggles / Radio / Checkbox"')).toBeGreaterThanOrEqual(0);
-    expect(familyList.indexOf('"Switches / Toggles / Radio / Checkbox"')).toBeLessThan(familyList.indexOf('"Primary Button"'));
+    expect(familyList.indexOf('"Switches / Toggles / Radio / Checkbox"')).toBeLessThan(familyList.indexOf('"Studio Button Family"'));
     for (const duplicate of ['"Toggle"', '"Vertical Word Toggle"', '"Settings Switch"', '"Checkbox"', '"Radio"', '"Segmented Choice"', '"Controller Switch"']) {
       expect(familyList).not.toContain(duplicate);
     }
