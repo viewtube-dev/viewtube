@@ -311,7 +311,7 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
     <section className="vt-confirmed-primitive-grid-overview" data-vt-confirmed-primitive-grid="true" aria-labelledby="vt-confirmed-primitive-grid-title">
       <h2 id="vt-confirmed-primitive-grid-title">Primitive Grid · Live Production Components</h2>
       <p>Top-level quick reference: real production primitives across action, split, field, choice, counter, slider, and toggle designs. The complete standard representative inventory and detailed family variants follow below.</p>
-      <StudioComponentGrid cols={1} rows={18} size="standard" aria-label="Confirmed Studio primitive grid">
+      <StudioComponentGrid cols={1} rows={19} size="standard" aria-label="Confirmed Studio primitive grid">
         <StudioComponentGridCell col={1} row={1}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioButton">
             <span>BUTTON</span>
@@ -418,6 +418,12 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioInterModule">
             <span>INTERMODULE</span>
             <StudioInterModule title="DETAILS" sizeVariant="standard" defaultOpen><p>Intermodule preview.</p></StudioInterModule>
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={1} row={19}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSplitTextInput">
+            <span>SPLIT TEXT INPUT</span>
+            <StudioSplitTextInput sizeVariant="standard" split="left" leftIcon={<Settings2 aria-hidden="true" />} aria-label="Grid specimen split text input" placeholder="TYPE HERE" />
           </div>
         </StudioComponentGridCell>
       </StudioComponentGrid>
