@@ -301,11 +301,12 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
   const [counterValue, setCounterValue] = React.useState(24)
   const [sliderValue, setSliderValue] = React.useState(58)
   const [buttonPressed, setButtonPressed] = React.useState(false)
+  const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)
   return (
     <section className="vt-confirmed-primitive-grid-overview" data-vt-confirmed-primitive-grid="true" aria-labelledby="vt-confirmed-primitive-grid-title">
       <h2 id="vt-confirmed-primitive-grid-title">Primitive Grid · Live Production Components</h2>
       <p>Canonical component-grid primitive with real Studio controls in each cell. The full standard representative inventory and detailed design-family modules follow below.</p>
-      <StudioComponentGrid cols={2} rows={2} size="standard" aria-label="Confirmed Studio primitive grid">
+      <StudioComponentGrid cols={2} rows={3} size="standard" aria-label="Confirmed Studio primitive grid">
         <StudioComponentGridCell col={1} row={1}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioButton">
             <span>BUTTON</span>
@@ -328,6 +329,20 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDoubleSplitSlider">
             <span>DOUBLE SPLIT SLIDER</span>
             <StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Grid specimen double split slider" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={1} row={3}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioSplitLeftButton">
+            <span>SPLIT-LEFT BUTTON</span>
+            <StudioSplitLeftButton icon={<Sparkles aria-hidden="true" />} sizeVariant="standard" aria-label="Grid specimen split-left button" onClick={() => setSplitButtonPressed(value => !value)}>
+              {splitButtonPressed ? "SELECTED" : "SPLIT BUTTON"}
+            </StudioSplitLeftButton>
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={2} row={3}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioTextInput">
+            <span>TEXT INPUT</span>
+            <StudioTextInput sizeVariant="standard" aria-label="Grid specimen text input" placeholder="TYPE HERE" />
           </div>
         </StudioComponentGridCell>
       </StudioComponentGrid>
