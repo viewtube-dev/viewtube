@@ -1,7 +1,7 @@
 import React from "react"
 import { Captions, Check, ChevronDown, ChevronRight, Expand, FileText, Gauge, Image, Lightbulb, ListVideo, Menu, Minus, MoreHorizontal, Music, Pause, Play, Plus, Search, Settings2, SlidersHorizontal, Upload, Volume2, X } from "lucide-react"
 import { MiniSubToolbox, SubToolbox, SubToolboxDropdownControl } from "../Toolbox"
-import { StudioSideCounter } from "../../studio-ui/primitives/StudioControls"
+import { StudioSideCounter, StudioLeftWordCounter } from "../../studio-ui/primitives/StudioControls"
 import type { ToolboxControlLevel } from "../subtoolbox/tokens"
 import {
   SubToolboxAlert,
@@ -148,6 +148,7 @@ export const STUDIO_HUB_MIGRATED_FAMILIES = [
   "Number Field",
   "Input Action",
   "Stepper",
+  "Studio Left Word Counter",
   "Slider",
   "Range Slider",
   "Button Group",
@@ -295,6 +296,7 @@ const CATALOG_PREVIEW_GEOMETRY: Partial<Record<StudioHubMigratedFamily, CatalogP
   "Split Search": { mode: "compound", inlineUnits: 5.15, portraitStack: true },
   "Input Action": { mode: "compound", inlineUnits: 4.7, portraitStack: true },
   "Stepper": { mode: "compound", inlineUnits: 3.2, portraitStack: true },
+  "Studio Left Word Counter": { mode: "compound", inlineUnits: 3.2, portraitStack: true },
   "Button Group": { mode: "compound", inlineUnits: 4.1, portraitStack: true },
   "Progress Value": { mode: "compound", inlineUnits: 4.8, portraitStack: true },
   "Pagination": { mode: "compound", inlineUnits: 4.6, portraitStack: true },
@@ -384,6 +386,7 @@ const PrimitiveMigrationControl: React.FC<{
   level: StudioHubComponentLevel
 }> = ({ name, level }) => {
   const [stepperValue, setStepperValue] = React.useState(5)
+  const [wordCounterValue, setWordCounterValue] = React.useState(1)
   const [toggleOn, setToggleOn] = React.useState(true)
   const [settingsOn, setSettingsOn] = React.useState(true)
   const [checkboxOn, setCheckboxOn] = React.useState(true)
@@ -493,6 +496,17 @@ const PrimitiveMigrationControl: React.FC<{
   }
   if (name === "Stepper") {
     return <StudioSideCounter size={level === "l2" ? "compact" : "standard"} value={stepperValue} onValueChange={setStepperValue} ariaLabel="Demo value" />
+  }
+  if (name === "Studio Left Word Counter") {
+    return (
+      <div className="vt-catalog-word-counter-family">
+        <StudioLeftWordCounter size="standard" value={wordCounterValue} onValueChange={setWordCounterValue} ariaLabel="Word counter" />
+        <details className="vt-catalog-variants">
+          <summary>VARIANTS</summary>
+          <p>Secondary value fill: add the <code>is-reversed</code> class. The representative above stays primary-filled with black text.</p>
+        </details>
+      </div>
+    )
   }
   if (name === "Toggle") {
     return <SubToolboxToggleSwitch level={level} pressed={toggleOn} aria-label="Toggle" onClick={() => setToggleOn((value) => !value)} />
