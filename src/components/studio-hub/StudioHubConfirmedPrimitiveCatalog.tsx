@@ -4,6 +4,7 @@ import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
+import { StudioComponentGrid, StudioComponentGridCell } from "../../studio-ui/primitives/StudioComponentGrid"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
@@ -295,6 +296,45 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
  * primitive per standard-size row. Keep the samples intentionally unadorned so
  * the component under test—not a catalog lookalike—owns its rendering.
  */
+/** A visible, top-of-library composition grid using real production primitives. */
+const ConfirmedPrimitiveGridOverview: React.FC = () => {
+  const [counterValue, setCounterValue] = React.useState(24)
+  const [sliderValue, setSliderValue] = React.useState(58)
+  const [buttonPressed, setButtonPressed] = React.useState(false)
+  return (
+    <section className="vt-confirmed-primitive-grid-overview" data-vt-confirmed-primitive-grid="true" aria-labelledby="vt-confirmed-primitive-grid-title">
+      <h2 id="vt-confirmed-primitive-grid-title">Primitive Grid · Live Production Components</h2>
+      <p>Canonical component-grid primitive with real Studio controls in each cell. The full standard representative inventory and detailed design-family modules follow below.</p>
+      <StudioComponentGrid cols={2} rows={2} size="standard" aria-label="Confirmed Studio primitive grid">
+        <StudioComponentGridCell col={1} row={1}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioButton">
+            <span>BUTTON</span>
+            <StudioButton sizeVariant="standard" aria-label="Grid specimen button" onClick={() => setButtonPressed(value => !value)}>{buttonPressed ? "SELECTED" : "STUDIO BUTTON"}</StudioButton>
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={2} row={1}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDropdown">
+            <span>DROPDOWN</span>
+            <StudioDropdown sizeVariant="standard" ariaLabel="Grid specimen dropdown" defaultValue="balanced" options={[{ value: "balanced", label: "BALANCED" }, { value: "focused", label: "FOCUSED" }, { value: "expanded", label: "EXPANDED" }]} />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={1} row={2}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioCounter">
+            <span>COUNTER</span>
+            <StudioCounter size="standard" value={counterValue} onValueChange={setCounterValue} min={0} max={100} ariaLabel="Grid specimen counter" />
+          </div>
+        </StudioComponentGridCell>
+        <StudioComponentGridCell col={2} row={2}>
+          <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioDoubleSplitSlider">
+            <span>DOUBLE SPLIT SLIDER</span>
+            <StudioDoubleSplitSlider size="standard" value={sliderValue} onValueChange={setSliderValue} min={0} max={100} ariaLabel="Grid specimen double split slider" />
+          </div>
+        </StudioComponentGridCell>
+      </StudioComponentGrid>
+    </section>
+  )
+}
+
 const ConfirmedDirectPrimitiveRows: React.FC = () => {
   const [arrowValue, setArrowValue] = React.useState("ONE")
   const [barValue, setBarValue] = React.useState(40)
@@ -857,6 +897,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <>
     <div className="vt-confirmed-catalog">
+      <ConfirmedPrimitiveGridOverview />
       <ConfirmedDirectPrimitiveRows />
     </div>
     <ConfirmedCatalogFamilyGroups>

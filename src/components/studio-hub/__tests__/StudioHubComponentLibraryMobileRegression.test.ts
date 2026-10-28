@@ -5,6 +5,24 @@ import { describe, expect, it } from "vitest"
 const read = (path: string) => readFileSync(resolve(process.cwd(), path), "utf8")
 
 describe("Studio Hub Component Library mobile regression", () => {
+  it("shows the live canonical primitive grid before the representative inventory", () => {
+    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+    const grid = read("src/studio-ui/primitives/StudioComponentGrid.tsx")
+    const styles = read("src/components/studio-hub/studio-hub-primitive-catalogs.css")
+
+    expect(catalog).toContain('import { StudioComponentGrid, StudioComponentGridCell } from "../../studio-ui/primitives/StudioComponentGrid"')
+    expect(catalog).toContain('data-vt-confirmed-primitive-grid="true"')
+    expect(catalog).toContain('aria-label="Confirmed Studio primitive grid"')
+    expect(catalog).toContain('data-vt-library-component="StudioButton"')
+    expect(catalog).toContain('data-vt-library-component="StudioDropdown"')
+    expect(catalog).toContain('data-vt-library-component="StudioCounter"')
+    expect(catalog).toContain('data-vt-library-component="StudioDoubleSplitSlider"')
+    expect(catalog.indexOf("<ConfirmedPrimitiveGridOverview />")).toBeLessThan(catalog.indexOf("<ConfirmedDirectPrimitiveRows />"))
+    expect(grid).toContain('data-vt-studio-component-grid="true"')
+    expect(styles).toContain(".vt-confirmed-primitive-grid-overview")
+    expect(styles).toContain(".vt-confirmed-primitive-grid-cell")
+  })
+
   it("mounts frozen and primitive-migration catalogs from the production library wrapper", () => {
     const library = read("src/components/ToolboxUIReferenceLibrary.tsx")
     expect(library).toContain('import { StudioHubCompletePrimitiveCatalog }')
