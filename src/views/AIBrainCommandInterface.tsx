@@ -995,7 +995,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const [questionAnswers, setQuestionAnswers] = useState<AIBrainQuestionAnswer[]>([])
  const [onboardingSnapshot, setOnboardingSnapshot] = useState<BrainOnboardingSnapshot | null>(null)
  const [intakeOpen, setIntakeOpen] = useState(false)
- const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext(authState.channelId || authState.channelHandle || null))
+ const [intakeContext, setIntakeContext] = useState<AiBrainContext>(() => loadAiBrainContext(authState.channelId || authState.channelHandle || null, authState.channelName || null, [authState.channelHandle]))
  const [intakeSaveStatus, setIntakeSaveStatus] = useState("Answers save locally as you type.")
  const [promptRailOpen, setPromptRailOpen] = useState(false)
  const [launcherMode, setLauncherMode] = useState<"prompts" | "capabilities">("prompts")
@@ -1042,9 +1042,9 @@ const AIBrainCommandInterface: React.FC = () => {
   [brain, authState, channelConnection, onboardingSnapshot, recentTurns],
  )
  useEffect(() => {
-  setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
+  setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label, [authState.channelHandle]))
   setIntakeSaveStatus("Loaded this channel's locally saved profile.")
- }, [channelId, snapshot.channel.label])
+ }, [channelId, snapshot.channel.label, authState.channelHandle])
 
  const creatorGrowthContext = useMemo(
   () => buildCreatorGrowthContext(snapshot, recentTurns, learningEntries),
@@ -1109,12 +1109,12 @@ const AIBrainCommandInterface: React.FC = () => {
  useEffect(() => {
   const query = new URLSearchParams(location.search)
   if (query.get("intake") === "1") {
-   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
+   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label, [authState.channelHandle]))
    setIntakeOpen(true)
    return
   }
   if (shouldShowAiBrainIntake(authState.isAuthenticated, channelId)) {
-   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
+   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label, [authState.channelHandle]))
    setIntakeOpen(true)
   }
  }, [authState.isAuthenticated, location.search, channelId, snapshot.channel.label])
@@ -1300,7 +1300,7 @@ const AIBrainCommandInterface: React.FC = () => {
   const promptOrigin = selectedPromptOrigin || (override === undefined ? draftPromptOrigin || undefined : undefined)
   if (!userText.trim() || busy || requestInFlightRef.current) return
   if (shouldShowAiBrainIntake(authState.isAuthenticated, channelId)) {
-   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
+   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label, [authState.channelHandle]))
    setIntakeOpen(true)
    return
   }
@@ -1326,7 +1326,7 @@ const AIBrainCommandInterface: React.FC = () => {
     requestText: userText,
    })
    turnGrowthContext = buildCreatorGrowthContext(turnSnapshot, recentTurns, learningEntries)
-   const creatorContext = loadAiBrainContext(channelId, turnSnapshot.channel.label)
+   const creatorContext = loadAiBrainContext(channelId, turnSnapshot.channel.label, [authState.channelHandle])
    const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, turnSnapshot.channel.label)
    turnSnapshot = { ...turnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(turnSnapshot.evidencePack, creatorAnswerEvidence) }
    const systemPrompt = buildAIBrainSystemPrompt({
@@ -1338,7 +1338,7 @@ const AIBrainCommandInterface: React.FC = () => {
     recentConversationTurns: recentTurns,
     requestText: userText,
     creatorGrowthContext: turnGrowthContext,
-    channelContext: loadAiBrainContext(channelId, snapshot.channel.label).channelContext,
+    channelContext: loadAiBrainContext(channelId, snapshot.channel.label, [authState.channelHandle]).channelContext,
    })
    const historyPayload = buildBrainConversationHistory(recentTurns)
    const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
@@ -1472,7 +1472,7 @@ const AIBrainCommandInterface: React.FC = () => {
     const baseTurnSnapshot = !useFreshEvidence && message.evidencePack
      ? { ...freshSnapshot, evidencePack: message.evidencePack }
      : freshSnapshot
-    const creatorContext = loadAiBrainContext(channelId, snapshot.channel.label)
+    const creatorContext = loadAiBrainContext(channelId, snapshot.channel.label, [authState.channelHandle])
     const creatorAnswerEvidence = buildScopedCreatorAnswerEvidenceRecords(creatorContext, channelId, snapshot.channel.label)
     const turnSnapshot = { ...baseTurnSnapshot, evidencePack: mergeCreatorAnswerEvidenceIntoPack(baseTurnSnapshot.evidencePack, creatorAnswerEvidence) }
     const turnGrowthContext = buildCreatorGrowthContext(
@@ -1490,7 +1490,7 @@ const AIBrainCommandInterface: React.FC = () => {
      requestText: userText,
      evidencePackOverride: !useFreshEvidence ? turnSnapshot.evidencePack : undefined,
      creatorGrowthContext: turnGrowthContext,
-     channelContext: loadAiBrainContext(channelId, snapshot.channel.label).channelContext,
+     channelContext: loadAiBrainContext(channelId, snapshot.channel.label, [authState.channelHandle]).channelContext,
     })
     const historyPayload = buildBrainConversationHistory(recentTurns.filter((turn) => turn.id !== message.id))
     const activeProject = resolveActiveBrainProject(brain.projects, brain.activeProjectId, projectContextCleared)
@@ -1956,7 +1956,7 @@ const AIBrainCommandInterface: React.FC = () => {
         )}
        </div>
        <aside data-vt-brain-workspace-part="right-context" aria-label="Creator context and recommended actions" className="vt-brain-studio-workspace__context-rail hidden min-h-0 overflow-y-auto xl:block">
-        <BrainContextRail channelId={channelId} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
+        <BrainContextRail channelId={channelId} channelHandle={authState.channelHandle} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setInput(prompt); requestAnimationFrame(() => composerRef.current?.focus({ preventScroll: true } as FocusOptions)) }} />
        </aside>
       </div>
 
@@ -2024,7 +2024,7 @@ const AIBrainCommandInterface: React.FC = () => {
          <StudioButton data-vt-brain-part="mobile-context-close" ref={contextCloseRef} sizeVariant="compact" tone="neutral" type="button" onClick={() => setContextRailOpen(false)}><X size={14} aria-hidden="true" /> Close</StudioButton>
         </div>
         <div className="vt-scrollless min-h-0 overflow-y-auto overscroll-contain" aria-label="Channel context" tabIndex={0}>
-         <BrainContextRail channelId={authState.channelId || null} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
+         <BrainContextRail channelId={channelId} channelHandle={authState.channelHandle} snapshot={snapshot} growthContext={creatorGrowthContext} insights={railInsights} questions={learningQuestions} responseQuestions={latestResponseQuestions} quickActions={quickActions} onAskInsight={handleAskInsight} onAcceptQuickAction={handleAcceptQuickAction} onAnswerQuestion={handleAnswerQuestion} onEditPrompt={(prompt) => { setContextRailOpen(false); setInput(prompt); composerRef.current?.focus() }} />
         </div>
         </div>
        </div>
