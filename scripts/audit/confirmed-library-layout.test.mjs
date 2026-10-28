@@ -256,8 +256,8 @@ test("catalog labels dropdown and action specimens according to their actual ini
 test("word-toggle settings document alternate skins; behavior stays in the production primitive", () => {
   assert.ok(catalog.includes("Alternate active-handle skins: COLOR SWAP and BLACK."));
   assert.ok(!catalog.includes("False selects the first word and true the second; custom words change labels, not the boolean state contract."));
-  assert.match(controls, /aria-pressed=\\{value === \\(index === 1\\)\\}/);
-  assert.match(controls, /onClick=\\{\\(\\) => onValueChange\\?\\.\\(index === 1\\)\\}/);
+  assert.match(controls, /aria-pressed=\{value === \(index === 1\)\}/);
+  assert.match(controls, /onClick=\{\(\) => onValueChange\?\.\(index === 1\)\}/);
 });
 
 test("icon-effect examples are clearly static previews, not live outcome claims", () => {
@@ -341,7 +341,7 @@ test("confirmed composite controls are represented in the production catalog", (
   for (const name of ["StudioPlayPauseButton", "StudioCircleIconButton", "StudioUsernameInput"]) {
     assert.ok(catalog.includes(name), `catalog includes ${name}`);
     assert.ok(catalog.includes(`data-vt-library-component="${name}"`), `${name} has a library specimen marker`);
-    assert.match(controls, new RegExp(`export const ${name}\\b`), `${name} is a production export`);
+    assert.match(controls, new RegExp(`export const ${name}\b`), `${name} is a production export`);
   }
   assert.match(catalog, /Play\/Pause Split-left Button · 44px \+ 28px/);
   assert.match(catalog, /Circle Icon Button · 44px \+ 28px/);
@@ -458,12 +458,12 @@ test("PR 756 ConfirmedSpecimenGrid is integrated into the confirmed production p
 test("ConfirmedSpecimenGrid is full-width and does not split the module into side-by-side columns", () => {
   const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
   const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
-  assert.match(gridCss, /--vt-specimen-gap:\\s*var\\(--vt-studio-space-unit,\\s*4px\\)/);
-  assert.match(gridCss, /\\.vt-specimen-module\\s*\\{[^}]*width:\\s*100%/s);
+  assert.match(gridCss, /--vt-specimen-gap:\s*var\(--vt-studio-space-unit,\s*4px\)/);
+  assert.match(gridCss, /\.vt-specimen-module\s*\{[^}]*width:\s*100%/s);
   assert.doesNotMatch(gridCss, /vt-specimen-columns/);
   assert.doesNotMatch(gridSource, /vt-specimen-columns/);
-  assert.match(gridSource, /aria-checked=\\{clean\\}/);
-  assert.match(gridSource, /aria-controls=\\{contentId\\}/);
+  assert.match(gridSource, /aria-checked=\{clean\}/);
+  assert.match(gridSource, /aria-controls=\{contentId\}/);
   assert.doesNotMatch(gridCss, /\\.vt-specimen-slot\\s+(?:button|input|textarea|select)[^{]*\\{[^}]*(?:height|border|background|font-size|padding)\\s*:/s);
 });
 
@@ -491,19 +491,19 @@ test("ConfirmedSpecimenGrid keeps layout proportional and leaves control geometr
   const gridSource = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.tsx", "utf8");
   const gridCss = readFileSync("src/components/studio-hub/ConfirmedSpecimenGrid.css", "utf8");
   const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"), styles.indexOf("/* Dense, collapsed Global Defaults"));
-  assert.match(gridCss, /--vt-specimen-gap:\\s*var\\(--vt-studio-space-unit,\\s*4px\\)/);
-  assert.match(gridCss, /grid-template-columns:\\s*repeat\\(144,\\s*minmax\\(0,\\s*1fr\\)\\)/);
-  assert.match(gridSource, /layoutRows\\.map\\(renderLayoutRow\\)/);
+  assert.match(gridCss, /--vt-specimen-gap:\s*var\(--vt-studio-space-unit,\s*4px\)/);
+  assert.match(gridCss, /grid-template-columns:\s*repeat\(144,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(gridSource, /layoutRows\.map\(renderLayoutRow\)/);
   assert.match(gridSource, /gridColumn: \`span \${span}\`/);
-  assert.match(buttonCss, /\\.vt-confirmed-button-skin\\s*\\{[^}]*width:\\s*100%/s);
+  assert.match(buttonCss, /\.vt-confirmed-button-skin\s*\{[^}]*width:\s*100%/s);
   assert.doesNotMatch(buttonCss, /(?:height|min-height|font-size|border-width|border-radius|box-shadow)\\s*:/,
     "catalog wrapper must not redefine production StudioButton geometry");
 });
 
 test("StudioButton catalog styles contain labels without retired V1-V7 skin overrides", () => {
   const buttonCss = styles.slice(styles.indexOf("/* Button catalog is arrangement-only"), styles.indexOf("/* Dense, collapsed Global Defaults"));
-  assert.match(buttonCss, /\\.vt-confirmed-button-skin\\s*>\\s*\\[data-vt-studio-button-face\\]/);
-  assert.match(buttonCss, /overflow:\\s*hidden/);
+  assert.match(buttonCss, /\.vt-confirmed-button-skin\s*>\s*\[data-vt-studio-button-face\]/);
+  assert.match(buttonCss, /overflow:\s*hidden/);
   assert.doesNotMatch(buttonCss, /data-vt-button-skin/);
   assert.doesNotMatch(buttonCss, /overflow-wrap:\\s*anywhere/,
     "the catalog must not override StudioButton's own text containment policy");
