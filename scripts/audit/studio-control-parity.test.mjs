@@ -155,7 +155,9 @@ test("top direct-representative module covers the full explicitly exported contr
   ]) {
     assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"`), `${primitive} needs a direct top-module specimen`);
   }
-  assert.doesNotMatch(representative, /data-vt-library-component="(?:StudioCollapsingSplitModule|StudioCollapsingTwoLineModule|StudioInterModule|StudioSplitAccordion)"/);
+  for (const composition of ["StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioSplitAccordion"]) {
+    assert.match(representative, new RegExp(`data-vt-library-component="${composition}"`), `${composition} must remain represented in the top inventory`);
+  }
 });
 
 
