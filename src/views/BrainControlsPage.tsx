@@ -7,7 +7,7 @@ import { BRAIN_USER_CONTROLS_STORAGE_KEY, DEFAULT_BRAIN_USER_CONTROLS, clearBrai
 import { readBrainEngineControls, resetBrainEngineControls, writeBrainEngineControls, type BrainEngineControls } from "../services/brain/BrainEngineControls"
 import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS, BRAIN_CAPABILITY_REGISTRY } from "../services/brain/BrainCapabilityRegistry"
 import type { BrainCapabilityDefinition } from "../types"
-import { StudioButton, StudioInterModule, StudioTopSplitModule } from "../studio-ui"
+import { StudioButton, StudioCollapsingTwoLineModule, StudioInterModule, StudioTopSplitModule } from "../studio-ui"
 import { capabilityPromptFor } from "../components/brain/BrainCapabilityBrowser"
 
 type Settings = { policy: BrainUserControls; engines: BrainEngineControls }
@@ -71,18 +71,21 @@ const CapabilityInventory: React.FC = () => {
     <p className="text-sm font-bold leading-5">This is the complete registered capability catalog—not a promise that every capability is ready for every channel. Each request still checks permissions, evidence, and context.</p>
     {groups.map(group => <section key={group.title} className="grid min-w-0 gap-2">
       <StudioInterModule title={group.title} sizeVariant="standard" />
-      {group.capabilities.map(capability => <details key={capability.id} className="min-w-0 border-2 border-black bg-white">
-        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-3 py-2 text-left text-xs font-black uppercase focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black">
-          <span className="min-w-0">{capability.label}</span><span aria-hidden="true" className="shrink-0 text-sm">+</span>
-        </summary>
-        <div className="grid min-w-0 gap-2 border-t-2 border-black p-3">
-          <p className="text-sm font-bold leading-5">{capability.description}</p>
+      {group.capabilities.map(capability => <StudioCollapsingTwoLineModule
+        key={capability.id}
+        title={capability.label}
+        description={capability.description}
+        sizeVariant="standard"
+        split="double"
+        className="min-w-0"
+      >
+        <div className="grid min-w-0 gap-2 p-3">
           <p className="text-[10px] font-black uppercase text-black/60">Intents: {capability.intents.join(" · ").replace(/_/g, " ")}</p>
           <p className="break-words text-[10px] font-bold leading-4">Evidence contract: {(BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS[capability.id] || []).join(", ").replace(/_/g, " ") || "No specific sections registered"}</p>
           <p className="text-[10px] font-bold leading-4 text-black/65">{capability.requiresChannelData ? "Requires channel evidence." : "Can be useful without channel analytics."} {capability.requiresCurrentResearch ? "Only selected for timely/current research requests." : ""} Maximum invocations per turn: {capability.maximumInvocationsPerTurn}.</p>
           <StudioButton type="button" sizeVariant="compact" tone="neutral" onClick={() => navigate("/ai-brain?draft=" + encodeURIComponent(capabilityPromptFor(capability)))}>PREPARE REQUEST IN BRAIN</StudioButton>
         </div>
-      </details>)}
+      </StudioCollapsingTwoLineModule>)}
     </section>)}
   </div>
 }
