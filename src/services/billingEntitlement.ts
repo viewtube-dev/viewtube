@@ -500,10 +500,11 @@ export const estimateMeterQuote = (
   markupMultiplier: MARKUP_MULTIPLIER,
   creditDebitEstimate,
   canRun:
-   isOwnerMode() ||
+   rates.known && (isOwnerMode() ||
    state.tier === "large" ||
-   (state.tier !== "free" && state.creditBalance >= Math.max(1, creditDebitEstimate)),
+   (state.tier !== "free" && state.creditBalance >= Math.max(1, creditDebitEstimate))),
   availableCredits: state.creditBalance,
+  pricingKnown: rates.known,
  }
 }
 
