@@ -955,6 +955,14 @@ describe("confirmed primitive library organization", () => {
     expect(classify).toContain('return "Modules & Frames"');
   });
 
+  it("routes text fields and tags into their dedicated groups", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const classify = catalog.slice(catalog.indexOf("const classifyConfirmedCatalogItem"), catalog.indexOf("const ConfirmedCatalogFamilyGroups"));
+    expect(classify).toContain("StudioTextInput|StudioTextArea|StudioTextBox");
+    expect(classify).toContain("StudioCloseableBadge");
+    expect(classify).toContain('return "Tags & Metadata"');
+  });
+
   it("keeps direct representatives unique and excludes composite showcase grids", () => {
     const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
     const start = catalog.indexOf('data-vt-confirmed-representatives="true"');
