@@ -22,7 +22,7 @@ export const chooseGeminiValidationModel = (models: GeminiModelDescriptor[]): st
   const candidates = models
     .filter((model) =>
       model.name &&
-      (model.supportedActions ?? model.supportedGenerationMethods)?.includes('generateContent') &&
+      [...(model.supportedActions ?? []), ...(model.supportedGenerationMethods ?? [])].includes('generateContent') &&
       model.name.toLowerCase().includes('gemini')
     )
     .map((model) => ({
