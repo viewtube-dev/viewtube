@@ -691,7 +691,12 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   continuity: retryContextContinuity,
   saved: originalModelInputSnapshot,
  })
- const restoreOriginalModelInput = Boolean(restoredModelInputSnapshot)
+ // A saved model-visible prompt is channel-scoped data. Never restore it into a
+ // retry for another channel, or when the old turn cannot prove its channel scope.
+ const restoreOriginalModelInput = Boolean(
+  restoredModelInputSnapshot
+  && (pending.metadata?.channelId || null) === (input.channelId || null)
+ )
  let modelSystemInstruction: string | undefined
  let modelHistory: any[] | undefined
  try {
