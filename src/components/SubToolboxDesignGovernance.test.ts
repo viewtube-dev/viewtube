@@ -937,6 +937,26 @@ describe("confirmed primitive library family organization", () => {
 
 
 describe("confirmed primitive library organization", () => {
+  it("does not duplicate family-module variants as separate individual cards", () => {
+    const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+    const start = catalog.indexOf("const ConfirmedIndividualPrimitiveSections");
+    const end = catalog.indexOf("const ConfirmedStudioValueToggleFamily", start);
+    const individual = catalog.slice(start, end);
+    for (const title of [
+      "StudioSwitch · Standard", "StudioRadio · Standard", "StudioCheckbox · Standard",
+      "StudioXCheckbox · Standard", "StudioWordToggle · Standard", "StudioVerticalWordToggle · Standard",
+      "StudioSplitRightBadge · Standard", "StudioDoubleSplitBadge · Standard",
+      "StudioArrowToggle · Standard", "StudioSideToggle · Standard",
+      "StudioDoubleSideToggle · Standard", "StudioBarToggle · Standard",
+    ]) {
+      expect(individual).not.toContain(title);
+    }
+    expect(catalog).toContain('title="Switches, Radios & Checkboxes"');
+    expect(catalog).toContain('title="Word Toggles · Standard + Compact + Vertical"');
+    expect(catalog).toContain('title="Split-left Badge · Standard + Compact + Micro"');
+    expect(catalog).toContain('title="Arrow / Side / Double Side / Bar Toggles"');
+  });
+
   it("declares deliberate family groups with choice controls first", () => {
     const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
     const familyList = catalog.slice(catalog.indexOf("const CONFIRMED_CATALOG_FAMILIES"), catalog.indexOf("const classifyConfirmedCatalogItem"));
