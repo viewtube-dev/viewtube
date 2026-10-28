@@ -23,10 +23,10 @@ export const chooseGeminiValidationModel = (models: GeminiModelDescriptor[]): st
     .filter((model) =>
       model.name &&
       model.supportedActions?.includes('generateContent') &&
-      /(^|\\/)gemini/i.test(model.name)
+      model.name.toLowerCase().includes('gemini')
     )
     .map((model) => ({
-      name: model.name!.replace(/^models\\//, ''),
+      name: model.name!.startsWith('models/') ? model.name!.slice(7) : model.name!,
       normalized: model.name!.toLowerCase(),
     }));
 
