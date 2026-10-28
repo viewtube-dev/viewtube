@@ -1,4 +1,5 @@
 import type { Project } from "../../types"
+import { loadAiBrainContext, type AiBrainContext } from "../aiBrainContext"
 import { getContentBuild } from "../asset-engine/ContentBuildRepository"
 import type { ContentBuildSnapshot } from "../asset-engine/contracts"
 import type { AlgorithmProjectContext } from "./AlgorithmIntelligenceOrchestrator"
@@ -40,6 +41,7 @@ export interface CreatorContextEnvelope {
  channelId: string | null
  controls: BrainUserControls
  profile: BrainChannelProfileBundle | null
+ creatorAnswers: AiBrainContext | null
  channelKnowledge: ChannelKnowledgeRetrieval | null
  styleProfile: StyleProfile | null
  project: AlgorithmProjectContext | null
@@ -56,6 +58,7 @@ export interface CreatorContextEnvelope {
 export interface CreatorContextResolverDependencies {
  readControls: (channelId?: string | null) => BrainUserControls
  loadProfile: (channelId: string) => Promise<BrainChannelProfileBundle>
+ loadCreatorAnswers?: (channelId: string) => AiBrainContext
  buildKnowledge: (input: {
   profile: BrainChannelProfileBundle
   query: string
@@ -109,10 +112,14 @@ export const resolveCreatorContext = async (
  const evidenceRefs = uniqueRefs(input.artifactRefs, input.selection?.evidenceIds)
 
  let profile: BrainChannelProfileBundle | null = null
+ let creatorAnswers: AiBrainContext | null = null
  let channelKnowledge: ChannelKnowledgeRetrieval | null = null
  let styleProfile: StyleProfile | null = null
 
  if (channelId && controls.enabled && controls.personalization) {
+  creatorAnswers = dependencies.loadCreatorAnswers
+   ? dependencies.loadCreatorAnswers(channelId)
+   : loadAiBrainContext(channelId)
   profile = await dependencies.loadProfile(channelId)
   if (profile.personalizationEnabled) {
    channelKnowledge = dependencies.buildKnowledge({
@@ -175,6 +182,7 @@ export const resolveCreatorContext = async (
   channelId,
   controls,
   profile,
+  creatorAnswers,
   channelKnowledge,
   styleProfile,
   project,
