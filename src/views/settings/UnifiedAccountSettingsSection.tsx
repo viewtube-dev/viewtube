@@ -17,7 +17,6 @@ export type UnifiedAccountSettingsSectionProps = {
   activePanel: SettingsPanel
   billingStatus: string | null
   canResolvePublicHandle: boolean
-  canViewGeminiKey: boolean
   channelConnection: { isConnected: boolean; helper: string; settingsLabel: string; state: string }
   currentEmail: string
   currentHandleValue: string
@@ -116,7 +115,6 @@ export const UnifiedAccountSettingsSection: React.FC<UnifiedAccountSettingsSecti
     case "ai":
       return (
         <SettingsAiPanel
-          canViewGeminiKey={props.canViewGeminiKey}
           geminiKey={props.geminiKey}
           showKey={props.showKey}
           settingsSaveStatus={props.settingsSaveStatus}
