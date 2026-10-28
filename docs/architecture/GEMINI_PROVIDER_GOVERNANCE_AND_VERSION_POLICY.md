@@ -144,6 +144,8 @@ Implement the facade and registry additively first. Migrate one consumer at a ti
 - [ ] Security boundary for production credentials and BYOK explicitly decided.
 - [ ] No claim of runtime compatibility without API-backed test evidence.
 
+## Additional audited consumers and dependency evidence
+
 - `src/services/brain/Core.ts` — direct generation consumer through the shared client
 - `src/services/CollabEngine.ts` — direct generation consumer
 - `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx` — direct generation consumer
