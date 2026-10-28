@@ -316,7 +316,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   ]
   return (
     <Family
-      title="Representatives · One Standard Specimen Per Primitive"
+      title="Direct Imported Primitive Representatives · Standard"
       nonDefaultSettings={[
         "Each row contains one live production primitive at its standard size; examples are imported from their production owners rather than recreated as catalog-only lookalikes.",
         "The double-split button is the canonical StudioDoubleSplitButton built from StudioButton and StudioSplitShell. Module and accordion specimens are documented in their own sections below.",
