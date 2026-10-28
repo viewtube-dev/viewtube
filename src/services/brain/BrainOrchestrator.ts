@@ -369,6 +369,16 @@ export interface RunBrainTurnInput {
  artifactRefs?: string[]
 }
 
+const buildCreatorAnswerEvidenceChips = (records: EvidenceRecord[]): string[] =>
+ records.slice(0, 8).map((record) => {
+  const field = record.id
+   .replace(/^creator-answer:[^:]+:/, "")
+   .replace(/^channelContext\./, "")
+   .replace(/^legacy\./, "legacy ")
+   .replace(/[._]/g, " ")
+  return `Creator profile evidence: ${field} (${record.id})`
+ })
+
 export const buildEvidenceProvenanceChips = (evidence: EvidenceIntelligenceEnvelope | null): string[] => {
  if (!evidence) return []
  const quality = evidence.evidenceQuality
@@ -762,7 +772,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   response = {
    ...response,
    evidenceIds: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 50),
-   evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
+   evidenceChips: [...buildEvidenceProvenanceChips(evidenceIntelligence), ...buildCreatorAnswerEvidenceChips(renderedCreatorAnswerEvidenceRecords)],
    generationPath,
    ...(fallbackReason ? { fallbackReason } : {}),
   }
@@ -865,7 +875,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   const response = {
    ...fallbackResponse,
    evidenceIds: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 50),
-   evidenceChips: buildEvidenceProvenanceChips(evidenceIntelligence),
+   evidenceChips: [...buildEvidenceProvenanceChips(evidenceIntelligence), ...buildCreatorAnswerEvidenceChips(renderedCreatorAnswerEvidenceRecords)],
    generationPath,
    fallbackReason,
   }
