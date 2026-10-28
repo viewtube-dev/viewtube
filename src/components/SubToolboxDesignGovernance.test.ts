@@ -894,7 +894,7 @@ describe("confirmed primitive library family organization", () => {
   it("keeps split button and dropdown variants in family modules, not duplicate representative rows", () => {
     const catalog = source("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
     const start = catalog.indexOf('<div className="vt-confirmed-direct-primitive-rows"');
-    const end = catalog.indexOf("\\n      </div>\\n    </Family>", start);
+    const end = catalog.indexOf("</Family>", start);
     const representatives = catalog.slice(start, end);
     for (const variant of ["StudioSplitLeftButton", "StudioDoubleSplitButton", "StudioTwoLineButton", "StudioSplitTwoLineButton", "StudioSplitRightButton", "StudioSplitLeftDropdown", "StudioLegendMultiDropdown", "StudioSplitRightBadge", "StudioDoubleSplitBadge", "StudioSideCounter", "StudioLeftCounter", "StudioLeftWordSlider", "StudioSideToggle", "StudioDoubleSideToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle", "StudioRadio", "StudioCheckbox", "StudioXCheckbox"]) {
       expect(representatives).not.toContain('data-vt-library-component="' + variant + '"');
@@ -903,6 +903,9 @@ describe("confirmed primitive library family organization", () => {
     expect(catalog).toContain("<ConfirmedStudioDropdownFamily />");
     expect(catalog).toContain('title="Split Button Family · Left / Right / Double / Two-Line"');
     expect(catalog).toContain('title="Dropdown Family · Standard / Split-Left / Multi-Select"');
+    for (const representative of ["StudioButton", "StudioDropdown", "StudioArrowToggle", "StudioCounter", "StudioLeftWordCounter", "StudioDoubleSplitSlider", "StudioSplitLeftBadge"]) {
+      expect(representatives.match(new RegExp('data-vt-library-component="' + representative + '"', "g"))?.length).toBe(1);
+    }
   });
 
   it("keeps the migration catalog's switch, radio, and checkbox specimens together without important overrides", () => {
