@@ -66,7 +66,7 @@ describe("Creator Brain intake convergence", () => {
   expect(result.goals.primaryGoal).toBe("Grow a loyal audience")
  })
  it("migrates legacy answers only into missing canonical fields", () => {
-  const canonical = { ...profile, identity: { ...profile.identity, description: "Canonical description", niche: "Canonical niche" } }
+  const canonical = { ...profile, identity: { ...profile.identity, description: "Canonical description", niche: "Canonical niche" }, audience: { ...profile.audience, idealViewer: undefined } }
   const migrated = syncLegacyAnswersToChannelContext(canonical, {
    channelDescription: "Old description",
    mainTopicFocus: "Old niche",
