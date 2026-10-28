@@ -296,4 +296,15 @@ describe("Studio Hub Component Library mobile regression", () => {
     expect(catalog).toContain('id: "details"')
   })
 
+
+  it("groups switch, toggle, radio, and checkbox variant modules under one Controls family module", () => {
+    const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+    expect(catalog).toContain('title="Switches / Toggles / Radio / Checkbox"')
+    expect(catalog).toContain("const switchToggleFamilies: React.ReactNode[] = []")
+    expect(catalog).toContain("if (isSwitchToggleChoiceFamily(title))")
+    expect(catalog).toContain("switchToggleFamilies.push(node)")
+    expect(catalog).toContain('const controls = grouped.get("Controls") ?? []')
+    expect(catalog).toContain("controls.unshift(")
+  })
+
 })
