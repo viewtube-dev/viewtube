@@ -1501,7 +1501,7 @@ describe("StudioSplitTextInput transparent-panel composition", () => {
 
 
 describe("canonical detached Studio dropdown menu", () => {
-  it("keeps the open menu separated, rounded on all corners, and white behind unselected rows", () => {
+  it("keeps the open menu detached, top-rounded, and white behind unselected rows", () => {
     const css = readStudioControlCss();
     const start = css.lastIndexOf("/* Canonical open dropdown menu contract");
     expect(start).toBeGreaterThanOrEqual(0);
