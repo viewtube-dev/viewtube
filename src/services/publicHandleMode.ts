@@ -1,332 +1,203 @@
 import { resolveFromFixture, snapshotFromFixture, fixturesEnabled } from "./publicHandleMode.fixtures"
+
 export interface PublicChannelResolution {
- input: string
- resolvedChannelId: string | null
- resolvedHandle: string | null
- channelTitle: string | null
- reason: string | null
+  input: string
+  resolvedChannelId: string | null
+  resolvedHandle: string | null
+  channelTitle: string | null
+  reason: string | null
 }
 
 export interface PublicChannelSnapshot {
- mode: "public_handle"
- fetchedAt: string
- channelId: string
- handle: string | null
- title: string | null
- subscriberCount: number | null
- videoCount: number | null
- viewCount: number | null
- source?: "youtube_data_api_public" | "public_page" | "fixture"
- topVideos: Array<{
-  videoId: string
-  title: string
-  publishedAt: string
+  mode: "public_handle"
+  fetchedAt: string
+  channelId: string
+  handle: string | null
+  title: string | null
+  subscriberCount: number | null
+  videoCount: number | null
   viewCount: number | null
-  likeCount: number | null
-  commentCount: number | null
- }>
+  source?: "public_page" | "fixture"
+  topVideos: Array<{
+    videoId: string
+    title: string
+    publishedAt: string
+    viewCount: number | null
+    likeCount: number | null
+    commentCount: number | null
+  }>
 }
-
-const YT_DATA_BASE = "https://www.googleapis.com/youtube/v3"
 
 const extractHandleLike = (input: string): string | null => {
- const trimmed = input.trim()
- if (!trimmed) return null
+  const trimmed = String(input || "").trim()
+  if (!trimmed || trimmed.length > 512) return null
+  if (/^UC[\w-]{20,}$/.test(trimmed)) return trimmed
+  if (trimmed.startsWith("@")) {
+    const handle = trimmed.slice(1)
+    return /^[a-zA-Z0-9._-]{1,100}$/.test(handle) ? `@${handle}` : null
+  }
 
- if (trimmed.startsWith("@")) return trimmed.slice(1)
-
- try {
-  const url = new URL(trimmed)
-  const pathname = url.pathname
-  if (pathname.startsWith("/@")) return pathname.slice(2)
-  if (pathname.startsWith("/channel/")) return pathname.replace("/channel/", "")
-  if (pathname.startsWith("/c/")) return pathname.replace("/c/", "")
-  if (pathname.startsWith("/user/")) return pathname.replace("/user/", "")
- } catch {
-  // not a URL
- }
-
- return trimmed
+  try {
+    const url = new URL(trimmed.startsWith("www.") ? `https://${trimmed}` : trimmed)
+    if (!["youtube.com", "www.youtube.com", "m.youtube.com"].includes(url.hostname.toLowerCase())) return null
+    const handlePath = url.pathname.match(/^\/@([^/]+)(?:\/.*)?$/)
+    if (handlePath) {
+      const handle = decodeURIComponent(handlePath[1])
+      return /^[a-zA-Z0-9._-]{1,100}$/.test(handle) ? `@${handle}` : null
+    }
+    const channelPath = url.pathname.match(/^\/channel\/(UC[\w-]{20,})(?:\/.*)?$/i)
+    if (channelPath) return channelPath[1]
+    const legacyPath = url.pathname.match(/^\/(?:c|user)\/([^/]+)(?:\/.*)?$/i)
+    if (legacyPath) {
+      const legacyName = decodeURIComponent(legacyPath[1])
+      return /^[a-zA-Z0-9._-]{1,100}$/.test(legacyName) ? `@${legacyName}` : null
+    }
+    return null
+  } catch {
+    const bare = trimmed.replace(/^@+/, "")
+    return /^[a-zA-Z0-9._-]{1,100}$/.test(bare) ? `@${bare}` : null
+  }
 }
-
 
 /**
- * Persist a public handle as a selected ingestion source even when public
- * metadata resolution is temporarily unavailable (for example, a missing
- * Data API key and an unavailable public-page resolver). This deliberately
- * does not invent a channel ID or claim that metadata was fetched.
+ * Persist the user's selected public source even if the public page is
+ * temporarily unreachable. It never invents a channel ID or fetched data.
  */
 export const persistPublicHandleForIngestion = (input: string): string | null => {
- const candidate = extractHandleLike(input)
- if (!candidate) return null
- const trimmed = input.trim()
- const isChannelId = /^UC[a-zA-Z0-9_-]{20,}$/.test(candidate)
- const isHandle = /^@?[a-zA-Z0-9._-]{2,100}$/.test(candidate)
- let isYoutubeChannelUrl = false
- try {
-  const url = new URL(trimmed)
-  isYoutubeChannelUrl =
-   (url.hostname === "youtube.com" || url.hostname.endsWith(".youtube.com") || url.hostname === "www.youtube.com") &&
-   (/^\/@[a-zA-Z0-9._-]+$/.test(url.pathname) || /^\/channel\/UC[a-zA-Z0-9_-]{20,}$/.test(url.pathname) || /^\/(c|user)\/[a-zA-Z0-9._-]+$/.test(url.pathname))
- } catch {
-  // Handle or channel ID input, not a URL.
- }
- if (!isChannelId && !isHandle && !isYoutubeChannelUrl) return null
- const normalized = candidate.startsWith("@") ? candidate : isChannelId ? candidate : `@${candidate}`
- localStorage.setItem("vt_public_channel_handle", normalized)
- localStorage.setItem("vt_public_channel_input", trimmed)
- localStorage.setItem("vt_ingest_mode", "public_handle")
- return normalized
-}
-
-const toNum = (value: unknown): number | null => {
- if (typeof value === "number" && Number.isFinite(value)) return value
- if (typeof value === "string") {
-  const parsed = Number(value)
-  return Number.isFinite(parsed) ? parsed : null
- }
- return null
-}
-
-const getApiKey = (): string | null => {
- const fromEnv = import.meta.env.VITE_YOUTUBE_API_KEY as string | undefined
- if (fromEnv && fromEnv.trim()) return fromEnv.trim()
- const fromLocal = localStorage.getItem("yt_public_api_key")
- if (fromLocal && fromLocal.trim()) return fromLocal.trim()
- return null
+  const candidate = extractHandleLike(input)
+  if (!candidate) return null
+  const trimmed = input.trim()
+  localStorage.setItem("vt_public_channel_handle", candidate)
+  localStorage.setItem("vt_public_channel_input", trimmed)
+  localStorage.setItem("vt_ingest_mode", "public_handle")
+  return candidate
 }
 
 type PublicPageIngestionPayload = {
- resolution?: { resolvedChannelId?: string | null; resolvedHandle?: string | null; channelTitle?: string | null; reason?: string | null }
- snapshot?: PublicChannelSnapshot
+  resolution?: {
+    resolvedChannelId?: string | null
+    resolvedHandle?: string | null
+    channelTitle?: string | null
+    reason?: string | null
+  }
+  snapshot?: PublicChannelSnapshot
+  limitations?: string[]
+}
+
+const isRealChannelId = (value: unknown): value is string =>
+  typeof value === "string" && /^UC[\w-]{20,}$/.test(value) && !value.startsWith("UC_FIXTURE_")
+
+const withHandlePrefix = (value: string | null | undefined): string | null => {
+  if (!value) return null
+  if (/^UC[\w-]{20,}$/.test(value)) return value
+  return value.startsWith("@") ? value : `@${value}`
 }
 
 const fetchPublicPageIngestion = async (handleInput: string): Promise<PublicPageIngestionPayload | null> => {
- const configuredBase = String(import.meta.env.VITE_BILLING_API_BASE || "").replace(/\/$/, "")
- const query = `?handle=${encodeURIComponent(handleInput)}`
- const urls = configuredBase
-  ? [`${configuredBase}/public-channel/resolve${query}`, `${configuredBase}/api/public-channel${query}`]
-  : [`/public-channel/resolve${query}`, `/api/public-channel${query}`]
- for (const url of urls) {
-  try {
-   const response = await fetch(url, { headers: { Accept: "application/json" } })
-   if (!response.ok) continue
-   const payload = await response.json() as PublicPageIngestionPayload
-   if (payload.resolution?.resolvedChannelId || payload.snapshot?.channelId) return payload
-  } catch {
-   // Try the other supported deployment route, then allowlisted local fixtures.
+  const configuredBase = String(import.meta.env.VITE_BILLING_API_BASE || "").replace(/\/$/, "")
+  const query = `?handle=${encodeURIComponent(handleInput)}`
+  const urls = configuredBase
+    ? [`${configuredBase}/public-channel/resolve${query}`, `${configuredBase}/api/public-channel${query}`]
+    : [`/public-channel/resolve${query}`, `/api/public-channel${query}`]
+
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, { headers: { Accept: "application/json" } })
+      if (!response.ok) continue
+      const payload = await response.json() as PublicPageIngestionPayload
+      if (isRealChannelId(payload.resolution?.resolvedChannelId) || isRealChannelId(payload.snapshot?.channelId)) return payload
+    } catch {
+      // Try the other supported deployment route; fixtures remain explicitly allowlisted.
+    }
   }
- }
- return null
+  return null
 }
 
-export const resolvePublicChannel = async (
- handleInput: string,
-): Promise<PublicChannelResolution> => {
- const apiKey = getApiKey()
- const candidate = extractHandleLike(handleInput)
-
- if (!candidate) {
+const fixtureResolution = (input: string): PublicChannelResolution | null => {
+  const fixture = resolveFromFixture(input)
+  if (!fixture) return null
   return {
-   input: handleInput,
-   resolvedChannelId: null,
-   resolvedHandle: null,
-   channelTitle: null,
-   reason: "Enter a YouTube handle, channel URL, or channel ID.",
-  }
- }
-
- if (!apiKey) {
-  try {
-   const payload = await fetchPublicPageIngestion(handleInput)
-   if (payload?.resolution?.resolvedChannelId) {
-    return {
-     input: handleInput,
-     resolvedChannelId: payload.resolution.resolvedChannelId,
-     resolvedHandle: payload.resolution.resolvedHandle || candidate,
-     channelTitle: payload.resolution.channelTitle || null,
-     reason: null,
-    }
-   }
-  } catch {
-   // Local fixture fallback remains available when the public ingestion route is not hosted.
-  }
-  const fixture = resolveFromFixture(handleInput)
-  if (fixture) {
-   return {
-    input: handleInput,
+    input,
     resolvedChannelId: fixture.channelId,
     resolvedHandle: fixture.handle,
     channelTitle: fixture.title,
     reason: "Fixture data only — not live YouTube analytics.",
-   }
   }
-  return {
-   input: handleInput,
-   resolvedChannelId: null,
-   resolvedHandle: candidate,
-   channelTitle: null,
-   reason: fixturesEnabled()
-    ? 'Public channel ingestion could not resolve "' + candidate + '" and no fixture matched.'
-    : "Public channel ingestion is unavailable. This path uses public channel pages and RSS, not a YouTube Data API key; confirm the /api/public-channel route is deployed.",
-  }
- }
-
- const isLikelyChannelId = /^UC[a-zA-Z0-9_-]{20,}$/.test(candidate)
- const byChannelIdUrl = `${YT_DATA_BASE}/channels?part=snippet&id=${encodeURIComponent(candidate)}&key=${apiKey}`
- const byHandleUrl = `${YT_DATA_BASE}/channels?part=snippet&forHandle=${encodeURIComponent(candidate.replace(/^@/, ""))}&key=${apiKey}`
- const bySearchUrl = `${YT_DATA_BASE}/search?part=snippet&type=channel&maxResults=1&q=${encodeURIComponent(candidate)}&key=${apiKey}`
-
- const tryUrls = isLikelyChannelId
-  ? [byChannelIdUrl, byHandleUrl, bySearchUrl]
-  : [byHandleUrl, bySearchUrl, byChannelIdUrl]
-
- for (const url of tryUrls) {
-  try {
-   const response = await fetch(url)
-   if (!response.ok) continue
-   const data = (await response.json()) as {
-    items?: Array<{
-     id?: string | { channelId?: string }
-     snippet?: { title?: string; customUrl?: string }
-    }>
-   }
-
-   const item = data.items?.[0]
-   if (!item) continue
-
-   const channelId =
-    typeof item.id === "string"
-     ? item.id
-     : typeof item.id === "object"
-       ? item.id.channelId
-       : null
-
-   if (!channelId) continue
-
-   return {
-    input: handleInput,
-    resolvedChannelId: channelId,
-    resolvedHandle: item.snippet?.customUrl || candidate.replace(/^@/, ""),
-    channelTitle: item.snippet?.title || null,
-    reason: null,
-   }
-  } catch {
-   // try next
-  }
- }
-
- return {
-  input: handleInput,
-  resolvedChannelId: null,
-  resolvedHandle: candidate,
-  channelTitle: null,
-  reason: "Channel could not be resolved from the provided input.",
- }
 }
 
-export const fetchPublicChannelSnapshot = async (
- handleInput: string,
-): Promise<PublicChannelSnapshot | null> => {
- const apiKey = getApiKey()
- if (!apiKey) {
+const unresolvedReason = (candidate: string): string => fixturesEnabled()
+  ? `Public channel ingestion could not resolve "${candidate}" and no fixture matched.`
+  : "Public channel ingestion is unavailable. The resolver uses public YouTube pages and RSS; confirm the /api/public-channel route is deployed."
+
+export const resolvePublicChannel = async (handleInput: string): Promise<PublicChannelResolution> => {
+  const candidate = extractHandleLike(handleInput)
+  if (!candidate) {
+    return {
+      input: handleInput,
+      resolvedChannelId: null,
+      resolvedHandle: null,
+      channelTitle: null,
+      reason: "Enter a valid YouTube handle, channel URL, or channel ID.",
+    }
+  }
+
   try {
-   const payload = await fetchPublicPageIngestion(handleInput)
-   if (payload?.snapshot?.channelId) return payload.snapshot
+    const payload = await fetchPublicPageIngestion(handleInput)
+    const resolution = payload?.resolution
+    const channelId = isRealChannelId(resolution?.resolvedChannelId)
+      ? resolution.resolvedChannelId
+      : isRealChannelId(payload?.snapshot?.channelId) ? payload.snapshot.channelId : null
+    if (channelId) {
+      return {
+        input: handleInput,
+        resolvedChannelId: channelId,
+        resolvedHandle: withHandlePrefix(resolution?.resolvedHandle || payload?.snapshot?.handle || candidate),
+        channelTitle: resolution?.channelTitle || payload?.snapshot?.title || null,
+        reason: null,
+      }
+    }
   } catch {
-   // Fall through to allowlisted fixtures for local testing.
+    // Resolver outage is not a reason to fabricate a live channel record.
   }
- }
- const resolved = await resolvePublicChannel(handleInput)
- const candidate = extractHandleLike(handleInput)
- if (resolved.resolvedChannelId?.startsWith("UC_FIXTURE_") || !apiKey) {
-  if (candidate) {
-   const fixture = snapshotFromFixture(candidate) || snapshotFromFixture(handleInput)
-   if (fixture) return fixture
+
+  return fixtureResolution(handleInput) || {
+    input: handleInput,
+    resolvedChannelId: null,
+    resolvedHandle: candidate,
+    channelTitle: null,
+    reason: unresolvedReason(candidate),
   }
- }
- if (!resolved.resolvedChannelId) return null
- if (!apiKey) return null
+}
 
- const channelId = resolved.resolvedChannelId
- const profileUrl = `${YT_DATA_BASE}/channels?part=snippet,statistics&id=${encodeURIComponent(channelId)}&key=${apiKey}`
- const searchUrl = `${YT_DATA_BASE}/search?part=snippet&channelId=${encodeURIComponent(channelId)}&order=date&type=video&maxResults=10&key=${apiKey}`
+export const fetchPublicChannelSnapshot = async (handleInput: string): Promise<PublicChannelSnapshot | null> => {
+  const candidate = extractHandleLike(handleInput)
+  if (!candidate) return null
 
- const profileResponse = await fetch(profileUrl)
- if (!profileResponse.ok) return null
- const profileData = (await profileResponse.json()) as {
-  items?: Array<{
-   snippet?: { title?: string; customUrl?: string }
-   statistics?: {
-    subscriberCount?: string
-    videoCount?: string
-    viewCount?: string
-   }
-  }>
- }
-
- const channel = profileData.items?.[0]
- if (!channel) return null
-
- const searchResponse = await fetch(searchUrl)
- const searchData = searchResponse.ok
-  ? ((await searchResponse.json()) as {
-     items?: Array<{
-      id?: { videoId?: string }
-      snippet?: { title?: string; publishedAt?: string }
-     }>
-    })
-  : { items: [] }
-
- const videoIds = (searchData.items || [])
-  .map((item) => item.id?.videoId)
-  .filter((value): value is string => !!value)
-
- let statsByVideoId = new Map<string, { viewCount: number | null; likeCount: number | null; commentCount: number | null }>()
- if (videoIds.length > 0) {
-  const statsUrl = `${YT_DATA_BASE}/videos?part=statistics&id=${videoIds.join(",")}&key=${apiKey}`
-  const statsResponse = await fetch(statsUrl)
-  if (statsResponse.ok) {
-   const statsData = (await statsResponse.json()) as {
-    items?: Array<{
-     id?: string
-     statistics?: { viewCount?: string; likeCount?: string; commentCount?: string }
-    }>
-   }
-   statsByVideoId = new Map(
-    (statsData.items || []).map((item) => [
-     item.id || "",
-     {
-      viewCount: toNum(item.statistics?.viewCount),
-      likeCount: toNum(item.statistics?.likeCount),
-      commentCount: toNum(item.statistics?.commentCount),
-     },
-    ]),
-   )
+  try {
+    const payload = await fetchPublicPageIngestion(handleInput)
+    const snapshot = payload?.snapshot
+    if (snapshot && isRealChannelId(snapshot.channelId)) {
+      return {
+        ...snapshot,
+        source: "public_page",
+        handle: withHandlePrefix(snapshot.handle || payload?.resolution?.resolvedHandle || candidate),
+        title: snapshot.title || payload?.resolution?.channelTitle || null,
+        subscriberCount: null,
+        videoCount: null,
+        viewCount: null,
+        topVideos: Array.isArray(snapshot.topVideos) ? snapshot.topVideos.map((video) => ({
+          videoId: String(video.videoId || ""),
+          title: String(video.title || video.videoId || ""),
+          publishedAt: String(video.publishedAt || ""),
+          viewCount: null,
+          likeCount: null,
+          commentCount: null,
+        })) : [],
+      }
+    }
+  } catch {
+    // Try explicit local fixtures after a public resolver outage.
   }
- }
 
- return {
-  mode: "public_handle",
-  source: "youtube_data_api_public",
-  fetchedAt: new Date().toISOString(),
-  channelId,
-  handle: channel.snippet?.customUrl || resolved.resolvedHandle || null,
-  title: channel.snippet?.title || resolved.channelTitle || null,
-  subscriberCount: toNum(channel.statistics?.subscriberCount),
-  videoCount: toNum(channel.statistics?.videoCount),
-  viewCount: toNum(channel.statistics?.viewCount),
-  topVideos: (searchData.items || []).map((item) => {
-   const videoId = item.id?.videoId || ""
-   const stats = statsByVideoId.get(videoId)
-   return {
-    videoId,
-    title: item.snippet?.title || videoId,
-    publishedAt: item.snippet?.publishedAt || "",
-    viewCount: stats?.viewCount ?? null,
-    likeCount: stats?.likeCount ?? null,
-    commentCount: stats?.commentCount ?? null,
-   }
-  }),
- }
+  return snapshotFromFixture(handleInput)
 }
