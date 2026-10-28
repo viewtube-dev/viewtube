@@ -55,7 +55,7 @@ import { resolveCreatorContext } from "./CreatorContextResolver"
 import { loadAiBrainContext } from "../aiBrainContext"
 import { buildCreatorAnswerEvidenceRecords, isCreatorAnswerProfileEligible } from "./CreatorAnswerEvidence"
 import { readBrainSurfaceSelection } from "./BrainSurfaceSelection"
-import { resolveBrainRetryInput, resolveBrainModelInputSnapshot, type BrainGenerationInputSnapshot, type BrainModelInputSnapshot, type BrainRetryContextContinuity } from "./BrainRetryContinuity"
+import { isBrainModelInputSnapshotChannelCompatible, resolveBrainRetryInput, resolveBrainModelInputSnapshot, type BrainGenerationInputSnapshot, type BrainModelInputSnapshot, type BrainRetryContextContinuity } from "./BrainRetryContinuity"
 import {
  cacheCurrentNicheResearch,
  readCachedCurrentNicheResearch,
@@ -695,7 +695,10 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  // retry for another channel, or when the old turn cannot prove its channel scope.
  const restoreOriginalModelInput = Boolean(
   restoredModelInputSnapshot
-  && (pending.metadata?.channelId || null) === (input.channelId || null)
+  && isBrainModelInputSnapshotChannelCompatible(
+   typeof pending.metadata?.channelId === "string" ? pending.metadata.channelId : null,
+   input.channelId || null,
+  )
  )
  let modelSystemInstruction: string | undefined
  let modelHistory: any[] | undefined
