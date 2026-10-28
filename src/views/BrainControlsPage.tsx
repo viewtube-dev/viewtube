@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useBrain } from "../context/useBrain"
+import { CHANNEL_CONTEXT_QUESTIONS } from "../context/channelContextQuestions"
+import { scoreContext } from "../context/ChannelContextScoring"
+import { loadAiBrainContext } from "../services/aiBrainContext"
+import { buildCreatorAnswerEvidenceRecords } from "../services/brain/CreatorAnswerEvidence"
 import { BrainScopeSummary } from "../components/brain/BrainScopeSummary"
 import { BrainSettingsSwitch, BrainSettingsRange } from "../components/brain/BrainSettingsControls"
 import { BRAIN_USER_CONTROLS_STORAGE_KEY, DEFAULT_BRAIN_USER_CONTROLS, clearBrainUserControlOverride, readBrainUserControls, writeBrainUserControls, type BrainUserControls } from "../services/brain/BrainUserControls"
@@ -64,6 +68,15 @@ export const getBrainCapabilityGroups = () => [
   { title: "Discovery + publishing", ids: ["seo-opportunity", "niche-knowledge", "current-grounding", "content-generation"] },
 ].map(group => ({ ...group, capabilities: group.ids.map(id => BRAIN_CAPABILITY_REGISTRY.find(item => item.id === id)).filter((item): item is BrainCapabilityDefinition => Boolean(item)) }))
 
+const readProfileValue = (profile: ReturnType<typeof loadAiBrainContext>["channelContext"], path: string): unknown =>
+  path.split(".").reduce<unknown>((value, key) =>
+    value && typeof value === "object" ? (value as Record<string, unknown>)[key] : undefined, profile)
+const displayProfileValue = (value: unknown): string =>
+  Array.isArray(value) ? value.map(item => String(item ?? "").trim()).filter(Boolean).join(", ")
+    : value === undefined || value === null ? "" : String(value).trim()
+const normalizeChannelName = (value: unknown): string =>
+  String(value || "").trim().toLocaleLowerCase().replace(/\s+/g, " ")
+
 const CapabilityInventory: React.FC = () => {
   const navigate = useNavigate()
   const groups = getBrainCapabilityGroups()
@@ -99,6 +112,7 @@ export default function BrainControlsPage() {
   const [loadedScope, setLoadedScope] = useState(channelId)
   const [resetPending, setResetPending] = useState(false)
   const [status, setStatus] = useState("")
+  const [creatorProfile, setCreatorProfile] = useState(() => loadAiBrainContext())
   const scopeReady = loadedScope === channelId
   const dirty = resetPending || brainSettingsDiffer(draft, saved)
   const reload = () => {
@@ -115,6 +129,15 @@ export default function BrainControlsPage() {
     window.addEventListener("beforeunload", warn)
     return () => window.removeEventListener("beforeunload", warn)
   }, [dirty])
+  useEffect(() => {
+    const refreshCreatorProfile = () => setCreatorProfile(loadAiBrainContext())
+    window.addEventListener("vt_creator_channel_context_updated", refreshCreatorProfile)
+    window.addEventListener("storage", refreshCreatorProfile)
+    return () => {
+      window.removeEventListener("vt_creator_channel_context_updated", refreshCreatorProfile)
+      window.removeEventListener("storage", refreshCreatorProfile)
+    }
+  }, [])
   const editPolicy = (key: keyof BrainUserControls, value: boolean) => { setDraft(old => ({ ...old, policy: { ...old.policy, [key]: value } })); setResetPending(false); setStatus("") }
   const editEngine = (key: keyof BrainEngineControls, value: boolean | number) => { setDraft(old => ({ ...old, engines: { ...old.engines, [key]: value } })); setResetPending(false); setStatus("") }
   const save = () => {
@@ -132,6 +155,15 @@ export default function BrainControlsPage() {
     setDraft(inheritedSettings()); setResetPending(true); setStatus("Reset preview only. Save removes both channel overrides; Cancel keeps the saved settings.")
   }
   const rows = (items: PolicyRow[]) => items.map(([key, label, detail]) => <BrainSettingsSwitch key={key} checked={draft.policy[key]} onChange={value => editPolicy(key, value)} label={label} detail={detail} />)
+  const contextScore = scoreContext(creatorProfile.channelContext)
+  const answeredQuestions = CHANNEL_CONTEXT_QUESTIONS.filter(question => Boolean(displayProfileValue(readProfileValue(creatorProfile.channelContext, question.contextField))))
+  const activeChannelName = normalizeChannelName(authState.channelName)
+  const profileChannelName = normalizeChannelName(creatorProfile.channelContext.identity.name)
+  const profileMatchesActiveChannel = Boolean(activeChannelName && profileChannelName && activeChannelName === profileChannelName)
+  const creatorAnswerEvidence = profileMatchesActiveChannel && channelId
+    ? buildCreatorAnswerEvidenceRecords(creatorProfile, channelId)
+    : []
+  const evidenceIds = new Set(creatorAnswerEvidence.map(record => record.id))
   return <main className="min-h-screen bg-[#f5f5f2] text-black">
     <div className="mx-auto grid w-full max-w-[1120px] min-w-0 gap-4 p-2 sm:p-4 md:gap-5 md:p-6">
       <header className="grid min-w-0 gap-3 border-b-[3px] border-black pb-4">
@@ -159,23 +191,62 @@ export default function BrainControlsPage() {
       </StudioTopSplitModule>
 
       {!channelId ? <p role="note" className="border-2 border-black bg-[#FFDA47] p-3 text-sm font-bold">Select a channel before changing settings. No channel overrides will be written without an explicit channel.</p> : null}
+
+      <Card title="Creator profile + evidence" eyebrow="01 / One canonical local intake">
+        <div className="grid min-w-0 gap-3 p-2">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="min-w-0 border-2 border-black bg-[#f8f8f4] p-2">
+              <p className="text-[9px] font-black uppercase text-black/55">Answers stored locally</p>
+              <p className="text-xl font-black tabular-nums">{answeredQuestions.length}<span className="text-xs"> / {CHANNEL_CONTEXT_QUESTIONS.length}</span></p>
+            </div>
+            <div className="min-w-0 border-2 border-black bg-[#f8f8f4] p-2">
+              <p className="text-[9px] font-black uppercase text-black/55">Required context</p>
+              <p className="text-xl font-black tabular-nums">{contextScore.completionScore}%</p>
+            </div>
+          </div>
+          <p className="text-xs font-bold leading-5">
+            {profileMatchesActiveChannel
+              ? `${creatorAnswerEvidence.length} creator-answer evidence records are scoped to ${creatorProfile.channelContext.identity.name}. The Brain may use them as USER_PROVIDED context; they are not verified analytics.`
+              : "Your answers are kept in this browser. To attach them to this channel's evidence, set the exact active channel name in the creator profile first."}
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <StudioButton type="button" sizeVariant="standard" tone="neutral" onClick={() => navigate("/settings?panel=ai")}>EDIT CREATOR PROFILE</StudioButton>
+            <StudioButton type="button" sizeVariant="standard" tone="neutral" onClick={() => navigate("/ai-brain")}>OPEN BRAIN CHAT</StudioButton>
+          </div>
+          <StudioCollapsingTwoLineModule title="Saved answers + evidence IDs" description="Inspect every intake answer and its stable evidence reference." sizeVariant="standard" split="double" className="min-w-0">
+            <ul className="grid min-w-0 gap-1 p-2">
+              {CHANNEL_CONTEXT_QUESTIONS.map(question => {
+                const answer = displayProfileValue(readProfileValue(creatorProfile.channelContext, question.contextField))
+                const evidenceId = `creator-answer:${channelId || ""}:channelContext.${question.contextField}`
+                const hasEvidence = Boolean(answer && evidenceIds.has(evidenceId))
+                return <li key={question.id} className="grid min-w-0 gap-1 border-b border-black/15 py-2 last:border-b-0">
+                  <span className="text-[10px] font-black uppercase">{question.title}</span>
+                  <span className="break-words text-xs font-bold">{answer || "Not answered"}</span>
+                  <span className="break-all text-[9px] font-bold text-black/55">{hasEvidence ? evidenceId : answer ? "Evidence waits for an exact active-channel match." : "No answer evidence until answered."}</span>
+                </li>
+              })}
+            </ul>
+          </StudioCollapsingTwoLineModule>
+        </div>
+      </Card>
+
       <fieldset disabled={!channelId || !scopeReady} className="grid min-w-0 gap-4 border-0 p-0">
         <legend className="sr-only">Channel Brain settings</legend>
-        <Card title="Master policy" eyebrow="01 / Brain behavior">{rows(masterRows)}</Card>
-        <Card title="Data access" eyebrow="02 / Connected sources">{rows(accessRows)}<p className="mt-3 border-t border-black/25 pt-3 text-xs font-bold leading-4">Permission is not readiness: enabling access does not mean a source is connected, synced, or has usable evidence.</p></Card>
-        <Card title="Intelligence engines" eyebrow="03 / Governed subsystems">
+        <Card title="Master policy" eyebrow="02 / Brain behavior">{rows(masterRows)}</Card>
+        <Card title="Data access" eyebrow="03 / Connected sources">{rows(accessRows)}<p className="mt-3 border-t border-black/25 pt-3 text-xs font-bold leading-4">Permission is not readiness: enabling access does not mean a source is connected, synced, or has usable evidence.</p></Card>
+        <Card title="Intelligence engines" eyebrow="04 / Governed subsystems">
           {engineRows.map(([key, label, detail]) => <BrainSettingsSwitch key={key} checked={draft.engines[key]} onChange={value => editEngine(key, value)} label={label} detail={detail} />)}
           <p className="mt-3 border-t border-black/25 pt-3 text-xs font-bold leading-4">Engine preferences remain stored when data access is off. Existing runtime permission gates still decide whether an engine can run.</p>
         </Card>
-        <Card title="Evidence thresholds" eyebrow="04 / Quality and uncertainty">
+        <Card title="Evidence thresholds" eyebrow="05 / Quality and uncertainty">
           <BrainSettingsRange label="Maximum evidence items" detail="Limit selected evidence items per supported turn (3–30)." min={3} max={30} value={draft.engines.maxEvidenceItems} onChange={value => editEngine("maxEvidenceItems", value)} />
           <BrainSettingsRange label="Anomaly minimum impact" detail="Minimum impact threshold for eligible anomaly signals." min={0} max={1} step={.05} value={draft.engines.anomalyMinimumImpact} onChange={value => editEngine("anomalyMinimumImpact", value)} />
           <BrainSettingsRange label="Anomaly confidence threshold" detail="Signal-filtering threshold, not a probability that an answer is correct." min={0} max={1} step={.05} value={draft.engines.anomalyMinimumConfidence} onChange={value => editEngine("anomalyMinimumConfidence", value)} />
         </Card>
-        <Card title="Safety + learning" eyebrow="05 / Review before retention">{rows(safetyRows)}</Card>
+        <Card title="Safety + learning" eyebrow="06 / Review before retention">{rows(safetyRows)}</Card>
       </fieldset>
 
-      <Card title="Capability inventory" eyebrow="06 / Discover what Brain can do">
+      <Card title="Capability inventory" eyebrow="07 / Discover what Brain can do">
         <CapabilityInventory />
       </Card>
 
