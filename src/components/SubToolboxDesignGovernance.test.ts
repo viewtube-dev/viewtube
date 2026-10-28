@@ -903,9 +903,9 @@ describe("confirmed primitive library family organization", () => {
     expect(catalog).toContain("<ConfirmedStudioDropdownFamily />");
     expect(catalog).toContain('title="Split Button Family · Left / Right / Double / Two-Line"');
     expect(catalog).toContain('title="Dropdown Family · Standard / Split-Left / Multi-Select"');
-    const counterFamily = catalog.slice(catalog.indexOf("const ConfirmedStudioCounterFamily"), catalog.indexOf("\\nconst ConfirmedStudioDoubleSplitSliderFamily"));
+    const counterFamily = catalog.slice(catalog.indexOf("const ConfirmedStudioCounterFamily"), catalog.indexOf("const ConfirmedStudioDoubleSplitSliderFamily", catalog.indexOf("const ConfirmedStudioCounterFamily")) );
     expect(counterFamily).toContain("<ConfirmedStudioSideCounterFamily />");
-    expect(catalog).not.toContain("<ConfirmedStudioDoubleSplitSliderFamily />\\n    <ConfirmedStudioSideCounterFamily />");
+    expect(catalog).not.toMatch(/<ConfirmedStudioDoubleSplitSliderFamily \/>\\s*<ConfirmedStudioSideCounterFamily \/>/);
 
     for (const representative of ["StudioButton", "StudioDropdown", "StudioArrowToggle", "StudioCounter", "StudioLeftWordCounter", "StudioDoubleSplitSlider", "StudioSplitLeftBadge"]) {
       expect(representatives.match(new RegExp('data-vt-library-component="' + representative + '"', "g"))?.length).toBe(1);
