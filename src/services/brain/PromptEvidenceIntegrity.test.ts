@@ -63,7 +63,7 @@ describe("PromptEvidenceIntegrity", () => {
 
  it("rejects a missing creator-answer evidence manifest when creator records are present", () => {
   const metadata = metadataFor([record()], [record({ id: "creator-answer:channel-1:goal" })])
-  delete metadata.creatorAnswerEvidenceFingerprint
+  metadata.creatorAnswerEvidenceFingerprint = undefined as unknown as string
 
   expect(getPromptEvidenceIntegrityStatus(metadata)).toBe("mismatch")
  })
