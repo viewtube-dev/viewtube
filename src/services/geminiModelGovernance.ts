@@ -24,6 +24,7 @@ export interface GeminiModelMetadata {
   tier: "flash" | "pro" | "lite" | "image"
   capabilities: readonly GeminiCapability[]
   lifecycle: "preview" | "stable" | "legacy"
+  costMultiplier: number
   pricing?: GeminiModelPricing
 }
 
@@ -38,41 +39,49 @@ export const GEMINI_MODEL_REGISTRY: Readonly<Record<string, GeminiModelMetadata>
   "gemini-3.1-pro-preview": {
     id: "gemini-3.1-pro-preview", displayName: "Gemini 3.1 Pro Preview", family: "3.1",
     tier: "pro", capabilities: ["text", "thinking", "analysis"], lifecycle: "preview",
+    costMultiplier: 15,
     pricing: legacyPricing(0.0035, 0.0105),
   },
   "gemini-3.1-flash-lite": {
     id: "gemini-3.1-flash-lite", displayName: "Gemini 3.1 Flash Lite", family: "3.1",
     tier: "lite", capabilities: ["text", "fast-text"], lifecycle: "preview",
+    costMultiplier: 1,
     pricing: legacyPricing(0.0001, 0.0003),
   },
   "gemini-3.1-flash-image-preview": {
     id: "gemini-3.1-flash-image-preview", displayName: "Gemini 3.1 Flash Image Preview", family: "3.1",
     tier: "image", capabilities: ["image", "text"], lifecycle: "preview",
+    costMultiplier: 5,
     pricing: legacyPricing(0.001, 0.005),
   },
   "gemini-3-flash-preview": {
     id: "gemini-3-flash-preview", displayName: "Gemini 3 Flash Preview", family: "3.0",
     tier: "flash", capabilities: ["text", "video", "audio"], lifecycle: "preview",
+    costMultiplier: 2,
     pricing: legacyPricing(0.0004, 0.0012),
   },
   "gemini-3.1-pro": {
     id: "gemini-3.1-pro", displayName: "Gemini 3.1 Pro", family: "3.1",
     tier: "pro", capabilities: ["text", "thinking", "analysis"], lifecycle: "stable",
+    costMultiplier: 15,
     pricing: legacyPricing(0.0035, 0.0105),
   },
   "gemini-3.1-flash": {
     id: "gemini-3.1-flash", displayName: "Gemini 3.1 Flash", family: "3.1",
     tier: "flash", capabilities: ["text", "fast-text"], lifecycle: "stable",
+    costMultiplier: 1.5,
     pricing: legacyPricing(0.00035, 0.00105),
   },
   "gemini-3.0-pro": {
     id: "gemini-3.0-pro", displayName: "Gemini 3.0 Pro (legacy)", family: "3.0",
     tier: "pro", capabilities: ["text", "thinking", "analysis"], lifecycle: "legacy",
+    costMultiplier: 10,
     pricing: legacyPricing(0.003, 0.009),
   },
   "gemini-3.0-flash": {
     id: "gemini-3.0-flash", displayName: "Gemini 3.0 Flash (legacy)", family: "3.0",
     tier: "flash", capabilities: ["text", "fast-text"], lifecycle: "legacy",
+    costMultiplier: 1,
     pricing: legacyPricing(0.0003, 0.0009),
   },
 })
