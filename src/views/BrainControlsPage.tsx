@@ -75,7 +75,7 @@ const displayProfileValue = (value: unknown): string =>
   Array.isArray(value) ? value.map(item => String(item ?? "").trim()).filter(Boolean).join(", ")
     : value === undefined || value === null ? "" : String(value).trim()
 const normalizeChannelName = (value: unknown): string =>
-  String(value || "").trim().toLocaleLowerCase().replace(/\\s+/g, " ")
+  String(value || "").trim().toLocaleLowerCase().replace(/\s+/g, " ")
 
 const CapabilityInventory: React.FC = () => {
   const navigate = useNavigate()
