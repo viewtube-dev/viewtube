@@ -11,18 +11,16 @@ describe("StudioSplitTextInput geometry comparison variants", () => {
     const html = renderToStaticMarkup(
       <>
         <StudioSplitTextInput aria-label="Baseline" geometryVariant="current" leftIcon={<svg viewBox="0 0 24 24" />} />
-        <StudioSplitTextInput aria-label="Padding reference" geometryVariant="padding-reference" leftIcon={<svg viewBox="0 0 24 24" />} />
         <StudioSplitTextInput aria-label="Half padding" geometryVariant="half-vertical-padding" leftIcon={<svg viewBox="0 0 24 24" />} />
         <StudioSplitTextInput aria-label="Username height" geometryVariant="username-height" leftIcon={<svg viewBox="0 0 24 24" />} />
       </>,
     )
 
     expect(html).toContain('data-geometry-variant="current"')
-    expect(html).toContain('data-geometry-variant="padding-reference"')
     expect(html).toContain('data-geometry-variant="half-vertical-padding"')
     expect(html).toContain('data-geometry-variant="username-height"')
-    expect(html.match(/data-vt-studio-split-rail="start"/g)).toHaveLength(4)
-    expect(html.match(/class="vt-studio-split-text-input__field"/g)).toHaveLength(4)
+    expect(html.match(/data-vt-studio-split-rail="start"/g)).toHaveLength(3)
+    expect(html.match(/class="vt-studio-split-text-input__field"/g)).toHaveLength(3)
   })
 
 
@@ -30,8 +28,7 @@ describe("StudioSplitTextInput geometry comparison variants", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain("Split Text Input · Vertical Geometry Comparison")
     expect(html).toContain("CURRENT · BASELINE")
-    expect(html).toContain("4PX VERTICAL PADDING REFERENCE")
-    expect(html).toContain("HALF OF 4PX VERTICAL PADDING · 2PX")
+    expect(html).toContain("HALF VERTICAL PADDING")
     expect(html).toContain("USERNAME-MATCHED INNER HEIGHT")
     expect(html).toContain('data-geometry-variant="current"')
     expect(html).toContain('data-geometry-variant="half-vertical-padding"')
@@ -39,24 +36,14 @@ describe("StudioSplitTextInput geometry comparison variants", () => {
   })
 
   it("changes only field padding or field height while preserving the rail's centered geometry", () => {
-    const html = renderToStaticMarkup(
-      <>
-        <StudioSplitTextInput aria-label="Baseline" geometryVariant="current" leftIcon={<svg viewBox="0 0 24 24" />} />
-        <StudioSplitTextInput aria-label="Half padding" geometryVariant="half-vertical-padding" leftIcon={<svg viewBox="0 0 24 24" />} />
-        <StudioSplitTextInput aria-label="Username height" geometryVariant="username-height" leftIcon={<svg viewBox="0 0 24 24" />} />
-      </>,
-    )
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-split-text-input.css"), "utf8")
     const railStart = css.indexOf(".vt-studio-split-text-input > .vt-studio-split-shell__rail")
     const railEnd = css.indexOf(".vt-studio-split-text-input[data-vt-studio-split=\"right\"]")
     const railRules = css.slice(railStart, railEnd)
 
     expect(html).toContain('data-vt-studio-field-kind="text-input" data-geometry-variant="current"')
-    expect(html).toContain('data-vt-studio-field-kind="text-input" data-geometry-variant="padding-reference"')
     expect(html).toContain('data-vt-studio-field-kind="text-input" data-geometry-variant="half-vertical-padding"')
     expect(html).toContain('data-vt-studio-field-kind="text-input" data-geometry-variant="username-height"')
-    expect(css).toContain('.vt-studio-split-text-input__field[data-geometry-variant="padding-reference"]')
-    expect(css).toContain("padding-block: var(--vt-studio-space-unit, 4px);")
     expect(css).toContain('.vt-studio-split-text-input__field[data-geometry-variant="half-vertical-padding"]')
     expect(css).toContain("padding-block: calc(var(--vt-studio-space-unit, 4px) / 2);")
     expect(css).toContain('.vt-studio-split-text-input__field[data-geometry-variant="username-height"]')
