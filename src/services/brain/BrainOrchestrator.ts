@@ -834,7 +834,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     evidenceRecords: renderedEvidenceRecords,
     creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
     creatorAnswerEvidenceRecordIds: renderedCreatorAnswerEvidenceRecords.map((record) => record.id),
-    evidenceRecordQuality,
+    evidenceRecordQuality: renderedEvidenceRecords.length
+     ? buildBrainEvidenceRecordQuality(renderedEvidenceRecords, { expectedChannelId: input.channelId })
+     : null,
     promptEvidenceRecordIds: renderedEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
@@ -942,7 +944,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     evidenceRecords: renderedEvidenceRecords,
     creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
     creatorAnswerEvidenceRecordIds: renderedCreatorAnswerEvidenceRecords.map((record) => record.id),
-    evidenceRecordQuality,
+    evidenceRecordQuality: renderedEvidenceRecords.length
+     ? buildBrainEvidenceRecordQuality(renderedEvidenceRecords, { expectedChannelId: input.channelId })
+     : null,
     promptEvidenceRecordIds: renderedEvidenceRecords.map((record) => record.id),
     channelId: input.channelId || null,
     projectId: input.projectId || input.project?.id || null,
