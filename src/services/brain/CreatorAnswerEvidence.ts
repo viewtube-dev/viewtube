@@ -1,4 +1,6 @@
 import type { AiBrainContext } from "../aiBrainContext"
+import type { AIBrainEvidencePack } from "../../types"
+import { resolveChannelContextForActiveChannel } from "../../context/channelContextScope"
 import { CHANNEL_CONTEXT_QUESTIONS } from "../../context/channelContextQuestions"
 import type { EvidenceRecord } from "./EvidenceRecord"
 
@@ -71,4 +73,48 @@ export const buildCreatorAnswerEvidenceRecords = (
   add(`channelContext.${question.contextField}`, question.title, readPath(context.channelContext, question.contextField))
  })
  return records
+}
+
+
+/** Fail closed when the saved profile cannot be proven to belong to the active channel. */
+export const buildScopedCreatorAnswerEvidenceRecords = (
+ context: AiBrainContext,
+ channelId: string | null | undefined,
+ activeChannelLabel: string | null | undefined,
+): EvidenceRecord[] => {
+ const scopedProfile = resolveChannelContextForActiveChannel(context.channelContext, activeChannelLabel)
+ if (!scopedProfile) return []
+ return buildCreatorAnswerEvidenceRecords({ ...context, channelContext: scopedProfile }, channelId)
+}
+
+const creatorAnswerLabel = (record: EvidenceRecord): string => {
+ const prefix = "ai-brain-context:channelContext."
+ const sourceRef = record.sourceRef || ""
+ if (sourceRef.startsWith(prefix)) {
+  const contextField = sourceRef.slice(prefix.length)
+  const question = CHANNEL_CONTEXT_QUESTIONS.find((candidate) => candidate.contextField === contextField)
+  if (question) return question.title
+ }
+ const legacy = legacyAnswers.find(({ field }) => sourceRef === `ai-brain-context:legacy.${String(field)}`)
+ return legacy?.label || sourceRef.replace(/^ai-brain-context:/, "").replace(/[._]/g, " ")
+}
+
+/** Add creator-stated answers to the same evidence pack used by Brain responses. */
+export const mergeCreatorAnswerEvidenceIntoPack = (
+ pack: AIBrainEvidencePack,
+ records: EvidenceRecord[],
+): AIBrainEvidencePack => {
+ if (!records.length) return pack
+ const creatorItems = records.map((record) => ({
+  id: record.id,
+  label: creatorAnswerLabel(record),
+  source: "creator-provided profile",
+  detail: String(record.value ?? ""),
+ }))
+ const items = Array.from(new Map([...pack.items, ...creatorItems].map((item) => [item.id, item])).values())
+ return {
+  ...pack,
+  evidenceIds: Array.from(new Set([...pack.evidenceIds, ...records.map((record) => record.id)])),
+  items,
+ }
 }
