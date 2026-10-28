@@ -1025,7 +1025,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   } catch {
    // Trace persistence must never mask the fallback response.
   }
-  const learning = await captureAIBrainLearningEvent({
+  const learning = input.retryGenerationOnly ? null : await captureAIBrainLearningEvent({
    channelId: input.channelId || null,
    source: "copilot",
    summary: `Copilot conversation: ${input.userText}`,
@@ -1065,7 +1065,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    response,
    answerModules: response.modules,
    evaluation,
-   learningEntryIds: [learning.id],
+   learningEntryIds: learning ? [learning.id] : [],
    metadata: {
     orchestrationError: error instanceof Error ? error.message : String(error),
     capabilities: capabilityIds,
