@@ -550,7 +550,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   ? evidenceIntelligence?.audienceIntelligence || null
   : null
  const surfaceSelection = readBrainSurfaceSelection()
- const savedAiBrainContext = loadAiBrainContext(input.channelId)
+ const savedAiBrainContext = loadAiBrainContext(input.channelId, input.snapshot.channel.label)
  const savedChannelContext = savedAiBrainContext.channelContext
  const normalizeChannelName = (value: unknown): string => String(value || "").trim().toLocaleLowerCase().replace(/ +/g, " ")
  const savedProfileMatchesActiveChannel = Boolean(
