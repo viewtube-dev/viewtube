@@ -1235,10 +1235,10 @@ export const StudioHubPrimitiveMigrationCatalog: React.FC<StudioHubPrimitiveMigr
     <div className="vt-definitive-token-strip" aria-label="Confirmed default component tokens">
       <span><b>HEIGHT</b> 44px</span>
       <span><b>STROKE</b> 3px</span>
-      <span><b>RADIUS</b> 8px</span>
-      <span><b>SHADOW</b> 4px</span>
+      <span><b>RADIUS</b> 6px</span>
+      <span><b>SHADOW</b> FLAT · 0</span>
       <span><b>TYPE</b> Inter · 1000</span>
-      <span><b>TEXT</b> Uppercase · −0.035em · 0.86 line</span>
+      <span><b>TEXT</b> Uppercase · −0.02em · 1 line</span>
     </div>
 
     <div className="vt-complete-catalog-grid">
