@@ -486,7 +486,11 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    saved,
    current,
   })
-  retryContextContinuity = retryResolution.continuity
+  retryContextContinuity = retryResolution.continuity === "original_input_restored"
+   && !(pending.metadata?.originalModelInputSnapshot
+    && typeof (pending.metadata.originalModelInputSnapshot as { systemInstruction?: unknown }).systemInstruction === "string")
+   ? "legacy_context_reconstructed"
+   : retryResolution.continuity
   await recordAIBrainTurnInteraction(pending.id, {
    type: "retry_generation_input",
    direction: "inbound",
@@ -1097,6 +1101,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     repaired: false,
     repairAttempted: repairOutcome.attempted,
     repairSucceeded: repairOutcome.succeeded,
+    ...(retryContextContinuity ? { retryContextContinuity, retryEvidenceMode: input.retryEvidenceMode || "saved" } : {}),
    },
   })
   return {
