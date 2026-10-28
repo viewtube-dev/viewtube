@@ -78,3 +78,16 @@ export const resolveBrainModelInputSnapshot = <TRecord,>(input: {
  }
  return saved
 }
+
+/**
+ * Saved model prompts may contain private creator answers and channel analytics.
+ * Require explicit, exact scope equality before reusing them on a retry.
+ */
+export const isBrainModelInputSnapshotChannelCompatible = (
+ savedTurnChannelId: string | null | undefined,
+ activeChannelId: string | null | undefined,
+): boolean => Boolean(
+  savedTurnChannelId
+  && activeChannelId
+  && savedTurnChannelId === activeChannelId
+)
