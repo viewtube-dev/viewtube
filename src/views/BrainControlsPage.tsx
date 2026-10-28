@@ -115,14 +115,14 @@ export default function BrainControlsPage() {
   const { authState } = useBrain()
   const navigate = useNavigate()
   const channelId = authState.channelId || authState.channelHandle || null
-  const creatorProfileChannelId = authState.channelId || null
+  const creatorProfileChannelId = channelId
   const activeChannelLabel = authState.channelName || null
   const [draft, setDraft] = useState(() => loadSettings(channelId))
   const [saved, setSaved] = useState(() => loadSettings(channelId))
   const [loadedScope, setLoadedScope] = useState(channelId)
   const [resetPending, setResetPending] = useState(false)
   const [status, setStatus] = useState("")
-  const [creatorProfile, setCreatorProfile] = useState(() => loadAiBrainContext(creatorProfileChannelId, activeChannelLabel))
+  const [creatorProfile, setCreatorProfile] = useState(() => loadAiBrainContext(creatorProfileChannelId, activeChannelLabel, [authState.channelHandle]))
   const scopeReady = loadedScope === channelId
   const dirty = resetPending || brainSettingsDiffer(draft, saved)
   const reload = () => {
@@ -140,7 +140,7 @@ export default function BrainControlsPage() {
     return () => window.removeEventListener("beforeunload", warn)
   }, [dirty])
   useEffect(() => {
-    const refreshCreatorProfile = () => setCreatorProfile(loadAiBrainContext(creatorProfileChannelId, activeChannelLabel))
+    const refreshCreatorProfile = () => setCreatorProfile(loadAiBrainContext(creatorProfileChannelId, activeChannelLabel, [authState.channelHandle]))
     refreshCreatorProfile()
     window.addEventListener("vt_creator_channel_context_updated", refreshCreatorProfile)
     window.addEventListener("storage", refreshCreatorProfile)
@@ -148,7 +148,7 @@ export default function BrainControlsPage() {
       window.removeEventListener("vt_creator_channel_context_updated", refreshCreatorProfile)
       window.removeEventListener("storage", refreshCreatorProfile)
     }
-  }, [creatorProfileChannelId, activeChannelLabel])
+  }, [creatorProfileChannelId, activeChannelLabel, authState.channelHandle])
   const editPolicy = (key: keyof BrainUserControls, value: boolean) => { setDraft(old => ({ ...old, policy: { ...old.policy, [key]: value } })); setResetPending(false); setStatus("") }
   const editEngine = (key: keyof BrainEngineControls, value: boolean | number) => { setDraft(old => ({ ...old, engines: { ...old.engines, [key]: value } })); setResetPending(false); setStatus("") }
   const save = () => {
