@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import "./AIBrainStudioWorkspace.css"
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
+import { CHANNEL_CONTEXT_QUESTIONS } from "../context/channelContextQuestions"
+import type { ChannelContextProfile } from "../context/ChannelContextProfile"
 import {
  ArrowRight,
  BookOpen,
@@ -26,7 +28,7 @@ import { BrainComposerDock } from "../components/brain/BrainComposerDock"
 import { BrainHubUtilityRow } from "../components/brain/brain-hub-redesign/BrainHubUtilityRow"
 import { BrainPromptLibrary, promptCardSummary } from "../components/brain/BrainPromptLibrary"
 import { useVisualViewportHeight } from "../components/brain/useVisualViewportHeight"
-import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioInterModule, StudioTextArea, StudioSquareIconButton, StudioSquareIconButtonGroup } from "../studio-ui"
+import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioInterModule, StudioTextArea, StudioTextInput, StudioSquareIconButton, StudioSquareIconButtonGroup } from "../studio-ui"
 import "../components/brain/brain-hub-redesign/brain-hub-shell.css"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
@@ -103,6 +105,7 @@ import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import { buildCreatorAnswerEvidenceRecords } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
 import { isEvidenceRecord, type EvidenceRecord } from "../services/brain/EvidenceRecord"
 import {
@@ -841,6 +844,19 @@ export const UserMessage: React.FC<{ text: string }> = ({ text }) => (
  </StudioInterModule>
 )
 
+const CREATOR_PROFILE_ARRAY_FIELDS = new Set([
+ "subNiches", "competitors", "priorityRanking", "offers", "segments", "types",
+ "bestFormats", "priorityThemes", "blockedThemes", "influences", "sources", "capabilities",
+])
+const CREATOR_PROFILE_LONG_FIELDS = new Set([
+ "identity.description", "goals.successDefinition", "audience.idealViewer", "audience.problem",
+ "audience.transformation", "brand.voice", "content.recurringSeriesDescription",
+ "content.biggestWeakness", "content.mostSuccessfulVideo", "intelligence.signupReason",
+])
+const readCreatorProfileField = (profile: ChannelContextProfile, path: string): unknown =>
+ path.split(".").reduce<unknown>((current, key) =>
+  current && typeof current === "object" ? (current as Record<string, unknown>)[key] : undefined, profile)
+
 const CreatorIntakeWizard: React.FC<{
  context: AiBrainContext
  onChange: (context: AiBrainContext) => void
@@ -848,53 +864,97 @@ const CreatorIntakeWizard: React.FC<{
  onDefer: () => void
 }> = ({ context, onChange, onSave, onDefer }) => {
  const [questionIndex, setQuestionIndex] = useState(0)
- const update = (key: keyof AiBrainContext, value: string) => onChange({ ...context, [key]: value })
- const question = AI_BRAIN_INTAKE_QUESTIONS[questionIndex]
- const lastQuestion = questionIndex === AI_BRAIN_INTAKE_QUESTIONS.length - 1
+ const question = CHANNEL_CONTEXT_QUESTIONS[questionIndex]
+ const lastQuestion = questionIndex === CHANNEL_CONTEXT_QUESTIONS.length - 1
+ const rawValue = readCreatorProfileField(context.channelContext, question.contextField)
+ const value = Array.isArray(rawValue) ? rawValue.join(", ") : rawValue === null || rawValue === undefined ? "" : String(rawValue)
+ const update = (raw: string) => {
+  const [section, field] = question.contextField.split(".")
+  let parsed: unknown = raw
+  if (CREATOR_PROFILE_ARRAY_FIELDS.has(field)) {
+   parsed = raw.split(",").map((item) => item.trim()).filter(Boolean)
+  } else if (question.contextField === "brand.creativity") {
+   if (!raw.trim()) parsed = undefined
+   else {
+    const number = Number(raw)
+    parsed = Number.isFinite(number) ? Math.max(1, Math.min(10, number)) : undefined
+   }
+  }
+  const currentSection = context.channelContext[section as keyof ChannelContextProfile] as Record<string, unknown>
+  const channelContext = {
+   ...context.channelContext,
+   [section]: { ...currentSection, [field]: parsed },
+  } as ChannelContextProfile
+  onChange({ ...context, channelContext })
+ }
  return (
   <section data-vt-brain-component="BrainProfileSetup" className={`${shellCard} flex h-full min-h-0 flex-col overflow-hidden`}>
    <div data-vt-brain-part="profile-setup-heading" className="border-b-[4px] border-black bg-[#3FEE56] px-5 py-4">
     <div className="flex items-center justify-between gap-3">
      <div>
-      <div data-vt-brain-part="profile-setup-eyebrow" className="text-[10px] font-black uppercase tracking-[0.18em] text-black/55">Creator Profile Setup</div>
-      <h2 data-vt-brain-part="profile-setup-title" className="mt-1 text-2xl font-[1000] uppercase leading-none sm:text-3xl">Help ViewTube Understand Your Channel</h2>
+      <div data-vt-brain-part="profile-setup-eyebrow" className="text-[10px] font-black uppercase tracking-[0.18em] text-black/55">Unified Creator Profile · {question.category.replace(/_/g, " ")}</div>
+      <h2 data-vt-brain-part="profile-setup-title" className="mt-1 text-2xl font-[1000] uppercase leading-none sm:text-3xl">Teach the Brain your channel</h2>
      </div>
      <span className="rounded-[8px] border-[2px] border-black bg-white px-3 py-1 text-xs font-black">
-      {questionIndex + 1} / {AI_BRAIN_INTAKE_QUESTIONS.length}
+      {questionIndex + 1} / {CHANNEL_CONTEXT_QUESTIONS.length}
      </span>
     </div>
+    <p className="mt-2 text-xs font-bold leading-4">One shared profile powers Creator Brain context, runtime personalization, and evidence-linked answers.</p>
    </div>
-   <div className="grid min-h-0 flex-1 place-items-center p-4 sm:p-6">
+   <div className="grid min-h-0 flex-1 place-items-center overflow-y-auto p-4 sm:p-6">
     <label key={question.id} className={`${innerCard} block w-full max-w-4xl overflow-hidden`}>
      <span className="block border-b-[2px] border-black px-4 py-3" style={{ backgroundColor: TOOLBOX_PALETTE[(questionIndex + 2) % TOOLBOX_PALETTE.length] }}>
-      <span data-vt-brain-part="profile-question-label" className="block text-[9px] font-black uppercase tracking-[0.16em] text-black/55">{question.label}</span>
-      <span data-vt-brain-part="profile-question-prompt" className="mt-1 block text-lg font-[1000] leading-6">{question.prompt}</span>
+      <span data-vt-brain-part="profile-question-label" className="block text-[9px] font-black uppercase tracking-[0.16em] text-black/55">{question.title}</span>
+      <span data-vt-brain-part="profile-question-prompt" className="mt-1 block text-lg font-[1000] leading-6">{question.description || question.title}</span>
      </span>
-     <StudioTextArea
-      data-vt-brain-part="profile-question-answer"
-      sizeVariant="standard"
-      rows={5}
-      value={String(context[question.id] || "")}
-      onChange={(event) => update(question.id, event.target.value)}
-      placeholder={question.placeholder}
-      style={{ height: "clamp(150px, 28vh, 250px)" }}
-      className="w-full resize-none"
-     />
+     {question.contextField === "brand.creativity" ? (
+      <StudioTextInput
+       data-vt-brain-part="profile-question-answer"
+       sizeVariant="standard"
+       type="number"
+       min={1}
+       max={10}
+       value={value}
+       onChange={(event) => update(event.currentTarget.value)}
+       placeholder="1–10"
+       className="w-full"
+      />
+     ) : CREATOR_PROFILE_LONG_FIELDS.has(question.contextField) || CREATOR_PROFILE_ARRAY_FIELDS.has(fieldFromContextPath(question.contextField)) ? (
+      <StudioTextArea
+       data-vt-brain-part="profile-question-answer"
+       sizeVariant="standard"
+       rows={5}
+       value={value}
+       onChange={(event) => update(event.currentTarget.value)}
+       placeholder="Add your answer. Separate multiple items with commas."
+       style={{ height: "clamp(150px, 28vh, 250px)" }}
+       className="w-full resize-none"
+      />
+     ) : (
+      <StudioTextInput
+       data-vt-brain-part="profile-question-answer"
+       sizeVariant="standard"
+       value={value}
+       onChange={(event) => update(event.currentTarget.value)}
+       placeholder="Add your answer"
+       className="w-full"
+      />
+     )}
     </label>
    </div>
-   <div className="border-t-[4px] border-black bg-[#f8f8f4] p-4">
-    <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto_auto] sm:items-center">
-     <p className="text-sm font-bold leading-6 text-black/70">
-      Answer what you know now. You can skip and continue later.
-     </p>
-     <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={onDefer}>Skip for now</StudioButton>
-     <StudioSplitLeftButton sizeVariant="compact" icon={<ChevronLeft aria-hidden="true" />} type="button" onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))} disabled={questionIndex === 0}>Previous</StudioSplitLeftButton>
-     <StudioSplitLeftButton sizeVariant="standard" icon={<ArrowRight aria-hidden="true" />} type="button" onClick={() => lastQuestion ? onSave() : setQuestionIndex((index) => Math.min(AI_BRAIN_INTAKE_QUESTIONS.length - 1, index + 1))}>{lastQuestion ? "Save Creator Profile" : "Next Question"}</StudioSplitLeftButton>
+   <div className="grid shrink-0 gap-3 border-t-[4px] border-black bg-white p-3 sm:grid-cols-[1fr_auto] sm:items-center">
+    <p className="text-xs font-bold leading-4 text-black/65">Answers are stored in the shared Creator Brain profile and labeled as creator-provided—not independently verified analytics.</p>
+    <div className="grid grid-cols-2 gap-2 sm:flex">
+     <StudioButton sizeVariant="compact" tone="neutral" type="button" onClick={onDefer}>SKIP FOR NOW</StudioButton>
+     <StudioSplitLeftButton sizeVariant="compact" icon={<ChevronLeft aria-hidden="true" />} type="button" onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))} disabled={questionIndex === 0}>PREVIOUS</StudioSplitLeftButton>
+     <StudioSplitLeftButton sizeVariant="standard" icon={<ArrowRight aria-hidden="true" />} type="button" onClick={() => lastQuestion ? onSave() : setQuestionIndex((index) => Math.min(CHANNEL_CONTEXT_QUESTIONS.length - 1, index + 1))}>{lastQuestion ? "SAVE UNIFIED PROFILE" : "NEXT QUESTION"}</StudioSplitLeftButton>
     </div>
    </div>
   </section>
  )
 }
+
+const fieldFromContextPath = (path: string): string => path.split(".")[1] || path
 
 const AIBrainCommandInterface: React.FC = () => {
  const location = useLocation()
@@ -1638,6 +1698,7 @@ const AIBrainCommandInterface: React.FC = () => {
 
  const handleSaveIntake = () => {
   const saved = saveAiBrainContext({ ...intakeContext, source: "wizard" })
+  const intakeEvidenceRecords = buildCreatorAnswerEvidenceRecords(saved, channelId)
   setIntakeContext(saved)
   updateBrain({
    creatorPreferences: {
@@ -1668,7 +1729,7 @@ const AIBrainCommandInterface: React.FC = () => {
     .join(" "),
    category: "channel_fact",
    confidence: "high",
-   evidence: ["Creator profile intake"],
+   evidence: ["Creator profile intake", ...intakeEvidenceRecords.map((record) => record.id)],
   })
    .then((entry) =>
     entry
@@ -1677,7 +1738,7 @@ const AIBrainCommandInterface: React.FC = () => {
         userText: "Creator profile intake completed",
         assistantText: "Creator profile saved for future ViewTube Copilot coaching.",
         learningEntryIds: [entry.id],
-        metadata: { source: "creator_intake" },
+        metadata: { source: "creator_intake", creatorAnswerEvidenceRecordIds: intakeEvidenceRecords.map((record) => record.id) },
        })
      : null,
    )
