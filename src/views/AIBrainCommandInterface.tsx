@@ -106,6 +106,7 @@ import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import { readBrainComposerDraft, writeBrainComposerDraft } from "../services/brain/BrainComposerDraftStore"
 import { buildScopedCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
 import type { EvidenceRecord } from "../services/brain/EvidenceRecord"
@@ -972,6 +973,9 @@ const AIBrainCommandInterface: React.FC = () => {
  const [input, setInput] = useState("")
  const [activePromptTitle, setActivePromptTitle] = useState<string | null>(null)
  const [draftPromptOrigin, setDraftPromptOrigin] = useState<{ promptId: string; promptVersion: string; action: "edited" } | null>(null)
+ const composerDraftHydrationRef = useRef<string | null>(null)
+ const composerDraftSkipSaveRef = useRef<string | null>(null)
+ const initialRequestedDraftRef = useRef(searchParams.get("draft"))
  useEffect(() => {
   const requestedDraft = searchParams.get("draft")
   if (!requestedDraft) return
@@ -1019,7 +1023,30 @@ const AIBrainCommandInterface: React.FC = () => {
  const askSeededRef = useRef(false)
  const canUseGemini = hasGeminiKey()
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
+
  const channelId = authState.channelId || authState.channelHandle || null
+ useEffect(() => {
+  const requestedDraft = initialRequestedDraftRef.current
+  initialRequestedDraftRef.current = null
+  const savedDraft = requestedDraft ? null : readBrainComposerDraft(channelId)
+  setInput(requestedDraft ?? savedDraft?.text ?? "")
+  setActivePromptTitle(savedDraft?.activePromptTitle ?? null)
+  setDraftPromptOrigin(savedDraft?.promptOrigin ?? null)
+  composerDraftHydrationRef.current = channelId
+  composerDraftSkipSaveRef.current = channelId
+ }, [channelId])
+ useEffect(() => {
+  if (composerDraftHydrationRef.current !== channelId) return
+  if (composerDraftSkipSaveRef.current === channelId) {
+   composerDraftSkipSaveRef.current = null
+   return
+  }
+  writeBrainComposerDraft(channelId, {
+   text: input,
+   activePromptTitle,
+   promptOrigin: draftPromptOrigin,
+  })
+ }, [channelId, input, activePromptTitle, draftPromptOrigin])
  const [brainControls, setBrainControls] = useState(() => readBrainUserControls(channelId))
  const runtimeSnapshot = useMemo(
   () => readBrainRuntimeSnapshot({
