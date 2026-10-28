@@ -12,17 +12,17 @@ const readPath = (value: unknown, path: string): unknown =>
  path.split(".").reduce<unknown>((current, key) =>
   current && typeof current === "object" ? (current as Record<string, unknown>)[key] : undefined, value)
 
-const legacyAnswers: Array<{ field: keyof AiBrainContext; label: string }> = [
- { field: "channelDescription", label: "Channel description" },
- { field: "mainTopicFocus", label: "Main topic focus" },
- { field: "audienceDescription", label: "Audience description" },
- { field: "successDefinition", label: "Success definition" },
- { field: "mainYoutubeGoal", label: "Main YouTube goal" },
- { field: "recurringSeriesName", label: "Recurring series name" },
- { field: "recurringSeriesDescription", label: "Recurring series description" },
- { field: "biggestWeakness", label: "Creator-identified weakness" },
- { field: "mostSuccessfulVideo", label: "Creator-identified successful video" },
- { field: "signupReason", label: "Reason for using ViewTube" },
+const legacyAnswers: Array<{ field: keyof AiBrainContext; label: string; canonicalPath: string }> = [
+ { field: "channelDescription", label: "Channel description", canonicalPath: "identity.description" },
+ { field: "mainTopicFocus", label: "Main topic focus", canonicalPath: "identity.niche" },
+ { field: "audienceDescription", label: "Audience description", canonicalPath: "audience.idealViewer" },
+ { field: "successDefinition", label: "Success definition", canonicalPath: "goals.successDefinition" },
+ { field: "mainYoutubeGoal", label: "Main YouTube goal", canonicalPath: "goals.primaryGoal" },
+ { field: "recurringSeriesName", label: "Recurring series name", canonicalPath: "content.recurringSeriesName" },
+ { field: "recurringSeriesDescription", label: "Recurring series description", canonicalPath: "content.recurringSeriesDescription" },
+ { field: "biggestWeakness", label: "Creator-identified weakness", canonicalPath: "content.biggestWeakness" },
+ { field: "mostSuccessfulVideo", label: "Creator-identified successful video", canonicalPath: "content.mostSuccessfulVideo" },
+ { field: "signupReason", label: "Reason for using ViewTube", canonicalPath: "intelligence.signupReason" },
 ]
 
 /**
@@ -54,7 +54,7 @@ export const buildCreatorAnswerEvidenceRecords = (
    epistemicState: "USER_PROVIDED",
    confidence: 1,
    observedAt: context.updatedAt || context.completedAt || null,
-   limitations: ["Records the creator's answer; not independently verified public or analytics evidence."],
+   limitations: ["Creator-stated answer (" + label + "); not independently verified public or analytics evidence."],
    provenance: {
     evidenceIds: [id],
     sourceRoute: "settings/ai/channel-context",
@@ -62,7 +62,11 @@ export const buildCreatorAnswerEvidenceRecords = (
    },
   })
  }
- legacyAnswers.forEach(({ field, label }) => add(`legacy.${field}`, label, context[field]))
+ legacyAnswers.forEach(({ field, label, canonicalPath }) => {
+  const legacyValue = clean(context[field])
+  const canonicalValue = clean(readPath(context.channelContext, canonicalPath))
+  if (legacyValue && legacyValue !== canonicalValue) add(`legacy.${field}`, label, legacyValue)
+ })
  CHANNEL_CONTEXT_QUESTIONS.forEach((question) => {
   add(`channelContext.${question.contextField}`, question.title, readPath(context.channelContext, question.contextField))
  })

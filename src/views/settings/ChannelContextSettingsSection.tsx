@@ -84,7 +84,7 @@ export const ChannelContextSettingsSection: React.FC = () => {
                     <span className="min-w-0 flex-1">{question.title}</span>
                     {question.required ? <span aria-label="Required" className="shrink-0 text-xs">REQUIRED</span> : <span className="shrink-0 text-xs opacity-60">OPTIONAL</span>}
                   </span>
-                  {["identity.description", "goals.successDefinition", "audience.idealViewer", "audience.problem", "audience.transformation", "brand.voice"].includes(question.contextField) ? (
+                  {["identity.description", "goals.successDefinition", "audience.idealViewer", "audience.problem", "audience.transformation", "brand.voice", "content.recurringSeriesDescription", "content.biggestWeakness", "content.mostSuccessfulVideo", "intelligence.signupReason"].includes(question.contextField) ? (
                     <StudioTextArea
                       sizeVariant="standard"
                       rows={3}

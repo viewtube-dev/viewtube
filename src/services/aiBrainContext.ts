@@ -235,12 +235,54 @@ export const loadAiBrainContext = (): AiBrainContext => {
  }
 }
 
+export const syncLegacyAnswersToChannelContext = (
+ profile: ChannelContextProfile,
+ input: AiBrainContextInput,
+): ChannelContextProfile => {
+ const next: ChannelContextProfile = {
+  ...profile,
+  identity: { ...profile.identity },
+  goals: { ...profile.goals },
+  audience: { ...profile.audience },
+  content: { ...profile.content },
+  intelligence: { ...profile.intelligence },
+  brand: { ...profile.brand },
+ }
+ const fields: Array<{ key: keyof AiBrainCreatorProfile; path: string }> = [
+  { key: "channelDescription", path: "identity.description" },
+  { key: "mainTopicFocus", path: "identity.niche" },
+  { key: "audienceDescription", path: "audience.idealViewer" },
+  { key: "successDefinition", path: "goals.successDefinition" },
+  { key: "mainYoutubeGoal", path: "goals.primaryGoal" },
+  { key: "recurringSeriesName", path: "content.recurringSeriesName" },
+  { key: "recurringSeriesDescription", path: "content.recurringSeriesDescription" },
+  { key: "biggestWeakness", path: "content.biggestWeakness" },
+  { key: "mostSuccessfulVideo", path: "content.mostSuccessfulVideo" },
+  { key: "signupReason", path: "intelligence.signupReason" },
+ ]
+ const inputRecord = input as unknown as Record<string, unknown>
+ fields.forEach(({ key, path }) => {
+  if (!Object.prototype.hasOwnProperty.call(inputRecord, key)) return
+  const [section, field] = path.split(".")
+  const sectionRecord = next[section as keyof ChannelContextProfile] as Record<string, unknown>
+  sectionRecord[field] = clean(inputRecord[key])
+ })
+ if (!Object.prototype.hasOwnProperty.call(inputRecord, "mainTopicFocus") && Object.prototype.hasOwnProperty.call(inputRecord, "audienceNiche")) {
+  next.identity.niche = clean(inputRecord.audienceNiche)
+ }
+ if (!Object.prototype.hasOwnProperty.call(inputRecord, "successDefinition") && Object.prototype.hasOwnProperty.call(inputRecord, "whatNext")) {
+  next.goals.successDefinition = clean(inputRecord.whatNext)
+ }
+ return next
+}
+
 export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext => {
  const previous = loadAiBrainContext()
  const updatedAt = new Date().toISOString()
  const payload = normalizeContext({
   ...previous,
   ...next,
+  channelContext: syncLegacyAnswersToChannelContext(next.channelContext || previous.channelContext, next),
   whatNext: clean(next.whatNext ?? next.mainYoutubeGoal ?? previous.whatNext),
   primaryGoal: normalizePrimaryGoal(next.primaryGoal || previous.primaryGoal),
   audienceNiche: clean(next.audienceNiche ?? next.mainTopicFocus ?? previous.audienceNiche),
@@ -257,13 +299,34 @@ export const saveAiBrainContext = (next: AiBrainContextInput): AiBrainContext =>
  return payload
 }
 
+export const syncChannelContextToLegacyAnswers = (
+ context: AiBrainContext,
+ channelContext: ChannelContextProfile,
+): AiBrainContext => ({
+ ...context,
+ channelContext,
+ channelDescription: clean(channelContext.identity.description),
+ mainTopicFocus: clean(channelContext.identity.niche),
+ audienceDescription: clean(channelContext.audience.idealViewer),
+ successDefinition: clean(channelContext.goals.successDefinition),
+ mainYoutubeGoal: clean(channelContext.goals.primaryGoal),
+ recurringSeriesName: clean(channelContext.content.recurringSeriesName),
+ recurringSeriesDescription: clean(channelContext.content.recurringSeriesDescription),
+ biggestWeakness: clean(channelContext.content.biggestWeakness),
+ mostSuccessfulVideo: clean(channelContext.content.mostSuccessfulVideo),
+ signupReason: clean(channelContext.intelligence.signupReason),
+ whatNext: clean(channelContext.goals.successDefinition),
+ audienceNiche: clean(channelContext.identity.niche),
+})
+
 export const saveChannelContextProfile = (channelContext: ChannelContextProfile): AiBrainContext => {
  const previous = loadAiBrainContext()
- const payload = normalizeContext({
+ const normalized = normalizeContext({
   ...previous,
   channelContext,
   updatedAt: new Date().toISOString(),
  })
+ const payload = syncChannelContextToLegacyAnswers(normalized, channelContext)
  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
  return payload
 }
