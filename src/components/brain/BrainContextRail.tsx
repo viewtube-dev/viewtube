@@ -1,5 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { AlertTriangle, ArrowRight, Check } from "lucide-react"
 import type {
  BrainQuickAction,
