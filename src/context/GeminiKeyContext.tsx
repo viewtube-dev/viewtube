@@ -48,7 +48,7 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       const { GoogleGenAI } = await import('@google/genai');
       const ai = new GoogleGenAI({ apiKey: key });
       const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
+        model: 'gemini-3.1-flash',
         contents: 'reply with exactly "OK"',
       });
 
@@ -59,8 +59,17 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }
       throw new Error("Invalid response from Gemini");
     } catch (error: any) {
-      console.error('Gemini API Key validation failed:', error);
-      setValidationError(error.message || 'Failed to validate API key. Please check the key and try again.');
+      // Keep provider diagnostics out of the settings UI; SDK errors can contain
+      // raw request details and model identifiers that are not useful to creators.
+      const status = Number(error?.status ?? error?.code);
+      const message = String(error?.message ?? '');
+      if (status === 404 || /model.+(not found|not supported)|models\/[^ ]+ is not found/i.test(message)) {
+        setValidationError('Gemini could not use the validation model. Check that the selected model is available to your API key and try again.');
+      } else if (status === 400 || status === 401 || status === 403 || /api key|unauthorized|permission denied|invalid argument/i.test(message)) {
+        setValidationError('Gemini could not validate this API key. Check the key and its API access, then try again.');
+      } else {
+        setValidationError('Gemini connection failed. Check your network and API access, then try again.');
+      }
       setIsValidating(false);
       return false;
     }
