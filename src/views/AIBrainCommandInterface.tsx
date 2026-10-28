@@ -1020,9 +1020,9 @@ const AIBrainCommandInterface: React.FC = () => {
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
  const channelId = authState.channelId || authState.channelHandle || null
  useEffect(() => {
-  setIntakeContext(loadAiBrainContext(channelId))
+  setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label))
   setIntakeSaveStatus("Loaded this channel's locally saved profile.")
- }, [channelId])
+ }, [channelId, snapshot.channel.label])
 
  const [brainControls, setBrainControls] = useState(() => readBrainUserControls(channelId))
  const runtimeSnapshot = useMemo(
@@ -1117,7 +1117,7 @@ const AIBrainCommandInterface: React.FC = () => {
    setIntakeContext(loadAiBrainContext(channelId))
    setIntakeOpen(true)
   }
- }, [authState.isAuthenticated, location.search])
+ }, [authState.isAuthenticated, location.search, channelId, snapshot.channel.label])
 
  const refreshLearning = async () => {
   try {
