@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -251,8 +251,8 @@ describe("Studio dropdown chevron and split-left contract", () => {
     expect(html).toContain('data-size="compact"')
   })
 
-  it("keeps simple dropdowns free of a split rail and places the chevron at the trailing edge", () => {
-    const html = renderToStaticMarkup(<StudioSimpleDropdown aria-label="Simple mode" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }]} />)
+  it("uses StudioDropdown for simple selection without a split rail and places the chevron at the trailing edge", () => {
+    const html = renderToStaticMarkup(<StudioDropdown aria-label="Simple mode" defaultValue="balanced" options={[{ value: "balanced", label: "Balanced" }]} />)
     expect(html).not.toContain('data-vt-studio-split-rail')
     expect(html).toContain('class="vt-studio-dropdown-chevron is-trailing"')
   })
@@ -1073,11 +1073,12 @@ describe("Studio counter hold-repeat acceleration", () => {
 
 
 describe("Supreme and Micro production size contract", () => {
-  it("defines the four canonical tiers with exact 60/44/28/12px heights", () => {
+  it("defines the five canonical tiers with exact 60/44/28/20/12px heights", () => {
     const expected: Record<StudioControlSize, number> = {
       supreme: 60,
       standard: 44,
       compact: 28,
+      mini: 20,
       micro: 12,
     }
     for (const [size, height] of Object.entries(expected) as [StudioControlSize, number][]) {
