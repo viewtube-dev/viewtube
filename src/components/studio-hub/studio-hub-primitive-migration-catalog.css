@@ -269,3 +269,56 @@
   max-width: 34rem;
   margin: 6px 0 0;
 }
+
+
+/* Confirmed primitive library: family variants are grouped within one module. */
+.vt-primitive-migration-catalog .vt-catalog-family-variants {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-variant {
+  display: grid;
+  grid-template-columns: minmax(112px, .7fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-variant > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 1000;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-variant > :last-child {
+  min-width: 0;
+  width: 100%;
+}
+.vt-primitive-migration-catalog .vt-catalog-family-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+@media (min-width: 760px) {
+  .vt-primitive-migration-catalog .vt-catalog-family-variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .vt-primitive-migration-catalog .vt-catalog-family-note {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 480px) {
+  .vt-primitive-migration-catalog .vt-catalog-family-variant {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}
