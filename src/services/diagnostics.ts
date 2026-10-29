@@ -10,6 +10,7 @@ export interface DiagnosticDetails {
  actual?: string
  evidenceRefs?: readonly string[]
  recommendedActions?: readonly string[]
+ explanation?: string
  confidence?: "confirmed" | "high" | "medium" | "low" | "unknown"
  privacy?: "public" | "sanitized" | "sensitive"
  metadata?: Record<string, unknown>
@@ -204,7 +205,22 @@ export const reportDiagnostic = (input: ViewTubeDiagnostic): void => {
 
 export const formatDiagnostics = (entries: readonly DiagnosticEntry[]): string => {
  if (!entries.length) return "(no diagnostics captured)"
- return entries.map((entry) =>
-  `[${entry.lastSeen.toString().padStart(5, " ")}ms] ${entry.level.toUpperCase()} ${entry.tag}: ${entry.message}${entry.count > 1 ? ` (x${entry.count})` : ""}`,
- ).join("\n")
+ return entries.map((entry) => {
+  const header = `[${entry.lastSeen.toString().padStart(5, " ")}ms] ${entry.level.toUpperCase()} ${entry.tag}: ${entry.message}${entry.count > 1 ? ` (x${entry.count})` : ""}`
+  const details = entry.details
+  if (!details) return header
+  const lines = [
+   details.source ? `  Source: ${details.source}` : undefined,
+   details.status ? `  Status: ${details.status}` : undefined,
+   details.correlationId ? `  Correlation: ${details.correlationId}` : undefined,
+   details.explanation ? `  Explanation: ${details.explanation}` : undefined,
+   details.expected ? `  Expected: ${details.expected}` : undefined,
+   details.actual ? `  Actual: ${details.actual}` : undefined,
+   details.evidenceRefs?.length ? `  Evidence: ${details.evidenceRefs.join(", ")}` : undefined,
+   details.recommendedActions?.length ? `  Next steps: ${details.recommendedActions.join(" | ")}` : undefined,
+   details.confidence ? `  Confidence: ${details.confidence}` : undefined,
+   details.privacy ? `  Privacy: ${details.privacy}` : undefined,
+  ].filter((line): line is string => Boolean(line))
+  return [header, ...lines].join("\n")
+ }).join("\n")
 }
