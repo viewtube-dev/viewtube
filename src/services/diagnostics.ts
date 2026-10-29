@@ -186,17 +186,39 @@ export const readDiagnostics = (): readonly DiagnosticEntry[] => buffer.map((ent
   : undefined,
 }))
 
+const inferDiagnosticSubsystem = (area: string): string => {
+ const normalized = area.toLowerCase()
+ if (/google|youtube-auth|oauth|authorization/.test(normalized)) return "authorization"
+ if (/brain|gemini|model|evidence|capability|creator-context/.test(normalized)) return "brain"
+ if (/analytics|report|sync|query|dataset|storage/.test(normalized)) return "analytics"
+ if (/account|billing|payment|usage|entitlement|subscription/.test(normalized)) return "account"
+ if (/api|backend|server|proxy|route/.test(normalized)) return "backend"
+ if (/frontend|render|browser|ui|boot-timing/.test(normalized)) return "frontend"
+ if (/deploy|health|network|tls|dns/.test(normalized)) return "deployment"
+ return "runtime"
+}
+
+const inferDiagnosticDetails = (input: ViewTubeDiagnostic): DiagnosticDetails => ({
+ source: input.area,
+ subsystem: inferDiagnosticSubsystem(input.area),
+ kind: input.event,
+ status: input.level === "error" ? "failed" : input.level === "warn" ? "degraded" : "unknown",
+ explanation: input.whatItMeans,
+ recommendedActions: input.whatToCheck,
+ privacy: "sanitized",
+ metadata: sanitizeDiagnosticData(input.debugData),
+})
+
 export const reportDiagnostic = (input: ViewTubeDiagnostic): void => {
- recordDiagnostic(input.level, `${input.area}:${input.event}`, input.whatHappened, input.details)
+ const details = input.details ?? inferDiagnosticDetails(input)
+ recordDiagnostic(input.level, `${input.area}:${input.event}`, input.whatHappened, details)
  if (!isDeveloperDiagnosticsEnabled()) return
  const payload = {
   WHAT_HAPPENED: redactText(input.whatHappened),
   WHAT_IT_MEANS: input.whatItMeans ? redactText(input.whatItMeans) : undefined,
   WHAT_TO_CHECK: input.whatToCheck?.map(redactText),
   DEBUG_DATA: sanitizeDiagnosticData(input.debugData),
-  DETAILS: input.details
-   ? sanitizeDiagnosticData(input.details as unknown as Record<string, unknown>)
-   : undefined,
+  DETAILS: sanitizeDiagnosticData(details as unknown as Record<string, unknown>),
   error: input.error ? sanitizeValue(input.error) : undefined,
  }
  const method = input.level === "error" ? "error" : input.level === "warn" ? "warn" : "info"
