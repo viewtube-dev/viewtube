@@ -161,6 +161,30 @@ export const requestGoogleWithRetry = async (
    level: details.retryable ? "warn" : "error",
    whatHappened: details.message,
    whatItMeans: details.reconnectRequired ? "Google must be reconnected before more requests run." : "The Google request did not complete.",
+   details: {
+    source: "google-read",
+    subsystem: "authorization",
+    kind: details.code,
+    status: "failed",
+    expected: "Google API request completes successfully",
+    actual: `${details.code} (HTTP ${details.upstreamStatus ?? response.status})`,
+    recommendedActions: details.reconnectRequired
+     ? ["Check OAuth token expiry", "Verify refresh-token flow", "Review requested scopes"]
+     : details.retryable
+     ? ["Check network reachability", "Review Google API status", "Inspect proxy timeout configuration"]
+     : ["Verify API permissions and request parameters", "Inspect server proxy logs"],
+    confidence: "confirmed",
+    privacy: "sanitized",
+    metadata: {
+     operation: options.operation || "google-read",
+     requestId: details.requestId,
+     failureCode: details.code,
+     attempts,
+     retryable: details.retryable,
+     reconnectRequired: details.reconnectRequired,
+     upstreamStatus: details.upstreamStatus ?? response.status,
+    },
+   },
    // vt-2242 — populate whatToCheck so developers reading the console log get
    // a triage checklist, not just a symptom + guess.
    whatToCheck: details.reconnectRequired
