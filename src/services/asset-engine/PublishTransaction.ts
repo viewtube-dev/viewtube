@@ -81,6 +81,8 @@ export const getPublishTransaction=(id:string)=>{
  return transaction ? assertTransactionSnapshotIntegrity(transaction) : null
 }
 
+export const markPublishStepRunning=(input:{transactionId:string;step:PublishTransactionStep})=>{const transaction=getPublishTransaction(input.transactionId);if(!transaction)throw new Error("Unknown publish transaction: "+input.transactionId);const current=transaction.steps[input.step];if(current?.status==="completed"||current?.status==="running")return transaction;const timestamp=now();return save({...transaction,status:"running",steps:{...transaction.steps,[input.step]:{status:"running",startedAt:timestamp}},updatedAt:timestamp})};
+
 export const beginPublishTransaction=(projection:PublishingPackageProjection,toolId="video-publisher",identity:{workflowId?:string|null;operationId?:string|null;actionPacketId?:string|null;recommendationId?:string|null;experimentId?:string|null}={})=>{
  if(!canStore()) throw new Error("Publish transaction requires persistent browser storage; in-memory fallback is not safe for publishing.")
  if(!projection.ready) throw new Error("Publishing Package is not ready: "+projection.missing.join(", "))
