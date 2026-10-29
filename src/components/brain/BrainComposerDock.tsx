@@ -62,6 +62,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   promptLauncherRef,
   contextLauncherRef,
   composerRef,
+  maxFieldPx,
   className = "",
 }) => {
   const setRefs = useCallback(
@@ -157,6 +158,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             }}
             placeholder="Ask anything about your channel, content, or next upload…"
             className="vt-brain-composer-input w-full min-w-0 resize-none"
+            style={maxFieldPx ? { maxHeight: maxFieldPx } : undefined}
             aria-label="Message to ViewTube Brain"
             aria-describedby="brain-composer-help"
             onFocus={(event) => {
