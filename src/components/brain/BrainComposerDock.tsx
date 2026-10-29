@@ -62,6 +62,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   promptLauncherRef,
   contextLauncherRef,
   composerRef,
+  maxFieldPx,
   className = "",
 }) => {
   const setRefs = useCallback(
