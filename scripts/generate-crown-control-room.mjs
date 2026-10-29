@@ -25,8 +25,10 @@ export function collectExchangeRecords(root = EXCHANGE_ROOT) {
   }
   visit(root)
   records.sort((a, b) => a.path.localeCompare(b.path))
-  const missionCount = records.filter((item) => item.path.startsWith(".viewtube/exchange/missions/")).length
-  if (!missionCount) throw new Error("Crown Exchange contains no mission records; refusing to generate an empty Control Room.")
+  const missionRecords = records.filter((item) => item.path.startsWith(".viewtube/exchange/missions/"))
+  const invalidMissions = missionRecords.filter((item) => typeof item.record.missionId !== "string" || !item.record.missionId.trim())
+  if (invalidMissions.length) throw new Error(`Crown Exchange mission records require a non-empty missionId: ${invalidMissions.map((item) => item.path).join(", ")}`)
+  if (!missionRecords.length) throw new Error("Crown Exchange contains no mission records; refusing to generate an empty Control Room.")
   return records
 }
 
