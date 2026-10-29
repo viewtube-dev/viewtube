@@ -351,7 +351,6 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   color: #000;
 }
-.vt-studio-dropdown-option:disabled { cursor: not-allowed; opacity: .45; }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-dropdown-option {  }
 }
@@ -2898,13 +2897,6 @@ no shell shadows{
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-}
-:where([data-vt-studio-control="true"]) {
-  --vt-studio-space-unit: 4px;
-  --vt-studio-space-top: var(--vt-studio-space-unit);
-  --vt-studio-space-right: var(--vt-studio-space-unit);
-  --vt-studio-space-bottom: var(--vt-studio-space-unit);
-  --vt-studio-space-left: var(--vt-studio-space-unit);
 }
 @media (prefers-reduced-motion: reduce) {
   :where(

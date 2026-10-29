@@ -44,6 +44,28 @@ test("stylesheet order preserves token-first and family-final ownership", () => 
     "token source, shared defaults, corrections and final family sheets must retain declared order");
 });
 
+test("system layer defines the disabled dropdown option rule only once", () => {
+  const system = read("src/styles/studio-control-system.css");
+  const duplicateRule = ".vt-studio-dropdown-option:disabled { cursor: not-allowed; opacity: .45; }";
+  assert.equal(system.split("\n").filter((line) => line.trim() === duplicateRule).length, 1,
+    "disabled dropdown cursor/opacity defaults should not be repeated");
+});
+
+test("distill layer defines the icon-group base rule only once", () => {
+  const distill = read("src/styles/studio-control-distill-overrides.css");
+  const baseRules = distill.split("\n").filter((line) => line.trim() === ".vt-studio-square-icon-button-group {");
+  assert.equal(baseRules.length, 1,
+    "the content-sized icon-group base rule should be defined once; Brain-specific scoping stays separate");
+});
+
+test("canonical system owns one scoped spacing-unit declaration", () => {
+  const system = read("src/styles/studio-control-system.css");
+  assert.match(system, /\[data-vt-studio-control\] \{[^}]*--vt-studio-space-unit:\s*4px;/s,
+    "the shared control root owns the spacing-unit token");
+  assert.doesNotMatch(system, /:where\(\[data-vt-studio-control="true"\]\) \{[^}]*--vt-studio-space-unit:/s,
+    "a second scoped declaration must not duplicate the shared control root");
+});
+
 test("recovery layer does not redeclare the global spacing-unit token", () => {
   const recovery = read("src/styles/studio-control-recovery-overrides.css");
   assert.doesNotMatch(recovery, /--vt-studio-space-unit\s*:/,
