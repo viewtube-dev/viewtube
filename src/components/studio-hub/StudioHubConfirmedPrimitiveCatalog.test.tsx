@@ -704,3 +704,24 @@ describe("public export representative runtime coverage", () => {
     }
   });
 });
+
+
+describe("Studio Calendar confirmed primitive representatives", () => {
+  it("renders each calendar primitive as a real named specimen with every supported rail and ratio", () => {
+    const markup = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    for (const primitive of ["StudioCalendarEventChip", "StudioCalendarMediaRail"]) {
+      expect(markup).toContain(`data-vt-library-component="${primitive}"`);
+    }
+    for (const kind of ["publish", "task", "milestone", "reminder", "deadline"]) {
+      expect(markup).toContain(`data-event-kind="${kind}"`);
+    }
+    for (const split of ["left", "right", "double"]) {
+      expect(markup).toContain(`data-split="${split}"`);
+    }
+    expect(markup).toContain('data-aspect-ratio="16:9"');
+    expect(markup).toContain('data-aspect-ratio="9:16"');
+    expect(markup).toContain('data-event-status="scheduled"');
+    expect(markup).toContain('data-event-status="in progress"');
+    expect(markup).toContain("REMOVABLE EVENT");
+  });
+});
