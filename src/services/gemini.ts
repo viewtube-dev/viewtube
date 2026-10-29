@@ -59,6 +59,7 @@ import {
  estimateMeterQuote,
  getCurrentEntitlement,
 } from "./billingEntitlement"
+import { canonicalizeGeminiModelId, GEMINI_MODEL_REGISTRY, resolveGeminiModel } from "./geminiModelGovernance"
 import { consultBrainSync, annotateSystemPrompt } from "./brain/Utils";
 import {
  consumeUnifiedAiCredits,
@@ -341,34 +342,10 @@ const getAiSettings = () => {
  return { customKey, modelPreference }
 }
 
-const CANONICAL_MODELS = [
- "gemini-3.1-pro-preview",
- "gemini-3.1-flash-lite",
- "gemini-3-flash-preview",
- "gemini-3.1-flash-image-preview",
- "gemini-3.1-flash",
- "gemini-3.1-pro",
- "gemini-3.0-flash",
- "gemini-3.0-pro",
-] as const
+type CanonicalModelId = keyof typeof GEMINI_MODEL_REGISTRY
 
-type CanonicalModelId = (typeof CANONICAL_MODELS)[number]
-
-const isCanonicalModel = (value: string): value is CanonicalModelId =>
- (CANONICAL_MODELS as readonly string[]).includes(value)
-
-const toCanonicalModel = (value: string): CanonicalModelId => {
- if (isCanonicalModel(value)) return value
- const normalized = value.toLowerCase()
- if (normalized.includes("3.1") && normalized.includes("pro")) return "gemini-3.1-pro-preview"
- if (normalized.includes("lite")) return "gemini-3.1-flash-lite"
- if (normalized.includes("image")) return "gemini-3.1-flash-image-preview"
- if (normalized.includes("3.1") && normalized.includes("flash")) return "gemini-3.1-flash-lite"
- if (normalized.includes("3.0") && normalized.includes("flash")) return "gemini-3-flash-preview"
- if (normalized.includes("3-flash")) return "gemini-3-flash-preview"
- if (normalized.includes("pro")) return "gemini-3.1-pro-preview"
- return "gemini-3.1-flash-lite"
-}
+const toCanonicalModel = (value: string): CanonicalModelId =>
+ canonicalizeGeminiModelId(value) as CanonicalModelId
 
 const getFallbackChain = (sourceModel: CanonicalModelId): CanonicalModelId[] => {
  const [_, family, tier] = sourceModel.match(/^gemini-(3\.[01])-(flash|pro)$/) || []
@@ -669,15 +646,10 @@ export const getActiveModel = (
   | "live" = "text",
 ): string => {
  const { modelPreference } = getAiSettings()
- const selected = toCanonicalModel(modelPreference)
- 
- // HYBRID STRATEGY (MAY 2026)
- if (capability === "thinking" || capability === "analysis") return "gemini-3.1-pro-preview"
- if (capability === "image") return "gemini-3.1-flash-image-preview"
- if (capability === "video" || capability === "audio") return "gemini-3-flash-preview"
- if (capability === "fast-text" || capability === "text") return "gemini-3.1-flash-lite"
- 
- return selected
+ return resolveGeminiModel({
+  preference: modelPreference,
+  capability,
+ }).served
 }
 
 // --- HARBOR PILOT: RELIABILITY HELPERS ---
