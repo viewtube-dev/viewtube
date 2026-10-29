@@ -35,6 +35,7 @@ const createLocalStorageMock = () => {
 
 describe("billing entitlement runtime", () => {
  beforeEach(() => {
+  vi.unstubAllGlobals()
   const localStorageMock = createLocalStorageMock()
   Object.defineProperty(globalThis, "localStorage", {
    configurable: true,
@@ -201,6 +202,7 @@ describe("billing entitlement runtime", () => {
 
 
  it("reports checkout-session failures without recording provider error text or redirect URLs", async () => {
+  vi.stubGlobal("window", { location: { origin: "https://billing.example" } })
   vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ error: "private provider detail" }), {
    status: 503,
    headers: { "Content-Type": "application/json" },
@@ -228,6 +230,7 @@ describe("billing entitlement runtime", () => {
  })
 
  it("reports entitlement fetch failures with a safe HTTP status", async () => {
+  vi.stubGlobal("window", { location: { origin: "https://billing.example" } })
   vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ error: "private account detail" }), {
    status: 502,
    headers: { "Content-Type": "application/json" },
