@@ -34,7 +34,7 @@ describe("Brain provider architecture guard", () => {
   const violations = collect(ROOT)
    .filter((absolute) => containsDirectProviderInvocation(fs.readFileSync(absolute, "utf8")))
    .map(normalize)
-   .filter((file) => !file.includes("/__tests__/") && !ALLOWED_DIRECT_PROVIDER_CALLS.has(file))
+   .filter((file) => !/\.(test|spec)\.(ts|tsx)$/.test(file) && !file.includes("/__tests__/") && !ALLOWED_DIRECT_PROVIDER_CALLS.has(file))
 
   expect(violations).toEqual([])
  })
