@@ -619,15 +619,129 @@ export const getAiClient = () => {
  }) as any
 
  baseClient.models.generateContentStream = (async (...args: any[]) => {
+  const modelId = toCanonicalModel(String(args?.[0]?.model || "gemini-3.1-flash"))
+  const promptText = JSON.stringify(args?.[0]?.contents || "")
   const entitlement = getCurrentEntitlement()
-  if (entitlement.subscriptionPlanId === "beta" && keySource !== "custom") {
+  const quote = estimateMeterQuote(
+   {
+    modelId,
+    inputTokensEstimate: Math.max(80, Math.ceil(promptText.length / 4)),
+    outputTokensEstimate: 350,
+   },
+   entitlement,
+  )
+  const isLocalhostDev = Boolean(import.meta.env?.DEV) &&
+   (typeof window === "undefined" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+  if (isLocalhostDev && keySource === "env") {
+   return withCanonicalModel("generateContentStream", args, (nextArgs) =>
+    (generateContentStream as any)(...nextArgs),
+   )
+  }
+
+  const unifiedMetering = isUnifiedAccountServerEnabled() && keySource !== "custom"
+  const unifiedSnapshot = isUnifiedAccountServerEnabled()
+   ? await fetchUnifiedAccountSnapshot()
+   : null
+  const effectivePlanId = unifiedSnapshot?.billing.planId || entitlement.subscriptionPlanId
+
+  if (effectivePlanId === "beta" && keySource !== "custom") {
    throw new Error(
     "Beta Version requires your own Gemini API Key. Please set it in System Settings -> Key Vault.",
    )
   }
-  return await withCanonicalModel("generateContentStream", args, (nextArgs) =>
+  if (unifiedSnapshot && unifiedSnapshot.authentication.status !== "authenticated") {
+   throw new Error("AI generation requires a signed-in ViewTube account.")
+  }
+  if (unifiedMetering) {
+   const unlimited = unifiedSnapshot?.billing.planId === "executive"
+   const available = Math.max(0, Number(unifiedSnapshot?.ai.availableCredits || 0))
+   if (!unlimited && available < quote.creditDebitEstimate) {
+    throw new Error(`Not enough credits. Need ~${quote.creditDebitEstimate}, have ${Math.floor(available)}.`)
+   }
+  }
+
+  if (!unifiedMetering && !quote.canRun) {
+   if (keySource === "custom") {
+    let isAuthenticated = unifiedSnapshot?.authentication.status === "authenticated"
+    if (!isUnifiedAccountServerEnabled()) {
+     try {
+      const authStateRaw = localStorage.getItem("vt_auth_state")
+      const authState = authStateRaw ? JSON.parse(authStateRaw) : {}
+      isAuthenticated = Boolean((authState as { isAuthenticated?: unknown }).isAuthenticated)
+     } catch {
+      isAuthenticated = false
+     }
+    }
+    if (!isAuthenticated) {
+     throw new Error("AI generation with a custom key requires a connected ViewTube account. Please connect and retry.")
+    }
+   } else if (entitlement.tier === "free") {
+    throw new Error(
+     "AI generation requires a paid plan. Upgrade to a paid plan in /settings?panel=billing.",
+    )
+   } else {
+    throw new Error(
+     `Not enough credits. Need ~${quote.creditDebitEstimate}, have ${Math.max(0, Math.floor(entitlement.creditBalance))}.`,
+    )
+   }
+  }
+
+  const responseStream = await withCanonicalModel("generateContentStream", args, (nextArgs) =>
    (generateContentStream as any)(...nextArgs),
   )
+  return (async function* () {
+   let inputTokens = 0
+   let outputTokens = 0
+   let effectiveProviderModel = String(args?.[0]?.model || modelId)
+   try {
+    for await (const chunk of responseStream as AsyncIterable<any>) {
+     const usage = chunk?.usageMetadata || {}
+     inputTokens = Math.max(inputTokens, Number(usage.promptTokenCount ?? usage.inputTokenCount ?? 0))
+     outputTokens = Math.max(outputTokens, Number(
+      usage.candidatesTokenCount ?? usage.outputTokenCount ?? usage.totalTokenCount ?? 0,
+     ))
+     effectiveProviderModel = String(chunk?.modelVersion || effectiveProviderModel)
+     yield chunk
+    }
+   } finally {
+    if (keySource !== "custom") {
+     const effectiveCanonicalModel = inferCanonicalFromProvider(effectiveProviderModel)
+     const finalQuote = estimateMeterQuote({
+      modelId: effectiveCanonicalModel,
+      inputTokensEstimate: inputTokens > 0 ? inputTokens : quote.inputTokensEstimate,
+      outputTokensEstimate: outputTokens > 0 ? outputTokens : quote.outputTokensEstimate,
+     })
+     const chargeId = `chg_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`
+     if (unifiedMetering) {
+      await consumeUnifiedAiCredits({
+       credits: finalQuote.creditDebitEstimate,
+       idempotencyKey: chargeId,
+       metadata: {
+        modelId: effectiveCanonicalModel,
+        inputTokens: inputTokens > 0 ? inputTokens : quote.inputTokensEstimate,
+        outputTokens: outputTokens > 0 ? outputTokens : quote.outputTokensEstimate,
+        reason: inputTokens > 0 || outputTokens > 0 ? "usage_metadata" : "fallback_estimate",
+       },
+      })
+     } else {
+      const charge = applyMeterChargeEvent({
+       id: chargeId,
+       modelId: effectiveCanonicalModel,
+       inputTokens: inputTokens > 0 ? inputTokens : quote.inputTokensEstimate,
+       outputTokens: outputTokens > 0 ? outputTokens : quote.outputTokensEstimate,
+       rawCostUsd: finalQuote.rawCostUsd,
+       meterCostUsd: finalQuote.meterCostUsd,
+       creditDebit: finalQuote.creditDebitEstimate,
+       reason: inputTokens > 0 || outputTokens > 0 ? "usage_metadata" : "fallback_estimate",
+       fallbackApplied: !(inputTokens > 0 || outputTokens > 0),
+      })
+      if (!charge.allowed) {
+       throw new Error("Insufficient credits after metering. Please top up and try again.")
+      }
+     }
+    }
+   }
+  })()
  }) as any
 
  return baseClient
