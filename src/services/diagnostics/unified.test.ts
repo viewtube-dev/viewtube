@@ -82,4 +82,32 @@ describe("unified diagnostics integration adapters", () => {
     ingestDiagnostic("test-runner", { summary: "Source check" })
     expect(readDiagnostics().at(-1)?.details?.source).toBe("test-runner")
   })
+
+  it("omits evidence and raw metadata for events classified as sensitive", () => {
+    unregister = registerDiagnosticAdapter({
+      id: "sensitive-source",
+      normalize: () => ({
+        source: "spoofed",
+        subsystem: "account",
+        kind: "payment",
+        severity: "error",
+        status: "failed",
+        code: "PAYMENT_FAILURE",
+        summary: "Payment provider failed",
+        expected: "payment accepted for test account",
+        actual: "private customer payload",
+        evidenceRefs: ["private://customer/123"],
+        privacy: "sensitive",
+        metadata: { customerEmail: "person@example.com", paymentToken: "secret" },
+      }),
+    })
+    ingestDiagnostic("sensitive-source", {})
+    expect(readDiagnostics().at(-1)?.details).toMatchObject({
+      source: "sensitive-source",
+      privacy: "sensitive",
+    })
+    expect(readDiagnostics().at(-1)?.details).not.toHaveProperty("metadata")
+    expect(readDiagnostics().at(-1)?.details).not.toHaveProperty("evidenceRefs")
+    expect(readDiagnostics().at(-1)?.details?.actual).toBe("[OMITTED: sensitive]")
+  })
 })
