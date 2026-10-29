@@ -43,10 +43,6 @@ export const CAPABILITY_FLAGS: Record<string, CapabilityFlagDef> = {
   "feature-discovery-registry": { flag: CAPABILITY_FLAG_PREFIX + "feature-discovery-registry", title: "Unified Feature Discovery and Action Registry", number: 25 },
 }
 
-/** Capabilities with complete implementations (view-model core + adapter contract + UI + tests). */
-// Keep every capability disabled by default until canonical adapters, routes, and runtime tests are verified.
-const IMPLEMENTED_PREVIEW = new Set<string>()
-
 const STORAGE_KEY = "viewtube.capabilityFlagOverrides"
 
 function readOverrides(): Record<string, boolean> {
@@ -70,9 +66,8 @@ export function isCapabilityFlagEnabled(slug: string): boolean {
   if (!def) return false
   const overrides = readOverrides()
   if (slug in overrides) return overrides[slug]
-  // No capability is enabled by default. Explicit opt-in remains available through
-  // the existing development/demo override while release gates are incomplete.
-  return IMPLEMENTED_PREVIEW.has(slug)
+  // No capability is enabled by default until its canonical wiring and release gates are verified.
+  return false
 }
 
 export function readCapabilityFlagEnabled(slug: string): boolean {
