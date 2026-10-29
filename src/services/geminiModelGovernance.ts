@@ -142,12 +142,18 @@ export const resolveGeminiModel = (input: {
   capability: GeminiCapability
 }): GeminiModelResolution => {
   const requested = normalizeGeminiModelId(input.preference)
+  const metadata = getGeminiModel(requested)
   const required = MODALITY_REQUIRED[input.capability]
   const policy = CAPABILITY_POLICY[input.capability]
-  const served = required ?? policy ?? requested
+  // Modality constraints always win. Otherwise honor a known compatible user
+  // choice; only apply the capability default when metadata proves incompatibility.
+  const served = required
+    ?? (!metadata || metadata.capabilities.includes(input.capability)
+      ? requested
+      : policy ?? requested)
   const reason: GeminiSubstitutionReason = required
     ? "capability_requires_model"
-    : policy && policy !== requested
+    : served !== requested
       ? "capability_policy_override"
       : "honoured"
   return {
