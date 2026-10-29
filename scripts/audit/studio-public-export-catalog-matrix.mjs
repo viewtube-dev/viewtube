@@ -36,7 +36,7 @@ const dispositions = {
   StudioHubCertification: "Certification page/surface, not a control primitive; verify its route remains the authoritative certification surface.",
 };
 
-const entries = exportedNames(barrel).filter(entry => !entry.typeOnly && /^(Studio|SubToolbox|PrimaryButton|MetadataEditorRecipe|SearchResultsRecipe|VideoSelectorRecipe)/.test(entry.name));
+const entries = exportedNames(barrel).filter(entry => !entry.typeOnly && /^Studio/.test(entry.name));
 const rows = entries.map(entry => {
   const represented = hasJsxRepresentative(catalog, entry.name);
   return {
