@@ -44,7 +44,8 @@ export const CAPABILITY_FLAGS: Record<string, CapabilityFlagDef> = {
 }
 
 /** Capabilities with complete implementations (view-model core + adapter contract + UI + tests). */
-const IMPLEMENTED_PREVIEW = new Set<string>(["channel-intelligence-engine", "evidence-connected-brain"])
+// Keep every capability disabled by default until canonical adapters, routes, and runtime tests are verified.
+const IMPLEMENTED_PREVIEW = new Set<string>()
 
 const STORAGE_KEY = "viewtube.capabilityFlagOverrides"
 
@@ -69,9 +70,8 @@ export function isCapabilityFlagEnabled(slug: string): boolean {
   if (!def) return false
   const overrides = readOverrides()
   if (slug in overrides) return overrides[slug]
-  // Rollout: items 1 and 2 are fully implemented behind capability adapters and
-  // default ON as review previews; every other scaffold stays default OFF until
-  // its A/B/C/D audit completes on the target branch.
+  // No capability is enabled by default. Explicit opt-in remains available through
+  // the existing development/demo override while release gates are incomplete.
   return IMPLEMENTED_PREVIEW.has(slug)
 }
 
