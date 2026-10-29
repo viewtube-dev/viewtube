@@ -541,3 +541,10 @@ Source paths and imports were inspected. Browser visual certification, computed-
 ## Simplified ownership migration — 2026-10-27
 
 Simplification must be compatibility-preserving: retain public token exports and Toolbox token dependencies in `src/studio-ui/tokens.ts`; generate semantic CSS variables from that canonical source; keep field, split, dropdown, and accordion anatomy in their family-owned stylesheets. Legacy entry imports must not be removed until every live selector from parity/recovery layers has been migrated and ownership, typecheck, build, and rendered-control checks pass. Prefer deleting duplicate rules over adding overrides.
+
+
+## Phase 3–4 CSS ownership cleanup — 2026-10-29
+
+The active stylesheet entry is `src/styles/studio-control-entry.css`. The unreferenced `studio-control-system-2.css` alternative has been removed after repository code search returned no references; the entry and a regression test now require the single canonical `studio-control-system.css` layer. The recovery stylesheet no longer re-declares the global `--vt-studio-space-unit` token.
+
+Do not remove remaining `!important` declarations by count alone. Each declaration must be traced to its winning selector and migrated to the owning primitive/family stylesheet with regression coverage before deletion. The distill and recovery files are late cross-family correction layers, not the final stylesheets in the import order; later family sheets own their specific anatomy.
