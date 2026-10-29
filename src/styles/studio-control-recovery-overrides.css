@@ -1,10 +1,9 @@
 /**
  * STUDIO CONTROLS RECOVERY OVERRIDES
- * Imported LAST in studio-control-entry.css so recovery rules win the cascade.
+ * Loaded after the shared field/parity layers; final family sheets still follow.
  * Size-tier variables are owned by studio-control-system.css and emitted from tokens.ts.
  */
 [data-vt-studio-control] {
-  --vt-studio-space-unit: 4px;
   --vt-field-inline-stroke: var(--vt-field-primary);
 }
 

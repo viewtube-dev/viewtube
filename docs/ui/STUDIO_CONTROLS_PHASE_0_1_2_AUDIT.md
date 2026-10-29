@@ -203,7 +203,7 @@ The explicit width allow-list in `STUDIO_CONTROL_EXCEPTIONS` is `spectrumTag`, `
 - The shared `studio-control-system.css` is approximately 325 KB and contains approximately 339 occurrences of `!important` and hundreds of pixel-valued declarations (the static scan found 723 declarations matching a geometry/type property with a px value). These counts are rough textual indicators, not a semantic CSS audit; many declarations may be legitimate family anatomy, but the scale requires selector-level review.
 - `studio-control-distill-overrides.css` contains 68 `!important` occurrences and `studio-control-recovery-overrides.css` contains 117.
 - This is in tension with the documented ownership model that treats unexplained local/late overrides as drift and the contract test note that only narrow stroke-color enforcement may use `!important`, with geometry/typography not handled by late important layers. The actual selectors and final computed winners must be classified before removal.
-- `studio-control-system-2.css` is also present and is almost the same scale as `studio-control-system.css`; imports/references must be traced to establish whether it is dead, duplicate, or consumed elsewhere. Do not delete it based on filename alone.
+- `studio-control-system-2.css` was confirmed unreferenced by repository code search and absent from the active stylesheet entry. It has been removed on the Phase 3–4 branch; a regression test prevents it from returning. The similarly sized file was not assumed to be a duplicate based on its name alone.
 
 **P0 — Public barrel, internal exports and specimen provenance need explicit reconciliation**
 
@@ -262,7 +262,7 @@ These are candidates based on current source and canonical contracts; each must 
 | AUD-004 | 49 settings blocks are not mechanically reconciled against actual deviations | High | Generate exception manifest and coverage test |
 | AUD-005 | Catalog directly imports internal symbols absent from the public barrel | High | Mark each symbol public/internal/deprecated/missing intentionally |
 | AUD-006 | Repeated/nested family headings can be mistaken for duplicate or complete primitive coverage | High | Classify headings by primitive/specimen/anatomy/state and deduplicate only with evidence |
-| AUD-007 | `studio-control-system-2.css` exists alongside the main system file | Medium | Trace imports and references; document or remove if proven dead in a separate change |
+| AUD-007 | `studio-control-system-2.css` existed alongside the main system file without code references | Resolved | Repository code search returned zero references; removed the duplicate 325 KB stylesheet and added a regression guard |
 | AUD-008 | Catalog tests mostly check strings and source fragments | Medium | Add manifest parity and browser/computed-style checks |
 | AUD-009 | Family-level hard-coded dimensions and !important rules require semantic classification | High | Build selector/value inventory; register intentional exceptions and fix drift |
 | AUD-010 | Catalog integration note explicitly says browser certification remains pending for ConfirmedSpecimenGrid | Medium | Record browser evidence separately from source/test certification |
@@ -325,3 +325,31 @@ I verified the source and test contents through the GitHub API and checked the e
 - `src/styles/studio-control-distill-overrides.css`
 - `src/styles/studio-control-recovery-overrides.css`
 
+
+
+## Phase 3 — Consolidation follow-through (2026-10-29)
+
+- The Confirmed Primitive Library remains the active audited registry; retained legacy/migration tracks are still wired into the reference-library shell and were not deleted blindly.
+- The missing `StudioChatComposerDock` import is included in the branch inherited from the dedicated correction PR, so its two static catalog specimens resolve to the existing production primitive module.
+- The public-export matrix remains the contract for public representative coverage. Its 11 documented exceptions are explicit decisions to review, not evidence that all exports are ideal or permanent.
+
+## Phase 4 — Safe CSS ownership cleanup (2026-10-29)
+
+### Removed
+
+- Deleted `src/styles/studio-control-system-2.css` (approximately 325 KB). The active entry imported `studio-control-system.css`, not the `-2` file; repository code search found no references to the removed filename. The two files were not byte-identical, so this is recorded as removal of an unreferenced legacy alternative, not a claim that their contents were identical.
+- Removed the duplicate `--vt-studio-space-unit: 4px` declaration from `studio-control-recovery-overrides.css`. The canonical system stylesheet already owns the global spacing unit; the distinct recovery bridge `--vt-field-inline-stroke` remains until its consuming selectors are migrated.
+- Corrected misleading comments that described the distill/recovery layers as the final imported stylesheets. The entry imports later family sheets for side rails, component grid, counters, and split text input; comments now reflect the actual cascade order.
+
+### Regression guards added
+
+- `scripts/audit/studio-control-css-ownership.test.mjs` checks that all entry imports resolve, the removed system sheet stays absent, the canonical system stylesheet is imported once, token-first/family-final order is preserved, and the recovery layer does not re-declare the global spacing unit.
+- `npm run test:studio-control-css-ownership` is the focused command for this guard.
+
+### Important declaration policy
+
+No blanket removal of `!important` declarations was performed. The recovery layer still contains high-specificity geometry and field-state rules that may currently be necessary to beat legacy selectors. Removing them without selector-winner analysis and rendered regression tests would risk reintroducing the split-rail, field focus, and double-border defects this contract is intended to prevent. Phase 4 removes only the proven dead stylesheet and duplicate global token declaration in this pass; remaining `!important` occurrences require selector-level ownership migration, not count-based deletion.
+
+### Verification boundary
+
+The edits are committed to the Phase 3–4 branch, but the new Node test, existing Studio Controls suite, token emitter consistency check, TypeScript, production build, and browser/computed-style certification have not been run from a checkout in this session. Do not mark visual/runtime certification complete until those checks pass. The Vercel deployment checks previously reported the account's deployment-rate limit, which is separate from application test evidence.

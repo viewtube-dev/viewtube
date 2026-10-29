@@ -1,11 +1,11 @@
 /* Load generated size-tier variables before global control defaults and family styles. */
 @import "./studio-control-vars.generated.css";
 
-/* Global contract + legacy shared families; dedicated family layers below own final geometry. */
+/* Shared contract and legacy family rules; scoped family sheets below refine final anatomy. */
 @import "./studio-control-system.css";
 @import "./studio-control-core.css";
 
-/* Family-specific geometry, field behavior, motion, parity, then final scoped corrections. */
+/* Family behavior and parity, followed by scoped cross-family correction layers. */
 @import "./studio-control-split.css";
 @import "./studio-control-fields.css";
 @import "./studio-control-motion.css";

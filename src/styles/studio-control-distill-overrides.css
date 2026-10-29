@@ -1,5 +1,5 @@
 /* Studio Controls distillation overrides.
- * Loaded last by studio-control-entry.css so the shared contract wins over legacy rules.
+ * Loaded after shared field/parity layers; later family sheets may own final anatomy.
  * Keep this file focused on cross-family corrections; primitive geometry remains token-owned.
  */
 
