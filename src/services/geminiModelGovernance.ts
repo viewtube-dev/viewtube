@@ -111,7 +111,8 @@ export const canonicalizeGeminiModelId = (modelId: string): string => {
     return "gemini-3-flash-preview"
   }
   if (lower.includes("flash")) return "gemini-3.1-flash-lite"
-  return "gemini-3.1-flash-lite"
+  // Unknown IDs remain unknown; registry resolution must never silently select Flash Lite.
+  return normalized
 }
 
 export type GeminiSubstitutionReason =
