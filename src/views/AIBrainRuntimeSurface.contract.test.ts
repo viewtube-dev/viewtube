@@ -14,6 +14,16 @@ const collapsePrimitiveSource = readFileSync(new URL("../studio-ui/primitives/St
 const toolboxSource = readFileSync(new URL("../components/Toolbox.tsx", import.meta.url), "utf8")
 
 describe("AI Brain runtime surface integration", () => {
+ it("refreshes Gemini readiness when a key is saved or changed without remounting Brain Hub", () => {
+  expect(source).toContain('useState(() => hasGeminiKey())')
+  expect(source).toContain('window.addEventListener(GEMINI_KEY_UPDATED_EVENT, refreshGeminiReadiness)')
+  expect(source).toContain('window.addEventListener("yt_settings_updated", refreshGeminiReadiness)')
+  expect(source).toContain('window.addEventListener("storage", refreshGeminiReadiness)')
+  expect(source).toContain('setCanUseGemini(hasGeminiKey())')
+  expect(source).toContain('allowModel: canUseGemini')
+  expect(source).toContain('window.removeEventListener(GEMINI_KEY_UPDATED_EVENT, refreshGeminiReadiness)')
+ })
+
  it("mounts the canonical backend runtime snapshot above the conversation workspace", () => {
   expect(source).toContain('from "../services/brain/BrainRuntimeSnapshot"')
   expect(source).toContain('from "../components/brain/BrainRuntimePanel"')
