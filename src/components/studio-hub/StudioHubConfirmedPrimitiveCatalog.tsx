@@ -1789,88 +1789,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
   </ConfirmedCatalogFamilyGroups>
-    <ConfirmedIndividualPrimitiveSections />
+    {/* Core controls are already represented in the canonical grouped families above. */}
     <ConfirmedAdditionalPrimitiveSections />
   </>
 )
-
-const ConfirmedIndividualPrimitiveSections: React.FC = () => {
-  const [switchValue, setSwitchValue] = React.useState(false)
-  const [radioValue, setRadioValue] = React.useState(false)
-  const [checkboxValue, setCheckboxValue] = React.useState(false)
-  const [xCheckboxValue, setXCheckboxValue] = React.useState(false)
-  const [wordValue, setWordValue] = React.useState(false)
-  const [verticalWordValue, setVerticalWordValue] = React.useState(false)
-  const [arrowValue, setArrowValue] = React.useState("ONE")
-  const [sideValue, setSideValue] = React.useState("LOW")
-  const [doubleLeft, setDoubleLeft] = React.useState("SOURCE")
-  const [doubleRight, setDoubleRight] = React.useState("TARGET")
-  const [barValue, setBarValue] = React.useState(40)
-  return <ConfirmedCatalogFamilyGroups>
-    <Family title="StudioResponseMetaRow · Compact" nonDefaultSettings={[
-      "Optional status, metadata, and trailing slots are omitted when unused; this specimen uses Compact density.",
-      "Long labels wrap on narrow widths; existing status/action primitives own their own interaction and appearance.",
-      "Uses the Studio spacing rhythm and remains free of shadows and geometry movement.",
-    ]} provenance={<Provenance primitive="StudioResponseMetaRow" tsx="src/studio-ui/primitives/StudioResponseMetaRow.tsx" css="src/styles/studio-response-meta-row.css" tokens="44px standard / 28px compact / 12px micro · 4px rhythm" imports={["src/studio-ui/primitives/StudioResponseMetaRow.tsx", "src/styles/studio-response-meta-row.css"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioResponseMetaRow">
-        <span>COMPACT · TITLE + STATUS + METADATA + TRAILING SLOT</span>
-        <StudioResponseMetaRow
-          title="ANSWER SUMMARY"
-          status={<StudioBrainStatusBadge label="VERIFIED" tone="green" appearance="tinted" />}
-          metadata={<span>3 SOURCES</span>}
-          trailing={<span>OPEN DETAILS →</span>}
-        />
-        <span>MICRO · LONG LABEL WRAPS</span>
-        <StudioResponseMetaRow sizeVariant="micro" title="EVIDENCE PROVENANCE" metadata={<span>PARTIAL MATCH</span>} />
-      </div>
-    </Family>
-    <Family title="StudioChatResponseShell · Compact" nonDefaultSettings={[
-      "Slot order is metadata, answer, optional evidence, then caller-owned actions; evidence visibility remains caller-controlled.",
-      "The shell does not create a parallel evidence store or action system; callers own evidence visibility and interactions.",
-      "Responsive wrapping follows the 4px Studio spacing rhythm; no shadow or geometry movement is added.",
-    ]} provenance={<Provenance primitive="StudioChatResponseShell" tsx="src/studio-ui/primitives/StudioChatResponseShell.tsx" css="src/styles/studio-chat-response-shell.css" tokens="44px standard / 28px compact / 12px micro · 4px spacing rhythm" imports={["src/studio-ui/primitives/StudioChatResponseShell.tsx", "src/styles/studio-chat-response-shell.css"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatResponseShell">
-        <StudioChatResponseShell
-          metadata={<StudioResponseMetaRow title="ANSWER SUMMARY" status={<StudioBrainStatusBadge label="READY" tone="green" appearance="tinted" />} metadata={<span>3 SOURCES</span>} />}
-          evidence={<details><summary>VIEW EVIDENCE</summary><p>Evidence details remain caller-owned content.</p></details>}
-          actions={<StudioChatActionGroup><StudioButton sizeVariant="compact">COPY</StudioButton><StudioButton sizeVariant="compact">RETRY</StudioButton></StudioChatActionGroup>}
-        >
-          <p>Answer-first response content goes here. Keep the main response readable before optional supporting detail.</p>
-        </StudioChatResponseShell>
-      </div>
-    </Family>
-    <Family title="StudioChatActionGroup · Compact" nonDefaultSettings={[
-      "Existing Studio buttons own their visuals and actions; this wrapper only groups and wraps them.",
-      "Actions wrap on narrow widths with 4px spacing.",
-      "No wrapper-level button styling, shadow, or movement is introduced.",
-    ]} provenance={<Provenance primitive="StudioChatActionGroup" tsx="src/studio-ui/primitives/StudioChatActionGroup.tsx" css="src/styles/studio-chat-action-group.css" tokens="44px standard / 28px compact / 12px micro · 4px rhythm" imports={["src/studio-ui/primitives/StudioChatActionGroup.tsx", "src/styles/studio-chat-action-group.css"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatActionGroup">
-        <span>COMPACT · EXISTING STUDIO ACTIONS · RESPONSIVE WRAP</span>
-        <StudioChatActionGroup aria-label="Chat response action specimen">
-          <StudioButton sizeVariant="compact" onClick={() => undefined}>COPY</StudioButton>
-          <StudioButton sizeVariant="compact" onClick={() => undefined}>RETRY</StudioButton>
-          <StudioButton sizeVariant="compact" onClick={() => undefined}>EDIT</StudioButton>
-        </StudioChatActionGroup>
-      </div>
-    </Family>
-    <Family title="StudioDoubleSplitButton · Standard" nonDefaultSettings={["Two square action rails share the button face; the split shell owns the outer border and single internal divider."]} provenance={<Provenance primitive="StudioDoubleSplitButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · leading and trailing square rails" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton"><span>STANDARD · DOUBLE-SPLIT BUTTON</span><StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Standard double-split button specimen">DOUBLE SPLIT</StudioDoubleSplitButton></div>
-    </Family>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-  </ConfirmedCatalogFamilyGroups>
-}
 
 const ConfirmedStudioValueToggleFamily: React.FC = () => {
   const [arrowStd, setArrowStd] = React.useState("ONE")
