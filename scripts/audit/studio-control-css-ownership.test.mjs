@@ -73,3 +73,23 @@ test("recovery layer does not redeclare the global spacing-unit token", () => {
   assert.match(recovery, /--vt-field-inline-stroke:\s*var\(--vt-field-primary\)/,
     "the recovery layer keeps its distinct field-inset bridge until migrated");
 });
+
+
+test("bar toggle has one canonical inactive fill owner with 50% primary opacity", () => {
+  const distill = read("src/styles/studio-control-distill-overrides.css");
+  const inactiveRules = [...distill.matchAll(/\.vt-studio-value-toggle__bar\[data-active="false"\][^{]*\{([^}]*)\}/g)];
+  assert.equal(inactiveRules.length, 1,
+    "inactive bar fill should be declared once rather than repeated in recovery and canonical blocks");
+  assert.match(inactiveRules[0][1], /background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\) 50%, transparent\) !important;/,
+    "inactive bars use a half-opacity primary fill, not a white/primary opaque blend");
+  assert.match(distill, /\.vt-studio-value-toggle__bar\[data-active="true"\][^{]*\{[^}]*background:\s*#000 !important;/s,
+    "active bars remain black");
+});
+
+test("split text input uses its canonical primary token alias for the inset border", () => {
+  const splitInput = read("src/styles/studio-split-text-input.css");
+  assert.match(splitInput, /\.vt-studio-split-text-input__field\s*\{[^}]*border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\) !important;/s,
+    "split input inset border must use the family alias that resolves to the canonical primary token");
+  assert.match(splitInput, /\.vt-studio-split-text-input__field:focus[^{]*\{[^}]*outline:\s*none !important;[^}]*box-shadow:\s*none !important;/s,
+    "native focus outline/shadow stays suppressed so the owned secondary outline is the only focus ring");
+});
