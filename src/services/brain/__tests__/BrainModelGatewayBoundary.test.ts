@@ -19,7 +19,7 @@ describe("Brain model gateway boundary", () => {
  it("keeps provider runtime imports out of the gateway contract module", () => {
   const source = read("../runtime/BrainModelGateway.ts")
 
-  expect(source).not.toMatch(/^import\s+.*from\s+["'][^"']*\/gemini["']/m)
+  expect(source).not.toMatch(/^import\s+(?!type\b).*from\s+["'][^"']*\/gemini["']/m)
   expect(source).toContain('await import("../../gemini")')
  })
 
