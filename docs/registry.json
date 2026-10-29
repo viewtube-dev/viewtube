@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "productionDate": "2026-09-26",
-  "lastEdited": "2026-09-27",
+  "lastEdited": "2026-10-29",
   "migrationState": "phase-d-brain-prompt-authority-consolidation",
   "authorityRule": "One primary authority per bounded concern. Current executable evidence verifies implementation; registry metadata determines documentation role.",
   "entries": [
@@ -274,7 +274,7 @@
       "concern": "conversation-improvement-operating-system",
       "owner": "Conversation & Improvement OS",
       "productionDate": "2026-09-26",
-      "lastEdited": "2026-09-26",
+      "lastEdited": "2026-10-29",
       "lastAuditedMainSha": "e657cefe83f3f66d5a8316543814d9d18197b338",
       "supersedes": [
         "agent/contracts/herald-in.md",
@@ -349,7 +349,7 @@
       "concern": "conversation-handoff-work-reconciliation",
       "owner": "Conversation & Improvement OS + Documentation Governance",
       "productionDate": "2026-09-27",
-      "lastEdited": "2026-09-27",
+      "lastEdited": "2026-10-29",
       "lastAuditedMainSha": "faa07ed085173f5764db72054f17583ce9a3cb38",
       "supersedes": [],
       "relatedAuthorities": [

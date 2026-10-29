@@ -56,6 +56,10 @@ Runtime implementation belongs under src/.
 
 Do not create a new document for an existing subject. Update or consolidate its canonical owner first.
 
+## Conversation continuity and work reconciliation
+
+- [Conversation Handoffs](governance/CONVERSATION_HANDOFFS.md) — complete user-instruction register, branch/PR reconciliation, feature integration gaps and cross-agent continuity.
+
 ## Documentation operations
 
 | Subject | Canonical document |

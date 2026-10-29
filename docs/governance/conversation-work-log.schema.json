@@ -295,7 +295,389 @@
         },
         "additionalProperties": true
       }
+    },
+    "instructions": {
+      "type": "array",
+      "description": "Conversation-level user requirements; these are not canonical tasks.",
+      "items": {
+        "$ref": "#/$defs/instruction"
+      }
+    },
+    "branchPrReconciliation": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/branchPrReconciliation"
+      }
+    },
+    "integrationGaps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/integrationGap"
+      }
     }
   },
-  "additionalProperties": true
+  "additionalProperties": true,
+  "$defs": {
+    "instruction": {
+      "type": "object",
+      "required": [
+        "instructionId",
+        "text",
+        "status"
+      ],
+      "properties": {
+        "instructionId": {
+          "type": "string",
+          "pattern": "^REQ-[0-9]{3,}$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "NOT_STARTED",
+            "IN_PROGRESS",
+            "PARTIAL",
+            "IMPLEMENTED_LOCALLY",
+            "COMMITTED",
+            "IN_PR",
+            "MERGED",
+            "VERIFIED_DELIVERED",
+            "BLOCKED",
+            "DEFERRED",
+            "REJECTED_WITH_REASON",
+            "SUPERSEDED_WITH_REFERENCE"
+          ]
+        },
+        "relatedItemIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "branchRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pullRequests": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "commits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "targetBranch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "deliveryState": {
+          "enum": [
+            "NOT_STARTED",
+            "LOCAL_ONLY",
+            "COMMITTED",
+            "IN_PR",
+            "MERGED",
+            "PRESENT_ON_TARGET",
+            "INTEGRATED",
+            "VERIFIED",
+            "NOT_APPLICABLE",
+            "UNKNOWN"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "supersedes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "branchPrReconciliation": {
+      "type": "object",
+      "required": [
+        "branch",
+        "targetBranch",
+        "classification"
+      ],
+      "properties": {
+        "branch": {
+          "type": "string"
+        },
+        "targetBranch": {
+          "type": "string"
+        },
+        "pullRequest": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "openedHeadSha": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "currentHeadSha": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "commitsAfterPrOpen": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "postPrChangedPaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mergeCommitSha": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "targetContainsChanges": {
+          "enum": [
+            "YES",
+            "PARTIAL",
+            "NO",
+            "UNKNOWN"
+          ]
+        },
+        "classification": {
+          "enum": [
+            "MERGED_AND_CURRENT",
+            "PARTIALLY_MERGED",
+            "OPEN_PR",
+            "CLOSED_UNMERGED",
+            "UNMERGED_BRANCH",
+            "POST_PR_WORK_REMAINS",
+            "RECOVERED_IN_ANOTHER_PR",
+            "SUPERSEDED",
+            "ABANDONED",
+            "DUPLICATE",
+            "CONFLICTED",
+            "BRANCH_MISSING",
+            "UNKNOWN"
+          ]
+        },
+        "recoveryDestination": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "integrationGap": {
+      "type": "object",
+      "required": [
+        "featureId",
+        "title",
+        "maturity"
+      ],
+      "properties": {
+        "featureId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "maturity": {
+          "type": "object",
+          "properties": {
+            "architecture": {
+              "enum": [
+                "NONE",
+                "PLANNED",
+                "PARTIAL",
+                "IMPLEMENTED",
+                "VERIFIED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "backend": {
+              "enum": [
+                "NONE",
+                "PLANNED",
+                "PARTIAL",
+                "IMPLEMENTED",
+                "VERIFIED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "frontend": {
+              "enum": [
+                "NONE",
+                "PLANNED",
+                "PARTIAL",
+                "IMPLEMENTED",
+                "VERIFIED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "integration": {
+              "enum": [
+                "NONE",
+                "PLANNED",
+                "PARTIAL",
+                "IMPLEMENTED",
+                "VERIFIED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "tests": {
+              "enum": [
+                "NONE",
+                "PLANNED",
+                "PARTIAL",
+                "IMPLEMENTED",
+                "VERIFIED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "runtime": {
+              "enum": [
+                "NONE",
+                "PLANNED",
+                "PARTIAL",
+                "IMPLEMENTED",
+                "VERIFIED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "responsive": {
+              "enum": [
+                "NONE",
+                "PLANNED",
+                "PARTIAL",
+                "IMPLEMENTED",
+                "VERIFIED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "documentation": {
+              "enum": [
+                "NONE",
+                "PLANNED",
+                "PARTIAL",
+                "IMPLEMENTED",
+                "VERIFIED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "release": {
+              "enum": [
+                "NONE",
+                "PLANNED",
+                "PARTIAL",
+                "IMPLEMENTED",
+                "VERIFIED",
+                "NOT_APPLICABLE"
+              ]
+            }
+          },
+          "required": [
+            "architecture",
+            "backend",
+            "frontend",
+            "integration",
+            "tests",
+            "runtime",
+            "responsive",
+            "documentation",
+            "release"
+          ],
+          "additionalProperties": false
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "category",
+              "description"
+            ],
+            "properties": {
+              "category": {
+                "enum": [
+                  "IMPLEMENTED_BUT_UNCONNECTED",
+                  "BACKEND_WITHOUT_FRONTEND",
+                  "FRONTEND_WITHOUT_BACKEND",
+                  "COMPONENT_WITHOUT_APPLICATION_INTEGRATION",
+                  "API_WITHOUT_AUTHORIZATION",
+                  "DATA_WITHOUT_PERSISTENCE",
+                  "WORKFLOW_WITHOUT_FEEDBACK",
+                  "TESTS_WITHOUT_RUNTIME_PROOF",
+                  "DOCUMENTATION_WITHOUT_IMPLEMENTATION",
+                  "RELEASE_BLOCKED",
+                  "UNKNOWN"
+                ]
+              },
+              "description": {
+                "type": "string"
+              },
+              "userImpact": {
+                "type": "string"
+              },
+              "dependency": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "acceptanceEvidence": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
 }

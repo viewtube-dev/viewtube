@@ -1,7 +1,7 @@
 # ViewTube Conversation Handoffs
 
 **Production Date:** 2026-09-27  
-**Last Edited:** 2026-09-27  
+**Last Edited:** 2026-10-29  
 **Class:** SPECIFICATION  
 **Status:** ACTIVE  
 **Concern:** long-conversation handoff, conversation work capture, intake review, valuation, deduplication and promotion  
@@ -325,3 +325,38 @@ They may later move to the Removed Archive when:
 ChatGPT, Codex, Claude and future agents use the same handoff/work-log contract.
 
 Host-specific memory is never the only place unfinished ViewTube work is stored.
+
+
+## Complete user-instruction register
+
+Every distinct user instruction, request, correction, constraint, preference and prohibition must be recorded as an individual conversation-level requirement. Do not collapse materially different instructions into a general summary.
+
+The structured work log may carry an optional top-level `instructions` array. Each record uses a stable conversation-local `instructionId`, concise `text`, `status`, related work-item IDs, branch/PR/commit references, target branch, delivery state and evidence references. The handoff renders these records as a readable checkbox register.
+
+Instruction status is distinct from work-item state and canonical Task Index lifecycle. A request may be implemented locally, committed, included in a PR, merged, present on target, integrated and verified at different times. Record the actual stage. Never mark a local implementation as delivered, or a merged PR as verified without acceptance evidence. If multiple PRs contributed, list every contributing PR. If no PR applies, record commit/artifact evidence or explicit N/A.
+
+Use stable IDs such as `REQ-001`. Preserve corrections and supersession links. Do not create one canonical task per user sentence; link related instructions to shared work items and canonical tasks where they exist.
+
+## Branch and PR history reconciliation
+
+Branch history and PR history are separate evidence streams. For each relevant branch/PR pair, record source and target branches, PR number, opening head SHA when recoverable, current head SHA, commits and changed paths added after PR opening, merge commit, current target-branch presence, recovery destination and verification.
+
+Explicitly classify unmerged, partially merged, post-PR work, orphaned, recovered, duplicate, conflicted, missing and unknown states. Do not assume a PR contains all later branch commits. If the PR-opening snapshot or branch history cannot be recovered, mark it UNKNOWN. Preserve unique work from closed or abandoned PRs through a reconciled recovery branch; do not blindly merge stale branches.
+
+## Feature integration gap register
+
+Each feature/capability may have a top-level `integrationGaps` record with maturity across the existing Task Authority axes: architecture, backend, frontend, integration, tests, runtime, responsive, documentation and release. Reuse the existing maturity vocabulary: `NONE`, `PLANNED`, `PARTIAL`, `IMPLEMENTED`, `VERIFIED`, `NOT_APPLICABLE`.
+
+Record concrete missing connections, user-visible impact, dependencies and acceptance evidence. Explicitly detect components without application integration, backend without frontend, frontend without backend, APIs without authorization, data without persistence, workflows without feedback, tests without runtime proof and release blockers. Component existence or isolated tests do not prove end-to-end application integration.
+
+## Ideas and next-best-action routing
+
+The five-idea evolution pass and next-best-action recommendation extend existing Conversation OS and Convergence capabilities; they do not create parallel registries or backlogs. Route improvement proposals through `ideas/registry.json` and `governance/convergence/improvements.json`. Keep unapproved ideas as proposals.
+
+Derive next-best action from canonical tasks, active Crown missions/work orders, dependencies, blockers and verification receipts. Do not mutate canonical task lifecycle from a handoff. Task Authority remains the only authorized task-state mutation path after canonical Task Index storage/writer is positively resolved.
+
+## Closure additions
+
+A package is not fully reconciled until every distinct user instruction is registered and linked to its work/evidence; branch and PR histories have been reconciled including post-PR changes; feature integration gaps are explicit; completed work distinguishes implementation, delivery, integration and verification; and the next agent has an executable next action.
+
+The conversation intake workspace remains provenance and staging, not a second Task Index or feature maturity authority.

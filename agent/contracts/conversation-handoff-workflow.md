@@ -1,7 +1,7 @@
 # ViewTube Conversation Handoff & Work Reconciliation Workflow
 
 **Production Date:** 2026-09-27  
-**Last Edited:** 2026-09-27  
+**Last Edited:** 2026-10-29  
 **Status:** ACTIVE
 
 Canonical specification: `docs/governance/CONVERSATION_HANDOFFS.md`.
@@ -64,3 +64,15 @@ Every work item must eventually have:
 - canonical target or explicit no-action/reject/archive result.
 
 A conversation package with unresolved items remains open.
+
+
+## Complete requirement and integration evidence
+
+The shared process also requires:
+- a per-instruction register for every distinct user request, correction, constraint and prohibition;
+- separate evidence for local implementation, commit, PR inclusion, merge, target presence, application integration and verification;
+- independent branch/PR reconciliation, including post-PR commits and changed paths;
+- a feature integration-gap register using Task Authority's nine maturity axes;
+- improvement proposals and next-best actions routed through existing Ideas Registry, improvement recommendations, Task Authority and Crown records.
+
+The intake package remains a provenance/handoff record, not a parallel task backlog or task lifecycle authority. Unknown branch/PR lineage remains explicitly UNKNOWN.
