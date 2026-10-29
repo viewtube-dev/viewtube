@@ -15,7 +15,7 @@
 
 import React, { useEffect, useState } from "react"
 import type { DiagnosticEntry } from "../services/diagnostics"
-import { readDiagnostics } from "../services/diagnostics"
+import { formatDiagnostics, readDiagnostics } from "../services/diagnostics"
 
 const LEVEL_COLOR: Record<DiagnosticEntry["level"], string> = {
  info: "#8b91a3",
@@ -68,9 +68,7 @@ export const DiagnosticOverlay: React.FC = () => {
  const errCount = entries.filter((e) => e.level === "error").length
 
  const copyAll = () => {
-  const text = entries
-   .map((e) => `[${fmtTime(e.lastSeen)}] ${e.level.toUpperCase()} ${e.tag}: ${e.message}${e.count > 1 ? ` (x${e.count})` : ""}`)
-   .join("\n")
+  const text = formatDiagnostics(entries)
   const done = () => {
    setCopyState("copied")
    window.setTimeout(() => setCopyState("idle"), 1200)
@@ -218,6 +216,16 @@ export const DiagnosticOverlay: React.FC = () => {
           <span style={{ display: "block", color: "#cfd3df", overflowWrap: "anywhere" }}>
            {e.message}
           </span>
+          {e.details && (
+           <span style={{ display: "block", color: "#aeb5c4", overflowWrap: "anywhere", marginTop: 3 }}>
+            {e.details.explanation && <span style={{ display: "block" }}>{e.details.explanation}</span>}
+            {e.details.expected && <span style={{ display: "block" }}>Expected: {e.details.expected}</span>}
+            {e.details.actual && <span style={{ display: "block" }}>Actual: {e.details.actual}</span>}
+            {e.details.evidenceRefs?.length ? <span style={{ display: "block" }}>Evidence: {e.details.evidenceRefs.join(", ")}</span> : null}
+            {e.details.recommendedActions?.length ? <span style={{ display: "block" }}>Next: {e.details.recommendedActions.join(" · ")}</span> : null}
+            <span style={{ display: "block" }}>Source: {e.details.source} · Status: {e.details.status}</span>
+           </span>
+          )}
          </span>
         </div>
        ))
