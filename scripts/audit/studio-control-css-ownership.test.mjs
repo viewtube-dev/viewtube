@@ -46,9 +46,9 @@ test("stylesheet order preserves token-first and family-final ownership", () => 
 
 test("canonical system owns one scoped spacing-unit declaration", () => {
   const system = read("src/styles/studio-control-system.css");
-  assert.match(system, /\\[data-vt-studio-control\\] \\{[^}]*--vt-studio-space-unit:\\s*4px;/s,
+  assert.match(system, /\[data-vt-studio-control\] \{[^}]*--vt-studio-space-unit:\s*4px;/s,
     "the shared control root owns the spacing-unit token");
-  assert.doesNotMatch(system, /:where\\(\\[data-vt-studio-control="true"\\]\\) \\{[^}]*--vt-studio-space-unit:/s,
+  assert.doesNotMatch(system, /:where\(\[data-vt-studio-control="true"\]\) \{[^}]*--vt-studio-space-unit:/s,
     "a second scoped declaration must not duplicate the shared control root");
 });
 
