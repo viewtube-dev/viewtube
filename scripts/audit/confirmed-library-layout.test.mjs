@@ -548,9 +548,9 @@ test("confirmed primitive grid is visible first and covers core and advanced Stu
 
 
 test("canonical grouped families do not render a second duplicate individual-controls section", () => {
-  assert.doesNotMatch(catalog, /<ConfirmedIndividualPrimitiveSections\\s*\\/>/);
-  assert.doesNotMatch(catalog, /const ConfirmedIndividualPrimitiveSections\\s*:/);
-  assert.match(catalog, /<CanonicalControlFamilies\\s*\\/>/);
-  assert.match(catalog, /<CanonicalWordToggleFamily\\s*\\/>/);
-  assert.match(catalog, /<ConfirmedStudioValueToggleFamily\\s*\\/>/);
+  assert.doesNotMatch(catalog, /<ConfirmedIndividualPrimitiveSections\s*\/>/);
+  assert.doesNotMatch(catalog, /const ConfirmedIndividualPrimitiveSections\s*:/);
+  assert.match(catalog, /<CanonicalControlFamilies\s*\/>/);
+  assert.match(catalog, /<CanonicalWordToggleFamily\s*\/>/);
+  assert.match(catalog, /<ConfirmedStudioValueToggleFamily\s*\/>/);
 });
