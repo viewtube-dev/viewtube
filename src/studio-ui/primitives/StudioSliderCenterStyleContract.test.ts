@@ -24,16 +24,20 @@ describe("Studio recovery control styling", () => {
     expect(valueToggles).toContain("StudioDoubleSideToggle");
   });
 
-  it("uses primary 50% fill and a primary inset border for split slider centers, with 15% focus fill", () => {
-    expect(controlSystemCss).toContain('.vt-studio-double-split-slider [data-vt-studio-split-field]');
-    expect(controlSystemCss).toContain("50%, transparent");
-    expect(controlSystemCss).toContain("15%, transparent");
+  it("delegates slider center fill and handle radius to shared defaults", () => {
+    expect(controlSystemCss).toContain("background: var(--vt-field-fill-rest);");
+    expect(controlSystemCss).toContain("background: var(--vt-field-fill-focus);");
+    expect(controlSystemCss).not.toContain("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-studio-control-accent");
+    expect(controlSystemCss).toContain("border-radius: inherit;");
     expect(subtoolboxCss).toContain(".vt-subtoolbox-slider-center,.vt-subtoolbox-range-center");
-    expect(subtoolboxCss).toContain("background:color-mix(in srgb,var(--slider-color) 50%,transparent)");
-    expect(subtoolboxCss).toContain("background:color-mix(in srgb,var(--slider-color) 15%,transparent)");
+    expect(subtoolboxCss).toContain("background:var(--vt-field-fill-rest)");
+    expect(subtoolboxCss).toContain("background:var(--vt-field-fill-focus)");
+    expect(subtoolboxCss).toContain("var(--slider-opposite,var(--pair-b))");
     expect(catalogCss).toContain(".vt-complete-catalog .slider-center,.vt-complete-catalog .range-center");
-    expect(catalogCss).toContain("color-mix(in srgb,var(--pair-a,#36e0f6) 50%,transparent)");
-    expect(catalogCss).toContain("color-mix(in srgb,var(--pair-a,#36e0f6) 15%,transparent)");
+    expect(catalogCss).toContain("background:var(--vt-field-fill-rest)");
+    expect(catalogCss).toContain("background:var(--vt-field-fill-focus)");
+    expect(catalogCss).not.toContain("border-radius:25%!important;");
+    expect(catalogCss).not.toContain("--slider-track-stroke:2px;");
   });
 
   it("keeps the bar-toggle recovery coloring while preserving token-owned geometry", () => {
