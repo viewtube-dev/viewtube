@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createContentBuild, getContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests, updateContentBuild } from "./ContentBuildRepository"
-import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
+import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, markPublishStepRunning, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
 import { listAlgorithmIntelligenceEvents } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
@@ -185,6 +185,13 @@ describe("PublishTransaction",()=>{
   expect(retried.steps["upload-video"]?.status).toBe("completed")
   expect(retried.steps["apply-metadata"]?.status).toBe("completed")
   expect(listContentBuildEvents("cb-publish").filter(event => event.eventType === "publish.transaction.started")).toHaveLength(1)
+ })
+
+ it("persists the provider-dispatch boundary before a remote upload can be attempted",()=>{
+  const transaction=beginPublishTransaction(projection())
+  const running=markPublishStepRunning({transactionId:transaction.id,step:"upload-video"})
+  expect(running.steps["upload-video"]).toMatchObject({status:"running",startedAt:expect.any(String)})
+  expect(getPublishTransaction(transaction.id)?.steps["upload-video"]?.status).toBe("running")
  })
 
  it("refuses transaction completion before the remote YouTube state is verified", () => {
