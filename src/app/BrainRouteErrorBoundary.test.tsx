@@ -28,7 +28,7 @@ describe("AI Brain route crash diagnostics", () => {
 
  it("offers a recovery path instead of leaving the Brain page blank", () => {
   expect(boundarySource).toContain("Brain encountered a rendering error")
-  expect(boundarySource).toContain("window.location.assign(\"/\")")
+  expect(boundarySource).toContain('href="/"')
   expect(boundarySource).toContain("Try again")
  })
 })
