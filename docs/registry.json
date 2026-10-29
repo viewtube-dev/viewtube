@@ -455,6 +455,25 @@
         "docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md",
         "docs/architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md"
       ]
+    },
+    {
+      "id": "DOC-PLAN-BRAIN-GEMINI-CONTEXT-GROUNDING",
+      "path": "docs/brain/BRAIN_GEMINI_CONTEXT_GROUNDING_AUDIT_AND_FIX_PLAN.md",
+      "class": "ACTIVE_PLAN",
+      "status": "ACTIVE",
+      "concern": "brain-gemini-context-grounding-diagnosis-and-fix",
+      "owner": "BrainRuntime",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": null,
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/domains/BRAIN.md",
+        "docs/brain/AI_BRAIN_QUICK_WINS_MASTER_IMPLEMENTATION_PLAN.md",
+        "docs/brain/AI_BRAIN_FEATURE_MASTER_AND_IMPLEMENTATION_READINESS.md",
+        "docs/specifications/PROMPTS.md",
+        "docs/governance/VERIFICATION.md"
+      ]
     }
   ],
   "legacyGlobalSources": [
