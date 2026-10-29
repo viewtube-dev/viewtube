@@ -947,31 +947,6 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
           />
         </div>
       </Family>
-      <Family title="Split Text Input · Vertical Geometry Comparison" nonDefaultSettings={[
-        "Diagnostic padding variants are 0px, 4px, and 2px; a fourth specimen matches the username field’s inner height.",
-        "Focus/blur comparison is intended to expose primary-inset alignment, glyph baseline, and lower-edge clipping.",
-        "Diagnostic-only padding does not alter global icon sizing or split-rail geometry.",
-      ]} provenance={<Provenance primitive="StudioSplitTextInput" tsx="src/studio-ui/primitives/StudioSplitTextInput.tsx" css="src/styles/studio-split-text-input.css" tokens="Standard 44px · black outer border · primary inset field border" imports={["src/studio-ui/primitives/StudioSplitTextInput.tsx", "src/styles/studio-split-text-input.css"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTextInput" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 12 }}>
-          <div style={{ display: "grid", gap: 4 }}>
-            <strong>CURRENT · BASELINE</strong>
-            <StudioSplitTextInput geometryVariant="current" sizeVariant="standard" aria-label="Current split text input geometry" placeholder="TYPE HERE" defaultValue="CREATOR" leftIcon={<Home size={24} aria-hidden="true" />} />
-          </div>
-          <div style={{ display: "grid", gap: 4 }}>
-            <strong>4PX VERTICAL PADDING REFERENCE</strong>
-            <StudioSplitTextInput geometryVariant="padding-reference" sizeVariant="standard" aria-label="Four pixel vertical padding reference split text input geometry" placeholder="TYPE HERE" defaultValue="CREATOR" leftIcon={<Home size={24} aria-hidden="true" />} />
-          </div>
-          <div style={{ display: "grid", gap: 4 }}>
-            <strong>HALF OF 4PX VERTICAL PADDING · 2PX</strong>
-            <StudioSplitTextInput geometryVariant="half-vertical-padding" sizeVariant="standard" aria-label="Half vertical padding split text input geometry" placeholder="TYPE HERE" defaultValue="CREATOR" leftIcon={<Home size={24} aria-hidden="true" />} />
-          </div>
-          <div style={{ display: "grid", gap: 4 }}>
-            <strong>USERNAME-MATCHED INNER HEIGHT</strong>
-            <StudioSplitTextInput geometryVariant="username-height" sizeVariant="standard" aria-label="Username-matched height split text input geometry" placeholder="TYPE HERE" defaultValue="CREATOR" leftIcon={<Home size={24} aria-hidden="true" />} />
-          </div>
-        </div>
-      </Family>
-
       <Family title="StudioDropdown · Single Selection" nonDefaultSettings={["This is the public canonical dropdown; simple/split-left wrappers are compatibility/layout variants, not separate menu engines.", "Chevron rail and option rows follow the selected size tier."]} provenance={<Provenance primitive="StudioDropdown" tsx="src/studio-ui/primitives/StudioDropdown.tsx" css="src/styles/studio-control-system.css" tokens="Five-tier dropdown rail/chevron tokens; primary trigger and secondary rail." imports={["src/studio-ui/primitives/StudioDropdown.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdown"><span>STANDARD · SINGLE SELECT</span><StudioDropdown sizeVariant="standard" ariaLabel="Canonical dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
       </Family>
