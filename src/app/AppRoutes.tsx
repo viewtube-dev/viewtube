@@ -4,6 +4,7 @@ import { Routes, Route, Navigate, useSearchParams } from "react-router-dom"
 import { lazyRoute, RouteSuspense } from "./lazyRoute"
 import { isMountableSuperTool, superToolRoute } from "./superToolViewRegistry"
 import { CAPABILITY_ROUTES } from "./capabilitiesRoutes"
+import { BrainRouteErrorBoundary } from "./BrainRouteErrorBoundary"
 
 // `lazyRoute` = `React.lazy` + one retry on chunk-load failure + a single
 // hard-reload backstop when the retry also fails (usually a stale
@@ -110,7 +111,7 @@ export const AppRoutes: React.FC = () => {
     <Route path="/tools" element={<SuperToolIndex />} />
     <Route path="/tools/:toolId" element={<SuperToolRoute />} />
     <Route path="/data-transparency" element={<InternalToolRedirect />} />
-    <Route path="/ai-brain" element={<AIBrainCommandInterface />} />
+    <Route path="/ai-brain" element={<BrainRouteErrorBoundary><AIBrainCommandInterface /></BrainRouteErrorBoundary>} />
     <Route path="/brain-controls" element={<BrainControlsPage />} />
     <Route path="/crown" element={<CrownControlRoom />} />
     <Route path="/local-analytics" element={<VtSyncLocalAnalyticsPage />} />

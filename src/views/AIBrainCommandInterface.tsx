@@ -1965,6 +1965,7 @@ const AIBrainCommandInterface: React.FC = () => {
            promptLauncherRef={promptLauncherRef}
            contextLauncherRef={contextLauncherRef}
            composerRef={composerRef}
+           maxFieldPx={mobileViewportHeight ? Math.max(120, Math.floor(mobileViewportHeight * 0.28)) : undefined}
           /></div>}
         >
           {!hydrated && messages.length === 0 ? (
