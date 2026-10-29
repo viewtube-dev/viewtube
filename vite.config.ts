@@ -4,6 +4,9 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 import { execFileSync } from 'node:child_process'
 
+// Crown's runtime projection is regenerated exclusively from .viewtube/exchange/**.
+execFileSync(process.execPath, [path.resolve(__dirname, 'scripts/generate-crown-control-room.mjs')], { stdio: 'inherit' })
+
 const readBuildValue = (environmentName: string, gitArgs: string[], fallback: string): string => {
   const configured = String(process.env[environmentName] || '').trim()
   if (configured) return configured
