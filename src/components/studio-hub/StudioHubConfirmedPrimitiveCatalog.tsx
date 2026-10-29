@@ -914,7 +914,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
             aria-label="Static composer dock representative"
             status={<StudioBrainStatusBadge label="READY" tone="green" appearance="tinted" sizeVariant="compact" />}
             chips={<span>CHANNEL CONTEXT</span>}
-            tray={<StudioButton sizeVariant="compact" variant="secondary">PROMPTS</StudioButton>}
+            tray={<StudioButton sizeVariant="compact" variant="v2">PROMPTS</StudioButton>}
             field={<StudioTextArea aria-label="Composer dock specimen field" placeholder="WRITE A MESSAGE…" />}
             action={<StudioButton sizeVariant="standard" onClick={() => undefined}>SEND</StudioButton>}
           />
@@ -924,7 +924,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
           <StudioChatComposerDock
             layout="toolbar-actions"
             aria-label="Static toolbar composer dock representative"
-            tray={<StudioButton sizeVariant="compact" variant="secondary">CONTEXT</StudioButton>}
+            tray={<StudioButton sizeVariant="compact" variant="v2">CONTEXT</StudioButton>}
             field={<StudioTextArea aria-label="Toolbar composer dock specimen field" placeholder="WRITE A MESSAGE…" />}
             action={<StudioButton sizeVariant="compact" onClick={() => undefined}>SEND</StudioButton>}
           />
