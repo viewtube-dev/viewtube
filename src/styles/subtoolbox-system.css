@@ -448,8 +448,10 @@
 .vt-subtoolbox-slider>output,.vt-subtoolbox-range>output{border-left:var(--vt-component-stroke) solid #000}
 .vt-subtoolbox-slider-rail svg{width:48%;height:48%;stroke:#000;stroke-width:3.5}
 .vt-subtoolbox-slider-center,.vt-subtoolbox-range-center{
-  position:relative;min-width:0;height:100%;display:grid;align-items:center;padding:0 calc(var(--vt-component-height)*.18);background:var(--slider-opposite)
+  position:relative;min-width:0;height:100%;display:grid;align-items:center;padding:0 calc(var(--vt-component-height)*.18);background:color-mix(in srgb,var(--slider-color) 50%,transparent);box-shadow:inset 0 0 0 var(--slider-track-stroke) var(--slider-color)
 }
+.vt-subtoolbox-slider-center:has(input[type=range]:focus-visible),
+.vt-subtoolbox-range-center:has(input[type=range]:focus-visible){background:color-mix(in srgb,var(--slider-color) 15%,transparent)}
 .vt-subtoolbox-slider input[type=range]{
   appearance:none;-webkit-appearance:none;width:100%;height:var(--slider-track);margin:0;padding:0;border:0;border-radius:999px;
   background:linear-gradient(to right,var(--slider-color) 0 var(--pct),#fff var(--pct) 100%);
