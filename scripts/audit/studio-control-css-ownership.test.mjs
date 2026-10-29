@@ -46,7 +46,7 @@ test("stylesheet order preserves token-first and family-final ownership", () => 
 
 test("distill layer defines the icon-group base rule only once", () => {
   const distill = read("src/styles/studio-control-distill-overrides.css");
-  const baseRules = [...distill.matchAll(/(?:^|\\n)\\.vt-studio-square-icon-button-group\\s*\\{/g)];
+  const baseRules = distill.split("\n").filter((line) => line.trim() === ".vt-studio-square-icon-button-group {");
   assert.equal(baseRules.length, 1,
     "the content-sized icon-group base rule should be defined once; Brain-specific scoping stays separate");
 });
