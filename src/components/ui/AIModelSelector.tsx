@@ -2,13 +2,13 @@ import React from 'react'
 import { useBrain } from '../../context/useBrain'
 import { GEMINI_MODELS } from '../../config/aiConfig'
 import { getPaletteColor } from '../../styles/toolboxPalette'
-import { getActiveModelResolution } from '../../services/gemini'
+import { resolveGeminiModel } from '../../services/geminiModelGovernance'
 
 export const AIModelSelector: React.FC<{ compact?: boolean }> = ({ compact }) => {
   const { aiModel, setAiModel } = useBrain()
 
   const accentColor = getPaletteColor(4)
-  const textResolution = getActiveModelResolution('text')
+  const textResolution = resolveGeminiModel({ preference: aiModel, capability: 'text' })
 
   return (
     <div className={`flex items-center gap-2 ${compact ? '' : 'mb-2'}`}>
