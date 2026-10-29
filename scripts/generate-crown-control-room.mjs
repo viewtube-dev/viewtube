@@ -14,7 +14,7 @@ export function collectExchangeRecords(root = EXCHANGE_ROOT) {
       const absolute = path.join(directory, entry.name)
       if (entry.isDirectory()) visit(absolute)
       else if (entry.isFile() && entry.name.endsWith(".json")) {
-        const relative = path.relative(ROOT, absolute).split(path.sep).join("/")
+        const relative = `.viewtube/exchange/${path.relative(root, absolute).split(path.sep).join("/")}`
         let record
         try { record = JSON.parse(fs.readFileSync(absolute, "utf8")) }
         catch (error) { throw new Error(`Invalid Crown Exchange JSON at ${relative}: ${error.message}`) }
