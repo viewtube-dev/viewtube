@@ -60,6 +60,9 @@ export {
   StudioXCheckbox,
   StudioUploadFrame,
   StudioBrainStatusBadge,
+  StudioSpectrumTag,
+  StudioCloseableBadge,
+  StudioTagEditor,
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
@@ -110,6 +113,9 @@ export type {
   StudioBrainStatusBadgeTone,
   StudioBrainStatusAppearance,
   StudioBrainStatusBadgeSize,
+  StudioSpectrumTagProps,
+  StudioCloseableBadgeProps,
+  StudioTagEditorProps,
 } from "./primitives/StudioControls"
 export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle } from "./primitives/StudioValueToggles";
 export type { StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioToggleAppearance } from "./primitives/StudioValueToggles";
@@ -179,3 +185,6 @@ export type { StudioChatComposerDockProps, StudioChatComposerDockLayout } from "
 
 export { StudioChatResponseShell } from "./primitives/StudioChatResponseShell"
 export type { StudioChatResponseShellProps, StudioChatResponseShellSize } from "./primitives/StudioChatResponseShell"
+
+export { StudioCalendarEventChip, StudioCalendarMediaRail } from "./primitives/StudioCalendarPrimitives"
+export type { StudioCalendarEventKind, StudioCalendarEventChipProps, StudioCalendarMediaRailProps } from "./primitives/StudioCalendarPrimitives"
