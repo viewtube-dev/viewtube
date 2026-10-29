@@ -1,6 +1,15 @@
 /* Studio Hub control ownership boundary.
    These rules intentionally require [data-vt-studio-control] so widget/dashboard
-   CSS cannot redefine Studio Hub fields and Studio Hub rules cannot leak back. */
+   CSS cannot redefine Studio Hub fields and Studio Hub rules cannot leak back.
+
+   UPDATED 2026-10-28b: root-cause fixes (not override layers):
+   - legend-trigger-text: removed width:0 (multi-dropdown text visible)
+   - slider track: empty #000, filled secondary
+   - arrow/side toggles: solid primary/accent face fill
+   - bar toggle: empty bars bordered + visible fill
+   - side-toggle divider: single control-stroke (counter parity)
+   - dropdown chevrons/labels: aligned square rails + flex-centered text
+*/
 
 [data-vt-studio-control] {
   --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px);
@@ -214,15 +223,17 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-dropdown-chevron {
   display: grid;
-  width: var(--vt-studio-dropdown-rail-size);
-  min-width: var(--vt-studio-dropdown-rail-size);
-  height: var(--vt-studio-dropdown-rail-size);
-  flex: 0 0 var(--vt-studio-dropdown-rail-size);
+  width: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
+  min-width: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
+  height: 100%;
+  min-height: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
+  flex: 0 0 var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
   place-items: center;
   align-self: stretch;
   justify-self: stretch;
   box-sizing: border-box;
   border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   color: #000;
   pointer-events: none;
 }
@@ -234,13 +245,13 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   max-height: 100%;
 }
 .vt-studio-dropdown-chevron.is-leading { border-left: 0; border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; min-width: 0; padding: 0 8px; overflow: hidden; justify-content: flex-start; text-overflow: clip; white-space: nowrap; }
+.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; display: flex; align-items: center; justify-content: flex-start; min-width: 0; height: 100%; padding: 0 10px; overflow: hidden; text-overflow: clip; white-space: nowrap; font-weight: var(--vt-studio-control-font-weight, 1000); font-size: var(--vt-studio-control-font-size, 38px); line-height: 1; }
 .vt-studio-dropdown.is-split-left .vt-studio-dropdown-chevron.is-trailing { grid-column: 3; grid-row: 1; border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
-.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%); }
+.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
 .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] { display: grid; place-items: center; }
 .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] svg { width: var(--vt-studio-dropdown-chevron-size); height: var(--vt-studio-dropdown-chevron-size); }
-.vt-studio-dropdown:not(.is-split-left) [data-vt-studio-dropdown-value] { grid-column: 1; grid-row: 1; padding: 0 8px 0 12px; }
+.vt-studio-dropdown:not(.is-split-left) [data-vt-studio-dropdown-value] { grid-column: 1; grid-row: 1; display: flex; align-items: center; min-width: 0; height: 100%; padding: 0 8px 0 12px; font-weight: var(--vt-studio-control-font-weight, 1000); font-size: var(--vt-studio-control-font-size, 38px); line-height: 1; }
 .vt-studio-dropdown:not(.is-split-left) .vt-studio-dropdown-chevron.is-trailing { grid-column: 2; grid-row: 1; }
 
 [data-vt-studio-dropdown-value] {
@@ -252,25 +263,30 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 
 .vt-studio-dropdown-menu {
   position: absolute;
-  z-index: 60;
-  top: calc(100% + 4px);
+  z-index: 610;
+  top: calc(100% + 8px);
   left: 0;
   width: 100%;
   max-height: 280px;
   overflow-y: auto;
+  overscroll-behavior: contain;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px);
+  border-radius: var(--vt-studio-control-radius, 6px) var(--vt-studio-control-radius, 6px) 0 0;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   padding: 4px;
+  box-sizing: border-box;
+  scrollbar-width: thin;
 }
 
 .vt-studio-dropdown-option {
   display: flex;
   width: 100%;
+  min-width: 0;
   min-height: var(--vt-studio-control-height, 44px);
   align-items: center;
-  border: 0;
-  border-radius: calc(var(--vt-studio-control-radius, 6px) - 3px);
+  margin-bottom: 3px;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
   background: #fff;
   color: #000;
   cursor: pointer;
@@ -279,13 +295,25 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   font-weight: 1000;
   letter-spacing: -.02em;
   line-height: 1;
-  padding: 0 8px;
+  padding: 2px 8px;
   text-align: left;
   text-transform: uppercase;
-  
   -webkit-text-stroke: .2px currentColor;
-  
 }
+.vt-studio-dropdown-option:last-child { margin-bottom: 0; }
+.vt-studio-dropdown-option:hover:not(:disabled):not([data-selected="true"]),
+.vt-studio-dropdown-option:focus-visible:not([data-selected="true"]) {
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 22%, #fff);
+}
+.vt-studio-dropdown-option[data-selected="true"] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+.vt-studio-dropdown-option:focus-visible {
+  outline: 3px solid #000;
+  outline-offset: -5px;
+}
+.vt-studio-dropdown-option:disabled { cursor: not-allowed; opacity: .45; }
 
 .vt-studio-dropdown[data-size="compact"] {
   --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
@@ -593,7 +621,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-legend-trigger:hover, .vt-studio-legend-trigger:focus, .vt-studio-legend-trigger:focus-visible, .vt-studio-legend-trigger:active {  transform: none;  }
 .vt-studio-legend-trigger:focus-visible { outline: 2px solid var(--vt-legend-b); outline-offset: 0; }
 .vt-studio-legend-trigger:disabled { cursor: not-allowed; opacity: .5; }
-.vt-studio-legend-trigger-text { display: block; min-width: 0; width: 0; max-width: 100%; flex: 1 1 0; overflow: hidden; text-overflow: clip; white-space: nowrap; text-align: center; }
+.vt-studio-legend-trigger-text { display: block; min-width: 0; width: auto; max-width: 100%; flex: 1 1 auto; overflow: hidden; text-overflow: clip; white-space: nowrap; text-align: left; }
 .vt-studio-legend-chevron { display: block; flex: 0 0 var(--vt-legend-chevron-size); width: var(--vt-legend-chevron-size); height: var(--vt-legend-chevron-size); min-width: var(--vt-legend-chevron-size); min-height: var(--vt-legend-chevron-size); fill: none; stroke: #000; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;  }
 .vt-studio-legend-chevron { stroke-width: var(--vt-studio-dropdown-chevron-stroke, 2.5); }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-chevron { stroke-width: var(--vt-studio-dropdown-chevron-stroke, 1.65); }
@@ -2165,7 +2193,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   z-index: 50;
   pointer-events: none;
   color: color-mix(in srgb, var(--pair-a, #fa618a) 50%, #fff);
-  font: 1000 18px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -3855,8 +3883,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border: 0;
   border-radius: var(--vt-studio-slider-radius);
   outline: 0;
-  --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  --vt-studio-slider-left-fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: #000;
   border: var(--vt-studio-slider-stroke) solid #000;
   box-shadow: none;
   cursor: pointer;
@@ -3864,7 +3892,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-double-split-slider input[type="range"]::-webkit-slider-runnable-track {
   height: var(--vt-studio-slider-track-height);
   border: 0;
-  background: transparent;
+  background: #000;
 }
 .vt-studio-double-split-slider input[type="range"]::-webkit-slider-thumb {
   appearance: none;
@@ -3881,12 +3909,12 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: var(--vt-studio-slider-track-height);
   border: 0;
   border-radius: var(--vt-studio-slider-radius);
-  background: transparent;
+  background: #000;
 }
 .vt-studio-double-split-slider input[type="range"]::-moz-range-progress {
   height: var(--vt-studio-slider-track-height);
   border-radius: var(--vt-studio-slider-radius);
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-double-split-slider input[type="range"]::-moz-range-thumb {
   box-sizing: border-box;
@@ -4058,7 +4086,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame__inset::after {
   inset: var(--vt-upload-primary-stroke);
   border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary);
-  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke) - var(--vt-upload-secondary-stroke)));
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke)));
 }
 .vt-studio-upload-frame__layers { position: absolute; inset: 0; }
 .vt-studio-upload-frame__layer {
@@ -4586,7 +4614,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice.is-checkbox svg {
    horizontal label padding never exposes the page background as a false gap. */
 button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] [data-vt-studio-split-label] {
   box-sizing: border-box;
-  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff);
 }
 
 /* Compact dropdown split rails use the compact control height for both the
@@ -5385,7 +5413,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 /* Studio value-toggle family: canonical primitive styles; no motion or shadow. */
 .vt-studio-value-toggle {
   --vt-toggle-text: #000;
-  --vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  --vt-toggle-fill: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-toggle-icon: #000;
   --vt-toggle-icon-fill: transparent;
   display: flex; align-items: stretch; gap: 0; min-width: 0; width: 100%; box-sizing: border-box;
@@ -5814,9 +5842,9 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   width: 12px;
   height: 28px;
   align-self: center;
-  /* Empty bars: 50% white of primary so they remain visible on the face. */
-  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
-  border: 1px solid #000;
+  /* Empty bars must read on the primary face: light fill + black stroke. */
+  background: color-mix(in srgb, #fff 75%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  border: 2px solid #000;
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -6210,12 +6238,12 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
 }
 .vt-studio-two-line-module[data-size="standard"] .vt-studio-two-line-module__title { font-size: 14px; }
 .vt-studio-two-line-module[data-size="standard"] .vt-studio-two-line-module__description { font-size: 11px; }
-
+\n
 /* Studio Controls shared field + family corrections.
    Keep character fill and glyph stroke sourced from the same state token. */
 [data-vt-studio-control] {
   --vt-field-text-stroke: var(--vt-field-text);
-  --vt-field-text-stroke-focus: var(--vt-field-text-focus);
+  --vt-field-text-stroke-focus: var(--vt-field-primary);
   --vt-studio-control-text-transition: var(--vt-studio-focus-outline-fade-ms, 500ms);
 }
 [data-vt-studio-control]:is(input, textarea, select) {
@@ -6241,14 +6269,21 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
   outline-offset: 0;
 }
-
-/* Shared slider contract: the active track/center stays primary; split rails are secondary. */
+\n
+/* Shared slider contract: filled (left) = secondary; empty (right) = black; rails stay secondary. */
 [data-vt-studio-slider] input[type="range"] {
-  --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
-  accent-color: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  --vt-studio-slider-left-fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  accent-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: #000;
 }
 [data-vt-studio-slider] input[type="range"]::-moz-range-progress {
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+[data-vt-studio-slider] input[type="range"]::-webkit-slider-runnable-track {
+  background: #000;
+}
+[data-vt-studio-slider] input[type="range"]::-moz-range-track {
+  background: #000;
 }
 [data-vt-studio-slider] [data-vt-studio-split-rail],
 .vt-studio-value-toggle__double-side [data-vt-studio-split-rail],
@@ -6256,7 +6291,7 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-value-toggle[data-vt-studio-value-toggle="side"] {
-  --vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  --vt-toggle-fill: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
 }
 
 /* Geometry invariants shared by the counter and split-control families. */
@@ -6291,11 +6326,11 @@ input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):
 .vt-studio-split-shell__label,[data-vt-studio-split-label]{box-sizing:border-box;display:flex;flex:1 1 auto;align-items:center;justify-content:center;min-width:0;height:100%;padding:0 4px;overflow:hidden;white-space:nowrap;text-overflow:clip;font-size:var(--vt-studio-control-font-size);font-weight:1000;line-height:1;letter-spacing:-.02em;text-transform:uppercase;color:#000;-webkit-text-stroke:var(--vt-studio-control-text-stroke) currentColor}
 .vt-studio-split-shell__rail,.vt-studio-split-shell__label{align-self:stretch}
 .vt-studio-value-toggle__bars{display:flex;flex:1 1 auto;align-items:center;justify-content:center;gap:4px;width:100%;height:100%;padding:4px;box-sizing:border-box}
-.vt-studio-value-toggle__bar{display:block;flex:0 0 auto;width:calc(var(--vt-studio-control-font-size)*.4);height:var(--vt-studio-control-font-size);aspect-ratio:1/2.5;border-radius:2px;border:0;background:color-mix(in srgb,var(--vt-studio-control-accent,var(--pair-a)) 50%,#fff);pointer-events:none}
-.vt-studio-value-toggle__bar[data-active="true"]{background:#000}
+.vt-studio-value-toggle__bar{display:block;flex:0 0 auto;box-sizing:border-box;width:max(6px,calc(var(--vt-studio-control-font-size,38px)*.28));height:max(14px,calc(var(--vt-studio-control-font-size,38px)*.72));border-radius:2px;border:2px solid #000;background:color-mix(in srgb,#fff 75%,var(--vt-studio-control-accent,var(--pair-a,#36e0f6)));pointer-events:none}
+.vt-studio-value-toggle__bar[data-active="true"]{background:#000;border-color:#000}
 .vt-studio-vertical-word-toggle__handle,.vt-studio-vertical-word-toggle .vt-studio-word-toggle__handle{box-sizing:border-box;position:absolute;inset:3px;border-radius:calc(var(--vt-studio-control-radius) - 1px)}
 .vt-studio-value-toggle__arrow-stack{position:relative;display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);width:100%;height:100%}
-.vt-studio-value-toggle__arrow-stack::after{content:"";position:absolute;z-index:3;inset-inline:0;top:50%;height:var(--vt-studio-control-stroke);background:#000;transform:translateY(-50%);pointer-events:none}
+.vt-studio-value-toggle__arrow-stack::after{content:"";position:absolute;z-index:2;left:0;right:0;top:50%;transform:translateY(-50%);height:var(--vt-studio-control-stroke,3px);background:#000;pointer-events:none;box-shadow:none;border:0;margin:0}
 .vt-studio-value-toggle--double .vt-studio-value-toggle__divider{position:absolute;z-index:3;top:0;bottom:0;left:50%;width:var(--vt-studio-control-stroke);transform:translateX(-50%);background:#000;pointer-events:none;outline:none!important;box-shadow:none!important}
 .vt-studio-value-toggle--double:focus-within{outline:var(--vt-studio-control-focus-outline-width) solid var(--vt-studio-control-secondary,var(--pair-b));outline-offset:0}
 .vt-studio-counter__value,[data-vt-studio-counter-value]{aspect-ratio:2/1;flex:1 1 auto;min-width:0}
@@ -6585,165 +6620,291 @@ button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-sele
 }
 
 
-/* 2026-10-27 follow-up: stable bottom strokes for split-module headers.
-   Keep border space reserved in both states so the title and rails never jump.
-   Collapsed details use the shell's real bottom edge; open details use an
-   inset header rule. Top-split modules always paint their header rule in-place. */
-details.vt-studio-collapsing-split-module {
-  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
-}
+/* =============================================================================
+ * 2026-10-29 — Field + module geometry from HTML starter principles
+ * (square rails, single outer stroke, primary inset field ring, fixed headers)
+ * Source fixes — not layered !important overrides where avoidable.
+ * ============================================================================= */
 
-details.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
-details.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head {
+/* --- SPLIT TEXT / USERNAME / SEARCH FIELDS ---------------------------------
+ * Starter pattern: one outer black shell; rail is square (aspect 1/1);
+ * field face uses 50% primary fill; primary inset ring on ALL edges of the
+ * text area (including bottom); input text vertically centered.
+ * Nested [data-vt-studio-control] inside the field must NOT paint a second border.
+ */
+
+.vt-studio-split-shell[data-vt-studio-control="true"]:has([data-vt-studio-split-field]),
+.vt-studio-split-shell:has([data-vt-studio-split-field]) {
   box-sizing: border-box;
-  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
-  padding-bottom: 0 !important;
-}
-
-details.vt-studio-collapsing-split-module[open] > summary.vt-studio-collapsing-split-module__head,
-details.vt-studio-collapsing-split-module[open] > summary.vt-studio-top-split-module__head {
-  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
-}
-
-details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
-details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
-  box-shadow: none !important;
-}
-
-.vt-studio-top-split-module > .vt-studio-top-split-module__head {
-  box-sizing: border-box;
-  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
-  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
-}
-
-.vt-studio-top-split-module[data-open="false"] > .vt-studio-top-split-module__head,
-.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head {
-  border-bottom-color: transparent !important;
-  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
-}
-
-
-
-
-/* ─── Canonical steppers + username-input foundation (port from the certified base) ─── */
-/* Studio Controls-owned stepper family styles moved from primitive sidecars. */
-/* Studio steppers share the Split-Left Username Input visual foundation:
-   primary translucent value surface,
-opaque secondary action rail,
-inset primary
-   strokes,
-black compound dividers{
-  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
-  --vt-stepper-height: var(--vt-studio-control-height, 44px);
-  --vt-stepper-radius: var(--vt-studio-control-radius, 6px);
-  --vt-stepper-focus: var(--vt-studio-control-focus-outline-width, 3px);
-  box-sizing: border-box;
-  position: relative;
-  min-width: 0;
-  height: var(--vt-stepper-height);
-  min-height: var(--vt-stepper-height);
-  overflow: hidden;
-  isolation: isolate;
-  border: var(--vt-stepper-stroke) solid #000;
-  border-radius: var(--vt-stepper-radius);
-  background: var(--vt-stepper-secondary);
-  color: #000;
-  
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-}
-/* Username composite: shell owns perimeter; inner input and rail do not duplicate it. */
-.vt-studio-username-input,
-.vt-studio-split-shell.vt-studio-username-input {
-  box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   overflow: hidden;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+  background: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 50%, transparent);
 }
-.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"],
-.vt-studio-username-input [data-vt-studio-split-field] > [data-vt-studio-control="true"],
-.vt-studio-username-input [data-vt-studio-split-label] > [data-vt-studio-control="true"] {
+
+.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail],
+.vt-studio-split-shell:has([data-vt-studio-split-field]) .vt-studio-split-shell__rail {
   box-sizing: border-box;
-  border: 0;
-  border-radius: 0;
-  outline: none;
-  box-shadow: none;
-  background: transparent;
-  min-height: 100%;
+  flex: 0 0 var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  max-width: var(--vt-studio-control-height, 44px);
   height: 100%;
-}
-.vt-studio-username-input > [data-vt-studio-split-rail],
-.vt-studio-username-input [data-vt-studio-split-rail] {
-  border: 0;
-  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: 0;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  color: #000;
+  border: 0;
+  /* Single divider toward the field — not a second outer stroke */
+  box-shadow: none;
 }
-.vt-studio-username-input [data-vt-studio-split-rail] svg,
-.vt-studio-username-input [data-vt-studio-split-rail] svg * {
-  color: #000;
-  stroke: #000;
+
+.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail][data-rail="start"],
+.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail]:first-child {
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
 }
-/* Split steppers own one stationary shell; suppress legacy pseudo-faces that could stack borders. */
-.vt-studio-split-stepper::before { content: none; display: none; }
-/* Inline and vertical steppers share the canonical shell and field contracts. */
-[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper {
-  width: 100%;
+.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail][data-rail="end"],
+.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail]:last-child {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-right: 0;
 }
-[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper[data-vt-studio-width="content"] {
-  width: fit-content;
+
+.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail] svg {
+  width: 86%;
+  height: 86%;
+  max-width: calc(var(--vt-studio-control-height, 44px) * 0.86);
+  max-height: calc(var(--vt-studio-control-height, 44px) * 0.86);
+  display: block;
 }
-.vt-studio-inline-stepper__rail {
-  position: relative;
-  min-width: 0;
-  max-width: 100%;
-  z-index: 0;
-}
-.vt-studio-inline-stepper__value,
-.vt-studio-split-stepper-value {
+
+/* Field panel: primary inset stroke on all four edges (starter .field .body:after) */
+.vt-studio-split-shell > [data-vt-studio-split-field] {
   position: relative;
   box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+  flex: 1 1 auto;
   min-width: 0;
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif) !important;
-  font-weight: var(--vt-studio-control-font-weight, 1000) !important;
-  font-size: var(--vt-studio-control-font-size, 38px) !important;
-  line-height: var(--vt-studio-control-line-height, .86) !important;
-  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em) !important;
-  text-transform: var(--vt-studio-control-text-transform, uppercase) !important;
-  padding: 0 14px !important;
-  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent) !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
-  box-shadow: inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary) !important;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0 !important;
+  border-radius: 0;
+  overflow: hidden;
+  background: transparent;
 }
-.vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value,
-.vt-studio-split-stepper[data-size="compact"] .vt-studio-split-stepper-value {
-  font-size: var(--vt-studio-28-font-size, 24px) !important;
-  padding: 0 8px !important;
-  -webkit-text-stroke: var(--vt-studio-28-text-stroke, .5px) #000 !important;
+
+.vt-studio-split-shell > [data-vt-studio-split-field]::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  border-radius: 0;
+  pointer-events: none;
 }
-.vt-studio-inline-stepper[data-size="micro"] .vt-studio-inline-stepper__value {
-  font-size: var(--vt-studio-14-font-size, 10px) !important;
-  padding: 0 2px !important;
-  -webkit-text-stroke: var(--vt-studio-14-text-stroke, .25px) #000 !important;
-}
-.vt-studio-inline-stepper:focus-within .vt-studio-inline-stepper__value,
-.vt-studio-split-stepper:focus-within .vt-studio-split-stepper-value {
+
+/* Kill nested double borders / overlapping shells inside the field */
+.vt-studio-split-shell > [data-vt-studio-split-field] > [data-vt-studio-control="true"],
+.vt-studio-split-shell > [data-vt-studio-split-field] input,
+.vt-studio-split-shell > [data-vt-studio-split-field] .vt-studio-text-input,
+.vt-studio-split-shell > [data-vt-studio-split-field] [data-vt-studio-text-input] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none;
   background: transparent !important;
+  display: flex;
+  align-items: center;
 }
-.vt-studio-inline-stepper__rail svg,
-.vt-studio-split-stepper-actions svg {
-  stroke-width: var(--vt-studio-control-icon-stroke, 3.2);
+
+.vt-studio-split-shell > [data-vt-studio-split-field] input[type="text"],
+.vt-studio-split-shell > [data-vt-studio-split-field] input:not([type]),
+.vt-studio-split-shell > [data-vt-studio-split-field] input[type="search"] {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-fill-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: var(--vt-studio-control-font-weight, 1000);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  /* Vertical centering: equal line-box inside full height */
+  padding-block: 0;
 }
-.vt-studio-split-stepper-actions button {
+
+.vt-studio-split-shell > [data-vt-studio-split-field] input::placeholder {
+  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  opacity: 1;
+  line-height: 1;
+}
+
+.vt-studio-split-shell > [data-vt-studio-split-field]:focus-within::after {
+  /* Keep primary inset on focus; outer shell may use secondary focus outline */
+  border-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+
+.vt-studio-split-shell:has([data-vt-studio-split-field]):focus-within {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  background: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 15%, transparent);
+}
+
+.vt-studio-split-shell > [data-vt-studio-split-field] input:focus {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  caret-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+
+/* Standalone text input (non-split): same primary inset ring on all edges */
+[data-vt-studio-control="true"].vt-studio-text-input:not(.vt-studio-split-shell),
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
   position: relative;
 }
-.vt-studio-split-stepper-actions button:focus-visible {
-  outline: var(--vt-stepper-focus) solid var(--vt-stepper-secondary);
-  outline-offset: -2px;
-  z-index: 1;
+
+/* Prefer inset ring via box-shadow so bottom edge is never clipped */
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* --- MODULES = SPLIT BADGE HEADER FOUNDATION --------------------------------
+ * Collapsed collapsing module ≡ split badge (square rails + label + outer stroke).
+ * Header bottom border always present; open = white body below that rule.
+ * Header metrics fixed; icons/text do not move on open/close.
+ */
+
+.vt-studio-top-split-module,
+details.vt-studio-collapsing-split-module,
+details.vt-studio-two-line-module,
+.vt-studio-collapsing-split-module,
+.vt-studio-two-line-module {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  border: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
+  border-radius: var(--vt-top-split-radius, var(--vt-studio-control-radius, 6px));
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Header = badge-height row; always full bottom black stroke */
+.vt-studio-top-split-module__head,
+.vt-studio-collapsing-split-module__head,
+summary.vt-studio-top-split-module__head,
+summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module > summary,
+details.vt-studio-two-line-module > summary {
+  box-sizing: border-box;
+  display: grid;
+  align-items: stretch;
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: var(--vt-top-split-size, var(--vt-studio-control-height, 44px));
+  height: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 0;
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+  border-radius: 0;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+details.vt-studio-collapsing-split-module > summary::-webkit-details-marker,
+details.vt-studio-two-line-module > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Square rails inside module headers (badge parity) */
+.vt-studio-top-split-module__rail,
+.vt-studio-collapsing-split-module__rail,
+summary .vt-studio-top-split-module__rail {
+  box-sizing: border-box;
+  width: var(--vt-top-split-size, var(--vt-studio-control-height, 44px));
+  min-width: var(--vt-top-split-size, var(--vt-studio-control-height, 44px));
+  height: 100%;
+  min-height: var(--vt-top-split-size, var(--vt-studio-control-height, 44px));
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  border: 0;
+}
+
+.vt-studio-top-split-module__rail[data-rail="start"],
+.vt-studio-collapsing-split-module__rail[data-rail="start"] {
+  border-right: var(--vt-top-split-stroke, 3px) solid #000;
+}
+.vt-studio-top-split-module__rail[data-rail="end"],
+.vt-studio-collapsing-split-module__rail[data-rail="end"] {
+  border-left: var(--vt-top-split-stroke, 3px) solid #000;
+}
+
+.vt-studio-top-split-module__title,
+.vt-studio-collapsing-split-module__title,
+summary .vt-studio-top-split-module__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  padding: 0 10px;
+  font-weight: 1000;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+
+/* Closed: no extra shell bottom — header bottom border IS the component bottom
+   (collapsed module looks like a split badge) */
+details.vt-studio-collapsing-split-module:not([open]),
+details.vt-studio-two-line-module:not([open]),
+.vt-studio-collapsing-split-module:not([open]),
+.vt-studio-two-line-module:not([open]) {
+  border-bottom: 0 !important;
+}
+
+/* Open: restore shell bottom under white body; header rule stays the divider */
+details.vt-studio-collapsing-split-module[open],
+details.vt-studio-two-line-module[open],
+.vt-studio-collapsing-split-module[open],
+.vt-studio-two-line-module[open] {
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+}
+
+.vt-studio-top-split-module__body,
+.vt-studio-collapsing-split-module__body,
+.vt-studio-two-line-module__body,
+details.vt-studio-collapsing-split-module > :not(summary),
+details.vt-studio-two-line-module > :not(summary) {
+  box-sizing: border-box;
+  border-top: 0 !important;
+  background: #fff;
+  /* Body never changes header metrics */
+  flex: 1 1 auto;
 }
