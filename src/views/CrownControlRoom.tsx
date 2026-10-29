@@ -125,7 +125,6 @@ const CrownControlRoom: React.FC = () => {
   const openConflicts = conflictRecords.filter((item) => item.record.state !== "resolved")
   const pendingDecisions = decisionRecords.filter((item) => ["proposed", "needs-creator-decision"].includes(str(item.record.state, "")))
   const incomplete = missions.filter((mission) => mission.status !== "complete")
-  const missionEvidence = (id: string) => receiptRecords.filter((item) => related(item, id))
   const codeRecords = [...workOrderRecords, ...receiptRecords.filter((item) => Array.isArray(item.record.changedPaths) || Array.isArray(item.record.changed))]
   const serviceMissions = missions.filter((mission) => mission.domain === "Citadel")
   const brainMissions = missions.filter((mission) => mission.domain === "Brain")
