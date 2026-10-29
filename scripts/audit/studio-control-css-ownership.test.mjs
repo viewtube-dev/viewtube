@@ -44,6 +44,13 @@ test("stylesheet order preserves token-first and family-final ownership", () => 
     "token source, shared defaults, corrections and final family sheets must retain declared order");
 });
 
+test("distill layer defines the icon-group base rule only once", () => {
+  const distill = read("src/styles/studio-control-distill-overrides.css");
+  const baseRules = [...distill.matchAll(/(?:^|\\n)\\.vt-studio-square-icon-button-group\\s*\\{/g)];
+  assert.equal(baseRules.length, 1,
+    "the content-sized icon-group base rule should be defined once; Brain-specific scoping stays separate");
+});
+
 test("canonical system owns one scoped spacing-unit declaration", () => {
   const system = read("src/styles/studio-control-system.css");
   assert.match(system, /\[data-vt-studio-control\] \{[^}]*--vt-studio-space-unit:\s*4px;/s,
