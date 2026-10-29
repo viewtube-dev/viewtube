@@ -9,11 +9,11 @@ const read = (path) => readFileSync(resolve(root, path), "utf8");
 
 test("active Studio stylesheet imports resolve and retired duplicate system sheet stays absent", () => {
   const entry = read("src/styles/studio-control-entry.css");
-  const imports = [...entry.matchAll(/@import\\s+["']([^"']+)["']\\s*;/g)].map((match) => match[1]);
+  const imports = [...entry.matchAll(/@import\s+["']([^"']+)["']\s*;/g)].map((match) => match[1]);
   assert.ok(imports.length > 0, "stylesheet entry should declare its owned layers");
 
   for (const imported of imports) {
-    assert.ok(existsSync(resolve(root, "src/styles", imported.replace(/^\\.\\//, ""))), `missing imported stylesheet: ${imported}`);
+    assert.ok(existsSync(resolve(root, "src/styles", imported.replace(/^\.\//, ""))), `missing imported stylesheet: ${imported}`);
   }
 
   assert.equal(existsSync(resolve(root, "src/styles/studio-control-system-2.css")), false,
@@ -46,8 +46,8 @@ test("stylesheet order preserves token-first and family-final ownership", () => 
 
 test("recovery layer does not redeclare the global spacing-unit token", () => {
   const recovery = read("src/styles/studio-control-recovery-overrides.css");
-  assert.doesNotMatch(recovery, /--vt-studio-space-unit\\s*:/,
+  assert.doesNotMatch(recovery, /--vt-studio-space-unit\s*:/,
     "global spacing-unit ownership belongs to the canonical system stylesheet");
-  assert.match(recovery, /--vt-field-inline-stroke:\\s*var\\(--vt-field-primary\\)/,
+  assert.match(recovery, /--vt-field-inline-stroke:\s*var\(--vt-field-primary\)/,
     "the recovery layer keeps its distinct field-inset bridge until migrated");
 });
