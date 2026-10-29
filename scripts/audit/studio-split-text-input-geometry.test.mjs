@@ -1,4 +1,5 @@
 import test from "node:test";
+import postcss from "postcss";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
@@ -7,19 +8,19 @@ const splitComponent = readFileSync("src/studio-ui/primitives/StudioSplitTextInp
 const interCss = readFileSync("src/styles/studio-inter-module.css", "utf8");
 
 test("split text input styles target the actual rendered shell, rails, and editable field", () => {
-  assert.match(splitCss, /\.vt-studio-split-shell\.vt-studio-split-text-input\s*\{/);
-  assert.match(splitCss, /\.vt-studio-split-text-input\s*>\s*\.vt-studio-split-shell__rail/);
-  assert.match(splitCss, /\.vt-studio-split-text-input__field\s*\{/);
-  assert.match(splitComponent, /className="vt-studio-split-text-input__field"/);
-  assert.match(splitComponent, /data-vt-studio-split=\{split\}/);
-  assert.doesNotMatch(splitCss, /data-vt-studio-split-label/);
+  assert.match(splitCss, /html body \.vt-studio-split-text-input\s*\{/);
+  assert.match(splitCss, /\.vt-studio-split-text-input \[data-vt-studio-split-rail\]/);
+  assert.match(splitCss, /\.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\]/);
+  assert.match(splitComponent, /<StudioTextInput[\s\S]*?className=\{inputClassName\}/);
+  assert.match(splitComponent, /data-split=\{split\}/);
+  assert.match(splitCss, /\[data-vt-studio-split-label\]/);
 });
 
 test("split input has one stable geometry rule and the canonical resting/focus field contract", () => {
-  assert.equal((splitCss.match(/\.vt-studio-split-text-input__field\s*\{/g) || []).length, 1);
+  assert.equal((splitCss.match(/html body \.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\],/g) || []).length, 1);
   assert.doesNotMatch(splitCss, /data-geometry-variant|padding-reference|half-vertical-padding|username-height/);
-  assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid #000/);
-  assert.match(splitCss, /background:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\)/);
+  assert.match(splitCss, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-split-field-primary\)/);
+  assert.match(splitCss, /background-color:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\)/);
   assert.match(splitCss, /:focus-visible[\s\S]*?15%, transparent[\s\S]*?-webkit-text-stroke-color:\s*#000/);
   assert.match(splitCss, /:focus-within\s*\{[\s\S]*?focus-outline-width-ratio, \.65[\s\S]*?var\(--vt-split-field-secondary\)/);
   assert.match(splitCss, /caret-color:\s*var\(--vt-split-field-primary\)/);
@@ -32,4 +33,14 @@ test("intermodule sizing uses canonical supreme tokens and focus outline follows
   assert.match(interCss, /outline:\s*calc\(var\(--vt-im-stroke\) \* \.65\) solid/);
   assert.match(interCss, /\.vt-studio-inter-module__line-1/);
   assert.match(interCss, /\.vt-studio-inter-module__line-2/);
+});
+
+test("split text input stylesheet is complete and closes the nested field rule", () => {
+  assert.doesNotMatch(splitCss, /\.\.\.\s*$/, "stylesheet must not be truncated");
+  assert.doesNotThrow(() => postcss.parse(splitCss), "split text input stylesheet must parse as valid CSS");
+  assert.match(
+    splitCss,
+    /--vt-split-field-pad:\s*max\(10px, calc\(var\(--vt-studio-control-stroke, 3px\) \+ 8px\)\);[\s\S]*?caret-color:\s*var\(--vt-split-field-primary\);[\s\S]*?\n}\s*$/,
+    "nested field declarations must be complete and the rule must close",
+  );
 });
