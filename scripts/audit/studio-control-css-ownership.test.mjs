@@ -44,6 +44,13 @@ test("stylesheet order preserves token-first and family-final ownership", () => 
     "token source, shared defaults, corrections and final family sheets must retain declared order");
 });
 
+test("system layer defines the disabled dropdown option rule only once", () => {
+  const system = read("src/styles/studio-control-system.css");
+  const duplicateRule = ".vt-studio-dropdown-option:disabled { cursor: not-allowed; opacity: .45; }";
+  assert.equal(system.split("\n").filter((line) => line.trim() === duplicateRule).length, 1,
+    "disabled dropdown cursor/opacity defaults should not be repeated");
+});
+
 test("distill layer defines the icon-group base rule only once", () => {
   const distill = read("src/styles/studio-control-distill-overrides.css");
   const baseRules = distill.split("\n").filter((line) => line.trim() === ".vt-studio-square-icon-button-group {");
