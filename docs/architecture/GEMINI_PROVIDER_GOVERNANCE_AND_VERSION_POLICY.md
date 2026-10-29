@@ -191,3 +191,18 @@ The reconciled implementation branch now contains the first additive runtime mig
 ### Verification status
 
 The source edits and tests have been added to the reconciliation branch, but no local test run, typecheck, production build, real-key probe, or deployment is claimed here. Phase 0 is not marked exhaustive because indexed code search surfaced stale revisions. Close those evidence gaps against the exact PR head before calling phases 0–3 fully verified.
+
+
+## Phase 4 — secure fallback and operational diagnostics
+
+**Implementation branch:** `feat/gemini-phase-4-secure-fallback-observability`
+
+- Provider fallback is now limited to a maximum of three candidate attempts and candidates are filtered to preserve every capability declared by the selected registry model. A model that supports image/video/audio must not silently fall back to a text-only candidate.
+- Fallback eligibility uses the shared failure classifier. Authentication, permission, quota, and unknown failures stop immediately. Unsupported-model errors may walk the bounded candidate list. Transient failures receive at most one retry.
+- Unknown model IDs remain unknown through canonicalization. They are attempted as requested without being silently rewritten to Flash Lite and without inheriting an invented fallback policy.
+- Fallback diagnostics use an explicit allowlist: provider, source/fallback/effective model IDs, failure category, operation, attempt number, and timestamp. Prompts, generated content, API keys, account identifiers, and raw provider errors are not included in the event payload.
+- Routing tests now assert that known-compatible creator preferences are honored. The provider architecture guard ignores test fixtures so a source-contract assertion mentioning an SDK method is not treated as a production direct-provider call.
+
+### Phase 4 verification gate
+
+The merged Phase 0–3 workflow showed a passing production build and local smoke job, but failures in focused contracts, typecheck, the confirmed-catalog audit, and full tests. Some failures are unrelated Studio catalog/style assertions and existing Brain test fixture typing. Gemini-relevant regressions include the old routing expectation and the architecture guard counting `GeminiKeyContext.test.ts` as a production call. This branch corrects the two source-contract regressions and adds unknown-model/fallback hardening; all checks must rerun before Phase 4 can be marked complete.
