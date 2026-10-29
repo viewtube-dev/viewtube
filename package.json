@@ -80,7 +80,9 @@
     "test:studio-component-grid-css": "node --test scripts/audit/studio-component-grid-css-minifier.test.mjs",
     "audit:confirmed-catalog": "node scripts/audit/confirmed-catalog-coverage.mjs",
     "test:studio-public-export-catalog": "node --test scripts/audit/studio-public-export-catalog-matrix.test.mjs && node scripts/audit/studio-public-export-catalog-matrix.mjs",
-    "test:studio-control-css-ownership": "node --test scripts/audit/studio-control-css-ownership.test.mjs"
+    "test:studio-control-css-ownership": "node --test scripts/audit/studio-control-css-ownership.test.mjs",
+    "audit:ai-generation-callers": "node scripts/audit/ai-generation-callers.mjs",
+    "test:ai-generation-callers": "node --test scripts/audit/ai-generation-callers.test.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
