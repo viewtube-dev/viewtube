@@ -28,10 +28,10 @@
 }
 
 .vt-studio-inter-module[data-size="supreme"] {
-  --vt-im-stroke: var(--vt-studio-supreme-stroke, 4.09px);
+  --vt-im-stroke: var(--vt-studio-supreme-stroke, 3px);
   --vt-im-face: var(--vt-studio-supreme-height, 60px);
-  --vt-im-font: var(--vt-studio-supreme-font-size, 51.82px);
-  --vt-im-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px);
+  --vt-im-font: var(--vt-studio-supreme-font-size, 52px);
+  --vt-im-text-stroke: var(--vt-studio-supreme-text-stroke, 1px);
 }
 
 .vt-studio-inter-module[data-size="compact"] {
@@ -95,7 +95,7 @@
 }
 
 .vt-studio-inter-module__head[role="button"]:focus-visible {
-  outline: var(--vt-studio-control-focus-outline-width, 1.95px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline: calc(var(--vt-im-stroke) * .65) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
 
