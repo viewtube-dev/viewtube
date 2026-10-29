@@ -2,11 +2,13 @@ import React from 'react'
 import { useBrain } from '../../context/useBrain'
 import { GEMINI_MODELS } from '../../config/aiConfig'
 import { getPaletteColor } from '../../styles/toolboxPalette'
+import { resolveGeminiModel } from '../../services/geminiModelGovernance'
 
 export const AIModelSelector: React.FC<{ compact?: boolean }> = ({ compact }) => {
   const { aiModel, setAiModel } = useBrain()
 
   const accentColor = getPaletteColor(4)
+  const textResolution = resolveGeminiModel({ preference: aiModel, capability: 'text' })
 
   return (
     <div className={`flex items-center gap-2 ${compact ? '' : 'mb-2'}`}>
@@ -72,6 +74,14 @@ export const AIModelSelector: React.FC<{ compact?: boolean }> = ({ compact }) =>
                    >
                      {m.tier.toUpperCase()}
                    </span>
+                </div>
+                <div className="mt-3 border-t border-black/15 pt-2 text-[10px] font-bold uppercase tracking-wide text-gray-700">
+                  Text capability serves: <span className="text-black">{textResolution.served}</span>
+                  {textResolution.substituted && (
+                    <p className="mt-1 text-amber-800 normal-case tracking-normal">
+                      Your selection is substituted for text requests ({textResolution.reason.replaceAll('_', ' ')}).
+                    </p>
+                  )}
                 </div>
              </div>
           ))}
