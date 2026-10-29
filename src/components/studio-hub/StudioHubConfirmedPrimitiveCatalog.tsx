@@ -5,8 +5,7 @@ import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
-import { StudioComponentGrid, StudioComponentGridCell } from "../../studio-ui/primitives/StudioComponentGrid"
-import { StudioComponentGridRow } from "../../studio-ui/primitives/StudioComponentGrid"
+import { StudioComponentGrid, StudioComponentGridCell, StudioComponentGridRow } from "../../studio-ui/primitives/StudioComponentGrid"
 import { StudioComponentGridSpecimen, StudioComponentGridSpecimenPair } from "../../studio-ui/primitives/StudioComponentGridSpecimen"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
