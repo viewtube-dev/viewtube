@@ -338,12 +338,12 @@ I verified the source and test contents through the GitHub API and checked the e
 ### Removed
 
 - Deleted `src/styles/studio-control-system-2.css` (approximately 325 KB). The active entry imported `studio-control-system.css`, not the `-2` file; repository code search found no references to the removed filename. The two files were not byte-identical, so this is recorded as removal of an unreferenced legacy alternative, not a claim that their contents were identical.
-- Removed the duplicate `--vt-studio-space-unit: 4px` declaration from `studio-control-recovery-overrides.css`. The canonical system stylesheet already owns the global spacing unit; the distinct recovery bridge `--vt-field-inline-stroke` remains until its consuming selectors are migrated.
+- Removed duplicate `--vt-studio-space-unit: 4px` declarations from both `studio-control-recovery-overrides.css` and a redundant `:where([data-vt-studio-control="true"])` block in `studio-control-system.css`. The broader canonical `[data-vt-studio-control]` block already owns the same scoped value; the root-level layout token remains for row gaps. The distinct recovery bridge `--vt-field-inline-stroke` remains until its consuming selectors are migrated.
 - Corrected misleading comments that described the distill/recovery layers as the final imported stylesheets. The entry imports later family sheets for side rails, component grid, counters, and split text input; comments now reflect the actual cascade order.
 
 ### Regression guards added
 
-- `scripts/audit/studio-control-css-ownership.test.mjs` checks that all entry imports resolve, the removed system sheet stays absent, the canonical system stylesheet is imported once, token-first/family-final order is preserved, and the recovery layer does not re-declare the global spacing unit.
+- `scripts/audit/studio-control-css-ownership.test.mjs` checks that all entry imports resolve, the removed system sheet stays absent, the canonical system stylesheet is imported once, token-first/family-final order is preserved, and neither recovery nor a duplicate scoped system block re-declares the global spacing unit.
 - `npm run test:studio-control-css-ownership` is the focused command for this guard.
 
 ### Important declaration policy
