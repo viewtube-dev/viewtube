@@ -1740,25 +1740,38 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
       </div>
     </Family>
-      <Family title="Calendar Event & Media Rails" nonDefaultSettings={[
-        "Event chips use the shared alphabetic spectrum identity and canonical closeable badge for removable events.",
-        "Media rails support 16:9 landscape and 9:16 portrait assets with left, right, or double split rails.",
+      <Family title="Calendar Event & Media Rails · Standard Representatives" nonDefaultSettings={[
+        "Each specimen below renders the production calendar primitive itself; the component root carries its library identity.",
+        "Event chips cover all five semantic kinds, scheduled and in-progress states, selected state, and the canonical removable-badge path.",
+        "Media rails cover both 16:9 landscape and 9:16 portrait ratios across left, right, and double rail arrangements.",
         "Calendar state and publish dates remain owned by Projects; these are presentation primitives only.",
       ]} provenance={<Provenance primitive="StudioCalendarEventChip · StudioCalendarMediaRail" tsx="src/studio-ui/primitives/StudioCalendarPrimitives.tsx" css="src/studio-ui/primitives/studio-calendar-primitives.css" tokens="Semantic primary/secondary colors · global Studio stroke/radius/spacing · ratio-based media geometry" imports={["src/studio-ui/primitives/StudioCalendarPrimitives.tsx", "src/studio-ui/primitives/studio-calendar-primitives.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarEventChip">
-          <span>EVENT STATES · PUBLISH / TASK / DEADLINE</span>
+        <div className="vt-confirmed-variant is-full-row">
+          <span>EVENT CHIPS · ALL SEMANTIC KINDS + REAL STATUS STATES</span>
           <div className="flex flex-wrap items-center gap-2">
             <StudioCalendarEventChip label="PUBLISH EPISODE" kind="publish" status="scheduled" selected onClick={() => undefined} />
-            <StudioCalendarEventChip label="SCRIPT REVIEW" kind="task" status="open" />
-            <StudioCalendarEventChip label="SPONSOR DEADLINE" kind="deadline" />
+            <StudioCalendarEventChip label="SCRIPT REVIEW" kind="task" status="in progress" />
+            <StudioCalendarEventChip label="PROJECT MILESTONE" kind="milestone" status="upcoming" />
+            <StudioCalendarEventChip label="CREATOR REMINDER" kind="reminder" status="open" />
+            <StudioCalendarEventChip label="SPONSOR DEADLINE" kind="deadline" status="due soon" />
             <StudioCalendarEventChip label="REMOVABLE EVENT" kind="reminder" onRemove={() => undefined} />
           </div>
         </div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarMediaRail">
-          <span>16:9 LANDSCAPE · DOUBLE SPLIT</span>
-          <StudioCalendarMediaRail aspectRatio="16:9" split="double" label="Landscape publishing thumbnail" leftLabel="VIDEO" rightLabel="PUBLISH" />
-          <span>9:16 PORTRAIT · DOUBLE SPLIT</span>
-          <StudioCalendarMediaRail aspectRatio="9:16" split="double" label="Short-form publishing thumbnail" leftLabel="SHORT" rightLabel="SCHEDULE" />
+        <div className="vt-confirmed-variant is-full-row">
+          <span>MEDIA RAILS · 16:9 LANDSCAPE · LEFT / RIGHT / DOUBLE</span>
+          <div className="grid grid-cols-1 gap-2">
+            <StudioCalendarMediaRail aspectRatio="16:9" split="left" label="Landscape thumbnail with leading event rail" leftLabel="VIDEO" />
+            <StudioCalendarMediaRail aspectRatio="16:9" split="right" label="Landscape thumbnail with trailing event rail" rightLabel="PUBLISH" />
+            <StudioCalendarMediaRail aspectRatio="16:9" split="double" label="Landscape thumbnail with double event rails" leftLabel="VIDEO" rightLabel="PUBLISH" />
+          </div>
+        </div>
+        <div className="vt-confirmed-variant is-full-row">
+          <span>MEDIA RAILS · 9:16 PORTRAIT · LEFT / RIGHT / DOUBLE</span>
+          <div className="grid grid-cols-1 gap-2">
+            <StudioCalendarMediaRail aspectRatio="9:16" split="left" label="Portrait thumbnail with leading event rail" leftLabel="SHORT" />
+            <StudioCalendarMediaRail aspectRatio="9:16" split="right" label="Portrait thumbnail with trailing event rail" rightLabel="SCHEDULE" />
+            <StudioCalendarMediaRail aspectRatio="9:16" split="double" label="Portrait thumbnail with double event rails" leftLabel="SHORT" rightLabel="SCHEDULE" />
+          </div>
         </div>
       </Family>
   </ConfirmedCatalogFamilyGroups>
