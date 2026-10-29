@@ -554,3 +554,19 @@ test("canonical grouped families do not render a second duplicate individual-con
   assert.match(catalog, /<CanonicalWordToggleFamily\s*\/>/);
   assert.match(catalog, /<ConfirmedStudioValueToggleFamily\s*\/>/);
 });
+
+ 
+test("split-left, split-right, double-split, and two-line buttons share one family", () => {
+  const family = catalog.match(/const ConfirmedStudioSplitButtonFamily:[\s\S]*?const ConfirmedStudioDropdownFamily/)?.[0] ?? "";
+  for (const primitive of [
+    "StudioSplitLeftButton",
+    "StudioSplitRightButton",
+    "StudioDoubleSplitButton",
+    "StudioTwoLineButton",
+    "StudioSplitTwoLineButton",
+  ]) assert.ok(family.includes(primitive), `split family is missing ${primitive}`);
+  assert.match(family, /StudioSplitLeftButton sizeVariant="compact"/);
+  assert.match(family, /StudioSplitRightButton sizeVariant="compact"/);
+  assert.match(family, /StudioDoubleSplitButton sizeVariant="compact"/);
+  assert.doesNotMatch(catalog, /title="StudioSplitRightButton · Standard"|title="Two-Line Button · Standard \+ Compact"|title="Split Two-Line Button · Standard \+ Compact"/);
+});
