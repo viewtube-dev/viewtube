@@ -143,6 +143,8 @@ Regression tests were added for authenticated custom-key streaming and rejection
 
 **Verification status:** source and test changes are committed to the remediation branch. The focused Vitest command must pass in CI before this finding is certified closed. The implementation has not been independently executed in a local checkout during this audit.
 
+A static caller-inventory tool and fixture tests were also added: `scripts/audit/ai-generation-callers.mjs` and `scripts/audit/ai-generation-callers.test.mjs`. Run `npm run audit:ai-generation-callers` to enumerate exported Gemini functions with static named/namespace imports and references across source, API, server, and script code. Run `npm run test:ai-generation-callers` for its fixture tests. The report intentionally labels results as static references rather than runtime reachability; dynamic imports, re-exports, DI, and route reachability still need manual verification.
+
 **Additional security review remains required.** On the current target head, `src/services/keyVault.ts` stores the Gemini credential in browser `localStorage` under the `yt_api_key` and legacy alias keys; `src/context/GeminiKeyContext.tsx` loads and saves that value in the browser; and `src/services/gemini.ts` constructs `GoogleGenAI` in the client and accepts `VITE_GEMINI_API_KEY` / `VITE_GOOGLE_API_KEY` build-time values. These are concrete browser-exposure surfaces, not a server-side secret boundary. Do not claim that localStorage is encrypted. A proper remediation needs an explicit product decision between (a) user-managed BYO credentials with documented browser threat boundaries and strict XSS controls, and (b) a server-side provider proxy with user-scoped authorization, secret storage, quotas, and abuse controls. This audit does not certify either design.
 
 ## 7. Tests and CI evidence
@@ -172,13 +174,13 @@ The prior target and the remediation head both report Vercel `build-rate-limit` 
 |---|---|---|
 | P0 | Streaming authentication, entitlement, and metering parity | Implemented on remediation branch; CI verification pending |
 | P0 | Add regression coverage for authenticated and signed-out custom-key streams | Added on remediation branch; CI verification pending |
-| P1 | Map every legacy prompt/export to real production callers | Not complete; must be generated from target-branch call-site evidence |
+| P1 | Map every legacy prompt/export to real production callers | Static inventory tooling added; report execution and manual runtime reachability review pending |
 | P1 | Assign canonical owner/family/context recipe/schema and migration gates | Governance contract exists; population incomplete |
 | P1 | Route all eligible generation surfaces through BrainRuntime/BrainModelGateway | Partial; do not create parallel providers or orchestration |
 | P1 | Standardize prompt/model/evidence/output provenance across all generation paths | Partial; JSON-task lineage exists, legacy coverage incomplete |
 | P1 | Review client-side key exposure and production `VITE_*` configuration | Open security review |
 | P2 | Establish representative golden fixtures and quality baselines before prompt migrations | Not complete |
-| P2 | Execute focused, full, typecheck, build, and production-stack suites | Must be confirmed by CI |
+| P2 | Execute focused, caller-inventory, governance, full, typecheck, build, and production-stack suites | Must be confirmed by CI |
 | P2 | Certify API persistence, authorization, and evidence lineage end-to-end | Partial; focused integration verification required |
 
 ## 9. Required completion gates
