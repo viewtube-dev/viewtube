@@ -1,142 +1,121 @@
-/* Split text input: one black shell perimeter, primary inset field, and full-height rails. */
-.vt-studio-split-shell.vt-studio-split-text-input {
-  --vt-split-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  --vt-split-field-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+/**
+ * StudioSplitTextInput — single perimeter + text clear of rails
+ * -------------------------------------------------------------
+ * Shell (badge) owns the only black outer border + rail dividers.
+ * Nested input: border 0; one primary inset via box-shadow.
+ * Grid columns must stay rail | label so text never starts under the icon.
+ */
+
+html body .vt-studio-split-text-input {
+  display: block;
   box-sizing: border-box;
-  display: flex;
-  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  flex: 1 1 auto;
+  background: transparent;
+}
+
+/* Keep badge grid columns (do NOT collapse to a single column). */
+html body .vt-studio-split-text-input > [data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  display: grid;
   width: 100%;
   min-width: 0;
   height: var(--vt-studio-control-height, 44px);
-  margin: 0;
+  min-height: var(--vt-studio-control-height, 44px);
+  max-height: var(--vt-studio-control-height, 44px);
+  align-items: stretch;
   padding: 0;
   gap: 0;
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px);
-  overflow: hidden;
   background: transparent;
-  box-shadow: none;
+  overflow: hidden;
 }
 
-.vt-studio-split-text-input > .vt-studio-split-shell__rail {
+html body .vt-studio-split-text-input[data-split="left"] > [data-vt-studio-control="true"] {
+  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+html body .vt-studio-split-text-input[data-split="right"] > [data-vt-studio-control="true"] {
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, 44px);
+  grid-template-rows: minmax(0, 1fr);
+}
+html body .vt-studio-split-text-input[data-split="double"] > [data-vt-studio-control="true"] {
+  grid-template-columns:
+    var(--vt-studio-control-height, 44px)
+    minmax(0, 1fr)
+    var(--vt-studio-control-height, 44px);
+  grid-template-rows: minmax(0, 1fr);
+}
+
+/* Label cell: only the middle (or side) track — never under rails */
+html body .vt-studio-split-text-input [data-vt-studio-split-label] {
+  --vt-split-field-inner-radius: max(
+    0px,
+    calc(var(--vt-studio-control-radius, 6px) - var(--vt-studio-control-stroke, 3px))
+  );
   box-sizing: border-box;
   display: grid;
-  place-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+  justify-items: stretch;
   align-self: stretch;
-  flex: 0 0 calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
   min-width: 0;
-  height: auto;
+  max-width: 100%;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
   margin: 0;
   padding: 0;
   border: 0;
-  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: 0;
-  background: var(--vt-split-field-secondary);
-  color: #000;
-  font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: 1000;
-  line-height: 1;
-  -webkit-text-stroke: 0;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+  /* Badge labels default to centered text; fields must be start-aligned */
+  justify-content: stretch;
+  text-align: left;
 }
 
-.vt-studio-split-text-input[data-vt-studio-split="right"] > .vt-studio-split-shell__rail,
-.vt-studio-split-text-input[data-vt-studio-split="double"] > .vt-studio-split-shell__rail:last-child {
-  border-right: 0;
-  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+html body .vt-studio-split-text-input[data-split="left"] [data-vt-studio-split-label] {
+  border-radius: 0 var(--vt-split-field-inner-radius) var(--vt-split-field-inner-radius) 0;
+}
+html body .vt-studio-split-text-input[data-split="right"] [data-vt-studio-split-label] {
+  border-radius: var(--vt-split-field-inner-radius) 0 0 var(--vt-split-field-inner-radius);
+}
+html body .vt-studio-split-text-input[data-split="double"] [data-vt-studio-split-label] {
+  border-radius: 0;
 }
 
-.vt-studio-split-text-input > .vt-studio-split-shell__rail svg,
-.vt-studio-split-text-input > .vt-studio-split-shell__rail svg * {
-  display: block;
-  color: #000;
-  stroke: #000;
-}
-
-.vt-studio-split-text-input__field {
-  display: block;
-  position: relative;
-  flex: 1 1 auto;
-  align-self: stretch;
+/* Rails: full square cell; secondary fill; divider toward field only */
+html body .vt-studio-split-text-input [data-vt-studio-split-rail] {
   box-sizing: border-box;
+  width: 100%;
   min-width: 0;
-  width: 0;
-  height: auto;
-  min-height: 0;
-  margin: 0;
-  padding: 0 var(--vt-studio-space-unit, 4px);
-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary) !important;
-  border-radius: 0 !important;
-  outline: none !important;
-  outline-offset: 0 !important;
-  box-shadow: none !important;
-  background: color-mix(in srgb, var(--vt-split-field-primary) 50%, transparent) !important;
-  background-image: none !important;
-  color: var(--vt-split-field-primary);
-  -webkit-text-fill-color: var(--vt-split-field-primary);
-  -webkit-text-stroke-color: var(--vt-split-field-primary);
-  -webkit-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
-  caret-color: var(--vt-split-field-primary);
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: var(--vt-studio-control-line-height, 1);
-  letter-spacing: var(--vt-studio-control-letter-spacing, -0.02em);
-  text-transform: var(--vt-studio-control-text-transform, uppercase);
+  max-width: none;
+  height: 100%;
+  aspect-ratio: auto;
+  display: grid;
+  place-items: center;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  overflow: hidden;
+  z-index: 1;
+}
+html body .vt-studio-split-text-input [data-vt-studio-split-rail] svg {
+  width: 86%;
+  height: 86%;
+  max-width: 86%;
+  max-height: 86%;
+  display: block;
 }
 
-.vt-studio-split-text-input__field:focus,
-.vt-studio-split-text-input__field:focus-visible {
-  border-color: var(--vt-split-field-primary) !important;
-  outline: none !important;
-  outline-offset: 0 !important;
-  box-shadow: none !important;
-  background: color-mix(in srgb, var(--vt-split-field-primary) 15%, transparent) !important;
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke-color: #000;
-  caret-color: var(--vt-split-field-primary);
-}
-
-.vt-studio-split-text-input:focus-within {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-split-field-secondary);
-  outline-offset: 0;
-}
-
-.vt-studio-split-text-input[data-size="supreme"] {
-  --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
-  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
-  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
-  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px);
-}
-.vt-studio-split-text-input[data-size="standard"] {
-  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
-  --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
-  --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px);
-  --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
-}
-.vt-studio-split-text-input[data-size="compact"] {
-  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
-  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
-  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
-  --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px);
-}
-.vt-studio-split-text-input[data-size="mini"] {
-  --vt-studio-control-height: var(--vt-studio-mini-height, 20px);
-  --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px);
-  --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
-  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
-}
-.vt-studio-split-text-input[data-size="micro"] {
-  --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px);
-  --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .vt-studio-split-text-input,
-  .vt-studio-split-text-input__field {
-    transition: none !important;
-    animation: none !important;
-  }
-}
+/**
+ * Nested input: no real border; one primary inset; text starts clear of rails.
+ * Horizontal padding = stroke + 8px so glyphs clear the inset ring and divider.
+ */
+html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"],
+html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
+  --vt-split-field-primary: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  --vt-split-field-pad: max(10px, calc(var(--vt-studio-control-stroke, 3
+... 
