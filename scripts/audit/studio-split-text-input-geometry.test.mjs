@@ -21,7 +21,7 @@ test("split input has one stable geometry rule and the canonical resting/focus f
   assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid #000/);
   assert.match(splitCss, /background:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\)/);
   assert.match(splitCss, /:focus-visible[\s\S]*?15%, transparent[\s\S]*?-webkit-text-stroke-color:\s*#000/);
-  assert.match(splitCss, /:focus-within\\s*\\{[\\s\\S]*?focus-outline-width-ratio, \.65[\\s\\S]*?var\\(--vt-split-field-secondary\\)/);
+  assert.match(splitCss, /:focus-within\s*\{[\s\S]*?focus-outline-width-ratio, \.65[\s\S]*?var\(--vt-split-field-secondary\)/);
   assert.match(splitCss, /caret-color:\s*var\(--vt-split-field-primary\)/);
   assert.doesNotMatch(splitComponent, /geometryVariant|data-geometry-variant/);
 });
