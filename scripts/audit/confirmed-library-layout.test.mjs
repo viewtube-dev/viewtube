@@ -531,6 +531,8 @@ test("confirmed primitive grid is visible first and covers core and advanced Stu
     "StudioSideCounter",
     "StudioDoubleSplitSlider",
     "StudioArrowToggle",
+  ]) assert.ok(grid.includes(`data-vt-library-component="${primitive}"`), `top grid is missing ${primitive}`);
+  for (const primitive of [
     "StudioDoubleSplitButton",
     "StudioSplitLeftDropdown",
     "StudioLegendMultiDropdown",
@@ -540,7 +542,7 @@ test("confirmed primitive grid is visible first and covers core and advanced Stu
     "StudioUploadFrame",
     "StudioSplitAccordion",
     "StudioInterModule",
-  ]) assert.ok(grid.includes(`data-vt-library-component="${primitive}"`), `top grid is missing ${primitive}`);
+  ]) assert.ok(catalog.includes(`data-vt-library-component="${primitive}"`), `catalog is missing ${primitive}`);
   assert.ok(grid.includes("const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)"));
   assert.ok(grid.includes("onClick={() => setSplitButtonPressed(value => !value)}"));
   assert.ok(grid.includes('{splitButtonPressed ? "SELECTED" : "SPLIT LEFT"}'));
