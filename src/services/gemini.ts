@@ -344,8 +344,8 @@ const getAiSettings = () => {
 
 type CanonicalModelId = keyof typeof GEMINI_MODEL_REGISTRY
 
-const toCanonicalModel = (value: string): CanonicalModelId =>
- canonicalizeGeminiModelId(value) as CanonicalModelId
+const toCanonicalModel = (value: string): string =>
+ canonicalizeGeminiModelId(value)
 
 
 const PROVIDER_COMPATIBILITY_MAP: Record<CanonicalModelId, string[]> = {
@@ -359,10 +359,12 @@ const PROVIDER_COMPATIBILITY_MAP: Record<CanonicalModelId, string[]> = {
  "gemini-3.0-flash": ["gemini-3.0-flash", "gemini-2.5-flash", "gemini-1.5-flash-latest"],
 }
 
-const getProviderModelSequence = (canonical: CanonicalModelId): string[] => {
+const getProviderModelSequence = (canonical: string): string[] => {
  const requestedMetadata = getGeminiModel(canonical)
- const requiredCapabilities = requestedMetadata?.capabilities ?? ["text" as const]
- const candidates = PROVIDER_COMPATIBILITY_MAP[canonical] || [canonical]
+ // Unknown models are attempted exactly as requested; they do not inherit a fallback policy.
+ if (!requestedMetadata) return [canonical]
+ const requiredCapabilities = requestedMetadata.capabilities
+ const candidates = PROVIDER_COMPATIBILITY_MAP[canonical as CanonicalModelId] || [canonical]
  const out: string[] = [canonical]
  for (const candidate of candidates) {
   if (out.includes(candidate)) continue
@@ -376,14 +378,10 @@ const getProviderModelSequence = (canonical: CanonicalModelId): string[] => {
  return out.slice(0, 3)
 }
 
-const inferCanonicalFromProvider = (providerModel: string): CanonicalModelId => {
- const normalized = String(providerModel || "").toLowerCase()
- if (normalized.includes("pro") && normalized.includes("3.1")) return "gemini-3.1-pro-preview"
- if (normalized.includes("lite")) return "gemini-3.1-flash-lite"
- if (normalized.includes("image")) return "gemini-3.1-flash-image-preview"
- if (normalized.includes("flash") && normalized.includes("3-")) return "gemini-3-flash-preview"
- if (normalized.includes("pro")) return "gemini-3.1-pro-preview"
- return "gemini-3.1-flash-lite"
+const inferCanonicalFromProvider = (providerModel: string): string => {
+ const normalized = String(providerModel || "").trim().toLowerCase()
+ if (!normalized) return ""
+ return canonicalizeGeminiModelId(normalized)
 }
 
 
