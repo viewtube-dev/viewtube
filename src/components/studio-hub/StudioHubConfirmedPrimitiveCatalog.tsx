@@ -69,7 +69,6 @@ import {
   StudioBarToggle,
   StudioSelect,
   StudioSearchInput,
-  StudioSimpleDropdown,
 } from "../../studio-ui/primitives/StudioControls"
 import { StudioChatActionGroup } from "../../studio-ui/primitives/StudioChatActionGroup"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
@@ -489,7 +488,6 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioXCheckbox"><span>X Checkbox · STANDARD</span><StudioXCheckbox skin="solid" checked={false} sizeVariant="standard" aria-label="X checkbox standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSelect"><span>Select · STANDARD</span><StudioSelect sizeVariant="standard" defaultValue="balanced" aria-label="Select standard specimen"><option value="balanced">BALANCED</option><option value="focused">FOCUSED</option></StudioSelect></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSearchInput"><span>Search Input · STANDARD</span><StudioSearchInput sizeVariant="standard" aria-label="Search input standard specimen" placeholder="SEARCH ASSETS" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSimpleDropdown"><span>Simple Dropdown · STANDARD</span><StudioSimpleDropdown sizeVariant="standard" ariaLabel="Simple dropdown standard specimen" defaultValue="balanced" options={[{ value: "balanced", label: "BALANCED" }, { value: "focused", label: "FOCUSED" }]} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown"><span>Legend Multi Dropdown · STANDARD</span><StudioLegendMultiDropdown label="VIDEOS" sizeVariant="standard" ariaLabel="Legend multi dropdown standard specimen" defaultValue={["videos"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }]} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftDropdown"><span>Split Left Dropdown · STANDARD</span><StudioSplitLeftDropdown sizeVariant="standard" ariaLabel="Split left dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>Bar Toggle · STANDARD</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} ariaLabel="Bar toggle standard representative" /></div>
