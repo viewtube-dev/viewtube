@@ -92,7 +92,7 @@
  font:1000 var(--fs)/.86 var(--vt-studio-toolbox-font,var(--font-sans,ui-sans-serif,system-ui));letter-spacing:-.055em;white-space:nowrap;min-width:max(var(--h),5ch);
 }
 .vt-complete-catalog .vt-catalog-range{grid-template-columns:var(--h) minmax(0,1fr) max(calc(var(--h)*1.45),5ch)}
-.vt-complete-catalog .slider-center,.vt-complete-catalog .range-center{position:relative;display:grid;align-items:center;min-width:0;padding:0 10px}
+.vt-complete-catalog .slider-center,.vt-complete-catalog .range-center{position:relative;display:grid;align-items:center;min-width:0;padding:0 10px;background:color-mix(in srgb,var(--pair-a,#36e0f6) 50%,transparent);box-shadow:inset 0 0 0 var(--stroke) var(--pair-a,#36e0f6)}.vt-complete-catalog .slider-center:has(input[type=range]:focus-visible),.vt-complete-catalog .range-center:has(input[type=range]:focus-visible){background:color-mix(in srgb,var(--pair-a,#36e0f6) 15%,transparent)}
 .vt-complete-catalog .vt-catalog-slider input[type=range]{
  appearance:none;-webkit-appearance:none;width:100%;height:calc(var(--h)*.58);margin:0;background:transparent;touch-action:pan-y;
 }
