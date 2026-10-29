@@ -11,9 +11,9 @@ test("split text input styles target the actual rendered shell, rails, and edita
   assert.match(splitCss, /html body \.vt-studio-split-text-input\s*\{/);
   assert.match(splitCss, /\.vt-studio-split-text-input \[data-vt-studio-split-rail\]/);
   assert.match(splitCss, /\.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\]/);
-  assert.match(splitComponent, /className="vt-studio-split-text-input__field"/);
+  assert.match(splitComponent, /<StudioTextInput[\\s\\S]*?className=\{inputClassName\}/);
   assert.match(splitComponent, /data-vt-studio-split=\{split\}/);
-  assert.doesNotMatch(splitCss, /data-vt-studio-split-label/);
+  assert.match(splitCss, /\\[data-vt-studio-split-label\\]/);
 });
 
 test("split input has one stable geometry rule and the canonical resting/focus field contract", () => {
