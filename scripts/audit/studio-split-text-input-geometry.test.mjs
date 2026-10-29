@@ -12,7 +12,7 @@ test("split text input styles target the actual rendered shell, rails, and edita
   assert.match(splitCss, /\.vt-studio-split-text-input \[data-vt-studio-split-rail\]/);
   assert.match(splitCss, /\.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\]/);
   assert.match(splitComponent, /<StudioTextInput[\s\S]*?className=\{inputClassName\}/);
-  assert.match(splitComponent, /data-vt-studio-split=\{split\}/);
+  assert.match(splitComponent, /data-split=\{split\}/);
   assert.match(splitCss, /\[data-vt-studio-split-label\]/);
 });
 
