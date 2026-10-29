@@ -2,7 +2,7 @@
   "schemaVersion": "viewtube.conversation-work-log.v1",
   "conversationId": "VT-CONV-DOCS-OS-TASK-INDEX",
   "created": "2026-09-27",
-  "lastEdited": "2026-09-27",
+  "lastEdited": "2026-10-29",
   "sourceHost": "ChatGPT",
   "reviewStatus": "PARTIALLY_RECONCILED",
   "items": [
@@ -760,6 +760,26 @@
         "convergence-first creation rule"
       ],
       "reviewNotes": "Built and branch-verified. Canonical production status awaits PR CI/merge. Remaining 33 ideas stay UNREVIEWED rather than becoming tasks."
+    }
+  ],
+  "branchPrReconciliation": [
+    {
+      "branch": "docs/conversation-handoff-reconciliation-2026-09-27",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": null,
+      "openedHeadSha": null,
+      "currentHeadSha": null,
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": "e5bbb56fee503c26a1251c6e3643307af12c4632",
+      "targetContainsChanges": "YES",
+      "classification": "MERGED_AND_CURRENT",
+      "recoveryDestination": null,
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/commit/e5bbb56fee503c26a1251c6e3643307af12c4632",
+        "GitHub compare: merge commit is an ancestor of master/consolidated-feature-integration at e2e09fd5767cb5782f3bf1d133a0b01462c74bfc"
+      ],
+      "notes": "The merge commit is present in the current target history. Its message says 'Merge PR #503', but current GitHub metadata for PR #503 identifies an unrelated split-stepper PR that is closed and unmerged. Therefore delivery is proven by commit ancestry, while the PR-number attribution is unresolved and intentionally left null. The original branch no longer appears in branch search."
     }
   ]
 }
