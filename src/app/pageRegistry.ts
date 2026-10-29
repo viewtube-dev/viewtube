@@ -62,7 +62,10 @@ export interface PageRegistryEntry {
  * FIRST (pageRegistry.test.ts fails otherwise) — even if you don't know
  * the section yet, `unclassified` + `hidden` is a valid stub.
  */
+import { CAPABILITY_PAGE_REGISTRY_ENTRIES } from "./pageRegistry.capabilities-snippet"
+
 export const PAGE_REGISTRY: readonly PageRegistryEntry[] = Object.freeze([
+ ...CAPABILITY_PAGE_REGISTRY_ENTRIES,
  { path: "/", title: "Dashboard", section: "studio", navigationVisibility: "top-nav", lifecycle: "production" },
  { path: "/dashboard-legacy", title: "Dashboard (legacy)", section: "studio", navigationVisibility: "hidden", lifecycle: "legacy" },
  { path: "/studio", title: "Studio Hub", section: "studio", navigationVisibility: "top-nav", lifecycle: "production" },
