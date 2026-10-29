@@ -115,15 +115,6 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 }
 
 
-/* Icon groups size to their content instead of stretching across the row. */
-.vt-studio-square-icon-button-group {
-  display: inline-flex;
-  width: max-content;
-  max-width: 100%;
-  flex: 0 0 auto;
-  align-self: flex-start;
-}
-
 /* Value toggles use the secondary focus outline without changing geometry. */
 .vt-studio-value-toggle:focus-within,
 .vt-studio-split-shell.vt-studio-value-toggle:focus-within,
