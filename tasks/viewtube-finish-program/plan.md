@@ -139,7 +139,7 @@ For each implementation slice, use the applicable gates from `docs/governance/VE
 - persistence/reload, idempotency, retry and rollback where relevant;
 - deployment evidence distinguished from branch-preview evidence.
 
-A green build is not user-visible proof. A screenshot is not server-authorization proof. A merged PR is not DONE proof.
+A green build is not user-visible proof. A screenshot is not server-authorization proof. A merged PR is not DONE proof. On 2026-10-29 GitHub Actions run 40966054493 passed the 10 snapshot tests, 16 transaction tests, production build and local smoke, while broad Vitest/typecheck/source-governance gates failed elsewhere. These scoped passes do not certify server-authoritative persistence or live YouTube recovery.
 
 ## Merge policy
 
