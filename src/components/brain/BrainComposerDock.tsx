@@ -62,7 +62,6 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   promptLauncherRef,
   contextLauncherRef,
   composerRef,
-  maxFieldPx = 104,
   className = "",
 }) => {
   const resizeField = useCallback(
@@ -71,7 +70,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
       // Keep the field aligned with the tool/send rail; longer drafts scroll internally.
       element.style.height = "104px"
     },
-    [maxFieldPx],
+    [],
   )
 
   const setRefs = useCallback(
