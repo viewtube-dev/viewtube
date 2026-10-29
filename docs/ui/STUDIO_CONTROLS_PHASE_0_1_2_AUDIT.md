@@ -285,6 +285,20 @@ Phase 3 has started on this audit branch. The first low-risk corrections are com
 
 The source changes and regression checks are committed, but the repository was inspected through GitHub APIs rather than a local checkout. Therefore the focused test, TypeScript check, production build, and browser/computed-style certification have **not** been executed in this work session. The new checks must be run before treating these changes as certified. AUD-002, AUD-004, AUD-005 and the remaining inventory/cascade reconciliation remain open.
 
+## Phase 3 — Public export reconciliation (2026-10-29, continued)
+
+The audit has now added a repeatable public-export-to-catalog matrix:
+
+- `scripts/audit/studio-public-export-catalog-matrix.mjs` parses value exports from `src/studio-ui/index.ts`, checks for a rendered JSX representative in the Confirmed Primitive Library, and emits each result as `rendered-representative`, `documented-exception`, or `unresolved-gap`.
+- `scripts/audit/studio-public-export-catalog-matrix.test.mjs` covers named/aliased/type-only export parsing, rejects incidental import mentions as representatives, and guards a critical list of production primitives.
+- Added `npm run test:studio-public-export-catalog` as the focused test + matrix command.
+- Added the missing `StudioChatComposerDock` representative with inline-actions and toolbar-actions examples. The specimens are static and explicitly do not imply a live Brain connection or submission behavior.
+- Documented exceptions remain for compatibility exports (`StudioInput` and lowercase legacy aliases), grid composition helpers, and the certification surface. These are recorded as exceptions rather than falsely marked as direct representatives.
+
+### Verification boundary
+
+I verified the source and test contents through the GitHub API and checked the export/JSX matching logic against the retrieved source text. I have **not** executed the new Node tests, TypeScript, Vite build, or browser rendering; do not treat the matrix or composer specimen as runtime-certified until CI completes and the command is run in a checkout. The audit intentionally avoids deleting legacy exports or changing global CSS cascade rules without evidence.
+
 ## Canonical references inspected
 
 - `docs/ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md`
