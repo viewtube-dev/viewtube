@@ -94,7 +94,7 @@
 .vt-complete-catalog .vt-catalog-range{grid-template-columns:var(--h) minmax(0,1fr) max(calc(var(--h)*1.45),5ch)}
 .vt-complete-catalog .slider-center,.vt-complete-catalog .range-center{position:relative;display:grid;align-items:center;min-width:0;padding:0 10px;background:var(--vt-field-fill-rest)}.vt-complete-catalog .slider-center:has(input[type=range]:focus-visible),.vt-complete-catalog .range-center:has(input[type=range]:focus-visible){background:var(--vt-field-fill-focus)}
 .vt-complete-catalog .vt-catalog-slider input[type=range]{
- appearance:none;-webkit-appearance:none;width:100%;height:calc(var(--h)*.58);margin:0;background:transparent;touch-action:pan-y;
+ appearance:none;-webkit-appearance:none;width:100%;height:calc(var(--h)*.58);margin:0;border-radius:var(--radius);background:transparent;touch-action:pan-y;
 }
 .vt-complete-catalog .vt-catalog-slider input[type=range]::-webkit-slider-runnable-track{
  height:calc(var(--h)*.2);border:var(--stroke) solid #000;border-radius:999px;background:color-mix(in srgb,var(--pair-b) 62%,white);
@@ -539,14 +539,14 @@
   pointer-events:none;
 }
 .vt-complete-catalog .vt-catalog-range .range-fill{
-  position:absolute!important;top:0!important;bottom:0!important;background:var(--slider-color)!important;
+  position:absolute!important;top:0!important;bottom:0!important;background:var(--slider-opposite,var(--pair-b))!important;
 }
 .vt-complete-catalog .vt-catalog-range input[type=range]{
   position:absolute!important;left:calc(var(--h)*.18)!important;right:calc(var(--h)*.18)!important;top:50%!important;
   width:calc(100% - (var(--h)*.36))!important;height:var(--slider-thumb)!important;
   transform:translateY(-50%)!important;
   appearance:none!important;-webkit-appearance:none!important;
-  margin:0!important;padding:0!important;background:transparent!important;pointer-events:none!important;
+  margin:0!important;padding:0!important;border-radius:var(--radius)!important;background:transparent!important;
 }
 .vt-complete-catalog .vt-catalog-range input[type=range]::-webkit-slider-runnable-track{
   height:var(--slider-track)!important;background:transparent!important;border:0!important;
