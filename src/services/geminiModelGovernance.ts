@@ -162,6 +162,105 @@ export const resolveGeminiModel = (input: {
 export const isGeminiSubstitutionSurprising = (resolution: GeminiModelResolution): boolean =>
   resolution.substituted && resolution.reason === "capability_policy_override"
 
+export interface GeminiGenerationSettings {
+  temperature?: number
+  topP?: number
+  topK?: number
+  maxOutputTokens?: number
+  responseMimeType?: "text/plain" | "application/json"
+  thinkingLevel?: "LOW" | "MEDIUM" | "HIGH"
+}
+
+export interface GeminiGenerationProfileResolution {
+  capability: GeminiCapability
+  modelId?: string
+  settings: GeminiGenerationSettings
+  sources: Partial<Record<keyof GeminiGenerationSettings, "platform" | "capability" | "user" | "task">>
+}
+
+/** Platform baseline is intentionally conservative; feature callers may supply capability, user, and task layers. */
+const PLATFORM_GENERATION_DEFAULTS: GeminiGenerationSettings = {
+  temperature: 0.7,
+  topP: 0.95,
+  maxOutputTokens: 2048,
+}
+
+const CAPABILITY_GENERATION_DEFAULTS: Partial<Record<GeminiCapability, GeminiGenerationSettings>> = {
+  "fast-text": { temperature: 0.25, maxOutputTokens: 1024 },
+  analysis: { temperature: 0.2, maxOutputTokens: 4096 },
+  thinking: { temperature: 0.4, maxOutputTokens: 4096, thinkingLevel: "HIGH" },
+  image: { temperature: 0.7 },
+  video: { temperature: 0.3 },
+  audio: { temperature: 0.3 },
+  tts: { temperature: 0.5 },
+  live: { temperature: 0.5 },
+}
+
+const validateGenerationSettings = (
+  capability: GeminiCapability,
+  modelId: string | undefined,
+  settings: GeminiGenerationSettings,
+): void => {
+  if (settings.temperature !== undefined && (!Number.isFinite(settings.temperature) || settings.temperature < 0 || settings.temperature > 2)) {
+    throw new Error("Gemini temperature must be between 0 and 2.")
+  }
+  if (settings.topP !== undefined && (!Number.isFinite(settings.topP) || settings.topP < 0 || settings.topP > 1)) {
+    throw new Error("Gemini topP must be between 0 and 1.")
+  }
+  if (settings.topK !== undefined && (!Number.isInteger(settings.topK) || settings.topK < 1)) {
+    throw new Error("Gemini topK must be a positive integer.")
+  }
+  if (settings.maxOutputTokens !== undefined && (!Number.isInteger(settings.maxOutputTokens) || settings.maxOutputTokens < 1)) {
+    throw new Error("Gemini maxOutputTokens must be a positive integer.")
+  }
+  if (settings.thinkingLevel && capability !== "thinking" && capability !== "analysis") {
+    throw new Error("Thinking level can only be set for thinking or analysis capabilities.")
+  }
+  if (modelId) {
+    const metadata = getGeminiModel(modelId)
+    if (metadata && !metadata.capabilities.includes(capability)) {
+      throw new Error(`Gemini model "${modelId}" does not declare the "${capability}" capability.`)
+    }
+  }
+}
+
+/**
+ * Resolves generation settings in the documented order:
+ * platform defaults → capability profile → user preference → task override.
+ * Task overrides are last by design, but all merged values are validated before use.
+ */
+export const resolveGeminiGenerationProfile = (input: {
+  capability: GeminiCapability
+  modelId?: string
+  userSettings?: GeminiGenerationSettings
+  taskOverride?: GeminiGenerationSettings
+}): GeminiGenerationProfileResolution => {
+  const settings: GeminiGenerationSettings = { ...PLATFORM_GENERATION_DEFAULTS }
+  const sources: GeminiGenerationProfileResolution["sources"] = {}
+
+  for (const key of Object.keys(PLATFORM_GENERATION_DEFAULTS) as (keyof GeminiGenerationSettings)[]) {
+    sources[key] = "platform"
+  }
+  const layers: Array<[ "capability" | "user" | "task", GeminiGenerationSettings | undefined ]> = [
+    ["capability", CAPABILITY_GENERATION_DEFAULTS[input.capability]],
+    ["user", input.userSettings],
+    ["task", input.taskOverride],
+  ]
+  for (const [source, layer] of layers) {
+    if (!layer) continue
+    for (const key of Object.keys(layer) as (keyof GeminiGenerationSettings)[]) {
+      const value = layer[key]
+      if (value !== undefined) {
+        ;(settings as Record<string, unknown>)[key] = value
+        sources[key] = source
+      }
+    }
+  }
+
+  validateGenerationSettings(input.capability, input.modelId, settings)
+  return { capability: input.capability, modelId: input.modelId, settings, sources }
+}
+
 export type GeminiFailureClassification = {
   kind: "authentication" | "permission" | "quota" | "unsupported_model" | "transient" | "unknown"
   fallbackAllowed: boolean
