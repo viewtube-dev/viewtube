@@ -1,5 +1,6 @@
 import React from "react"
 import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
+import { StudioHubCertification } from "../../studio-ui/StudioHubCertification"
 import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
@@ -985,6 +986,22 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
       <Family title="StudioChoice · Standard" nonDefaultSettings={["Shared production primitive used by the radio, checkbox, and X-checkbox public wrappers."]} provenance={<Provenance primitive="StudioChoice" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-distill-overrides.css" tokens="Five-tier choice geometry; secondary focus outline at 65% of the active border." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChoice"><span>STANDARD · SHARED RADIO CHOICE</span><StudioChoice kind="radio" skin="solid" checked={choiceChecked} onClick={() => setChoiceChecked((value) => !value)} sizeVariant="standard" aria-label="Shared choice dedicated specimen" /></div>
       </Family>
+      <Family title="Studio Hub Certification · Full Composition" nonDefaultSettings={[
+        "This export is a complete certification surface, not a control primitive; it is catalogued separately from the primitive representatives.",
+        "The surface intentionally reuses production Studio controls and shared Toolbox primitives rather than catalog-only recreations.",
+      ]} provenance={<Provenance
+        primitive="StudioHubCertification"
+        tsx="src/studio-ui/StudioHubCertification.tsx"
+        css="src/styles/studio-control-system.css + Toolbox/SubToolbox shared styles"
+        tokens="Uses canonical Studio control tokens and shared SubToolbox layout tokens."
+        imports={["src/studio-ui/StudioHubCertification.tsx"]}
+      />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioHubCertification">
+          <span>STUDIO HUB CERTIFICATION · PRODUCTION SURFACE</span>
+          <StudioHubCertification />
+        </div>
+      </Family>
+
       <Family title="Compatibility Exports + Composition Helpers · Standard" nonDefaultSettings={[
         "Compatibility aliases are shown explicitly for API coverage only; canonical component families above remain the preferred implementation surface.",
         "Grid helpers are compositions, not new control-face styles. They receive the existing production controls and inherit their tokens and CSS.",
