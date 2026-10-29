@@ -5,6 +5,7 @@ import { assertContentBuildCapability } from "../asset-engine/ContentBuildCapabi
 import {
  beginPublishTransaction,
  completePublishStep,
+ markPublishStepRunning,
  failPublishTransaction,
  getPublishTransaction,
  type ContentBuildPublishTransaction,
@@ -54,11 +55,13 @@ export const uploadPublishTransactionVideo=async(input:{
  const transaction=getPublishTransaction(input.transactionId)
  if(!transaction)throw new Error("Unknown publish transaction: "+input.transactionId)
  if(transaction.youtubeVideoId)return transaction
+ if(transaction.steps["upload-video"]?.status==="running") throw new Error("Upload dispatch has an ambiguous remote result; reconcile YouTube manually before retry to prevent a duplicate upload.")
  if(transaction.steps["upload-video"]?.status==="completed") {
   throw new Error("Upload step completed without a persisted YouTube video ID; manual recovery is required before retry.")
  }
  assertProviderDispatchAllowed(transaction)
  try{
+  markPublishStepRunning({transactionId:transaction.id,step:"upload-video"})
   const uploaded=await uploadUnifiedVideo(input.file,input.metadata,input.onProgress)
   const videoId=extractVideoId(uploaded)
   if(!videoId)throw new Error("YouTube upload completed without returning a video ID.")
@@ -80,8 +83,10 @@ export const runPublishTransactionStep=async<T>(input:{
  const transaction=getPublishTransaction(input.transactionId)
  if(!transaction)throw new Error("Unknown publish transaction: "+input.transactionId)
  if(transaction.steps[input.step]?.status==="completed")return transaction
+ if(transaction.steps[input.step]?.status==="running")throw new Error("Publish step has an ambiguous remote result; reconcile provider state before retry.")
  assertProviderDispatchAllowed(transaction)
  try{
+  markPublishStepRunning({transactionId:transaction.id,step:input.step})
   const result=await input.execute(transaction)
   return completePublishStep({transactionId:transaction.id,step:input.step,receipt:input.receipt?.(result),youtubeBinding:input.youtubeBinding?.(result,transaction),toolId:"video-publisher"})
  }catch(error){
@@ -94,9 +99,11 @@ export const verifyPublishTransactionRemoteState=async(transactionId:string)=>{
  const transaction=getPublishTransaction(transactionId)
  if(!transaction)throw new Error("Unknown publish transaction: "+transactionId)
  if(transaction.steps["verify-remote-state"]?.status==="completed")return transaction
+ if(transaction.steps["verify-remote-state"]?.status==="running")throw new Error("Remote verification has an ambiguous result; reconcile provider state before retry.")
  if(!transaction.youtubeVideoId)throw new Error("Cannot verify remote state before a YouTube video ID is bound.")
  assertProviderDispatchAllowed(transaction)
  try{
+  markPublishStepRunning({transactionId,step:"verify-remote-state"})
   const remote=await getUnifiedVideo(transaction.youtubeVideoId)
   return completePublishStep({transactionId,step:"verify-remote-state",youtubeVideoId:transaction.youtubeVideoId,receipt:{verified:true,remote},youtubeBinding:{lastVerifiedAt:new Date().toISOString()},toolId:"video-publisher"})
  }catch(error){
