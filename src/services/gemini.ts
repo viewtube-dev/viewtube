@@ -389,19 +389,28 @@ const emitModelFallbackEvent = (payload: {
  sourceModel: string
  fallbackModel: string
  reason: string
- tool: string
+ tool: "generateContent" | "generateContentStream"
  effectiveModel?: string
+ attempt: number
 }) => {
+ // Privacy contract: diagnostics contain only model IDs, operation, reason, and attempt.
+ // Never attach prompts, responses, API keys, account identifiers, or raw provider errors.
+ const detail = {
+  provider: "gemini",
+  sourceModel: payload.sourceModel,
+  fallbackModel: payload.fallbackModel,
+  reason: payload.reason,
+  tool: payload.tool,
+  effectiveModel: payload.effectiveModel,
+  attempt: payload.attempt,
+  timestamp: Date.now(),
+ }
  try {
-  window.dispatchEvent(
-   new CustomEvent("vt_ai_model_fallback", {
-    detail: { ...payload, timestamp: Date.now() },
-   }),
-  )
+  window.dispatchEvent(new CustomEvent("vt_ai_model_fallback", { detail }))
  } catch {
   // no-op
  }
- console.warn("[Gemini Fallback]", payload)
+ console.warn("[Gemini Fallback]", detail)
 }
 
 const getEnvGeminiKey = (): string => {
@@ -480,6 +489,7 @@ export const getAiClient = () => {
      reason: failure.kind,
      tool: op,
      effectiveModel: nextFallback,
+     attempt: index + 1,
     })
    }
   }
