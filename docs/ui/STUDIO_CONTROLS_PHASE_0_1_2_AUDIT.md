@@ -373,3 +373,11 @@ The edits are committed to the Phase 3–4 branch, but the new Node test, existi
 - The test renders the complete catalog through `renderToStaticMarkup` and requires each of those specimens to appear under its explicit `data-vt-library-component` marker. This complements the public-export source matrix by checking the actual component tree rather than only source text.
 - Consolidated the grid primitive imports while reviewing the new composition specimens.
 - This is a runtime-tree assertion, not browser visual certification. The Studio Controls suite, typecheck, production build, and Playwright/computed-style capture still need successful CI evidence before declaring the phase visually complete.
+
+
+### Phase 6 follow-up — CI-discovered cascade ownership defects
+
+- CI confirmed the inactive bar toggle fill was being defined twice: a recovery selector and a later canonical geometry block both mixed white and primary at 50%, yielding an opaque blend instead of the contract's 50%-opacity primary fill. Removed the redundant recovery selector and corrected the single canonical base rule to mix primary at 50% with transparency. Active bars remain black.
+- Updated the confirmed-catalog audit to check the split text field's actual canonical family alias `--vt-split-field-primary`, which resolves from the Studio primary token, instead of asserting the internal token name `--vt-field-primary` directly.
+- Added regression checks to the CSS ownership test for one canonical bar-fill owner, half-opacity primary fill, black active bars, and the split field's primary-token alias plus native-focus suppression.
+- CI has reported additional failures in older Studio contract tests that assert removed selectors, prior catalog markup, or pre-migration token spellings. Those are not silently rewritten as passing; they need focused contract-by-contract reconciliation. The production build passed on the initial Phase 6 commit, but all gates must be rechecked after these follow-up edits.
