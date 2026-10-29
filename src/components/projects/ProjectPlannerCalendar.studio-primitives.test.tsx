@@ -42,6 +42,8 @@ describe("Studio Calendar control compositions", () => {
     expect(calendar).toContain("StudioCalendarEventChip")
     expect(calendar).toContain("StudioCalendarMediaRail")
     expect(calendar).toContain("StudioCloseableBadge")
+    expect(calendar).toContain("StudioCheckbox")
+    expect(calendar).toContain("updateProject(projectId, { tasks, updatedAt: Date.now() })")
     expect(calendar).toContain("StudioSplitLeftButton")
     expect(calendar).toContain("StudioSquareIconButton")
     expect(calendar).toContain("StudioDropdown")
