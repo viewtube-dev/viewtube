@@ -64,7 +64,7 @@ const requiredP0 = [
   "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox", "StudioIconButton", "StudioSplitRightButton",
   "StudioWordToggle", "StudioArrowToggle", "StudioSideToggle", "StudioDoubleSideToggle",
   "StudioBarToggle", "StudioSplitAccordion", "StudioPublishingCard", "StudioBrainStatusBadge",
-  "StudioCounter", "StudioSideCounter", "StudioLeftCounter", "StudioDoubleSplitSlider", "StudioSpectrumTag", "StudioCloseableBadge", "StudioTagEditor",
+  "StudioCounter", "StudioSideCounter", "StudioLeftCounter", "StudioDoubleSplitSlider", "StudioSpectrumTag", "StudioCloseableBadge", "StudioTagEditor", "StudioCalendarEventChip", "StudioCalendarMediaRail",
 ]
 const missingP0 = requiredP0.filter((name) => !catalog.includes(name))
 checks.push(["P0 canonical specimen coverage", missingP0.length === 0])
