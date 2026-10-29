@@ -101,7 +101,28 @@ export const installOnScreenDiagnostics = (): void => {
    return
   }
   const message = event.error?.message || event.message || "unknown error"
-  recordDiagnostic("error", "window-error", message)
+  const route = `${window.location.pathname}${window.location.search}`
+  const errorStack = event.error instanceof Error ? event.error.stack : undefined
+  recordDiagnostic("error", "window-error", message, {
+   source: "window",
+   subsystem: /ai-brain|brain-controls/.test(window.location.pathname) ? "brain" : "frontend",
+   kind: "uncaught-window-error",
+   status: "failed",
+   explanation: "An uncaught browser error occurred. Source location and route are captured to distinguish Brain-only crashes from app-wide failures.",
+   actual: errorStack || message,
+   recommendedActions: [
+    "Inspect the first application-owned stack frame.",
+    "If the route is /ai-brain, check the failing callback/component and its imported function values.",
+   ],
+   privacy: "sanitized",
+   metadata: {
+    route,
+    filename: event.filename || undefined,
+    line: event.lineno || undefined,
+    column: event.colno || undefined,
+    stack: errorStack,
+   },
+  })
   if (isStaleChunkMessage(message)) attemptAutoReload()
  }, true)
 
