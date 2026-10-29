@@ -77,7 +77,8 @@
     "test:studio-dropdown-counter-slider-contract": "node --test scripts/audit/studio-dropdown-counter-slider-contract.test.mjs",
     "test:studio-control-fill": "node --test scripts/audit/studio-control-fill-and-catalog-cleanup.test.mjs",
     "test:studio-component-grid-css": "node --test scripts/audit/studio-component-grid-css-minifier.test.mjs",
-    "audit:confirmed-catalog": "node scripts/audit/confirmed-catalog-coverage.mjs"
+    "audit:confirmed-catalog": "node scripts/audit/confirmed-catalog-coverage.mjs",
+    "test:studio-public-export-catalog": "node --test scripts/audit/studio-public-export-catalog-matrix.test.mjs && node scripts/audit/studio-public-export-catalog-matrix.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

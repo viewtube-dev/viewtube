@@ -903,6 +903,33 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
   ]
   return (
     <ConfirmedCatalogFamilyGroups>
+      <Family title="StudioChatComposerDock · Message Composer Layout" nonDefaultSettings={[
+        "Layout primitive only: callers provide the field and action controls; it does not own prompt state or submission behavior.",
+        "Default inline-actions layout places the optional tools tray before the field row; toolbar-actions places tools and action beneath the field.",
+        "Status and context chips are optional, semantic regions; the catalog uses static specimen content rather than a live Brain connection.",
+      ]} provenance={<Provenance primitive="StudioChatComposerDock" tsx="src/studio-ui/primitives/StudioChatComposerDock.tsx" css="src/styles/studio-chat-composer-dock.css" tokens="Responsive composer shell · inline-actions / toolbar-actions layouts · optional status, context chips and tools tray" imports={["src/studio-ui/primitives/StudioChatComposerDock.tsx", "src/styles/studio-chat-composer-dock.css"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatComposerDock">
+          <span>STANDARD · INLINE ACTIONS</span>
+          <StudioChatComposerDock
+            aria-label="Static composer dock representative"
+            status={<StudioBrainStatusBadge label="READY" tone="green" appearance="tinted" sizeVariant="compact" />}
+            chips={<span>CHANNEL CONTEXT</span>}
+            tray={<StudioButton sizeVariant="compact" variant="v2">PROMPTS</StudioButton>}
+            field={<StudioTextArea aria-label="Composer dock specimen field" placeholder="WRITE A MESSAGE…" />}
+            action={<StudioButton sizeVariant="standard" onClick={() => undefined}>SEND</StudioButton>}
+          />
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatComposerDock-toolbar">
+          <span>COMPACT · TOOLBAR ACTIONS</span>
+          <StudioChatComposerDock
+            layout="toolbar-actions"
+            aria-label="Static toolbar composer dock representative"
+            tray={<StudioButton sizeVariant="compact" variant="v2">CONTEXT</StudioButton>}
+            field={<StudioTextArea aria-label="Toolbar composer dock specimen field" placeholder="WRITE A MESSAGE…" />}
+            action={<StudioButton sizeVariant="compact" onClick={() => undefined}>SEND</StudioButton>}
+          />
+        </div>
+      </Family>
       <Family title="Split Text Input · Vertical Geometry Comparison" nonDefaultSettings={[
         "Compare the current 0px-padding baseline, an explicit 4px padding reference, half that reference (2px), and username-matched inner height.",
         "Type into each field and focus/blur it to inspect the primary border, glyph baseline, and lower-edge clipping.",

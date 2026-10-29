@@ -6,13 +6,23 @@
 **Studio Controls authoring guide:** [`STUDIO_CONTROLS_AUTHORING_GUIDE.md`](./STUDIO_CONTROLS_AUTHORING_GUIDE.md).  
 **Related authority:** `../architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md` owns the production Toolbox/Subtoolbox system globally. Production tokens/code/tests win over catalog-only CSS.
 
+## Catalog ownership and track lifecycle — 2026-10-29
+
+The **Confirmed Primitive Library** in `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` is the active audited catalog for production-imported primitive representatives, provenance, family settings, and supported variants. `src/components/ToolboxUIReferenceLibrary.tsx` remains the shell and route/track selector; it must not become a second registry of primitive definitions.
+
+The `hardcoded` and `primitive` tracks, `StudioHubCompletePrimitiveCatalog`, `StudioHubPrimitiveMigrationCatalog`, and specialized subset catalogs are retained for comparison or migration where they are still routed. They are not evidence that a control is part of the public API, and they must not silently override the Confirmed catalog's ownership. Do not delete or hide these tracks until their live routes, users, and migration dependencies have been traced and covered by tests.
+
+Every Confirmed representative must state its source module, production stylesheet/token authority, importing files where known, public API status, supported size/state variants, and only the non-default settings that actually differ from canonical defaults. A real production import is not by itself proof of public-barrel export; classify the symbol as public, internal-only, deprecated, or intentionally unexported. Nested anatomy/state specimens are valid, but must be distinguished from the one canonical representative for a primitive so the library does not imply duplicate independent implementations.
+
+The specimen-grid tier list must stay in parity with the global five-tier vocabulary (Supreme, Standard, Compact, Mini, Micro). A tier appearing in the grid does not assert that every primitive supports it; each family must still be constrained to the sizes its production API and rendered behavior support.
+
 ## Studio Controls size-tier authority — 2026-10-20
 
 The canonical production size ladder is **Supreme 60px / Standard 44px / Compact 28px / Mini 20px / Micro 12px**. TypeScript tokens are authoritative, generated CSS is emitted from those tokens, and `studio-control-system.css` owns shared tier selectors. Supreme type/icons are rounded to 52px. Mini uses 17.5px type/icons; Micro keeps 12px height and 10px type/icons while inheriting Mini's 1.5px stroke, 3px radius, 0.975px outline, and global `-0.02em` letter-spacing. The canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` emits `src/styles/studio-control-vars.generated.css`; production geometry is applied by `src/styles/studio-control-system.css` and the family-specific styles. Supreme dimensional tokens scale Standard by 60/44 while preserving typography ratios, color roles, and flat-shell behavior. Mini has explicit 20px height / 1.5px stroke / 3px radius and is not interpolated from neighboring tiers. Micro has an explicit 12px height and is not derived from half Compact. Mini and Micro remain family-aware and must not be added to a component whose inner geometry cannot fit. The Confirmed Primitive Library may show a tier only after the production API and rendered behavior support it.
 
 `ToolboxUIReferenceLibrary.tsx` is the Studio Hub entry point and shell. It must not maintain an independent subset of component examples.
 
-`StudioHubCompletePrimitiveCatalog.tsx` owns the canonical family registry and rendered examples. Add reusable component families there so they automatically appear in the Studio Hub toolbox.
+`StudioHubConfirmedPrimitiveCatalog.tsx` owns the active confirmed-family registry and rendered production representatives. The older Complete catalog is retained as a comparison/migration surface only while its routing and dependencies remain live; new canonical representatives belong in the Confirmed catalog.
 
 `studio-hub-complete-primitive-catalog.css` owns catalog-only presentation. Production primitive geometry should continue moving toward shared primitive/token ownership rather than feature-local overrides.
 

@@ -1,7 +1,7 @@
 import React from "react"
 import "./ConfirmedSpecimenGrid.css"
 
-export type SpecimenTier = "supreme" | "standard" | "compact" | "micro"
+export type SpecimenTier = "supreme" | "standard" | "compact" | "mini" | "micro"
 
 export interface SpecimenRequest {
   id: string
@@ -47,7 +47,7 @@ export interface ConfirmedSpecimenGridProps {
   documentation?: React.ReactNode
 }
 
-const SPECIMEN_TIERS = ["supreme", "standard", "compact", "micro"] as const
+const SPECIMEN_TIERS = ["supreme", "standard", "compact", "mini", "micro"] as const
 
 /**
  * Layout-only catalog component. Widths are fractions of the full module width

@@ -16,6 +16,8 @@ const splitInput = read("src/styles/studio-split-text-input.css")
 const overrides = read("src/styles/studio-control-distill-overrides.css")
 const recovery = read("src/styles/studio-control-recovery-overrides.css")
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
+const specimenGrid = read("src/components/studio-hub/ConfirmedSpecimenGrid.tsx")
+const libraryAuthority = read("docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md")
 const controls = read("src/studio-ui/primitives/StudioControls.tsx")
 const index = read("src/studio-ui/index.ts")
 const moduleFile = read("src/components/studio-hub/ConfirmedCatalogModules.tsx")
@@ -51,6 +53,8 @@ const checks = [
   ["global defaults render before the seven family groups", catalog.indexOf("{defaults}") >= 0 && catalog.indexOf("{defaults}") < catalog.indexOf("vt-confirmed-family-grid")],
 
   ["retired CLEAN COMPOSITION specimen is absent from confirmed catalog", !/CLEAN COMPOSITION|Confirmed Specimen Grid\s*[·-]\s*Layout Contract/i.test(catalog)],
+  ["specimen grid supports the complete five-tier global size vocabulary", specimenGrid.includes('export type SpecimenTier = "supreme" | "standard" | "compact" | "mini" | "micro"') && specimenGrid.includes('const SPECIMEN_TIERS = ["supreme", "standard", "compact", "mini", "micro"] as const')],
+  ["confirmed library owns canonical production representatives while legacy tracks remain comparison-only", libraryAuthority.includes("The **Confirmed Primitive Library**") && libraryAuthority.includes("not evidence that a control is part of the public API") && libraryAuthority.includes("older Complete catalog is retained as a comparison/migration surface only")],
 ]
 
 const requiredP0 = [
