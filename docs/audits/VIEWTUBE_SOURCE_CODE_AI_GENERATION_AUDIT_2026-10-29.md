@@ -143,7 +143,7 @@ Regression tests were added for authenticated custom-key streaming and rejection
 
 **Verification status:** source and test changes are committed to the remediation branch. The focused Vitest command must pass in CI before this finding is certified closed. The implementation has not been independently executed in a local checkout during this audit.
 
-**Additional security review remains required** for browser-side BYO-key handling and any `VITE_*` provider key configuration. This audit does not certify browser credential storage as equivalent to a server-side secret boundary.
+**Additional security review remains required.** On the current target head, `src/services/keyVault.ts` stores the Gemini credential in browser `localStorage` under the `yt_api_key` and legacy alias keys; `src/context/GeminiKeyContext.tsx` loads and saves that value in the browser; and `src/services/gemini.ts` constructs `GoogleGenAI` in the client and accepts `VITE_GEMINI_API_KEY` / `VITE_GOOGLE_API_KEY` build-time values. These are concrete browser-exposure surfaces, not a server-side secret boundary. Do not claim that localStorage is encrypted. A proper remediation needs an explicit product decision between (a) user-managed BYO credentials with documented browser threat boundaries and strict XSS controls, and (b) a server-side provider proxy with user-scoped authorization, secret storage, quotas, and abuse controls. This audit does not certify either design.
 
 ## 7. Tests and CI evidence
 
@@ -164,7 +164,7 @@ Relevant repository commands include:
 - `npm run typecheck`
 - `npm run build`
 
-The prior audit observed Vercel `build-rate-limit` failures on the target commit. Those are deployment-check failures, not evidence of failing unit tests. This remediation audit does not claim tests passed unless the branch CI reports them as passing.
+The prior target and the remediation head both report Vercel `build-rate-limit` failures for the `viewtube`, `viewtube-x`, and `viewtube-nyas` deployment checks. These are deployment-check failures, not evidence of failing unit tests. No GitHub Actions workflow runs were returned for the remediation commit, so the focused Vitest, governance, typecheck, and build commands remain unexecuted/unverified here. This audit does not claim tests passed.
 
 ## 8. Priority remediation ledger
 
