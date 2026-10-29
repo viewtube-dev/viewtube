@@ -4,17 +4,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock3,
-  X,
 } from "lucide-react"
 import { useBrain } from "../../context/useBrain"
 import type { DayTask, Project } from "../../types"
-import {
-  SubToolboxButton,
-  SubToolboxIconButton,
-  SubToolboxSelect,
-  SubToolboxStatusBadge,
-} from "../subtoolbox/SubToolboxPrimitives"
 import { SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
+import { StudioButton, StudioCloseableBadge, StudioDropdown, StudioSplitLeftButton, StudioSquareIconButton, StudioCalendarEventChip, StudioCalendarMediaRail } from "../../studio-ui"
 import "../../styles/toolbox-entry.css"
 
 type ProjectPlannerCalendarProps = {
@@ -167,7 +161,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
         .vt-project-planner-calendar__selected-count { margin-top:6px; font-size:12px; font-weight:800; text-transform:uppercase; }
         .vt-project-planner-calendar__project-title { display:block; overflow:hidden; font-size:11px; font-weight:900; text-overflow:ellipsis; text-transform:uppercase; white-space:nowrap; }
         .vt-project-planner-calendar__project-meta { display:block; margin-top:3px; color:var(--vt-text-muted,#555); font-size:9px; font-weight:800; text-transform:uppercase; }
-        .vt-project-planner-calendar__project-row { display: flex; min-width: 0; gap: 7px; align-items: flex-start; padding: 9px; border-bottom: 1px solid #000; background: #fff; }
+        .vt-project-planner-calendar__project-row { display: flex; min-width: 0; gap: 7px; align-items: flex-start; padding: 9px; border-bottom: 1px solid #000; background: #fff; }\n        .vt-project-planner-calendar__media-rail { width: clamp(84px, 24%, 140px); flex: 0 0 clamp(84px, 24%, 140px); align-self: flex-start; }\n        .vt-project-planner-calendar__unschedule { flex: 0 0 auto; }
         .vt-project-planner-calendar__project-open { min-width: 0; flex: 1; text-align: left; }
         .vt-project-planner-calendar__quick-add { display: grid; gap: 7px; padding: 10px; border-top: 2px solid #000; }
         .vt-project-planner-calendar__empty { padding: 18px 10px; text-align: center; color: #666; font: 800 9px/1.4 var(--vt-font, inherit); text-transform: uppercase; }
@@ -197,57 +191,41 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
 
             <div>
               {selectedProjects.length ? selectedProjects.map(project => (
-                <div key={project.id} className="vt-project-planner-calendar__project-row">
-                  <div className="mt-1 h-3 w-3 shrink-0 border border-black" style={{ backgroundColor: project.color || "var(--pair-a, #FF4FD8)" }} aria-hidden="true" />
+                <div key={project.id} className="vt-project-planner-calendar__project-row">\n                  <StudioCalendarMediaRail aspectRatio={project.plan?.format === "short" || project.plan?.videoFormat === "short" ? "9:16" : "16:9"} split="double" thumbnailSrc={project.thumbnailUrl} label={projectTitle(project)} leftLabel="VIDEO" rightLabel="PUBLISH" className="vt-project-planner-calendar__media-rail" />
                   <button type="button" className="vt-project-planner-calendar__project-open" onClick={() => onOpenProject?.(project.id)}>
                     <span className="vt-project-planner-calendar__project-title">{projectTitle(project)}</span>
                     <span className="vt-project-planner-calendar__project-meta">{project.status || "Project"} · Open project</span>
                   </button>
-                  <SubToolboxIconButton level="l1" icon={<X size={12} />} ariaLabel={`Unschedule ${projectTitle(project)}`} onClick={() => clearSchedule(project.id)} />
+                  <StudioCloseableBadge label="UNSCHEDULE" entering={false} onClose={() => clearSchedule(project.id)} className="vt-project-planner-calendar__unschedule" />
                 </div>
               )) : null}
               {selectedTasks.map(task => (
                 <div key={`${task.projectId}-${task.id}`} className="vt-project-planner-calendar__project-row">
-                  <SubToolboxStatusBadge level="l2" className="is-dense" title={task.projectTitle}>TASK</SubToolboxStatusBadge>
+                  <StudioCalendarEventChip label="TASK" kind="task" status={task.completed ? "done" : "open"} />
                   <div className="vt-project-planner-calendar__project-open">
                     <span className="vt-project-planner-calendar__project-title">{task.text}</span>
                     <span className="vt-project-planner-calendar__project-meta">{task.projectTitle} · {task.completed ? "Complete" : "Open task"}</span>
                   </div>
-                  <SubToolboxStatusBadge level="l2" className="is-dense">{task.completed ? "DONE" : "OPEN"}</SubToolboxStatusBadge>
+                  <StudioCalendarEventChip label={task.completed ? "DONE" : "OPEN"} kind={task.completed ? "milestone" : "task"} />
                 </div>
               ))}
-              {!selectedProjects.length && !selectedTasks.length ? <div className="vt-project-planner-calendar__empty">No projects or tasks scheduled for this date</div> : null}
+              {!selectedProjects.length && !selectedTasks.length ? <div className="vt-project-planner-calendar__empty">Nothing planned for this day yet. Choose a project below to schedule it.</div> : null}
             </div>
 
             <div className="vt-project-planner-calendar__quick-add">
-              <SubToolboxSection label="Schedule or move a project">
-                <SubToolboxSelect value={quickAddProjectId} onChange={event => { setQuickAddProjectId(event.target.value); setScheduleFeedback("") }} aria-label="Choose project to schedule or move">
-                  <option value="">Choose a project</option>
-                  {projects.map(project => {
-                    const existingDate = parseDate(project.publishDate)
-                    return (
-                      <option key={project.id} value={project.id}>
-                        {project.name}{existingDate ? ` · currently ${dateKey(existingDate)}` : " · unscheduled"}
-                      </option>
-                    )
-                  })}
-                </SubToolboxSelect>
-              </SubToolboxSection>
-              <SubToolboxButton tone="accent" disabled={!quickAddProjectId} onClick={scheduleSelectedProject} icon={<Clock3 size={14} />}>
-                {projects.some(project => project.id === quickAddProjectId && parseDate(project.publishDate)) ? "Move to selected date" : "Schedule on selected date"}
-              </SubToolboxButton>
+              <SubToolboxSection label="Add a project to this date">\n                <StudioDropdown value={quickAddProjectId} onChange={value => { setQuickAddProjectId(value); setScheduleFeedback("") }} ariaLabel="Choose project to schedule or move" placeholder="CHOOSE A PROJECT" options={[{ value: "", label: "Choose a project" }, ...projects.map(project => { const existingDate = parseDate(project.publishDate); return { value: project.id, label: `${project.name}${existingDate ? ` · currently ${dateKey(existingDate)}` : " · unscheduled"}` } })]} />\n              </SubToolboxSection>\n              <StudioSplitLeftButton sizeVariant="standard" tone="accent" icon={<Clock3 size={14} />} disabled={!quickAddProjectId} onClick={scheduleSelectedProject>\n                {projects.some(project => project.id === quickAddProjectId && parseDate(project.publishDate)) ? "Move to selected date" : "Schedule on selected date"}\n              </StudioSplitLeftButton>
               {scheduleFeedback ? <div role="status" aria-live="polite" className="vt-project-planner-calendar__feedback">{scheduleFeedback}</div> : null}
-              {!projects.length ? <SubToolboxStatusBadge level="l1">No projects available to schedule</SubToolboxStatusBadge> : null}
+              {!projects.length ? <StudioCalendarEventChip label="NO PROJECTS AVAILABLE" kind="reminder" status="create a project first" /> : null}
             </div>
           </section>
 
         <header className="vt-project-planner-calendar__toolbar">
           <div className="vt-project-planner-calendar__month-nav">
-            <SubToolboxIconButton level="l1" icon={<ChevronLeft size={15} />} ariaLabel="Previous month" onClick={() => setCursor(date => new Date(date.getFullYear(), date.getMonth() - 1, 1))} />
+            <StudioSquareIconButton label="Previous month" icon={<ChevronLeft size={15} />} sizeVariant="compact" onClick={() => setCursor(date => new Date(date.getFullYear(), date.getMonth() - 1, 1))} />
             <div className="vt-project-planner-calendar__month-title" aria-live="polite">{monthLabel(cursor)}</div>
-            <SubToolboxIconButton level="l1" icon={<ChevronRight size={15} />} ariaLabel="Next month" onClick={() => setCursor(date => new Date(date.getFullYear(), date.getMonth() + 1, 1))} />
+            <StudioSquareIconButton label="Next month" icon={<ChevronRight size={15} />} sizeVariant="compact" onClick={() => setCursor(date => new Date(date.getFullYear(), date.getMonth() + 1, 1))} />
           </div>
-          <SubToolboxButton tone="neutral" onClick={() => { const today = startOfDay(new Date()); setCursor(today); setSelectedDate(dateKey(today)); setScheduleFeedback("") }}>Today</SubToolboxButton>
+          <StudioButton sizeVariant="compact" tone="neutral" onClick={() => { const today = startOfDay(new Date()); setCursor(today); setSelectedDate(dateKey(today)); setScheduleFeedback("") }}>Today</StudioButton>
         </header>
 
         <div className="vt-project-planner-calendar__body">
@@ -283,9 +261,9 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                       <span className={`vt-project-planner-calendar__day-number ${key === todayKey ? "is-today" : ""}`}>{day.getDate()}</span>
                       <span className="vt-project-planner-calendar__markers" aria-hidden="true">
                         {dayItems.slice(0, 2).map(item => (
-                          <SubToolboxStatusBadge key={item.id} level="l2" variant="outlined" tone={item.type === "project" ? "blue" : "green"} dense className="vt-project-planner-calendar__marker" title={item.label}>{item.label}</SubToolboxStatusBadge>
+                          <StudioCalendarEventChip key={item.id} label={item.label} kind={item.type === "project" ? "publish" : "task"} status={item.type === "project" ? "scheduled" : "task"} className="vt-project-planner-calendar__marker" />
                         ))}
-                        {dayItems.length > 2 ? <SubToolboxStatusBadge level="l2" variant="outlined" tone="neutral" dense className="vt-project-planner-calendar__marker">+{dayItems.length - 2} MORE</SubToolboxStatusBadge> : null}
+                        {dayItems.length > 2 ? <StudioCalendarEventChip label={`+${dayItems.length - 2} MORE`} kind="reminder" className="vt-project-planner-calendar__marker" /> : null}
                       </span>
                     </button>
                   </section>
