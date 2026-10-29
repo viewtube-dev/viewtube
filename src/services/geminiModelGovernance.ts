@@ -89,6 +89,11 @@ export const GEMINI_MODEL_REGISTRY: Readonly<Record<string, GeminiModelMetadata>
 const MODEL_ALIASES: Readonly<Record<string, string>> = Object.freeze({
   "gemini-3.1-flash-latest": "gemini-3.1-flash",
   "gemini-3.1-pro-latest": "gemini-3.1-pro",
+  // Explicit legacy provider IDs used by the bounded compatibility map.
+  "gemini-2.5-pro": "gemini-3.1-pro-preview",
+  "gemini-1.5-pro-latest": "gemini-3.1-pro-preview",
+  "gemini-2.5-flash": "gemini-3.1-flash-lite",
+  "gemini-1.5-flash-latest": "gemini-3.1-flash-lite",
 })
 
 export const normalizeGeminiModelId = (modelId: string): string => {
@@ -99,21 +104,9 @@ export const normalizeGeminiModelId = (modelId: string): string => {
 export const getGeminiModel = (modelId: string): GeminiModelMetadata | undefined =>
   GEMINI_MODEL_REGISTRY[normalizeGeminiModelId(modelId)]
 
-/** Canonicalizes legacy/provider model names without claiming live availability. */
-export const canonicalizeGeminiModelId = (modelId: string): string => {
-  const normalized = normalizeGeminiModelId(modelId)
-  if (GEMINI_MODEL_REGISTRY[normalized]) return normalized
-  const lower = normalized.toLowerCase()
-  if (lower.includes("image")) return "gemini-3.1-flash-image-preview"
-  if (lower.includes("pro")) return "gemini-3.1-pro-preview"
-  if (lower.includes("lite")) return "gemini-3.1-flash-lite"
-  if (lower.includes("flash") && (lower.includes("3.0") || lower.includes("3-flash"))) {
-    return "gemini-3-flash-preview"
-  }
-  if (lower.includes("flash")) return "gemini-3.1-flash-lite"
-  // Unknown IDs remain unknown; registry resolution must never silently select Flash Lite.
-  return normalized
-}
+/** Canonicalizes only registered IDs and explicit aliases; unknown IDs remain unknown. */
+export const canonicalizeGeminiModelId = (modelId: string): string =>
+  normalizeGeminiModelId(modelId)
 
 export type GeminiSubstitutionReason =
   | "honoured" | "capability_requires_model" | "capability_policy_override"
