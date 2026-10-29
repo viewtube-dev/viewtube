@@ -682,3 +682,25 @@ describe("confirmed primitive representative coverage", () => {
     }
   });
 });
+
+
+describe("public export representative runtime coverage", () => {
+  it("server-renders every formerly excepted public export as an explicitly named catalog specimen", () => {
+    const markup = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    for (const representative of [
+      "StudioInput",
+      "Studioarea",
+      "Studiotoggle",
+      "Studioswitch",
+      "Studioradio",
+      "Studiocheck",
+      "Studioxbox",
+      "StudioComponentGridRow",
+      "StudioComponentGridSpecimen",
+      "StudioComponentGridSpecimenPair",
+      "StudioHubCertification",
+    ]) {
+      expect(markup, representative).toContain(`data-vt-library-component="${representative}"`);
+    }
+  });
+});
