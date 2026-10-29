@@ -1,0 +1,23 @@
+/**
+ * Roadmap item 16: Evidence Quality and Source Validation — state owner (React hook over an honest store).
+ * Extend this instead of adding a second store; reuse canonical persistence
+ * owners where they already exist on the target branch.
+ */
+import { useMemo } from "react"
+import {
+  createAsyncCapabilityStore,
+  useAsyncCapability,
+} from "../shared/asyncCapabilityStore"
+import { fetchEvidenceQualityValidation } from "./EvidenceQualityValidationApi"
+import type { EvidenceQualityValidationData, EvidenceQualityValidationRequest } from "./EvidenceQualityValidationApi"
+
+export function useEvidenceQualityValidation(request: EvidenceQualityValidationRequest = {}) {
+  const store = useMemo(
+    () => createAsyncCapabilityStore<EvidenceQualityValidationData>(({ signal }) => fetchEvidenceQualityValidation(request, signal)),
+    // request is expected to be a stable primitive/parsed object per render site
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  const { snapshot, load, reset } = useAsyncCapability<EvidenceQualityValidationData>(store)
+  return { snapshot, load, reset }
+}
