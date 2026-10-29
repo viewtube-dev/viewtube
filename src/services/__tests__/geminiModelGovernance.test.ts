@@ -17,7 +17,13 @@ describe("canonical Gemini model governance", () => {
   it("resolves a requested model through the capability policy and reports substitutions", () => {
     expect(resolveGeminiModel({ preference: "gemini-3.1-pro", capability: "text" })).toMatchObject({
       requested: "gemini-3.1-pro",
-      served: "gemini-3.1-flash-lite",
+      served: "gemini-3.1-pro",
+      substituted: false,
+      reason: "honoured",
+    })
+    expect(resolveGeminiModel({ preference: "gemini-3.1-flash-lite", capability: "analysis" })).toMatchObject({
+      requested: "gemini-3.1-flash-lite",
+      served: "gemini-3.1-pro-preview",
       substituted: true,
       reason: "capability_policy_override",
     })
