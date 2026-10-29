@@ -1035,7 +1035,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
             size="standard"
             leftCounter={<StudioLeftCounter size="standard" value={12} min={0} max={100} ariaLabel="Grid helper left counter" />}
             dropdown={<StudioDropdown sizeVariant="standard" ariaLabel="Grid helper dropdown" defaultValue="balanced" options={dropdownOptions} />}
-            doubleSideToggle={<StudioDoubleSideToggle size="standard" leftValue="SOURCE" rightValue="TARGET" leftActive={true} rightActive={false} onLeftClick={() => undefined} onRightClick={() => undefined} ariaLabel="Grid helper double side toggle" />}
+            doubleSideToggle={<StudioDoubleSideToggle size="standard" left={{ options: ["SOURCE", "ORIGIN"], value: "SOURCE", onValueChange: () => undefined, ariaLabel: "Grid helper source" }} right={{ options: ["TARGET", "DESTINATION"], value: "TARGET", onValueChange: () => undefined, ariaLabel: "Grid helper target" }} />}
           />
         </div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGridSpecimenPair">
@@ -1044,7 +1044,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
             size="standard"
             leftCounter={<StudioLeftCounter size="standard" value={8} min={0} max={100} ariaLabel="Grid pair left counter" />}
             dropdown={<StudioDropdown sizeVariant="standard" ariaLabel="Grid pair dropdown" defaultValue="balanced" options={dropdownOptions} />}
-            doubleSideToggle={<StudioDoubleSideToggle size="standard" leftValue="SOURCE" rightValue="TARGET" leftActive={false} rightActive={true} onLeftClick={() => undefined} onRightClick={() => undefined} ariaLabel="Grid pair double side toggle" />}
+            doubleSideToggle={<StudioDoubleSideToggle size="standard" left={{ options: ["SOURCE", "ORIGIN"], value: "ORIGIN", onValueChange: () => undefined, ariaLabel: "Grid pair source" }} right={{ options: ["TARGET", "DESTINATION"], value: "DESTINATION", onValueChange: () => undefined, ariaLabel: "Grid pair target" }} />}
           />
         </div>
       </Family>
