@@ -95,7 +95,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
     const project = projects.find(item => item.id === quickAddProjectId)
     const scheduledDate = parseDate(selectedDate)
     if (!project || !scheduledDate) {
-      setScheduleFeedback("Choose a project and a valid date before scheduling.")
+      setScheduleFeedback("Choose a project to schedule it for this date.")
       return
     }
 
@@ -117,7 +117,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
       <div className="vt-project-planner-calendar__shell">
           <section className="vt-project-planner-calendar__detail" aria-label="Selected date details">
             <header className="vt-project-planner-calendar__detail-head">
-              <div className="vt-project-planner-calendar__selected-label"><CalendarDays size={17} /><strong>Selected date</strong></div>
+              <div className="vt-project-planner-calendar__selected-label"><CalendarDays size={17} /><strong>Schedule for</strong></div>
               <h2 className="vt-project-planner-calendar__selected-date">{dateLabel(parseDate(selectedDate) || new Date())}</h2>
               <div className="vt-project-planner-calendar__selected-count">{selectedProjects.length} scheduled project{selectedProjects.length === 1 ? "" : "s"} · {selectedTasks.length} task{selectedTasks.length === 1 ? "" : "s"}</div>
             </header>
@@ -128,7 +128,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                   <StudioCalendarMediaRail aspectRatio={project.plan?.format === "short" || project.plan?.videoFormat === "short" ? "9:16" : "16:9"} split="double" thumbnailSrc={project.thumbnailUrl} label={projectTitle(project)} leftLabel="VIDEO" rightLabel="PUBLISH" className="vt-project-planner-calendar__media-rail" />
                   <button type="button" className="vt-project-planner-calendar__project-open" onClick={() => onOpenProject?.(project.id)}>
                     <span className="vt-project-planner-calendar__project-title">{projectTitle(project)}</span>
-                    <span className="vt-project-planner-calendar__project-meta">{project.status || "Project"} · Open project</span>
+                    <span className="vt-project-planner-calendar__project-meta">{project.status || "Project"} · View project</span>
                   </button>
                   <StudioCloseableBadge label="UNSCHEDULE" entering={false} onClose={() => clearSchedule(project.id)} className="vt-project-planner-calendar__unschedule" />
                 </div>
@@ -138,7 +138,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                   <StudioCalendarEventChip label="TASK" kind="task" status={task.completed ? "done" : "open"} />
                   <div className="vt-project-planner-calendar__project-open">
                     <span className="vt-project-planner-calendar__project-title">{task.text}</span>
-                    <span className="vt-project-planner-calendar__project-meta">{task.projectTitle} · {task.completed ? "Complete" : "Open task"}</span>
+                    <span className="vt-project-planner-calendar__project-meta">{task.projectTitle} · {task.completed ? "Completed" : "Not completed"}</span>
                   </div>
                   <StudioCalendarEventChip label={task.completed ? "DONE" : "OPEN"} kind={task.completed ? "milestone" : "task"} />
                 </div>
@@ -147,11 +147,11 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
             </div>
 
             <div className="vt-project-planner-calendar__quick-add">
-              <SubToolboxSection label="Add a project to this date">
-                <StudioDropdown value={quickAddProjectId} onChange={value => { setQuickAddProjectId(value); setScheduleFeedback("") }} ariaLabel="Choose project to schedule or move" placeholder="CHOOSE A PROJECT" options={[{ value: "", label: "Choose a project" }, ...projects.map(project => { const existingDate = parseDate(project.publishDate); return { value: project.id, label: `${project.name}${existingDate ? ` · currently ${dateKey(existingDate)}` : " · unscheduled"}` } })]} />
+              <SubToolboxSection label="Schedule a project">
+                <StudioDropdown value={quickAddProjectId} onChange={value => { setQuickAddProjectId(value); setScheduleFeedback("") }} ariaLabel="Choose project to schedule or move" placeholder="CHOOSE A PROJECT" options={[{ value: "", label: "Choose a project" }, ...projects.map(project => { const existingDate = parseDate(project.publishDate); return { value: project.id, label: `${project.name}${existingDate ? ` · scheduled ${dateKey(existingDate)}` : " · not scheduled"}` } })]} />
               </SubToolboxSection>
               <StudioSplitLeftButton sizeVariant="standard" tone="accent" icon={<Clock3 size={14} />} disabled={!quickAddProjectId} onClick={scheduleSelectedProject}>
-                {projects.some(project => project.id === quickAddProjectId && parseDate(project.publishDate)) ? "Move to selected date" : "Schedule on selected date"}
+                {projects.some(project => project.id === quickAddProjectId && parseDate(project.publishDate)) ? "Move project here" : "Schedule project here"}
               </StudioSplitLeftButton>
               {scheduleFeedback ? <div role="status" aria-live="polite" className="vt-project-planner-calendar__feedback">{scheduleFeedback}</div> : null}
               {!projects.length ? <StudioCalendarEventChip label="NO PROJECTS AVAILABLE" kind="reminder" status="create a project first" /> : null}
@@ -217,7 +217,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
         <footer className="vt-project-planner-calendar__footer">
           <span>{scheduledProjects.length} scheduled</span>
           <span>{unscheduledProjects.length} unscheduled</span>
-          <span>Date changes save to the project record</span>
+          <span>Schedule changes save to the project</span>
         </footer>
       </div>
     </SubToolboxStack>
