@@ -14,6 +14,21 @@ export const reportSyncError = (msg: string) => {
     whatHappened: msg,
     whatItMeans: "An analytics sync phase could not complete normally.",
     whatToCheck: ["Connection state", "Requested metric bundle", "Stored snapshot freshness"],
+    details: {
+      source: "analytics-error-reporter",
+      subsystem: "analytics",
+      kind: "sync_error",
+      status: "failed",
+      expected: "Analytics sync completes and persists current data",
+      actual: "An analytics sync phase reported an error",
+      recommendedActions: [
+        "Check account connection and required scopes",
+        "Verify the requested metric bundle and date range",
+        "Check snapshot freshness and persistence outcome",
+      ],
+      confidence: "confirmed",
+      privacy: "sanitized",
+    },
   })
   try {
     const existing = typeof window !== "undefined" && window.localStorage
