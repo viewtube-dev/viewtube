@@ -8,18 +8,18 @@ const splitComponent = readFileSync("src/studio-ui/primitives/StudioSplitTextInp
 const interCss = readFileSync("src/styles/studio-inter-module.css", "utf8");
 
 test("split text input styles target the actual rendered shell, rails, and editable field", () => {
-  assert.match(splitCss, /\.vt-studio-split-shell\.vt-studio-split-text-input\s*\{/);
-  assert.match(splitCss, /\.vt-studio-split-text-input\s*>\s*\.vt-studio-split-shell__rail/);
-  assert.match(splitCss, /\.vt-studio-split-text-input__field\s*\{/);
+  assert.match(splitCss, /html body \.vt-studio-split-text-input\s*\{/);
+  assert.match(splitCss, /\.vt-studio-split-text-input \[data-vt-studio-split-rail\]/);
+  assert.match(splitCss, /\.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\]/);
   assert.match(splitComponent, /className="vt-studio-split-text-input__field"/);
   assert.match(splitComponent, /data-vt-studio-split=\{split\}/);
   assert.doesNotMatch(splitCss, /data-vt-studio-split-label/);
 });
 
 test("split input has one stable geometry rule and the canonical resting/focus field contract", () => {
-  assert.equal((splitCss.match(/\.vt-studio-split-text-input__field\s*\{/g) || []).length, 1);
+  assert.equal((splitCss.match(/html body \.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\],/g) || []).length, 1);
   assert.doesNotMatch(splitCss, /data-geometry-variant|padding-reference|half-vertical-padding|username-height/);
-  assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid #000/);
+  assert.match(splitCss, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-split-field-primary\)/);
   assert.match(splitCss, /background:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\)/);
   assert.match(splitCss, /:focus-visible[\s\S]*?15%, transparent[\s\S]*?-webkit-text-stroke-color:\s*#000/);
   assert.match(splitCss, /:focus-within\s*\{[\s\S]*?focus-outline-width-ratio, \.65[\s\S]*?var\(--vt-split-field-secondary\)/);
