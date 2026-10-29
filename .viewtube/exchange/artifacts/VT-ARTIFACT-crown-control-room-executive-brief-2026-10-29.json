@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "viewtube.artifact-record.v1",
+  "artifactId": "VT-ARTIFACT-crown-control-room-executive-brief-2026-10-29",
+  "missionId": "VT-MISSION-CROWN-control-room-exchange-runtime",
+  "taskIds": [],
+  "title": "Crown Executive Brief — Mission Priorities and Verification",
+  "type": "executive-brief",
+  "status": "DRAFT",
+  "source": "docs/architecture/VIEWTUBE_CROWN_EXECUTIVE_BRIEF.md",
+  "canonicalTarget": "docs/architecture/VIEWTUBE_CROWN_EXECUTIVE_BRIEF.md",
+  "producedBy": "Crown Control Room execution",
+  "verified": false,
+  "notes": [
+    "Derived from Royal Exchange mission/work-order/receipt/conflict records and PR #1167 CI evidence.",
+    "Prioritization does not mutate mission or Task Authority state.",
+    "Must be refreshed when Exchange records or CI evidence change."
+  ]
+}

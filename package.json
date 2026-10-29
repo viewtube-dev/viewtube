@@ -31,7 +31,7 @@
     "typecheck": "tsc -b",
     "lint": "eslint .",
     "lint:runtime": "eslint src server api scripts vite.config.ts",
-    "test": "vitest run",
+    "test": "node --test scripts/generate-crown-control-room.test.mjs && vitest run",
     "build:component-library": "node scripts/build-component-library-standalone.mjs",
     "certify:studio-components": "node scripts/capture-studio-component-certification.mjs",
     "generate:analytics-sync-backlog": "node scripts/generate-analytics-sync-backlog.mjs",

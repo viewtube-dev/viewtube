@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "viewtube.work-order.v1",
+  "missionId": "VT-MISSION-CROWN-control-room-exchange-runtime",
+  "executionId": "EXEC-CROWN-control-room-exchange-runtime-01",
+  "checkout": "GitHub branch feat/crown-exchange-readonly-runtime",
+  "baseRef": "master/consolidated-feature-integration",
+  "baseSha": "a338f0f8a31e10ccf85a4592cbd00b84f7a4192e",
+  "headRef": "feat/crown-exchange-readonly-runtime",
+  "headSha": "4350eff7e998b7dab9cf8f8f42ed03b25e5b7faf",
+  "orderedSteps": [
+    "Generate a deterministic runtime projection from JSON files under .viewtube/exchange/** only.",
+    "Remove live API, Brain, account, service, GitHub and release readers from CrownControlRoom.",
+    "Render all governance panels from Exchange records and preserve unknown/missing evidence.",
+    "Run generator contract tests, repository typecheck and production build.",
+    "Review the PR diff and keep the change unmerged until verification evidence is available."
+  ],
+  "writers": [
+    {
+      "role": "EMPEROR",
+      "paths": [
+        "scripts/generate-crown-control-room.mjs",
+        "scripts/generate-crown-control-room.test.mjs",
+        "src/data/crownExchangeGenerated.ts",
+        "src/views/CrownControlRoom.tsx",
+        "vite.config.ts",
+        "package.json",
+        ".viewtube/exchange/missions/VT-MISSION-CROWN-control-room-exchange-runtime.json",
+        ".viewtube/exchange/work-orders/VT-MISSION-CROWN-control-room-exchange-runtime__emperor.json"
+      ]
+    }
+  ],
+  "testsRequired": [
+    "node --test scripts/generate-crown-control-room.test.mjs",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "Review that the Crown page imports only the generated Exchange projection and has no live service/API readers."
+  ],
+  "reviewers": [
+    "viewtube-verification-chancellor"
+  ],
+  "deploymentRequired": false,
+  "rollback": "Revert the Crown Control Room feature branch; preserve all pre-existing Royal Exchange records and canonical authorities."
+}
