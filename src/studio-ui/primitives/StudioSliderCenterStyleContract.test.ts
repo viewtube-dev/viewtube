@@ -38,6 +38,9 @@ describe("Studio recovery control styling", () => {
     expect(catalogCss).toContain("background:var(--vt-field-fill-focus)");
     expect(catalogCss).not.toContain("border-radius:25%!important;");
     expect(catalogCss).not.toContain("--slider-track-stroke:2px;");
+    expect(catalogCss).toContain("background:var(--slider-opposite,var(--pair-b))!important;");
+    expect(subtoolboxCss).toContain("border-radius:var(--vt-component-radius)");
+    expect(catalogCss).toContain("border-radius:var(--radius)");
   });
 
   it("keeps the bar-toggle recovery coloring while preserving token-owned geometry", () => {
