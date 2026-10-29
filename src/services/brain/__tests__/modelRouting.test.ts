@@ -9,12 +9,12 @@ const resolve = (preference: string, capability: ModelCapability) =>
  resolveModelForCapability({ preference, capability })
 
 describe("resolveModelForCapability", () => {
- it("reports the blanket text policy overriding a creator's pro preference", () => {
+ it("honors a creator's known-compatible pro preference for text", () => {
   const resolution = resolve("gemini-3.1-pro", "text")
-  expect(resolution.served).toBe("gemini-3.1-flash-lite")
-  expect(resolution.substituted).toBe(true)
-  expect(resolution.reason).toBe("capability_policy_override")
-  expect(isSurprisingSubstitution(resolution)).toBe(true)
+  expect(resolution.served).toBe("gemini-3.1-pro")
+  expect(resolution.substituted).toBe(false)
+  expect(resolution.reason).toBe("honoured")
+  expect(isSurprisingSubstitution(resolution)).toBe(false)
  })
 
  it("does not call it a substitution when the policy matches the preference", () => {
