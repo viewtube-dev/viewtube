@@ -72,6 +72,7 @@ import {
 } from "../../studio-ui/primitives/StudioControls"
 import { StudioChatActionGroup } from "../../studio-ui/primitives/StudioChatActionGroup"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
+import { StudioCalendarEventChip, StudioCalendarMediaRail } from "../../studio-ui/primitives/StudioCalendarPrimitives"
 import { StudioDropdown } from "../../studio-ui/primitives/StudioDropdown"
 import { StudioInterModule, StudioTwoLineInterModule } from "../../studio-ui/primitives/StudioInterModule"
 import { StudioResponseMetaRow } from "../../studio-ui/primitives/StudioResponseMetaRow"
@@ -1739,6 +1740,27 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </div>
       </div>
     </Family>
+      <Family title="Calendar Event & Media Rails" nonDefaultSettings={[
+        "Event chips use the shared alphabetic spectrum identity and canonical closeable badge for removable events.",
+        "Media rails support 16:9 landscape and 9:16 portrait assets with left, right, or double split rails.",
+        "Calendar state and publish dates remain owned by Projects; these are presentation primitives only.",
+      ]} provenance={<Provenance primitive="StudioCalendarEventChip · StudioCalendarMediaRail" tsx="src/studio-ui/primitives/StudioCalendarPrimitives.tsx" css="src/studio-ui/primitives/studio-calendar-primitives.css" tokens="Semantic primary/secondary colors · global Studio stroke/radius/spacing · ratio-based media geometry" imports={["src/studio-ui/primitives/StudioCalendarPrimitives.tsx", "src/studio-ui/primitives/studio-calendar-primitives.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarEventChip">
+          <span>EVENT STATES · PUBLISH / TASK / DEADLINE</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <StudioCalendarEventChip label="PUBLISH EPISODE" kind="publish" status="scheduled" selected onClick={() => undefined} />
+            <StudioCalendarEventChip label="SCRIPT REVIEW" kind="task" status="open" />
+            <StudioCalendarEventChip label="SPONSOR DEADLINE" kind="deadline" />
+            <StudioCalendarEventChip label="REMOVABLE EVENT" kind="reminder" onRemove={() => undefined} />
+          </div>
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarMediaRail">
+          <span>16:9 LANDSCAPE · DOUBLE SPLIT</span>
+          <StudioCalendarMediaRail aspectRatio="16:9" split="double" label="Landscape publishing thumbnail" leftLabel="VIDEO" rightLabel="PUBLISH" />
+          <span>9:16 PORTRAIT · DOUBLE SPLIT</span>
+          <StudioCalendarMediaRail aspectRatio="9:16" split="double" label="Short-form publishing thumbnail" leftLabel="SHORT" rightLabel="SCHEDULE" />
+        </div>
+      </Family>
   </ConfirmedCatalogFamilyGroups>
     {/* Core controls are already represented in the canonical grouped families above. */}
     <ConfirmedAdditionalPrimitiveSections />

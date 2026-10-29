@@ -22,7 +22,7 @@ const ProjectCalendarPage: React.FC = () => (
   <section id="project-board" className="scroll-mt-[86px]">
    <ProjectsToolboxModule
     title="Project Board"
-    subtitle="Move projects through the production pipeline and schedule publishing"
+    subtitle="Track production stages and schedule publication dates"
     icon={<Columns3 />}
     paletteIndex={7}
     headerActions={<ProjectBoardViewToggle />}
@@ -35,7 +35,7 @@ const ProjectCalendarPage: React.FC = () => (
   <section id="storyboard-studio" className="scroll-mt-[86px]">
    <ProjectsToolboxModule
     title="Storyboard Studio"
-    subtitle="Plan scenes, sequences and visual structure"
+    subtitle="Shape scenes, sequences, and the visual story before editing"
     icon={<PanelsTopLeft />}
     paletteIndex={9}
     isOpenInitial={false}
