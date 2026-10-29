@@ -75,13 +75,13 @@ test("recovery layer does not redeclare the global spacing-unit token", () => {
 });
 
 
-test("bar toggle has one canonical inactive fill owner with 50% primary opacity", () => {
+test("bar toggle has one canonical inactive fill owner with 50% white and 50% primary", () => {
   const distill = read("src/styles/studio-control-distill-overrides.css");
   const inactiveRules = [...distill.matchAll(/\.vt-studio-value-toggle__bar\[data-active="false"\][^{]*\{([^}]*)\}/g)];
   assert.equal(inactiveRules.length, 0,
     "inactive bars inherit their fill from the canonical base rule instead of a repeated recovery selector");
-  assert.match(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?\{[^}]*background:\s*color-mix\(in srgb, var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\) 50%, transparent\) !important;/,
-    "inactive bars use a half-opacity primary fill, not a white/primary opaque blend");
+  assert.match(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?\{[^}]*background:\s*color-mix\(in srgb, #fff 50%, var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\) 50%\) !important;/,
+    "inactive bars retain 50% white so they stay visible over the background");
   assert.match(distill, /\.vt-studio-value-toggle__bar\[data-active="true"\][^{]*\{[^}]*background:\s*#000 !important;/s,
     "active bars remain black");
 });
