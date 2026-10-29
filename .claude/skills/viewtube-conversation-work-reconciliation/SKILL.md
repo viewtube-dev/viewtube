@@ -104,3 +104,22 @@ When conversation work overlaps an existing feature/tool/system/process, select:
 `EXTEND → COMBINE → MERGE → GENERALIZE → ADAPT → CREATE_REVIEW`.
 
 Record plan-family survivor and Plan Merge record for nontrivial consolidation.
+
+
+## User instruction and delivery evidence review
+
+Before reconciling work items, extract every distinct user instruction, request, correction, constraint, preference and prohibition into the conversation-level instruction register. Give each a stable ID and link it to relevant work items and evidence. Do not create one canonical task per instruction.
+
+For every claimed completion, distinguish implemented locally, committed, included in a PR, merged, present on the intended target branch, integrated into the application and verified against acceptance criteria. List every contributing PR. When no PR exists, cite commit or artifact evidence. A merged PR alone does not prove integration or acceptance.
+
+## Branch / PR reconciliation
+
+Inspect branch and PR history independently. Capture PR-opening SHA when recoverable, current head SHA, post-opening commits and changed paths, merge commit, target presence and recovery disposition. Record unmerged, partially merged, post-PR, orphaned, recovered, duplicate, conflicted and unknown states. Do not guess missing lineage.
+
+## Feature integration maturity
+
+For each feature, reuse the nine Task Authority maturity axes: architecture, backend, frontend, integration, tests, runtime, responsive, documentation and release. Use the existing maturity vocabulary. Record concrete gaps and acceptance evidence, especially missing application entry points, UI/backend connections, API authorization, data persistence, workflow feedback and runtime proof.
+
+## Idea and next-action routing
+
+Route the five strongest improvement proposals through existing Ideas Registry and improvement recommendations. Derive next-best action from canonical tasks, Crown missions/work orders, dependencies, blockers and verification receipts. These are proposals/recommendations, not a parallel backlog or canonical task mutation.
