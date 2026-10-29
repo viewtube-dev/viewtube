@@ -271,6 +271,20 @@ These are candidates based on current source and canonical contracts; each must 
 
 The baseline and source inventory establish the contracts and the concrete drift candidates above. No CSS or component behavior has been altered in Phases 0–2. This is intentional: removing cascade rules before tracing final winners risks regressions. The next implementation phase should start with AUD-001 through AUD-005, then proceed family-by-family with regression tests and browser evidence.
 
+## Phase 3 — Initial implementation progress (2026-10-29)
+
+Phase 3 has started on this audit branch. The first low-risk corrections are committed:
+
+- **AUD-003 addressed in source:** `ConfirmedSpecimenGrid` now includes Mini in both its `SpecimenTier` union and rendered tier list. This aligns the layout vocabulary with the five-tier global contract without claiming every family supports Mini.
+- **Regression guard added:** `StudioHubConfirmedPrimitiveCatalog.test.ts` asserts all five tiers remain represented in the grid and token source.
+- **Static audit guard added:** `scripts/audit/confirmed-catalog-coverage.mjs` now checks the five-tier parity and the catalog-ownership contract.
+- **AUD-001 documentation clarified:** the Confirmed Primitive Library is named as the active audited registry. The hardcoded and migration/primitive tracks remain preserved for comparison and migration; no routes or legacy catalogs were deleted. The docs now distinguish production import provenance from public API status.
+- **No production CSS or component styling was changed.** The large cascade/override findings remain intentionally open pending selector and consumer tracing.
+
+### Phase 3 verification status
+
+The source changes and regression checks are committed, but the repository was inspected through GitHub APIs rather than a local checkout. Therefore the focused test, TypeScript check, production build, and browser/computed-style certification have **not** been executed in this work session. The new checks must be run before treating these changes as certified. AUD-002, AUD-004, AUD-005 and the remaining inventory/cascade reconciliation remain open.
+
 ## Canonical references inspected
 
 - `docs/ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md`
