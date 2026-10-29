@@ -97,19 +97,21 @@ export const ingestDiagnostic = (adapterId: string, raw: unknown): boolean => {
   }
   if (!validEvent(normalized)) return false
 
+  const privacy = normalized.privacy ?? "sanitized"
+  const sensitive = privacy === "sensitive"
   const details: DiagnosticDetails = {
     source: adapterId,
     subsystem: normalized.subsystem,
     kind: normalized.kind,
     status: normalized.status,
-    correlationId: normalized.correlationId,
-    expected: normalized.expected,
-    actual: normalized.actual,
-    evidenceRefs: normalized.evidenceRefs,
+    correlationId: sensitive ? undefined : normalized.correlationId,
+    expected: sensitive ? "[OMITTED: sensitive]" : normalized.expected,
+    actual: sensitive ? "[OMITTED: sensitive]" : normalized.actual,
+    evidenceRefs: sensitive ? undefined : normalized.evidenceRefs,
     recommendedActions: normalized.recommendedActions,
     confidence: normalized.confidence,
-    privacy: normalized.privacy ?? "sanitized",
-    metadata: normalized.metadata,
+    privacy,
+    metadata: sensitive ? undefined : normalized.metadata,
   }
 
   reportDiagnostic({
@@ -119,7 +121,7 @@ export const ingestDiagnostic = (adapterId: string, raw: unknown): boolean => {
     whatHappened: normalized.summary,
     whatItMeans: `Integration ${adapterId} reported ${normalized.status}.`,
     whatToCheck: normalized.recommendedActions,
-    debugData: normalized.metadata,
+    debugData: privacy === "sensitive" ? undefined : normalized.metadata,
     details,
   })
   return true
