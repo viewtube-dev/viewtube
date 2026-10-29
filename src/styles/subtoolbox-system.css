@@ -453,7 +453,7 @@
 .vt-subtoolbox-slider-center:has(input[type=range]:focus-visible),
 .vt-subtoolbox-range-center:has(input[type=range]:focus-visible){background:var(--vt-field-fill-focus)}
 .vt-subtoolbox-slider input[type=range]{
-  appearance:none;-webkit-appearance:none;width:100%;height:var(--slider-track);margin:0;padding:0;border:0;border-radius:999px;
+  appearance:none;-webkit-appearance:none;width:100%;height:var(--slider-track);margin:0;padding:0;border:0;border-radius:var(--vt-component-radius);
   background:linear-gradient(to right,var(--slider-opposite,var(--pair-b)) 0 var(--pct),#fff var(--pct) 100%);
   box-shadow:inset 0 0 0 var(--slider-track-stroke) #000;
 }
@@ -472,6 +472,7 @@
 }
 .vt-subtoolbox-range-fill{position:absolute;top:0;bottom:0;background:var(--slider-color)}
 .vt-subtoolbox-range input[type=range]{
+  border-radius:var(--vt-component-radius);
   position:absolute;left:calc(var(--vt-component-height)*.18);right:calc(var(--vt-component-height)*.18);top:50%;
   width:calc(100% - (var(--vt-component-height)*.36));height:var(--slider-thumb);transform:translateY(-50%);
   appearance:none;-webkit-appearance:none;margin:0;padding:0;background:transparent;pointer-events:none
