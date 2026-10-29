@@ -35,4 +35,37 @@ describe("ViewTube developer diagnostics", () => {
    message: "Snapshot failed",
   })
  })
+ it("normalizes existing Google, Brain, analytics, account, backend, and frontend events into shared subsystem details", () => {
+  const cases = [
+   { area: "google-read", event: "GOOGLE_SCOPE_REQUIRED", subsystem: "authorization" },
+   { area: "brain-gemini", event: "model_unavailable", subsystem: "brain" },
+   { area: "youtube-analytics", event: "query_failed", subsystem: "analytics" },
+   { area: "account-billing", event: "usage_limit", subsystem: "account" },
+   { area: "backend-api", event: "request_failed", subsystem: "backend" },
+   { area: "frontend-runtime", event: "render_failed", subsystem: "frontend" },
+  ] as const
+
+  for (const item of cases) {
+   reportDiagnostic({
+    area: item.area,
+    event: item.event,
+    level: "error",
+    whatHappened: `${item.area} test failure`,
+    whatItMeans: "The request did not complete.",
+    whatToCheck: ["Inspect the response contract."],
+    debugData: { statusCode: 503, apiKey: "must-not-leak" },
+   })
+   const entry = readDiagnostics().at(-1)
+   expect(entry?.details).toMatchObject({
+    source: item.area,
+    subsystem: item.subsystem,
+    kind: item.event,
+    status: "failed",
+    explanation: "The request did not complete.",
+    recommendedActions: ["Inspect the response contract."],
+    metadata: { statusCode: 503, apiKey: "[REDACTED]" },
+   })
+  }
+ })
+
 })
