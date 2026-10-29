@@ -78,6 +78,7 @@ export interface MeterQuoteResponse {
  canRun: boolean
  availableCredits: number
  pricingKnown: boolean
+ pricingVerified?: boolean
 }
 
 export interface MeterChargeEvent {
@@ -244,8 +245,8 @@ const getPlanDefinition = (planId: SubscriptionPlanId): PlanDefinition =>
 const modelRatesFor = (modelId: string) => {
  const pricing = getGeminiModel(normalizeGeminiModelId(modelId))?.pricing
  return pricing
-  ? { input: pricing.inputUsdPer1k, output: pricing.outputUsdPer1k, known: true }
-  : { input: 0, output: 0, known: false }
+  ? { input: pricing.inputUsdPer1k, output: pricing.outputUsdPer1k, known: true, verified: pricing.verified }
+  : { input: 0, output: 0, known: false, verified: false }
 }
 
 const ensureCompatibilityFields = (state: EntitlementState): EntitlementState => ({
@@ -505,6 +506,7 @@ export const estimateMeterQuote = (
    (state.tier !== "free" && state.creditBalance >= Math.max(1, creditDebitEstimate))),
   availableCredits: state.creditBalance,
   pricingKnown: rates.known,
+  pricingVerified: rates.verified,
  }
 }
 
