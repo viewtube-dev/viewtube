@@ -32,4 +32,13 @@ describe("Gemini API-key validation contract", () => {
     expect(source).toContain("return false;");
     expect(source).not.toContain("setValidationError(error.message");
   });
+  it("reports Gemini key validation outcomes through shared diagnostics without logging the key", () => {
+    expect(source).toContain("import { reportDiagnostic } from '../services/diagnostics'");
+    expect(source).toContain('event: "api_key_validated"');
+    expect(source).toContain('event: "api_key_rejected"');
+    expect(source).toContain('event: "api_key_verification_degraded"');
+    expect(source).not.toContain("debugData: { apiKey");
+    expect(source).not.toContain("whatHappened: trimmedKey");
+  });
+
 });
