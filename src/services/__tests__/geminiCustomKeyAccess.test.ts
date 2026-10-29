@@ -82,8 +82,6 @@ describe("Gemini custom-key access", () => {
 
   expect(providerGenerateContent).not.toHaveBeenCalled()
  })
-})
-
 
  it("allows an authenticated creator to stream with their own key without ViewTube credits", async () => {
   providerGenerateContentStream.mockImplementation(async function* () {
@@ -117,3 +115,4 @@ describe("Gemini custom-key access", () => {
 
   expect(providerGenerateContentStream).not.toHaveBeenCalled()
  })
+})
