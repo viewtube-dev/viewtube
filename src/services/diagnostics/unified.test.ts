@@ -5,7 +5,7 @@ import {
   registerDiagnosticAdapter,
   type UnifiedDiagnosticEvent,
 } from "./unified"
-import { readDiagnostics } from "../diagnostics"
+import { formatDiagnostics, readDiagnostics } from "../diagnostics"
 
 const testAdapter = {
   id: "test-runner",
@@ -81,6 +81,17 @@ describe("unified diagnostics integration adapters", () => {
     unregister = registerDiagnosticAdapter(testAdapter)
     ingestDiagnostic("test-runner", { summary: "Source check" })
     expect(readDiagnostics().at(-1)?.details?.source).toBe("test-runner")
+  })
+
+  it("formats structured details into a readable diagnostic report", () => {
+    unregister = registerDiagnosticAdapter(testAdapter)
+    ingestDiagnostic("test-runner", { summary: "Gemini request failed" })
+    const report = formatDiagnostics(readDiagnostics().slice(-1))
+    expect(report).toContain("Source: test-runner")
+    expect(report).toContain("Status: failed")
+    expect(report).toContain("Expected: a successful response")
+    expect(report).toContain("Actual: request failed")
+    expect(report).toContain("Next steps: Inspect the failing request and response contract.")
   })
 
   it("omits evidence and raw metadata for events classified as sensitive", () => {
