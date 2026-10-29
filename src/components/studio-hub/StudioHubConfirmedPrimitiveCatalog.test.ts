@@ -104,3 +104,16 @@ describe("confirmed Studio button primitive library", () => {
   })
 
 })
+
+describe("confirmed specimen tier contract", () => {
+  it("keeps all five canonical size tiers available to the specimen grid", () => {
+    const grid = read("src/components/studio-hub/ConfirmedSpecimenGrid.tsx")
+    const tokens = read("src/studio-ui/tokens.ts")
+    expect(grid).toContain('export type SpecimenTier = "supreme" | "standard" | "compact" | "mini" | "micro"')
+    expect(grid).toContain('const SPECIMEN_TIERS = ["supreme", "standard", "compact", "mini", "micro"] as const')
+    for (const tier of ["supreme", "standard", "compact", "mini", "micro"]) {
+      expect(tokens).toContain(tier)
+      expect(grid).toContain(tier)
+    }
+  })
+})
