@@ -202,3 +202,12 @@ The 17 requested ideas are marked `IMPLEMENTATION_WAVE`; the other 33 remain `UN
 ### Canonical routing
 
 This wave extends Documentation Governance / Conversation OS / Product Architecture / Task Authority through the new `docs/governance/CONVERGENCE.md` authority. It does not create a second Task Index or product-architecture authority.
+
+
+## Historical branch / PR reconciliation — 2026-10-29
+
+The handoff-system merge commit `e5bbb56fee503c26a1251c6e3643307af12c4632` is present in the current `master/consolidated-feature-integration` history: GitHub compare reports the target as 7,684 commits ahead and 0 behind that commit. This proves the merge commit is an ancestor of the inspected target revision.
+
+The merge commit message says `Merge PR #503`, but the current GitHub PR metadata for #503 identifies an unrelated split-stepper change, closed without merging. The PR-number attribution is therefore **UNRESOLVED**; the commit itself remains valid delivery evidence. The original `docs/conversation-handoff-reconciliation-2026-09-27` branch is no longer returned by branch search. No replacement PR number is inferred.
+
+The current target branch is the source of truth for the present implementation. Historical PR linkage must remain marked unknown until an authoritative matching PR record is found.
