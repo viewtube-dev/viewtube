@@ -69,7 +69,6 @@ import {
   StudioBarToggle,
   StudioSelect,
   StudioSearchInput,
-  StudioSimpleDropdown,
 } from "../../studio-ui/primitives/StudioControls"
 import { StudioChatActionGroup } from "../../studio-ui/primitives/StudioChatActionGroup"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
@@ -489,7 +488,6 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioXCheckbox"><span>X Checkbox · STANDARD</span><StudioXCheckbox skin="solid" checked={false} sizeVariant="standard" aria-label="X checkbox standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSelect"><span>Select · STANDARD</span><StudioSelect sizeVariant="standard" defaultValue="balanced" aria-label="Select standard specimen"><option value="balanced">BALANCED</option><option value="focused">FOCUSED</option></StudioSelect></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSearchInput"><span>Search Input · STANDARD</span><StudioSearchInput sizeVariant="standard" aria-label="Search input standard specimen" placeholder="SEARCH ASSETS" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSimpleDropdown"><span>Simple Dropdown · STANDARD</span><StudioSimpleDropdown sizeVariant="standard" ariaLabel="Simple dropdown standard specimen" defaultValue="balanced" options={[{ value: "balanced", label: "BALANCED" }, { value: "focused", label: "FOCUSED" }]} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown"><span>Legend Multi Dropdown · STANDARD</span><StudioLegendMultiDropdown label="VIDEOS" sizeVariant="standard" ariaLabel="Legend multi dropdown standard specimen" defaultValue={["videos"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }]} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftDropdown"><span>Split Left Dropdown · STANDARD</span><StudioSplitLeftDropdown sizeVariant="standard" ariaLabel="Split left dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>Bar Toggle · STANDARD</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} ariaLabel="Bar toggle standard representative" /></div>
@@ -765,7 +763,7 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 const ConfirmedStudioSplitButtonFamily: React.FC = () => (
   <Family title="Split Button Family · Left / Right / Double / Two-Line" nonDefaultSettings={[
     "Split-left and split-right use one square rail; double-split uses two square rails; all keep a single black divider per boundary.",
-    "Two-line variants keep both lines inside one Standard-height face; no second control or increased shell height is introduced.",
+    "Two-line variants keep both lines inside one face at the selected size; no second control or increased shell height is introduced.",
   ]} provenance={<Provenance primitive="StudioSplitLeftButton · StudioSplitRightButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · secondary square rails · single black divider · clipped centered labels" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
     <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitButtonFamily">
       <span>STANDARD · SPLIT VARIANTS</span>
@@ -774,6 +772,14 @@ const ConfirmedStudioSplitButtonFamily: React.FC = () => (
       <StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Double split variant">DOUBLE</StudioDoubleSplitButton>
       <StudioTwoLineButton sizeVariant="standard" firstLine="TWO LINE" secondLine="BUTTON" aria-label="Two line variant" />
       <StudioSplitTwoLineButton sizeVariant="standard" icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label="Two line split variant" />
+    </div>
+    <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitButtonFamily-compact">
+      <span>COMPACT · SPLIT VARIANTS</span>
+      <StudioSplitLeftButton sizeVariant="compact" icon={<Check aria-hidden="true" />} aria-label="Compact split left variant">LEFT</StudioSplitLeftButton>
+      <StudioSplitRightButton sizeVariant="compact" icon={<Settings2 aria-hidden="true" />} aria-label="Compact split right variant">RIGHT</StudioSplitRightButton>
+      <StudioDoubleSplitButton sizeVariant="compact" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Compact double split variant">DOUBLE</StudioDoubleSplitButton>
+      <StudioTwoLineButton sizeVariant="compact" firstLine="TWO LINE" secondLine="BUTTON" aria-label="Compact two line variant" />
+      <StudioSplitTwoLineButton sizeVariant="compact" icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label="Compact two line split variant" />
     </div>
   </Family>
 )
@@ -979,9 +985,7 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
       <Family title="StudioIconButton · Standard" nonDefaultSettings={["Standalone icon-button face is not the joined square-icon rail or the circular icon-button shape."]} provenance={<Provenance primitive="StudioIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Standard 44px icon button with canonical stroke/radius and no lift." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton"><span>STANDARD · SETTINGS</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" sizeVariant="standard" /></div>
       </Family>
-      <Family title="StudioSplitRightButton · Standard" nonDefaultSettings={["Action rail is on the right; the left and double-split variants remain separate layout specimens."]} provenance={<Provenance primitive="StudioSplitRightButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="Square secondary rail; single outer black perimeter; standard size." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightButton"><span>STANDARD · RIGHT RAIL</span><StudioSplitRightButton icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split right button dedicated specimen">SETTINGS</StudioSplitRightButton></div>
-      </Family>
+      
       <Family title="StudioChoice · Standard" nonDefaultSettings={["Shared choice engine underlies radio, checkbox, and X-checkbox wrappers; each wrapper supplies its own native input semantics."]} provenance={<Provenance primitive="StudioChoice" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-distill-overrides.css" tokens="Five-tier choice geometry; secondary focus outline at 65% of the active border." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChoice"><span>STANDARD · SHARED RADIO CHOICE</span><StudioChoice kind="radio" skin="solid" checked={choiceChecked} onClick={() => setChoiceChecked((value) => !value)} sizeVariant="standard" aria-label="Shared choice dedicated specimen" /></div>
       </Family>
@@ -1334,36 +1338,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         </StudioSquareIconButtonGroup>
       </div>
     </Family>
-    <Family
-      title="Two-Line Button · Standard + Compact"
-      nonDefaultSettings={[
-        "Uses StudioTwoLineButton, the canonical StudioButton two-line text-layout wrapper; it is not a separately styled button implementation.",
-        "Both lines remain inside the same face and inherit the global button stroke, fill, focus, disabled, and clipping rules.",
-      ]}
-      provenance={<Provenance primitive="StudioTwoLineButton → StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · canonical button face and typography" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTwoLineButton" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 4, minWidth: 0 }}>
-        <StudioTwoLineButton firstLine="CONFIRM" secondLine="DIRECTION" sizeVariant="standard" aria-label="Confirm direction" />
-        <StudioTwoLineButton firstLine="OPEN" secondLine="PROMPT LIBRARY" sizeVariant="standard" aria-label="Open prompt library" />
-        <StudioTwoLineButton firstLine="SAVE" secondLine="DRAFT" sizeVariant="compact" aria-label="Save draft" />
-        <StudioTwoLineButton firstLine="REVIEW" secondLine="RESPONSE" sizeVariant="compact" aria-label="Review response" />
-      </div>
-    </Family>
-    <Family
-      title="Split Two-Line Button · Standard + Compact"
-      nonDefaultSettings={[
-        "Canonical split-left action rail with a stacked two-line label; the rail remains square and the label occupies the remaining face.",
-        "Uses StudioButton state, palette, focus, disabled, clipping, and size tokens; the second line does not create a second control.",
-      ]}
-      provenance={<Provenance primitive="StudioSplitTwoLineButton → StudioButton + StudioSplitShell" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · 18px / 12px stacked label lines · secondary square rail" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTwoLineButton" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 4, minWidth: 0 }}>
-        <StudioSplitTwoLineButton icon={<Settings2 aria-hidden="true" />} firstLine="EDIT" secondLine="PROMPT" sizeVariant="standard" aria-label="Edit prompt" />
-        <StudioSplitTwoLineButton icon={<Sparkles aria-hidden="true" />} firstLine="SEND" secondLine="TO CHAT" sizeVariant="standard" aria-label="Send to chat" />
-        <StudioSplitTwoLineButton icon={<Settings2 aria-hidden="true" />} firstLine="EDIT" secondLine="PROMPT" sizeVariant="compact" aria-label="Edit prompt compact" />
-        <StudioSplitTwoLineButton icon={<Sparkles aria-hidden="true" />} firstLine="SEND" secondLine="TO CHAT" sizeVariant="compact" aria-label="Send to chat compact" />
-      </div>
-    </Family>
+    
+    
     <Family
       title="Top Split Module · Left / Right / Double / None"
       nonDefaultSettings={[
@@ -1789,88 +1765,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       </div>
     </Family>
   </ConfirmedCatalogFamilyGroups>
-    <ConfirmedIndividualPrimitiveSections />
+    {/* Core controls are already represented in the canonical grouped families above. */}
     <ConfirmedAdditionalPrimitiveSections />
   </>
 )
-
-const ConfirmedIndividualPrimitiveSections: React.FC = () => {
-  const [switchValue, setSwitchValue] = React.useState(false)
-  const [radioValue, setRadioValue] = React.useState(false)
-  const [checkboxValue, setCheckboxValue] = React.useState(false)
-  const [xCheckboxValue, setXCheckboxValue] = React.useState(false)
-  const [wordValue, setWordValue] = React.useState(false)
-  const [verticalWordValue, setVerticalWordValue] = React.useState(false)
-  const [arrowValue, setArrowValue] = React.useState("ONE")
-  const [sideValue, setSideValue] = React.useState("LOW")
-  const [doubleLeft, setDoubleLeft] = React.useState("SOURCE")
-  const [doubleRight, setDoubleRight] = React.useState("TARGET")
-  const [barValue, setBarValue] = React.useState(40)
-  return <ConfirmedCatalogFamilyGroups>
-    <Family title="StudioResponseMetaRow · Compact" nonDefaultSettings={[
-      "Optional status, metadata, and trailing slots are omitted when unused; this specimen uses Compact density.",
-      "Long labels wrap on narrow widths; existing status/action primitives own their own interaction and appearance.",
-      "Uses the Studio spacing rhythm and remains free of shadows and geometry movement.",
-    ]} provenance={<Provenance primitive="StudioResponseMetaRow" tsx="src/studio-ui/primitives/StudioResponseMetaRow.tsx" css="src/styles/studio-response-meta-row.css" tokens="44px standard / 28px compact / 12px micro · 4px rhythm" imports={["src/studio-ui/primitives/StudioResponseMetaRow.tsx", "src/styles/studio-response-meta-row.css"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioResponseMetaRow">
-        <span>COMPACT · TITLE + STATUS + METADATA + TRAILING SLOT</span>
-        <StudioResponseMetaRow
-          title="ANSWER SUMMARY"
-          status={<StudioBrainStatusBadge label="VERIFIED" tone="green" appearance="tinted" />}
-          metadata={<span>3 SOURCES</span>}
-          trailing={<span>OPEN DETAILS →</span>}
-        />
-        <span>MICRO · LONG LABEL WRAPS</span>
-        <StudioResponseMetaRow sizeVariant="micro" title="EVIDENCE PROVENANCE" metadata={<span>PARTIAL MATCH</span>} />
-      </div>
-    </Family>
-    <Family title="StudioChatResponseShell · Compact" nonDefaultSettings={[
-      "Slot order is metadata, answer, optional evidence, then caller-owned actions; evidence visibility remains caller-controlled.",
-      "The shell does not create a parallel evidence store or action system; callers own evidence visibility and interactions.",
-      "Responsive wrapping follows the 4px Studio spacing rhythm; no shadow or geometry movement is added.",
-    ]} provenance={<Provenance primitive="StudioChatResponseShell" tsx="src/studio-ui/primitives/StudioChatResponseShell.tsx" css="src/styles/studio-chat-response-shell.css" tokens="44px standard / 28px compact / 12px micro · 4px spacing rhythm" imports={["src/studio-ui/primitives/StudioChatResponseShell.tsx", "src/styles/studio-chat-response-shell.css"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatResponseShell">
-        <StudioChatResponseShell
-          metadata={<StudioResponseMetaRow title="ANSWER SUMMARY" status={<StudioBrainStatusBadge label="READY" tone="green" appearance="tinted" />} metadata={<span>3 SOURCES</span>} />}
-          evidence={<details><summary>VIEW EVIDENCE</summary><p>Evidence details remain caller-owned content.</p></details>}
-          actions={<StudioChatActionGroup><StudioButton sizeVariant="compact">COPY</StudioButton><StudioButton sizeVariant="compact">RETRY</StudioButton></StudioChatActionGroup>}
-        >
-          <p>Answer-first response content goes here. Keep the main response readable before optional supporting detail.</p>
-        </StudioChatResponseShell>
-      </div>
-    </Family>
-    <Family title="StudioChatActionGroup · Compact" nonDefaultSettings={[
-      "Existing Studio buttons own their visuals and actions; this wrapper only groups and wraps them.",
-      "Actions wrap on narrow widths with 4px spacing.",
-      "No wrapper-level button styling, shadow, or movement is introduced.",
-    ]} provenance={<Provenance primitive="StudioChatActionGroup" tsx="src/studio-ui/primitives/StudioChatActionGroup.tsx" css="src/styles/studio-chat-action-group.css" tokens="44px standard / 28px compact / 12px micro · 4px rhythm" imports={["src/studio-ui/primitives/StudioChatActionGroup.tsx", "src/styles/studio-chat-action-group.css"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatActionGroup">
-        <span>COMPACT · EXISTING STUDIO ACTIONS · RESPONSIVE WRAP</span>
-        <StudioChatActionGroup aria-label="Chat response action specimen">
-          <StudioButton sizeVariant="compact" onClick={() => undefined}>COPY</StudioButton>
-          <StudioButton sizeVariant="compact" onClick={() => undefined}>RETRY</StudioButton>
-          <StudioButton sizeVariant="compact" onClick={() => undefined}>EDIT</StudioButton>
-        </StudioChatActionGroup>
-      </div>
-    </Family>
-    <Family title="StudioDoubleSplitButton · Standard" nonDefaultSettings={["Two square action rails share the button face; the split shell owns the outer border and single internal divider."]} provenance={<Provenance primitive="StudioDoubleSplitButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · leading and trailing square rails" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitButton"><span>STANDARD · DOUBLE-SPLIT BUTTON</span><StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Standard double-split button specimen">DOUBLE SPLIT</StudioDoubleSplitButton></div>
-    </Family>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-  </ConfirmedCatalogFamilyGroups>
-}
 
 const ConfirmedStudioValueToggleFamily: React.FC = () => {
   const [arrowStd, setArrowStd] = React.useState("ONE")

@@ -73,3 +73,15 @@ test("recovery layer does not redeclare the global spacing-unit token", () => {
   assert.match(recovery, /--vt-field-inline-stroke:\s*var\(--vt-field-primary\)/,
     "the recovery layer keeps its distinct field-inset bridge until migrated");
 });
+
+
+test("bar toggle empty bars retain the canonical 50% white + 50% primary fill", () => {
+  const distill = read("src/styles/studio-control-distill-overrides.css");
+  const inactiveRules = [...distill.matchAll(/\.vt-studio-value-toggle__bar\[data-active="false"\][^{]*\{([^}]*)\}/g)];
+  assert.equal(inactiveRules.length, 0,
+    "inactive bars inherit their fill from the canonical base rule instead of a repeated recovery selector");
+  assert.match(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?\{[^}]*background:\s*color-mix\(in srgb, #fff 50%, var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\) 50%\) !important;/,
+    "empty bars keep a 50% white contribution so they remain visible against the background");
+  assert.match(distill, /\.vt-studio-value-toggle__bar\[data-active="true"\][^{]*\{[^}]*background:\s*#000 !important;/s,
+    "active bars remain black");
+});

@@ -520,7 +520,7 @@ test("confirmed primitive grid is visible first and covers core and advanced Stu
   const top = catalog.slice(catalog.indexOf("export const StudioHubConfirmedPrimitiveCatalog"));
   assert.match(top, /<ConfirmedPrimitiveGridOverview\s*\/>\s*<ConfirmedDirectPrimitiveRows\s*\/>/);
   const grid = catalog.match(/const ConfirmedPrimitiveGridOverview:[^]*?\n}\n\nconst ConfirmedDirectPrimitiveRows/)?.[0] ?? "";
-  assert.match(grid, /<StudioComponentGrid cols=\{3\} rows=\{6\} size="standard"/);
+  assert.match(grid, /<StudioComponentGrid cols=\{3\} rows=\{3\} size="standard"/);
   for (const primitive of [
     "StudioButton",
     "StudioSplitLeftButton",
@@ -531,6 +531,8 @@ test("confirmed primitive grid is visible first and covers core and advanced Stu
     "StudioSideCounter",
     "StudioDoubleSplitSlider",
     "StudioArrowToggle",
+  ]) assert.ok(grid.includes(`data-vt-library-component="${primitive}"`), `top grid is missing ${primitive}`);
+  for (const primitive of [
     "StudioDoubleSplitButton",
     "StudioSplitLeftDropdown",
     "StudioLegendMultiDropdown",
@@ -540,8 +542,33 @@ test("confirmed primitive grid is visible first and covers core and advanced Stu
     "StudioUploadFrame",
     "StudioSplitAccordion",
     "StudioInterModule",
-  ]) assert.ok(grid.includes(`data-vt-library-component="${primitive}"`), `top grid is missing ${primitive}`);
+  ]) assert.ok(catalog.includes(`data-vt-library-component="${primitive}"`), `catalog is missing ${primitive}`);
   assert.ok(grid.includes("const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)"));
   assert.ok(grid.includes("onClick={() => setSplitButtonPressed(value => !value)}"));
   assert.ok(grid.includes('{splitButtonPressed ? "SELECTED" : "SPLIT LEFT"}'));
+});
+
+
+test("canonical grouped families do not render a second duplicate individual-controls section", () => {
+  assert.doesNotMatch(catalog, /<ConfirmedIndividualPrimitiveSections\s*\/>/);
+  assert.doesNotMatch(catalog, /const ConfirmedIndividualPrimitiveSections\s*:/);
+  assert.match(catalog, /<CanonicalControlFamilies\s*\/>/);
+  assert.match(catalog, /<CanonicalWordToggleFamily\s*\/>/);
+  assert.match(catalog, /<ConfirmedStudioValueToggleFamily\s*\/>/);
+});
+
+ 
+test("split-left, split-right, double-split, and two-line buttons share one family", () => {
+  const family = catalog.match(/const ConfirmedStudioSplitButtonFamily:[\s\S]*?const ConfirmedStudioDropdownFamily/)?.[0] ?? "";
+  for (const primitive of [
+    "StudioSplitLeftButton",
+    "StudioSplitRightButton",
+    "StudioDoubleSplitButton",
+    "StudioTwoLineButton",
+    "StudioSplitTwoLineButton",
+  ]) assert.ok(family.includes(primitive), `split family is missing ${primitive}`);
+  assert.match(family, /StudioSplitLeftButton sizeVariant="compact"/);
+  assert.match(family, /StudioSplitRightButton sizeVariant="compact"/);
+  assert.match(family, /StudioDoubleSplitButton sizeVariant="compact"/);
+  assert.doesNotMatch(catalog, /title="StudioSplitRightButton · Standard"|title="Two-Line Button · Standard \+ Compact"|title="Split Two-Line Button · Standard \+ Compact"/);
 });

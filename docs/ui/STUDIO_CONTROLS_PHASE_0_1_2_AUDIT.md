@@ -373,3 +373,11 @@ The edits are committed to the Phase 3–4 branch, but the new Node test, existi
 - The test renders the complete catalog through `renderToStaticMarkup` and requires each of those specimens to appear under its explicit `data-vt-library-component` marker. This complements the public-export source matrix by checking the actual component tree rather than only source text.
 - Consolidated the grid primitive imports while reviewing the new composition specimens.
 - This is a runtime-tree assertion, not browser visual certification. The Studio Controls suite, typecheck, production build, and Playwright/computed-style capture still need successful CI evidence before declaring the phase visually complete.
+
+
+## Phase 6 reconciliation + library organization (2026-10-29)
+
+- Migrated the inactive Bar Toggle fill correction into the consolidated Studio library work: the duplicate recovery selector is removed, the canonical empty-bar fill remains a 50% white + 50% primary blend for contrast, and active bars remain black.
+- Removed the second standalone individual-controls section from the rendered catalog. Switches, radios, checkboxes, word toggles, and value toggles are already represented in their canonical grouped families; showing the standalone copy duplicated specimens and fragmented the library navigation.
+- Added source-contract regressions for canonical bar-fill ownership and for the catalog not rendering the duplicate controls section.
+- Verification is pending on the new PR. Source-level assertions are not browser certification; typecheck, focused/full Studio tests, production build, and browser computed-style checks remain required.

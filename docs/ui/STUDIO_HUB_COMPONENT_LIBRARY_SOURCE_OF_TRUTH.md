@@ -561,3 +561,12 @@ The 11 formerly excepted exports are covered explicitly:
 - **Certification surface (1):** `StudioHubCertification` has its own full-composition specimen and is not counted as a primitive control face.
 
 The matrix test now requires every public Studio value export to have direct JSX coverage. This proves source-level representative presence only. Typecheck, the Studio controls test suite, production build, and browser/computed-style certification must pass before visual behavior is considered verified.
+
+
+## Confirmed library organization contract
+
+- Use one canonical family section for each control family. Put size, skin, orientation, and registered behavior variants inside that family rather than repeating the same controls in standalone duplicate sections.
+- Keep navigation groups stable and ordered: Text Fields, Buttons & Badges, Dropdowns, Controls, Counters & Sliders, Modules & Frames, and Compositions.
+- Global Defaults + Exceptions stays a dedicated source-contract section; it is not a primitive specimen family.
+- Compatibility aliases and composition helpers are documented as such and do not create parallel primitive implementations.
+- Keep one canonical owner for each CSS behavior. In particular, empty Bar Toggle segments must preserve the 50% white + 50% primary blend so they remain visible against the background; active segments remain black.

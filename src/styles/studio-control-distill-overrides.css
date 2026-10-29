@@ -66,16 +66,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   flex: 0 0 auto;
 }
 
-/* Recovery design: inactive bars remain visible on the primary face; active bars are black. */
-.vt-studio-value-toggle__bar[data-active="false"],
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="false"] {
-  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%) !important;
-}
-.vt-studio-value-toggle__bar[data-active="true"],
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
-  background: #000 !important;
-}
-
+/* Bar geometry and fill are owned by the canonical track block below. */
 /* Bar geometry and fill are owned by the canonical track block below. */
 .vt-studio-value-toggle__arrow {
   position: relative;
