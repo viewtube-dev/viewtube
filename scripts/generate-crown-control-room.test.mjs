@@ -15,7 +15,8 @@ test("collects only JSON records recursively from the supplied Exchange root", (
     fs.writeFileSync(path.join(root, "README.md"), "not runtime data")
     const records = collectExchangeRecords(root)
     assert.equal(records.length, 2)
-    assert.ok(records.every((item) => item.path.endsWith(".json")))
+    assert.ok(records.every((item) => item.path.startsWith(".viewtube/exchange/")))
+    assert.ok(records.every((item) => item.path.endsWith(".json")) )
     assert.deepEqual(records.map((item) => item.record.missionId), ["VT-MISSION-1", "VT-MISSION-1"])
   } finally {
     fs.rmSync(root, { recursive: true, force: true })
