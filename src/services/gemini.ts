@@ -59,7 +59,7 @@ import {
  estimateMeterQuote,
  getCurrentEntitlement,
 } from "./billingEntitlement"
-import { canonicalizeGeminiModelId, GEMINI_MODEL_REGISTRY, resolveGeminiModel } from "./geminiModelGovernance"
+import { canonicalizeGeminiModelId, GEMINI_MODEL_REGISTRY, resolveGeminiModel, type GeminiCapability, type GeminiModelResolution } from "./geminiModelGovernance"
 import { consultBrainSync, annotateSystemPrompt } from "./brain/Utils";
 import {
  consumeUnifiedAiCredits,
@@ -633,24 +633,19 @@ export const hasGeminiKey = (): boolean => {
 }
 
 // Helper to get the active model based on preference and capability
-export const getActiveModel = (
- capability:
-  | "text"
-  | "image"
-  | "video"
-  | "thinking"
-  | "analysis"
-  | "fast-text"
-  | "audio"
-  | "tts"
-  | "live" = "text",
-): string => {
+export const getActiveModelResolution = (
+ capability: GeminiCapability = "text",
+): GeminiModelResolution => {
  const { modelPreference } = getAiSettings()
  return resolveGeminiModel({
   preference: modelPreference,
   capability,
- }).served
+ })
 }
+
+/** Compatibility helper for existing callers; use getActiveModelResolution when UI/telemetry needs substitution details. */
+export const getActiveModel = (capability: GeminiCapability = "text"): string =>
+ getActiveModelResolution(capability).served
 
 // --- HARBOR PILOT: RELIABILITY HELPERS ---
 
