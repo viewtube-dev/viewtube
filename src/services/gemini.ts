@@ -59,7 +59,7 @@ import {
  estimateMeterQuote,
  getCurrentEntitlement,
 } from "./billingEntitlement"
-import { canonicalizeGeminiModelId, GEMINI_MODEL_REGISTRY, resolveGeminiModel, type GeminiCapability, type GeminiModelResolution } from "./geminiModelGovernance"
+import { canonicalizeGeminiModelId, GEMINI_MODEL_REGISTRY, getGeminiModel, resolveGeminiModel, classifyGeminiFailure, type GeminiCapability, type GeminiModelResolution } from "./geminiModelGovernance"
 import { consultBrainSync, annotateSystemPrompt } from "./brain/Utils";
 import {
  consumeUnifiedAiCredits,
@@ -347,17 +347,6 @@ type CanonicalModelId = keyof typeof GEMINI_MODEL_REGISTRY
 const toCanonicalModel = (value: string): CanonicalModelId =>
  canonicalizeGeminiModelId(value) as CanonicalModelId
 
-const getFallbackChain = (sourceModel: CanonicalModelId): CanonicalModelId[] => {
- const [_, family, tier] = sourceModel.match(/^gemini-(3\.[01])-(flash|pro)$/) || []
- if (!family || !tier) return ["gemini-3.1-flash", "gemini-3.1-pro", "gemini-3.0-flash", "gemini-3.0-pro"]
- const altTier = tier === "flash" ? "pro" : "flash"
- const nearFamily = family === "3.1" ? "3.0" : "3.1"
- return [
-  `gemini-${family}-${altTier}`,
-  `gemini-${nearFamily}-${tier}`,
-  `gemini-${nearFamily}-${altTier}`,
- ].map((m) => toCanonicalModel(m))
-}
 
 const PROVIDER_COMPATIBILITY_MAP: Record<CanonicalModelId, string[]> = {
  "gemini-3.1-pro-preview": ["gemini-3.1-pro-preview", "gemini-3.1-pro", "gemini-2.5-pro", "gemini-1.5-pro-latest"],
@@ -371,15 +360,20 @@ const PROVIDER_COMPATIBILITY_MAP: Record<CanonicalModelId, string[]> = {
 }
 
 const getProviderModelSequence = (canonical: CanonicalModelId): string[] => {
- const canonicalChain = [canonical, ...getFallbackChain(canonical)]
- const out: string[] = []
- for (const c of canonicalChain) {
-  const providerCandidates = PROVIDER_COMPATIBILITY_MAP[c] || [c]
-  for (const p of providerCandidates) {
-   if (!out.includes(p)) out.push(p)
+ const requestedMetadata = getGeminiModel(canonical)
+ const requiredCapabilities = requestedMetadata?.capabilities ?? ["text" as const]
+ const candidates = PROVIDER_COMPATIBILITY_MAP[canonical] || [canonical]
+ const out: string[] = [canonical]
+ for (const candidate of candidates) {
+  if (out.includes(candidate)) continue
+  const candidateMetadata = getGeminiModel(canonicalizeGeminiModelId(candidate))
+  // A fallback must retain every capability declared by the selected model.
+  // This prevents image/video/audio requests from silently degrading to text-only models.
+  if (candidateMetadata && requiredCapabilities.every((capability) => candidateMetadata.capabilities.includes(capability))) {
+   out.push(candidate)
   }
  }
- return out
+ return out.slice(0, 3)
 }
 
 const inferCanonicalFromProvider = (providerModel: string): CanonicalModelId => {
@@ -392,15 +386,6 @@ const inferCanonicalFromProvider = (providerModel: string): CanonicalModelId => 
  return "gemini-3.1-flash-lite"
 }
 
-const isModel404 = (error: any): boolean => {
- const text = String(error?.message || error || "")
- return (
-  text.includes("404") ||
-  text.includes("NOT_FOUND") ||
-  text.includes("is not found for API version") ||
-  text.includes("not supported for generateContent")
- )
-}
 
 const emitModelFallbackEvent = (payload: {
  sourceModel: string
@@ -468,24 +453,36 @@ export const getAiClient = () => {
   const requestedModel = toCanonicalModel(String(args?.[0]?.model || "gemini-3.1-flash"))
   const modelSequence = getProviderModelSequence(requestedModel)
   let lastError: any
-  for (const modelId of modelSequence) {
+  let transientFallbacks = 0
+  for (let index = 0; index < modelSequence.length; index += 1) {
+   const modelId = modelSequence[index]
    try {
     const nextArgs = [...args]
     nextArgs[0] = { ...(nextArgs[0] || {}), model: modelId }
     return await run(nextArgs)
    } catch (error: any) {
     lastError = error
-    if (!isModel404(error)) throw error
-    const nextFallback = modelSequence[modelSequence.indexOf(modelId) + 1]
-    if (nextFallback) {
-     emitModelFallbackEvent({
-      sourceModel: modelId,
-      fallbackModel: nextFallback,
-      reason: "404_model_not_found",
-      tool: op,
-      effectiveModel: nextFallback,
-     })
+    const failure = classifyGeminiFailure({
+     status: error?.status,
+     code: error?.code,
+     message: error?.message ?? String(error),
+    })
+    const nextFallback = modelSequence[index + 1]
+    // Never mask credential, permission, quota, or unknown failures with a different model.
+    if (!failure.fallbackAllowed || !nextFallback) throw error
+    // A transient provider outage gets one retry only; unsupported-model errors may
+    // walk the short capability-compatible candidate list (at most three attempts).
+    if (failure.kind === "transient") {
+     if (transientFallbacks >= 1) throw error
+     transientFallbacks += 1
     }
+    emitModelFallbackEvent({
+     sourceModel: modelId,
+     fallbackModel: nextFallback,
+     reason: failure.kind,
+     tool: op,
+     effectiveModel: nextFallback,
+    })
    }
   }
   throw lastError
