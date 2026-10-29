@@ -161,7 +161,9 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
         .vt-project-planner-calendar__selected-count { margin-top:6px; font-size:12px; font-weight:800; text-transform:uppercase; }
         .vt-project-planner-calendar__project-title { display:block; overflow:hidden; font-size:11px; font-weight:900; text-overflow:ellipsis; text-transform:uppercase; white-space:nowrap; }
         .vt-project-planner-calendar__project-meta { display:block; margin-top:3px; color:var(--vt-text-muted,#555); font-size:9px; font-weight:800; text-transform:uppercase; }
-        .vt-project-planner-calendar__project-row { display: flex; min-width: 0; gap: 7px; align-items: flex-start; padding: 9px; border-bottom: 1px solid #000; background: #fff; }\n        .vt-project-planner-calendar__media-rail { width: clamp(84px, 24%, 140px); flex: 0 0 clamp(84px, 24%, 140px); align-self: flex-start; }\n        .vt-project-planner-calendar__unschedule { flex: 0 0 auto; }
+        .vt-project-planner-calendar__project-row { display: flex; min-width: 0; gap: 7px; align-items: flex-start; padding: 9px; border-bottom: 1px solid #000; background: #fff; }
+        .vt-project-planner-calendar__media-rail { width: clamp(84px, 24%, 140px); flex: 0 0 clamp(84px, 24%, 140px); align-self: flex-start; }
+        .vt-project-planner-calendar__unschedule { flex: 0 0 auto; }
         .vt-project-planner-calendar__project-open { min-width: 0; flex: 1; text-align: left; }
         .vt-project-planner-calendar__quick-add { display: grid; gap: 7px; padding: 10px; border-top: 2px solid #000; }
         .vt-project-planner-calendar__empty { padding: 18px 10px; text-align: center; color: #666; font: 800 9px/1.4 var(--vt-font, inherit); text-transform: uppercase; }
@@ -191,7 +193,8 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
 
             <div>
               {selectedProjects.length ? selectedProjects.map(project => (
-                <div key={project.id} className="vt-project-planner-calendar__project-row">\n                  <StudioCalendarMediaRail aspectRatio={project.plan?.format === "short" || project.plan?.videoFormat === "short" ? "9:16" : "16:9"} split="double" thumbnailSrc={project.thumbnailUrl} label={projectTitle(project)} leftLabel="VIDEO" rightLabel="PUBLISH" className="vt-project-planner-calendar__media-rail" />
+                <div key={project.id} className="vt-project-planner-calendar__project-row">
+                  <StudioCalendarMediaRail aspectRatio={project.plan?.format === "short" || project.plan?.videoFormat === "short" ? "9:16" : "16:9"} split="double" thumbnailSrc={project.thumbnailUrl} label={projectTitle(project)} leftLabel="VIDEO" rightLabel="PUBLISH" className="vt-project-planner-calendar__media-rail" />
                   <button type="button" className="vt-project-planner-calendar__project-open" onClick={() => onOpenProject?.(project.id)}>
                     <span className="vt-project-planner-calendar__project-title">{projectTitle(project)}</span>
                     <span className="vt-project-planner-calendar__project-meta">{project.status || "Project"} · Open project</span>
@@ -213,7 +216,12 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
             </div>
 
             <div className="vt-project-planner-calendar__quick-add">
-              <SubToolboxSection label="Add a project to this date">\n                <StudioDropdown value={quickAddProjectId} onChange={value => { setQuickAddProjectId(value); setScheduleFeedback("") }} ariaLabel="Choose project to schedule or move" placeholder="CHOOSE A PROJECT" options={[{ value: "", label: "Choose a project" }, ...projects.map(project => { const existingDate = parseDate(project.publishDate); return { value: project.id, label: `${project.name}${existingDate ? ` · currently ${dateKey(existingDate)}` : " · unscheduled"}` } })]} />\n              </SubToolboxSection>\n              <StudioSplitLeftButton sizeVariant="standard" tone="accent" icon={<Clock3 size={14} />} disabled={!quickAddProjectId} onClick={scheduleSelectedProject>\n                {projects.some(project => project.id === quickAddProjectId && parseDate(project.publishDate)) ? "Move to selected date" : "Schedule on selected date"}\n              </StudioSplitLeftButton>
+              <SubToolboxSection label="Add a project to this date">
+                <StudioDropdown value={quickAddProjectId} onChange={value => { setQuickAddProjectId(value); setScheduleFeedback("") }} ariaLabel="Choose project to schedule or move" placeholder="CHOOSE A PROJECT" options={[{ value: "", label: "Choose a project" }, ...projects.map(project => { const existingDate = parseDate(project.publishDate); return { value: project.id, label: `${project.name}${existingDate ? ` · currently ${dateKey(existingDate)}` : " · unscheduled"}` } })]} />
+              </SubToolboxSection>
+              <StudioSplitLeftButton sizeVariant="standard" tone="accent" icon={<Clock3 size={14} />} disabled={!quickAddProjectId} onClick={scheduleSelectedProject}>
+                {projects.some(project => project.id === quickAddProjectId && parseDate(project.publishDate)) ? "Move to selected date" : "Schedule on selected date"}
+              </StudioSplitLeftButton>
               {scheduleFeedback ? <div role="status" aria-live="polite" className="vt-project-planner-calendar__feedback">{scheduleFeedback}</div> : null}
               {!projects.length ? <StudioCalendarEventChip label="NO PROJECTS AVAILABLE" kind="reminder" status="create a project first" /> : null}
             </div>
