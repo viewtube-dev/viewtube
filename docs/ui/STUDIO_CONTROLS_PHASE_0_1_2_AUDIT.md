@@ -295,6 +295,10 @@ The audit has now added a repeatable public-export-to-catalog matrix:
 - Added the missing `StudioChatComposerDock` representative with inline-actions and toolbar-actions examples. The specimens are static and explicitly do not imply a live Brain connection or submission behavior.
 - Documented exceptions remain for compatibility exports (`StudioInput` and lowercase legacy aliases), grid composition helpers, and the certification surface. These are recorded as exceptions rather than falsely marked as direct representatives.
 
+### Current source-derived matrix snapshot
+
+The current barrel/catalog source scan found **64 Studio value exports**: **53** have direct JSX representatives in the Confirmed Primitive Library and **11** are explicit documented exceptions. The scan currently reports **zero unclassified Studio value exports**. This is a static source-derived inventory, not proof that every visual representative renders correctly or that every exception is the final API decision.
+
 ### Verification boundary
 
 I verified the source and test contents through the GitHub API and checked the export/JSX matching logic against the retrieved source text. I have **not** executed the new Node tests, TypeScript, Vite build, or browser rendering; do not treat the matrix or composer specimen as runtime-certified until CI completes and the command is run in a checkout. The audit intentionally avoids deleting legacy exports or changing global CSS cascade rules without evidence.
