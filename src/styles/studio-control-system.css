@@ -6606,41 +6606,105 @@ button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-sele
 }
 
 
-/* 2026-10-27 follow-up: stable bottom strokes for split-module headers.
-   Keep border space reserved in both states so the title and rails never jump.
-   Collapsed details use the shell's real bottom edge; open details use an
-   inset header rule. Top-split modules always paint their header rule in-place. */
-details.vt-studio-collapsing-split-module {
-  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
-}
+/* 2026-10-28 module geometry — fixed header bottom border (open + closed)
+   ---------------------------------------------------------------------
+   Header always paints a FULL solid bottom border (straight, edge-to-edge).
+   Open and closed share the same header box; only the body mounts/unmounts.
+   Closed: outer shell bottom edge coincides with the header bottom border
+   (no double line, no transparent placeholder, no inset-only rule).
+   Top-split modules always show the same header bottom rule above the white body.
+*/
 
-details.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
-details.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head {
+.vt-studio-top-split-module {
   box-sizing: border-box;
-  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
-  padding-bottom: 0 !important;
+  overflow: hidden;
 }
 
-details.vt-studio-collapsing-split-module[open] > summary.vt-studio-collapsing-split-module__head,
-details.vt-studio-collapsing-split-module[open] > summary.vt-studio-top-split-module__head {
-  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
-}
-
-details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
-details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
+.vt-studio-top-split-module > .vt-studio-top-split-module__head,
+.vt-studio-top-split-module .vt-studio-top-split-module__head {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: var(--vt-top-split-size, var(--vt-studio-control-height, 44px));
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
   box-shadow: none !important;
 }
 
-.vt-studio-top-split-module > .vt-studio-top-split-module__head {
+.vt-studio-top-split-module__body {
   box-sizing: border-box;
-  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
-  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
+  border-top: 0 !important;
+  background: #fff;
 }
 
-.vt-studio-top-split-module[data-open="false"] > .vt-studio-top-split-module__head,
-.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head {
-  border-bottom-color: transparent !important;
-  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
+/* Collapsing split + two-line: details/summary */
+details.vt-studio-collapsing-split-module,
+details.vt-studio-two-line-module,
+.vt-studio-collapsing-split-module,
+.vt-studio-two-line-module {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  border: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
+  border-radius: var(--vt-top-split-radius, var(--vt-studio-control-radius, 6px));
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Header is identical open and closed — real bottom border always */
+details.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head,
+details.vt-studio-two-line-module > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-two-line-module > summary.vt-studio-top-split-module__head,
+.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
+.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head,
+.vt-studio-two-line-module > summary.vt-studio-collapsing-split-module__head {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  list-style: none;
+  min-height: var(--vt-top-split-size, var(--vt-studio-control-height, 44px));
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+  box-shadow: none !important;
+  padding-bottom: 0 !important;
+}
+
+details.vt-studio-collapsing-split-module > summary::-webkit-details-marker,
+details.vt-studio-two-line-module > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Closed: suppress outer shell bottom so the header bottom border IS the bottom edge.
+   That Y position matches open state's header bottom border. */
+details.vt-studio-collapsing-split-module:not([open]),
+details.vt-studio-two-line-module:not([open]),
+.vt-studio-collapsing-split-module:not([open]),
+.vt-studio-two-line-module:not([open]) {
+  border-bottom: 0 !important;
+}
+
+/* Open: restore full shell bottom around the body; header keeps its own bottom rule */
+details.vt-studio-collapsing-split-module[open],
+details.vt-studio-two-line-module[open],
+.vt-studio-collapsing-split-module[open],
+.vt-studio-two-line-module[open] {
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+}
+
+/* Body never shifts header; no top border that doubles the header rule */
+.vt-studio-collapsing-split-module__body,
+details.vt-studio-collapsing-split-module > :not(summary),
+.vt-studio-two-line-module__body,
+details.vt-studio-two-line-module > :not(summary) {
+  box-sizing: border-box;
+  border-top: 0 !important;
+  background: #fff;
+}
+
+/* Intermodule: keep head/body separator as a full straight stroke */
+.vt-studio-inter-module__head {
+  box-sizing: border-box;
+  border-bottom: var(--vt-studio-control-stroke, 3px) solid #000 !important;
+  box-shadow: none !important;
 }
 
 
