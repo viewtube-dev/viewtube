@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest"
+import { readDiagnostics } from "../diagnostics"
 import {
  GoogleRequestError,
  readGoogleProxyError,
@@ -108,4 +109,32 @@ describe("Google proxy failure contract", () => {
   const details = await readGoogleProxyError(response)
   expect(details?.code).toBe("GOOGLE_SCOPE_REQUIRED")
  })
+ it("records structured Google API failure details without retaining credential material", async () => {
+  const response = failure(403, {
+   code: "GOOGLE_SCOPE_REQUIRED",
+   message: "Reconnect for analytics.",
+   retryable: false,
+   reconnectRequired: false,
+   requestId: "request-safe-1",
+   upstreamStatus: 403,
+  })
+  await requestGoogleWithRetry(async () => response, { operation: "youtube-analytics" })
+  const entry = readDiagnostics().findLast((item) => item.tag === "google-read:GOOGLE_SCOPE_REQUIRED")
+  expect(entry?.details).toMatchObject({
+   source: "google-read",
+   subsystem: "authorization",
+   kind: "GOOGLE_SCOPE_REQUIRED",
+   status: "failed",
+   expected: "Google API request completes successfully",
+   actual: "GOOGLE_SCOPE_REQUIRED (HTTP 403)",
+   metadata: {
+    operation: "youtube-analytics",
+    failureCode: "GOOGLE_SCOPE_REQUIRED",
+    attempts: 1,
+    upstreamStatus: 403,
+   },
+  })
+  expect(JSON.stringify(entry?.details)).not.toContain("apiKey")
+ })
+
 })
