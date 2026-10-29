@@ -30,7 +30,7 @@ test("rejects malformed JSON and an Exchange without mission records", () => {
     fs.writeFileSync(path.join(root, "missions", "bad.json"), "{")
     assert.throws(() => collectExchangeRecords(root), /Invalid Crown Exchange JSON/)
     fs.writeFileSync(path.join(root, "missions", "bad.json"), JSON.stringify({ receiptId: "orphan" }))
-    assert.throws(() => collectExchangeRecords(root), /no mission records/)
+    assert.throws(() => collectExchangeRecords(root), /missionId/)
   } finally {
     fs.rmSync(root, { recursive: true, force: true })
   }
