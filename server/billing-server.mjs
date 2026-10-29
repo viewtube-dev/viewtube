@@ -724,7 +724,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    if (method === "GET" && pathname === "/public-channel/resolve") {
+    if (pathname === "/public-channel/resolve") {
       let statusCode = 200;
       const publicChannelResponse = {
         status(code) { statusCode = code; return this; },
