@@ -118,27 +118,66 @@ const parseFeed = (xml) => [...String(xml || "").matchAll(/<entry\b[^>]*>([\s\S]
   return { videoId, title: decodeHtml(title), publishedAt: decodeHtml(publishedAt), viewCount: null, likeCount: null, commentCount: null };
 }).filter((item) => /^[a-zA-Z0-9_-]{1,64}$/.test(item.videoId));
 
+const isAllowedYouTubeUrl = (url) =>
+  url.protocol === "https:" && YOUTUBE_HOSTS.has(url.hostname.toLowerCase());
+
 const fetchText = async (url) => {
-  const response = await fetch(url, {
-    headers: { "User-Agent": "Mozilla/5.0 (compatible; ViewTubePublicChannel/1.0)", Accept: "text/html,application/atom+xml,application/xml;q=0.9,*/*;q=0.8" },
-    redirect: "follow",
-    signal: AbortSignal.timeout(12000),
-  });
-  if (response.url) {
-    let finalUrl;
-    try {
-      finalUrl = new URL(response.url);
-    } catch {
-      throw new Error("The public channel source returned an invalid redirect URL.");
-    }
-    if (!YOUTUBE_HOSTS.has(finalUrl.hostname.toLowerCase()) || !["http:", "https:"].includes(finalUrl.protocol)) {
-      throw new Error("The public channel source redirected outside the YouTube host allowlist.");
-    }
+  let currentUrl;
+  try {
+    currentUrl = new URL(url);
+  } catch {
+    throw new Error("The public channel source URL is invalid.");
   }
-  if (!response.ok) throw new Error("Public channel source returned HTTP " + response.status + ".");
-  const text = await response.text();
-  if (text.length > MAX_PAGE_LENGTH) throw new Error("The public channel response exceeded the allowed size.");
-  return text;
+  if (!isAllowedYouTubeUrl(currentUrl)) {
+    throw new Error("The public channel source URL is outside the YouTube host allowlist.");
+  }
+
+  const maxRedirects = 3;
+  for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount += 1) {
+    const response = await fetch(currentUrl.toString(), {
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; ViewTubePublicChannel/1.0)", Accept: "text/html,application/atom+xml,application/xml;q=0.9,*/*;q=0.8" },
+      redirect: "manual",
+      signal: AbortSignal.timeout(12000),
+    });
+
+    if (response.url) {
+      let responseUrl;
+      try {
+        responseUrl = new URL(response.url);
+      } catch {
+        throw new Error("The public channel source returned an invalid response URL.");
+      }
+      if (!isAllowedYouTubeUrl(responseUrl)) {
+        throw new Error("The public channel source redirected outside the YouTube host allowlist.");
+      }
+    }
+
+    if (response.status >= 300 && response.status < 400) {
+      const location = response.headers?.get?.("location");
+      if (!location) throw new Error("The public channel source returned a redirect without a location.");
+      let nextUrl;
+      try {
+        nextUrl = new URL(location, currentUrl);
+      } catch {
+        throw new Error("The public channel source returned an invalid redirect URL.");
+      }
+      if (!isAllowedYouTubeUrl(nextUrl)) {
+        throw new Error("The public channel source attempted to redirect outside the YouTube host allowlist.");
+      }
+      if (redirectCount === maxRedirects) {
+        throw new Error("The public channel source exceeded the redirect limit.");
+      }
+      currentUrl = nextUrl;
+      continue;
+    }
+
+    if (!response.ok) throw new Error("Public channel source returned HTTP " + response.status + ".");
+    const text = await response.text();
+    if (text.length > MAX_PAGE_LENGTH) throw new Error("The public channel response exceeded the allowed size.");
+    return text;
+  }
+
+  throw new Error("The public channel source exceeded the redirect limit.");
 };
 
 export default async function handler(req, res) {

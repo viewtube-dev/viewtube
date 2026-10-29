@@ -1,0 +1,40 @@
+name: Public page resolver
+
+on:
+  pull_request:
+    paths:
+      - "api/public-channel.mjs"
+      - "api/public-channel.node.test.mjs"
+      - "api/public-channel.test.ts"
+      - "server/billing-server.mjs"
+      - "src/services/publicHandleMode.ts"
+      - "src/services/publicHandleMode.test.ts"
+      - "src/services/publicHandleMode.pending-ingestion.test.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/public-page-resolver.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-page-resolver:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Test public page resolver
+        run: npm run test:public-page-resolver
+      - name: Type-check
+        run: npm run typecheck
+      - name: Build production bundle
+        run: npm run build

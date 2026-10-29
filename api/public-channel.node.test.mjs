@@ -64,6 +64,27 @@ test("rejects redirects to hosts outside the YouTube allowlist", async () => {
   assert.match(result.body.error, /redirect|host|YouTube/i)
 })
 
+test("blocks an external redirect before fetching the redirected host", async () => {
+  const calls = []
+  globalThis.fetch = async (url, options) => {
+    calls.push({ url: String(url), redirect: options?.redirect })
+    return {
+      ok: false,
+      status: 302,
+      url: String(url),
+      headers: { get: (name) => name.toLowerCase() === "location" ? "https://attacker.example/collect" : null },
+      text: async () => "",
+    }
+  }
+
+  const result = await invoke("@public_creator")
+
+  assert.equal(result.statusCode, 502)
+  assert.match(result.body.error, /redirect|host|YouTube/i)
+  assert.equal(calls.length, 1)
+  assert.equal(calls[0].redirect, "manual")
+})
+
 test("resolves a channel ID directly from RSS without fetching its page", async () => {
   const calls = []
   globalThis.fetch = async (url) => { calls.push(String(url)); return response("<feed><entry><yt:videoId>abc123</yt:videoId><title>Latest upload</title><published>2026-10-26T12:00:00Z</published></entry></feed>") }
