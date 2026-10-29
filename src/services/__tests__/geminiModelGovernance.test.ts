@@ -35,6 +35,8 @@ describe("canonical Gemini model governance", () => {
   it("does not fabricate availability or pricing for unknown models", () => {
     expect(getGeminiModel("gemini-future-model")).toBeUndefined()
     expect(canonicalizeGeminiModelId("gemini-future-model")).toBe("gemini-future-model")
+    expect(canonicalizeGeminiModelId("gemini-future-pro-model")).toBe("gemini-future-pro-model")
+    expect(canonicalizeGeminiModelId("gemini-2.5-pro")).toBe("gemini-3.1-pro-preview")
     expect(resolveGeminiModel({ preference: "gemini-future-model", capability: "text" }).served)
       .toBe("gemini-future-model")
     expect(GEMINI_MODEL_REGISTRY["gemini-3.1-flash"]?.pricing?.verified).toBe(false)
