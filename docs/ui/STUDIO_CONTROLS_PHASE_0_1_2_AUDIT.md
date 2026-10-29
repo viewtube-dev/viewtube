@@ -293,11 +293,11 @@ The audit has now added a repeatable public-export-to-catalog matrix:
 - `scripts/audit/studio-public-export-catalog-matrix.test.mjs` covers named/aliased/type-only export parsing, rejects incidental import mentions as representatives, and guards a critical list of production primitives.
 - Added `npm run test:studio-public-export-catalog` as the focused test + matrix command.
 - Added the missing `StudioChatComposerDock` representative with inline-actions and toolbar-actions examples. The specimens are static and explicitly do not imply a live Brain connection or submission behavior.
-- Documented exceptions remain for compatibility exports (`StudioInput` and lowercase legacy aliases), grid composition helpers, and the certification surface. These are recorded as exceptions rather than falsely marked as direct representatives.
+- Phase 5 follow-through: compatibility exports (`StudioInput` and lowercase legacy aliases), grid composition helpers, and the certification surface now each have an explicit rendered representative. The public export matrix no longer treats these as exceptions.
 
 ### Current source-derived matrix snapshot
 
-The current barrel/catalog source scan found **64 Studio value exports**: **53** have direct JSX representatives in the Confirmed Primitive Library and **11** are explicit documented exceptions. The scan currently reports **zero unclassified Studio value exports**. This is a static source-derived inventory, not proof that every visual representative renders correctly or that every exception is the final API decision.
+The initial barrel/catalog scan found **64 Studio value exports**: 53 direct representatives and 11 documented exceptions. The 2026-10-29 representative-completion pass adds direct JSX coverage for all 11 previously excepted exports, including compatibility aliases, grid composition helpers, and `StudioHubCertification`. The matrix now requires direct coverage rather than allowing these names to remain classified as exceptions. This is static source coverage, not proof of runtime rendering or visual certification.
 
 ### Verification boundary
 
@@ -331,7 +331,7 @@ I verified the source and test contents through the GitHub API and checked the e
 
 - The Confirmed Primitive Library remains the active audited registry; retained legacy/migration tracks are still wired into the reference-library shell and were not deleted blindly.
 - The missing `StudioChatComposerDock` import is included in the branch inherited from the dedicated correction PR, so its two static catalog specimens resolve to the existing production primitive module.
-- The public-export matrix remains the contract for public representative coverage. Its 11 documented exceptions are explicit decisions to review, not evidence that all exports are ideal or permanent.
+- The public-export matrix remains the contract for public representative coverage. The prior 11 exceptions now have rendered specimens; the matrix fails when any public Studio value export lacks a direct representative.
 
 ## Phase 4 — Safe CSS ownership cleanup (2026-10-29)
 
@@ -355,3 +355,13 @@ No blanket removal of `!important` declarations was performed. The recovery laye
 ### Verification boundary
 
 The edits are committed to the Phase 3–4 branch, but the new Node test, existing Studio Controls suite, token emitter consistency check, TypeScript, production build, and browser/computed-style certification have not been run from a checkout in this session. Do not mark visual/runtime certification complete until those checks pass. The Vercel deployment checks previously reported the account's deployment-rate limit, which is separate from application test evidence.
+
+
+## Phase 5 — Complete public-export representative coverage (2026-10-29)
+
+- Added explicit specimens for the seven previously excepted compatibility exports: `StudioInput`, `Studioarea`, `Studiotoggle`, `Studioswitch`, `Studioradio`, `Studiocheck`, and `Studioxbox`. These are marked compatibility-only so canonical names remain the preferred API and the examples do not imply a new component implementation.
+- Added explicit composition-helper specimens for `StudioComponentGridRow`, `StudioComponentGridSpecimen`, and `StudioComponentGridSpecimenPair`, supplying existing production controls rather than new lookalike controls.
+- Added a dedicated `StudioHubCertification` production-surface specimen, separated from primitive faces because it is a complete certification surface, not a primitive.
+- Removed the old exception dispositions from `scripts/audit/studio-public-export-catalog-matrix.mjs`. Any public Studio value export without direct JSX coverage is now an unresolved gap and fails the audit.
+- Extended the matrix test to assert direct coverage for every non-type `Studio*` export and added the ten component/helper names to the critical representative set.
+- Runtime/typecheck/build and browser/computed-style verification remain required before claiming these representatives are visually certified.
