@@ -33,6 +33,7 @@ import "../components/brain/brain-hub-redesign/brain-hub-shell.css"
 import { useBrain } from "../context/useBrain"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
+import { GEMINI_KEY_UPDATED_EVENT } from "../services/keyVault"
 import {
  dismissAiBrainIntake,
  loadAiBrainContext,
@@ -1021,7 +1022,19 @@ const AIBrainCommandInterface: React.FC = () => {
  
  const shouldFollowConversationRef = useRef(true)
  const askSeededRef = useRef(false)
- const canUseGemini = hasGeminiKey()
+ const [canUseGemini, setCanUseGemini] = useState(() => hasGeminiKey())
+ useEffect(() => {
+  const refreshGeminiReadiness = () => setCanUseGemini(hasGeminiKey())
+  window.addEventListener(GEMINI_KEY_UPDATED_EVENT, refreshGeminiReadiness)
+  window.addEventListener("yt_settings_updated", refreshGeminiReadiness)
+  window.addEventListener("storage", refreshGeminiReadiness)
+  refreshGeminiReadiness()
+  return () => {
+   window.removeEventListener(GEMINI_KEY_UPDATED_EVENT, refreshGeminiReadiness)
+   window.removeEventListener("yt_settings_updated", refreshGeminiReadiness)
+   window.removeEventListener("storage", refreshGeminiReadiness)
+  }
+ }, [])
  const promptCards = useMemo(() => buildCreatorBrainPromptCards(), [])
 
  const channelId = authState.channelId || authState.channelHandle || null

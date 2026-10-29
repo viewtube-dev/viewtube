@@ -1,5 +1,16 @@
 export type VaultKeyName = 'gemini' | 'googleClientId' | 'elevenLabs' | 'auphonic';
 
+/** Emitted after the effective Gemini key changes; never includes key material. */
+export const GEMINI_KEY_UPDATED_EVENT = 'vt:gemini-key-updated';
+
+const notifyGeminiKeyUpdated = (): void => {
+  try {
+    if (typeof window !== 'undefined') window.dispatchEvent(new Event(GEMINI_KEY_UPDATED_EVENT));
+  } catch {
+    // Key storage must remain usable in SSR, tests, and restricted browser contexts.
+  }
+};
+
 const KEY_MAP: Record<VaultKeyName, string> = {
   gemini: 'yt_api_key',
   googleClientId: 'yt_google_client_id',
@@ -72,9 +83,11 @@ export const setVaultKey = (name: VaultKeyName, value: string): void => {
     const trimmed = value.trim();
     if (!trimmed) {
       GEMINI_ALIASES.forEach(removeStorage);
+      notifyGeminiKeyUpdated();
       return;
     }
     GEMINI_ALIASES.forEach((key) => writeStorage(key, trimmed));
+    notifyGeminiKeyUpdated();
     return;
   }
 
