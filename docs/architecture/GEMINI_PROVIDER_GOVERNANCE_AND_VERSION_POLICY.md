@@ -1,6 +1,6 @@
 # Gemini Provider Governance and Version Policy
 
-**Status:** Phase 0/1 audit and design baseline  
+**Status:** Phase 0/1 governance baseline plus Phase 2/3 implementation notes; verification gates remain open  
 **Target branch:** `master/consolidated-feature-integration`  
 **Documentation branch:** `docs/gemini-governance-phase-0-1`  
 **Scope:** Gemini provider integration, SDK/API versioning, model identity, generation configuration, key validation, routing, pricing, and operational evidence.
@@ -165,3 +165,29 @@ Implement the facade and registry additively first. Migrate one consumer at a ti
 ## Change log
 
 - 2026-10-28: Initial Phase 0/1 audit and policy baseline authored from GitHub source inspection. A repository-wide target-SHA scan, local test execution, and live-key validation remain outstanding.
+
+
+## Phase 2/3 implementation reconciliation — 2026-10-28
+
+The reconciled implementation branch now contains the first additive runtime migration:
+
+1. `geminiModelGovernance.ts` is the canonical metadata/resolution module. It records lifecycle and capability metadata, normalizes known aliases, reports requested versus served models, classifies provider failures, and defines typed generation settings.
+2. `aiConfig.ts` projects selector options from the registry; it must not add independent model IDs.
+3. `brain/modelRouting.ts` is a compatibility facade; new routing rules belong in the canonical module.
+4. `gemini.ts` canonicalizes model IDs through the registry and delegates active-model selection to the resolver. Its legacy provider compatibility map and broad 404 fallback sequence remain a known Phase 2 migration boundary; do not interpret them as verified model availability.
+5. `billingEntitlement.ts` reads model rates from the registry and no longer invents a default rate for unknown model IDs. Existing prices are explicitly legacy estimates, not verified provider prices.
+6. `AIModelSelector.tsx` displays the resolved model for text capability and explains when routing substitutes a different model.
+7. `resolveGeminiGenerationProfile` implements platform → capability → user → task precedence with numeric-range validation and checks known model capability metadata. This API is available for progressive adoption; existing operation-specific generation configs have not all been migrated to it.
+
+### Important behavior rules
+
+- A user-selected model is honored when registry metadata declares it compatible with the requested capability.
+- A required modality model wins when the capability requires image/video/audio support.
+- A capability default may replace a *known incompatible* model; the resolver returns a reason. Unknown models are not silently asserted to be available or assigned a fabricated capability record.
+- Fallbacks are forbidden for authentication, permission, and quota failures. Unsupported-model and transient errors may be eligible for a bounded fallback, but each fallback must preserve the operation's capability and cost/quality constraints. The current legacy fallback chain has not yet been proven to satisfy that entire contract.
+- Registry membership is static metadata only; it is not proof that a given key/project/region/API version can use the model.
+- Pricing values remain unverified legacy estimates. Production pricing should not be described as authoritative until the rate table is checked against current provider documentation and the effective date is recorded.
+
+### Verification status
+
+The source edits and tests have been added to the reconciliation branch, but no local test run, typecheck, production build, real-key probe, or deployment is claimed here. Phase 0 is not marked exhaustive because indexed code search surfaced stale revisions. Close those evidence gaps against the exact PR head before calling phases 0–3 fully verified.
