@@ -4,7 +4,8 @@ textarea[data-vt-studio-control="true"],
 [data-vt-studio-control="true"] input,
 [data-vt-studio-control="true"] textarea {
   box-sizing: border-box;
-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-studio-control-accent, var(--pair-a));
+  border: 0;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary);
   outline: 0 solid transparent;
   box-shadow: none;
 }

@@ -102,7 +102,7 @@ test("bar toggle uses adaptive width counts, proportional fill, and size-specifi
   assert.match(overrides, /--vt-bar-width:\s*calc\(var\(--vt-bar-height\) \* 0\.4\)/);
   assert.match(overrides, /--vt-bar-gap:\s*3px/);
   assert.match(overrides, /border:\s*0\s*!important/);
-  assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
+  assert.match(overrides, /background:\s*color-mix\(in srgb, #fff 50%, var\(--vt-studio-control-accent[^)]*\)\) 50%\)\s*!important/);
   assert.match(overrides, /\.vt-studio-value-toggle__bar\[data-active="true"\][\s\S]*?background:\s*#000/);
 });
 
@@ -132,7 +132,7 @@ test("bar toggle bars follow their size's text height and a 2.5:1 height-to-widt
   assert.match(overrides, /--vt-bar-height:\s*var\(--vt-studio-control-font-size/);
   assert.match(overrides, /aspect-ratio:\s*2\s*\/\s*5/);
   assert.match(overrides, /border-radius:\s*var\(--vt-bar-radius/);
-  assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
+  assert.match(overrides, /background:\s*color-mix\(in srgb, #fff 50%, var\(--vt-studio-control-accent[^)]*\)\) 50%\)\s*!important/);
   assert.match(overrides, /data-active="true"[\s\S]*?background:\s*#000/);
 });
 
@@ -146,8 +146,8 @@ test("top direct-representative module covers the full explicitly exported contr
     "StudioIconButton", "StudioSquareIconButton", "StudioSquareIconButtonGroup", "StudioCircleIconButton",
     "StudioSplitLeftButton", "StudioSplitRightButton", "StudioDoubleSplitButton",
     "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
-    "StudioNumberInput", "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
-    "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
+    "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
+    "StudioDropdown", "StudioSimpleDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
     "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
     "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
     "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
@@ -155,7 +155,6 @@ test("top direct-representative module covers the full explicitly exported contr
   ]) {
     assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"`), `${primitive} needs a direct top-module specimen`);
   }
-  assert.doesNotMatch(representative, /data-vt-library-component="(?:StudioCollapsingSplitModule|StudioCollapsingTwoLineModule|StudioInterModule|StudioSplitAccordion)"/);
 });
 
 

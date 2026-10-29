@@ -11,6 +11,22 @@ export const StudioNumberInput = React.forwardRef<
   <StudioTextInput {...props} ref={ref} type="number" sizeVariant={sizeVariant} />
 ));
 StudioNumberInput.displayName = "StudioNumberInput";
+
+export const StudioSearchInput = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
+>(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
+  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
+))
+StudioSearchInput.displayName = "StudioSearchInput"
+
+export const StudioSelect = React.forwardRef<
+  HTMLSelectElement,
+  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: StudioControlSize }
+>(({ sizeVariant = "standard", ...props }, ref) => (
+  <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
+))
+StudioSelect.displayName = "StudioSelect"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
 import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Image as ImageIcon, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
@@ -781,7 +797,10 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     if (!root || !word) return null;
     const rootRect = root.getBoundingClientRect();
     const wordRect = word.getBoundingClientRect();
-    return { top: wordRect.top - rootRect.top - root.clientTop - 1, height: wordRect.height + 2 };
+    // Mirror the horizontal word-toggle handle: exact word-block bounds with no
+    // line-height fudge. Side insets stay in CSS, so the handle's corner radius
+    // and edge spacing align evenly on all four sides of the module.
+    return { top: wordRect.top - rootRect.top - root.clientTop, height: wordRect.height };
   }, []);
 
   const settle = React.useCallback((nextValue: boolean) => {
@@ -2236,6 +2255,26 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
 }
 
 /** Single-select dropdown with a secondary icon rail on the left and a trailing chevron rail. */
+export interface StudioSimpleDropdownOption { value: string; label: string; disabled?: boolean }
+export interface StudioSimpleDropdownProps {
+  value?: string
+  defaultValue?: string
+  options: StudioSimpleDropdownOption[]
+  onChange?: (value: string) => void
+  placeholder?: React.ReactNode
+  disabled?: boolean
+  className?: string
+  id?: string
+  ariaLabel?: string
+  sizeVariant?: StudioControlInteractiveSize
+}
+
+/** Simple single-select child variant of the canonical StudioDropdown family. */
+export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ options, ...props }) => (
+  <StudioDropdown {...props} options={options} variant="simple" />
+)
+StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
+
 export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "variant">> = (props) => (
   <StudioDropdown {...props} variant="split-left" />
 )
@@ -2358,8 +2397,7 @@ export interface StudioLeftCounterProps extends StudioCounterProps {
   displayValue?: React.ReactNode;
 }
 
-export type StudioLeftWordVariant = "default" | "color-cycle";
-export type StudioLeftWordCounterProps = Omit<StudioCounterProps, "min" | "max" | "step"> & { variant?: StudioLeftWordVariant };
+export type StudioLeftWordCounterProps = Omit<StudioCounterProps, "min" | "max" | "step">;
 export type StudioLeftWordSliderProps = Omit<StudioDoubleSplitSliderProps, "min" | "max" | "step" | "leftControls">;
 
 export const STUDIO_LEFT_WORD_OPTIONS = ["ONE", "TWO", "THREE", "FOUR"] as const;
@@ -2483,7 +2521,7 @@ StudioLeftCounter.displayName = "StudioLeftCounter";
 
 /** Four-state word cycle built on the canonical StudioLeftCounter interaction mechanics. */
 export const StudioLeftWordCounter: React.FC<StudioLeftWordCounterProps> = ({
-  value, onValueChange, size = "standard", className, disabled = false, ariaLabel = "Word", variant = "default",
+  value, onValueChange, size = "standard", className, disabled = false, ariaLabel = "Word",
   ...props
 }) => {
   const wordIndex = normalizeStudioLeftWordIndex(value);
@@ -2504,7 +2542,6 @@ export const StudioLeftWordCounter: React.FC<StudioLeftWordCounterProps> = ({
       displayValue={STUDIO_LEFT_WORD_OPTIONS[wordIndex - 1]}
       className={studioClasses("vt-studio-left-word-counter", className)}
       data-vt-studio-word-index={String(wordIndex)}
-      data-vt-studio-word-variant={variant}
       data-vt-library-component="StudioLeftWordCounter"
     />
   );
@@ -3150,6 +3187,125 @@ export const StudioBrainStatusIndicator: React.FC<{
 StudioBrainStatusIndicator.displayName = "StudioBrainStatusIndicator";
 
 
+
+
+// ─── Canonical steppers: inline (double-split) and split (value + action rail) ───
+export function normalizeStudioInlineStepperValue(
+  value: number,
+  direction: -1 | 1,
+  step = 1,
+  min = Number.NEGATIVE_INFINITY,
+  max = Number.POSITIVE_INFINITY,
+): number {
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const current = Number.isFinite(value) ? value : Number.isFinite(min) ? min : 0;
+  const next = Math.min(max, Math.max(min, current + direction * safeStep));
+  const precision = Math.min(12, Math.max(0, (String(safeStep).split(".")[1] ?? "").length));
+  return Number(next.toFixed(precision));
+}
+
+export interface StudioInlineStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: "standard" | "compact";
+  ariaLabel?: string;
+  disabled?: boolean;
+}
+
+/** Flat double-split numeric stepper: decrement, editable value, increment. */
+export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
+  value, onValueChange, min = 0, max = Number.POSITIVE_INFINITY, step = 1,
+  size = "standard", ariaLabel = "Value", disabled = false, className, ...props
+}) => {
+  const change = (direction: -1 | 1) => onValueChange(normalizeStudioInlineStepperValue(value, direction, step, min, max));
+  return (
+    <div
+      {...props}
+      className={studioClasses("vt-studio-inline-stepper", size === "compact" ? "is-compact" : "is-standard", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="inline-stepper"
+      data-vt-studio-split="double"
+      data-size={size}
+    >
+      <div className="vt-studio-inline-stepper__actions">
+        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
+        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
+      </div>
+      <input
+        className="vt-studio-inline-stepper__value"
+        type="number"
+        aria-label={ariaLabel}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        disabled={disabled}
+        onChange={event => {
+          const parsed = Number(event.currentTarget.value);
+          if (event.currentTarget.value.trim() !== "" && Number.isFinite(parsed)) onValueChange(Math.min(max, Math.max(min, parsed)));
+        }}
+      />
+    </div>
+  );
+};
+StudioInlineStepper.displayName = "StudioInlineStepper"
+
+export interface StudioSplitStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: "standard" | "compact";
+  ariaLabel?: string;
+  disabled?: boolean;
+}
+export type StudioSplitStepperSize = NonNullable<StudioSplitStepperProps["size"]>;
+
+/** Username-input-derived compact numeric field with a secondary action rail. */
+export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
+  value, onValueChange, min = 0, max = Number.POSITIVE_INFINITY, step = 1,
+  size = "standard", ariaLabel = "Value", disabled = false, className, ...props
+}) => {
+  const change = (direction: -1 | 1) => onValueChange(normalizeStudioInlineStepperValue(value, direction, step, min, max));
+  return (
+    <div
+      {...props}
+      className={studioClasses("vt-studio-split-stepper", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="split-stepper"
+      data-vt-studio-username-foundation="true"
+      data-size={size}
+    >
+      <input
+        className="vt-studio-split-stepper-value"
+        type="number"
+        aria-label={ariaLabel}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        disabled={disabled}
+        onChange={event => {
+          const parsed = Number(event.currentTarget.value);
+          if (event.currentTarget.value.trim() !== "" && Number.isFinite(parsed)) onValueChange(Math.min(max, Math.max(min, parsed)));
+        }}
+      />
+      <div className="vt-studio-split-stepper-rail">
+        <div className="vt-studio-split-stepper-actions">
+          <button type="button" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
+          <button type="button" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
+        </div>
+      </div>
+    </div>
+  );
+};
+StudioSplitStepper.displayName = "StudioSplitStepper"
 
 
 export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, STUDIO_VALUE_TOGGLE_VARIANTS } from "./StudioValueToggles";

@@ -221,7 +221,9 @@
 }
 
 .vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {
-  padding: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-block: 0;
 }
 
 /* Flush nested lists share the parent header edge instead of doubling the top rule. */
@@ -290,7 +292,7 @@
 /* Override the catalog/module body's 4px side inset so intermodule rails meet the containing module's inner borders. */
 .vt-studio-inter-module.vt-studio-inter-host--bleed {
   box-sizing: border-box;
-  width: calc(100% + 8px);
+  width: calc(100% + 16px);
   max-width: none;
-  margin-inline: -4px;
+  margin-inline: -8px;
 }

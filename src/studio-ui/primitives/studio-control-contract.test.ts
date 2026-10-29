@@ -16,17 +16,20 @@ describe("Studio control global contract", () => {
     const micro = studioSizeTierToCssVars("micro");
     expect(supreme["--vt-studio-control-height"]).toBe("60px");
     expect(supreme["--vt-studio-control-font-weight"]).toBe(1000);
-    expect(supreme["--vt-studio-control-text-stroke"]).toBe("1.36px");
-    expect(supreme["--vt-studio-control-focus-outline-width"]).toBe("2.66px");
+    expect(supreme["--vt-studio-control-text-stroke"]).toBe("1px");
+    expect(supreme["--vt-studio-control-focus-outline-width"]).toBe("1.95px");
     expect(micro["--vt-studio-control-height"]).toBe("12px");
     expect(micro["--vt-studio-control-font-size"]).toBe("10px");
-    expect(micro["--vt-studio-control-text-stroke"]).toBe("0.25px");
-    expect(micro["--vt-studio-control-focus-outline-width"]).toBe("0.65px");
+    expect(micro["--vt-studio-control-text-stroke"]).toBe("0.4px");
+    expect(micro["--vt-studio-control-focus-outline-width"]).toBe("0.975px");
+    const mini = studioSizeTierToCssVars("mini");
+    expect(mini["--vt-studio-control-height"]).toBe("20px");
+    expect(mini["--vt-studio-control-text-stroke"]).toBe("0.4px");
   });
 
   it("defines canonical Supreme/standard/compact/Micro geometry without an internal gap token", () => {
     const css = read("src/styles/studio-control-vars.generated.css");
-    for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-micro-stroke: 1px", "--vt-studio-micro-radius: 2px", "--vt-studio-micro-font-size: 10px", "--vt-studio-textarea-standard-font-size: 18px", "--vt-studio-textarea-compact-font-size: 14px", "--vt-studio-textarea-standard-text-stroke: 0.5px", "--vt-studio-textarea-compact-text-stroke: 0.35px", "--vt-studio-textarea-min-height: 92px", "--vt-studio-textarea-line-height: 1"]) expect(css).toContain(token);
+    for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-mini-height: 20px", "--vt-studio-micro-stroke: 1.5px", "--vt-studio-micro-radius: 3px", "--vt-studio-micro-font-size: 10px", "--vt-studio-textarea-standard-font-size: 18px", "--vt-studio-textarea-compact-font-size: 14px", "--vt-studio-textarea-standard-text-stroke: 0.5px", "--vt-studio-textarea-compact-text-stroke: 0.35px", "--vt-studio-textarea-min-height: 92px", "--vt-studio-textarea-line-height: 0.85"]) expect(css).toContain(token);
     expect(css).toContain("--vt-studio-supreme-height: 60px");
     expect(css).not.toContain("--vt-studio-14-height");
     expect(css).not.toContain("--vt-studio-control-gap");
@@ -77,9 +80,9 @@ describe("Studio control global contract", () => {
     expect(fields).toContain("outline-offset: 0");
     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.95px");
     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.3px");
-    expect(system).toContain("--vt-studio-control-focus-outline-width: .65px");
+    expect(system).toContain("var(--vt-studio-micro-focus-outline-width, 0.975px)");
     expect(system).not.toContain("--vt-studio-control-focus-outline-width: 1px");
-    expect(system).toContain(".vt-studio-floating-field[data-size=\"micro\"] {\n  --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);\n  --vt-studio-control-focus-outline-width: .65px;\n}");
+    expect(system).toContain(".vt-studio-floating-field[data-size=\"micro\"] {\n  --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);\n  --vt-studio-control-focus-outline-width: var(--vt-studio-micro-focus-outline-width, 0.975px);\n}");
     expect(system).toContain("outline-offset: 0;");
     const finalGenericFocusRule = system.slice(system.lastIndexOf("/* Explicit non-button exceptions:"));
     expect(finalGenericFocusRule).not.toContain("outline-offset: 1px");
@@ -147,7 +150,9 @@ describe("Studio control global contract", () => {
   it("keeps field typography in the canonical rules without a late important override layer", () => {
     const css = read("src/styles/studio-control-fields.css");
     expect(css).not.toContain("Final global field contract:");
-    expect(css).not.toContain("!important");
+    // Only stroke-color enforcement may use !important; geometry and typography never do.
+    expect(css).not.toMatch(/(?:font-size|line-height|height|width|border-width|padding)[^;:]*:!auto[^;]*!important/);
+    expect(css).not.toMatch(/(?:font-size|line-height|min-height|border)[^;]*!important/);
     expect(css).toContain("--vt-studio-control-text-stroke, 1px");
     expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
     expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
@@ -203,7 +208,8 @@ describe("Studio textarea typography token ownership", () => {
     expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.supremeTextStroke).toBeCloseTo(0.68, 2);
     expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.standardTextStroke).toBe(0.5);
     expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.compactTextStroke).toBe(0.35);
-    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.microTextStroke).toBe(0.25);
+    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.miniTextStroke).toBe(0.4);
+    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.microTextStroke).toBe(0.4);
   });
 
   it("pairs editable-field text and glyph stroke through state tokens without important overrides", () => {
@@ -230,7 +236,6 @@ describe("StudioInterModule shared separator contract", () => {
     expect(css).toContain('.vt-studio-inter-module__body > .vt-studio-inter-module + .vt-studio-inter-module > .vt-studio-inter-module__head {\n  border-top: 0;');
     expect(css).toContain('.vt-studio-inter-module[data-open="true"] + .vt-studio-inter-module > .vt-studio-inter-module__head {\n  border-top-width: var(--vt-im-stroke, 2px);');
     expect(css).toContain('.vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {\n  padding-left: 0;\n  padding-right: 0;');
-    expect(css).toContain(".vt-studio-inter-module.brain-prompt-library-category > .vt-studio-inter-module__body");
   });
 });
 

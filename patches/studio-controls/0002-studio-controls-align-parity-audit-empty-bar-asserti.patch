@@ -1,0 +1,345 @@
+From 7eb5f6c35c910615d54aac0a3be36854b5a32485 Mon Sep 17 00:00:00 2001
+From: Studio Controls Bot <bot@viewtube.dev>
+Date: Wed, 28 Oct 2026 07:21:55 +0000
+Subject: [PATCH 2/2] studio-controls: align parity audit empty-bar assertion
+ to the 50%-white contract
+
+---
+ scripts/audit/studio-control-parity.test.mjs  |   2 +-
+ .../StudioHubConfirmedPrimitiveCatalog.tsx    |   2 +-
+ src/studio-ui/tokens.ts                       |   2 +-
+ src/styles/studio-control-system.css          | 198 +++++++++---------
+ src/styles/studio-inter-module.css            |   4 +-
+ 5 files changed, 109 insertions(+), 99 deletions(-)
+
+diff --git a/scripts/audit/studio-control-parity.test.mjs b/scripts/audit/studio-control-parity.test.mjs
+index 89aeec9f3..8775ab11b 100644
+--- a/scripts/audit/studio-control-parity.test.mjs
++++ b/scripts/audit/studio-control-parity.test.mjs
+@@ -132,7 +132,7 @@ test("bar toggle bars follow their size's text height and a 2.5:1 height-to-widt
+   assert.match(overrides, /--vt-bar-height:\s*var\(--vt-studio-control-font-size/);
+   assert.match(overrides, /aspect-ratio:\s*2\s*\/\s*5/);
+   assert.match(overrides, /border-radius:\s*var\(--vt-bar-radius/);
+-  assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
++  assert.match(overrides, /background:\s*color-mix\(in srgb, #fff 50%, var\(--vt-studio-control-accent[^)]*\)\) 50%\)\s*!important/);
+   assert.match(overrides, /data-active="true"[\s\S]*?background:\s*#000/);
+ });
+ 
+diff --git a/src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx b/src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx
+index 14c07648a..1745a35c2 100644
+--- a/src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx
++++ b/src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx
+@@ -304,7 +304,6 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
+   const [counterValue, setCounterValue] = React.useState(24)
+   const [sideCounterValue, setSideCounterValue] = React.useState(36)
+   const [sliderValue, setSliderValue] = React.useState(58)
+-  const [leftCounterRepValue, setLeftCounterRepValue] = React.useState(12)
+   const [buttonPressed, setButtonPressed] = React.useState(false)
+   const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)
+   const [arrowValue, setArrowValue] = React.useState("ONE")
+@@ -389,6 +388,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
+   const [leftWordValue, setLeftWordValue] = React.useState(1)
+   const [leftWordSliderValue, setLeftWordSliderValue] = React.useState(3)
+   const [sliderValue, setSliderValue] = React.useState(58)
++  const [leftCounterRepValue, setLeftCounterRepValue] = React.useState(12)
+   const options = ["ONE", "TWO", "THREE"] as const
+   const dropdownOptions = [
+     { value: "balanced", label: "BALANCED" },
+diff --git a/src/studio-ui/tokens.ts b/src/studio-ui/tokens.ts
+index 3822305b8..26472c304 100644
+--- a/src/studio-ui/tokens.ts
++++ b/src/studio-ui/tokens.ts
+@@ -291,7 +291,7 @@ export function studioSizeTierToCssVars(size: StudioControlSize) {
+     "--vt-studio-control-font-size": `${tier.fontSize}px`,
+     "--vt-studio-control-icon-size": `${tier.iconSize}px`,
+     "--vt-studio-control-text-stroke": `${tier.textStroke}px`,
+-    "--vt-studio-control-font-weight": String(tier.fontWeight),
++    "--vt-studio-control-font-weight": tier.fontWeight,
+     "--vt-studio-control-icon-stroke": String(tier.iconStroke),
+     "--vt-studio-control-focus-outline-width": `${tier.focusOutlineWidth}px`,
+     "--vt-studio-control-secondary-outline-width": `${tier.secondaryFocusOutlineWidth}px`,
+diff --git a/src/styles/studio-control-system.css b/src/styles/studio-control-system.css
+index 7e92414a3..b83e3f699 100644
+--- a/src/styles/studio-control-system.css
++++ b/src/styles/studio-control-system.css
+@@ -237,7 +237,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
+ .vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; min-width: 0; padding: 0 8px; overflow: hidden; justify-content: flex-start; text-overflow: clip; white-space: nowrap; }
+ .vt-studio-dropdown.is-split-left .vt-studio-dropdown-chevron.is-trailing { grid-column: 3; grid-row: 1; border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
+ .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+-.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff); }
++.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%); }
+ .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] { display: grid; place-items: center; }
+ .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] svg { width: var(--vt-studio-dropdown-chevron-size); height: var(--vt-studio-dropdown-chevron-size); }
+ .vt-studio-dropdown:not(.is-split-left) [data-vt-studio-dropdown-value] { grid-column: 1; grid-row: 1; padding: 0 8px 0 12px; }
+@@ -2016,7 +2016,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face]
+   border-radius: 999px;
+   background: var(--vt-badge-primary);
+   color: var(--vt-badge-text);
+-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
++  font: 1000 18px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+   letter-spacing: .02em;
+   text-transform: uppercase;
+   white-space: nowrap;
+@@ -2165,7 +2165,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face]
+   z-index: 50;
+   pointer-events: none;
+   color: color-mix(in srgb, var(--pair-a, #fa618a) 50%, #fff);
+-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
++  font: 1000 18px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+   letter-spacing: .02em;
+   text-transform: uppercase;
+   white-space: nowrap;
+@@ -4586,7 +4586,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice.is-checkbox svg {
+    horizontal label padding never exposes the page background as a false gap. */
+ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] [data-vt-studio-split-label] {
+   box-sizing: border-box;
+-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff);
++  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
+ }
+ 
+ /* Compact dropdown split rails use the compact control height for both the
+@@ -5815,7 +5815,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
+   height: 28px;
+   align-self: center;
+   /* Empty bars: 50% white of primary so they remain visible on the face. */
+-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff);
++  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
+   border: 1px solid #000;
+   box-sizing: border-box;
+   pointer-events: none;
+@@ -6623,119 +6623,127 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-sp
+ }
+ 
+ 
+-/* ─── Canonical steppers: one perimeter, divided action rails, shared palette ─── */
+-.vt-studio-inline-stepper,
+-.vt-studio-split-stepper {
++
++
++/* ─── Canonical steppers + username-input foundation (port from the certified base) ─── */
++/* Studio Controls-owned stepper family styles moved from primitive sidecars. */
++/* Studio steppers share the Split-Left Username Input visual foundation:
++   primary translucent value surface,
++opaque secondary action rail,
++inset primary
++   strokes,
++black compound dividers{
+   --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+   --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+   --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
++  --vt-stepper-height: var(--vt-studio-control-height, 44px);
++  --vt-stepper-radius: var(--vt-studio-control-radius, 6px);
++  --vt-stepper-focus: var(--vt-studio-control-focus-outline-width, 3px);
+   box-sizing: border-box;
+-  display: flex;
+-  align-items: stretch;
+-  width: 100%;
++  position: relative;
+   min-width: 0;
+-  height: var(--vt-studio-control-height, 44px);
++  height: var(--vt-stepper-height);
++  min-height: var(--vt-stepper-height);
+   overflow: hidden;
++  isolation: isolate;
+   border: var(--vt-stepper-stroke) solid #000;
+-  border-radius: var(--vt-studio-control-radius, 6px);
++  border-radius: var(--vt-stepper-radius);
+   background: var(--vt-stepper-secondary);
+-  box-shadow: none;
++  color: #000;
++  
+   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+ }
+-.vt-studio-username-input {
+-  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+-  --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+-  --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
+-  box-shadow: none;
+-}
+-.vt-studio-inline-stepper__actions {
+-  display: grid;
+-  grid-template-rows: repeat(2, minmax(0, 1fr));
+-  flex: 0 0 var(--vt-studio-control-height, 44px);
+-  width: var(--vt-studio-control-height, 44px);
++/* Username composite: shell owns perimeter; inner input and rail do not duplicate it. */
++.vt-studio-username-input,
++.vt-studio-split-shell.vt-studio-username-input {
++  box-sizing: border-box;
++  border: var(--vt-studio-control-stroke, 3px) solid #000;
++  border-radius: var(--vt-studio-control-radius, 6px);
++  overflow: hidden;
++  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+ }
+-.vt-studio-inline-stepper__rail {
+-  display: grid;
+-  place-items: center;
+-  width: 100%;
++.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"],
++.vt-studio-username-input [data-vt-studio-split-field] > [data-vt-studio-control="true"],
++.vt-studio-username-input [data-vt-studio-split-label] > [data-vt-studio-control="true"] {
++  box-sizing: border-box;
++  border: 0;
++  border-radius: 0;
++  outline: none;
++  box-shadow: none;
++  background: transparent;
++  min-height: 100%;
+   height: 100%;
+-  min-height: 0;
+-  padding: 0;
++}
++.vt-studio-username-input > [data-vt-studio-split-rail],
++.vt-studio-username-input [data-vt-studio-split-rail] {
+   border: 0;
+-  background: var(--vt-stepper-secondary);
++  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
++  border-radius: 0;
++  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+   color: #000;
+-  cursor: pointer;
+ }
+-.vt-studio-inline-stepper__rail:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }
+-.vt-studio-inline-stepper__rail:focus-visible { outline: 3px solid var(--vt-stepper-secondary); outline-offset: -3px; z-index: 1; }
+-.vt-studio-inline-stepper__value {
+-  box-sizing: border-box;
+-  flex: 1 1 auto;
++.vt-studio-username-input [data-vt-studio-split-rail] svg,
++.vt-studio-username-input [data-vt-studio-split-rail] svg * {
++  color: #000;
++  stroke: #000;
++}
++/* Split steppers own one stationary shell; suppress legacy pseudo-faces that could stack borders. */
++.vt-studio-split-stepper::before { content: none; display: none; }
++/* Inline and vertical steppers share the canonical shell and field contracts. */
++[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper {
+   width: 100%;
++}
++[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper[data-vt-studio-width="content"] {
++  width: fit-content;
++}
++.vt-studio-inline-stepper__rail {
++  position: relative;
+   min-width: 0;
+-  height: 100%;
+-  margin: 0;
+-  padding: 0 8px;
+-  border: 0;
+-  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+-  color: #000;
+-  font: inherit;
+-  caret-color: var(--vt-stepper-primary);
+-  outline: none;
+-  box-shadow: inset 0 0 0 var(--vt-stepper-stroke) var(--vt-stepper-primary);
+-  text-align: center;
+-  appearance: textfield;
++  max-width: 100%;
++  z-index: 0;
+ }
+-.vt-studio-inline-stepper__value::-webkit-outer-spin-button,
+-.vt-studio-inline-stepper__value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
++.vt-studio-inline-stepper__value,
+ .vt-studio-split-stepper-value {
++  position: relative;
+   box-sizing: border-box;
+-  flex: 1 1 auto;
+-  width: 100%;
+   min-width: 0;
+-  height: 100%;
+-  margin: 0;
+-  padding: 0 14px;
+-  border: 0;
+-  border-radius: 0;
+-  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+-  color: #000;
+-  font: inherit;
+-  caret-color: var(--vt-stepper-primary);
+-  outline: none;
+-  box-shadow: inset 0 0 0 var(--vt-stepper-stroke) var(--vt-stepper-primary);
+-  appearance: textfield;
++  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif) !important;
++  font-weight: var(--vt-studio-control-font-weight, 1000) !important;
++  font-size: var(--vt-studio-control-font-size, 38px) !important;
++  line-height: var(--vt-studio-control-line-height, .86) !important;
++  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em) !important;
++  text-transform: var(--vt-studio-control-text-transform, uppercase) !important;
++  padding: 0 14px !important;
++  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent) !important;
++  color: #000 !important;
++  -webkit-text-fill-color: #000 !important;
++  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
++  box-shadow: inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary) !important;
++}
++.vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value,
++.vt-studio-split-stepper[data-size="compact"] .vt-studio-split-stepper-value {
++  font-size: var(--vt-studio-28-font-size, 24px) !important;
++  padding: 0 8px !important;
++  -webkit-text-stroke: var(--vt-studio-28-text-stroke, .5px) #000 !important;
++}
++.vt-studio-inline-stepper[data-size="micro"] .vt-studio-inline-stepper__value {
++  font-size: var(--vt-studio-14-font-size, 10px) !important;
++  padding: 0 2px !important;
++  -webkit-text-stroke: var(--vt-studio-14-text-stroke, .25px) #000 !important;
++}
++.vt-studio-inline-stepper:focus-within .vt-studio-inline-stepper__value,
++.vt-studio-split-stepper:focus-within .vt-studio-split-stepper-value {
++  background: transparent !important;
+ }
+-.vt-studio-split-stepper-value::-webkit-outer-spin-button,
+-.vt-studio-split-stepper-value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+-/* 2:1 value-to-rail ratio; the rail owns the single vertical seam. */
+-.vt-studio-split-stepper-rail {
+-  display: grid;
+-  flex: 0 0 calc(var(--vt-studio-control-height, 44px) * .5);
+-  width: calc(var(--vt-studio-control-height, 44px) * .5);
+-  min-width: 0;
+-  border-left: var(--vt-stepper-stroke) solid #000;
+-  background: var(--vt-stepper-secondary);
++.vt-studio-inline-stepper__rail svg,
++.vt-studio-split-stepper-actions svg {
++  stroke-width: var(--vt-studio-control-icon-stroke, 3.2);
+ }
+-.vt-studio-split-stepper-actions {
++.vt-studio-split-stepper-actions button {
+   position: relative;
+-  display: grid;
+-  grid-template-rows: repeat(2, minmax(0, 1fr));
+-  width: 100%;
+-  height: 100%;
+ }
+-.vt-studio-split-stepper-actions button {
+-  display: grid;
+-  place-items: center;
+-  width: 100%;
+-  min-width: 0;
+-  min-height: 0;
+-  padding: 0;
+-  border: 0;
+-  background: var(--vt-stepper-secondary);
+-  color: #000;
+-  cursor: pointer;
++.vt-studio-split-stepper-actions button:focus-visible {
++  outline: var(--vt-stepper-focus) solid var(--vt-stepper-secondary);
++  outline-offset: -2px;
++  z-index: 1;
+ }
+-.vt-studio-split-stepper-actions button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }
+-.vt-studio-split-stepper-actions button:focus-visible { outline: 3px solid var(--vt-stepper-secondary); outline-offset: -3px; z-index: 1; }
+-.vt-studio-split-stepper-actions button:disabled { opacity: .4; cursor: not-allowed; }
+diff --git a/src/styles/studio-inter-module.css b/src/styles/studio-inter-module.css
+index 21b918f0d..f103e4f0a 100644
+--- a/src/styles/studio-inter-module.css
++++ b/src/styles/studio-inter-module.css
+@@ -221,7 +221,9 @@
+ }
+ 
+ .vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {
+-  padding: 0;
++  padding-left: 0;
++  padding-right: 0;
++  padding-block: 0;
+ }
+ 
+ /* Flush nested lists share the parent header edge instead of doubling the top rule. */
+-- 
+2.43.0
+
