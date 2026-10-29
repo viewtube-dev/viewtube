@@ -33,3 +33,20 @@ test("intermodule sizing uses canonical supreme tokens and focus outline follows
   assert.match(interCss, /\.vt-studio-inter-module__line-1/);
   assert.match(interCss, /\.vt-studio-inter-module__line-2/);
 });
+
+
+test("split text input stylesheet is complete and closes the nested field rule", () => {
+  assert.doesNotMatch(splitCss, /\\.\\.\\.\\s*$/, "stylesheet must not be truncated");
+  assert.match(
+    splitCss,
+    /--vt-split-field-pad:\\s*max\\(10px, calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\+ 8px\\)\\);[\\s\\S]*?caret-color:\\s*var\\(--vt-split-field-primary\\);[\\s\\S]*?\\n}\\s*$/,
+    "nested field declarations must be complete and the rule must close",
+  );
+  let depth = 0;
+  for (const char of splitCss) {
+    if (char === "{") depth += 1;
+    if (char === "}") depth -= 1;
+    assert.ok(depth >= 0, "stylesheet must not close a rule before it opens");
+  }
+  assert.equal(depth, 0, "all CSS blocks must be balanced");
+});
