@@ -9,7 +9,7 @@ const walkSourceFiles = (directory, rootDir, output = []) => {
   if (!fs.existsSync(directory)) return output;
   for (const entry of fs.readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
     if (entry.isDirectory()) {
-      if (["node_modules", "dist", "build", ".git", "coverage"].includes(entry.name)) continue;
+      if (["node_modules", "dist", "build", ".git", "coverage", ".next", "vendor"].includes(entry.name)) continue;
       walkSourceFiles(path.join(directory, entry.name), rootDir, output);
       continue;
     }
@@ -56,7 +56,7 @@ const isTestFile = (relativePath) => TEST_PATH.test(relativePath);
 
 export const buildGenerationCallerInventory = (rootDir = process.cwd()) => {
   const sourceRoot = path.join(rootDir, "src");
-  const files = walkSourceFiles(sourceRoot, rootDir);
+  const files = walkSourceFiles(rootDir, rootDir);
   const geminiPath = path.join(sourceRoot, "services", "gemini.ts");
   const geminiSource = fs.existsSync(geminiPath) ? fs.readFileSync(geminiPath, "utf8") : "";
   const exports = parseExportedGenerationFunctions(geminiSource);
