@@ -1,5 +1,20 @@
 export type DiagnosticLevel = "info" | "warn" | "error"
 
+export interface DiagnosticDetails {
+ source: string
+ subsystem: string
+ kind: string
+ status: "passed" | "failed" | "blocked" | "skipped" | "degraded" | "unknown"
+ correlationId?: string
+ expected?: string
+ actual?: string
+ evidenceRefs?: readonly string[]
+ recommendedActions?: readonly string[]
+ confidence?: "confirmed" | "high" | "medium" | "low" | "unknown"
+ privacy?: "public" | "sanitized" | "sensitive"
+ metadata?: Record<string, unknown>
+}
+
 export interface DiagnosticEntry {
  t: number
  firstSeen: number
@@ -8,6 +23,7 @@ export interface DiagnosticEntry {
  level: DiagnosticLevel
  tag: string
  message: string
+ details?: DiagnosticDetails
 }
 
 export interface ViewTubeDiagnostic {
@@ -19,6 +35,7 @@ export interface ViewTubeDiagnostic {
  whatToCheck?: readonly string[]
  debugData?: Record<string, unknown>
  error?: unknown
+ details?: DiagnosticDetails
 }
 
 const BUFFER_LIMIT = 60
@@ -142,31 +159,43 @@ const scheduleConsoleSummary = () => {
  consoleFlushTimer = schedule(flushConsoleSummary, 250)
 }
 
-export const recordDiagnostic = (level: DiagnosticLevel, tag: string, message: string): void => {
+export const recordDiagnostic = (level: DiagnosticLevel, tag: string, message: string, details?: DiagnosticDetails): void => {
  const timestamp = now()
  const cleanTag = redactText(String(tag)).slice(0, 80)
  const cleanMessage = redactText(String(message)).slice(0, MAX_MESSAGE_LENGTH)
  const existing = buffer.find((entry) => entry.level === level && entry.tag === cleanTag && entry.message === cleanMessage)
+ const safeDetails = details
+  ? sanitizeDiagnosticData(details as unknown as Record<string, unknown>) as unknown as DiagnosticDetails
+  : undefined
  if (existing) {
   existing.count += 1
   existing.lastSeen = timestamp
+  if (safeDetails) existing.details = safeDetails
  } else {
-  buffer.push({ t: timestamp, firstSeen: timestamp, lastSeen: timestamp, count: 1, level, tag: cleanTag, message: cleanMessage })
+  buffer.push({ t: timestamp, firstSeen: timestamp, lastSeen: timestamp, count: 1, level, tag: cleanTag, message: cleanMessage, details: safeDetails })
   if (buffer.length > BUFFER_LIMIT) buffer.shift()
  }
  if (level !== "info") scheduleConsoleSummary()
 }
 
-export const readDiagnostics = (): readonly DiagnosticEntry[] => buffer.map((entry) => ({ ...entry }))
+export const readDiagnostics = (): readonly DiagnosticEntry[] => buffer.map((entry) => ({
+ ...entry,
+ details: entry.details
+  ? sanitizeDiagnosticData(entry.details as unknown as Record<string, unknown>) as unknown as DiagnosticDetails
+  : undefined,
+}))
 
 export const reportDiagnostic = (input: ViewTubeDiagnostic): void => {
- recordDiagnostic(input.level, `${input.area}:${input.event}`, input.whatHappened)
+ recordDiagnostic(input.level, `${input.area}:${input.event}`, input.whatHappened, input.details)
  if (!isDeveloperDiagnosticsEnabled()) return
  const payload = {
   WHAT_HAPPENED: redactText(input.whatHappened),
   WHAT_IT_MEANS: input.whatItMeans ? redactText(input.whatItMeans) : undefined,
   WHAT_TO_CHECK: input.whatToCheck?.map(redactText),
   DEBUG_DATA: sanitizeDiagnosticData(input.debugData),
+  DETAILS: input.details
+   ? sanitizeDiagnosticData(input.details as unknown as Record<string, unknown>)
+   : undefined,
   error: input.error ? sanitizeValue(input.error) : undefined,
  }
  const method = input.level === "error" ? "error" : input.level === "warn" ? "warn" : "info"
