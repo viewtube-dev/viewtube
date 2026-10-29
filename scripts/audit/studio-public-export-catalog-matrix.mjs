@@ -22,19 +22,7 @@ function hasJsxRepresentative(source, name) {
     || new RegExp("(?:Component\\s*:\\s*|Component\\s*=\\s*\\{)" + name + "\\b").test(source);
 }
 
-const dispositions = {
-  StudioInput: "Compatibility export; visually related text-field coverage exists under StudioTextInput. Confirm whether the alias should remain public.",
-  Studioarea: "Legacy lowercase compatibility export; not a distinct canonical specimen.",
-  Studiotoggle: "Legacy lowercase compatibility export; not a distinct canonical specimen.",
-  Studioswitch: "Legacy lowercase compatibility export; not a distinct canonical specimen.",
-  Studioradio: "Legacy lowercase compatibility export; not a distinct canonical specimen.",
-  Studiocheck: "Legacy lowercase compatibility export; not a distinct canonical specimen.",
-  Studioxbox: "Legacy lowercase compatibility export; not a distinct canonical specimen.",
-  StudioComponentGridRow: "Composition helper represented by the StudioComponentGrid specimen; separately rendered row API coverage is not explicit.",
-  StudioComponentGridSpecimen: "Composition helper; specimen is part of the component-grid composition, not a separate primitive face.",
-  StudioComponentGridSpecimenPair: "Composition helper; corner comparison is a specialized grid composition.",
-  StudioHubCertification: "Certification page/surface, not a control primitive; verify its route remains the authoritative certification surface.",
-};
+const dispositions = {}
 
 const entries = exportedNames(barrel).filter(entry => !entry.typeOnly && /^Studio/.test(entry.name));
 const rows = entries.map(entry => {

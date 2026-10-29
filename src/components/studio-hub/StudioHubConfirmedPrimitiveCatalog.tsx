@@ -1,14 +1,24 @@
 import React from "react"
 import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
+import { StudioHubCertification } from "../../studio-ui/StudioHubCertification"
 import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
 import { StudioComponentGrid, StudioComponentGridCell } from "../../studio-ui/primitives/StudioComponentGrid"
+import { StudioComponentGridRow } from "../../studio-ui/primitives/StudioComponentGrid"
+import { StudioComponentGridSpecimen, StudioComponentGridSpecimenPair } from "../../studio-ui/primitives/StudioComponentGridSpecimen"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
   StudioButton,
+  StudioInput,
+  Studioarea,
+  Studiotoggle,
+  Studioswitch,
+  Studioradio,
+  Studiocheck,
+  Studioxbox,
   StudioTwoLineButton,
   StudioSplitTwoLineButton,
   StudioActionButton,
@@ -976,6 +986,86 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
       <Family title="StudioChoice · Standard" nonDefaultSettings={["Shared production primitive used by the radio, checkbox, and X-checkbox public wrappers."]} provenance={<Provenance primitive="StudioChoice" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-distill-overrides.css" tokens="Five-tier choice geometry; secondary focus outline at 65% of the active border." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChoice"><span>STANDARD · SHARED RADIO CHOICE</span><StudioChoice kind="radio" skin="solid" checked={choiceChecked} onClick={() => setChoiceChecked((value) => !value)} sizeVariant="standard" aria-label="Shared choice dedicated specimen" /></div>
       </Family>
+      <Family title="Studio Hub Certification · Full Composition" nonDefaultSettings={[
+        "This export is a complete certification surface, not a control primitive; it is catalogued separately from the primitive representatives.",
+        "The surface intentionally reuses production Studio controls and shared Toolbox primitives rather than catalog-only recreations.",
+      ]} provenance={<Provenance
+        primitive="StudioHubCertification"
+        tsx="src/studio-ui/StudioHubCertification.tsx"
+        css="src/styles/studio-control-system.css + Toolbox/SubToolbox shared styles"
+        tokens="Uses canonical Studio control tokens and shared SubToolbox layout tokens."
+        imports={["src/studio-ui/StudioHubCertification.tsx"]}
+      />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioHubCertification">
+          <span>STUDIO HUB CERTIFICATION · PRODUCTION SURFACE</span>
+          <StudioHubCertification />
+        </div>
+      </Family>
+
+      <Family title="Compatibility Exports + Composition Helpers · Standard" nonDefaultSettings={[
+        "Compatibility aliases are shown explicitly for API coverage only; canonical component families above remain the preferred implementation surface.",
+        "Grid helpers are compositions, not new control-face styles. They receive the existing production controls and inherit their tokens and CSS.",
+      ]} provenance={<Provenance
+        primitive="StudioInput · Studioarea · Studiotoggle · Studioswitch · Studioradio · Studiocheck · Studioxbox · StudioComponentGridRow · StudioComponentGridSpecimen · StudioComponentGridSpecimenPair"
+        tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioComponentGrid.tsx + src/studio-ui/primitives/StudioComponentGridSpecimen.tsx"
+        css="src/styles/studio-control-system.css + src/styles/studio-component-grid.css"
+        tokens="Canonical standard-tier primitives; compatibility aliases inherit the canonical component's token contract."
+        imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioComponentGrid.tsx", "src/studio-ui/primitives/StudioComponentGridSpecimen.tsx"]}
+      />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInput">
+          <span>STUDIO INPUT · COMPATIBILITY EXPORT</span>
+          <StudioInput sizeVariant="standard" aria-label="Compatibility StudioInput specimen" placeholder="CREATOR TITLE" />
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="Studioarea">
+          <span>STUDIOAREA · COMPATIBILITY EXPORT</span>
+          <Studioarea sizeVariant="standard" rows={2} aria-label="Compatibility Studioarea specimen" placeholder="DESCRIPTION" />
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="Studiotoggle">
+          <span>STUDIOTOGGLE · COMPATIBILITY EXPORT</span>
+          <Studiotoggle size="44" value={false} words={["OFF", "ON"]} aria-label="Compatibility Studiotoggle specimen" />
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="Studioswitch">
+          <span>STUDIOSWITCH · COMPATIBILITY EXPORT</span>
+          <Studioswitch sizeVariant="standard" shape="round" checked={false} aria-label="Compatibility Studioswitch specimen" />
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="Studioradio">
+          <span>STUDIORADIO · COMPATIBILITY EXPORT</span>
+          <Studioradio sizeVariant="standard" shape="round" skin="solid" checked={false} aria-label="Compatibility Studioradio specimen" />
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="Studiocheck">
+          <span>STUDIOCHECK · COMPATIBILITY EXPORT</span>
+          <Studiocheck sizeVariant="standard" shape="rect" skin="solid" checked={false} aria-label="Compatibility Studiocheck specimen" />
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="Studioxbox">
+          <span>STUDIOXBOX · COMPATIBILITY EXPORT</span>
+          <Studioxbox sizeVariant="standard" shape="rect" skin="solid" checked={false} aria-label="Compatibility Studioxbox specimen" />
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGridRow">
+          <span>STUDIO COMPONENT GRID ROW · COMPOSITION HELPER</span>
+          <StudioComponentGrid cols={2} rows={1} size="standard" aria-label="Component grid row helper specimen">
+            <StudioComponentGridRow><StudioButton sizeVariant="standard">FULL-WIDTH GRID ROW</StudioButton></StudioComponentGridRow>
+          </StudioComponentGrid>
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGridSpecimen">
+          <span>STUDIO COMPONENT GRID SPECIMEN · COMPOSITION HELPER</span>
+          <StudioComponentGridSpecimen
+            size="standard"
+            leftCounter={<StudioLeftCounter size="standard" value={12} min={0} max={100} ariaLabel="Grid helper left counter" />}
+            dropdown={<StudioDropdown sizeVariant="standard" ariaLabel="Grid helper dropdown" defaultValue="balanced" options={dropdownOptions} />}
+            doubleSideToggle={<StudioDoubleSideToggle size="standard" left={{ options: ["SOURCE", "ORIGIN"], value: "SOURCE", onValueChange: () => undefined, ariaLabel: "Grid helper source" }} right={{ options: ["TARGET", "DESTINATION"], value: "TARGET", onValueChange: () => undefined, ariaLabel: "Grid helper target" }} />}
+          />
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGridSpecimenPair">
+          <span>STUDIO COMPONENT GRID SPECIMEN PAIR · COMPOSITION HELPER</span>
+          <StudioComponentGridSpecimenPair
+            size="standard"
+            leftCounter={<StudioLeftCounter size="standard" value={8} min={0} max={100} ariaLabel="Grid pair left counter" />}
+            dropdown={<StudioDropdown sizeVariant="standard" ariaLabel="Grid pair dropdown" defaultValue="balanced" options={dropdownOptions} />}
+            doubleSideToggle={<StudioDoubleSideToggle size="standard" left={{ options: ["SOURCE", "ORIGIN"], value: "ORIGIN", onValueChange: () => undefined, ariaLabel: "Grid pair source" }} right={{ options: ["TARGET", "DESTINATION"], value: "DESTINATION", onValueChange: () => undefined, ariaLabel: "Grid pair target" }} />}
+          />
+        </div>
+      </Family>
+
       <Family title="StudioLeftCounter · Standard" nonDefaultSettings={["Left-action counter variant with the same 2:1 numeric display as the standard counter."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>STANDARD · LEFT ACTION RAIL</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter dedicated specimen" /></div>
       </Family>

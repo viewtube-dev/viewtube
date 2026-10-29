@@ -39,6 +39,12 @@ test("confirmed catalog matrix distinguishes rendered representatives from incid
   assert.equal(hasJsxRepresentative("<ChoiceComponent />", "StudioChoice"), false);
 });
 
+test("every public Studio value export has a direct representative, including compatibility aliases and grid helpers", () => {
+  const valueExports = exportedNames(barrel).filter(item => !item.typeOnly && /^Studio/.test(item.name));
+  const missing = valueExports.filter(item => !hasJsxRepresentative(catalog, item.name)).map(item => item.name);
+  assert.deepEqual(missing, [], "public Studio exports must be rendered or deliberately removed from the public barrel");
+});
+
 test("critical public primitives have direct representatives in the confirmed catalog", () => {
   const parsed = exportedNames(barrel);
   const valueExports = parsed.filter(item => !item.typeOnly);
@@ -48,6 +54,8 @@ test("critical public primitives have direct representatives in the confirmed ca
     "StudioDoubleSideToggle", "StudioBarToggle", "StudioSplitAccordion",
     "StudioDropdown", "StudioPublishingCard", "StudioLedBadgeTab",
     "StudioChatComposerDock", "StudioChatResponseShell",
+    "StudioInput", "Studioarea", "Studiotoggle", "Studioswitch", "Studioradio", "Studiocheck", "Studioxbox",
+    "StudioComponentGridRow", "StudioComponentGridSpecimen", "StudioComponentGridSpecimenPair",
   ];
   const missingFromBarrel = critical.filter(name => !valueExports.some(item => item.name === name));
   const missingRepresentative = critical.filter(name => !hasJsxRepresentative(catalog, name));
