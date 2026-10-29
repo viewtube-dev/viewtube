@@ -229,7 +229,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   border-radius: var(--vt-bar-radius);
   box-sizing: border-box;
   pointer-events: none;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
+  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%) !important;
 }
 .vt-studio-value-toggle__bar[data-active="true"],
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
