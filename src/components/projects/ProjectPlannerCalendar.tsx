@@ -8,7 +8,7 @@ import {
 import { useBrain } from "../../context/useBrain"
 import type { DayTask, Project } from "../../types"
 import { SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
-import { StudioButton, StudioCloseableBadge, StudioDropdown, StudioSplitLeftButton, StudioSquareIconButton, StudioCalendarEventChip, StudioCalendarMediaRail } from "../../studio-ui"
+import { StudioButton, StudioCheckbox, StudioCloseableBadge, StudioDropdown, StudioSplitLeftButton, StudioSquareIconButton, StudioCalendarEventChip, StudioCalendarMediaRail } from "../../studio-ui"
 import "../../styles/toolbox-entry.css"
 import "./ProjectPlannerCalendar.css"
 
@@ -105,6 +105,15 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
     setScheduleFeedback(projectTitle(project) + " scheduled for " + dateLabel(scheduledDate))
     setQuickAddProjectId("")
   }
+  const toggleProjectTask = (projectId: string, taskId: string) => {
+    const project = projects.find(item => item.id === projectId)
+    if (!project) return
+    const tasks = (project.tasks || []).map((task: DayTask) =>
+      task.id === taskId ? { ...task, completed: !task.completed } : task,
+    )
+    updateProject(projectId, { tasks, updatedAt: Date.now() })
+  }
+
   const clearSchedule = (projectId: string) => {
     updateProject(projectId, { publishDate: "", updatedAt: Date.now() })
     const project = projects.find(item => item.id === projectId)
@@ -135,6 +144,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
               )) : null}
               {selectedTasks.map(task => (
                 <div key={`${task.projectId}-${task.id}`} className="vt-project-planner-calendar__project-row">
+                  <StudioCheckbox checked={Boolean(task.completed)} sizeVariant="compact" aria-label={`${task.completed ? "Mark incomplete" : "Mark complete"}: ${task.text}`} onClick={() => toggleProjectTask(task.projectId, task.id)} />
                   <StudioCalendarEventChip label="TASK" kind="task" status={task.completed ? "done" : "open"} />
                   <div className="vt-project-planner-calendar__project-open">
                     <span className="vt-project-planner-calendar__project-title">{task.text}</span>
