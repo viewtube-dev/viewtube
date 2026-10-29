@@ -257,7 +257,7 @@ export const resolveGeminiGenerationProfile = (input: {
     for (const key of Object.keys(layer) as (keyof GeminiGenerationSettings)[]) {
       const value = layer[key]
       if (value !== undefined) {
-        ;(settings as Record<string, unknown>)[key] = value
+        Object.assign(settings, { [key]: value })
         sources[key] = source
       }
     }
