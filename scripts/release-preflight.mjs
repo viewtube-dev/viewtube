@@ -45,6 +45,7 @@ const gates = [
   ["source governance", ["run", "check:src-governance"]],
   ["privacy source audit", ["run", "check:privacy-src"]],
   ["focused contracts", ["run", "test:focused"]],
+  ["unified diagnostics", ["run", "test:unified-diagnostics"]],
   ["Node account contracts", ["run", "account:test"]],
   ["full Vitest suite", ["test"]],
   ["TypeScript", ["run", "typecheck"]],
