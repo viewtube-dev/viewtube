@@ -6,6 +6,8 @@ import {
   Clock3,
 } from "lucide-react"
 import { useBrain } from "../../context/useBrain"
+import { getContentBuild } from "../../services/asset-engine/ContentBuildRepository"
+import { getProjectCalendarPublicationBadge } from "./projectCalendarPublicationState"
 import type { DayTask, Project } from "../../types"
 import { SubToolboxSection, SubToolboxStack } from "../subtoolbox/SubToolboxLayouts"
 import { StudioButton, StudioCheckbox, StudioCloseableBadge, StudioDropdown, StudioSplitLeftButton, StudioSquareIconButton, StudioCalendarEventChip, StudioCalendarMediaRail } from "../../studio-ui"
@@ -63,6 +65,28 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
   const [quickAddProjectId, setQuickAddProjectId] = useState("")
   const [scheduleFeedback, setScheduleFeedback] = useState("")
   const todayKey = dateKey(new Date())
+
+  const publicationBadgeForProject = (project: Project) => {
+    const plannedDate = parseDate(project.publishDate)
+    try {
+      const binding = project.contentBuildId ? getContentBuild(project.contentBuildId)?.youtube ?? null : null
+      const remoteDate = binding?.scheduledAt ? parseDate(binding.scheduledAt) : null
+      return getProjectCalendarPublicationBadge({
+        binding,
+        plannedDateKey: plannedDate ? dateKey(plannedDate) : null,
+        remoteScheduledDateKey: remoteDate ? dateKey(remoteDate) : null,
+      })
+    } catch {
+      return project.contentBuildId
+        ? getProjectCalendarPublicationBadge({
+            binding: null,
+            plannedDateKey: plannedDate ? dateKey(plannedDate) : null,
+            remoteScheduledDateKey: null,
+            stateUnavailable: true,
+          })
+        : null
+    }
+  }
 
   const scheduledProjects = useMemo(
     () => projects.filter(project => Boolean(parseDate(project.publishDate))),
@@ -138,6 +162,7 @@ const ProjectPlannerCalendar: React.FC<ProjectPlannerCalendarProps> = ({ onOpenP
                   <button type="button" className="vt-project-planner-calendar__project-open" onClick={() => onOpenProject?.(project.id)}>
                     <span className="vt-project-planner-calendar__project-title">{projectTitle(project)}</span>
                     <span className="vt-project-planner-calendar__project-meta">{project.status || "Project"} · View project</span>
+                    {(() => { const badge = publicationBadgeForProject(project); return badge ? <StudioCalendarEventChip label={badge.label} kind={badge.kind} status={badge.status} /> : null })()}
                   </button>
                   <StudioCloseableBadge label="UNSCHEDULE" entering={false} onClose={() => clearSchedule(project.id)} className="vt-project-planner-calendar__unschedule" />
                 </div>
