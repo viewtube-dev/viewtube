@@ -1,4 +1,5 @@
 import type { SubscriptionPlanId } from "./subscriptionPlans"
+import { reportDiagnostic } from "./diagnostics"
 import { getGeminiModel, normalizeGeminiModelId } from "./geminiModelGovernance"
 
 export type LaunchTier = "free" | "medium" | "large"
@@ -131,7 +132,40 @@ export const createBillingPortalSession = async (returnUrl: string): Promise<{ p
   body: JSON.stringify({ returnUrl }),
  })
  const payload = (await response.json().catch(() => ({}))) as { portalUrl?: string; error?: string }
- if (!response.ok || !payload.portalUrl) throw new Error(payload.error || `Billing portal failed (${response.status}).`)
+ if (!response.ok || !payload.portalUrl) {
+  const actual = !response.ok
+   ? `Billing portal request failed (HTTP ${response.status})`
+   : "Billing portal response omitted the portal URL"
+  reportDiagnostic({
+   area: "account-billing",
+   event: "billing_portal_failed",
+   level: "error",
+   whatHappened: actual,
+   whatItMeans: "The billing portal session could not be created.",
+   whatToCheck: [
+    "Confirm the account session is valid",
+    "Check billing API availability and configuration",
+    "Review the provider response status without logging payment data",
+   ],
+   details: {
+    source: "billing-entitlement",
+    subsystem: "account",
+    kind: "billing_portal",
+    status: "failed",
+    expected: "Billing portal session is created",
+    actual,
+    recommendedActions: [
+     "Confirm the account session is valid",
+     "Check billing API availability and configuration",
+     "Review the provider response status without logging payment data",
+    ],
+    confidence: "confirmed",
+    privacy: "sanitized",
+    metadata: { httpStatus: response.status, responseHasPortalUrl: Boolean(payload.portalUrl) },
+   },
+  })
+  throw new Error(payload.error || `Billing portal failed (${response.status}).`)
+ }
  return { portalUrl: payload.portalUrl }
 }
 

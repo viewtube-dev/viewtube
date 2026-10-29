@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
+import { readDiagnostics } from "../diagnostics"
 import {
  applyPlanToEntitlement,
+ createBillingPortalSession,
  canAffordAiTokensFromState,
  consumeEntitlementTokens,
  createDefaultEntitlement,
@@ -171,4 +173,30 @@ describe("billing entitlement runtime", () => {
   expect(next.referralCode).toBe("CUSTOM77")
   expect(next.referralCodeLocked).toBe(true)
  })
+ it("reports billing portal failures with safe entitlement diagnostics", async () => {
+  vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ error: "Billing portal unavailable" }), {
+   status: 503,
+   headers: { "Content-Type": "application/json" },
+  })))
+
+  await expect(createBillingPortalSession("https://viewtube.example/settings?panel=billing"))
+   .rejects.toThrow("Billing portal unavailable")
+
+  const entry = readDiagnostics().filter((item) => item.tag === "account-billing:billing_portal_failed").at(-1)
+  expect(entry?.details).toMatchObject({
+   source: "billing-entitlement",
+   subsystem: "account",
+   kind: "billing_portal",
+   status: "failed",
+   expected: "Billing portal session is created",
+   actual: "Billing portal request failed (HTTP 503)",
+   recommendedActions: [
+    "Confirm the account session is valid",
+    "Check billing API availability and configuration",
+    "Review the provider response status without logging payment data",
+   ],
+  })
+  expect(JSON.stringify(entry?.details)).not.toContain("Billing portal unavailable")
+ })
+
 })
