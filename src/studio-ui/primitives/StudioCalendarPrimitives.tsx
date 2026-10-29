@@ -27,6 +27,7 @@ export const StudioCalendarEventChip: React.FC<StudioCalendarEventChipProps> = (
   <span
     className={["vt-studio-calendar-event-chip", className].filter(Boolean).join(" ")}
     data-vt-calendar-event="true"
+    data-vt-library-component="StudioCalendarEventChip"
     data-event-kind={kind}
     data-event-status={status}
   >
@@ -69,6 +70,7 @@ export const StudioCalendarMediaRail: React.FC<StudioCalendarMediaRailProps> = (
 }) => (
   <div
     className={["vt-studio-calendar-media-rail", className].filter(Boolean).join(" ")}
+    data-vt-library-component="StudioCalendarMediaRail"
     data-aspect-ratio={aspectRatio}
     data-split={split}
     role="group"
