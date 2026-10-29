@@ -64,24 +64,14 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   composerRef,
   className = "",
 }) => {
-  const resizeField = useCallback(
-    (element: HTMLTextAreaElement | null) => {
-      if (!element) return
-      // Keep the field aligned with the tool/send rail; longer drafts scroll internally.
-      element.style.height = "104px"
-    },
-    [],
-  )
-
   const setRefs = useCallback(
     (node: HTMLTextAreaElement | null) => {
       if (typeof composerRef === "function") composerRef(node)
       else if (composerRef && "current" in composerRef) {
         ;(composerRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = node
       }
-      if (node) resizeField(node)
     },
-    [composerRef, resizeField],
+    [composerRef],
   )
 
   const resolvedStatus = status ?? (busy ? "loading" : undefined)
@@ -163,12 +153,10 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             rows={2}
             value={value}
             onChange={(event) => {
-              resizeField(event.currentTarget)
               onChange(event.currentTarget.value)
             }}
             placeholder="Ask anything about your channel, content, or next upload…"
             className="vt-brain-composer-input w-full min-w-0 resize-none"
-            style={{ height: 104, minHeight: 104, maxHeight: 104 }}
             aria-label="Message to ViewTube Brain"
             aria-describedby="brain-composer-help"
             onFocus={(event) => {
