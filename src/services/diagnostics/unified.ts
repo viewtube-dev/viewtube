@@ -109,6 +109,7 @@ export const ingestDiagnostic = (adapterId: string, raw: unknown): boolean => {
     actual: sensitive ? "[OMITTED: sensitive]" : normalized.actual,
     evidenceRefs: sensitive ? undefined : normalized.evidenceRefs,
     recommendedActions: normalized.recommendedActions,
+    explanation: `The ${normalized.subsystem} ${normalized.kind} check ${normalized.status}.`,
     confidence: normalized.confidence,
     privacy,
     metadata: sensitive ? undefined : normalized.metadata,
