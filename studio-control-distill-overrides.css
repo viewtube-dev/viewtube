@@ -17,7 +17,12 @@ html body [data-vt-studio-control="true"] textarea {
   background-color: var(--vt-field-fill-rest);
   caret-color: var(--vt-field-text);
   box-shadow: none;
-  transition: none;
+  transition:
+    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
 }
 html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
@@ -47,21 +52,21 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 }
 
 /* Group width is determined by its square cells, not the parent row. */
+.vt-studio-square-icon-button-group {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  width: max-content;
+  max-width: 100%;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
 [data-vt-brain-component="BrainAnswerFeedback"] .vt-studio-square-icon-button-group {
   width: max-content;
   flex: 0 0 auto;
 }
 
-/* Keep every bar visible against the full-primary toggle face. Empty bars are
-   50% white-primary; full bars are black; borders come from the base rule. */
-.vt-studio-value-toggle__bar[data-active="false"],
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="false"] {
-  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%) !important;
-}
-.vt-studio-value-toggle__bar[data-active="true"],
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
-  background: #000 !important;
-}
+/* Bar geometry and fill are owned by the canonical track block below. */
 .vt-studio-value-toggle__arrow {
   position: relative;
   z-index: 2;
@@ -160,9 +165,9 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 /* Bar track: size tokens, 50% primary empty bars, active bars black, no borders. */
 .vt-studio-value-toggle__bars {
   --vt-bar-gap: 3px;
-  --vt-bar-width: 10px;
-  --vt-bar-height: 28px;
-  --vt-bar-radius: 2px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 38px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
   --vt-bar-padding-inline: 6px;
   display: flex;
   flex: 1 1 auto;
@@ -175,36 +180,40 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   padding: 0 var(--vt-bar-padding-inline);
   box-sizing: border-box;
 }
+
+.vt-studio-value-toggle[data-size="supreme"] .vt-studio-value-toggle__bars {
+  --vt-bar-gap: 4px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 51.82px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
+}
+.vt-studio-value-toggle[data-size="mini"] .vt-studio-value-toggle__bars {
+  --vt-bar-gap: 1.5px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 17.5px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
+}
 .vt-studio-value-toggle[data-size="standard"] .vt-studio-value-toggle__bars,
 .vt-studio-value-toggle:not([data-size]) .vt-studio-value-toggle__bars {
-  /* Bar height matches the 38px standard text height; 2.5 tall × 1 wide. */
   --vt-bar-gap: 3px;
-  --vt-bar-width: 15.2px;
-  --vt-bar-height: 38px;
-  --vt-bar-radius: 2px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 38px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
   --vt-bar-padding-inline: 6px;
 }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars {
   --vt-bar-gap: 2px;
-  --vt-bar-width: 9.6px;
-  --vt-bar-height: 24px;
-  --vt-bar-radius: 1.5px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 24px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
   --vt-bar-padding-inline: 4px;
 }
 .vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars {
   --vt-bar-gap: 1px;
-  --vt-bar-width: 4px;
-  --vt-bar-height: 10px;
-  --vt-bar-radius: 1px;
+  --vt-bar-height: var(--vt-studio-control-font-size, 10px);
+  --vt-bar-width: calc(var(--vt-bar-height) * 0.4);
+  --vt-bar-radius: max(1px, calc(var(--vt-bar-width) * 0.1));
   --vt-bar-padding-inline: 2px;
-}
-/* Mini tier: 20px text height; bars stay 2.5 tall × 1 wide (6.8 × 17). */
-.vt-studio-value-toggle[data-size="mini"] .vt-studio-value-toggle__bars {
-  --vt-bar-gap: 1.5px;
-  --vt-bar-width: 6.8px;
-  --vt-bar-height: 17px;
-  --vt-bar-radius: 1.5px;
-  --vt-bar-padding-inline: 3px;
 }
 .vt-studio-value-toggle__bar,
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
@@ -214,6 +223,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   min-width: var(--vt-bar-width);
   max-width: var(--vt-bar-width);
   height: var(--vt-bar-height);
+  aspect-ratio: 2 / 5;
   align-self: center;
   border: 0 !important;
   border-radius: var(--vt-bar-radius);
@@ -224,4 +234,242 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 .vt-studio-value-toggle__bar[data-active="true"],
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
   background: #000 !important;
+}
+
+
+/* Choice controls share the same five-tier geometry as the rest of Studio Controls. */
+.vt-studio-44-switch[data-vt-studio-control="true"] {
+  width: calc(var(--vt-studio-control-height, 44px) * 1.72);
+  height: var(--vt-studio-control-height, 44px);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"] .vt-studio-44-handle {
+  top: calc(var(--vt-studio-control-height, 44px) * .0833333333);
+  left: calc(var(--vt-studio-control-height, 44px) * .0833333333);
+  width: calc(var(--vt-studio-control-height, 44px) * .8333333333);
+  height: calc(var(--vt-studio-control-height, 44px) * .8333333333);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"].is-on .vt-studio-44-handle {
+  transform: translateX(calc(var(--vt-studio-control-height, 44px) * .72));
+}
+.vt-studio-44-switch[data-vt-studio-control="true"].is-rect {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .1666666667);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"].is-rect .vt-studio-44-handle {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .0833333333);
+}
+.vt-studio-44-choice[data-vt-studio-control="true"] {
+  width: var(--vt-studio-control-height, 44px);
+  height: var(--vt-studio-control-height, 44px);
+}
+.vt-studio-44-choice[data-vt-studio-control="true"] .vt-studio-44-dot {
+  width: 75%;
+  height: 75%;
+}
+.vt-studio-44-choice[data-vt-studio-control="true"].is-rect {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .1666666667);
+}
+.vt-studio-44-choice[data-vt-studio-control="true"].is-radio.is-rect .vt-studio-44-dot {
+  border-radius: calc(var(--vt-studio-control-height, 44px) * .0416666667);
+}
+.vt-studio-44-switch[data-vt-studio-control="true"]:focus-visible,
+.vt-studio-44-choice[data-vt-studio-control="true"]:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+
+/* Horizontal word toggle follows the same five-tier tokens; its measured handle remains content-sized. */
+.vt-studio-44-word-toggle[data-vt-word-toggle-size] {
+  box-sizing: border-box;
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
+}
+.vt-studio-44-word-toggle[data-vt-word-toggle-size] > button {
+  font-size: var(--vt-studio-control-font-size, 38px);
+  line-height: var(--vt-studio-control-line-height, 1);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+.vt-studio-44-word-toggle[data-vt-word-toggle-size] .vt-studio-44-word-handle {
+  top: var(--vt-word-toggle-handle-inset, 2.75px);
+  bottom: var(--vt-word-toggle-handle-inset, 2.75px);
+  border-radius: max(1px, calc(var(--vt-studio-control-height, 44px) * .1));
+}
+
+
+/* Vertical word-toggle spacing scales with the selected size without changing its content-driven height. */
+.vt-studio-vertical-word-toggle.is-supreme {
+  --vt-studio-vertical-word-gap: 5px;
+  --vt-studio-vertical-word-padding: 5px;
+  --vt-studio-vertical-word-horizontal-padding: 20px;
+  --vt-studio-vertical-word-handle-inset: 3.75px;
+}
+.vt-studio-vertical-word-toggle.is-mini {
+  --vt-studio-vertical-word-gap: 1.666667px;
+  --vt-studio-vertical-word-padding: 1.666667px;
+  --vt-studio-vertical-word-horizontal-padding: 6.666667px;
+  --vt-studio-vertical-word-handle-inset: 1.25px;
+}
+.vt-studio-vertical-word-toggle:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+
+/* Final regression-recovery contract: this file loads last in studio-control-entry.css. */
+/* Editable fields use primary glyph strokes; read-only TextBox is the explicit exception. */
+html body input[data-vt-studio-control="true"],
+html body textarea[data-vt-studio-control="true"],
+html body [data-vt-studio-control="true"] textarea {
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
+  color: var(--vt-field-text, #000);
+  -webkit-text-fill-color: var(--vt-field-text, #000);
+}
+/* Read-only TextBox intentionally keeps black text and black glyph stroke.
+   Its secondary outline (orange in the current palette) is a separate outer stroke. */
+html body .vt-studio-text-box[data-vt-studio-control="true"],
+html body .vt-studio-text-box[data-vt-studio-control="true"][data-size] {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px)) !important;
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
+}
+
+/* Side and double-side toggle faces are solid primary like counter value faces.
+   Arrow button cells use the same solid secondary fill, black glyphs and shared divider. */
+html body .vt-studio-value-toggle--side:not(.vt-studio-value-toggle--nested) .vt-studio-value-toggle__face {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+}
+html body .vt-studio-value-toggle--double .vt-studio-value-toggle__double-side:first-child .vt-studio-value-toggle__face {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+}
+/* Preserve the explicit V1/V2 right-side appearance axis. */
+html body .vt-studio-value-toggle--double[data-right-appearance="primary"] .vt-studio-value-toggle__double-side:last-child .vt-studio-value-toggle__face {
+  background: var(--pair-a, #36e0f6) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+}
+html body .vt-studio-value-toggle--double[data-right-appearance="secondary"] .vt-studio-value-toggle__double-side:last-child .vt-studio-value-toggle__face {
+  background: var(--pair-b, #ff7f6b) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke-color: #000 !important;
+}
+html body .vt-studio-value-toggle--double[data-right-appearance="black-primary-text"] .vt-studio-value-toggle__double-side:last-child .vt-studio-value-toggle__face {
+  background: #000 !important;
+  color: var(--pair-a, #36e0f6) !important;
+  -webkit-text-fill-color: var(--pair-a, #36e0f6) !important;
+  -webkit-text-stroke-color: var(--pair-a, #36e0f6) !important;
+}
+html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack,
+html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow-stack {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+}
+html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow,
+html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  color: #000 !important;
+}
+html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow svg,
+html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow svg {
+  color: #000 !important;
+  stroke: #000 !important;
+}
+/* Keep the horizontal split between the two arrow buttons a single black stroke. */
+html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack::after {
+  background: #000 !important;
+}
+/* Split rails: outer-face 1×1, full shell height — no inset square, no vertical gap.
+   (Replaces PR #923 distill rules that used align-self:center + height-2*stroke.) */
+html body [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
+html body [data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
+html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail],
+html body .vt-studio-split-left-badge__rail,
+html body .vt-studio-split-right-badge__rail,
+html body .vt-studio-double-split-badge__rail,
+html body .vt-studio-side-counter__rail,
+html body .vt-studio-counter__rail,
+html body .vt-studio-top-split-module__rail,
+html body .vt-studio-arrow-toggle__rail,
+html body .vt-studio-side-toggle__rail,
+html body .vt-studio-double-side-toggle__rail,
+html body .vt-studio-bar-toggle__rail,
+html body .vt-studio-inter-module__rail {
+  box-sizing: border-box !important;
+  align-self: stretch !important;
+  flex: 0 0 var(--vt-studio-control-height, 44px) !important;
+  width: var(--vt-studio-control-height, 44px) !important;
+  min-width: var(--vt-studio-control-height, 44px) !important;
+  max-width: var(--vt-studio-control-height, 44px) !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Top-split head columns: rail column = full control height (not height-2*stroke) */
+html body .vt-studio-top-split-module__head[data-split="left"] {
+  grid-template-columns: var(--vt-top-split-size, 44px) minmax(0, 1fr);
+}
+html body .vt-studio-top-split-module__head[data-split="right"] {
+  grid-template-columns: minmax(0, 1fr) var(--vt-top-split-size, 44px);
+}
+html body .vt-studio-top-split-module__head[data-split="double"] {
+  grid-template-columns: var(--vt-top-split-size, 44px) minmax(0, 1fr) var(--vt-top-split-size, 44px);
+}
+html body .vt-studio-top-split-module__rail {
+  width: var(--vt-top-split-size, 44px) !important;
+  min-width: var(--vt-top-split-size, 44px) !important;
+  max-width: var(--vt-top-split-size, 44px) !important;
+}
+
+/* Intermodules: full width of host */
+html body .vt-studio-inter-module,
+html body .vt-studio-intermodule,
+html body [data-vt-studio-intermodule="true"],
+html body [data-vt-studio-inter-module="true"] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  grid-column: 1 / -1;
+}
+
+/* Intermodule rails: 1×1 of face token, stretch with head (no inset square) */
+html body .vt-studio-inter-module__rail {
+  box-sizing: border-box !important;
+  width: var(--vt-im-face, 44px) !important;
+  min-width: var(--vt-im-face, 44px) !important;
+  max-width: var(--vt-im-face, 44px) !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  flex: 0 0 var(--vt-im-face, 44px) !important;
+  aspect-ratio: auto !important;
+  align-self: stretch !important;
+}
+html body .vt-studio-inter-module__rail {
+  --vt-im-rail-square: calc(var(--vt-im-face, 44px) - 2 * var(--vt-im-stroke, 3px));
+  box-sizing: border-box;
+  width: var(--vt-im-rail-square);
+  min-width: var(--vt-im-rail-square);
+  max-width: var(--vt-im-rail-square);
+  height: var(--vt-im-rail-square);
+  min-height: var(--vt-im-rail-square);
+  max-height: var(--vt-im-rail-square);
+  flex: 0 0 var(--vt-im-rail-square);
+  aspect-ratio: 1 / 1;
 }

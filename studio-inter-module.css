@@ -27,25 +27,32 @@
   color: #000;
 }
 
-.vt-studio-inter-module[data-size="compact"] {
-  --vt-im-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-im-face: var(--vt-studio-28-height, 28px);
-  --vt-im-font: var(--vt-studio-28-font-size, 24px);
-  --vt-im-text-stroke: var(--vt-studio-28-text-stroke, 0.5px);
+.vt-studio-inter-module[data-size="supreme"] {
+  --vt-im-stroke: var(--vt-studio-supreme-stroke, 4.09px);
+  --vt-im-face: var(--vt-studio-supreme-height, 60px);
+  --vt-im-font: var(--vt-studio-supreme-font-size, 51.82px);
+  --vt-im-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px);
 }
 
-.vt-studio-inter-module[data-size="micro"] {
-  --vt-im-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-im-face: var(--vt-studio-micro-height, 12px);
-  --vt-im-font: var(--vt-studio-micro-font-size, 10px);
-  --vt-im-text-stroke: var(--vt-studio-micro-text-stroke, 0.25px);
+.vt-studio-inter-module[data-size="compact"] {
+  --vt-im-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-im-face: var(--vt-studio-compact-height, 28px);
+  --vt-im-font: var(--vt-studio-compact-font-size, 24px);
+  --vt-im-text-stroke: var(--vt-studio-compact-text-stroke, 0.5px);
 }
 
 .vt-studio-inter-module[data-size="mini"] {
   --vt-im-stroke: var(--vt-studio-mini-stroke, 1.5px);
   --vt-im-face: var(--vt-studio-mini-height, 20px);
-  --vt-im-font: var(--vt-studio-mini-font-size, 17px);
-  --vt-im-text-stroke: var(--vt-studio-mini-text-stroke, 0.38px);
+  --vt-im-font: var(--vt-studio-mini-font-size, 17.5px);
+  --vt-im-text-stroke: var(--vt-studio-mini-text-stroke, 0.4px);
+}
+
+.vt-studio-inter-module[data-size="micro"] {
+  --vt-im-stroke: var(--vt-studio-micro-stroke, 1.5px);
+  --vt-im-face: var(--vt-studio-micro-height, 12px);
+  --vt-im-font: var(--vt-studio-micro-font-size, 10px);
+  --vt-im-text-stroke: var(--vt-studio-micro-text-stroke, 0.4px);
 }
 
 .vt-studio-inter-module[data-tone="accent"] {
@@ -98,7 +105,10 @@
   place-items: center;
   width: var(--vt-im-face);
   min-width: var(--vt-im-face);
-  min-height: var(--vt-im-face);
+  max-width: var(--vt-im-face);
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
   margin: 0;
   padding: 0;
   border: 0;
@@ -142,6 +152,63 @@
   -webkit-text-stroke: var(--vt-im-text-stroke) currentColor;
 }
 
+/* Two-line intermodule accordion header (title + description). Head grows; rails stretch full height (not forced square). */
+.vt-studio-inter-module--two-line > .vt-studio-inter-module__head,
+.vt-studio-inter-module[data-lines="two"] > .vt-studio-inter-module__head {
+  min-height: calc(var(--vt-im-face) * 1.35);
+}
+.vt-studio-inter-module--two-line .vt-studio-inter-module__rail,
+.vt-studio-inter-module[data-lines="two"] .vt-studio-inter-module__rail {
+  aspect-ratio: auto;
+  height: 100%;
+  min-height: 100%;
+}
+.vt-studio-inter-module--two-line .vt-studio-inter-module__title,
+.vt-studio-inter-module[data-lines="two"] .vt-studio-inter-module__title {
+  display: block;
+  align-self: stretch;
+  white-space: normal;
+  -webkit-text-stroke: 0;
+  padding: 3px 6px;
+}
+.vt-studio-inter-module__two-line {
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: 2px;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+}
+.vt-studio-inter-module__line-1 {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: calc(var(--vt-im-font) * 0.42);
+  font-weight: 1000;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  color: #000;
+}
+.vt-studio-inter-module__line-2 {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: calc(var(--vt-im-font) * 0.32);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #000;
+}
+.vt-studio-inter-module[data-size="standard"].vt-studio-inter-module--two-line .vt-studio-inter-module__line-1 {
+  font-size: 14px;
+}
+.vt-studio-inter-module[data-size="standard"].vt-studio-inter-module--two-line .vt-studio-inter-module__line-2 {
+  font-size: 11px;
+}
+
 .vt-studio-inter-module__body {
   box-sizing: border-box;
   width: 100%;
@@ -154,7 +221,9 @@
 }
 
 .vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {
-  padding: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-block: 0;
 }
 
 /* Flush nested lists share the parent header edge instead of doubling the top rule. */
@@ -220,17 +289,10 @@
 }
 
 
-/* Bleed through the existing 8px parent-body inset so rails and rules meet the shell's inner edges. */
-.vt-studio-inter-host--bleed {
+/* Override the catalog/module body's 4px side inset so intermodule rails meet the containing module's inner borders. */
+.vt-studio-inter-module.vt-studio-inter-host--bleed {
+  box-sizing: border-box;
   width: calc(100% + 16px);
   max-width: none;
   margin-inline: -8px;
 }
-
-/* Compact StudioTopSplitModule bodies have 6px inset rather than the standard 8px. */
-.vt-studio-top-split-module[data-size="compact"] > .vt-studio-top-split-module__body > .vt-studio-inter-host--bleed {
-  width: calc(100% + 12px);
-  max-width: none;
-  margin-inline: -6px;
-}
-

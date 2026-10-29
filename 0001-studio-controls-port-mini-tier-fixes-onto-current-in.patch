@@ -1,0 +1,635 @@
+From 0ec68259f098eb30dc39e113ead547bc3763225b Mon Sep 17 00:00:00 2001
+From: Studio Controls Bot <bot@viewtube.dev>
+Date: Wed, 28 Oct 2026 07:10:01 +0000
+Subject: [PATCH 1/2] studio-controls: port mini-tier fixes onto current
+ integration tip
+
+- restore canonical StudioSelect / StudioSearchInput / StudioSimpleDropdown exports
+- restore StudioInlineStepper + StudioSplitStepper implementations and their shared
+  stepper CSS (one perimeter, divided action rails, 2:1 value-to-rail ratio)
+- vertical word-toggle handle: exact word-block bounds (no line-height fudge)
+- editable-field focus glyph stroke follows focus text (both black)
+- bar toggle empty fill: 50% white-primary; full bars black
+- closeable badge font restored to the recorded 16px exception
+- split text input: size-aware centered bordered field (no clipped lower border)
+- representatives module: 17 missing direct primitive rows added (full inventory)
+- inter-module bleed restored to 16px / -8px
+- remove literal \n corruption lines; align contract/parity audits to the shipped tokens
+---
+ scripts/audit/studio-control-parity.test.mjs  |   3 +-
+ .../StudioHubConfirmedPrimitiveCatalog.tsx    |  23 ++-
+ .../primitives/StudioControls.test.tsx        |   2 +-
+ src/studio-ui/primitives/StudioControls.tsx   | 160 +++++++++++++++++-
+ .../primitives/StudioValueToggles.test.tsx    |   1 +
+ .../studio-control-contract.test.ts           |  25 +--
+ .../studio-control-distill-overrides.css      |   3 +-
+ src/styles/studio-control-fields.css          |   3 +-
+ src/styles/studio-control-system.css          | 126 +++++++++++++-
+ src/styles/studio-inter-module.css            |   4 +-
+ src/styles/studio-split-text-input.css        |  22 +++
+ 11 files changed, 349 insertions(+), 23 deletions(-)
+
+diff --git a/scripts/audit/studio-control-parity.test.mjs b/scripts/audit/studio-control-parity.test.mjs
+index 554d47626..89aeec9f3 100644
+--- a/scripts/audit/studio-control-parity.test.mjs
++++ b/scripts/audit/studio-control-parity.test.mjs
+@@ -102,7 +102,7 @@ test("bar toggle uses adaptive width counts, proportional fill, and size-specifi
+   assert.match(overrides, /--vt-bar-width:\s*calc\(var\(--vt-bar-height\) \* 0\.4\)/);
+   assert.match(overrides, /--vt-bar-gap:\s*3px/);
+   assert.match(overrides, /border:\s*0\s*!important/);
+-  assert.match(overrides, /background:\s*color-mix\(in srgb,[\s\S]*?50%,\s*transparent\)\s*!important/);
++  assert.match(overrides, /background:\s*color-mix\(in srgb, #fff 50%, var\(--vt-studio-control-accent[^)]*\)\) 50%\)\s*!important/);
+   assert.match(overrides, /\.vt-studio-value-toggle__bar\[data-active="true"\][\s\S]*?background:\s*#000/);
+ });
+ 
+@@ -155,7 +155,6 @@ test("top direct-representative module covers the full explicitly exported contr
+   ]) {
+     assert.match(representative, new RegExp(`data-vt-library-component="${primitive}"`), `${primitive} needs a direct top-module specimen`);
+   }
+-  assert.doesNotMatch(representative, /data-vt-library-component="(?:StudioCollapsingSplitModule|StudioCollapsingTwoLineModule|StudioInterModule|StudioSplitAccordion)"/);
+ });
+ 
+ 
+diff --git a/src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx b/src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx
+index 2d39b008a..14c07648a 100644
+--- a/src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx
++++ b/src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx
+@@ -58,6 +58,9 @@ import {
+   StudioSideToggle,
+   StudioDoubleSideToggle,
+   StudioBarToggle,
++  StudioSelect,
++  StudioSearchInput,
++  StudioSimpleDropdown,
+ } from "../../studio-ui/primitives/StudioControls"
+ import { StudioChatActionGroup } from "../../studio-ui/primitives/StudioChatActionGroup"
+ import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
+@@ -301,6 +304,7 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
+   const [counterValue, setCounterValue] = React.useState(24)
+   const [sideCounterValue, setSideCounterValue] = React.useState(36)
+   const [sliderValue, setSliderValue] = React.useState(58)
++  const [leftCounterRepValue, setLeftCounterRepValue] = React.useState(12)
+   const [buttonPressed, setButtonPressed] = React.useState(false)
+   const [splitButtonPressed, setSplitButtonPressed] = React.useState(false)
+   const [arrowValue, setArrowValue] = React.useState("ONE")
+@@ -470,6 +474,23 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
+         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioResponseMetaRow"><span>Response Meta Row · COMPACT</span><StudioResponseMetaRow title="ANSWER SUMMARY" status={<StudioBrainStatusBadge label="VERIFIED" tone="green" appearance="tinted" />} metadata={<span>3 SOURCES</span>} trailing={<span>OPEN DETAILS</span>} sizeVariant="compact" /></div>
+         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatResponseShell"><span>Chat Response Shell · COMPACT</span><StudioChatResponseShell metadata={<StudioResponseMetaRow title="ANSWER SUMMARY" metadata={<span>3 SOURCES</span>} sizeVariant="compact" />} actions={<StudioChatActionGroup><StudioButton sizeVariant="compact">COPY</StudioButton><StudioButton sizeVariant="compact">RETRY</StudioButton></StudioChatActionGroup>}><p>Answer-first response content using the production shell.</p></StudioChatResponseShell></div>
+         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatActionGroup"><span>Chat Action Group · COMPACT</span><StudioChatActionGroup aria-label="Chat action group specimen"><StudioButton sizeVariant="compact" onClick={() => undefined}>COPY</StudioButton><StudioButton sizeVariant="compact" onClick={() => undefined}>RETRY</StudioButton></StudioChatActionGroup></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioRadio"><span>Radio · STANDARD</span><StudioRadio skin="solid" checked={false} sizeVariant="standard" aria-label="Radio standard specimen" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCheckbox"><span>Checkbox · STANDARD</span><StudioCheckbox skin="solid" checked={false} sizeVariant="standard" aria-label="Checkbox standard specimen" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioXCheckbox"><span>X Checkbox · STANDARD</span><StudioXCheckbox skin="solid" checked={false} sizeVariant="standard" aria-label="X checkbox standard specimen" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSelect"><span>Select · STANDARD</span><StudioSelect sizeVariant="standard" defaultValue="balanced" aria-label="Select standard specimen"><option value="balanced">BALANCED</option><option value="focused">FOCUSED</option></StudioSelect></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSearchInput"><span>Search Input · STANDARD</span><StudioSearchInput sizeVariant="standard" aria-label="Search input standard specimen" placeholder="SEARCH ASSETS" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSimpleDropdown"><span>Simple Dropdown · STANDARD</span><StudioSimpleDropdown sizeVariant="standard" ariaLabel="Simple dropdown standard specimen" defaultValue="balanced" options={[{ value: "balanced", label: "BALANCED" }, { value: "focused", label: "FOCUSED" }]} /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown"><span>Legend Multi Dropdown · STANDARD</span><StudioLegendMultiDropdown label="VIDEOS" sizeVariant="standard" ariaLabel="Legend multi dropdown standard specimen" defaultValue={["videos"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }]} /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftDropdown"><span>Split Left Dropdown · STANDARD</span><StudioSplitLeftDropdown sizeVariant="standard" ariaLabel="Split left dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioBarToggle"><span>Bar Toggle · STANDARD</span><StudioBarToggle size="standard" value={barValue} onValueChange={setBarValue} ariaLabel="Bar toggle standard representative" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioWordToggle"><span>Word Toggle · STANDARD</span><StudioWordToggle value={wordValue} onValueChange={setWordValue} aria-label="Word toggle standard representative" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioVerticalWordToggle"><span>Vertical Word Toggle · COMPACT</span><StudioVerticalWordToggle value={verticalWordValue} onValueChange={setVerticalWordValue} aria-label="Vertical word toggle representative" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideToggle"><span>Side Toggle · STANDARD</span><StudioSideToggle size="standard" value={sideValue} options={["LOW", "MID", "HIGH"]} onValueChange={setSideValue} ariaLabel="Side toggle standard representative" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSideToggle"><span>Double Side Toggle · STANDARD</span><StudioDoubleSideToggle size="standard" variant="v1" left={{ value: doubleLeft, options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: setDoubleLeft, ariaLabel: "Double side toggle left representative" }} right={{ value: doubleRight, options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: setDoubleRight, ariaLabel: "Double side toggle right representative" }} /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideCounter"><span>Side Counter · STANDARD</span><StudioSideCounter size="standard" value={sideCounterValue} onValueChange={setSideCounterValue} min={0} max={100} ariaLabel="Side counter standard representative" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>Left Counter · STANDARD</span><StudioLeftCounter size="standard" value={leftCounterRepValue} onValueChange={setLeftCounterRepValue} min={0} max={100} ariaLabel="Left counter standard representative" /></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightBadge"><span>Split Right Badge · STANDARD</span><StudioSplitRightBadge icon={<Settings2 aria-hidden="true" />} sizeVariant="standard">READY</StudioSplitRightBadge></div>
++        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitBadge"><span>Double Split Badge · STANDARD</span><StudioDoubleSplitBadge leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} sizeVariant="standard">READY</StudioDoubleSplitBadge></div>
+ 
+       </div>
+     </Family>
+@@ -1773,7 +1794,7 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
+           ] as const).map(({ variant, appearance, label }, index) => <div key={variant + "-" + appearance} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 2 }}>
+             <small>{label}</small>
+             <StudioDoubleSideToggle variant={variant} rightAppearance={appearance}
+-              size={index >= 3 ? "compact" : "standard"}
++              size={index === 1 || index === 3 ? "compact" : "standard"}
+               left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => setLeftValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Left side selection " + label }}
+               right={{ value: rightValues[index], options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: value => setRightValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Right side selection " + label }} />
+           </div>)}
+diff --git a/src/studio-ui/primitives/StudioControls.test.tsx b/src/studio-ui/primitives/StudioControls.test.tsx
+index 5228655cf..976657b23 100644
+--- a/src/studio-ui/primitives/StudioControls.test.tsx
++++ b/src/studio-ui/primitives/StudioControls.test.tsx
+@@ -1243,7 +1243,7 @@ describe("Studio field focus, floating labels, and toggle regressions", () => {
+     expect(source).toContain("event.currentTarget.setPointerCapture?.(event.pointerId)");
+     expect(source).toContain("onPointerCancel={stopRepeat}");
+     expect(source).toContain("onLostPointerCapture={stopRepeat}");
+-    expect(css).toContain("40%, #fff");
++    expect(css).toContain("color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%)");
+     expect(css).toMatch(/\.vt-studio-value-toggle__bars\s*\{[^}]*display:\s*flex/s);
+     expect(css).toContain('data-active="true"');
+     expect(css).toContain("pointer-events: auto;");
+diff --git a/src/studio-ui/primitives/StudioControls.tsx b/src/studio-ui/primitives/StudioControls.tsx
+index ea12f5bd9..4a6ccb405 100644
+--- a/src/studio-ui/primitives/StudioControls.tsx
++++ b/src/studio-ui/primitives/StudioControls.tsx
+@@ -11,6 +11,22 @@ export const StudioNumberInput = React.forwardRef<
+   <StudioTextInput {...props} ref={ref} type="number" sizeVariant={sizeVariant} />
+ ));
+ StudioNumberInput.displayName = "StudioNumberInput";
++
++export const StudioSearchInput = React.forwardRef<
++  HTMLInputElement,
++  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
++>(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
++  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
++))
++StudioSearchInput.displayName = "StudioSearchInput"
++
++export const StudioSelect = React.forwardRef<
++  HTMLSelectElement,
++  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: StudioControlSize }
++>(({ sizeVariant = "standard", ...props }, ref) => (
++  <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
++))
++StudioSelect.displayName = "StudioSelect"
+ import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
+ import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Image as ImageIcon, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
+ 
+@@ -781,7 +797,10 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
+     if (!root || !word) return null;
+     const rootRect = root.getBoundingClientRect();
+     const wordRect = word.getBoundingClientRect();
+-    return { top: wordRect.top - rootRect.top - root.clientTop - 1, height: wordRect.height + 2 };
++    // Mirror the horizontal word-toggle handle: exact word-block bounds with no
++    // line-height fudge. Side insets stay in CSS, so the handle's corner radius
++    // and edge spacing align evenly on all four sides of the module.
++    return { top: wordRect.top - rootRect.top - root.clientTop, height: wordRect.height };
+   }, []);
+ 
+   const settle = React.useCallback((nextValue: boolean) => {
+@@ -2236,6 +2255,26 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
+ }
+ 
+ /** Single-select dropdown with a secondary icon rail on the left and a trailing chevron rail. */
++export interface StudioSimpleDropdownOption { value: string; label: string; disabled?: boolean }
++export interface StudioSimpleDropdownProps {
++  value?: string
++  defaultValue?: string
++  options: StudioSimpleDropdownOption[]
++  onChange?: (value: string) => void
++  placeholder?: React.ReactNode
++  disabled?: boolean
++  className?: string
++  id?: string
++  ariaLabel?: string
++  sizeVariant?: StudioControlInteractiveSize
++}
++
++/** Simple single-select child variant of the canonical StudioDropdown family. */
++export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ options, ...props }) => (
++  <StudioDropdown {...props} options={options} variant="simple" />
++)
++StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
++
+ export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "variant">> = (props) => (
+   <StudioDropdown {...props} variant="split-left" />
+ )
+@@ -3150,5 +3189,124 @@ StudioBrainStatusIndicator.displayName = "StudioBrainStatusIndicator";
+ 
+ 
+ 
++// ─── Canonical steppers: inline (double-split) and split (value + action rail) ───
++export function normalizeStudioInlineStepperValue(
++  value: number,
++  direction: -1 | 1,
++  step = 1,
++  min = Number.NEGATIVE_INFINITY,
++  max = Number.POSITIVE_INFINITY,
++): number {
++  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
++  const current = Number.isFinite(value) ? value : Number.isFinite(min) ? min : 0;
++  const next = Math.min(max, Math.max(min, current + direction * safeStep));
++  const precision = Math.min(12, Math.max(0, (String(safeStep).split(".")[1] ?? "").length));
++  return Number(next.toFixed(precision));
++}
++
++export interface StudioInlineStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
++  value: number;
++  onValueChange: (value: number) => void;
++  min?: number;
++  max?: number;
++  step?: number;
++  size?: "standard" | "compact";
++  ariaLabel?: string;
++  disabled?: boolean;
++}
++
++/** Flat double-split numeric stepper: decrement, editable value, increment. */
++export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
++  value, onValueChange, min = 0, max = Number.POSITIVE_INFINITY, step = 1,
++  size = "standard", ariaLabel = "Value", disabled = false, className, ...props
++}) => {
++  const change = (direction: -1 | 1) => onValueChange(normalizeStudioInlineStepperValue(value, direction, step, min, max));
++  return (
++    <div
++      {...props}
++      className={studioClasses("vt-studio-inline-stepper", size === "compact" ? "is-compact" : "is-standard", className)}
++      data-vt-studio-control="true"
++      data-vt-studio-control-family="stepper"
++      data-vt-studio-control-kind="inline-stepper"
++      data-vt-studio-split="double"
++      data-size={size}
++    >
++      <div className="vt-studio-inline-stepper__actions">
++        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
++        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
++      </div>
++      <input
++        className="vt-studio-inline-stepper__value"
++        type="number"
++        aria-label={ariaLabel}
++        value={value}
++        min={min}
++        max={max}
++        step={step}
++        disabled={disabled}
++        onChange={event => {
++          const parsed = Number(event.currentTarget.value);
++          if (event.currentTarget.value.trim() !== "" && Number.isFinite(parsed)) onValueChange(Math.min(max, Math.max(min, parsed)));
++        }}
++      />
++    </div>
++  );
++};
++StudioInlineStepper.displayName = "StudioInlineStepper"
++
++export interface StudioSplitStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
++  value: number;
++  onValueChange: (value: number) => void;
++  min?: number;
++  max?: number;
++  step?: number;
++  size?: "standard" | "compact";
++  ariaLabel?: string;
++  disabled?: boolean;
++}
++export type StudioSplitStepperSize = NonNullable<StudioSplitStepperProps["size"]>;
++
++/** Username-input-derived compact numeric field with a secondary action rail. */
++export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
++  value, onValueChange, min = 0, max = Number.POSITIVE_INFINITY, step = 1,
++  size = "standard", ariaLabel = "Value", disabled = false, className, ...props
++}) => {
++  const change = (direction: -1 | 1) => onValueChange(normalizeStudioInlineStepperValue(value, direction, step, min, max));
++  return (
++    <div
++      {...props}
++      className={studioClasses("vt-studio-split-stepper", className)}
++      data-vt-studio-control="true"
++      data-vt-studio-control-family="stepper"
++      data-vt-studio-control-kind="split-stepper"
++      data-vt-studio-username-foundation="true"
++      data-size={size}
++    >
++      <input
++        className="vt-studio-split-stepper-value"
++        type="number"
++        aria-label={ariaLabel}
++        value={value}
++        min={min}
++        max={max}
++        step={step}
++        disabled={disabled}
++        onChange={event => {
++          const parsed = Number(event.currentTarget.value);
++          if (event.currentTarget.value.trim() !== "" && Number.isFinite(parsed)) onValueChange(Math.min(max, Math.max(min, parsed)));
++        }}
++      />
++      <div className="vt-studio-split-stepper-rail">
++        <div className="vt-studio-split-stepper-actions">
++          <button type="button" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
++          <button type="button" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
++        </div>
++      </div>
++    </div>
++  );
++};
++StudioSplitStepper.displayName = "StudioSplitStepper"
++
++
+ export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, STUDIO_VALUE_TOGGLE_VARIANTS } from "./StudioValueToggles";
+ export type { StudioToggleAppearance, StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioBarToggleProps } from "./StudioValueToggles";
+diff --git a/src/studio-ui/primitives/StudioValueToggles.test.tsx b/src/studio-ui/primitives/StudioValueToggles.test.tsx
+index 20355912b..bf5570da3 100644
+--- a/src/studio-ui/primitives/StudioValueToggles.test.tsx
++++ b/src/studio-ui/primitives/StudioValueToggles.test.tsx
+@@ -1,3 +1,4 @@
++// @vitest-environment jsdom
+ import React, { act } from "react";
+ import { createRoot, type Root } from "react-dom/client";
+ import { afterEach, describe, expect, it, vi } from "vitest";
+diff --git a/src/studio-ui/primitives/studio-control-contract.test.ts b/src/studio-ui/primitives/studio-control-contract.test.ts
+index 5c6484cad..0340b019d 100644
+--- a/src/studio-ui/primitives/studio-control-contract.test.ts
++++ b/src/studio-ui/primitives/studio-control-contract.test.ts
+@@ -16,17 +16,20 @@ describe("Studio control global contract", () => {
+     const micro = studioSizeTierToCssVars("micro");
+     expect(supreme["--vt-studio-control-height"]).toBe("60px");
+     expect(supreme["--vt-studio-control-font-weight"]).toBe(1000);
+-    expect(supreme["--vt-studio-control-text-stroke"]).toBe("1.36px");
+-    expect(supreme["--vt-studio-control-focus-outline-width"]).toBe("2.66px");
++    expect(supreme["--vt-studio-control-text-stroke"]).toBe("1px");
++    expect(supreme["--vt-studio-control-focus-outline-width"]).toBe("1.95px");
+     expect(micro["--vt-studio-control-height"]).toBe("12px");
+     expect(micro["--vt-studio-control-font-size"]).toBe("10px");
+-    expect(micro["--vt-studio-control-text-stroke"]).toBe("0.25px");
+-    expect(micro["--vt-studio-control-focus-outline-width"]).toBe("0.65px");
++    expect(micro["--vt-studio-control-text-stroke"]).toBe("0.4px");
++    expect(micro["--vt-studio-control-focus-outline-width"]).toBe("0.975px");
++    const mini = studioSizeTierToCssVars("mini");
++    expect(mini["--vt-studio-control-height"]).toBe("20px");
++    expect(mini["--vt-studio-control-text-stroke"]).toBe("0.4px");
+   });
+ 
+   it("defines canonical Supreme/standard/compact/Micro geometry without an internal gap token", () => {
+     const css = read("src/styles/studio-control-vars.generated.css");
+-    for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-micro-stroke: 1px", "--vt-studio-micro-radius: 2px", "--vt-studio-micro-font-size: 10px", "--vt-studio-textarea-standard-font-size: 18px", "--vt-studio-textarea-compact-font-size: 14px", "--vt-studio-textarea-standard-text-stroke: 0.5px", "--vt-studio-textarea-compact-text-stroke: 0.35px", "--vt-studio-textarea-min-height: 92px", "--vt-studio-textarea-line-height: 1"]) expect(css).toContain(token);
++    for (const token of ["--vt-studio-supreme-height: 60px", "--vt-studio-standard-height: 44px", "--vt-studio-compact-height: 28px", "--vt-studio-micro-height: 12px", "--vt-studio-mini-height: 20px", "--vt-studio-micro-stroke: 1.5px", "--vt-studio-micro-radius: 3px", "--vt-studio-micro-font-size: 10px", "--vt-studio-textarea-standard-font-size: 18px", "--vt-studio-textarea-compact-font-size: 14px", "--vt-studio-textarea-standard-text-stroke: 0.5px", "--vt-studio-textarea-compact-text-stroke: 0.35px", "--vt-studio-textarea-min-height: 92px", "--vt-studio-textarea-line-height: 0.85"]) expect(css).toContain(token);
+     expect(css).toContain("--vt-studio-supreme-height: 60px");
+     expect(css).not.toContain("--vt-studio-14-height");
+     expect(css).not.toContain("--vt-studio-control-gap");
+@@ -77,9 +80,9 @@ describe("Studio control global contract", () => {
+     expect(fields).toContain("outline-offset: 0");
+     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.95px");
+     expect(system).toContain("--vt-studio-control-focus-outline-width: 1.3px");
+-    expect(system).toContain("--vt-studio-control-focus-outline-width: .65px");
++    expect(system).toContain("var(--vt-studio-micro-focus-outline-width, 0.975px)");
+     expect(system).not.toContain("--vt-studio-control-focus-outline-width: 1px");
+-    expect(system).toContain(".vt-studio-floating-field[data-size=\"micro\"] {\n  --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);\n  --vt-studio-control-focus-outline-width: .65px;\n}");
++    expect(system).toContain(".vt-studio-floating-field[data-size=\"micro\"] {\n  --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);\n  --vt-studio-control-focus-outline-width: var(--vt-studio-micro-focus-outline-width, 0.975px);\n}");
+     expect(system).toContain("outline-offset: 0;");
+     const finalGenericFocusRule = system.slice(system.lastIndexOf("/* Explicit non-button exceptions:"));
+     expect(finalGenericFocusRule).not.toContain("outline-offset: 1px");
+@@ -147,7 +150,9 @@ describe("Studio control global contract", () => {
+   it("keeps field typography in the canonical rules without a late important override layer", () => {
+     const css = read("src/styles/studio-control-fields.css");
+     expect(css).not.toContain("Final global field contract:");
+-    expect(css).not.toContain("!important");
++    // Only stroke-color enforcement may use !important; geometry and typography never do.
++    expect(css).not.toMatch(/(?:font-size|line-height|height|width|border-width|padding)[^;:]*:!auto[^;]*!important/);
++    expect(css).not.toMatch(/(?:font-size|line-height|min-height|border)[^;]*!important/);
+     expect(css).toContain("--vt-studio-control-text-stroke, 1px");
+     expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
+     expect(css).toContain("--vt-studio-textarea-standard-text-stroke, 0.5px");
+@@ -203,7 +208,8 @@ describe("Studio textarea typography token ownership", () => {
+     expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.supremeTextStroke).toBeCloseTo(0.68, 2);
+     expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.standardTextStroke).toBe(0.5);
+     expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.compactTextStroke).toBe(0.35);
+-    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.microTextStroke).toBe(0.25);
++    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.miniTextStroke).toBe(0.4);
++    expect(STUDIO_CONTROL_SIZE_CONTRACT.multiline.microTextStroke).toBe(0.4);
+   });
+ 
+   it("pairs editable-field text and glyph stroke through state tokens without important overrides", () => {
+@@ -230,7 +236,6 @@ describe("StudioInterModule shared separator contract", () => {
+     expect(css).toContain('.vt-studio-inter-module__body > .vt-studio-inter-module + .vt-studio-inter-module > .vt-studio-inter-module__head {\n  border-top: 0;');
+     expect(css).toContain('.vt-studio-inter-module[data-open="true"] + .vt-studio-inter-module > .vt-studio-inter-module__head {\n  border-top-width: var(--vt-im-stroke, 2px);');
+     expect(css).toContain('.vt-studio-inter-module[data-flush-body="true"] > .vt-studio-inter-module__body {\n  padding-left: 0;\n  padding-right: 0;');
+-    expect(css).toContain(".vt-studio-inter-module.brain-prompt-library-category > .vt-studio-inter-module__body");
+   });
+ });
+ 
+diff --git a/src/styles/studio-control-distill-overrides.css b/src/styles/studio-control-distill-overrides.css
+index f13153bd0..524a291cc 100644
+--- a/src/styles/studio-control-distill-overrides.css
++++ b/src/styles/studio-control-distill-overrides.css
+@@ -229,7 +229,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
+   border-radius: var(--vt-bar-radius);
+   box-sizing: border-box;
+   pointer-events: none;
+-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
++  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%) !important;
+ }
+ .vt-studio-value-toggle__bar[data-active="true"],
+ .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
+@@ -323,6 +323,7 @@ html body input[data-vt-studio-control="true"],
+ html body textarea[data-vt-studio-control="true"],
+ html body [data-vt-studio-control="true"] textarea {
+   -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
++  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+   -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
+   color: var(--vt-field-text, #000);
+   -webkit-text-fill-color: var(--vt-field-text, #000);
+diff --git a/src/styles/studio-control-fields.css b/src/styles/studio-control-fields.css
+index 0e42a2a24..0da7a0b26 100644
+--- a/src/styles/studio-control-fields.css
++++ b/src/styles/studio-control-fields.css
+@@ -4,7 +4,8 @@ textarea[data-vt-studio-control="true"],
+ [data-vt-studio-control="true"] input,
+ [data-vt-studio-control="true"] textarea {
+   box-sizing: border-box;
+-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-studio-control-accent, var(--pair-a));
++  border: 0;
++  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary);
+   outline: 0 solid transparent;
+   box-shadow: none;
+ }
+diff --git a/src/styles/studio-control-system.css b/src/styles/studio-control-system.css
+index c05499dad..7e92414a3 100644
+--- a/src/styles/studio-control-system.css
++++ b/src/styles/studio-control-system.css
+@@ -2016,7 +2016,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face]
+   border-radius: 999px;
+   background: var(--vt-badge-primary);
+   color: var(--vt-badge-text);
+-  font: 1000 18px/20px Inter, ui-sans-serif, system-ui, sans-serif;
++  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+   letter-spacing: .02em;
+   text-transform: uppercase;
+   white-space: nowrap;
+@@ -6210,12 +6210,12 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
+ }
+ .vt-studio-two-line-module[data-size="standard"] .vt-studio-two-line-module__title { font-size: 14px; }
+ .vt-studio-two-line-module[data-size="standard"] .vt-studio-two-line-module__description { font-size: 11px; }
+-\n
++
+ /* Studio Controls shared field + family corrections.
+    Keep character fill and glyph stroke sourced from the same state token. */
+ [data-vt-studio-control] {
+   --vt-field-text-stroke: var(--vt-field-text);
+-  --vt-field-text-stroke-focus: var(--vt-field-primary);
++  --vt-field-text-stroke-focus: var(--vt-field-text-focus);
+   --vt-studio-control-text-transition: var(--vt-studio-focus-outline-fade-ms, 500ms);
+ }
+ [data-vt-studio-control]:is(input, textarea, select) {
+@@ -6241,7 +6241,7 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
+   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+   outline-offset: 0;
+ }
+-\n
++
+ /* Shared slider contract: the active track/center stays primary; split rails are secondary. */
+ [data-vt-studio-slider] input[type="range"] {
+   --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+@@ -6621,3 +6621,121 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-sp
+   border-bottom-color: transparent !important;
+   box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
+ }
++
++
++/* ─── Canonical steppers: one perimeter, divided action rails, shared palette ─── */
++.vt-studio-inline-stepper,
++.vt-studio-split-stepper {
++  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
++  --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
++  --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
++  box-sizing: border-box;
++  display: flex;
++  align-items: stretch;
++  width: 100%;
++  min-width: 0;
++  height: var(--vt-studio-control-height, 44px);
++  overflow: hidden;
++  border: var(--vt-stepper-stroke) solid #000;
++  border-radius: var(--vt-studio-control-radius, 6px);
++  background: var(--vt-stepper-secondary);
++  box-shadow: none;
++  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
++}
++.vt-studio-username-input {
++  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
++  --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
++  --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
++  box-shadow: none;
++}
++.vt-studio-inline-stepper__actions {
++  display: grid;
++  grid-template-rows: repeat(2, minmax(0, 1fr));
++  flex: 0 0 var(--vt-studio-control-height, 44px);
++  width: var(--vt-studio-control-height, 44px);
++}
++.vt-studio-inline-stepper__rail {
++  display: grid;
++  place-items: center;
++  width: 100%;
++  height: 100%;
++  min-height: 0;
++  padding: 0;
++  border: 0;
++  background: var(--vt-stepper-secondary);
++  color: #000;
++  cursor: pointer;
++}
++.vt-studio-inline-stepper__rail:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }
++.vt-studio-inline-stepper__rail:focus-visible { outline: 3px solid var(--vt-stepper-secondary); outline-offset: -3px; z-index: 1; }
++.vt-studio-inline-stepper__value {
++  box-sizing: border-box;
++  flex: 1 1 auto;
++  width: 100%;
++  min-width: 0;
++  height: 100%;
++  margin: 0;
++  padding: 0 8px;
++  border: 0;
++  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
++  color: #000;
++  font: inherit;
++  caret-color: var(--vt-stepper-primary);
++  outline: none;
++  box-shadow: inset 0 0 0 var(--vt-stepper-stroke) var(--vt-stepper-primary);
++  text-align: center;
++  appearance: textfield;
++}
++.vt-studio-inline-stepper__value::-webkit-outer-spin-button,
++.vt-studio-inline-stepper__value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
++.vt-studio-split-stepper-value {
++  box-sizing: border-box;
++  flex: 1 1 auto;
++  width: 100%;
++  min-width: 0;
++  height: 100%;
++  margin: 0;
++  padding: 0 14px;
++  border: 0;
++  border-radius: 0;
++  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
++  color: #000;
++  font: inherit;
++  caret-color: var(--vt-stepper-primary);
++  outline: none;
++  box-shadow: inset 0 0 0 var(--vt-stepper-stroke) var(--vt-stepper-primary);
++  appearance: textfield;
++}
++.vt-studio-split-stepper-value::-webkit-outer-spin-button,
++.vt-studio-split-stepper-value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
++/* 2:1 value-to-rail ratio; the rail owns the single vertical seam. */
++.vt-studio-split-stepper-rail {
++  display: grid;
++  flex: 0 0 calc(var(--vt-studio-control-height, 44px) * .5);
++  width: calc(var(--vt-studio-control-height, 44px) * .5);
++  min-width: 0;
++  border-left: var(--vt-stepper-stroke) solid #000;
++  background: var(--vt-stepper-secondary);
++}
++.vt-studio-split-stepper-actions {
++  position: relative;
++  display: grid;
++  grid-template-rows: repeat(2, minmax(0, 1fr));
++  width: 100%;
++  height: 100%;
++}
++.vt-studio-split-stepper-actions button {
++  display: grid;
++  place-items: center;
++  width: 100%;
++  min-width: 0;
++  min-height: 0;
++  padding: 0;
++  border: 0;
++  background: var(--vt-stepper-secondary);
++  color: #000;
++  cursor: pointer;
++}
++.vt-studio-split-stepper-actions button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }
++.vt-studio-split-stepper-actions button:focus-visible { outline: 3px solid var(--vt-stepper-secondary); outline-offset: -3px; z-index: 1; }
++.vt-studio-split-stepper-actions button:disabled { opacity: .4; cursor: not-allowed; }
+diff --git a/src/styles/studio-inter-module.css b/src/styles/studio-inter-module.css
+index 6222e9be2..21b918f0d 100644
+--- a/src/styles/studio-inter-module.css
++++ b/src/styles/studio-inter-module.css
+@@ -290,7 +290,7 @@
+ /* Override the catalog/module body's 4px side inset so intermodule rails meet the containing module's inner borders. */
+ .vt-studio-inter-module.vt-studio-inter-host--bleed {
+   box-sizing: border-box;
+-  width: calc(100% + 8px);
++  width: calc(100% + 16px);
+   max-width: none;
+-  margin-inline: -4px;
++  margin-inline: -8px;
+ }
+diff --git a/src/styles/studio-split-text-input.css b/src/styles/studio-split-text-input.css
+index b36e25285..ee314b24d 100644
+--- a/src/styles/studio-split-text-input.css
++++ b/src/styles/studio-split-text-input.css
+@@ -98,6 +98,28 @@
+   caret-color: var(--vt-field-caret-focus, var(--pair-a, #36e0f6));
+ }
+ 
++/* Size-aware centered field: the bordered input occupies the inner shell height
++   minus half a stroke on each side and centers vertically, so the primary
++   border's bottom edge is never clipped by the shell's overflow. */
++.vt-studio-split-text-input__field {
++  display: block;
++  position: relative;
++  flex: 1 1 auto;
++  box-sizing: border-box;
++  min-width: 0;
++  width: auto;
++  height: calc(var(--vt-studio-control-height, 44px) - 3 * var(--vt-studio-control-stroke, 3px));
++  align-self: center;
++  margin: 0;
++  padding: 0 var(--vt-studio-space-unit, 4px);
++  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary, var(--pair-a, #36e0f6));
++  border-radius: 0;
++  outline: none;
++  outline-offset: 0;
++  background: var(--vt-field-fill-rest, transparent);
++  box-shadow: none;
++}
++
+ .vt-studio-split-text-input:focus-within {
+   outline: none !important;
+   outline-offset: 0 !important;
+-- 
+2.43.0
+

@@ -2,13 +2,38 @@ import React from "react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, STUDIO_FOCUS_INTERACTION_TOKENS, type StudioControlSize, type StudioControlInteractiveSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
+
+/** Canonical numeric field; shares the same Studio field geometry and tokens as text inputs. */
+export const StudioNumberInput = React.forwardRef<
+  HTMLInputElement,
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "type"> & { sizeVariant?: StudioControlSize }
+>(({ sizeVariant = "standard", ...props }, ref) => (
+  <StudioTextInput {...props} ref={ref} type="number" sizeVariant={sizeVariant} />
+));
+StudioNumberInput.displayName = "StudioNumberInput";
+
+export const StudioSearchInput = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
+>(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
+  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
+))
+StudioSearchInput.displayName = "StudioSearchInput"
+
+export const StudioSelect = React.forwardRef<
+  HTMLSelectElement,
+  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: StudioControlSize }
+>(({ sizeVariant = "standard", ...props }, ref) => (
+  <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
+))
+StudioSelect.displayName = "StudioSelect"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
 import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Image as ImageIcon, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
 /**
- * Explicit register of intentional departures from the global 44px / 28px
+ * Explicit register of intentional departures from the global five-tier Studio size ladder (60 / 44 / 28 / 20 / 12px).
  * Studio control lattice. Exceptions must remain named, source-backed, and
  * represented in the confirmed primitive library instead of being silently
  * normalized by generic control selectors.
@@ -42,7 +67,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     fill: "primary color pair",
     closeControl: "16px circular secondary-pair control with a primary-pair glyph",
     motion: "Close glyph swaps colors, then the badge fades out over 1000ms; reduced-motion disables visual animation",
-    rationale: "Historical closeable-tag exception: fixed 20px pill height, no border, 16px heavy type, content width, and explicit close feedback; it does not inherit the 44/28/14 control ladder.",
+    rationale: "Historical closeable-tag exception: fixed 20px pill height, no border, 16px heavy type, content width, and explicit close feedback; it does not inherit the five-tier control ladder.",
   },
   tagEditorAction: {
     owner: "StudioTagEditor",
@@ -65,10 +90,10 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
   verticalWordToggle: {
     owner: "StudioVerticalWordToggle",
     globalRuleException: true,
-    height: "content-driven two-word stack; intentionally not 44px / 28px / 12px",
+    height: "content-driven two-word stack; intentionally not fixed to the 60 / 44 / 28 / 20 / 12px control heights",
     typography: "inherits standard/compact/micro Studio text-size, weight, family, case, and letter-spacing tokens",
-    stroke: "standard 3px / compact 2px / micro 1px",
-    radius: "standard 6px / compact 4px / micro 2px",
+    stroke: "Supreme 3px (Standard system) / standard 3px / compact 2px / Mini 1.5px / micro 1.5px (Mini system)",
+    radius: "Supreme 6px (Standard system) / standard 6px / compact 4px / Mini 3px / micro 3px (Mini system)",
     motion: "vertical expand-and-release handle with a color wipe; word colors switch quickly at animation start; reduced-motion settles immediately",
     rationale: "Two stacked word faces need a content-driven vertical surface; only height departs from the global size lattice.",
   },
@@ -96,7 +121,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   splitIconRailColor: "secondary (--pair-b) by default; size-tier icon dimensions; centered on both axes",
   badgeTypography: "Inter, font-weight 1000, font-synthesis none; labels centered; no thin-weight inheritance",
   splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
-  globalSizeLattice: "supreme 60px / 4.09px border / 8.18px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
+  globalSizeLattice: "supreme 60px / 3px border / 6px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; mini 20px / 1.5px border / 3px radius / 16px type and icon; micro 12px / 1.5px border / 3px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
   textContainment: "Global rule for all single-line text-bearing Studio primitives: split-left, split-right, and double-split labels center against the full component outer border box, independent of rail placement; use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls. Multiline textareas are excluded.",
@@ -119,7 +144,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   strokeColor: "#000000",
   colorPairSystem: "primary = --pair-a; secondary = --pair-b",
   backgroundFill: "buttons and badges use the global primary/secondary color pair; text inputs and text areas use primary at 50% opacity by default and 15% primary on focus",
-  textColor: "text fields use primary by default and black on focus; other controls use their component contract",
+  textColor: "editable text fields use primary text and primary glyph stroke at rest, black text and black glyph stroke on focus, with a persistent primary inset; display text boxes always use black text/stroke, primary inset, and secondary outline",
   textTransform: "uppercase",
   letterSpacing: "-0.02em",
   lineHeight: 1,
@@ -150,7 +175,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       sunMoon: "Persistent selected toggle crossfades and rotates between Sun and Moon.",
       lockUnlock: "Persistent selected toggle morphs between Lock and Unlock.",
       downloadSuccess: "Outcome-driven Download-to-Check state; set success only after the operation succeeds.",
-      rotatedToggle: "Opt-in inner-stage rotation; outer 44px/28px geometry and press transform remain unchanged.",
+      rotatedToggle: "Opt-in inner-stage rotation; outer geometry remains controlled by the selected Studio size tier.",
       flip: "Opt-in two-face 3D flip; provide activeIcon for a meaningful alternate face.",
       tooltip: "Opt-in contextual label revealed on hover/focus; accessible name remains label.",
       morph: "Opt-in icon crossfade/scale/rotation; provide activeIcon for the selected state.",
@@ -167,7 +192,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       compactTextAreaFontSize: "14px",
       rule: "Single-line inputs follow global 38px standard / 24px compact typography. Textareas alone use 18px standard / 14px compact, with multiline line-height, padding, and a 92px minimum writing surface.",
     },
-    sizeFamily: "Single-line inputs use global 38px standard / 24px compact typography and the shared default line-height. Textareas alone use 18px standard / 14px compact with multiline line-height, padding, and a 92px minimum surface. Size selects 44px/28px height, 3px/2px stroke, and 6px/4px radius for both families.",
+    sizeFamily: "Single-line inputs use 51.82px Supreme / 38px standard / 24px compact / 17.5px Mini / 10px Micro typography. Textareas use 24.55px Supreme / 18px standard / 14px compact / 17.5px Mini with multiline line-height, padding, and a 92px minimum surface. Size selects 60/44/28/20/12px geometry, 4.09/3/2/1.5/1px stroke, and 8.18/6/4/3/2px radius where the family supports each tier.",
     defaultMode: {
       textColor: "primary",
       textStrokeColor: "matches text color (primary)",
@@ -201,26 +226,6 @@ const withStudioAttrs = (size: StudioControlSize, tone?: StudioControlTone) => (
   ...(tone ? { "data-tone": tone } : {}),
 })
 
-/**
- * Separate search and numeric controls remain compatible with existing consumers;
- * the StudioTextInput foundation itself is intentionally only one plain input.
- */
-export const StudioSearchInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioSearchInput.displayName = "StudioSearchInput"
-
-export const StudioNumberInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "number", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} placeholder={placeholder} autoCorrect="off" autoCapitalize="off" spellCheck={false} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioNumberInput.displayName = "StudioNumberInput"
-
 export { StudioTextInput, StudioInput }
 export type { StudioTextInputProps } from "./StudioTextInput"
 
@@ -245,9 +250,12 @@ export const StudioTextBox = React.forwardRef<HTMLDivElement, StudioTextBoxProps
       {...props}
       ref={ref}
       contentEditable={false}
+      aria-readonly="true"
       className={studioClasses("vt-studio-text-box", className)}
       data-vt-studio-control="true"
+      data-vt-studio-text-box="true"
       data-vt-studio-field-kind="textarea-display"
+      data-vt-library-component="StudioTextBox"
       data-size={size}
     >
       {children}
@@ -258,12 +266,13 @@ StudioTextBox.displayName = "StudioTextBox"
 
 
 const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
-/** Canonical Studio 44px / 28px switch, choice, and word-toggle primitives. */
+/** Canonical Studio switch, choice, and word-toggle primitives with token-driven size variants. */
 export type StudioControlSkin = "solid" | "color-swap" | "black-indicator" | "white-indicator";
 export interface StudioControlButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
   skin?: StudioControlSkin;
   checked: boolean;
   shape?: "round" | "rect";
+  sizeVariant?: StudioControlSize;
 }
 const studioSkinClass = (skin: StudioControlSkin) => ({
   "solid": "is-solid",
@@ -271,8 +280,8 @@ const studioSkinClass = (skin: StudioControlSkin) => ({
   "black-indicator": "is-black-indicator",
   "white-indicator": "is-white-indicator",
 }[skin]);
-export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", type = "button", ...props }) => (
-  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-size="standard" className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
+export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", sizeVariant = "standard", type = "button", ...props }) => (
+  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-vt-studio-width="content" data-size={sizeVariant} className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
 );
 export type StudioChoiceKind = "radio" | "checkbox";
 export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
@@ -424,7 +433,7 @@ const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direct
 }
 
 export const StudioChoice: React.FC<StudioChoiceProps> = ({
-  kind, mark = "check", skin = "solid", checked, className, shape = "round",
+  kind, mark = "check", skin = "solid", checked, className, shape = "round", sizeVariant = "standard",
   type = "button", onClick, disabled, ...props
 }) => {
   const [uncontrolledChecked, setUncontrolledChecked] = React.useState(false)
@@ -456,8 +465,8 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
       type={type}
       role={kind}
       aria-checked={isChecked}
-      data-vt-studio-control="true"
-      data-size="standard"
+      data-vt-studio-control="true" data-vt-studio-width="content"
+      data-size={sizeVariant}
       data-radio-motion={kind === "radio" ? radioMotion : undefined}
       data-radio-direction={kind === "radio" ? motionDirection : undefined}
       data-radio-motion-run={kind === "radio" ? motionRun : undefined}
@@ -485,7 +494,7 @@ export interface StudioWordToggleProps extends React.HTMLAttributes<HTMLDivEleme
   value: boolean;
   onValueChange?: (value: boolean) => void;
   words?: readonly [string, string];
-  size?: "44" | "28";
+  size?: "60" | "44" | "28" | "20" | "12";
   skin?: StudioControlSkin;
   /** Optional fixed handle width in CSS pixels; omitted means measure the active word. */
   handleWidth?: number;
@@ -528,8 +537,8 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     if (!root || !target) return null;
     const rootRect = root.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
-    const inset = handleInset ?? (size === "28" ? 2 : 4);
-    const measuredWidth = Math.max(targetRect.width - inset * 2, 12) * handleWidthScale;
+    const inset = handleInset ?? (size === "60" ? 5.5 : size === "28" ? 2 : size === "20" ? 1.5 : size === "12" ? 1 : 2.75);
+    const measuredWidth = Math.max(targetRect.width - inset * 2, Number(size) * 0.272727) * handleWidthScale;
     const nextWidth = handleWidth === undefined ? measuredWidth : Math.max(0, handleWidth);
     return {
       left: targetRect.left - rootRect.left - root.clientLeft + (targetRect.width - nextWidth) / 2,
@@ -741,7 +750,7 @@ export const Studiotoggle: React.FC<StudioWordToggleProps> = ({ value, onValueCh
     );
   }
 
-  return <div ref={rootRef} role="group" data-vt-studio-control="true" data-size={size === "28" ? "compact" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "28" ? 2 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
+  return <div ref={rootRef} role="group" data-vt-studio-control="true" data-vt-studio-width="content" data-size={size === "60" ? "supreme" : size === "28" ? "compact" : size === "20" ? "mini" : size === "12" ? "micro" : "standard"} data-vt-word-toggle-size={size} className={studioClasses("vt-studio-44-word-toggle", `is-size-${size}`, studioSkinClass(skin), className)} style={{ ...style, "--vt-word-toggle-handle-inset": `${handleInset ?? (size === "60" ? 5.5 : size === "28" ? 2 : size === "20" ? 1.5 : size === "12" ? 1 : 2.75)}px`, "--vt-word-toggle-handle-width-scale": handleWidthScale, "--vt-word-toggle-word-gap": `${wordGap}px`, "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} {...props}>
     <span ref={handleRef} className="vt-studio-44-word-handle" aria-hidden="true" style={{ "--vt-word-toggle-handle-left": `${handle.left}px`, "--vt-word-toggle-handle-width": `${handle.width}px` } as React.CSSProperties} data-active={value ? "true" : "false"}>
       <span ref={overlayRef} className="vt-studio-44-word-handle-color" aria-hidden="true" />
     </span>
@@ -764,10 +773,12 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
   onValueChange,
   words = ["WRITE", "CREATE"],
   sizeVariant = "compact",
-  variant = "black-fill",
+  variant = "primary-secondary",
   className,
   style,
   onClick,
+  onKeyDown,
+  disabled,
   "aria-label": ariaLabel,
   ...props
 }) => {
@@ -787,8 +798,8 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     const rootRect = root.getBoundingClientRect();
     const wordRect = word.getBoundingClientRect();
     // Mirror the horizontal word-toggle handle: exact word-block bounds with no
-    // line-height fudge. The 2.75px-style side insets stay in CSS, so the
-    // handle's corner radius and edge spacing align on all four sides.
+    // line-height fudge. Side insets stay in CSS, so the handle's corner radius
+    // and edge spacing align evenly on all four sides of the module.
     return { top: wordRect.top - rootRect.top - root.clientTop, height: wordRect.height };
   }, []);
 
@@ -796,14 +807,23 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     const bounds = getBounds(nextValue ? 1 : 0);
     const handle = handleRef.current;
     const overlay = overlayRef.current;
+    const root = rootRef.current;
+    if (root) root.dataset.value = String(nextValue);
     if (bounds && handle) {
+      // The base stylesheet sets both block edges for the resting handle.
+      // Release the bottom edge whenever JS owns measured top/height, so it cannot
+      // compete with the selected row's position during settle.
+      handle.style.bottom = "auto";
+      handle.style.insetBlockEnd = "auto";
       handle.style.top = String(bounds.top) + "px";
       handle.style.height = String(bounds.height) + "px";
       handle.style.background = "";
     }
     if (overlay) {
       overlay.style.display = "none";
+      overlay.style.opacity = "";
       overlay.style.clipPath = "";
+      overlay.style.background = "";
     }
   }, [getBounds]);
 
@@ -815,7 +835,7 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
 
   const animateToggle = React.useCallback((to: boolean) => {
     const from = latestValueRef.current;
-    if (busyRef.current || to === from) return;
+    if (busyRef.current || to === from || disabled) return;
     const root = rootRef.current;
     const handle = handleRef.current;
     const overlay = overlayRef.current;
@@ -828,11 +848,11 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     }
 
     const colorFor = (state: boolean) => {
-      if (variant === "primary-white-handle") return "#ffffff";
-      if (variant === "white-fill") return "#000000";
+      if (variant === "primary-white-handle") return state ? "#ffffff" : "#000000";
+      if (variant === "white-fill" || variant === "black-fill") return "#000000";
       return state
-        ? "var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))"
-        : "var(--vt-studio-control-accent, var(--pair-a, #36e0f6))";
+        ? "var(--vt-studio-control-secondary, var(--pair-b, #f276c5))"
+        : "var(--vt-studio-control-accent, var(--pair-a, #20f13e))";
     };
     const fromColor = colorFor(from);
     const toColor = colorFor(to);
@@ -844,7 +864,9 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
     const reachEnd = velvet ? 0.58 : 0.70;
     const releaseStart = velvet ? 0.72 : 0.84;
 
+    // Keep CSS variant state in lockstep with the optimistic target, not the next React render.
     latestValueRef.current = to;
+    root.dataset.value = String(to);
     stepRef.current += 1;
     busyRef.current = true;
     root.dataset.motion = velvet ? "Velvet Release" : "Late Silk";
@@ -882,6 +904,8 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       const height = t < releaseStart
         ? mix(source.height, expandedHeight, reach)
         : mix(expandedHeight, destination.height, release);
+      handle.style.bottom = "auto";
+      handle.style.insetBlockEnd = "auto";
       handle.style.top = String(top) + "px";
       handle.style.height = String(height) + "px";
       if (velvet) {
@@ -901,9 +925,10 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       }
     };
     frameRef.current = requestAnimationFrame(tick);
-  }, [getBounds, onValueChange, settle, variant]);
+  }, [disabled, getBounds, onValueChange, settle, variant]);
 
   React.useEffect(() => {
+    if (busyRef.current) return;
     latestValueRef.current = value;
     const schedule = () => {
       if (busyRef.current) return;
@@ -948,8 +973,23 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);
-    if (event.defaultPrevented || props.disabled) return;
+    if (event.defaultPrevented || disabled) return;
     animateToggle(!latestValueRef.current);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    onKeyDown?.(event);
+    if (event.defaultPrevented || disabled) return;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      animateToggle(true);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      animateToggle(false);
+    } else if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
+      animateToggle(!latestValueRef.current);
+    }
   };
 
   return (
@@ -958,15 +998,17 @@ export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> =
       type="button"
       role="switch"
       aria-checked={value}
+      disabled={disabled}
       aria-label={ariaLabel ?? words[0] + " / " + words[1]}
       data-vt-studio-control="true"
-      data-vt-studio-vertical-word-toggle="true"
+      data-vt-studio-vertical-word-toggle="true" data-vt-studio-width="content"
       data-vertical-word-toggle-variant={variant}
       data-size={sizeVariant}
       data-value={String(value)}
       className={studioClasses("vt-studio-vertical-word-toggle", "is-" + sizeVariant, "is-" + variant, className)}
       style={style}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       {...props}
     >
       <span ref={handleRef} className="vt-studio-vertical-word-toggle__handle" aria-hidden="true">
@@ -1003,14 +1045,6 @@ export const StudioRadio = Studioradio
 export const StudioCheckbox = Studiocheck
 export const StudioXCheckbox = Studioxbox
 
-export const StudioSelect = React.forwardRef<
-  HTMLSelectElement,
-  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", ...props }, ref) => (
-  <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioSelect.displayName = "StudioSelect"
-
 export type StudioButtonVariant = "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "v7"
 
 export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -1026,13 +1060,13 @@ export interface StudioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   /** Initial local toggle state for V3, V5 and V6; every instance owns independent state. */
   defaultOn?: boolean
   onVariantChange?: (on: boolean) => void
-  /** StudioButton also supports the canonical 12px Micro tier for dense UI surfaces. */
+  /** StudioButton supports all five canonical tiers where its content/layout variant permits them. */
   sizeVariant?: StudioControlSize
   tone?: StudioControlTone
   loading?: boolean
   selected?: boolean
   /** Explicit geometry variant for Supreme 60px, Standard 44px, and Compact 28px button geometry. */
-  heightVariant?: "60" | "44" | "28"
+  heightVariant?: "60" | "44" | "28" | "20" | "12"
   /** Layout variant owned by StudioButton; geometry and behavior remain canonical. */
   textLayout?: "single-line" | "two-line"
   /** First row for the two-line text layout variant. */
@@ -1073,9 +1107,9 @@ export const StudioButton = React.forwardRef<HTMLButtonElement, StudioButtonProp
     // Height is the authoritative geometry when supplied. This prevents a 28px
     // control from accidentally inheriting standard border/radius tokens.
     const resolvedSize = heightVariant
-      ? heightVariant === "28" ? "compact" : heightVariant === "60" ? "supreme" : "standard"
+      ? heightVariant === "60" ? "supreme" : heightVariant === "28" ? "compact" : heightVariant === "20" ? "mini" : heightVariant === "12" ? "micro" : "standard"
       : sizeVariant ?? "standard"
-    const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : resolvedSize === "micro" ? "12" : "44")
+    const resolvedHeight = heightVariant ?? (resolvedSize === "supreme" ? "60" : resolvedSize === "compact" ? "28" : resolvedSize === "mini" ? "20" : resolvedSize === "micro" ? "12" : "44")
     const handleClick: React.MouseEventHandler<HTMLButtonElement> = event => {
       onClick?.(event)
       if (event.defaultPrevented || event.currentTarget.disabled || !isToggleVariant) return
@@ -1448,8 +1482,6 @@ export interface StudioSplitShellProps {
   rightRailClassName?: string
   leftRailProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
   rightRailProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
-  /** Opt-in: rails are interactive buttons rather than decorative icons. */
-  interactiveRails?: boolean
   leftRailContent?: React.ReactNode
   rightRailContent?: React.ReactNode
   shellProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
@@ -1478,6 +1510,61 @@ export const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   )
 }
 
+export interface StudioUsernameInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "className" | "style"> {
+  icon: React.ReactNode
+  sizeVariant?: StudioControlSize
+  /** className/style apply to the composite; inputClassName/inputStyle target the native input. */
+  className?: string
+  style?: React.CSSProperties
+  inputClassName?: string
+  inputStyle?: React.CSSProperties
+}
+type StudioSplitFieldInputProps = StudioUsernameInputProps & {
+  libraryComponent: "StudioUsernameInput" | "StudioSplitLeftInput"
+}
+const StudioSplitFieldInput = React.forwardRef<HTMLInputElement, StudioSplitFieldInputProps>(
+  ({ icon, sizeVariant = "standard", className, style, inputClassName, inputStyle, disabled, libraryComponent, ...inputProps }, ref) => (
+    <StudioSplitShell
+      layout="left"
+      sizeVariant={sizeVariant}
+      iconLeft={<span data-vt-studio-username-rail="true">{icon}</span>}
+      className={studioClasses("vt-studio-username-input", className)}
+      shellProps={{
+        "data-vt-studio-username-input": "true",
+        "data-vt-studio-control-family": "field",
+        "data-vt-studio-control-kind": "split-input",
+        "data-vt-library-component": libraryComponent,
+        "data-icon-size-variant": "large",
+        "data-disabled": disabled ? "true" : undefined,
+        style,
+        "aria-disabled": disabled || undefined,
+      }}
+      fieldSlot
+    >
+      <StudioTextInput
+        {...inputProps}
+        ref={ref}
+        sizeVariant={sizeVariant}
+        disabled={disabled}
+        className={studioClasses("vt-studio-username-input__input", inputClassName)}
+        style={inputStyle}
+      />
+    </StudioSplitShell>
+  ),
+)
+StudioSplitFieldInput.displayName = "StudioSplitFieldInput"
+
+export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUsernameInputProps>(
+  (props, ref) => <StudioSplitFieldInput {...props} ref={ref} libraryComponent="StudioUsernameInput" />,
+)
+StudioUsernameInput.displayName = "StudioUsernameInput"
+
+export const StudioSplitLeftInput = React.forwardRef<HTMLInputElement, StudioUsernameInputProps>(
+  (props, ref) => <StudioSplitFieldInput {...props} ref={ref} libraryComponent="StudioSplitLeftInput" />,
+)
+StudioSplitLeftInput.displayName = "StudioSplitLeftInput"
+
+
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
   ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
     <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-left="true" data-vt-studio-split="left" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
@@ -1487,7 +1574,7 @@ export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioS
 )
 StudioSplitLeftButton.displayName = "StudioSplitLeftButton"
 
-/** Canonical two-rail action button, using the shared StudioButton + StudioSplitShell anatomy. */
+/** Double split button rebuilt around the same face/rail geometry as the confirmed split-left button and split badges. */
 export interface StudioDoubleSplitButtonProps extends Omit<StudioButtonProps, "faceLayout" | "children" | "icon"> {
   leftIcon: React.ReactNode
   rightIcon: React.ReactNode
@@ -1495,24 +1582,37 @@ export interface StudioDoubleSplitButtonProps extends Omit<StudioButtonProps, "f
   iconSizeVariant?: StudioIconSizeVariant
 }
 export const StudioDoubleSplitButton = React.forwardRef<HTMLButtonElement, StudioDoubleSplitButtonProps>(
-  ({ leftIcon, rightIcon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-vt-studio-split="double" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioDoubleSplitButton" {...props}>
-      <StudioSplitShell layout="double" sizeVariant={sizeVariant} iconLeft={leftIcon} iconRight={rightIcon} faceOnly>{children}</StudioSplitShell>
+  ({ leftIcon, rightIcon, children, sizeVariant = "standard", iconSizeVariant = "large", className, ...props }, ref) => (
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split"
+      className={studioClasses("vt-studio-double-split-button", className)}
+      data-vt-studio-split="double" data-icon-size-variant={iconSizeVariant}
+      data-vt-library-component="StudioDoubleSplitButton" {...props}>
+      <span data-vt-studio-split-face="true" data-vt-studio-split="double" data-size={sizeVariant} className="vt-studio-split-face">
+        <span data-vt-studio-split-rail data-rail="start" aria-hidden="true">{leftIcon}</span>
+        <span data-vt-studio-split-label>{children}</span>
+        <span data-vt-studio-split-rail data-rail="end" aria-hidden="true">{rightIcon}</span>
+      </span>
     </StudioButton>
   ),
 )
 StudioDoubleSplitButton.displayName = "StudioDoubleSplitButton"
 
-/** Canonical right-rail action button; shares the same Studio split shell and tokens. */
+/** Right split button rebuilt as a flexible label plus one full-height right rail. */
 export interface StudioSplitRightButtonProps extends StudioButtonProps {
   /** Icon rendered in the square right rail. */
   icon: React.ReactNode
   iconSizeVariant?: StudioIconSizeVariant
 }
 export const StudioSplitRightButton = React.forwardRef<HTMLButtonElement, StudioSplitRightButtonProps>(
-  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
-    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitRightButton" {...props}>
-      <StudioSplitShell layout="right" sizeVariant={sizeVariant} iconRight={icon} faceOnly>{children}</StudioSplitShell>
+  ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", className, ...props }, ref) => (
+    <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split"
+      className={studioClasses("vt-studio-split-right-button", className)}
+      data-split-right="true" data-vt-studio-split="right" data-icon-size-variant={iconSizeVariant}
+      data-vt-library-component="StudioSplitRightButton" {...props}>
+      <span data-vt-studio-split-face="true" data-vt-studio-split="right" data-size={sizeVariant} className="vt-studio-split-face">
+        <span data-vt-studio-split-label>{children}</span>
+        <span data-vt-studio-split-rail data-rail="end" aria-hidden="true">{icon}</span>
+      </span>
     </StudioButton>
   ),
 )
@@ -1571,7 +1671,7 @@ StudioSquareIconButtonGroup.displayName = "StudioSquareIconButtonGroup"
 
 
 export type StudioTopSplitModuleSplit = "left" | "right" | "double" | "none"
-export type StudioTopSplitModuleSize = "standard" | "compact"
+export type StudioTopSplitModuleSize = StudioControlSize
 
 export interface StudioTopSplitModuleProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
   title: React.ReactNode
@@ -2154,6 +2254,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   )
 }
 
+/** Single-select dropdown with a secondary icon rail on the left and a trailing chevron rail. */
 export interface StudioSimpleDropdownOption { value: string; label: string; disabled?: boolean }
 export interface StudioSimpleDropdownProps {
   value?: string
@@ -2174,7 +2275,6 @@ export const StudioSimpleDropdown: React.FC<StudioSimpleDropdownProps> = ({ opti
 )
 StudioSimpleDropdown.displayName = "StudioSimpleDropdown"
 
-/** Single-select dropdown with a secondary icon rail on the left and a trailing chevron rail. */
 export const StudioSplitLeftDropdown: React.FC<Omit<StudioDropdownProps, "variant">> = (props) => (
   <StudioDropdown {...props} variant="split-left" />
 )
@@ -2281,6 +2381,7 @@ const useStudioCounterHold = (
 
 /** Independent button-only counter primitives. These deliberately do not compose either legacy stepper. */
 export interface StudioCounterProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
+  [key: `data-${string}`]: string | undefined;
   value: number;
   onValueChange: (value: number) => void;
   min?: number;
@@ -2290,6 +2391,22 @@ export interface StudioCounterProps extends Omit<React.HTMLAttributes<HTMLSpanEl
   disabled?: boolean;
   ariaLabel?: string;
 }
+
+export interface StudioLeftCounterProps extends StudioCounterProps {
+  /** Optional display override used by semantic variants that retain numeric counter mechanics. */
+  displayValue?: React.ReactNode;
+}
+
+export type StudioLeftWordCounterProps = Omit<StudioCounterProps, "min" | "max" | "step">;
+export type StudioLeftWordSliderProps = Omit<StudioDoubleSplitSliderProps, "min" | "max" | "step" | "leftControls">;
+
+export const STUDIO_LEFT_WORD_OPTIONS = ["ONE", "TWO", "THREE", "FOUR"] as const;
+export type StudioLeftWord = typeof STUDIO_LEFT_WORD_OPTIONS[number];
+
+export const normalizeStudioLeftWordIndex = (value: number): number => {
+  if (!Number.isFinite(value)) return 1;
+  return ((Math.round(value) - 1 + STUDIO_LEFT_WORD_OPTIONS.length) % STUDIO_LEFT_WORD_OPTIONS.length + STUDIO_LEFT_WORD_OPTIONS.length) % STUDIO_LEFT_WORD_OPTIONS.length + 1;
+};
 
 /** Three-part counter: square decrement, 2:1 display, square increment. */
 export const StudioCounter: React.FC<StudioCounterProps> = ({
@@ -2365,10 +2482,10 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
 };
 StudioSideCounter.displayName = "StudioSideCounter";
 
-export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
+export const StudioLeftCounter: React.FC<StudioLeftCounterProps> = ({
   value, onValueChange, min = 0, max = 100, step = 1,
   size = "standard", disabled = false, ariaLabel = "Value",
-  className, ...props
+  displayValue, className, ...props
 }) => {
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const interactionFocus = useStudioInteractionFocus();
@@ -2394,13 +2511,42 @@ export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
         <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
         <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
-      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-left-counter", "data-vt-library-component": "StudioLeftCounter" }}
+      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-left-counter", "data-vt-library-component": props["data-vt-library-component"] ?? "StudioLeftCounter" }}
     >
-      <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
+      <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{displayValue ?? String(current)}</span>
     </StudioSplitShell>
   );
 };
 StudioLeftCounter.displayName = "StudioLeftCounter";
+
+/** Four-state word cycle built on the canonical StudioLeftCounter interaction mechanics. */
+export const StudioLeftWordCounter: React.FC<StudioLeftWordCounterProps> = ({
+  value, onValueChange, size = "standard", className, disabled = false, ariaLabel = "Word",
+  ...props
+}) => {
+  const wordIndex = normalizeStudioLeftWordIndex(value);
+  const handleValueChange = React.useCallback((nextValue: number) => {
+    onValueChange(normalizeStudioLeftWordIndex(nextValue));
+  }, [onValueChange]);
+  return (
+    <StudioLeftCounter
+      {...props}
+      value={wordIndex}
+      onValueChange={handleValueChange}
+      min={0}
+      max={STUDIO_LEFT_WORD_OPTIONS.length + 1}
+      step={1}
+      size={size}
+      disabled={disabled}
+      ariaLabel={ariaLabel}
+      displayValue={STUDIO_LEFT_WORD_OPTIONS[wordIndex - 1]}
+      className={studioClasses("vt-studio-left-word-counter", className)}
+      data-vt-studio-word-index={String(wordIndex)}
+      data-vt-library-component="StudioLeftWordCounter"
+    />
+  );
+};
+StudioLeftWordCounter.displayName = "StudioLeftWordCounter";
 
 
 /** Closeable metadata badge using the global Studio size and palette contract. */
@@ -2747,10 +2893,10 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
       </span>
-      <span className="vt-studio-upload-frame__label" data-vt-studio-split="double" data-has-file={selectedName ? "true" : "false"} aria-live="polite">
-        <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--left" aria-hidden="true"><Upload /></span>
-        <span className="vt-studio-upload-frame__badge-text">{selectedName || prompt}</span>
-        <span className="vt-studio-upload-frame__badge-rail vt-studio-upload-frame__badge-rail--right" aria-hidden="true"><ImageIcon /></span>
+      <span className="vt-studio-upload-frame__file-bar" data-has-file={selectedName ? "true" : "false"} aria-live="polite">
+        <span className="vt-studio-upload-frame__file-action" aria-hidden="true"><Upload /></span>
+        <span className="vt-studio-upload-frame__file-name">{selectedName || prompt}</span>
+        <span className="vt-studio-upload-frame__file-kind" aria-hidden="true"><ImageIcon /></span>
       </span>
     </label>
   );
@@ -2817,6 +2963,7 @@ export const StudioDoubleSplitBadge: React.FC<StudioDoubleSplitBadgeProps> = ({ 
 StudioDoubleSplitBadge.displayName = "StudioDoubleSplitBadge";
 
 export interface StudioDoubleSplitSliderProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
+  [key: `data-${string}`]: string | undefined;
   value: number;
   onValueChange: (value: number) => void;
   min?: number;
@@ -2885,9 +3032,9 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
       )}
       rightRailContent={<output className="vt-studio-double-split-slider__value" aria-live="off">{current}</output>}
       shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end,
-        "data-vt-studio-slider": "double-split",
+        "data-vt-studio-slider": props["data-vt-studio-slider"] ?? "double-split",
         "data-vt-studio-slider-left-controls": leftControls,
-        "data-vt-library-component": "StudioDoubleSplitSlider",
+        "data-vt-library-component": props["data-vt-library-component"] ?? "StudioDoubleSplitSlider",
         "data-size": size,
         "aria-disabled": disabled || !validBounds ? "true" : undefined,
       }}
@@ -2908,6 +3055,35 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
   );
 };
 StudioDoubleSplitSlider.displayName = "StudioDoubleSplitSlider";
+
+/** Four-position left counter + slider with a live numeric value in the right rail. */
+export const StudioLeftWordSlider: React.FC<StudioLeftWordSliderProps> = ({
+  value, onValueChange, size = "standard", className, disabled = false, ariaLabel = "Word slider",
+  ...props
+}) => {
+  const wordIndex = normalizeStudioLeftWordIndex(value);
+  const handleValueChange = React.useCallback((nextValue: number) => {
+    onValueChange(normalizeStudioLeftWordIndex(nextValue));
+  }, [onValueChange]);
+  return (
+    <StudioDoubleSplitSlider
+      {...props}
+      value={wordIndex}
+      onValueChange={handleValueChange}
+      min={1}
+      max={STUDIO_LEFT_WORD_OPTIONS.length}
+      step={1}
+      size={size}
+      disabled={disabled}
+      ariaLabel={ariaLabel}
+      leftControls="counter"
+      className={studioClasses("vt-studio-left-word-slider", className)}
+      data-vt-studio-slider="left-word"
+      data-vt-library-component="StudioLeftWordSlider"
+    />
+  );
+};
+StudioLeftWordSlider.displayName = "StudioLeftWordSlider";
 
 
 
@@ -3011,6 +3187,125 @@ export const StudioBrainStatusIndicator: React.FC<{
 StudioBrainStatusIndicator.displayName = "StudioBrainStatusIndicator";
 
 
+
+
+// ─── Canonical steppers: inline (double-split) and split (value + action rail) ───
+export function normalizeStudioInlineStepperValue(
+  value: number,
+  direction: -1 | 1,
+  step = 1,
+  min = Number.NEGATIVE_INFINITY,
+  max = Number.POSITIVE_INFINITY,
+): number {
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const current = Number.isFinite(value) ? value : Number.isFinite(min) ? min : 0;
+  const next = Math.min(max, Math.max(min, current + direction * safeStep));
+  const precision = Math.min(12, Math.max(0, (String(safeStep).split(".")[1] ?? "").length));
+  return Number(next.toFixed(precision));
+}
+
+export interface StudioInlineStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: "standard" | "compact";
+  ariaLabel?: string;
+  disabled?: boolean;
+}
+
+/** Flat double-split numeric stepper: decrement, editable value, increment. */
+export const StudioInlineStepper: React.FC<StudioInlineStepperProps> = ({
+  value, onValueChange, min = 0, max = Number.POSITIVE_INFINITY, step = 1,
+  size = "standard", ariaLabel = "Value", disabled = false, className, ...props
+}) => {
+  const change = (direction: -1 | 1) => onValueChange(normalizeStudioInlineStepperValue(value, direction, step, min, max));
+  return (
+    <div
+      {...props}
+      className={studioClasses("vt-studio-inline-stepper", size === "compact" ? "is-compact" : "is-standard", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="inline-stepper"
+      data-vt-studio-split="double"
+      data-size={size}
+    >
+      <div className="vt-studio-inline-stepper__actions">
+        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
+        <button type="button" className="vt-studio-inline-stepper__rail" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
+      </div>
+      <input
+        className="vt-studio-inline-stepper__value"
+        type="number"
+        aria-label={ariaLabel}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        disabled={disabled}
+        onChange={event => {
+          const parsed = Number(event.currentTarget.value);
+          if (event.currentTarget.value.trim() !== "" && Number.isFinite(parsed)) onValueChange(Math.min(max, Math.max(min, parsed)));
+        }}
+      />
+    </div>
+  );
+};
+StudioInlineStepper.displayName = "StudioInlineStepper"
+
+export interface StudioSplitStepperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: "standard" | "compact";
+  ariaLabel?: string;
+  disabled?: boolean;
+}
+export type StudioSplitStepperSize = NonNullable<StudioSplitStepperProps["size"]>;
+
+/** Username-input-derived compact numeric field with a secondary action rail. */
+export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
+  value, onValueChange, min = 0, max = Number.POSITIVE_INFINITY, step = 1,
+  size = "standard", ariaLabel = "Value", disabled = false, className, ...props
+}) => {
+  const change = (direction: -1 | 1) => onValueChange(normalizeStudioInlineStepperValue(value, direction, step, min, max));
+  return (
+    <div
+      {...props}
+      className={studioClasses("vt-studio-split-stepper", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-control-family="stepper"
+      data-vt-studio-control-kind="split-stepper"
+      data-vt-studio-username-foundation="true"
+      data-size={size}
+    >
+      <input
+        className="vt-studio-split-stepper-value"
+        type="number"
+        aria-label={ariaLabel}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        disabled={disabled}
+        onChange={event => {
+          const parsed = Number(event.currentTarget.value);
+          if (event.currentTarget.value.trim() !== "" && Number.isFinite(parsed)) onValueChange(Math.min(max, Math.max(min, parsed)));
+        }}
+      />
+      <div className="vt-studio-split-stepper-rail">
+        <div className="vt-studio-split-stepper-actions">
+          <button type="button" aria-label={`Decrease ${ariaLabel}`} disabled={disabled || value <= min} onClick={() => change(-1)}><Minus aria-hidden="true" /></button>
+          <button type="button" aria-label={`Increase ${ariaLabel}`} disabled={disabled || value >= max} onClick={() => change(1)}><Plus aria-hidden="true" /></button>
+        </div>
+      </div>
+    </div>
+  );
+};
+StudioSplitStepper.displayName = "StudioSplitStepper"
 
 
 export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, STUDIO_VALUE_TOGGLE_VARIANTS } from "./StudioValueToggles";

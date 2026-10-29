@@ -3,16 +3,21 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
+import { StudioSplitTextInput } from "./StudioSplitTextInput"
 
 const readStudioControlCss = () => [
   "studio-control-system.css",
   "studio-control-core.css",
   "studio-control-split.css",
   "studio-control-fields.css",
+  "studio-control-distill-overrides.css",
+  "studio-control-recovery-overrides.css",
+  "studio-control-word-counter.css",
+  "studio-split-text-input.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
 
 const canonicalTail = (css: string) => {
@@ -21,21 +26,21 @@ const canonicalTail = (css: string) => {
 };
 
 
-describe("StudioTextBox size-aware stroke defaults", () => {
-  it("halves only the local stroke width while preserving the 50% fill and black text", () => {
+describe("StudioTextBox size-aware primary inline stroke defaults", () => {
+  it("shares full field geometry while keeping black text and matching black glyph stroke", () => {
     const css = readStudioControlCss();
     const start = css.indexOf('.vt-studio-text-box[data-vt-studio-control="true"]');
     const end = css.indexOf("/* Textarea and read-only text display share", start);
     const textBox = css.slice(start, end);
-    expect(textBox).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5)");
-    expect(textBox).toContain("border: var(--studio-text-box-stroke-width) solid #000");
-    expect(textBox).toContain("inset 0 0 0 var(--studio-text-box-stroke-width)");
-    expect(textBox).toContain("outline: var(--studio-text-box-stroke-width) solid");
+    expect(textBox).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000");
+    expect(textBox).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
+    expect(textBox).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;");
     expect(textBox).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
     expect(textBox).toContain("color: #000");
-    expect(textBox).toContain("line-height: var(--textarea-description-line-height, 0.75)");
+    expect(textBox).toContain("line-height: var(--vt-studio-textarea-line-height, .85)");
     expect(textBox).toContain('[data-size="compact"]');
     expect(textBox).toContain('[data-size="micro"]');
+    expect(textBox).toContain('[data-size="mini"]');
   });
 });
 
@@ -74,6 +79,17 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain('aria-label="Upload media"');
     expect(html).toContain('class="vt-studio-upload-frame__layers"');
     expect(html).toContain('class="vt-studio-upload-frame__layer vt-studio-upload-frame__layer--core"');
+    expect(html).toContain('class="vt-studio-upload-frame__file-bar"');
+    expect(html).toContain('class="vt-studio-upload-frame__file-action"');
+    expect(html).toContain('class="vt-studio-upload-frame__file-name"');
+    expect(html).toContain('class="vt-studio-upload-frame__file-kind"');
+    expect(html).not.toContain('vt-studio-upload-frame__badge-rail');
+    expect(html).not.toContain('data-vt-studio-split="double"');
+    const css = readStudioControlCss();
+    expect(css).toContain('.vt-studio-upload-frame::before');
+    expect(css).toContain('mask-composite: exclude');
+    expect(css).toContain('inset: calc(2 * var(--vt-studio-upload-frame-stroke))');
+    expect(css).toContain('border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke) - var(--vt-upload-secondary-stroke)))');
     expect(html).toContain("Drag or drop");
     expect(html).toContain("Image / video here · or click to upload");
     expect(html).not.toContain("FA618A");
@@ -280,41 +296,62 @@ describe("standalone Studio text fields", () => {
     expect(compact).toContain('data-size="compact"')
   })
 
-  it("renders StudioTextBox as non-editable standard, compact, and micro display surfaces", () => {
+  it("renders StudioTextBox as readonly display surfaces across the supported size tiers", () => {
     const standard = renderToStaticMarkup(<StudioTextBox aria-label="Standard summary">First row{"\n"}Second row</StudioTextBox>)
+    const supreme = renderToStaticMarkup(<StudioTextBox size="supreme" aria-label="Supreme summary">Supreme content</StudioTextBox>)
     const compact = renderToStaticMarkup(<StudioTextBox size="compact" aria-label="Compact summary">Compact content</StudioTextBox>)
+    const mini = renderToStaticMarkup(<StudioTextBox size="mini" aria-label="Mini summary">Mini content</StudioTextBox>)
     const micro = renderToStaticMarkup(<StudioTextBox size="micro" aria-label="Micro summary">Micro content</StudioTextBox>)
     expect(standard).toContain('data-vt-studio-field-kind="textarea-display"')
     expect(standard).toContain('data-size="standard"')
     expect(standard).toContain('First row')
     expect(standard).toContain('Second row')
     expect(standard).toContain('contenteditable="false"')
+    expect(standard).toContain('aria-readonly="true"')
+    expect(standard).toContain('data-vt-studio-text-box="true"')
+    expect(supreme).toContain('data-size="supreme"')
     expect(compact).toContain('data-size="compact"')
+    expect(mini).toContain('data-size="mini"')
     expect(micro).toContain('data-size="micro"')
   })
 
-  it("uses half-width black borders and matching primary/secondary strokes for StudioTextBox", () => {
+  it("uses shared border geometry, black glyph stroke, and a proportional secondary outline for StudioTextBox", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
     const block = css.match(/\.vt-studio-text-box\[data-vt-studio-control="true"\] \{([\s\S]*?)\n\}/)?.[1] ?? "";
-    expect(block).toContain("--field-border-width: var(--vt-studio-control-stroke, 3px);");
-    expect(block).toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
-    expect(block).toContain("border: var(--studio-text-box-stroke-width) solid #000;");
-    expect(block).toContain("box-shadow: inset 0 0 0 var(--studio-text-box-stroke-width) var(--vt-field-primary");
-    expect(block).toContain("outline: var(--studio-text-box-stroke-width) solid var(--vt-field-secondary");
+    expect(css).toContain("--studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);");
+    expect(block).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000;");
+    expect(block).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
+    expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--pair-a, #36e0f6));");
     expect(block).toContain("outline-offset: 0;");
     expect(block).toContain("color: #000;");
     expect(block).toContain("-webkit-text-fill-color: #000;");
     expect(block).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
-    expect(block).not.toContain("-webkit-text-stroke");
-    expect(css).not.toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) #000;");
-    expect(css).not.toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, .25px) #000;");
+    expect(block).not.toContain("var(--vt-field-primary");
+    expect(css).not.toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
+    expect(css).not.toContain("-webkit-text-stroke-color: var(--vt-field-text-focus, #000);");
   });
 
   it("uses the shared 0.85 line-height token for textarea and text-box sizes", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8")
+    const generated = readFileSync(resolve(process.cwd(), "src/styles/studio-control-vars.generated.css"), "utf8")
     expect(css).toContain("--vt-studio-textarea-line-height: .85;")
+    expect(generated).toContain("--vt-studio-textarea-line-height: 0.85;")
     expect(css).not.toMatch(/line-height:\s*(?:0)?\.75\b/)
-    expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(5)
+    expect(css.match(/line-height: var\(--vt-studio-textarea-line-height, \.85\)/g)).toHaveLength(6)
+  })
+
+  it("maps choice controls and horizontal word toggles through all five size tiers", () => {
+    const miniSwitch = renderToStaticMarkup(<StudioSwitch checked={false} sizeVariant="mini" aria-label="Mini switch" />)
+    const supremeRadio = renderToStaticMarkup(<StudioRadio checked={false} sizeVariant="supreme" aria-label="Supreme radio" />)
+    const miniWordToggle = renderToStaticMarkup(<StudioWordToggle size="20" value={false} words={["OFF", "ON"]} onValueChange={() => {}} aria-label="Mini word toggle" />)
+    expect(miniSwitch).toContain('data-size="mini"')
+    expect(supremeRadio).toContain('data-size="supreme"')
+    expect(miniWordToggle).toContain('data-size="mini"')
+    expect(miniWordToggle).toContain('data-vt-word-toggle-size="20"')
+    const overrides = readFileSync(resolve(process.cwd(), "src/styles/studio-control-distill-overrides.css"), "utf8")
+    expect(overrides).toContain('.vt-studio-44-switch[data-vt-studio-control="true"]')
+    expect(overrides).toContain('.vt-studio-44-choice[data-vt-studio-control="true"]')
+    expect(overrides).toContain('.vt-studio-44-word-toggle[data-vt-word-toggle-size]')
   })
 
   it("keeps the plain input free of label wrappers while textarea labels remain separate", () => {
@@ -821,7 +858,7 @@ describe("Studio Username Split-Left Input", () => {
     const end = css.indexOf('.vt-studio-username-input[data-disabled="true"]', start)
     const fieldRules = css.slice(start, end)
     expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary)")
-    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000")
+    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary)")
     expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #8b8b8b")
     expect(fieldRules).not.toContain("!important")
   })
@@ -1006,6 +1043,10 @@ describe("StudioVerticalWordToggle", () => {
     expect(html).toContain('data-vertical-word-toggle-variant="white-fill"');
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={true} sizeVariant="compact" />)).toContain('data-size="compact"');
     expect(renderToStaticMarkup(<StudioVerticalWordToggle value={false} sizeVariant="micro" />)).toContain('data-size="micro"');
+    const controlsSource = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8");
+    expect(controlsSource).toContain('handle.style.bottom = "auto";');
+    expect(controlsSource).toContain('handle.style.insetBlockEnd = "auto";');
+    expect(controlsSource).toContain('const destination = getBounds(to ? 1 : 0);');
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.globalRuleException).toBe(true);
     expect(STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS.verticalWordToggle.height).toBe("content-driven two-word stack; intentionally not 44px / 28px / 12px");
   });
@@ -1173,12 +1214,12 @@ describe("Confirmed Primitive Library button tier grid regression", () => {
 
 
 describe("Studio field focus, floating labels, and toggle regressions", () => {
-  it("keeps resting field glyph stroke primary, focused glyph stroke black, and shares risen-label typography tokens", () => {
-    const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
+  it("keeps field glyph stroke primary at rest and focus, and shares risen-label typography tokens", () => {
+    const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-distill-overrides.css"), "utf8");
     const css = readStudioControlCss();
-    const finalFieldContract = fields.slice(fields.lastIndexOf("/* Final clarified field contract"));
-    expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));");
-    expect(finalFieldContract).toContain("-webkit-text-stroke-color: #000 !important;");
+    const finalFieldContract = fields.slice(fields.lastIndexOf("/* Final regression-recovery contract"));
+    expect(finalFieldContract).toContain("-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
+    expect(finalFieldContract).toContain("text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;");
     expect(css).toContain("--vt-studio-floating-label-risen-font-size: 12px;");
     expect(css).toContain("--vt-studio-floating-label-risen-text-stroke: 0.5px;");
     expect(css).toContain("font-size: var(--vt-studio-floating-label-risen-font-size, 12px) !important;");
@@ -1307,5 +1348,148 @@ describe("StudioSplitTwoLineButton", () => {
     expect(catalog).toContain('data-vt-library-component="StudioSplitTwoLineButton"');
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
     expect(css).toContain('[data-vt-studio-button-lines="two"][data-vt-studio-split="left"] [data-vt-studio-split-label]');
+  });
+});
+
+
+describe("Studio Controls regression recovery contracts", () => {
+  it("keeps every Studio text field primary-stroked at rest and focus", () => {
+    const inputSource = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+    const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
+    expect(inputSource).toContain('"vt-studio-text-input--simple"');
+    expect(fields).toContain('input.vt-studio-text-input--simple[data-vt-studio-control="true"]:is(:focus, :focus-visible)');
+    expect(fields).toContain('-webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;');
+    expect(fields).toContain('[data-vt-studio-field-kind="text-box"]');
+  });
+
+  it("pins split rails to square inner dimensions and restores full-width intermodules", () => {
+    const split = readFileSync("src/styles/studio-control-split.css", "utf8");
+    expect(split).toContain('height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height');
+    expect(split).toContain('aspect-ratio: 1 / 1;');
+    expect(split).toContain('calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px))');
+    expect(split).toContain('.vt-studio-inter-module');
+    expect(split).toContain('grid-column: 1 / -1;');
+  });
+});
+
+
+describe("collapsing module header geometry", () => {
+  it("reserves the bottom divider space when collapsed so header content does not shift", () => {
+    const css = readStudioControlCss()
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module:not\(\[open\]\)[^,{]*,?[\s\S]*?border-bottom:\s*var\(--vt-top-split-stroke,\s*3px\)\s+solid\s+transparent\s*!important/s)
+    expect(css).toContain("Keep collapsed module header geometry identical to the expanded header.")
+  })
+})
+
+
+describe("toggle and switch visible backgrounds", () => {
+  it("keeps the switch tracks, word-toggle handles, and value-toggle faces visibly painted in the final CSS layer", () => {
+    const css = readStudioControlCss()
+    expect(css).toContain("Restore visible toggle/switch silhouettes after the final recovery layer.")
+    expect(css).toContain('button[data-vt-studio-control="true"].vt-studio-44-switch')
+    expect(css).toContain(".vt-studio-44-word-toggle .vt-studio-44-word-handle")
+    expect(css).toContain(".vt-studio-value-toggle__face")
+    expect(css).toContain(".vt-studio-value-toggle__bar[data-active=\"true\"]")
+  })
+})
+
+
+describe("Studio left word counter and word slider", () => {
+  it("cycles forward and backward through exactly four word states", () => {
+    expect(STUDIO_LEFT_WORD_OPTIONS).toEqual(["ONE", "TWO", "THREE", "FOUR"]);
+    expect(normalizeStudioLeftWordIndex(5)).toBe(1);
+    expect(normalizeStudioLeftWordIndex(0)).toBe(4);
+    expect(normalizeStudioLeftWordIndex(3)).toBe(3);
+  });
+
+  it("renders the corresponding label and semantic state for every word", () => {
+    const specimens = [1, 2, 3, 4].map(value => renderToStaticMarkup(
+      <StudioLeftWordCounter value={value} onValueChange={() => undefined} ariaLabel="Word state specimen" />,
+    ));
+    ["ONE", "TWO", "THREE", "FOUR"].forEach((word, index) => {
+      expect(specimens[index]).toContain(`data-vt-studio-word-index="${index + 1}"`);
+      expect(specimens[index]).toContain(`>${word}</span>`);
+    });
+  });
+
+  it("renders the four-state left counter using the existing counter shell", () => {
+    const html = renderToStaticMarkup(
+      <StudioLeftWordCounter value={3} onValueChange={() => undefined} ariaLabel="Word counter test" />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioLeftWordCounter"');
+    expect(html).toContain('data-vt-studio-word-index="3"');
+    expect(html).toContain(">THREE</span>");
+    expect(html).toContain('aria-label="Increase Word counter test"');
+    expect(html).toContain('aria-label="Decrease Word counter test"');
+  });
+
+  it("renders a four-position slider with a synchronized numeric right section", () => {
+    const html = renderToStaticMarkup(
+      <StudioLeftWordSlider value={3} onValueChange={() => undefined} ariaLabel="Word slider test" />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioLeftWordSlider"');
+    expect(html).toContain('data-vt-studio-slider="left-word"');
+    expect(html).toContain('type="range"');
+    expect(html).toContain('min="1"');
+    expect(html).toContain('max="4"');
+    expect(html).toContain('value="3"');
+    expect(html).toContain('aria-label="Word slider test"');
+    expect(html).toContain('>3</output>');
+  });
+
+  it("registers both production primitives in the confirmed representative library", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    expect(html).toContain('data-vt-library-component="StudioLeftWordCounter"');
+    expect(html).toContain('data-vt-library-component="StudioLeftWordSlider"');
+  });
+
+  it("defines palette-state and slider geometry rules in the dedicated stylesheet", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-word-counter.css"), "utf8");
+    expect(css).toContain('[data-vt-studio-word-index="2"]');
+    expect(css).toContain('[data-vt-studio-word-index="3"]');
+    expect(css).toContain('[data-vt-studio-word-index="4"]');
+    expect(css).toContain(".vt-studio-left-word-slider");
+    expect(css).toContain("prefers-reduced-motion");
+  });
+});
+
+
+describe("StudioSplitTextInput transparent-panel composition", () => {
+  it("keeps the split badge shell and places a size-aware text input inside it", () => {
+    const html = renderToStaticMarkup(
+      <StudioSplitTextInput split="left" sizeVariant="standard" leftIcon={<span>SEARCH</span>} aria-label="Search" />,
+    );
+    expect(html).toContain('class="vt-studio-split-shell vt-studio-split-text-input"');
+    expect(html).toContain('data-vt-studio-split="left"');
+    expect(html).toContain('class="vt-studio-split-shell__rail"');
+    expect(html).toContain('class="vt-studio-split-text-input__field"');
+    expect(html).toContain('aria-label="Search"');
+    expect(html).toContain('data-size="standard"');
+  });
+
+  it("uses a transparent split panel and an inset primary-border input without a second focus outline", () => {
+    const css = readStudioControlCss();
+    const shellStart = css.lastIndexOf(".vt-studio-split-shell.vt-studio-split-text-input {");
+    const fieldStart = css.lastIndexOf(".vt-studio-split-text-input__field {");
+    const focusStart = css.lastIndexOf(".vt-studio-split-text-input:focus-within");
+    expect(shellStart).toBeGreaterThanOrEqual(0);
+    expect(fieldStart).toBeGreaterThan(shellStart);
+    expect(focusStart).toBeGreaterThan(fieldStart);
+    const shell = css.slice(shellStart, fieldStart);
+    const field = css.slice(fieldStart, focusStart);
+    expect(shell).toContain("background: transparent");
+    expect(field).toContain("border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary");
+    expect(field).toContain("height: calc(var(--vt-studio-control-height, 44px) - 3 * var(--vt-studio-control-stroke, 3px))");
+    expect(field).toContain("align-self: center");
+    const rail = css.slice(css.indexOf(".vt-studio-split-text-input > .vt-studio-split-shell__rail"), css.indexOf(".vt-studio-split-text-input__field"));
+    expect(rail).toContain("place-items: center");
+    expect(rail).toContain("flex: 0 0 calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px))");
+    expect(rail).toContain("height: 100%");
+    expect(field).toContain("outline: none");
+    expect(field).toContain("background: var(--vt-field-fill-rest, transparent)");
+    expect(field).not.toContain("border: 0 !important");
+    expect(field).toContain("background-image: none !important");
+    expect(field).not.toContain("linear-gradient(");
+    expect(css.slice(focusStart, focusStart + 1000)).toContain("outline: none");
   });
 });

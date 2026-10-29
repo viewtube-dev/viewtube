@@ -3,37 +3,37 @@
    CSS cannot redefine Studio Hub fields and Studio Hub rules cannot leak back. */
 
 [data-vt-studio-control] {
-  --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);
-  /* Canonical editable-field tokens: resting text/stroke match primary; focus text/stroke are black and caret stays primary. */
+  --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px);
+  /* Canonical editable-field tokens: resting text/stroke match primary; focus uses black text/glyph stroke, a persistent primary inset, and a primary caret. */
   --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-field-text: var(--vt-field-primary);
   --vt-field-text-stroke: var(--vt-field-text);
   --vt-field-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
   --vt-field-text-focus: #000;
-  --vt-field-text-stroke-focus: var(--vt-field-text-focus);
+  --vt-field-text-stroke-focus: #000;
   --vt-field-caret-focus: var(--vt-field-primary);
   --vt-field-fill-rest: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
   --vt-field-fill-focus: color-mix(in srgb, var(--vt-field-primary) 15%, transparent);
   --vt-field-focus-outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 
-  --vt-studio-control-height: var(--vt-studio-44-height, 44px);
-  --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px);
-  --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
-  --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px);
-  --vt-studio-control-font-weight: var(--vt-studio-44-font-weight, 1000);
+  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
+  --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
+  --vt-studio-control-font-weight: var(--vt-studio-standard-font-weight, 1000);
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-text-transform: uppercase;
   --vt-studio-control-letter-spacing: -.02em;
   --vt-studio-control-line-height: 1;
-  --vt-studio-textarea-line-height: 1;
+  --vt-studio-textarea-line-height: .85;
   
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
   --vt-studio-control-focus-outline-width: 1.95px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1.95px;
-  --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
-  --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
+  --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-standard-icon-stroke, 1.9);
   --vt-studio-control-accent: var(--pair-a, #36e0f6);
   --vt-studio-control-secondary: var(--pair-b, #ff7f6b);
   
@@ -41,65 +41,85 @@
 }
 
 [data-vt-studio-control][data-size="supreme"] {
-  --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px);
+  --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1px);
   --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
-  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 4.09px);
-  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 8.18px);
-  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px);
   --vt-studio-control-font-weight: var(--vt-studio-supreme-font-weight, 1000);
-  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 51.82px);
-  --vt-studio-control-icon-stroke: var(--vt-studio-supreme-icon-stroke, 2.59);
-  --vt-studio-control-focus-outline-width: 2.66px;
-  --vt-studio-control-secondary-outline-width: 2.66px;
+  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-supreme-icon-stroke, 1.9);
+  --vt-studio-control-focus-outline-width: var(--vt-studio-supreme-focus-outline-width, 1.95px);
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-supreme-secondary-outline-width, 1.95px);
 }
 
 [data-vt-studio-control][data-size="supreme"] .vt-studio-dropdown-chevron { width: var(--vt-studio-dropdown-supreme-rail-size, 60px); min-width: var(--vt-studio-dropdown-supreme-rail-size, 60px); }
 [data-vt-studio-control][data-size="supreme"] .vt-studio-dropdown-chevron svg { width: var(--vt-studio-dropdown-supreme-chevron-size, 38px); height: var(--vt-studio-dropdown-supreme-chevron-size, 38px); }
 
+[data-vt-studio-control][data-size="mini"] .vt-studio-dropdown-chevron { width: var(--vt-studio-dropdown-mini-rail-size, 20px); min-width: var(--vt-studio-dropdown-mini-rail-size, 20px); }
+[data-vt-studio-control][data-size="mini"] .vt-studio-dropdown-chevron svg { width: var(--vt-studio-dropdown-mini-chevron-size, 14px); height: var(--vt-studio-dropdown-mini-chevron-size, 14px); }
+[data-vt-studio-control][data-size="micro"] .vt-studio-dropdown-chevron { width: var(--vt-studio-dropdown-micro-rail-size, 12px); min-width: var(--vt-studio-dropdown-micro-rail-size, 12px); }
+[data-vt-studio-control][data-size="micro"] .vt-studio-dropdown-chevron svg { width: var(--vt-studio-dropdown-micro-chevron-size, 8px); height: var(--vt-studio-dropdown-micro-chevron-size, 8px); }
+
 [data-vt-studio-control][data-size="compact"] {
-  --vt-field-text-stroke-width: var(--vt-studio-28-text-stroke, 0.5px);
-  --vt-studio-control-text-stroke: var(--vt-studio-28-text-stroke, .5px);
-  --vt-studio-control-height: var(--vt-studio-28-height, 28px);
-  --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
-  --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px);
-  --vt-studio-control-font-weight: var(--vt-studio-28-font-weight, 1000);
+  --vt-field-text-stroke-width: var(--vt-studio-compact-text-stroke, 0.5px);
+  --vt-studio-control-text-stroke: var(--vt-studio-compact-text-stroke, .5px);
+  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px);
+  --vt-studio-control-font-weight: var(--vt-studio-compact-font-weight, 1000);
   
   --vt-studio-control-outline-stroke: 1px;
   --vt-studio-control-focus-outline-width: 1.3px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1.3px;
-  --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px);
-  --vt-studio-control-icon-stroke: var(--vt-studio-28-icon-stroke, 2.0);
+  --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-compact-icon-stroke, 2.0);
 }
 [data-vt-studio-control][data-size="standard"] {
-  --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px);
-  --vt-studio-control-height: var(--vt-studio-44-height, 44px);
-  --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px);
-  --vt-studio-control-radius: var(--vt-studio-44-radius, 6px);
-  --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px);
-  --vt-studio-control-font-weight: var(--vt-studio-44-font-weight, 1000);
+  --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px);
+  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
+  --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
+  --vt-studio-control-font-weight: var(--vt-studio-standard-font-weight, 1000);
   
   --vt-studio-control-outline-stroke: 1.5px;
   --vt-studio-control-focus-outline-width: 1.95px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1.95px;
-  --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px);
-  --vt-studio-control-icon-stroke: var(--vt-studio-44-icon-stroke, 1.9);
+  --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-standard-icon-stroke, 1.9);
+}
+[data-vt-studio-control][data-size="mini"] {
+  --vt-field-text-stroke-width: var(--vt-studio-mini-text-stroke, 0.4px);
+  --vt-studio-control-text-stroke: var(--vt-studio-mini-text-stroke, 0.4px);
+  --vt-studio-control-height: var(--vt-studio-mini-height, 20px);
+  --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
+  --vt-studio-control-font-weight: var(--vt-studio-mini-font-weight, 1000);
+  --vt-studio-control-outline-stroke: .75px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-mini-focus-outline-width, 0.975px);
+  --vt-studio-control-focus-outline-offset: 0px;
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-mini-secondary-outline-width, 0.975px);
+  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 17.5px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-mini-icon-stroke, 1.6);
 }
 [data-vt-studio-control][data-size="micro"] {
-  --vt-field-text-stroke-width: var(--vt-studio-micro-text-stroke, 0.25px);
-  --vt-studio-control-focus-outline-width: .65px;
+  --vt-field-text-stroke-width: var(--vt-studio-micro-text-stroke, 0.4px);
+  --vt-studio-control-focus-outline-width: var(--vt-studio-micro-focus-outline-width, 0.975px);
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: .65px;
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-micro-secondary-outline-width, 0.975px);
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px);
   --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
   --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000);
-  --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, .25px);
+  --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, 0.4px);
   --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
-  --vt-studio-control-icon-stroke: var(--vt-studio-micro-icon-stroke, 1.5);
+  --vt-studio-control-icon-stroke: var(--vt-studio-micro-icon-stroke, 1.6);
 }
 
 /* Compatibility controls consume the same inherited SubToolbox pair as
@@ -137,7 +157,7 @@ button[data-vt-studio-control]:not(.vt-studio-legend-trigger):not(.vt-studio-44-
   
 }
 
-button[data-vt-studio-control][data-size="compact"]:not(.vt-studio-legend-trigger):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-vertical-word-toggle):not([data-vt-studio-button="true"]):not([data-vt-studio-action-button="true"]):not(.vt-studio-inter-module):not(.vt-studio-counter):not(.vt-studio-side-counter) { font-size: 24px; padding: 0 8px; }
+button[data-vt-studio-control][data-size="compact"]:not(.vt-studio-legend-trigger):not(.vt-studio-44-switch):not(.vt-studio-44-choice):not(.vt-studio-vertical-word-toggle):not([data-vt-studio-button="true"]):not([data-vt-studio-action-button="true"]) { font-size: 24px; padding: 0 8px; }
 [data-vt-studio-button-icon] { display: grid; place-items: center; }
 
 [data-vt-studio-control][data-tone="neutral"] { --vt-studio-control-accent: #fff; }
@@ -187,8 +207,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] > svg {
   display: block;
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
+  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
   color: #000;
   stroke: #000;
 }
@@ -217,7 +237,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; min-width: 0; padding: 0 8px; overflow: hidden; justify-content: flex-start; text-overflow: clip; white-space: nowrap; }
 .vt-studio-dropdown.is-split-left .vt-studio-dropdown-chevron.is-trailing { grid-column: 3; grid-row: 1; border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
-.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff); }
+.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%); }
 .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] { display: grid; place-items: center; }
 .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] svg { width: var(--vt-studio-dropdown-chevron-size); height: var(--vt-studio-dropdown-chevron-size); }
 .vt-studio-dropdown:not(.is-split-left) [data-vt-studio-dropdown-value] { grid-column: 1; grid-row: 1; padding: 0 8px 0 12px; }
@@ -289,10 +309,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-dropdown[data-size="supreme"] {
   --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
-  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px);
-  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 4.09px);
-  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 8.18px);
-  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 51.82px);
+  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px);
+  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
+  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px);
   --vt-studio-dropdown-rail-size: var(--vt-studio-dropdown-supreme-rail-size, 60px);
   --vt-studio-dropdown-chevron-size: var(--vt-studio-dropdown-supreme-chevron-size, 38px);
   --vt-studio-dropdown-chevron-stroke: var(--vt-studio-dropdown-supreme-chevron-stroke, 3.41);
@@ -372,11 +392,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-floating-field[data-size="micro"] {
   --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);
-  --vt-studio-control-focus-outline-width: .65px;
-}
-.vt-studio-floating-field[data-size="mini"] {
-  --vt-studio-control-floating-label-height: var(--vt-studio-mini-font-size, 17px);
-  --vt-studio-control-focus-outline-width: .98px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-micro-focus-outline-width, 0.975px);
 }
 .vt-studio-floating-field > [data-vt-studio-control="true"] {
   display: block;
@@ -400,7 +416,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   text-transform: uppercase;
   white-space: nowrap;
   text-overflow: clip;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1.36px) currentColor;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, var(--vt-studio-supreme-text-stroke, 1px)) currentColor;
   pointer-events: none;
   transform: translateY(-50%);
   transform-origin: left center;
@@ -630,7 +646,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 
 /* Canonical size defaults — keep in sync with STUDIO_COMPONENT_SIZE_DEFAULTS at the top of StudioControls.tsx. */
 :root {
-  --vt-studio-60-height: var(--vt-studio-supreme-height, 60px); --vt-studio-60-stroke: var(--vt-studio-supreme-stroke, 4.09px); --vt-studio-60-radius: var(--vt-studio-supreme-radius, 8.18px); --vt-studio-60-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-60-font-weight: 1000;
+  --vt-studio-60-height: var(--vt-studio-supreme-height, 60px); --vt-studio-60-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-60-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-60-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-60-font-weight: 1000;
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
    
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
@@ -649,7 +665,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-control-secondary-outline-width: 1.95px;
 }
 [data-vt-studio-control][data-size="compact"] {
-  --vt-studio-control-text-stroke: var(--vt-studio-28-text-stroke, .5px);
+  --vt-studio-control-text-stroke: var(--vt-studio-compact-text-stroke, .5px);
   --vt-studio-control-height: var(--vt-studio-28-height);
   --vt-studio-control-stroke: var(--vt-studio-28-stroke);
   --vt-studio-control-radius: var(--vt-studio-28-radius);
@@ -973,7 +989,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 .vt-studio-legend-clear {
   min-height: var(--vt-legend-height, 44px) !important;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
-  font-size: var(--vt-studio-44-font-size, 38px) !important;
+  font-size: var(--vt-studio-standard-font-size, 38px) !important;
   font-weight: 1000 !important;
   line-height: 1 !important;
   letter-spacing: -.02em !important;
@@ -981,7 +997,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   margin-top: 3px !important;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-clear {
-  font-size: var(--vt-studio-28-font-size, 24px) !important;
+  font-size: var(--vt-studio-compact-font-size, 24px) !important;
   font-weight: 1000 !important;
   line-height: 1 !important;
   letter-spacing: -.02em !important;
@@ -1100,11 +1116,11 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   font-weight: var(--vt-studio-control-font-weight, 1000);
   -webkit-text-stroke: var(--vt-studio-textarea-standard-text-stroke, 0.5px) var(--vt-field-primary);
   /* Only textarea-specific typography override: compact description row spacing. */
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   letter-spacing: var(--vt-studio-control-letter-spacing);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="supreme"] {
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-supreme-font-size, 24.55px);
   padding: calc(var(--vt-studio-textarea-standard-padding-block, 10px) * 1.363636) calc(var(--vt-studio-textarea-standard-padding-inline, 12px) * 1.363636);
 }
@@ -1115,7 +1131,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
-  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.25px) var(--vt-field-primary);
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.4px) var(--vt-field-primary);
 }
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"])::placeholder {
   color: var(--vt-field-primary);
@@ -1224,7 +1240,7 @@ button.vt-studio-44-switch.is-rect { border-radius: 7.333px; }
 
 button.vt-studio-44-choice {
   width: 44px;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 40%, #fff);
 }
 button.vt-studio-44-choice.is-round { border-radius: 50%; }
 button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
@@ -1308,8 +1324,8 @@ button[data-vt-studio-button="true"][data-size="compact"] {
   
 }
 
-button[data-vt-studio-button="true"][data-size="supreme"] { --vt-studio-control-height:60px; --vt-studio-control-stroke:4.09px; --vt-studio-control-radius:8.18px; --vt-studio-control-font-size:51.82px; --vt-studio-control-font-weight:1000; --vt-studio-control-text-stroke:1.36px; --vt-studio-control-icon-size:51.82px; --vt-studio-control-icon-stroke:2.59; }
-button[data-vt-studio-button="true"][data-size="supreme"] > [data-vt-studio-button-face] { font-size:51.82px; padding-inline:14px; border-width:4.09px; border-radius:8.18px; -webkit-text-stroke:1.36px currentColor; }
+button[data-vt-studio-button="true"][data-size="supreme"] { --vt-studio-control-height:60px; --vt-studio-control-stroke:var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius:var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size:52px; --vt-studio-control-font-weight:1000; --vt-studio-control-text-stroke:var(--vt-studio-supreme-text-stroke, 1px); --vt-studio-control-icon-size:52px; --vt-studio-control-icon-stroke:var(--vt-studio-supreme-icon-stroke, 1.9); }
+button[data-vt-studio-button="true"][data-size="supreme"] > [data-vt-studio-button-face] { font-size:52px; padding-inline:14px; border-width:var(--vt-studio-supreme-stroke, 3px); border-radius:var(--vt-studio-supreme-radius, 6px); -webkit-text-stroke:var(--vt-studio-supreme-text-stroke, 1px) currentColor; }
 button[data-vt-studio-button="true"][data-size="standard"] { --vt-studio-control-height:44px; --vt-studio-control-stroke:3px; --vt-studio-control-radius:6px; --vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1.9; }
 button[data-vt-studio-button="true"][data-size="compact"] { --vt-studio-control-height:28px; --vt-studio-control-stroke:2px; --vt-studio-control-radius:4px; --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
 
@@ -1322,28 +1338,28 @@ button[data-vt-studio-button="true"][data-icon-size-variant="large"][data-size="
 button[data-vt-studio-button="true"][data-icon-size-variant="large"][data-size="compact"] { --vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2.0; }
 /* StudioActionButton defaults to Supreme and follows the shared interactive size tiers. */
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
-  --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 4.09px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 8.18px);
+  --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
   appearance: none; box-sizing: border-box; display: inline-flex; align-items: stretch; justify-content: stretch;
-  min-height: var(--vt-studio-control-height, 60px); height: var(--vt-studio-control-height, 60px); padding: 0; border: 0; border-radius: var(--vt-studio-control-radius, 8.18px); background: transparent;
+  min-height: var(--vt-studio-control-height, 60px); height: var(--vt-studio-control-height, 60px); padding: 0; border: 0; border-radius: var(--vt-studio-control-radius, var(--vt-studio-supreme-radius, 6px)); background: transparent;
    overflow: visible; color: #000;
   
 }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 4.09px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 8.18px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px); --vt-studio-control-secondary-outline-width: var(--vt-studio-supreme-secondary-outline-width, 2.66px); }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1px); --vt-studio-control-secondary-outline-width: var(--vt-studio-supreme-secondary-outline-width, var(--vt-studio-supreme-focus-outline-width, 1.95px)); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="standard"] { --vt-studio-control-height: var(--vt-studio-standard-height, 44px); --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px); --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px); --vt-studio-control-secondary-outline-width: var(--vt-studio-standard-secondary-outline-width, 1.95px); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-text-stroke: var(--vt-studio-compact-text-stroke, .5px); --vt-studio-control-secondary-outline-width: var(--vt-studio-compact-secondary-outline-width, 1.3px); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: var(--vt-studio-space-unit, 4px);
   width: 100%; min-width: 0; min-height: var(--vt-studio-control-height, 60px); height: var(--vt-studio-control-height, 60px); padding: 4px 8px;
-  border: var(--vt-studio-control-stroke, 4.09px) solid #000; border-radius: var(--vt-studio-control-radius, 8.18px);
+  border: var(--vt-studio-control-stroke, var(--vt-studio-supreme-stroke, 3px)) solid #000; border-radius: var(--vt-studio-control-radius, var(--vt-studio-supreme-radius, 6px));
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));  color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: var(--vt-studio-control-font-size, 51.82px); font-weight: 1000; line-height: 1; letter-spacing: -.02em;
-  text-transform: uppercase; -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px) currentColor;
+  font-size: var(--vt-studio-control-font-size, 52px); font-weight: 1000; line-height: 1; letter-spacing: -.02em;
+  text-transform: uppercase; -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1px) currentColor;
   
 }
 
 
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: var(--vt-studio-control-secondary-outline-width, 2.66px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 0; }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: var(--vt-studio-control-secondary-outline-width, var(--vt-studio-supreme-secondary-outline-width, 1.95px)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 0; }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
@@ -1455,6 +1471,135 @@ button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studi
 button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="left"] [data-vt-studio-split-label] { padding-inline:8px; }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-rail], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
+
+/* Right and double split buttons deliberately mirror the split-left foundation:
+   one outer face grid, zero internal gaps, fixed height-sized rails, and one
+   divider per rail boundary. The shell only contributes semantic rail/label nodes. */
+button[data-vt-studio-button="true"][data-vt-studio-split="right"],
+button[data-vt-studio-button="true"][data-split-right="true"],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] {
+  appearance: none;
+  display: inline-flex;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  overflow: visible;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-split-right="true"] > [data-vt-studio-button-face] {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height);
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  overflow: hidden;
+  text-align: left;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] > [data-vt-studio-button-face] {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: var(--vt-studio-control-height) minmax(0, 1fr) var(--vt-studio-control-height);
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
+  overflow: hidden;
+  text-align: left;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-face],
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-face] {
+  display: contents;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail] {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: var(--vt-studio-control-height);
+  min-width: var(--vt-studio-control-height);
+  max-width: var(--vt-studio-control-height);
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail][data-rail="end"] {
+  border-left: var(--vt-studio-control-stroke) solid #000;
+  border-right: 0;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail][data-rail="start"] {
+  border-right: var(--vt-studio-control-stroke) solid #000;
+  border-left: 0;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-rail] > svg,
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-rail] > svg,
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-rail] > svg {
+  display: block;
+  width: var(--vt-studio-control-icon-size, 28px);
+  height: var(--vt-studio-control-icon-size, 28px);
+  min-width: var(--vt-studio-control-icon-size, 28px);
+  min-height: var(--vt-studio-control-icon-size, 28px);
+  max-width: 100%;
+  max-height: 100%;
+  stroke-width: var(--vt-studio-control-icon-stroke, 2.5);
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-split-right="true"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-label] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-inline: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  color: #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="right"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="double"] [data-vt-studio-split-label] {
+  padding-inline: 8px;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][data-selected="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][data-selected="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][aria-pressed="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][aria-pressed="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][data-selected="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][data-selected="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][aria-pressed="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][aria-pressed="true"] [data-vt-studio-split-rail] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+
+/* Also ensure split-left face uses display:contents for the faceOnly shell */
+button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-face],
+button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-face] {
+  display: contents;
+}
+
 @media (prefers-reduced-motion:reduce) { button[data-vt-studio-button="true"], button[data-vt-studio-button="true"]::before, button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {  } }
 
 /* 4. Word-toggle sizing remains configurable at the component boundary. */
@@ -1847,7 +1992,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 /* Checkmark and wide-X checkbox faces follow the standard 44px control radius.
    Rectangular radios retain their separate reference-specific 7.333px geometry. */
 .vt-studio-44-choice.is-checkbox.is-rect {
-  border-radius: var(--vt-studio-44-radius, 6px) !important;
+  border-radius: var(--vt-studio-standard-radius, 6px) !important;
 }
 
 
@@ -2020,7 +2165,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   z-index: 50;
   pointer-events: none;
   color: color-mix(in srgb, var(--pair-a, #fa618a) 50%, #fff);
-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 1000 18px/20px Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -2094,24 +2239,6 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   width: 28px;
   height: 28px;
 }
-
-
-/* Plain single-select dropdown primitive; inherits Studio Controls global sizing, pair and typography. */
-.vt-studio-simple-dropdown { position: relative; display: block; width: 100%; min-width: 0; }
-.vt-studio-simple-dropdown select {
-  appearance: none; display: block; box-sizing: border-box; width: 100%; min-width: 0;
-  height: var(--vt-studio-control-height, 44px); padding: 0 34px 0 8px;
-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-studio-control-border, #000);
-  border-radius: var(--vt-studio-control-radius, 6px);
-  background: var(--pair-b, #fff); color: var(--pair-a, #000);
-  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-studio-control-font-size, 24px); font-weight: var(--vt-studio-control-font-weight, 1000);
-  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em); text-transform: uppercase;
-}
-.vt-studio-simple-dropdown__icon { position: absolute; right: 8px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); pointer-events: none; color: var(--pair-a, #000); }
-.vt-studio-simple-dropdown select:focus-visible { outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b, #fff)); outline-offset: 0; }
-.vt-studio-simple-dropdown[data-size="compact"] select { height: 28px; padding-left: 5px; padding-right: 24px; font-size: 18px; border-width: 2px; }
-.vt-studio-simple-dropdown[data-size="compact"] .vt-studio-simple-dropdown__icon { width: 14px; height: 14px; right: 5px; }
 
 
 /* Studio Controls-owned stepper family styles moved from primitive sidecars. */
@@ -2524,6 +2651,10 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"][data-
 /* Explicit non-button exceptions: these are fields/indicators,
 not button faces.
    Preserve visible focus via outlines rather than shadow strokes. */
+[data-vt-studio-control]:is(input, textarea, select){
+  
+  
+}
 [data-vt-studio-control]:is(input, textarea, select):focus-visible {
   outline: var(--vt-studio-control-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid
     var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
@@ -2584,23 +2715,6 @@ not button faces.
   --vt-studio-control-icon-size: 10px;
   --vt-studio-control-icon-stroke: 1.5;
   min-height: var(--vt-studio-micro-height, 12px);
-}
-[data-vt-studio-control][data-size="mini"] {
-  --vt-studio-control-height: var(--vt-studio-mini-height, 20px);
-  --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px);
-  --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
-  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17px);
-  --vt-studio-control-font-weight: 1000;
-  --vt-studio-control-letter-spacing: -.02em;
-  --vt-studio-control-line-height: 1;
-  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 17px);
-  --vt-studio-control-icon-stroke: 1.6;
-  --vt-field-text-stroke-width: var(--vt-studio-mini-text-stroke, .38px);
-  --vt-studio-control-text-stroke: var(--vt-studio-mini-text-stroke, .38px);
-  --vt-studio-control-focus-outline-width: .98px;
-  --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: .98px;
-  min-height: var(--vt-studio-mini-height, 20px);
 }
 
 /* No hard-coded elevation or motion on Studio primitives/components. Geometry and
@@ -2860,13 +2974,13 @@ no shell shadows{
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  height: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
-  min-height: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
-  grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr);
+  height: var(--vt-studio-control-height, var(--vt-studio-standard-height, 44px));
+  min-height: var(--vt-studio-control-height, var(--vt-studio-standard-height, 44px));
+  grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-standard-height, 44px)) minmax(0, 1fr);
   align-items: stretch;
   overflow: hidden;
-  border: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
-  border-radius: var(--vt-studio-control-radius, var(--vt-studio-44-radius, 6px));
+  border: var(--vt-studio-control-stroke, var(--vt-studio-standard-stroke, 3px)) solid #000;
+  border-radius: var(--vt-studio-control-radius, var(--vt-studio-standard-radius, 6px));
   background: var(--vt-studio-control-accent);
   color: #000;
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
@@ -2879,11 +2993,11 @@ no shell shadows{
 }
 .vt-studio-split-shell[data-vt-studio-split="right"],
 .vt-studio-split-right-badge {
-  grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-standard-height, 44px));
 }
 .vt-studio-split-shell[data-vt-studio-split="double"],
 .vt-studio-double-split-badge {
-  grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px)) minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+  grid-template-columns: var(--vt-studio-control-height, var(--vt-studio-standard-height, 44px)) minmax(0, 1fr) var(--vt-studio-control-height, var(--vt-studio-standard-height, 44px));
 }
 .vt-studio-split-shell > [data-vt-studio-split-rail],
 .vt-studio-split-left-badge__rail,
@@ -2893,7 +3007,7 @@ no shell shadows{
   display: grid;
   place-items: center;
   align-self: stretch;
-  width: var(--vt-studio-control-height, var(--vt-studio-44-height, 44px));
+  width: var(--vt-studio-control-height, var(--vt-studio-standard-height, 44px));
   min-width: 0;
   max-width: 100%;
   height: 100%;
@@ -2908,17 +3022,17 @@ no shell shadows{
 .vt-studio-split-shell > [data-vt-studio-split-rail]:first-child,
 .vt-studio-split-left-badge__rail,
 .vt-studio-double-split-badge__rail {
-  border-right: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+  border-right: var(--vt-studio-control-stroke, var(--vt-studio-standard-stroke, 3px)) solid #000;
 }
 .vt-studio-split-shell[data-vt-studio-split="right"] > [data-vt-studio-split-rail],
 .vt-studio-split-right-badge__rail {
   border-right: 0;
-  border-left: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+  border-left: var(--vt-studio-control-stroke, var(--vt-studio-standard-stroke, 3px)) solid #000;
 }
 .vt-studio-split-shell[data-vt-studio-split="double"] > [data-vt-studio-split-rail]:last-child,
 .vt-studio-double-split-badge__rail:last-child {
   border-right: 0;
-  border-left: var(--vt-studio-control-stroke, var(--vt-studio-44-stroke, 3px)) solid #000;
+  border-left: var(--vt-studio-control-stroke, var(--vt-studio-standard-stroke, 3px)) solid #000;
 }
 /* Both double-split rails use secondary by contract. */
 .vt-studio-split-shell[data-vt-studio-split="double"] > [data-vt-studio-split-rail],
@@ -2928,8 +3042,8 @@ no shell shadows{
 .vt-studio-split-right-badge__rail > svg,
 .vt-studio-double-split-badge__rail > svg {
   display: block;
-  width: min(var(--vt-studio-control-icon-size, var(--vt-studio-44-icon-size, 38px)), 100%);
-  height: min(var(--vt-studio-control-icon-size, var(--vt-studio-44-icon-size, 38px)), 100%);
+  width: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
+  height: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
   align-self: center;
   justify-self: center;
   flex: 0 0 auto;
@@ -2981,16 +3095,16 @@ no shell shadows{
 }
 .vt-studio-split-left-badge[data-size="standard"],
 .vt-studio-split-right-badge[data-size="standard"],
-.vt-studio-double-split-badge[data-size="standard"] { --vt-studio-control-height: var(--vt-studio-44-height, 44px); --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-44-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px); --vt-studio-control-font-weight: var(--vt-studio-44-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px); --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px); }
+.vt-studio-double-split-badge[data-size="standard"] { --vt-studio-control-height: var(--vt-studio-standard-height, 44px); --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px); --vt-studio-control-font-weight: var(--vt-studio-standard-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px); --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px); }
 .vt-studio-split-left-badge[data-size="supreme"],
 .vt-studio-split-right-badge[data-size="supreme"],
-.vt-studio-double-split-badge[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 4.09px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 8.18px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 51.82px); --vt-studio-control-font-weight: 1000; --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 51.82px); --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px); }
+.vt-studio-double-split-badge[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-font-weight: 1000; --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px); --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1px); }
 .vt-studio-split-left-badge[data-size="compact"],
 .vt-studio-split-right-badge[data-size="compact"],
-.vt-studio-double-split-badge[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-28-height, 28px); --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-28-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px); --vt-studio-control-font-weight: var(--vt-studio-28-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px); --vt-studio-control-text-stroke: var(--vt-studio-28-text-stroke, .5px); }
+.vt-studio-double-split-badge[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-font-weight: var(--vt-studio-compact-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px); --vt-studio-control-text-stroke: var(--vt-studio-compact-text-stroke, .5px); }
 .vt-studio-split-left-badge[data-size="micro"],
 .vt-studio-split-right-badge[data-size="micro"],
-.vt-studio-double-split-badge[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, .25px); }
+.vt-studio-double-split-badge[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, 0.4px); }
 .vt-studio-split-left-badge[data-size="compact"] > [data-vt-studio-split-label], .vt-studio-split-right-badge[data-size="compact"] > [data-vt-studio-split-label], .vt-studio-double-split-badge[data-size="compact"] > [data-vt-studio-split-label] { padding-inline: 8px; }
 .vt-studio-split-left-badge[data-size="micro"] > [data-vt-studio-split-label], .vt-studio-split-right-badge[data-size="micro"] > [data-vt-studio-split-label], .vt-studio-double-split-badge[data-size="micro"] > [data-vt-studio-split-label] { padding-inline: 2px; }
 .vt-studio-split-left-badge,
@@ -3285,8 +3399,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter,
 .vt-studio-left-counter {
   display: grid;
-  /* 50% white-primary tint shared by the numeral rest state. */
-  --vt-studio-number-tint: color-mix(in srgb, white 50%, var(--pair-a));
   /* These controls are fixed-geometry primitives, not row-filling fields. */
   width: var(--vt-studio-counter-width, 176px);
   min-width: var(--vt-studio-counter-width, 176px);
@@ -3320,9 +3432,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-counter[data-size="compact"],
 .vt-studio-side-counter[data-size="compact"],
 .vt-studio-left-counter[data-size="compact"] {
-  --vt-studio-control-height: var(--vt-studio-28-height, 28px);
-  --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
+  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
 }
 .vt-studio-counter[data-size="compact"] { --vt-studio-counter-width: 112px; }
 .vt-studio-side-counter[data-size="compact"] { --vt-studio-counter-width: 84px; }
@@ -3331,12 +3443,12 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter[data-size="micro"],
 .vt-studio-left-counter[data-size="micro"] {
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px);
 }
-.vt-studio-counter[data-size="micro"] { --vt-studio-counter-width: 56px; }
-.vt-studio-side-counter[data-size="micro"] { --vt-studio-counter-width: 42px; }
-.vt-studio-left-counter[data-size="micro"] { --vt-studio-counter-width: 42px; }
+.vt-studio-counter[data-size="micro"] { --vt-studio-counter-width: 48px; }
+.vt-studio-side-counter[data-size="micro"] { --vt-studio-counter-width: 36px; }
+.vt-studio-left-counter[data-size="micro"] { --vt-studio-counter-width: 36px; }
 .vt-studio-counter [data-vt-studio-split-rail],
 .vt-studio-side-counter [data-vt-studio-split-rail],
 .vt-studio-left-counter [data-vt-studio-split-rail] {
@@ -3449,9 +3561,40 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   max-height: 100%;
   stroke-width: 2.5;
 }
+
+/* Side Toggle arrow glyphs mirror Side Counter metrics by size; no global icon-size leakage. */
+.vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
+.vt-studio-value-toggle--double .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
+  display: block;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  max-width: 100%;
+  max-height: 100%;
+  stroke-width: 2.5;
+}
+.vt-studio-value-toggle--side[data-size="supreme"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
+.vt-studio-value-toggle--double[data-size="supreme"] .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
+  width: 42px;
+  height: 42px;
+  stroke-width: 3.75;
+}
+.vt-studio-value-toggle--side[data-size="compact"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
+.vt-studio-value-toggle--double[data-size="compact"] .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
+  width: 30px;
+  height: 30px;
+  stroke-width: 3;
+}
+.vt-studio-value-toggle--side[data-size="micro"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
+.vt-studio-value-toggle--double[data-size="micro"] .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.25;
+}
+
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__value,
 .vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__value,
-.vt-studio-left-counter[data-size="compact"] .vt-studio-side-counter__value { font-size: var(--vt-studio-28-font-size, 24px); }
+.vt-studio-left-counter[data-size="compact"] .vt-studio-side-counter__value { font-size: var(--vt-studio-compact-font-size, 24px); }
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__value,
 .vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__value,
 .vt-studio-left-counter[data-size="micro"] .vt-studio-side-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
@@ -3587,23 +3730,20 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 /* Default numeral fill + stroke: 50% white mixed with the number-area surface. */
 .vt-studio-counter__value,
 .vt-studio-side-counter__value {
-  color: color-mix(in srgb, #fff 50%, var(--pair-a) 50%);
+  color: color-mix(in srgb, #fff var(--vt-studio-number-default-white-mix, 50%), var(--vt-studio-number-background, var(--pair-a)));
   -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: 1px var(--pair-a);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
   /* Keep value-area backgrounds stable while pressing, especially on right counters. */
 }
-
-.vt-studio-left-counter.is-reversed { --vt-studio-number-background: var(--pair-b); }
 
 /* Reversed variants tint against the secondary number-area surface. */
 .vt-studio-counter.is-reversed .vt-studio-counter__value,
 .vt-studio-side-counter.is-reversed .vt-studio-side-counter__value,
 .vt-studio-left-counter.is-reversed .vt-studio-side-counter__value {
   --vt-studio-number-background: var(--pair-b);
-  color: color-mix(in srgb, #fff 50%, var(--pair-b) 50%);
+  color: color-mix(in srgb, #fff var(--vt-studio-number-default-white-mix, 50%), var(--vt-studio-number-background));
   -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: 1px var(--pair-b);
-  -webkit-text-stroke-color: color-mix(in srgb, #fff 50%, var(--pair-b) 50%);
+  -webkit-text-stroke-color: currentColor;
 }
 
 /* Standard/left counter: click and hold use the same black numeral treatment. */
@@ -3611,19 +3751,18 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-counter__value {
   background: color-mix(in srgb, var(--pair-a) 50%, transparent);
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke: 1px var(--vt-studio-control-accent, var(--pair-a));
+  color: var(--vt-studio-number-active-color, #000);
+  -webkit-text-fill-color: var(--vt-studio-number-active-color, #000);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-number-active-stroke, #000);
 }
 
 .vt-studio-counter.is-reversed:has(
   .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-counter__value {
   background: color-mix(in srgb, var(--pair-b) 50%, transparent);
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke: 1px var(--vt-studio-control-accent, var(--pair-b));
-  -webkit-text-stroke-color: var(--pair-b);
+  color: var(--vt-studio-number-active-color, #000);
+  -webkit-text-fill-color: var(--vt-studio-number-active-color, #000);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-number-active-stroke, #000);
 }
 
 /* Right counter: numeral turns black, but the value-area background never changes. */
@@ -3633,10 +3772,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter.is-reversed:has(
   .vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-side-counter__value {
-  color: #000;
-  -webkit-text-fill-color: #000;
+  color: var(--vt-studio-number-active-color, #000);
+  -webkit-text-fill-color: var(--vt-studio-number-active-color, #000);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-number-active-stroke, #000);
-  -webkit-text-stroke-color: color-mix(in srgb, #fff 50%, var(--pair-b) 50%);
 }
 
 /* StudioDoubleSplitSlider — double-split rails contrast with the center fill.
@@ -3653,7 +3791,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__rail {
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__reset,
 .vt-studio-double-split-slider .vt-studio-double-split-slider__value {
@@ -3666,14 +3804,14 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   color: #000;
   font: inherit;
   line-height: 1;
   -webkit-text-stroke: 0;
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__reset {
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   color: #000;
   cursor: pointer;
   font-size: calc(var(--vt-studio-control-height, 44px) * .72);
@@ -3684,10 +3822,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   opacity: .55;
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__value {
-  color: color-mix(in srgb, #fff var(--vt-studio-number-default-white-mix, 50%), var(--vt-studio-number-background));
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
-  font-size: calc(var(--vt-studio-control-font-size, 38px) * .62);
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
+  font-size: var(--vt-studio-control-font-size, 38px);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -3703,7 +3841,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: 100%;
   align-items: center;
   padding-inline: calc(var(--vt-studio-control-height, 44px) * .18);
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-double-split-slider input[type="range"] {
   appearance: none;
@@ -3718,9 +3856,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border-radius: var(--vt-studio-slider-radius);
   outline: 0;
   --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
-  background: linear-gradient(to right,
-    var(--vt-studio-slider-left-fill) 0 var(--vt-studio-slider-progress, 0%),
-    color-mix(in srgb, var(--vt-studio-slider-left-fill) 50%, #fff) var(--vt-studio-slider-progress, 0%) 100%);
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   border: var(--vt-studio-slider-stroke) solid #000;
   box-shadow: none;
   cursor: pointer;
@@ -3769,9 +3905,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   opacity: .55;
 }
 .vt-studio-double-split-slider[data-size="compact"] {
-  --vt-studio-control-height: var(--vt-studio-28-height, 28px);
-  --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
+  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
   --vt-studio-control-font-size: 24px;
   --vt-studio-control-icon-size: 24px;
 }
@@ -3780,8 +3916,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-double-split-slider[data-size="micro"] {
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px);
   --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
 }
 .vt-studio-double-split-slider[data-size="micro"] .vt-studio-double-split-slider__reset {
@@ -3847,15 +3983,28 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   aspect-ratio: 16 / 9;
   overflow: hidden;
   isolation: isolate;
-  border: 0;
+  border: var(--vt-studio-upload-frame-stroke) solid #000;
   border-radius: var(--vt-studio-upload-frame-radius);
-  background: conic-gradient(from var(--vt-studio-upload-angle, 0deg), var(--vt-studio-upload-primary), color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary)), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary));
+  background: #000;
   animation: vt-studio-upload-spin calc(4s / var(--vt-studio-upload-speed)) linear infinite;
   cursor: pointer;
   container-type: inline-size;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   transform-origin: center;
+}
+.vt-studio-upload-frame::before {
+  position: absolute;
+  z-index: 0;
+  inset: var(--vt-studio-upload-frame-stroke);
+  content: "";
+  border: var(--vt-studio-upload-frame-stroke) solid transparent;
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - var(--vt-studio-upload-frame-stroke)));
+  background: conic-gradient(from var(--vt-studio-upload-angle, 0deg), var(--vt-studio-upload-primary), color-mix(in srgb, var(--vt-studio-upload-primary) 50%, var(--vt-studio-upload-secondary)), var(--vt-studio-upload-secondary), var(--vt-studio-upload-primary)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 .vt-studio-upload-frame.is-drag { --vt-studio-upload-speed: 2.5; }
 .vt-studio-upload-frame:hover,
@@ -3887,11 +4036,11 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-upload-frame__inset {
   position: absolute;
-  z-index: 0;
-  inset: var(--vt-studio-upload-frame-inset);
+  z-index: 1;
+  inset: calc(2 * var(--vt-studio-upload-frame-stroke));
   overflow: hidden;
-  border: var(--vt-studio-upload-frame-stroke) solid #000;
-  border-radius: var(--vt-studio-upload-inset-radius);
+  border: 0;
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke)));
   background: #fff;
 }
 .vt-studio-upload-frame__inset::before,
@@ -3900,17 +4049,16 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   z-index: 2;
   content: "";
   pointer-events: none;
-  border-radius: inherit;
 }
 .vt-studio-upload-frame__inset::before {
   inset: 0;
   border: var(--vt-upload-primary-stroke) solid var(--vt-studio-upload-primary);
-  border-radius: max(0px, calc(var(--vt-studio-upload-inset-radius) - 1cqw));
+  border-radius: inherit;
 }
 .vt-studio-upload-frame__inset::after {
   inset: var(--vt-upload-primary-stroke);
   border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary);
-  border-radius: max(0px, calc(var(--vt-studio-upload-inset-radius) - 1cqw - var(--vt-studio-upload-frame-stroke) * 1.25));
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke) - var(--vt-upload-secondary-stroke)));
 }
 .vt-studio-upload-frame__layers { position: absolute; inset: 0; }
 .vt-studio-upload-frame__layer {
@@ -3981,112 +4129,72 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-upload-frame:hover .vt-studio-upload-frame__icon,
 .vt-studio-upload-frame.is-drag .vt-studio-upload-frame__icon { transform: scale(1.06); }
-.vt-studio-upload-frame__label {
+/* Upload metadata bar: dedicated three-zone composition, independent of split-badge primitives. */
+.vt-studio-upload-frame__file-bar {
   position: absolute;
   z-index: 7;
   bottom: 1.25cqw;
   left: 50%;
   translate: -50% 0;
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: minmax(24px, 4cqw) minmax(0, 1fr) minmax(24px, 4cqw);
   align-items: stretch;
-  justify-content: center;
-  gap: 0;
   width: max-content;
   max-width: min(80cqw, calc(100% - 8px));
+  min-height: 28px;
+  max-height: 42px;
   overflow: hidden;
   padding: 0;
   border: var(--vt-studio-upload-frame-stroke) solid #000;
+  border-radius: var(--vt-studio-upload-badge-radius);
   box-sizing: border-box;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--vt-studio-upload-primary) 50%, white);
+  background: #000;
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  height: 28px;
-  min-height: 28px;
-  max-height: 28px;
-  font-size: 12px;
+  font-size: clamp(10px, 3cqw, 12px);
   font-weight: 1000;
-  line-height: 1.1;
+  line-height: 1;
   letter-spacing: -.02em;
   text-transform: uppercase;
-  white-space: pre-line;
-  overflow-wrap: anywhere;
 }
-.vt-studio-upload-frame__badge-text {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  padding: 0 6px;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: clip;
-  overflow-wrap: anywhere;
-}
-.vt-studio-upload-frame__label[data-has-file="true"] .vt-studio-upload-frame__badge-text {
-  white-space: nowrap;
-  overflow-wrap: normal;
-  text-overflow: clip;
-}
-.vt-studio-upload-frame__badge-rail {
-  box-sizing: border-box;
+.vt-studio-upload-frame__file-action,
+.vt-studio-upload-frame__file-kind {
   display: grid;
-  flex: 0 0 24px;
-  width: 24px;
-  min-width: 24px;
   place-items: center;
-  align-self: stretch;
-  color: #000;
+  min-width: 0;
   background: var(--vt-studio-upload-primary);
 }
-.vt-studio-upload-frame__badge-rail--left {
+.vt-studio-upload-frame__file-action {
   border-right: var(--vt-studio-upload-frame-stroke) solid #000;
 }
-.vt-studio-upload-frame__badge-rail--right {
+.vt-studio-upload-frame__file-kind {
   border-left: var(--vt-studio-upload-frame-stroke) solid #000;
   background: var(--vt-studio-upload-secondary);
 }
-.vt-studio-upload-frame__badge-rail > svg {
+.vt-studio-upload-frame__file-action > svg,
+.vt-studio-upload-frame__file-kind > svg {
   display: block;
   width: 55%;
   height: 55%;
   stroke: #000;
   stroke-width: 2.5;
 }
-.vt-studio-upload-frame__filename {
-  position: absolute;
-  z-index: 7;
-  bottom: 1.25cqw;
-  left: 50%;
-  display: inline-flex;
-  align-items: stretch;
-  width: max-content;
-  max-width: 80%;
+.vt-studio-upload-frame__file-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 5px 8px;
   overflow: hidden;
-  padding: 0;
-  border: var(--vt-studio-upload-frame-stroke) solid #000;
-  box-sizing: border-box;
-  border-radius: var(--vt-studio-upload-badge-radius);
-  background: linear-gradient(100deg, var(--vt-studio-upload-primary), var(--vt-studio-upload-secondary));
-  color: #000;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 3cqw;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: -.02em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  translate: -50% 0;
-}
-.vt-studio-upload-frame__filename .vt-studio-upload-frame__badge-text {
-  overflow: hidden;
+  background: color-mix(in srgb, var(--vt-studio-upload-primary) 50%, white);
+  text-align: center;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
   text-overflow: clip;
-  white-space: nowrap;
-  padding: 0.7cqw 1cqw;
 }
-.vt-studio-upload-frame__filename .vt-studio-upload-frame__badge-rail {
-  flex-basis: 4cqw;
+.vt-studio-upload-frame__file-bar[data-has-file="true"] .vt-studio-upload-frame__file-name {
+  white-space: nowrap;
+  overflow-wrap: normal;
 }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__center {
   inset: 0;
@@ -4478,7 +4586,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice.is-checkbox svg {
    horizontal label padding never exposes the page background as a false gap. */
 button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] [data-vt-studio-split-label] {
   box-sizing: border-box;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff);
+  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
 }
 
 /* Compact dropdown split rails use the compact control height for both the
@@ -4512,7 +4620,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 [data-vt-studio-control="true"] {
   --vt-studio-number-rest-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-number-rest-mix), white);
   --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65));
+  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 1));
 }
 
 /* Counter and slider values share the same neutral-rest / black-in-use transition. */
@@ -4587,7 +4695,8 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 
 
 
-/* Canonical vertical word toggle: global Studio typography/strokes with content-driven stacked height. */
+/* Canonical vertical word toggle — isolated from single-line global control geometry. */
+button.vt-studio-vertical-word-toggle[data-vt-studio-control="true"],
 .vt-studio-vertical-word-toggle {
   --vt-studio-vertical-word-font-size: var(--vt-studio-control-font-size, 38px);
   --vt-studio-vertical-word-stroke: var(--vt-studio-control-stroke, 3px);
@@ -4597,23 +4706,28 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   --vt-studio-vertical-word-horizontal-padding: 14.666667px;
   --vt-studio-vertical-word-text-stroke: var(--vt-studio-control-text-stroke, 1px);
   --vt-studio-vertical-word-handle-inset: 2.75px;
+  --vt-vwt-write-fill: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
+  --vt-vwt-create-fill: var(--vt-studio-control-secondary, var(--pair-b, #f276c5));
   position: relative;
+  box-sizing: border-box;
   display: inline-flex;
-  flex: 0 1 auto;
   flex-direction: column;
+  flex: 0 0 auto;
   align-items: stretch;
   justify-content: flex-start;
   gap: var(--vt-studio-vertical-word-gap);
   width: max-content;
   max-width: none;
   min-width: max-content;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
   align-self: flex-start;
-  height: auto;
   margin: 0;
-  padding: var(--vt-studio-vertical-word-padding) 0;
+  padding: var(--vt-studio-vertical-word-padding) 0 !important;
   border: var(--vt-studio-vertical-word-stroke) solid #000;
   border-radius: var(--vt-studio-vertical-word-radius);
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
+  background: #fff;
   color: #000;
   overflow: hidden;
   isolation: isolate;
@@ -4623,128 +4737,110 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   font-weight: 1000;
   font-variation-settings: "wght" 1000;
   font-synthesis: none;
-  letter-spacing: -.02em;
+  letter-spacing: -0.055em;
   line-height: 1;
   text-transform: uppercase;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+.vt-studio-vertical-word-toggle.is-supreme {
+  --vt-studio-vertical-word-font-size: var(--vt-studio-supreme-font-size, 52px);
+  --vt-studio-vertical-word-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-studio-vertical-word-radius: var(--vt-studio-control-radius, 6px);
+  --vt-studio-vertical-word-gap: 5px;
+  --vt-studio-vertical-word-padding: 5px;
+  --vt-studio-vertical-word-horizontal-padding: 18px;
+  --vt-studio-vertical-word-handle-inset: 3.5px;
+  --vt-studio-vertical-word-text-stroke: var(--vt-studio-supreme-text-stroke, 1px);
+}
+.vt-studio-vertical-word-toggle.is-standard {
+  --vt-studio-vertical-word-font-size: var(--vt-studio-control-font-size, 38px);
+  --vt-studio-vertical-word-gap: 3.666667px;
+  --vt-studio-vertical-word-padding: 3.666667px;
+  --vt-studio-vertical-word-horizontal-padding: 14.666667px;
+  --vt-studio-vertical-word-handle-inset: 2.75px;
+}
 .vt-studio-vertical-word-toggle.is-compact {
-
-  --vt-studio-vertical-word-gap: 2.444444px;
-  --vt-studio-vertical-word-padding: 2.444444px;
-  --vt-studio-vertical-word-horizontal-padding: 9.333333px;
-  --vt-studio-vertical-word-handle-inset: 1.833333px;
+  --vt-studio-vertical-word-font-size: 29.333333px;
+  --vt-studio-vertical-word-stroke: 3px;
+  --vt-studio-vertical-word-radius: 7.333333px;
+  --vt-studio-vertical-word-gap: 3.666667px;
+  --vt-studio-vertical-word-padding: 3.666667px;
+  --vt-studio-vertical-word-horizontal-padding: 14.666667px;
+  --vt-studio-vertical-word-handle-inset: 2.75px;
+  --vt-studio-vertical-word-text-stroke: 1px;
+}
+.vt-studio-vertical-word-toggle.is-mini {
+  --vt-studio-vertical-word-font-size: var(--vt-studio-mini-font-size, 17.5px);
+  --vt-studio-vertical-word-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-studio-vertical-word-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-studio-vertical-word-gap: 2px;
+  --vt-studio-vertical-word-padding: 2px;
+  --vt-studio-vertical-word-horizontal-padding: 8px;
+  --vt-studio-vertical-word-handle-inset: 1.5px;
+  --vt-studio-vertical-word-text-stroke: 0.375px;
 }
 .vt-studio-vertical-word-toggle.is-micro {
-
+  --vt-studio-vertical-word-font-size: var(--vt-studio-micro-font-size, 10px);
+  --vt-studio-vertical-word-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-studio-vertical-word-radius: var(--vt-studio-mini-radius, 3px);
   --vt-studio-vertical-word-gap: 1.222222px;
   --vt-studio-vertical-word-padding: 1.222222px;
   --vt-studio-vertical-word-horizontal-padding: 4px;
-  --vt-studio-vertical-word-handle-inset: .916667px;
+  --vt-studio-vertical-word-handle-inset: 0.916667px;
+  --vt-studio-vertical-word-text-stroke: 0.25px;
 }
 .vt-studio-vertical-word-toggle:focus-visible {
   outline: var(--vt-studio-control-focus-outline-width, 1.95px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 3px;
+  outline-offset: 5px;
 }
-.vt-studio-vertical-word-toggle:disabled {
-  cursor: not-allowed;
-  opacity: .55;
-}
+.vt-studio-vertical-word-toggle:disabled { cursor: not-allowed; opacity: .55; }
 .vt-studio-vertical-word-toggle__word {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex: 0 0 var(--vt-studio-vertical-word-font-size);
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  height: var(--vt-studio-vertical-word-font-size);
-  padding: 0 var(--vt-studio-vertical-word-horizontal-padding);
-  color: #000;
-  font-family: inherit;
-  font-size: var(--vt-studio-vertical-word-font-size);
-  font-weight: 1000;
-  font-variation-settings: "wght" 1000;
-  font-synthesis: none;
-  line-height: 1;
-  letter-spacing: -.02em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  user-select: none;
+  position: relative; z-index: 1; display: flex; flex: 0 0 var(--vt-studio-vertical-word-font-size);
+  align-items: center; justify-content: center; box-sizing: border-box; min-width: 0;
+  height: var(--vt-studio-vertical-word-font-size); padding: 0 var(--vt-studio-vertical-word-horizontal-padding);
+  color: #000; font-family: inherit; font-size: var(--vt-studio-vertical-word-font-size);
+  font-weight: 1000; font-variation-settings: "wght" 1000; font-synthesis: none; line-height: 1;
+  letter-spacing: -0.055em; text-transform: uppercase; white-space: nowrap; user-select: none;
   -webkit-text-stroke: var(--vt-studio-vertical-word-text-stroke) currentColor;
   transition: color 120ms ease-out;
 }
 .vt-studio-vertical-word-toggle__handle {
-  position: absolute;
-  z-index: 0;
-  top: var(--vt-studio-vertical-word-handle-top, 3px);
-  left: var(--vt-studio-vertical-word-handle-inset);
-  right: var(--vt-studio-vertical-word-handle-inset);
-  height: var(--vt-studio-vertical-word-handle-height, var(--vt-studio-vertical-word-font-size));
+  position: absolute; z-index: 0; top: var(--vt-studio-vertical-word-padding);
+  left: var(--vt-studio-vertical-word-handle-inset); right: var(--vt-studio-vertical-word-handle-inset);
+  height: calc(var(--vt-studio-vertical-word-font-size) + 2px);
   border-radius: calc(var(--vt-studio-vertical-word-radius) * .5);
-  background: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
-  overflow: hidden;
-  pointer-events: none;
+  background: var(--vt-vwt-write-fill); overflow: hidden; pointer-events: none;
 }
 .vt-studio-vertical-word-toggle__handle-color {
-  position: absolute;
-  inset: 0;
-  display: none;
-  border-radius: inherit;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  pointer-events: none;
+  position: absolute; inset: 0; display: none; border-radius: inherit;
+  background: var(--vt-vwt-create-fill); pointer-events: none;
 }
-.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="false"] .vt-studio-vertical-word-toggle__handle,
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="false"] .vt-studio-vertical-word-toggle__handle {
-  background: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
-}
-.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="true"] .vt-studio-vertical-word-toggle__handle,
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="true"] .vt-studio-vertical-word-toggle__handle {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #f276c5));
-}
+.vt-studio-vertical-word-toggle.is-primary-secondary { background: #fff; border-color: #000; }
 .vt-studio-vertical-word-toggle.is-primary-secondary .vt-studio-vertical-word-toggle__word { color: #000; }
-.vt-studio-vertical-word-toggle.is-black-fill {
-  border-color: #000;
-  background: #000;
-}
-.vt-studio-vertical-word-toggle.is-black-fill .vt-studio-vertical-word-toggle__word { color: var(--vt-studio-control-secondary, var(--pair-b, #f276c5)); }
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="0"],
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] { color: #000; }
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] { color: var(--vt-studio-control-secondary, var(--pair-b, #f276c5)); }
-.vt-studio-vertical-word-toggle.is-black-fill[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="0"] { color: var(--vt-studio-control-accent, var(--pair-a, #20f13e)); }
-.vt-studio-vertical-word-toggle.is-primary-white-handle {
-  border-color: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
-  background: var(--vt-studio-control-accent, var(--pair-a, #20f13e));
-}
-.vt-studio-vertical-word-toggle.is-primary-white-handle .vt-studio-vertical-word-toggle__word { color: var(--vt-studio-control-secondary, var(--pair-b, #f276c5)); }
-.vt-studio-vertical-word-toggle.is-primary-white-handle .vt-studio-vertical-word-toggle__handle { background: #fff; }
-.vt-studio-vertical-word-toggle.is-white-fill {
-  border-color: #fff;
-  background: #fff;
-}
+.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="false"] .vt-studio-vertical-word-toggle__handle { background: var(--vt-vwt-write-fill); }
+.vt-studio-vertical-word-toggle.is-primary-secondary[data-value="true"] .vt-studio-vertical-word-toggle__handle { background: var(--vt-vwt-create-fill); }
+.vt-studio-vertical-word-toggle.is-black-fill { background: #000; border-color: #000; color: #fff; }
+.vt-studio-vertical-word-toggle.is-black-fill .vt-studio-vertical-word-toggle__word { color: #fff; }
+.vt-studio-vertical-word-toggle.is-black-fill .vt-studio-vertical-word-toggle__handle { background: #000; box-shadow: inset 0 0 0 3px #fff; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle { background: var(--vt-vwt-write-fill); border-color: #000; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle .vt-studio-vertical-word-toggle__word { color: #000; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle[data-value="false"] .vt-studio-vertical-word-toggle__handle { background: #000; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle[data-value="true"] .vt-studio-vertical-word-toggle__handle { background: #fff; }
+.vt-studio-vertical-word-toggle.is-primary-white-handle[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="0"] { color: #fff; }
+.vt-studio-vertical-word-toggle.is-white-fill { background: #fff; border-color: #000; }
 .vt-studio-vertical-word-toggle.is-white-fill .vt-studio-vertical-word-toggle__word { color: #000; }
+.vt-studio-vertical-word-toggle.is-white-fill .vt-studio-vertical-word-toggle__handle { background: #000; }
 .vt-studio-vertical-word-toggle.is-white-fill[data-value="false"] .vt-studio-vertical-word-toggle__word[data-word-index="0"],
 .vt-studio-vertical-word-toggle.is-white-fill[data-value="true"] .vt-studio-vertical-word-toggle__word[data-word-index="1"] { color: #fff; }
-.vt-studio-vertical-word-toggle.is-white-fill .vt-studio-vertical-word-toggle__handle { background: #000; }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-vertical-word-toggle__word { transition: none !important; }
 }
 
-
 /* Read-only text display shares textarea tokens but never receives edit/focus states. */
+/* Read-only text display follows the same geometry and glyph contract as editable fields. */
 .vt-studio-text-box[data-vt-studio-control="true"] {
-  /*
-   * The selected size supplies the normal field border width.
-   * Reduce it locally; do not mutate the shared size token.
-   */
-  /* Stroke sourcing matches every other text field: the shared size token
-     supplies the border/outline width and the shared text-stroke token supplies
-     the letterform outline; no text-box-local multipliers remain. */
-  --studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);
-  --studio-text-box-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
-
   position: relative;
   box-sizing: border-box;
   display: block;
@@ -4754,19 +4850,20 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   min-height: var(--vt-studio-textarea-min-height, 92px);
   margin: 0;
   padding: var(--vt-studio-textarea-standard-padding-block, 10px) var(--vt-studio-textarea-standard-padding-inline, 12px);
-  border: var(--studio-text-box-stroke-width) solid #000;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   background: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  box-shadow: none;
-  outline: var(--studio-text-box-stroke-width) solid var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
   outline-offset: 0;
+  box-shadow: none;
   color: #000;
   -webkit-text-fill-color: #000;
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
   font-weight: 1000;
-  -webkit-text-stroke: var(--studio-text-box-text-stroke-width) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  line-height: var(--textarea-description-line-height, 1);
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
+  line-height: var(--vt-studio-textarea-line-height, .85);
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
   text-transform: uppercase;
   white-space: pre-wrap;
@@ -4774,37 +4871,37 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   user-select: text;
   cursor: text;
 }
-.vt-studio-text-box[data-vt-studio-control="true"]::before {
-  content: "";
-  position: absolute;
-  inset: var(--studio-text-box-stroke-width);
-  border: var(--studio-text-box-stroke-width) solid var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  border-radius: max(0px, calc(var(--vt-studio-control-radius, 6px) - var(--studio-text-box-stroke-width)));
-  pointer-events: none;
-}
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="supreme"] {
   padding: calc(var(--vt-studio-textarea-standard-padding-block, 10px) * 1.363636) calc(var(--vt-studio-textarea-standard-padding-inline, 12px) * 1.363636);
-  font-size: calc(var(--vt-studio-textarea-standard-font-size, 18px) * 1.363636);
+  font-size: var(--vt-studio-textarea-supreme-font-size, 24.55px);
+  -webkit-text-stroke: var(--vt-studio-textarea-supreme-text-stroke, .68px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="compact"] {
   padding: var(--vt-studio-textarea-compact-padding-block, 8px) var(--vt-studio-textarea-compact-padding-inline, 10px);
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
+  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, .35px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+.vt-studio-text-box[data-vt-studio-control="true"][data-size="mini"] {
+  padding: var(--vt-studio-textarea-compact-padding-block, 8px) var(--vt-studio-textarea-compact-padding-inline, 10px);
+  font-size: var(--vt-studio-textarea-mini-font-size, 17.5px);
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, .375px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="micro"] {
   padding: var(--vt-studio-textarea-micro-padding-block, 4px) var(--vt-studio-textarea-micro-padding-inline, 5px);
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, .25px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 /* Textarea and read-only text display share the canonical 0.85 line-height token. */
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"] {
-  line-height: var(--vt-studio-textarea-line-height, 1);
+  line-height: var(--vt-studio-textarea-line-height, .85);
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
 }
 
@@ -5014,15 +5111,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 .vt-studio-brain-status__lens { position: absolute; z-index: 1; width: 65%; height: 65%; border: 1px solid #000; border-radius: 50%; background: #fff; box-sizing: border-box; }
 .vt-studio-brain-status__label { overflow: hidden; text-overflow: clip; transform: translateY(.5px); }
 @keyframes vt-studio-brain-led-ripple { 0% { transform: scale(.55); opacity: .8; } 100% { transform: scale(2.15); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .vt-studio-brain-status[data-pulse="true"] .vt-studio-brain-status__led-wrap::before, .vt-studio-brain-status[data-pulse="true"] .vt-studio-brain-status__led-wrap::after { animation: none; } }
-.vt-studio-simple-dropdown select {
-  line-height: 1;
-  padding-top: 0;
-  padding-bottom: 0;
-  text-align: center;
-  text-align-last: center;
-}
-button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] {
+@media (prefers-reduced-motion: reduce) { .vt-studio-brain-status[data-pulse="true"] .vt-studio-brain-status__led-wrap::before, .vt-studio-brain-status[data-pulse="true"] .vt-studio-brain-status__led-wrap::after { animation: none; } }button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] {
   line-height: 1;
   display: flex;
   align-items: center;
@@ -5117,8 +5206,8 @@ button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studi
 }
 [data-vt-studio-button-icon] > svg {
   display: block;
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
+  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
   flex: 0 0 auto;
 }
 .vt-studio-split-shell,
@@ -5296,7 +5385,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 /* Studio value-toggle family: canonical primitive styles; no motion or shadow. */
 .vt-studio-value-toggle {
   --vt-toggle-text: #000;
-  --vt-toggle-fill: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   --vt-toggle-icon: #000;
   --vt-toggle-icon-fill: transparent;
   display: flex; align-items: stretch; gap: 0; min-width: 0; width: 100%; box-sizing: border-box;
@@ -5305,18 +5394,17 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   font-family: var(--vt-studio-control-font-family, Inter, sans-serif); font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000; line-height: 1; text-transform: uppercase; letter-spacing: -.02em;
 }
-.vt-studio-value-toggle[data-size="supreme"] { min-height: 60px; }
-.vt-studio-value-toggle[data-size="standard"] { min-height: 44px; }
-.vt-studio-value-toggle[data-size="compact"] { min-height: 28px; font-size: var(--vt-studio-28-font-size, 24px); border-width: var(--vt-studio-28-stroke, 2px); border-radius: var(--vt-studio-28-radius, 4px); }
-.vt-studio-value-toggle[data-size="micro"] { min-height: 12px; font-size: 10px; border-width: 1px; border-radius: 2px; }
+.vt-studio-value-toggle[data-size="supreme"] { min-height: var(--vt-studio-supreme-height, 60px); }
+.vt-studio-value-toggle[data-size="standard"] { min-height: var(--vt-studio-standard-height, 44px); }
+.vt-studio-value-toggle[data-size="compact"] { min-height: 28px; font-size: var(--vt-studio-compact-font-size, 24px); border-width: var(--vt-studio-compact-stroke, 2px); border-radius: var(--vt-studio-compact-radius, 4px); }
+.vt-studio-value-toggle[data-size="micro"] { min-height: var(--vt-studio-micro-height, 12px); font-size: var(--vt-studio-micro-font-size, 10px); border-width: var(--vt-studio-micro-stroke, 1.5px); border-radius: var(--vt-studio-micro-radius, 3px); }
 .vt-studio-value-toggle__face { display: flex; align-items: center; justify-content: center; flex: 1 1 auto; min-width: 0; padding: 0 4px; overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1; color: var(--vt-toggle-text); }
-.vt-studio-value-toggle__arrow { display: flex; align-items: center; justify-content: center; flex: 0 0 auto; min-width: 38px; padding: 0 2px; border: 0; border-radius: 0; color: var(--vt-toggle-icon); background: var(--vt-toggle-icon-fill); cursor: pointer; }
-.vt-studio-value-toggle__arrow svg { width: 38px; height: 38px; stroke-width: 2.4; }
+.vt-studio-value-toggle__arrow { display: grid; place-items: center; flex: 0 0 auto; padding: 0; border: 0; border-radius: 0; color: var(--vt-toggle-icon); background: var(--vt-toggle-icon-fill); cursor: pointer; }
 .vt-studio-value-toggle__arrow:disabled { opacity: .35; cursor: not-allowed; }
 .vt-studio-value-toggle__arrow:focus-visible { outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 0; }
 .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  display: block; width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%); stroke-width: 2.5;
+  display: block; width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
+  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%); stroke-width: 2.5;
   transform-origin: center;
 }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
@@ -5338,15 +5426,10 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-value-toggle--nested { border: 0; border-radius: 0; min-width: 0; }
 .vt-studio-value-toggle__divider { flex: 0 0 1px; background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
 .vt-studio-value-toggle--bar { align-items: stretch; }
-.vt-studio-value-toggle--bar .vt-studio-value-toggle__arrow { min-width: 38px; }
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow { min-width: 24px; }
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow svg { width: 24px; height: 24px; }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars { gap: 1px; }
 .vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bar { flex-basis: 10px; width: 10px; height: 20px; }
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__arrow { min-width: 12px; }
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__arrow svg { width: 10px; height: 10px; }
 .vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars { gap: 1px; padding: 0 1px; }
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bar { flex-basis: 4px; width: 4px; height: 10px; border-width: .5px; }
+.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bar { flex-basis: 3px; width: 3px; height: 8px; border-width: .5px; }
 
 /* Value toggles compose StudioSplitShell; this is an intentional foundation reuse. */
 .vt-studio-split-shell.vt-studio-value-toggle {
@@ -5362,7 +5445,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-split-shell.vt-studio-value-toggle[data-vt-studio-split="double"] { grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr) var(--vt-studio-control-height, 44px); }
 .vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] { width: var(--vt-studio-control-height, 44px); min-width: 0; background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); border-color: #000; }
 .vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-value-toggle__arrow { width: 100%; min-width: 0; height: 100%; padding: 0; color: var(--vt-toggle-icon, #000); background: var(--vt-toggle-icon-fill, transparent); }
-.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-value-toggle__arrow svg { width: min(var(--vt-studio-control-icon-size, 38px), 100%); height: min(var(--vt-studio-control-icon-size, 38px), 100%); }
+ .vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-value-toggle__arrow svg { width: 100%; height: 100%; }
 .vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-label] { min-width: 0; width: 100%; overflow: hidden; padding: 0 4px; background: var(--vt-toggle-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))); color: var(--vt-toggle-text, #000); -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor; }
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__face { display: flex; width: 100%; min-width: 0; height: 100%; align-items: center; justify-content: center; padding-block: 0; overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1; color: inherit; }
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow { display: grid; place-items: center; border: 0; border-radius: 0; cursor: pointer; }
@@ -5371,10 +5454,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
 }
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
-}
+
 .vt-studio-value-toggle--double:not(.vt-studio-split-shell) { display: flex; align-items: stretch; gap: 0; width: 100%; min-width: 0; min-height: var(--vt-studio-control-height, 44px); box-sizing: border-box; border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden; background: var(--vt-toggle-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))); }
 .vt-studio-value-toggle__double-side { display: flex; flex: 1 1 0; min-width: 0; }
 .vt-studio-value-toggle__double-side > .vt-studio-split-shell { flex: 1 1 auto; min-width: 0; width: 100%; border: 0; border-radius: 0; }
@@ -5439,11 +5519,9 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   --vt-toggle-text: var(--pair-a, #36e0f6);
 }
 /* Double Side Toggle owns one perimeter; propagate the same size tokens into both nested shells. */
-.vt-studio-value-toggle--double[data-size="supreme"] { --vt-studio-control-height: 60px; --vt-studio-control-stroke: 4.09px; --vt-studio-control-radius: 8.18px; --vt-studio-control-font-size: 51.82px; --vt-studio-control-icon-size: 51.82px; }
-.vt-studio-value-toggle--double[data-size="standard"] { --vt-studio-control-height: 44px; --vt-studio-control-stroke: 3px; --vt-studio-control-radius: 6px; --vt-studio-control-font-size: 38px; --vt-studio-control-icon-size: 38px; }
-.vt-studio-value-toggle--double[data-size="mini"] { --vt-studio-control-height: 20px; --vt-studio-control-stroke: 1.5px; --vt-studio-control-radius: 3px; --vt-studio-control-font-size: 17px; --vt-studio-control-icon-size: 17px; }
-.vt-studio-value-toggle--double[data-size="compact"] { --vt-studio-control-height: 28px; --vt-studio-control-stroke: 2px; --vt-studio-control-radius: 4px; --vt-studio-control-font-size: 24px; --vt-studio-control-icon-size: 24px; }
-.vt-studio-value-toggle--double[data-size="micro"] { --vt-studio-control-height: 12px; --vt-studio-control-stroke: 1px; --vt-studio-control-radius: 2px; --vt-studio-control-font-size: 10px; --vt-studio-control-icon-size: 10px; }
+.vt-studio-value-toggle--double[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px); }
+.vt-studio-value-toggle--double[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px); }
+.vt-studio-value-toggle--double[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); }
 .vt-studio-value-toggle--double .vt-studio-value-toggle__double-side > .vt-studio-split-shell { height: 100%; min-height: 100%; font-size: var(--vt-studio-control-font-size); }
 .vt-studio-value-toggle--double[data-variant="v2"] .vt-studio-value-toggle__divider { display: none; }
 
@@ -5474,8 +5552,8 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 
 [data-vt-studio-control] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
   display: block;
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
+  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
   flex: 0 0 auto;
   transform-origin: center;
 }
@@ -5486,20 +5564,8 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   outline-offset: 0;
 }
 
-[data-vt-studio-control][data-size="standard"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(38px, 100%);
-  height: min(38px, 100%);
-}
 
-[data-vt-studio-control][data-size="compact"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(30px, 100%);
-  height: min(30px, 100%);
-}
 
-[data-vt-studio-control][data-size="micro"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(15px, 100%);
-  height: min(15px, 100%);
-}
 
 /* Focus parity for both simple and labeled textarea writing surfaces. */
 [data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"]:is(:focus, :focus-visible) {
@@ -5611,21 +5677,21 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   --vt-studio-floating-label-risen-text-stroke: 0.5px;
 }
 .vt-studio-floating-field > input[data-size="supreme"] + .vt-studio-floating-field-label {
-  font-size: var(--vt-studio-supreme-font-size, 51.82px);
-  -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1.36px) currentColor;
+  font-size: var(--vt-studio-supreme-font-size, 52px);
+  -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1px) currentColor;
 }
 .vt-studio-floating-field > input[data-size="standard"] + .vt-studio-floating-field-label,
 .vt-studio-floating-field > input:not([data-size]) + .vt-studio-floating-field-label {
-  font-size: var(--vt-studio-44-font-size, 38px);
-  -webkit-text-stroke: var(--vt-studio-44-text-stroke, 1px) currentColor;
+  font-size: var(--vt-studio-standard-font-size, 38px);
+  -webkit-text-stroke: var(--vt-studio-standard-text-stroke, 1px) currentColor;
 }
 .vt-studio-floating-field > input[data-size="compact"] + .vt-studio-floating-field-label {
-  font-size: var(--vt-studio-28-font-size, 24px);
-  -webkit-text-stroke: var(--vt-studio-28-text-stroke, 0.5px) currentColor;
+  font-size: var(--vt-studio-compact-font-size, 24px);
+  -webkit-text-stroke: var(--vt-studio-compact-text-stroke, 0.5px) currentColor;
 }
 .vt-studio-floating-field > input[data-size="micro"] + .vt-studio-floating-field-label {
   font-size: var(--vt-studio-micro-font-size, 10px);
-  -webkit-text-stroke: var(--vt-studio-micro-text-stroke, 0.25px) currentColor;
+  -webkit-text-stroke: var(--vt-studio-micro-text-stroke, 0.4px) currentColor;
 }
 .vt-studio-floating-field > textarea[data-size="supreme"] + .vt-studio-floating-field-label {
   font-size: var(--vt-studio-textarea-supreme-font-size, 24.55px);
@@ -5642,7 +5708,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
 }
 .vt-studio-floating-field > textarea[data-size="micro"] + .vt-studio-floating-field-label {
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
-  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.25px) currentColor;
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, 0.4px) currentColor;
 }
 .vt-studio-floating-field > :is(input, textarea):is(:focus, :focus-visible) + .vt-studio-floating-field-label,
 .vt-studio-floating-field > :is(input, textarea):not(:placeholder-shown) + .vt-studio-floating-field-label {
@@ -5727,14 +5793,28 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   max-width: 18px;
 }
 
-/* Single bar definition: empty bars are 50% white-primary; full bars are black. */
+/* Single bar definition: inactive bars remain legible over the primary face. */
+.vt-studio-value-toggle__bars,
+.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bars {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
 .vt-studio-value-toggle__bar,
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
   display: block;
-  flex: 0 0 18px;
-  width: 18px;
-  height: 38px;
+  flex: 0 0 12px;
+  width: 12px;
+  height: 28px;
   align-self: center;
+  /* Empty bars: 50% white of primary so they remain visible on the face. */
   background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
   border: 1px solid #000;
   box-sizing: border-box;
@@ -5795,21 +5875,21 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
 }
 
 .vt-studio-square-icon-button-group[data-size="standard"] {
-  --vt-icon-group-size: var(--vt-studio-44-height, 44px);
-  --vt-icon-group-stroke: var(--vt-studio-44-stroke, 3px);
-  --vt-icon-group-radius: var(--vt-studio-44-radius, 6px);
+  --vt-icon-group-size: var(--vt-studio-standard-height, 44px);
+  --vt-icon-group-stroke: var(--vt-studio-standard-stroke, 3px);
+  --vt-icon-group-radius: var(--vt-studio-standard-radius, 6px);
 }
 
 .vt-studio-square-icon-button-group[data-size="compact"] {
-  --vt-icon-group-size: var(--vt-studio-28-height, 28px);
-  --vt-icon-group-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-icon-group-radius: var(--vt-studio-28-radius, 4px);
+  --vt-icon-group-size: var(--vt-studio-compact-height, 28px);
+  --vt-icon-group-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-icon-group-radius: var(--vt-studio-compact-radius, 4px);
 }
 
 .vt-studio-square-icon-button-group[data-size="micro"] {
   --vt-icon-group-size: var(--vt-studio-micro-height, 12px);
-  --vt-icon-group-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-icon-group-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-icon-group-stroke: var(--vt-studio-micro-stroke, 1.5px);
+  --vt-icon-group-radius: var(--vt-studio-micro-radius, 3px);
 }
 
 .vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"],
@@ -5922,9 +6002,9 @@ button[data-vt-studio-action-button="true"] {
 }
 
 .vt-studio-top-split-module[data-size="compact"] {
-  --vt-top-split-size: var(--vt-studio-28-height, 28px);
-  --vt-top-split-stroke: var(--vt-studio-28-stroke, 2px);
-  --vt-top-split-radius: var(--vt-studio-28-radius, 4px);
+  --vt-top-split-size: var(--vt-studio-compact-height, 28px);
+  --vt-top-split-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-top-split-radius: var(--vt-studio-compact-radius, 4px);
 }
 
 .vt-studio-top-split-module__head {
@@ -5947,8 +6027,8 @@ button[data-vt-studio-action-button="true"] {
 
 .vt-studio-top-split-module[data-size="compact"] .vt-studio-top-split-module__head {
   min-height: var(--vt-top-split-size);
-  font-size: var(--vt-studio-28-font-size, 24px);
-  -webkit-text-stroke-width: var(--vt-studio-28-text-stroke, 0.5px);
+  font-size: var(--vt-studio-compact-font-size, 24px);
+  -webkit-text-stroke-width: var(--vt-studio-compact-text-stroke, 0.5px);
 }
 
 .vt-studio-top-split-module__head[data-split="left"] {
@@ -6131,144 +6211,539 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
 .vt-studio-two-line-module[data-size="standard"] .vt-studio-two-line-module__title { font-size: 14px; }
 .vt-studio-two-line-module[data-size="standard"] .vt-studio-two-line-module__description { font-size: 11px; }
 
+/* Studio Controls shared field + family corrections.
+   Keep character fill and glyph stroke sourced from the same state token. */
+[data-vt-studio-control] {
+  --vt-field-text-stroke: var(--vt-field-text);
+  --vt-field-text-stroke-focus: var(--vt-field-text-focus);
+  --vt-studio-control-text-transition: var(--vt-studio-focus-outline-fade-ms, 500ms);
+}
+[data-vt-studio-control]:is(input, textarea, select) {
+  transition-property: color, -webkit-text-stroke-color, background-color, box-shadow, outline-color;
+  transition-duration: var(--vt-studio-control-text-transition);
+  transition-timing-function: ease-out;
+}
+[data-vt-studio-control]:is(input, textarea, select):focus,
+[data-vt-studio-control]:is(input, textarea, select):focus-visible {
+  color: var(--vt-field-text-focus, #000);
+  -webkit-text-stroke-color: var(--vt-field-text-stroke-focus, #000);
+}
+.vt-studio-text-box[data-vt-studio-control="true"] {
+  --field-border-width: var(--vt-studio-control-stroke, 3px);
+  --studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);
+  --studio-text-box-text-stroke-width: var(--vt-studio-control-text-stroke, 1px);
+  border-width: var(--vt-studio-control-stroke, 3px);
+  border-radius: var(--vt-studio-control-radius, 6px);
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a)));
+  box-shadow: none;
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline-offset: 0;
+}
 
-/* ═══ Canonical button-only default effects — consolidated from the CSS/layout skills ═══
-   Buttons may own a paint-only shadow transition; every other Studio surface stays flat. */
-button[data-vt-studio-button="true"] {
-  box-shadow: none;
-  transition: box-shadow 150ms ease-out;
+/* Shared slider contract: the active track/center stays primary; split rails are secondary. */
+[data-vt-studio-slider] input[type="range"] {
+  --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  accent-color: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] {
-  box-shadow: none;
-  transition: box-shadow 150ms ease-out;
+[data-vt-studio-slider] input[type="range"]::-moz-range-progress {
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
-button[data-vt-studio-button="true"]:hover:not(:disabled),
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled),
-button[data-vt-studio-button="true"]:active:not(:disabled),
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) {
-  box-shadow: none;
-  transform: none !important;
-  translate: none !important;
+[data-vt-studio-slider] [data-vt-studio-split-rail],
+.vt-studio-value-toggle__double-side [data-vt-studio-split-rail],
+.vt-studio-side-counter [data-vt-studio-split-rail] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
-.vt-studio-split-left-badge,
-.vt-studio-split-right-badge,
-.vt-studio-double-split-badge { box-shadow: none !important; }
-.vt-studio-inline-stepper > button,
-.vt-studio-split-stepper-actions > button { transition: none !important; }
-.vt-studio-dropdown-menu { box-shadow: none !important; }
-button[data-vt-studio-button="true"]:focus-visible,
-button[data-vt-studio-control="true"]:focus-visible {
-  outline: var(--vt-studio-control-focus-outline-width, 1.95px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+.vt-studio-value-toggle[data-vt-studio-value-toggle="side"] {
+  --vt-toggle-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+}
+
+/* Geometry invariants shared by the counter and split-control families. */
+.vt-studio-counter__value,
+.vt-studio-side-counter__value {
+  aspect-ratio: 2 / 1;
+  min-width: 0;
+  min-height: 0;
+}
+.vt-studio-side-counter [data-vt-studio-split-rail],
+.vt-studio-value-toggle__double-side [data-vt-studio-split-rail] {
+  aspect-ratio: 1 / 1;
+}
+.vt-studio-value-toggle__divider {
+  outline: 0;
+  box-shadow: none;
+}
+.vt-studio-vertical-word-toggle__handle {
+  box-sizing: border-box;
+  top: var(--vt-studio-vertical-word-handle-inset, 3px);
+  bottom: var(--vt-studio-vertical-word-handle-inset, 3px);
+  height: auto;
+  border-radius: var(--vt-studio-vertical-word-handle-radius, var(--vt-studio-control-radius, 6px));
+}
+
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus,:focus-visible),textarea[data-vt-studio-control="true"]:is(:focus,:focus-visible){color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke-color:#000;caret-color:var(--vt-field-primary);box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary);outline:var(--vt-field-focus-outline);outline-offset:0}
+.vt-studio-text-box,[data-vt-studio-field-kind="textarea-display"],[data-vt-studio-field-kind="text-box"]{color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke-color:#000;box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary);outline:var(--vt-field-focus-outline);outline-offset:0}
+.vt-studio-split-shell,[data-vt-studio-split-shell="true"]{box-sizing:border-box;display:flex;flex-direction:row;align-items:stretch;width:100%;min-width:0;height:var(--vt-studio-control-height);min-height:var(--vt-studio-control-height);border:var(--vt-studio-control-stroke) solid #000;border-radius:var(--vt-studio-control-radius);overflow:hidden;background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));color:#000;padding:0;gap:0}
+.vt-studio-split-shell__rail,[data-vt-studio-split-rail]{box-sizing:border-box;display:grid;place-items:center;flex:0 0 var(--vt-studio-control-height);width:var(--vt-studio-control-height);min-width:var(--vt-studio-control-height);max-width:var(--vt-studio-control-height);height:100%;min-height:100%;margin:0;padding:0;border:0;border-radius:0;background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));color:#000;-webkit-text-stroke:0}
+.vt-studio-split-shell[data-layout="left"] .vt-studio-split-shell__rail,.vt-studio-split-shell[data-layout="left"] [data-vt-studio-split-rail],.vt-studio-split-shell[data-layout="double"] .vt-studio-split-shell__rail[data-rail="start"],.vt-studio-split-shell[data-layout="double"] [data-vt-studio-split-rail="start"]{border-right:var(--vt-studio-control-stroke) solid #000}
+.vt-studio-split-shell[data-layout="right"] .vt-studio-split-shell__rail,.vt-studio-split-shell[data-layout="right"] [data-vt-studio-split-rail],.vt-studio-split-shell[data-layout="double"] .vt-studio-split-shell__rail[data-rail="end"],.vt-studio-split-shell[data-layout="double"] [data-vt-studio-split-rail="end"]{border-left:var(--vt-studio-control-stroke) solid #000;border-right:0}
+.vt-studio-split-shell__label,[data-vt-studio-split-label]{box-sizing:border-box;display:flex;flex:1 1 auto;align-items:center;justify-content:center;min-width:0;height:100%;padding:0 4px;overflow:hidden;white-space:nowrap;text-overflow:clip;font-size:var(--vt-studio-control-font-size);font-weight:1000;line-height:1;letter-spacing:-.02em;text-transform:uppercase;color:#000;-webkit-text-stroke:var(--vt-studio-control-text-stroke) currentColor}
+.vt-studio-split-shell__rail,.vt-studio-split-shell__label{align-self:stretch}
+.vt-studio-value-toggle__bars{display:flex;flex:1 1 auto;align-items:center;justify-content:center;gap:4px;width:100%;height:100%;padding:4px;box-sizing:border-box}
+.vt-studio-value-toggle__bar{display:block;flex:0 0 auto;width:calc(var(--vt-studio-control-font-size)*.4);height:var(--vt-studio-control-font-size);aspect-ratio:1/2.5;border-radius:2px;border:0;background:color-mix(in srgb,var(--vt-studio-control-accent,var(--pair-a)) 50%,#fff);pointer-events:none}
+.vt-studio-value-toggle__bar[data-active="true"]{background:#000}
+.vt-studio-vertical-word-toggle__handle,.vt-studio-vertical-word-toggle .vt-studio-word-toggle__handle{box-sizing:border-box;position:absolute;inset:3px;border-radius:calc(var(--vt-studio-control-radius) - 1px)}
+.vt-studio-value-toggle__arrow-stack{position:relative;display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);width:100%;height:100%}
+.vt-studio-value-toggle__arrow-stack::after{content:"";position:absolute;z-index:3;inset-inline:0;top:50%;height:var(--vt-studio-control-stroke);background:#000;transform:translateY(-50%);pointer-events:none}
+.vt-studio-value-toggle--double .vt-studio-value-toggle__divider{position:absolute;z-index:3;top:0;bottom:0;left:50%;width:var(--vt-studio-control-stroke);transform:translateX(-50%);background:#000;pointer-events:none;outline:none!important;box-shadow:none!important}
+.vt-studio-value-toggle--double:focus-within{outline:var(--vt-studio-control-focus-outline-width) solid var(--vt-studio-control-secondary,var(--pair-b));outline-offset:0}
+.vt-studio-counter__value,[data-vt-studio-counter-value]{aspect-ratio:2/1;flex:1 1 auto;min-width:0}
+/* Intermodule host: zero horizontal padding so horizontal rules meet host vertical borders.
+   Rails stay perfectly square (inner face height = face - 2*stroke). */
+[data-vt-studio-inter-host="true"] {
+  padding-left: 0;
+  padding-right: 0;
+}
+.vt-studio-inter-module {
+  width: 100%;
+  border-left: 0;
+  border-right: 0;
+}
+.vt-studio-inter-module__rail {
+  width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  min-width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  max-width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  aspect-ratio: 1 / 1;
+}
+
+/* Collapsed modules: single bottom border only (outer shell).
+   Head loses its bottom rule; body is fully removed so outer border is the only edge. */
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head,
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__head,
+.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head,
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head,
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head {
+  border-bottom: 0 !important;
+}
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__body,
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__body {
+  display: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+
+/* Expanded collapsible modules need a visible horizontal separator between header and body.
+   The collapsed state above removes this line so only the outer bottom border remains. */
+.vt-studio-collapsing-split-module[open] > .vt-studio-collapsing-split-module__head {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+}
+
+/* Intermodule: eliminate any residual host/body inset so rails flush to outer vertical borders. */
+[data-vt-studio-inter-host="true"],
+.vt-confirmed-intermodule-host,
+.vt-confirmed-variant [data-vt-studio-inter-host="true"] {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.vt-studio-inter-module,
+.vt-studio-inter-module__head {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+/* Rails use full face height so they are square to the outer chrome and flush to host edges. */
+.vt-studio-inter-module__rail {
+  width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
+  min-width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
+  max-width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
+  aspect-ratio: 1 / 1;
+  height: 100%;
+}
+.vt-studio-inter-module__head {
+  grid-template-columns:
+    var(--vt-im-face, var(--vt-studio-control-height, 44px))
+    minmax(0, 1fr)
+    var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
+}
+
+/* Content-width exemptions: switches, radios, checkboxes, word toggles are content-sized, not row-fill. */
+.vt-studio-44-switch,
+.vt-studio-44-choice,
+.vt-studio-44-word-toggle,
+.vt-studio-vertical-word-toggle,
+[data-vt-studio-control="true"].vt-studio-44-switch,
+[data-vt-studio-control="true"].vt-studio-44-choice,
+[data-vt-studio-control="true"].vt-studio-44-word-toggle,
+[data-vt-studio-control="true"].vt-studio-vertical-word-toggle,
+button.vt-studio-44-switch,
+button.vt-studio-44-choice {
+  width: max-content !important;
+  max-width: 100%;
+  flex: 0 0 auto !important;
+  align-self: flex-start;
+}
+
+/* Side toggles realign with counters: square arrow rail = control height. */
+.vt-studio-value-toggle--side,
+.vt-studio-value-toggle[data-vt-studio-value-toggle="side"] {
+  width: 100%;
+}
+.vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack,
+.vt-studio-value-toggle[data-vt-studio-value-toggle="side"] .vt-studio-value-toggle__arrow-stack {
+  flex: 0 0 var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  max-width: var(--vt-studio-control-height, 44px);
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  align-self: stretch;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+  box-sizing: border-box;
+}
+.vt-studio-value-toggle--side[data-arrow-side="left"] .vt-studio-value-toggle__arrow-stack,
+.vt-studio-value-toggle[data-vt-studio-value-toggle="side"][data-arrow-side="left"] .vt-studio-value-toggle__arrow-stack {
+  border-left: 0;
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-value-toggle--side .vt-studio-value-toggle__arrow,
+.vt-studio-value-toggle[data-vt-studio-value-toggle="side"] .vt-studio-value-toggle__arrow {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: transparent;
+}
+/* The arrow-stack pseudo-element owns the single centered horizontal divider. */
+.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow-stack {
+  flex-basis: var(--vt-studio-compact-height, 28px);
+  width: var(--vt-studio-compact-height, 28px);
+  min-width: var(--vt-studio-compact-height, 28px);
+  max-width: var(--vt-studio-compact-height, 28px);
+}
+.vt-studio-value-toggle--double {
+  width: 100%;
+}
+.vt-studio-value-toggle--double .vt-studio-value-toggle--side,
+.vt-studio-value-toggle--double .vt-studio-value-toggle--nested {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+}
+
+/* Square icon button group: content-sized (not row-fill); default specimen uses 3 buttons. */
+.vt-studio-square-icon-button-group,
+[data-vt-studio-icon-button-group="true"] {
+  width: max-content !important;
+  max-width: 100%;
+  flex: 0 0 auto !important;
+  display: inline-flex;
+  align-items: stretch;
+}
+
+/* Final, isolated geometry for rebuilt split-right and double-split buttons. */
+button[data-vt-studio-button="true"].vt-studio-split-right-button,
+button[data-vt-studio-button="true"].vt-studio-double-split-button {
+  display:inline-flex; box-sizing:border-box; width:100%; min-width:0; padding:0;
+  border:0; outline:0; background:transparent; overflow:visible;
+}
+button[data-vt-studio-button="true"].vt-studio-split-right-button > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"].vt-studio-double-split-button > [data-vt-studio-button-face] {
+  display:grid; box-sizing:border-box; align-self:stretch; align-items:stretch; justify-content:stretch;
+  width:100%; min-width:0; height:var(--vt-studio-control-height); gap:0; padding:0;
+  border:var(--vt-studio-control-stroke,3px) solid #000;
+  border-radius:var(--vt-studio-control-radius,6px); overflow:hidden;
+  background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); text-align:center;
+}
+button[data-vt-studio-button="true"].vt-studio-split-right-button > [data-vt-studio-button-face] {
+  grid-template-columns:minmax(0,1fr) var(--vt-studio-control-height);
+}
+button[data-vt-studio-button="true"].vt-studio-double-split-button > [data-vt-studio-button-face] {
+  grid-template-columns:var(--vt-studio-control-height) minmax(0,1fr) var(--vt-studio-control-height);
+}
+button[data-vt-studio-button="true"].vt-studio-split-right-button [data-vt-studio-split-face],
+button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-face] { display:contents; }
+button[data-vt-studio-button="true"].vt-studio-split-right-button [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-rail] {
+  display:grid; box-sizing:border-box; place-items:center; align-self:stretch; justify-self:stretch;
+  width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height);
+  max-width:var(--vt-studio-control-height); height:100%; min-height:0; margin:0; padding:0;
+  border:0; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); color:#000;
+}
+button[data-vt-studio-button="true"].vt-studio-split-right-button [data-vt-studio-split-rail][data-rail="end"],
+button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-rail][data-rail="end"] { border-left:var(--vt-studio-control-stroke,3px) solid #000; }
+button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-rail][data-rail="start"] { border-right:var(--vt-studio-control-stroke,3px) solid #000; }
+button[data-vt-studio-button="true"].vt-studio-split-right-button [data-vt-studio-split-rail] > svg,
+button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-rail] > svg {
+  display:block; width:min(var(--vt-studio-control-icon-size,28px),100%);
+  height:min(var(--vt-studio-control-icon-size,28px),100%); min-width:0; min-height:0;
+  max-width:100%; max-height:100%; color:#000; stroke:#000;
+  stroke-width:var(--vt-studio-control-icon-stroke,2.5);
+}
+button[data-vt-studio-button="true"].vt-studio-split-right-button [data-vt-studio-split-label],
+button[data-vt-studio-button="true"].vt-studio-double-split-button [data-vt-studio-split-label] {
+  display:flex; box-sizing:border-box; align-items:center; justify-content:center;
+  min-width:0; width:100%; height:100%; margin:0; padding-inline:10px;
+  overflow:hidden; white-space:nowrap; text-overflow:clip; color:#000;
+  -webkit-text-stroke:var(--vt-studio-control-text-stroke,1px) currentColor;
+}
+button[data-vt-studio-button="true"][data-size="compact"].vt-studio-split-right-button [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-size="compact"].vt-studio-double-split-button [data-vt-studio-split-label] { padding-inline:8px; }
+button[data-vt-studio-button="true"].vt-studio-split-right-button:is([data-selected="true"],[aria-pressed="true"]) > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-selected="true"],[aria-pressed="true"]) > [data-vt-studio-button-face] {
+  background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+}
+button[data-vt-studio-button="true"].vt-studio-split-right-button:is([data-selected="true"],[aria-pressed="true"]) [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-selected="true"],[aria-pressed="true"]) [data-vt-studio-split-rail] {
+  background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));
+}
+
+
+/* 2026-10-27 repair: intermodules are full-bleed within their owning content
+   region. Keep the 4px Studio spacing token for intentional composition gaps;
+   do not apply it as an extra inset inside the intermodule anatomy. */
+[data-vt-studio-inter-host="true"],
+.vt-confirmed-intermodule-host,
+.vt-confirmed-variant [data-vt-studio-inter-host="true"] {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  padding-inline: 0 !important;
+  margin-inline: 0 !important;
+}
+
+.vt-studio-inter-module {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+}
+
+.vt-studio-inter-module__head {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+}
+
+.vt-studio-inter-module__body {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin-inline: 0 !important;
+}
+
+/* Keep the header's height and bottom rule invariant across disclosure states.
+   In the collapsed state, the header rule becomes the shell's bottom edge;
+   suppress only the shell's bottom border to avoid a doubled stroke. */
+.vt-studio-collapsing-split-module {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
+.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+}
+
+.vt-studio-collapsing-split-module:not([open]) {
+  border-bottom: 0 !important;
+}
+
+.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
+.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+}
+
+.vt-studio-collapsing-split-module[open] {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000;
+}
+
+/* The two-line family may have a taller content-driven header, but its box
+   sizing and border must not change when the native details element toggles. */
+.vt-studio-two-line-module > summary.vt-studio-collapsing-split-module__head {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+
+/* 2026-10-27 follow-up: stable bottom strokes for split-module headers.
+   Keep border space reserved in both states so the title and rails never jump.
+   Collapsed details use the shell's real bottom edge; open details use an
+   inset header rule. Top-split modules always paint their header rule in-place. */
+details.vt-studio-collapsing-split-module {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+}
+
+details.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head {
+  box-sizing: border-box;
+  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
+  padding-bottom: 0 !important;
+}
+
+details.vt-studio-collapsing-split-module[open] > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module[open] > summary.vt-studio-top-split-module__head {
+  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
+}
+
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
   box-shadow: none !important;
 }
 
+.vt-studio-top-split-module > .vt-studio-top-split-module__head {
+  box-sizing: border-box;
+  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
+  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
+}
 
-/* ═══ Canonical steppers: shared palette tokens, one perimeter, divided action rails ═══
-   Both steppers compose the global split shell; the shell owns the perimeter and the
-   rail owns its single divider. Native numeric editing is retained. */
-.vt-studio-inline-stepper,
-.vt-studio-split-stepper {
+.vt-studio-top-split-module[data-open="false"] > .vt-studio-top-split-module__head,
+.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head {
+  border-bottom-color: transparent !important;
+  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
+}
+
+
+
+
+/* ─── Canonical steppers + username-input foundation (port from the certified base) ─── */
+/* Studio Controls-owned stepper family styles moved from primitive sidecars. */
+/* Studio steppers share the Split-Left Username Input visual foundation:
+   primary translucent value surface,
+opaque secondary action rail,
+inset primary
+   strokes,
+black compound dividers{
   --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-stepper-height: var(--vt-studio-control-height, 44px);
+  --vt-stepper-radius: var(--vt-studio-control-radius, 6px);
+  --vt-stepper-focus: var(--vt-studio-control-focus-outline-width, 3px);
+  box-sizing: border-box;
+  position: relative;
+  min-width: 0;
+  height: var(--vt-stepper-height);
+  min-height: var(--vt-stepper-height);
+  overflow: hidden;
+  isolation: isolate;
   border: var(--vt-stepper-stroke) solid #000;
+  border-radius: var(--vt-stepper-radius);
+  background: var(--vt-stepper-secondary);
+  color: #000;
+  
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+}
+/* Username composite: shell owns perimeter; inner input and rail do not duplicate it. */
+.vt-studio-username-input,
+.vt-studio-split-shell.vt-studio-username-input {
+  box-sizing: border-box;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   overflow: hidden;
-  background: var(--vt-stepper-secondary);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
 }
-.vt-studio-split-stepper input.vt-studio-split-stepper-value {
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"],
+.vt-studio-username-input [data-vt-studio-split-field] > [data-vt-studio-control="true"],
+.vt-studio-username-input [data-vt-studio-split-label] > [data-vt-studio-control="true"] {
   box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  margin: 0;
-  padding: 0 14px;
   border: 0;
   border-radius: 0;
-  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  color: #000;
-  font: inherit;
-  caret-color: var(--vt-stepper-primary);
   outline: none;
-  appearance: textfield;
-}
-.vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-outer-spin-button,
-.vt-studio-split-stepper input.vt-studio-split-stepper-value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-[data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
-[data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper > [data-vt-studio-split-rail].vt-studio-split-stepper-rail {
-  border-left: var(--vt-stepper-stroke) solid #000;
-  background: var(--vt-stepper-secondary);
-}
-.vt-studio-split-stepper-actions {
-  position: relative;
-  display: grid;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  width: 100%;
+  box-shadow: none;
+  background: transparent;
+  min-height: 100%;
   height: 100%;
 }
-.vt-studio-split-stepper-actions button {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
+.vt-studio-username-input > [data-vt-studio-split-rail],
+.vt-studio-username-input [data-vt-studio-split-rail] {
   border: 0;
-  background: var(--vt-stepper-secondary);
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   color: #000;
-  cursor: pointer;
-  touch-action: none;
 }
-.vt-studio-split-stepper-actions button:first-child { border-bottom: var(--vt-stepper-stroke) solid #000; }
-.vt-studio-split-stepper-actions button:focus-visible { outline: 3px solid var(--vt-stepper-secondary); outline-offset: -3px; z-index: 1; }
-.vt-studio-split-stepper-actions button:disabled { opacity: .4; cursor: not-allowed; }
-html body [data-vt-studio-control="true"][data-vt-studio-split="right"].vt-studio-split-stepper {
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+.vt-studio-username-input [data-vt-studio-split-rail] svg,
+.vt-studio-username-input [data-vt-studio-split-rail] svg * {
+  color: #000;
+  stroke: #000;
 }
-html body .vt-studio-split-stepper .vt-studio-split-stepper-actions > button:first-child {
-  border-bottom: var(--vt-stepper-stroke, 3px) solid #000 !important;
-}
-.vt-studio-inline-stepper {
-  --vt-inline-stepper-side: var(--vt-studio-control-height, 44px);
-  grid-template-columns: var(--vt-inline-stepper-side) minmax(40px, 1fr) var(--vt-inline-stepper-side);
-}
-[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper { display: grid; }
-.vt-studio-inline-stepper__value {
-  box-sizing: border-box;
+/* Split steppers own one stationary shell; suppress legacy pseudo-faces that could stack borders. */
+.vt-studio-split-stepper::before { content: none; display: none; }
+/* Inline and vertical steppers share the canonical shell and field contracts. */
+[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper {
   width: 100%;
-  min-width: 0;
-  height: 100%;
-  margin: 0;
-  padding: 0 8px;
-  border: 0;
-  background: color-mix(in srgb, var(--vt-stepper-primary, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-  color: #000;
-  font: inherit;
-  outline: none;
-  text-align: center;
+}
+[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper[data-vt-studio-width="content"] {
+  width: fit-content;
 }
 .vt-studio-inline-stepper__rail {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  border: 0;
-  background: var(--vt-stepper-secondary, var(--pair-b, #ff7f6b));
-  color: #000;
-  cursor: pointer;
-}
-
-/* Side-counter rail glyphs use the dedicated small chevron preset. */
-.vt-studio-side-counter__actions button svg {
-  display: block;
-  flex: 0 0 auto;
-  width: 14px;
-  height: 14px;
+  position: relative;
+  min-width: 0;
   max-width: 100%;
-  max-height: 100%;
-  stroke-width: 3.75;
+  z-index: 0;
 }
-
-/* Paired counter specimens top-align inside their centered per-size rows. */
-.vt-confirmed-counter-pair { justify-content: center; align-items: flex-start; }
+.vt-studio-inline-stepper__value,
+.vt-studio-split-stepper-value {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif) !important;
+  font-weight: var(--vt-studio-control-font-weight, 1000) !important;
+  font-size: var(--vt-studio-control-font-size, 38px) !important;
+  line-height: var(--vt-studio-control-line-height, .86) !important;
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em) !important;
+  text-transform: var(--vt-studio-control-text-transform, uppercase) !important;
+  padding: 0 14px !important;
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
+  box-shadow: inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary) !important;
+}
+.vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value,
+.vt-studio-split-stepper[data-size="compact"] .vt-studio-split-stepper-value {
+  font-size: var(--vt-studio-28-font-size, 24px) !important;
+  padding: 0 8px !important;
+  -webkit-text-stroke: var(--vt-studio-28-text-stroke, .5px) #000 !important;
+}
+.vt-studio-inline-stepper[data-size="micro"] .vt-studio-inline-stepper__value {
+  font-size: var(--vt-studio-14-font-size, 10px) !important;
+  padding: 0 2px !important;
+  -webkit-text-stroke: var(--vt-studio-14-text-stroke, .25px) #000 !important;
+}
+.vt-studio-inline-stepper:focus-within .vt-studio-inline-stepper__value,
+.vt-studio-split-stepper:focus-within .vt-studio-split-stepper-value {
+  background: transparent !important;
+}
+.vt-studio-inline-stepper__rail svg,
+.vt-studio-split-stepper-actions svg {
+  stroke-width: var(--vt-studio-control-icon-stroke, 3.2);
+}
+.vt-studio-split-stepper-actions button {
+  position: relative;
+}
+.vt-studio-split-stepper-actions button:focus-visible {
+  outline: var(--vt-stepper-focus) solid var(--vt-stepper-secondary);
+  outline-offset: -2px;
+  z-index: 1;
+}

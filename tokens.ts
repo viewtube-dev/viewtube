@@ -1,16 +1,62 @@
-// ═══════════════════════════════════════════════════════════════════════════════
-// STUDIO CONTROLS PRIMITIVE SYSTEM — SINGLE TOKEN SOURCE
-// Read order = authority order:
-//   1. STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS — shared interaction defaults (all components)
-//   2. STUDIO_CONTROL_SIZE_BASE                 — the five global size tiers
-//   3. STUDIO_CONTROL_SIZE_CONTRACT             — per-family settings layered on the tiers
-//   4. STUDIO_*_TOKENS                          — dropdown / focus / counter / bar-toggle families
-//   5. STUDIO_GLOBAL_DEFAULTS / STUDIO_COLOR_ROLES / width policy
-// Components never hard-code geometry; they read these tokens (CSS vars are
-// emitted from here by scripts/emit-studio-control-vars.mjs).
-// ═══════════════════════════════════════════════════════════════════════════════
+
 
 import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/tokens"
+
+// ─── Global defaults applied to every Studio control ─────────────────────────
+
+export const STUDIO_GLOBAL_DEFAULTS = {
+  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
+  fontWeight: 1000,
+  textTransform: "uppercase" as const,
+  letterSpacing: -0.02,
+  lineHeight: 1,
+  textareaLineHeight: 0.85,
+  fieldDefaultTextColor: "primary" as const,
+  fieldDefaultGlyphStrokeColor: "primary" as const,
+  textFieldDefaults: {
+    defaultMode: { textColor: "primary" as const, textStrokeColor: "primary" as const, fill: "primary 50%" as const, borderStrokeColor: "#000000" as const, inlineStrokeColor: "primary" as const, inlineStrokeWidth: "same as border width" as const },
+    focusMode: { textColor: "#000000" as const, textStrokeColor: "#000000" as const, fill: "primary 15%" as const, borderStrokeColor: "#000000" as const, inlineStrokeColor: "primary" as const, inlineStrokeWidth: "same as border width" as const, outlineStrokeColor: "secondary" as const, focusOutlineWidth: "65% of border width" as const, focusOutlineOffset: "0px" as const },
+    caret: { color: "primary" as const },
+    textBox: { textColor: "#000000" as const, textStrokeColor: "#000000" as const, inlineStrokeColor: "primary" as const, outlineStrokeColor: "secondary" as const },
+  },
+
+  focusTextColor: "#000000",
+  focusGlyphStrokeColor: "#000000" as const,
+  focusCaretColor: "primary" as const,
+  focusOutlineColor: "secondary" as const,
+  focusOutlineWidthRatio: 0.65,
+  focusOutlineOffset: 0,
+  focusTransitionMs: 0,
+  borderColor: "#000000",
+  defaultFillOpacity: 50,
+  focusFillOpacity: 15,
+  widthDefault: "row" as const, // 100%
+  shellMovement: "none" as const,
+  internalGap: 0,
+  spacingUnit: 4, // external gaps only
+  textOverflow: "clip" as const, // never ellipsis on single-line controls
+} as const
+
+// ─── Color roles ─────────────────────────────────────────────────────────────
+
+export const STUDIO_COLOR_ROLES = {
+  primary: "var(--pair-a)",
+  secondary: "var(--pair-b)",
+  border: "#000000",
+  activeText: "#000000",
+  fieldText: "primary" as const,
+  fieldGlyphStroke: "primary" as const,
+  focusGlyphStroke: "#000000" as const,
+  focusCaret: "primary" as const,
+  doubleSplitStartRail: "secondary" as const,
+  doubleSplitEndRail: "secondary" as const,
+  focusOutline: {
+    color: "secondary" as const,
+    opacity: 1,
+    widthRatio: 0.65,
+    offset: 0,
+  },
+} as const
 
 // ─── Shared interaction defaults (flat, no lift) ─────────────────────────────
 
@@ -24,125 +70,19 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
 } as const
 
 // ─── Five explicit size tiers (global defaults) ──────────────────────────────
-// Supreme / Standard / Compact / Mini / Micro are first-class. Nothing is derived at runtime.
-// Mini is the 20px tier between Compact (28px) and Micro (12px).
+// Supreme matches Standard stroke geometry; Micro matches Mini stroke geometry. All values stay explicit in this canonical token object.
 
 export const STUDIO_CONTROL_SIZE_BASE = {
-  supreme: {
-    height: 60,
-    stroke: 4.09,
-    radius: 8.18,
-    fontSize: 51.82,
-    fontWeight: 1000,
-    textStroke: 1.36,
-    width: "row" as const,
-    textTransform: "uppercase" as const,
-    letterSpacing: -0.02,
-    lineHeight: 1,
-    defaultFillOpacity: 50,
-    focusFillOpacity: 15,
-    focusOutlineWidth: 2.66,
-    focusOutlineOffset: 0,
-    secondaryFocusOutlineWidth: 2.66,
-    iconSize: 51.82,
-    iconStroke: 2.59,
-    floatingLabelHeight: 51.82,
-    floatingLabelOffsetRatio: 1.2,
-    ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS,
-  },
-  standard: {
-    height: 44,
-    stroke: 3,
-    radius: 6,
-    fontSize: 38,
-    fontWeight: 1000,
-    textStroke: 1,
-    width: "row" as const,
-    textTransform: "uppercase" as const,
-    letterSpacing: -0.02,
-    lineHeight: 1,
-    defaultFillOpacity: 50,
-    focusFillOpacity: 15,
-    focusOutlineWidth: 1.95,
-    focusOutlineOffset: 0,
-    secondaryFocusOutlineWidth: 1.95,
-    iconSize: 38,
-    iconStroke: 1.9,
-    floatingLabelHeight: 38,
-    floatingLabelOffsetRatio: 1.2,
-    ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS,
-  },
-  compact: {
-    height: 28,
-    stroke: 2,
-    radius: 4,
-    fontSize: 24,
-    fontWeight: 1000,
-    textStroke: 0.5,
-    width: "row" as const,
-    textTransform: "uppercase" as const,
-    letterSpacing: -0.02,
-    lineHeight: 1,
-    defaultFillOpacity: 50,
-    focusFillOpacity: 15,
-    focusOutlineWidth: 1.3,
-    focusOutlineOffset: 0,
-    secondaryFocusOutlineWidth: 1.3,
-    iconSize: 24,
-    iconStroke: 2.0,
-    floatingLabelHeight: 24,
-    floatingLabelOffsetRatio: 1.2,
-    ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS,
-  },
-  mini: {
-    height: 20,
-    stroke: 1.5,
-    radius: 3,
-    fontSize: 17,
-    fontWeight: 1000,
-    textStroke: 0.38,
-    width: "row" as const,
-    textTransform: "uppercase" as const,
-    letterSpacing: -0.02,
-    lineHeight: 1,
-    defaultFillOpacity: 50,
-    focusFillOpacity: 15,
-    focusOutlineWidth: 0.98,
-    focusOutlineOffset: 0,
-    secondaryFocusOutlineWidth: 0.98,
-    iconSize: 17,
-    iconStroke: 1.6,
-    floatingLabelHeight: 17,
-    floatingLabelOffsetRatio: 1.2,
-    ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS,
-  },
-  micro: {
-    height: 12,
-    stroke: 1,
-    radius: 2,
-    fontSize: 10,
-    fontWeight: 1000,
-    textStroke: 0.25,
-    width: "row" as const,
-    textTransform: "uppercase" as const,
-    letterSpacing: -0.01,
-    lineHeight: 1,
-    defaultFillOpacity: 50,
-    focusFillOpacity: 15,
-    focusOutlineWidth: 0.65,
-    focusOutlineOffset: 0,
-    secondaryFocusOutlineWidth: 0.65,
-    iconSize: 10,
-    iconStroke: 1.5,
-    floatingLabelHeight: 10,
-    floatingLabelOffsetRatio: 1.2,
-    ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS,
-  },
+  supreme: { height: 60, stroke: 3, radius: 6, fontSize: 52, fontWeight: 1000, textStroke: 1, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 52, iconStroke: 1.9, floatingLabelHeight: 52, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, floatingLabelHeight: 38, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2, floatingLabelHeight: 24, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  mini: { height: 20, stroke: 1.5, radius: 3, fontSize: 17.5, fontWeight: 1000, textStroke: 0.4, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.975, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.975, iconSize: 17.5, iconStroke: 1.6, floatingLabelHeight: 17.5, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  micro: { height: 12, stroke: 1.5, radius: 3, fontSize: 10, fontWeight: 1000, textStroke: 0.4, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.975, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.975, iconSize: 10, iconStroke: 1.6, floatingLabelHeight: 10, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
 } as const
 
 export type StudioControlSize = keyof typeof STUDIO_CONTROL_SIZE_BASE
+/** All five size tiers; individual families may narrow this when inner geometry requires it. */
 export type StudioControlInteractiveSize = StudioControlSize
-export type StudioIconSizeVariant = "current" | "moderate" | "large"
 
 // ─── Size contract (extends base with text-input / multiline specialisations) ─
 
@@ -173,6 +113,7 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
   verticalWordToggle: {
     standardFontSize: STUDIO_CONTROL_SIZE_BASE.standard.fontSize,
     compactFontSize: STUDIO_CONTROL_SIZE_BASE.compact.fontSize,
+    miniFontSize: STUDIO_CONTROL_SIZE_BASE.mini.fontSize,
     microFontSize: STUDIO_CONTROL_SIZE_BASE.micro.fontSize,
     fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
     textTransform: "uppercase" as const,
@@ -187,16 +128,16 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
     supremeFontSize: Math.round((18 * 60) / 44),
     standardFontSize: 18,
     compactFontSize: 14,
+    miniFontSize: 17.5,
     microFontSize: 10,
-    miniFontSize: 10,
     supremeTextStroke: 0.68,
     standardTextStroke: 0.5,
     compactTextStroke: 0.35,
-    microTextStroke: 0.25,
-    miniTextStroke: 0.25,
+    miniTextStroke: 0.4,
+    microTextStroke: 0.4,
     fontWeight: STUDIO_CONTROL_SIZE_BASE.standard.fontWeight,
     minHeight: 92,
-    lineHeight: 1,
+    lineHeight: 0.85,
     textAlign: "left" as const,
     resize: "vertical" as const,
     preservesSizeFamily: true,
@@ -208,9 +149,9 @@ export const STUDIO_CONTROL_SIZE_CONTRACT = {
 // ─── Dropdown / focus / counter contracts ────────────────────────────────────
 
 export const STUDIO_DROPDOWN_TOKENS = {
-  railSize: { supreme: 60, standard: 44, compact: 28 },
-  chevronSize: { supreme: 38, standard: 28, compact: 18 },
-  chevronStroke: { supreme: 3.41, standard: 2.5, compact: 1.65 },
+  railSize: { supreme: 60, standard: 44, compact: 28, mini: 20, micro: 12 },
+  chevronSize: { supreme: 38, standard: 28, compact: 18, mini: 14, micro: 8 },
+  chevronStroke: { supreme: 3.41, standard: 2.5, compact: 1.65, mini: 1.2, micro: 1 },
   railFill: "secondary" as const,
   splitIconFill: "black" as const,
   chevronPlacement: "trailing" as const,
@@ -218,7 +159,7 @@ export const STUDIO_DROPDOWN_TOKENS = {
 
 export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   holdMs: 1500,
-  outlineFadeMs: 500,
+  outlineFadeMs: 0,
   restTextMixPercent: 50,
   activeTextColor: "#000000",
   outlineColorRole: "secondary" as const,
@@ -233,40 +174,6 @@ export const STUDIO_COUNTER_NUMBER_TOKENS = {
   activeStrokeColor: STUDIO_FOCUS_INTERACTION_TOKENS.activeTextColor,
   holdMs: STUDIO_FOCUS_INTERACTION_TOKENS.holdMs,
   outlineFadeMs: STUDIO_FOCUS_INTERACTION_TOKENS.outlineFadeMs,
-} as const
-
-// ─── Global defaults applied to every Studio control ─────────────────────────
-
-export const STUDIO_GLOBAL_DEFAULTS = {
-  fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif',
-  fontWeight: 1000,
-  textTransform: "uppercase" as const,
-  letterSpacing: -0.02,
-  lineHeight: 1,
-  textareaLineHeight: 1,
-  borderColor: "#000000",
-  defaultFillOpacity: 50,
-  focusFillOpacity: 15,
-  widthDefault: "row" as const, // 100%
-  shellMovement: "none" as const,
-  internalGap: 0,
-  spacingUnit: 4, // external gaps only
-} as const
-
-// ─── Color roles ─────────────────────────────────────────────────────────────
-
-export const STUDIO_COLOR_ROLES = {
-  primary: "var(--pair-a)",
-  secondary: "var(--pair-b)",
-  border: "#000000",
-  activeText: "#000000",
-  doubleSplitStartRail: "secondary" as const,
-  doubleSplitEndRail: "secondary" as const,
-  focusOutline: {
-    color: "secondary" as const,
-    opacity: 0.65,
-    offset: 0,
-  },
 } as const
 
 // ─── Width policy + exceptions layer ─────────────────────────────────────────
@@ -335,21 +242,24 @@ export const STUDIO_TOKENS = {
       supreme: STUDIO_CONTROL_SIZE_BASE.supreme.height,
       standard: STUDIO_CONTROL_SIZE_BASE.standard.height,
       compact: STUDIO_CONTROL_SIZE_BASE.compact.height,
+      mini: STUDIO_CONTROL_SIZE_BASE.mini.height,
       micro: STUDIO_CONTROL_SIZE_BASE.micro.height,
     },
     stroke: {
       supreme: STUDIO_CONTROL_SIZE_BASE.supreme.stroke,
       standard: STUDIO_CONTROL_SIZE_BASE.standard.stroke,
       compact: STUDIO_CONTROL_SIZE_BASE.compact.stroke,
+      mini: STUDIO_CONTROL_SIZE_BASE.mini.stroke,
       micro: STUDIO_CONTROL_SIZE_BASE.micro.stroke,
     },
     radius: {
       supreme: STUDIO_CONTROL_SIZE_BASE.supreme.radius,
       standard: STUDIO_CONTROL_SIZE_BASE.standard.radius,
       compact: STUDIO_CONTROL_SIZE_BASE.compact.radius,
+      mini: STUDIO_CONTROL_SIZE_BASE.mini.radius,
       micro: STUDIO_CONTROL_SIZE_BASE.micro.radius,
     },
-    shadowOffset: { supreme: 0, standard: 0, compact: 0, micro: 0 },
+    shadowOffset: { supreme: 0, standard: 0, compact: 0, mini: 0, micro: 0 },
   },
   typography: {
     weight: STUDIO_GLOBAL_DEFAULTS.fontWeight,
@@ -381,7 +291,7 @@ export function studioSizeTierToCssVars(size: StudioControlSize) {
     "--vt-studio-control-font-size": `${tier.fontSize}px`,
     "--vt-studio-control-icon-size": `${tier.iconSize}px`,
     "--vt-studio-control-text-stroke": `${tier.textStroke}px`,
-    "--vt-studio-control-font-weight": String(tier.fontWeight),
+    "--vt-studio-control-font-weight": tier.fontWeight,
     "--vt-studio-control-icon-stroke": String(tier.iconStroke),
     "--vt-studio-control-focus-outline-width": `${tier.focusOutlineWidth}px`,
     "--vt-studio-control-secondary-outline-width": `${tier.secondaryFocusOutlineWidth}px`,
