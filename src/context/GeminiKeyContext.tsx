@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getVaultKey, setVaultKey } from '../services/keyVault';
+import { reportDiagnostic } from '../services/diagnostics';
 
 // Do NOT static-import @google/genai — it's a ~50 kB gzip module and this
 // provider mounts at App boot, which used to force every route (Dashboard,
@@ -45,6 +46,25 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const trimmedKey = key.trim();
     if (!trimmedKey) {
       setValidationError('Enter a Gemini API key.');
+      reportDiagnostic({
+        area: "brain-gemini",
+        event: "api_key_missing",
+        level: "warn",
+        whatHappened: "Gemini API-key validation was blocked because no key was provided.",
+        whatItMeans: "The Brain cannot verify provider access until a key is entered.",
+        whatToCheck: ["Enter a Gemini API key in Settings."],
+        details: {
+          source: "gemini-key-settings",
+          subsystem: "brain",
+          kind: "api_key_validation",
+          status: "blocked",
+          expected: "A non-empty Gemini API key is provided",
+          actual: "No key provided",
+          recommendedActions: ["Enter a Gemini API key in Settings."],
+          confidence: "confirmed",
+          privacy: "sanitized",
+        },
+      });
       return false;
     }
 
@@ -65,6 +85,25 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
       setApiKey(trimmedKey);
       setIsValidating(false);
+      reportDiagnostic({
+        area: "brain-gemini",
+        event: "api_key_validated",
+        level: "info",
+        whatHappened: "Gemini API-key validation succeeded.",
+        whatItMeans: "Google accepted the credential for model discovery.",
+        whatToCheck: ["Confirm the selected generation model is available when a Brain feature runs."],
+        details: {
+          source: "gemini-key-settings",
+          subsystem: "brain",
+          kind: "api_key_validation",
+          status: "passed",
+          expected: "Gemini model discovery succeeds",
+          actual: "Gemini model discovery completed",
+          recommendedActions: ["Confirm the selected generation model is available when a Brain feature runs."],
+          confidence: "confirmed",
+          privacy: "sanitized",
+        },
+      });
       return true;
     } catch (error: any) {
       // Saving a BYOK credential is separate from verifying Google's current
@@ -76,15 +115,62 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       if (status === 401 || /invalid api key|unauthorized|authentication failed/i.test(message)) {
         setValidationError('Google rejected this API key. Check the key and try again.');
         setIsValidating(false);
+        reportDiagnostic({
+          area: "brain-gemini",
+          event: "api_key_rejected",
+          level: "error",
+          whatHappened: "Google rejected the Gemini API key during validation.",
+          whatItMeans: "The supplied credential was not accepted; the key was not saved as valid.",
+          whatToCheck: ["Check that the key was copied correctly.", "Confirm the key is active and belongs to a project with Gemini API access."],
+          details: {
+            source: "gemini-key-settings",
+            subsystem: "brain",
+            kind: "api_key_validation",
+            status: "failed",
+            expected: "Google accepts the Gemini API key",
+            actual: "Google rejected the credential",
+            recommendedActions: ["Check that the key was copied correctly.", "Confirm the key is active and belongs to a project with Gemini API access."],
+            confidence: "confirmed",
+            privacy: "sanitized",
+            metadata: { providerStatus: status || undefined, failureClass: "credential_rejected" },
+          },
+        });
         return false;
       }
       setApiKey(trimmedKey);
-      if (status === 403 || /permission denied|forbidden/i.test(message)) {
+      const permissionDenied = status === 403 || /permission denied|forbidden/i.test(message);
+      if (permissionDenied) {
         setValidationError('Key saved locally, but Google denied verification. Check that Gemini API access is enabled and the project has permission.');
       } else {
         setValidationError('Key saved locally. Google could not verify the connection right now; you can retry or test it when using an AI feature.');
       }
       setIsValidating(false);
+      reportDiagnostic({
+        area: "brain-gemini",
+        event: "api_key_verification_degraded",
+        level: "warn",
+        whatHappened: permissionDenied
+          ? "Gemini API key was saved locally, but Google denied verification."
+          : "Gemini API key was saved locally, but provider verification could not be completed.",
+        whatItMeans: "Key storage succeeded, but provider connectivity is not confirmed.",
+        whatToCheck: permissionDenied
+          ? ["Enable the Gemini API for the key's project.", "Check project permissions and API restrictions."]
+          : ["Retry provider verification later.", "Check network access and Gemini API availability."],
+        details: {
+          source: "gemini-key-settings",
+          subsystem: "brain",
+          kind: "api_key_validation",
+          status: "degraded",
+          expected: "Google verifies the credential through model discovery",
+          actual: permissionDenied ? "Provider denied verification" : "Provider verification unavailable",
+          recommendedActions: permissionDenied
+            ? ["Enable the Gemini API for the key's project.", "Check project permissions and API restrictions."]
+            : ["Retry provider verification later.", "Check network access and Gemini API availability."],
+          confidence: "confirmed",
+          privacy: "sanitized",
+          metadata: { providerStatus: status || undefined, failureClass: permissionDenied ? "permission_denied" : "verification_unavailable" },
+        },
+      });
       return true;
     }
   };
