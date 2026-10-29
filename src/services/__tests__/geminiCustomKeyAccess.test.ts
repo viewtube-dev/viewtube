@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 const providerGenerateContent = vi.hoisted(() => vi.fn())
+const providerGenerateContentStream = vi.hoisted(() => vi.fn())
 const unifiedServerEnabled = vi.hoisted(() => vi.fn())
 const unifiedAccountSnapshot = vi.hoisted(() => vi.fn())
 
@@ -8,7 +9,7 @@ vi.mock("@google/genai", () => ({
  GoogleGenAI: class {
   models = {
    generateContent: providerGenerateContent,
-   generateContentStream: vi.fn(),
+   generateContentStream: providerGenerateContentStream,
   }
  },
  Type: new Proxy({}, { get: (_target, key) => String(key) }),
@@ -41,6 +42,7 @@ describe("Gemini custom-key access", () => {
   storage.setItem("vt_auth_state", JSON.stringify({ isAuthenticated: true }))
   vi.stubGlobal("localStorage", storage)
   providerGenerateContent.mockReset()
+  providerGenerateContentStream.mockReset()
   unifiedServerEnabled.mockReturnValue(true)
   unifiedAccountSnapshot.mockResolvedValue({
    authentication: { status: "authenticated" },
@@ -81,3 +83,37 @@ describe("Gemini custom-key access", () => {
   expect(providerGenerateContent).not.toHaveBeenCalled()
  })
 })
+
+
+ it("allows an authenticated creator to stream with their own key without ViewTube credits", async () => {
+  providerGenerateContentStream.mockImplementation(async function* () {
+   yield { text: "creator-specific streamed answer" }
+  })
+  const client = getAiClient()
+
+  const stream = await client.models.generateContentStream({
+   model: "gemini-3.1-flash",
+   contents: "Stream advice for my channel",
+  })
+  const chunks = []
+  for await (const chunk of stream) chunks.push(chunk)
+
+  expect(chunks).toEqual([{ text: "creator-specific streamed answer" }])
+  expect(providerGenerateContentStream).toHaveBeenCalledTimes(1)
+ })
+
+ it("blocks a signed-out creator from streaming with a custom key", async () => {
+  unifiedAccountSnapshot.mockResolvedValue({
+   authentication: { status: "signed_out" },
+   billing: { planId: "beta" },
+   ai: { availableCredits: 0 },
+  })
+  const client = getAiClient()
+
+  await expect(client.models.generateContentStream({
+   model: "gemini-3.1-flash",
+   contents: "Help with my channel",
+  })).rejects.toThrow("requires a signed-in ViewTube account")
+
+  expect(providerGenerateContentStream).not.toHaveBeenCalled()
+ })
