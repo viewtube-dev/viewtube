@@ -1,10 +1,6 @@
 /* Studio Hub control ownership boundary.
    These rules intentionally require [data-vt-studio-control] so widget/dashboard
-   CSS cannot redefine Studio Hub fields and Studio Hub rules cannot leak back.
-
-   UPDATED 2026-10-28: catalog conflict corrections appended (dropdowns, legend,
-   arrow/bar/side toggles). Drop-in replacement for src/styles/studio-control-system.css.
-*/
+   CSS cannot redefine Studio Hub fields and Studio Hub rules cannot leak back. */
 
 [data-vt-studio-control] {
   --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px);
@@ -241,7 +237,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; min-width: 0; padding: 0 8px; overflow: hidden; justify-content: flex-start; text-overflow: clip; white-space: nowrap; }
 .vt-studio-dropdown.is-split-left .vt-studio-dropdown-chevron.is-trailing { grid-column: 3; grid-row: 1; border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
-.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff); }
+.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%); }
 .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] { display: grid; place-items: center; }
 .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] svg { width: var(--vt-studio-dropdown-chevron-size); height: var(--vt-studio-dropdown-chevron-size); }
 .vt-studio-dropdown:not(.is-split-left) [data-vt-studio-dropdown-value] { grid-column: 1; grid-row: 1; padding: 0 8px 0 12px; }
@@ -256,30 +252,25 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 
 .vt-studio-dropdown-menu {
   position: absolute;
-  z-index: 610;
-  top: calc(100% + 8px);
+  z-index: 60;
+  top: calc(100% + 4px);
   left: 0;
   width: 100%;
   max-height: 280px;
   overflow-y: auto;
-  overscroll-behavior: contain;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px) var(--vt-studio-control-radius, 6px) 0 0;
+  border-radius: var(--vt-studio-control-radius, 6px);
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   padding: 4px;
-  box-sizing: border-box;
-  scrollbar-width: thin;
 }
 
 .vt-studio-dropdown-option {
   display: flex;
   width: 100%;
-  min-width: 0;
   min-height: var(--vt-studio-control-height, 44px);
   align-items: center;
-  margin-bottom: 3px;
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px);
+  border: 0;
+  border-radius: calc(var(--vt-studio-control-radius, 6px) - 3px);
   background: #fff;
   color: #000;
   cursor: pointer;
@@ -288,25 +279,13 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   font-weight: 1000;
   letter-spacing: -.02em;
   line-height: 1;
-  padding: 2px 8px;
+  padding: 0 8px;
   text-align: left;
   text-transform: uppercase;
+  
   -webkit-text-stroke: .2px currentColor;
+  
 }
-.vt-studio-dropdown-option:last-child { margin-bottom: 0; }
-.vt-studio-dropdown-option:hover:not(:disabled):not([data-selected="true"]),
-.vt-studio-dropdown-option:focus-visible:not([data-selected="true"]) {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 22%, #fff);
-}
-.vt-studio-dropdown-option[data-selected="true"] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  color: #000;
-}
-.vt-studio-dropdown-option:focus-visible {
-  outline: 3px solid #000;
-  outline-offset: -5px;
-}
-.vt-studio-dropdown-option:disabled { cursor: not-allowed; opacity: .45; }
 
 .vt-studio-dropdown[data-size="compact"] {
   --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
@@ -2186,7 +2165,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   z-index: 50;
   pointer-events: none;
   color: color-mix(in srgb, var(--pair-a, #fa618a) 50%, #fff);
-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 1000 18px/20px Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -4079,7 +4058,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-upload-frame__inset::after {
   inset: var(--vt-upload-primary-stroke);
   border: var(--vt-upload-secondary-stroke) solid var(--vt-studio-upload-secondary);
-  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke)));
+  border-radius: max(0px, calc(var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke) - var(--vt-upload-secondary-stroke)));
 }
 .vt-studio-upload-frame__layers { position: absolute; inset: 0; }
 .vt-studio-upload-frame__layer {
@@ -4607,7 +4586,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice.is-checkbox svg {
    horizontal label padding never exposes the page background as a false gap. */
 button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] [data-vt-studio-split-label] {
   box-sizing: border-box;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff);
+  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
 }
 
 /* Compact dropdown split rails use the compact control height for both the
@@ -5836,7 +5815,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   height: 28px;
   align-self: center;
   /* Empty bars: 50% white of primary so they remain visible on the face. */
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff);
+  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
   border: 1px solid #000;
   box-sizing: border-box;
   pointer-events: none;
@@ -6231,12 +6210,12 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
 }
 .vt-studio-two-line-module[data-size="standard"] .vt-studio-two-line-module__title { font-size: 14px; }
 .vt-studio-two-line-module[data-size="standard"] .vt-studio-two-line-module__description { font-size: 11px; }
-\n
+
 /* Studio Controls shared field + family corrections.
    Keep character fill and glyph stroke sourced from the same state token. */
 [data-vt-studio-control] {
   --vt-field-text-stroke: var(--vt-field-text);
-  --vt-field-text-stroke-focus: var(--vt-field-primary);
+  --vt-field-text-stroke-focus: var(--vt-field-text-focus);
   --vt-studio-control-text-transition: var(--vt-studio-focus-outline-fade-ms, 500ms);
 }
 [data-vt-studio-control]:is(input, textarea, select) {
@@ -6262,7 +6241,7 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
   outline-offset: 0;
 }
-\n
+
 /* Shared slider contract: the active track/center stays primary; split rails are secondary. */
 [data-vt-studio-slider] input[type="range"] {
   --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
@@ -6312,7 +6291,7 @@ input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):
 .vt-studio-split-shell__label,[data-vt-studio-split-label]{box-sizing:border-box;display:flex;flex:1 1 auto;align-items:center;justify-content:center;min-width:0;height:100%;padding:0 4px;overflow:hidden;white-space:nowrap;text-overflow:clip;font-size:var(--vt-studio-control-font-size);font-weight:1000;line-height:1;letter-spacing:-.02em;text-transform:uppercase;color:#000;-webkit-text-stroke:var(--vt-studio-control-text-stroke) currentColor}
 .vt-studio-split-shell__rail,.vt-studio-split-shell__label{align-self:stretch}
 .vt-studio-value-toggle__bars{display:flex;flex:1 1 auto;align-items:center;justify-content:center;gap:4px;width:100%;height:100%;padding:4px;box-sizing:border-box}
-.vt-studio-value-toggle__bar{display:block;flex:0 0 auto;width:max(6px,calc(var(--vt-studio-control-font-size)*.28));height:max(14px,calc(var(--vt-studio-control-font-size)*.72));aspect-ratio:auto;border-radius:2px;border:2px solid #000;background:color-mix(in srgb,#fff 70%,var(--vt-studio-control-accent,var(--pair-a)));pointer-events:none}
+.vt-studio-value-toggle__bar{display:block;flex:0 0 auto;width:calc(var(--vt-studio-control-font-size)*.4);height:var(--vt-studio-control-font-size);aspect-ratio:1/2.5;border-radius:2px;border:0;background:color-mix(in srgb,var(--vt-studio-control-accent,var(--pair-a)) 50%,#fff);pointer-events:none}
 .vt-studio-value-toggle__bar[data-active="true"]{background:#000}
 .vt-studio-vertical-word-toggle__handle,.vt-studio-vertical-word-toggle .vt-studio-word-toggle__handle{box-sizing:border-box;position:absolute;inset:3px;border-radius:calc(var(--vt-studio-control-radius) - 1px)}
 .vt-studio-value-toggle__arrow-stack{position:relative;display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);width:100%;height:100%}
@@ -6606,448 +6585,165 @@ button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-sele
 }
 
 
-/* 2026-10-28 module geometry — fixed header bottom border (open + closed)
-   ---------------------------------------------------------------------
-   Header always paints a FULL solid bottom border (straight, edge-to-edge).
-   Open and closed share the same header box; only the body mounts/unmounts.
-   Closed: outer shell bottom edge coincides with the header bottom border
-   (no double line, no transparent placeholder, no inset-only rule).
-   Top-split modules always show the same header bottom rule above the white body.
-*/
-
-.vt-studio-top-split-module {
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.vt-studio-top-split-module > .vt-studio-top-split-module__head,
-.vt-studio-top-split-module .vt-studio-top-split-module__head {
-  box-sizing: border-box;
-  flex: 0 0 auto;
-  min-height: var(--vt-top-split-size, var(--vt-studio-control-height, 44px));
+/* 2026-10-27 follow-up: stable bottom strokes for split-module headers.
+   Keep border space reserved in both states so the title and rails never jump.
+   Collapsed details use the shell's real bottom edge; open details use an
+   inset header rule. Top-split modules always paint their header rule in-place. */
+details.vt-studio-collapsing-split-module {
   border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
-  box-shadow: none !important;
 }
 
-.vt-studio-top-split-module__body {
-  box-sizing: border-box;
-  border-top: 0 !important;
-  background: #fff;
-}
-
-/* Collapsing split + two-line: details/summary */
-details.vt-studio-collapsing-split-module,
-details.vt-studio-two-line-module,
-.vt-studio-collapsing-split-module,
-.vt-studio-two-line-module {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-width: 0;
-  border: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
-  border-radius: var(--vt-top-split-radius, var(--vt-studio-control-radius, 6px));
-  overflow: hidden;
-  background: #fff;
-}
-
-/* Header is identical open and closed — real bottom border always */
 details.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
-details.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head,
-details.vt-studio-two-line-module > summary.vt-studio-collapsing-split-module__head,
-details.vt-studio-two-line-module > summary.vt-studio-top-split-module__head,
-.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
-.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head,
-.vt-studio-two-line-module > summary.vt-studio-collapsing-split-module__head {
+details.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head {
   box-sizing: border-box;
-  flex: 0 0 auto;
-  list-style: none;
-  min-height: var(--vt-top-split-size, var(--vt-studio-control-height, 44px));
-  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
-  box-shadow: none !important;
+  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
   padding-bottom: 0 !important;
 }
 
-details.vt-studio-collapsing-split-module > summary::-webkit-details-marker,
-details.vt-studio-two-line-module > summary::-webkit-details-marker {
-  display: none;
+details.vt-studio-collapsing-split-module[open] > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module[open] > summary.vt-studio-top-split-module__head {
+  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
 }
 
-/* Closed: suppress outer shell bottom so the header bottom border IS the bottom edge.
-   That Y position matches open state's header bottom border. */
-details.vt-studio-collapsing-split-module:not([open]),
-details.vt-studio-two-line-module:not([open]),
-.vt-studio-collapsing-split-module:not([open]),
-.vt-studio-two-line-module:not([open]) {
-  border-bottom: 0 !important;
-}
-
-/* Open: restore full shell bottom around the body; header keeps its own bottom rule */
-details.vt-studio-collapsing-split-module[open],
-details.vt-studio-two-line-module[open],
-.vt-studio-collapsing-split-module[open],
-.vt-studio-two-line-module[open] {
-  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
-}
-
-/* Body never shifts header; no top border that doubles the header rule */
-.vt-studio-collapsing-split-module__body,
-details.vt-studio-collapsing-split-module > :not(summary),
-.vt-studio-two-line-module__body,
-details.vt-studio-two-line-module > :not(summary) {
-  box-sizing: border-box;
-  border-top: 0 !important;
-  background: #fff;
-}
-
-/* Intermodule: keep head/body separator as a full straight stroke */
-.vt-studio-inter-module__head {
-  box-sizing: border-box;
-  border-bottom: var(--vt-studio-control-stroke, 3px) solid #000 !important;
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
   box-shadow: none !important;
 }
 
-
-/* Canonical detached dropdown contract. The menu has a real gap and complete
-   perimeter radius; option faces stay white unless selected. Keep this final
-   block as the shared single-select and multi-select menu surface contract. */
-.vt-studio-dropdown-menu {
-  top: calc(100% + 4px) !important;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border-radius: var(--vt-studio-control-radius, 6px) !important;
-  background: #fff !important;
-  padding: 4px !important;
-}
-.vt-studio-dropdown-menu > .vt-studio-dropdown-option {
+.vt-studio-top-split-module > .vt-studio-top-split-module__head {
   box-sizing: border-box;
-  min-width: 0;
-  margin: 0 0 3px !important;
-  padding: 2px 8px;
-  border-radius: var(--vt-studio-control-radius, 6px) !important;
-  background: #fff !important;
-  color: #000 !important;
-  text-align: left;
-  text-overflow: clip;
-  white-space: normal;
+  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
+  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
 }
-.vt-studio-dropdown-menu > .vt-studio-dropdown-option:last-child {
-  margin-bottom: 0 !important;
-}
-.vt-studio-dropdown-menu > .vt-studio-dropdown-option[data-active="true"]:not([data-selected="true"]),
-.vt-studio-dropdown-menu > .vt-studio-dropdown-option:hover:not(:disabled):not([data-selected="true"]),
-.vt-studio-dropdown-menu > .vt-studio-dropdown-option:focus-visible:not([data-selected="true"]) {
-  background: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 22%, #fff) !important;
-}
-.vt-studio-dropdown-menu > .vt-studio-dropdown-option[data-selected="true"],
-.vt-studio-dropdown-menu > .vt-studio-dropdown-option[aria-selected="true"] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  color: #000 !important;
-}
-.vt-studio-dropdown[data-open="true"] > button[data-dropdown-trigger="true"] {
-  border-radius: var(--vt-studio-control-radius, 6px) !important;
-}
-.vt-studio-dropdown[data-open="true"] > .vt-studio-dropdown-menu {
-  border-top: var(--vt-studio-control-stroke, 3px) solid #000 !important;
-  border-top-left-radius: var(--vt-studio-control-radius, 6px) !important;
-  border-top-right-radius: var(--vt-studio-control-radius, 6px) !important;
-}
-.vt-studio-dropdown[data-size="compact"] > .vt-studio-dropdown-menu,
-.vt-studio-dropdown[data-size="compact"][data-open="true"] > .vt-studio-dropdown-menu {
-  border-radius: var(--vt-studio-compact-radius, 4px) !important;
-}
-.vt-studio-dropdown[data-size="compact"][data-open="true"] > button[data-dropdown-trigger="true"] {
-  border-radius: var(--vt-studio-compact-radius, 4px) !important;
+
+.vt-studio-top-split-module[data-open="false"] > .vt-studio-top-split-module__head,
+.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head {
+  border-bottom-color: transparent !important;
+  box-shadow: inset 0 calc(-1 * var(--vt-top-split-stroke, 3px)) 0 #000 !important;
 }
 
 
-/* =============================================================================
- * VIEWTUBE STUDIO CONTROL SYSTEM — CANONICAL CORRECTIONS (2026-10-28)
- * Appended replacement authority: removes catalog conflicts for dropdowns,
- * legend multi, arrow/bar/side toggles. Prefer these over earlier hard-codes.
- * ============================================================================= */
 
-/* --- Dropdown chevron rails: square, trailing, centered glyph --- */
-.vt-studio-dropdown-chevron,
-.vt-studio-dropdown .vt-studio-dropdown-chevron {
-  box-sizing: border-box;
-  display: grid;
-  place-items: center;
-  flex: 0 0 var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
-  width: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
-  min-width: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
-  height: 100%;
-  align-self: stretch;
-  margin: 0;
-  padding: 0;
-  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  color: #000;
-  pointer-events: none;
-}
-.vt-studio-dropdown-chevron.is-leading {
-  border-left: 0;
-  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
-}
-.vt-studio-dropdown-chevron svg {
-  display: block;
-  width: var(--vt-studio-dropdown-chevron-size, calc(var(--vt-studio-control-height, 44px) * 0.62));
-  height: var(--vt-studio-dropdown-chevron-size, calc(var(--vt-studio-control-height, 44px) * 0.62));
-  max-width: 86%;
-  max-height: 86%;
-}
 
-/* Split-left + standard value labels: control defaults */
-.vt-studio-dropdown:not(.is-split-left) [data-vt-studio-dropdown-value],
-.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label],
-.vt-studio-dropdown.is-split-left [data-vt-studio-split-label] {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  min-width: 0;
-  height: 100%;
-  padding: 0 10px;
-  font-weight: var(--vt-studio-control-font-weight, 1000);
-  font-size: var(--vt-studio-control-font-size, 38px);
-  line-height: 1;
-  letter-spacing: var(--vt-studio-control-letter-spacing, -0.02em);
-  text-transform: uppercase;
-  text-align: left;
-}
-
-/* Open menus: primary shell, white rows, secondary selected */
-.vt-studio-dropdown-menu,
-.vt-studio-legend-menu {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
-  padding: 4px;
-  box-sizing: border-box;
-}
-.vt-studio-dropdown-option,
-.vt-studio-legend-option {
-  background: #fff;
-  color: #000;
-  font-weight: 1000;
-  font-size: var(--vt-studio-control-font-size, 38px);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-.vt-studio-dropdown-option[data-selected="true"],
-.vt-studio-dropdown-option[data-active="true"],
-.vt-studio-legend-option[data-selected="true"] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  color: #000;
-}
-.vt-studio-legend-option-text {
-  font-weight: 1000;
-  font-size: inherit;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-.vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option,
-.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
-  font-size: var(--vt-studio-compact-font-size, 24px);
-}
-
-/* Legend multi trigger + +N badge between label and chevron */
-.vt-studio-legend-multi .vt-studio-legend-trigger {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
-  align-items: stretch;
-  font-weight: 1000;
-  font-size: var(--vt-studio-control-font-size, 38px);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-.vt-studio-legend-multi .vt-studio-legend-count,
-.vt-studio-legend-multi [data-vt-legend-count],
-.vt-studio-legend-multi .vt-studio-legend-badge {
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
-  grid-column: 2;
-  grid-row: 1;
-  min-width: var(--vt-legend-count-size, 22px);
-  height: var(--vt-legend-count-size, 22px);
-  margin: 0 6px 0 0;
-  padding: 0 5px;
-  border: 2px solid #000;
-  border-radius: 4px;
-  background: #000;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 1000;
-  line-height: 1;
-}
-.vt-studio-legend-multi .vt-studio-legend-chevron-wrap,
-.vt-studio-legend-multi .vt-studio-dropdown-chevron {
-  grid-column: 3;
-  grid-row: 1;
-  display: grid;
-  place-items: center;
-  width: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
-  min-width: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
-  height: 100%;
-  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-
-/* Arrow toggle: 100% primary face */
-.vt-studio-value-toggle--arrow,
-.vt-studio-value-toggle[data-vt-studio-value-toggle="arrow"],
-.vt-studio-split-shell.vt-studio-value-toggle--arrow {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-}
-.vt-studio-value-toggle--arrow .vt-studio-value-toggle__face,
-.vt-studio-split-shell.vt-studio-value-toggle--arrow .vt-studio-value-toggle__face {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  color: #000;
-  font-weight: 1000;
-  justify-content: center;
-}
-.vt-studio-value-toggle--arrow .vt-studio-value-toggle__arrow {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-
-/* Value-toggle arrows = square side-counter rails (kill 38px hard geometry) */
-.vt-studio-value-toggle {
-  --vt-side-rail-size: var(--vt-studio-control-height, 44px);
-  --vt-side-chevron-size: calc(var(--vt-studio-control-height, 44px) * 0.55);
-  height: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
-}
-.vt-studio-value-toggle[data-size="supreme"] {
-  --vt-side-rail-size: var(--vt-studio-supreme-height, 60px);
-  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.55);
-}
-.vt-studio-value-toggle[data-size="compact"] {
-  --vt-side-rail-size: var(--vt-studio-compact-height, 28px);
-  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.55);
-}
-.vt-studio-value-toggle[data-size="mini"] {
-  --vt-side-rail-size: var(--vt-studio-mini-height, 20px);
-  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.55);
-}
-.vt-studio-value-toggle[data-size="micro"] {
-  --vt-side-rail-size: var(--vt-studio-micro-height, 12px);
-  --vt-side-chevron-size: calc(var(--vt-side-rail-size) * 0.55);
-}
-.vt-studio-value-toggle__arrow {
-  box-sizing: border-box;
-  display: grid;
-  place-items: center;
-  flex: 0 0 var(--vt-side-rail-size);
-  width: var(--vt-side-rail-size);
-  min-width: var(--vt-side-rail-size);
-  max-width: var(--vt-side-rail-size);
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: var(--vt-toggle-icon-fill, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
-  color: var(--vt-toggle-icon, #000);
-  cursor: pointer;
-}
-.vt-studio-value-toggle__arrow svg {
-  width: var(--vt-side-chevron-size);
-  height: var(--vt-side-chevron-size);
-  max-width: 86%;
-  max-height: 86%;
-}
-.vt-studio-value-toggle__arrow-stack {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 var(--vt-side-rail-size);
-  width: var(--vt-side-rail-size);
-  min-width: var(--vt-side-rail-size);
-  height: 100%;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-.vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow {
-  flex: 1 1 0;
-  width: 100%;
-  min-width: 0;
-  max-width: none;
-  background: transparent;
-}
-.vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: calc(var(--vt-side-chevron-size) * 0.85);
-  height: calc(var(--vt-side-chevron-size) * 0.85);
-  max-height: 45%;
-}
-
-/* Side / double side: face primary; no divergent rail chrome */
-.vt-studio-value-toggle--side .vt-studio-value-toggle__face {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  font-weight: 1000;
-  justify-content: center;
-}
-.vt-studio-value-toggle--double .vt-studio-value-toggle--nested {
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-.vt-studio-value-toggle__divider {
-  flex: 0 0 var(--vt-studio-control-stroke, 3px);
-  width: var(--vt-studio-control-stroke, 3px);
-  background: #000;
-  align-self: stretch;
-}
-
-/* Bar toggle: visible empty bars + primary track */
-.vt-studio-value-toggle__bars,
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bars {
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  width: 100%;
-  height: 100%;
-  padding: 4px 6px;
-  box-sizing: border-box;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-}
-.vt-studio-value-toggle__bar,
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
-  display: block;
-  flex: 0 0 auto;
-  box-sizing: border-box;
-  width: max(6px, calc(var(--vt-studio-control-font-size, 38px) * 0.28));
-  height: max(14px, calc(var(--vt-studio-control-font-size, 38px) * 0.72));
-  border: 2px solid #000;
-  border-radius: 2px;
-  background: color-mix(in srgb, #fff 70%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  pointer-events: none;
-}
-.vt-studio-value-toggle__bar[data-active="true"],
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
-  background: #000;
-  border-color: #000;
-}
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bar {
-  width: 8px;
-  height: 16px;
-  border-width: 1.5px;
-}
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bar {
-  width: 4px;
-  height: 8px;
-  border-width: 1px;
-}
-
-/* Stepper height alias parity with side rails */
-[data-vt-studio-stepper],
-.vt-studio-stepper {
-  --vt-stepper-height: var(--vt-studio-control-height, 44px);
+/* ─── Canonical steppers + username-input foundation (port from the certified base) ─── */
+/* Studio Controls-owned stepper family styles moved from primitive sidecars. */
+/* Studio steppers share the Split-Left Username Input visual foundation:
+   primary translucent value surface,
+opaque secondary action rail,
+inset primary
+   strokes,
+black compound dividers{
+  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-stepper-height: var(--vt-studio-control-height, 44px);
   --vt-stepper-radius: var(--vt-studio-control-radius, 6px);
+  --vt-stepper-focus: var(--vt-studio-control-focus-outline-width, 3px);
+  box-sizing: border-box;
+  position: relative;
+  min-width: 0;
+  height: var(--vt-stepper-height);
+  min-height: var(--vt-stepper-height);
+  overflow: hidden;
+  isolation: isolate;
+  border: var(--vt-stepper-stroke) solid #000;
+  border-radius: var(--vt-stepper-radius);
+  background: var(--vt-stepper-secondary);
+  color: #000;
+  
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+}
+/* Username composite: shell owns perimeter; inner input and rail do not duplicate it. */
+.vt-studio-username-input,
+.vt-studio-split-shell.vt-studio-username-input {
+  box-sizing: border-box;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
+}
+.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"],
+.vt-studio-username-input [data-vt-studio-split-field] > [data-vt-studio-control="true"],
+.vt-studio-username-input [data-vt-studio-split-label] > [data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  min-height: 100%;
+  height: 100%;
+}
+.vt-studio-username-input > [data-vt-studio-split-rail],
+.vt-studio-username-input [data-vt-studio-split-rail] {
+  border: 0;
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+.vt-studio-username-input [data-vt-studio-split-rail] svg,
+.vt-studio-username-input [data-vt-studio-split-rail] svg * {
+  color: #000;
+  stroke: #000;
+}
+/* Split steppers own one stationary shell; suppress legacy pseudo-faces that could stack borders. */
+.vt-studio-split-stepper::before { content: none; display: none; }
+/* Inline and vertical steppers share the canonical shell and field contracts. */
+[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper {
+  width: 100%;
+}
+[data-vt-studio-control="true"][data-vt-studio-split="double"].vt-studio-inline-stepper[data-vt-studio-width="content"] {
+  width: fit-content;
+}
+.vt-studio-inline-stepper__rail {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  z-index: 0;
+}
+.vt-studio-inline-stepper__value,
+.vt-studio-split-stepper-value {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif) !important;
+  font-weight: var(--vt-studio-control-font-weight, 1000) !important;
+  font-size: var(--vt-studio-control-font-size, 38px) !important;
+  line-height: var(--vt-studio-control-line-height, .86) !important;
+  letter-spacing: var(--vt-studio-control-letter-spacing, -.02em) !important;
+  text-transform: var(--vt-studio-control-text-transform, uppercase) !important;
+  padding: 0 14px !important;
+  background: color-mix(in srgb, var(--vt-stepper-primary) var(--vt-studio-control-default-fill-opacity, 50%), transparent) !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
+  box-shadow: inset calc(0px - var(--vt-stepper-stroke)) 0 0 0 var(--vt-stepper-primary) !important;
+}
+.vt-studio-inline-stepper[data-size="compact"] .vt-studio-inline-stepper__value,
+.vt-studio-split-stepper[data-size="compact"] .vt-studio-split-stepper-value {
+  font-size: var(--vt-studio-28-font-size, 24px) !important;
+  padding: 0 8px !important;
+  -webkit-text-stroke: var(--vt-studio-28-text-stroke, .5px) #000 !important;
+}
+.vt-studio-inline-stepper[data-size="micro"] .vt-studio-inline-stepper__value {
+  font-size: var(--vt-studio-14-font-size, 10px) !important;
+  padding: 0 2px !important;
+  -webkit-text-stroke: var(--vt-studio-14-text-stroke, .25px) #000 !important;
+}
+.vt-studio-inline-stepper:focus-within .vt-studio-inline-stepper__value,
+.vt-studio-split-stepper:focus-within .vt-studio-split-stepper-value {
+  background: transparent !important;
+}
+.vt-studio-inline-stepper__rail svg,
+.vt-studio-split-stepper-actions svg {
+  stroke-width: var(--vt-studio-control-icon-stroke, 3.2);
+}
+.vt-studio-split-stepper-actions button {
+  position: relative;
+}
+.vt-studio-split-stepper-actions button:focus-visible {
+  outline: var(--vt-stepper-focus) solid var(--vt-stepper-secondary);
+  outline-offset: -2px;
+  z-index: 1;
 }

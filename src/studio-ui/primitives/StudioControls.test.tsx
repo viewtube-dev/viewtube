@@ -1243,7 +1243,7 @@ describe("Studio field focus, floating labels, and toggle regressions", () => {
     expect(source).toContain("event.currentTarget.setPointerCapture?.(event.pointerId)");
     expect(source).toContain("onPointerCancel={stopRepeat}");
     expect(source).toContain("onLostPointerCapture={stopRepeat}");
-    expect(css).toContain("40%, #fff");
+    expect(css).toContain("color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%)");
     expect(css).toMatch(/\.vt-studio-value-toggle__bars\s*\{[^}]*display:\s*flex/s);
     expect(css).toContain('data-active="true"');
     expect(css).toContain("pointer-events: auto;");
@@ -1412,20 +1412,12 @@ describe("Studio left word counter and word slider", () => {
     });
   });
 
-  it("keeps the default word counter primary-filled and opts into color cycling only by variant", () => {
-    const defaultHtml = renderToStaticMarkup(<StudioLeftWordCounter value={2} onValueChange={() => undefined} ariaLabel="Default word counter" />);
-    const colorHtml = renderToStaticMarkup(<StudioLeftWordCounter value={2} onValueChange={() => undefined} variant="color-cycle" ariaLabel="Color-cycle word counter" />);
-    expect(defaultHtml).toContain('data-vt-studio-word-variant="default"');
-    expect(colorHtml).toContain('data-vt-studio-word-variant="color-cycle"');
-  });
-
   it("renders the four-state left counter using the existing counter shell", () => {
     const html = renderToStaticMarkup(
       <StudioLeftWordCounter value={3} onValueChange={() => undefined} ariaLabel="Word counter test" />,
     );
     expect(html).toContain('data-vt-library-component="StudioLeftWordCounter"');
     expect(html).toContain('data-vt-studio-word-index="3"');
-    expect(html).toContain('data-vt-studio-word-variant="default"');
     expect(html).toContain(">THREE</span>");
     expect(html).toContain('aria-label="Increase Word counter test"');
     expect(html).toContain('aria-label="Decrease Word counter test"');
@@ -1453,10 +1445,9 @@ describe("Studio left word counter and word slider", () => {
 
   it("defines palette-state and slider geometry rules in the dedicated stylesheet", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-word-counter.css"), "utf8");
-    expect(css).toContain('[data-vt-studio-word-variant="color-cycle"][data-vt-studio-word-index="2"]');
-    expect(css).toContain('[data-vt-studio-word-variant="color-cycle"][data-vt-studio-word-index="3"]');
-    expect(css).toContain('[data-vt-studio-word-variant="color-cycle"][data-vt-studio-word-index="4"]');
-    expect(css).toContain(".vt-studio-left-word-counter .vt-studio-side-counter__value");
+    expect(css).toContain('[data-vt-studio-word-index="2"]');
+    expect(css).toContain('[data-vt-studio-word-index="3"]');
+    expect(css).toContain('[data-vt-studio-word-index="4"]');
     expect(css).toContain(".vt-studio-left-word-slider");
     expect(css).toContain("prefers-reduced-motion");
   });
@@ -1500,42 +1491,5 @@ describe("StudioSplitTextInput transparent-panel composition", () => {
     expect(field).toContain("background-image: none !important");
     expect(field).not.toContain("linear-gradient(");
     expect(css.slice(focusStart, focusStart + 1000)).toContain("outline: none");
-  });
-});
-
-
-describe("canonical detached Studio dropdown menu", () => {
-  it("keeps the open menu detached, top-rounded, and white behind unselected rows", () => {
-    const css = readStudioControlCss();
-    const start = css.lastIndexOf("/* Canonical open dropdown menu contract");
-    expect(start).toBeGreaterThanOrEqual(0);
-    const contract = css.slice(start);
-    expect(contract).toContain("top: calc(100% + 8px)");
-    expect(contract).toContain("border-radius: var(--vt-studio-control-radius, 6px) var(--vt-studio-control-radius, 6px) 0 0");
-    expect(contract).toContain("background: #fff");
-    expect(contract).toContain(".vt-studio-dropdown-menu > .vt-studio-dropdown-option");
-    expect(contract).toContain("background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))");
-    expect(contract).toContain("margin-bottom: 3px");
-  });
-});
-
-describe("upload frame connected perimeter radii", () => {
-  it("connects the outer gradient, inset primary ring, and secondary ring", () => {
-    const css = readStudioControlCss();
-    const gradientStart = css.lastIndexOf(".vt-studio-upload-frame::before {");
-    const insetStart = css.lastIndexOf(".vt-studio-upload-frame__inset {");
-    const secondaryStart = css.lastIndexOf(".vt-studio-upload-frame__inset::after {");
-    expect(gradientStart).toBeGreaterThanOrEqual(0);
-    expect(insetStart).toBeGreaterThan(gradientStart);
-    expect(secondaryStart).toBeGreaterThan(insetStart);
-    const gradient = css.slice(gradientStart, insetStart);
-    const inset = css.slice(insetStart, secondaryStart);
-    const secondary = css.slice(secondaryStart, secondaryStart + 500);
-    expect(gradient).toContain("inset: var(--vt-studio-upload-frame-stroke)");
-    expect(gradient).toContain("var(--vt-studio-upload-frame-radius) - var(--vt-studio-upload-frame-stroke)");
-    expect(inset).toContain("inset: calc(2 * var(--vt-studio-upload-frame-stroke))");
-    expect(inset).toContain("var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke)");
-    expect(secondary).toContain("var(--vt-studio-upload-frame-radius) - 2 * var(--vt-studio-upload-frame-stroke) - var(--vt-upload-primary-stroke)");
-    expect(secondary).not.toContain("var(--vt-upload-secondary-stroke)))");
   });
 });

@@ -229,7 +229,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   border-radius: var(--vt-bar-radius);
   box-sizing: border-box;
   pointer-events: none;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important;
+  background: color-mix(in srgb, #fff 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%) !important;
 }
 .vt-studio-value-toggle__bar[data-active="true"],
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
@@ -323,6 +323,7 @@ html body input[data-vt-studio-control="true"],
 html body textarea[data-vt-studio-control="true"],
 html body [data-vt-studio-control="true"] textarea {
   -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
   -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
   color: var(--vt-field-text, #000);
   -webkit-text-fill-color: var(--vt-field-text, #000);

@@ -98,6 +98,28 @@
   caret-color: var(--vt-field-caret-focus, var(--pair-a, #36e0f6));
 }
 
+/* Size-aware centered field: the bordered input occupies the inner shell height
+   minus half a stroke on each side and centers vertically, so the primary
+   border's bottom edge is never clipped by the shell's overflow. */
+.vt-studio-split-text-input__field {
+  display: block;
+  position: relative;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  min-width: 0;
+  width: auto;
+  height: calc(var(--vt-studio-control-height, 44px) - 3 * var(--vt-studio-control-stroke, 3px));
+  align-self: center;
+  margin: 0;
+  padding: 0 var(--vt-studio-space-unit, 4px);
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary, var(--pair-a, #36e0f6));
+  border-radius: 0;
+  outline: none;
+  outline-offset: 0;
+  background: var(--vt-field-fill-rest, transparent);
+  box-shadow: none;
+}
+
 .vt-studio-split-text-input:focus-within {
   outline: none !important;
   outline-offset: 0 !important;

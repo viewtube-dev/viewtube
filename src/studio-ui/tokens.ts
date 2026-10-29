@@ -291,7 +291,7 @@ export function studioSizeTierToCssVars(size: StudioControlSize) {
     "--vt-studio-control-font-size": `${tier.fontSize}px`,
     "--vt-studio-control-icon-size": `${tier.iconSize}px`,
     "--vt-studio-control-text-stroke": `${tier.textStroke}px`,
-    "--vt-studio-control-font-weight": String(tier.fontWeight),
+    "--vt-studio-control-font-weight": tier.fontWeight,
     "--vt-studio-control-icon-stroke": String(tier.iconStroke),
     "--vt-studio-control-focus-outline-width": `${tier.focusOutlineWidth}px`,
     "--vt-studio-control-secondary-outline-width": `${tier.secondaryFocusOutlineWidth}px`,
