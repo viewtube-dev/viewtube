@@ -64,6 +64,7 @@ jobs:
       - run: npm run test:public-page-resolver
       - run: npm run test:vault-operation-store
       - run: npm run test:focused
+      - run: npm run test:unified-diagnostics
       - run: npm run account:test
 
   full_suite:
