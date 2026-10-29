@@ -836,6 +836,35 @@ export const createCheckoutSession = async (
   } catch {
    // Ignore malformed error body.
   }
+  const actual = `Checkout request failed (HTTP ${response.status})`
+  reportDiagnostic({
+   area: "account-billing",
+   event: "checkout_session_failed",
+   level: "error",
+   whatHappened: actual,
+   whatItMeans: "The billing checkout session could not be created.",
+   whatToCheck: [
+    "Confirm the account session is valid",
+    "Check billing API availability and configuration",
+    "Confirm the selected plan or top-up is supported",
+   ],
+   details: {
+    source: "billing-entitlement",
+    subsystem: "account",
+    kind: "checkout_session",
+    status: "failed",
+    expected: "Billing checkout session is created",
+    actual,
+    recommendedActions: [
+     "Confirm the account session is valid",
+     "Check billing API availability and configuration",
+     "Confirm the selected plan or top-up is supported",
+    ],
+    confidence: "confirmed",
+    privacy: "sanitized",
+    metadata: { httpStatus: response.status },
+   },
+  })
   if (response.status === 404 || response.status >= 500) {
    throw new Error(
     `Billing server unavailable at ${apiBase}. Start the billing server or update VITE_BILLING_API_BASE.`,
@@ -903,6 +932,35 @@ export async function fetchEntitlementFromServer(_legacyEmail?: string): Promise
   { credentials: "include", headers: { Accept: "application/json" } },
  )
  if (!response.ok) {
+  const actual = `Entitlement request failed (HTTP ${response.status})`
+  reportDiagnostic({
+   area: "account-billing",
+   event: "entitlement_fetch_failed",
+   level: "error",
+   whatHappened: actual,
+   whatItMeans: "The latest server-side entitlement could not be loaded; the cached local state was not replaced.",
+   whatToCheck: [
+    "Confirm the account session is valid",
+    "Check billing API availability",
+    "Retry the entitlement refresh",
+   ],
+   details: {
+    source: "billing-entitlement",
+    subsystem: "account",
+    kind: "entitlement_fetch",
+    status: "failed",
+    expected: "Server returns the current entitlement",
+    actual,
+    recommendedActions: [
+     "Confirm the account session is valid",
+     "Check billing API availability",
+     "Retry the entitlement refresh",
+    ],
+    confidence: "confirmed",
+    privacy: "sanitized",
+    metadata: { httpStatus: response.status },
+   },
+  })
   throw new Error(`Failed to fetch entitlement (${response.status})`)
  }
  const data = (await response.json()) as { userId: string; entitlement: EntitlementState | null }

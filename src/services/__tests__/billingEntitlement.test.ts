@@ -199,4 +199,52 @@ describe("billing entitlement runtime", () => {
   expect(JSON.stringify(entry?.details)).not.toContain("Billing portal unavailable")
  })
 
+
+ it("reports checkout-session failures without recording provider error text or redirect URLs", async () => {
+  vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ error: "private provider detail" }), {
+   status: 503,
+   headers: { "Content-Type": "application/json" },
+  })))
+
+  const { createCheckoutSession } = await import("../billingEntitlement")
+  await expect(createCheckoutSession({
+   planId: "creator_plus",
+   successUrl: "https://viewtube.example/success?private=1",
+   cancelUrl: "https://viewtube.example/cancel?private=1",
+  })).rejects.toThrow(/Billing server unavailable/)
+
+  const entry = readDiagnostics().filter((item) => item.tag === "account-billing:checkout_session_failed").at(-1)
+  expect(entry?.details).toMatchObject({
+   source: "billing-entitlement",
+   subsystem: "account",
+   kind: "checkout_session",
+   status: "failed",
+   expected: "Billing checkout session is created",
+   actual: "Checkout request failed (HTTP 503)",
+  })
+  const details = JSON.stringify(entry?.details)
+  expect(details).not.toContain("private provider detail")
+  expect(details).not.toContain("private=1")
+ })
+
+ it("reports entitlement fetch failures with a safe HTTP status", async () => {
+  vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ error: "private account detail" }), {
+   status: 502,
+   headers: { "Content-Type": "application/json" },
+  })))
+
+  const { fetchEntitlementFromServer } = await import("../billingEntitlement")
+  await expect(fetchEntitlementFromServer()).rejects.toThrow("Failed to fetch entitlement (502)")
+
+  const entry = readDiagnostics().filter((item) => item.tag === "account-billing:entitlement_fetch_failed").at(-1)
+  expect(entry?.details).toMatchObject({
+   source: "billing-entitlement",
+   subsystem: "account",
+   kind: "entitlement_fetch",
+   status: "failed",
+   actual: "Entitlement request failed (HTTP 502)",
+  })
+  expect(JSON.stringify(entry?.details)).not.toContain("private account detail")
+ })
+
 })
