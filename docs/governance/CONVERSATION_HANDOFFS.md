@@ -1,7 +1,7 @@
 # ViewTube Conversation Handoffs
 
 **Production Date:** 2026-09-27  
-**Last Edited:** 2026-09-27  
+**Last Edited:** 2026-10-29  
 **Class:** SPECIFICATION  
 **Status:** ACTIVE  
 **Concern:** long-conversation handoff, conversation work capture, intake review, valuation, deduplication and promotion  
