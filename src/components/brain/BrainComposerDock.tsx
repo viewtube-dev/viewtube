@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { LayoutGrid, Send, Zap } from "lucide-react"
+import { LayoutGrid, PanelRight, Send, Zap } from "lucide-react"
 import {
   StudioButton,
   StudioChatComposerDock,
@@ -62,14 +62,14 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
   promptLauncherRef,
   contextLauncherRef,
   composerRef,
-  maxFieldPx = 144,
+  maxFieldPx = 104,
   className = "",
 }) => {
   const resizeField = useCallback(
     (element: HTMLTextAreaElement | null) => {
       if (!element) return
-      element.style.height = "auto"
-      element.style.height = `${Math.min(element.scrollHeight, maxFieldPx)}px`
+      // Keep the field aligned with the tool/send rail; longer drafts scroll internally.
+      element.style.height = "104px"
     },
     [maxFieldPx],
   )
@@ -169,7 +169,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             }}
             placeholder="Ask anything about your channel, content, or next upload…"
             className="vt-brain-composer-input w-full min-w-0 resize-none"
-            style={{ minHeight: 68, maxHeight: maxFieldPx }}
+            style={{ height: 104, minHeight: 104, maxHeight: 104 }}
             aria-label="Message to ViewTube Brain"
             aria-describedby="brain-composer-help"
             onFocus={(event) => {
@@ -200,19 +200,32 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             Prompts
           </StudioSplitLeftButton>
           <StudioSplitLeftButton
-            data-vt-brain-component="BrainComposerSendAction"
+            ref={contextLauncherRef}
+            data-vt-brain-component="BrainComposerContextAction"
             type="button"
             sizeVariant="compact"
-            icon={busy ? <Zap size={16} aria-hidden="true" /> : <Send size={16} aria-hidden="true" />}
-            iconSizeVariant="large"
+            icon={<PanelRight size={14} aria-hidden="true" />}
+            iconSizeVariant="standard"
+            aria-label="Open channel context"
+            title="Open channel context"
+            onClick={onOpenContext}
+            className="vt-brain-composer-context"
+          >
+            Context
+          </StudioSplitLeftButton>
+          <StudioButton
+            data-vt-brain-component="BrainComposerSendAction"
+            type="button"
+            sizeVariant="standard"
+            tone="neutral"
             disabled={busy || !value.trim()}
             aria-label={busy ? "Sending message" : "Send message"}
             title={busy ? "Brain is working" : "Send message"}
             onClick={onSend}
             className="vt-brain-composer-send"
           >
-            {busy ? "Working" : "Send"}
-          </StudioSplitLeftButton>
+            {busy ? <><Zap size={14} aria-hidden="true" /> Working</> : <><Send size={14} aria-hidden="true" /> Send</>}
+          </StudioButton>
         </div>
       }
     />
