@@ -119,7 +119,7 @@ describe("Google proxy failure contract", () => {
    upstreamStatus: 403,
   })
   await requestGoogleWithRetry(async () => response, { operation: "youtube-analytics" })
-  const entry = readDiagnostics().findLast((item) => item.tag === "google-read:GOOGLE_SCOPE_REQUIRED")
+  const entry = readDiagnostics().filter((item) => item.tag === "google-read:GOOGLE_SCOPE_REQUIRED").at(-1)
   expect(entry?.details).toMatchObject({
    source: "google-read",
    subsystem: "authorization",
