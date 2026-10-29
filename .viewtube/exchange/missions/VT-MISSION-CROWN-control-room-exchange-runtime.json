@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "viewtube.mission.v2",
+  "missionId": "VT-MISSION-CROWN-control-room-exchange-runtime",
+  "taskIds": [],
+  "objective": "Make the Crown Control Room a read-only projection of Royal Exchange records, with no live reads from Task Index, GitHub, Brain, account, services or release APIs.",
+  "why": "The Control Room must report creator intent and execution evidence without becoming a second authority or silently substituting live state from other owners.",
+  "nonGoals": [
+    "Do not mutate Task Index or mission/task lifecycle from the UI.",
+    "Do not query external services, Brain context, GitHub, deployment metadata or release APIs at runtime.",
+    "Do not infer production completion from a plan, work order, commit or partial receipt.",
+    "Do not add write controls, deployment controls, OAuth scope changes, billing changes or publishing actions."
+  ],
+  "domains": [
+    "crown",
+    "governance",
+    "runtime",
+    "evidence",
+    "read-only"
+  ],
+  "canonicalOwners": {
+    "controlRoom": "src/views/CrownControlRoom.tsx",
+    "exchangeProjection": "scripts/generate-crown-control-room.mjs",
+    "exchangeAuthority": ".viewtube/exchange/**",
+    "verification": "GitHub Actions release gates"
+  },
+  "acceptance": [
+    "Every displayed mission, task reference, artifact, decision, work order, receipt, conflict and handoff is derived from JSON records under .viewtube/exchange/**.",
+    "Today, Code, Services, Brain and Release panels do not query non-Exchange runtime sources.",
+    "Missing evidence is presented as unknown or missing and never synthesized as success.",
+    "A mission is not displayed as complete without a complete receipt.",
+    "The generator rejects malformed JSON and an Exchange without mission records.",
+    "The generator contract tests and production build pass."
+  ],
+  "authorization": {
+    "externalWrites": false,
+    "deploy": false,
+    "billingChange": false,
+    "oauthScopeChange": false,
+    "publishing": false
+  },
+  "risk": "medium",
+  "rollback": "Revert the Crown Control Room feature branch; preserve all pre-existing Royal Exchange records and canonical authorities.",
+  "state": "executing"
+}
