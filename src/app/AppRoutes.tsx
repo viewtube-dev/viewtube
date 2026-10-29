@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useSearchParams } from "react-router-dom"
 
 import { lazyRoute, RouteSuspense } from "./lazyRoute"
 import { isMountableSuperTool, superToolRoute } from "./superToolViewRegistry"
+import { CAPABILITY_ROUTES } from "./capabilitiesRoutes"
 
 // `lazyRoute` = `React.lazy` + one retry on chunk-load failure + a single
 // hard-reload backstop when the retry also fails (usually a stale
@@ -199,6 +200,7 @@ export const AppRoutes: React.FC = () => {
     <Route path="/component-grid-lab" element={<ComponentGridLab />} />
     <Route path="/audit" element={<ComponentAudit />} />
 
+    {CAPABILITY_ROUTES}
     <Route path="*" element={<Navigate to="/" replace />} />
    </Routes>
   </RouteSuspense>
