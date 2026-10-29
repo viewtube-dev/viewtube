@@ -7,12 +7,12 @@ const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimit
 
 function exportedNames(source) {
   const names = [];
-  for (const match of source.matchAll(/export\\s+(type\\s+)?\\{([\\s\\S]*?)\\}\\s+from\\s+["'][^"']+["']/g)) {
+  for (const match of source.matchAll(/export\s+(type\s+)?\{([\s\S]*?)\}\s+from\s+["'][^"']+["']/g)) {
     const typeOnly = Boolean(match[1]);
     for (const part of match[2].split(",")) {
-      const clean = part.trim().replace(/^type\\s+/, "");
+      const clean = part.trim().replace(/^type\s+/, "");
       if (!clean) continue;
-      const [origin, alias] = clean.split(/\\s+as\\s+/);
+      const [origin, alias] = clean.split(/\s+as\s+/);
       names.push({ name: (alias || origin).trim(), origin: origin.trim(), typeOnly });
     }
   }
@@ -20,13 +20,12 @@ function exportedNames(source) {
 }
 
 function hasJsxRepresentative(source, name) {
-  const escaped = name.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\$&");
-  return new RegExp("<" + escaped + "(?=[\\s/>])").test(source)
-    || new RegExp("(?:Component\\s*:\\s*|Component\\s*=\\s*\\{)"+escaped+"\\b").test(source);
+  return new RegExp("<" + name + "(?=[\\s/>])").test(source)
+    || new RegExp("(?:Component\\s*:\\s*|Component\\s*=\\s*\\{)" + name + "\\b").test(source);
 }
 
 test("public barrel export parser preserves aliases and type-only exports", () => {
-  const parsed = exportedNames('export { Thing, Other as PublicOther } from "./x";\\nexport type { ThingProps } from "./x";');
+  const parsed = exportedNames('export { Thing, Other as PublicOther } from "./x";\nexport type { ThingProps } from "./x";');
   assert.deepEqual(parsed, [
     { name: "Thing", origin: "Thing", typeOnly: false },
     { name: "PublicOther", origin: "Other", typeOnly: false },
