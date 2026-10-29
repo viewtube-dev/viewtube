@@ -365,3 +365,11 @@ The edits are committed to the Phase 3–4 branch, but the new Node test, existi
 - Removed the old exception dispositions from `scripts/audit/studio-public-export-catalog-matrix.mjs`. Any public Studio value export without direct JSX coverage is now an unresolved gap and fails the audit.
 - Extended the matrix test to assert direct coverage for every non-type `Studio*` export and added the ten component/helper names to the critical representative set.
 - Runtime/typecheck/build and browser/computed-style verification remain required before claiming these representatives are visually certified.
+
+
+## Phase 6 — Runtime representative verification (2026-10-29)
+
+- Added a React server-render regression test to `StudioHubConfirmedPrimitiveCatalog.test.tsx` for the 11 exports that previously had no direct representative: seven compatibility aliases, three grid composition helpers, and the certification surface.
+- The test renders the complete catalog through `renderToStaticMarkup` and requires each of those specimens to appear under its explicit `data-vt-library-component` marker. This complements the public-export source matrix by checking the actual component tree rather than only source text.
+- Consolidated the grid primitive imports while reviewing the new composition specimens.
+- This is a runtime-tree assertion, not browser visual certification. The Studio Controls suite, typecheck, production build, and Playwright/computed-style capture still need successful CI evidence before declaring the phase visually complete.
