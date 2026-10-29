@@ -548,3 +548,16 @@ Simplification must be compatibility-preserving: retain public token exports and
 The active stylesheet entry is `src/styles/studio-control-entry.css`. The unreferenced `studio-control-system-2.css` alternative has been removed after repository code search returned no references; the entry and a regression test now require the single canonical `studio-control-system.css` layer. The recovery stylesheet no longer re-declares the global `--vt-studio-space-unit` token.
 
 Do not remove remaining `!important` declarations by count alone. Each declaration must be traced to its winning selector and migrated to the owning primitive/family stylesheet with regression coverage before deletion. The distill and recovery files are late cross-family correction layers, not the final stylesheets in the import order; later family sheets own their specific anatomy.
+
+
+## Public export representative completeness — 2026-10-29
+
+The Confirmed Primitive Library now renders direct representatives for every non-type `Studio*` value export from `src/studio-ui/index.ts`. The public-export matrix has no exception allow-list: a public value export without a direct JSX representative is an unresolved gap and fails the audit.
+
+The 11 formerly excepted exports are covered explicitly:
+
+- **Compatibility aliases (7):** `StudioInput`, `Studioarea`, `Studiotoggle`, `Studioswitch`, `Studioradio`, `Studiocheck`, and `Studioxbox`. These specimens are labelled compatibility-only; they are not presented as new canonical primitive designs.
+- **Grid composition helpers (3):** `StudioComponentGridRow`, `StudioComponentGridSpecimen`, and `StudioComponentGridSpecimenPair`. Each is composed from existing production controls and shared grid primitives.
+- **Certification surface (1):** `StudioHubCertification` has its own full-composition specimen and is not counted as a primitive control face.
+
+The matrix test now requires every public Studio value export to have direct JSX coverage. This proves source-level representative presence only. Typecheck, the Studio controls test suite, production build, and browser/computed-style certification must pass before visual behavior is considered verified.
