@@ -54,7 +54,7 @@ const checks = [
 
   ["retired CLEAN COMPOSITION specimen is absent from confirmed catalog", !/CLEAN COMPOSITION|Confirmed Specimen Grid\s*[·-]\s*Layout Contract/i.test(catalog)],
   ["specimen grid supports the complete five-tier global size vocabulary", specimenGrid.includes('export type SpecimenTier = "supreme" | "standard" | "compact" | "mini" | "micro"') && specimenGrid.includes('const SPECIMEN_TIERS = ["supreme", "standard", "compact", "mini", "micro"] as const')],
-  ["confirmed library owns canonical production representatives while legacy tracks remain comparison-only", libraryAuthority.includes("The **Confirmed Primitive Library**") && libraryAuthority.includes("not evidence that a control is part of the public API") && libraryAuthority.includes("older Complete catalog is retained as a comparison/migration surface only")],
+  ["confirmed library owns canonical production representatives while legacy tracks remain comparison-only", libraryAuthority.includes("The **Confirmed Primitive Library**") && libraryAuthority.includes("not evidence that a control is part of the public API") && libraryAuthority.includes("must not silently override the Confirmed catalog's ownership")],
 ]
 
 const requiredP0 = [
