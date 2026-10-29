@@ -276,8 +276,11 @@
 }
 
 
-/* Brain composer: keep the message field dominant, with stacked split-left actions beside it. */
+/* Brain composer: 104px field aligned to compact Prompts/Context and standard Send. */
 .vt-studio-chat-composer-dock.vt-brain-composer-dock[data-vt-composer-layout="inline-actions"] {
+  --vt-brain-composer-height: 104px;
+  --vt-brain-composer-tool-height: 28px;
+  --vt-brain-composer-send-height: 44px;
   gap: 0;
   padding: 8px 10px max(10px, env(safe-area-inset-bottom, 0px));
   border-top: 2px solid #000;
@@ -286,7 +289,7 @@
 
 .vt-brain-composer-dock .vt-studio-chat-composer-dock__field-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 18%);
+  grid-template-columns: minmax(0, 1fr) minmax(88px, 104px);
   align-items: stretch;
   gap: 4px;
   min-width: 0;
@@ -302,23 +305,26 @@
 
 .vt-brain-composer-dock .vt-studio-chat-composer-dock__field textarea,
 .vt-brain-composer-dock .vt-studio-chat-composer-dock__field [data-vt-studio-control="true"] textarea {
+  box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  min-height: 60px;
-  max-height: var(--vt-composer-dock-max-field);
-  height: 100%;
-  box-sizing: border-box;
+  height: var(--vt-brain-composer-height);
+  min-height: var(--vt-brain-composer-height);
+  max-height: var(--vt-brain-composer-height);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  resize: none;
 }
 
 .vt-brain-composer-action {
   display: grid;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
+  grid-template-rows: var(--vt-brain-composer-tool-height) var(--vt-brain-composer-tool-height) var(--vt-brain-composer-send-height);
   align-self: stretch;
   align-items: stretch;
-  gap: 4px;
+  gap: 2px;
   min-width: 0;
-  min-height: 60px;
-  height: 100%;
+  min-height: var(--vt-brain-composer-height);
+  height: var(--vt-brain-composer-height);
 }
 
 .vt-brain-composer-action > button {
@@ -345,18 +351,24 @@
   z-index: 1;
 }
 
+.vt-brain-composer-send {
+  min-width: 0;
+  min-height: var(--vt-brain-composer-send-height);
+  font-weight: 850;
+}
+
 @media (max-width: 420px) {
-  .vt-brain-composer-dock.vt-studio-chat-composer-dock {
+  .vt-studio-chat-composer-dock.vt-brain-composer-dock {
     padding-inline: 6px;
   }
 
   .vt-brain-composer-dock .vt-studio-chat-composer-dock__field-row {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 18%);
+    grid-template-columns: minmax(0, 1fr) minmax(84px, 88px);
     gap: 3px;
   }
 
   .vt-brain-composer-action {
-    gap: 3px;
+    gap: 2px;
   }
 
   .vt-brain-composer-action > button {
