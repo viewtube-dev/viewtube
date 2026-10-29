@@ -315,3 +315,14 @@ Routine engineering and reversible implementation choices should not create unne
 No agent gets its own version of ViewTube work state.
 
 Agents receive projections of the same governed state and return proposals, decisions, evidence and receipts to the same governed systems.
+
+
+## Instruction preservation and action recommendations
+
+For substantial handoffs, preserve each distinct user instruction, request, correction, constraint, preference and prohibition as an individually traceable conversation requirement. The handoff/worklog may track instruction status and evidence, but this does not create one canonical task per sentence or mutate Task Index state.
+
+Keep request completion separate from delivery. Distinguish local implementation, commit, PR inclusion, merge, target-branch presence, application integration and verification. Reconcile branch history independently from PR history, including commits and files added after a PR was opened. Unknown snapshots or missing lineage remain UNKNOWN.
+
+Feature completion reviews reuse Task Authority's maturity axes and vocabulary. A component, API or passing unit test does not establish application integration. Record missing frontend/backend, authorization, persistence, workflow, feedback, runtime, responsive, documentation and release connections where relevant.
+
+The five-idea evolution pass routes proposals through existing Ideas Registry and improvement recommendations. The next-best-action recommendation derives from canonical tasks, Crown missions/work orders, dependencies, blockers and verification receipts. These are recommendations, not a parallel backlog or permission to mutate canonical task state.
