@@ -205,7 +205,7 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
             type="button"
             sizeVariant="compact"
             icon={<PanelRight size={14} aria-hidden="true" />}
-            iconSizeVariant="standard"
+            iconSizeVariant="large"
             aria-label="Open channel context"
             title="Open channel context"
             onClick={onOpenContext}
