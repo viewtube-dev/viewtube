@@ -1,23 +1,20 @@
-import { readFile } from "node:fs/promises"
+import { readFile, readdir } from "node:fs/promises"
 import { describe, expect, it } from "vitest"
 
 const read = (path: string) => readFile(new URL(path, import.meta.url), "utf8")
 
 describe("crash regression diagnostics contracts", () => {
   it("keeps the missing Studio composer import regression guarded", async () => {
-    const catalogPaths = [
-      "../../src/studio-ui/ConfirmedPrimitiveCatalog.tsx",
-      "../../src/studio-ui/ConfirmedPrimitiveCatalog.ts",
-      "../../src/components/ConfirmedPrimitiveCatalog.tsx",
-      "../../src/components/ConfirmedPrimitiveCatalog.ts",
-    ]
-    const contents = await Promise.all(catalogPaths.map(async (path) => {
-      try { return await read(path) } catch { return "" }
-    }))
-    const catalog = contents.join("\n")
+    const sourceRoot = new URL("../../src/", import.meta.url)
+    const paths = await readdir(sourceRoot, { recursive: true })
+    const catalogPaths = paths
+      .filter((path) => /ConfirmedPrimitiveCatalog\\.tsx?$/.test(path))
+      .map((path) => new URL(path, sourceRoot))
+    const catalogs = await Promise.all(catalogPaths.map((path) => readFile(path, "utf8")))
+    const catalog = catalogs.join("\\n")
     expect(catalog, "Confirmed Primitive Catalog source should be discoverable").not.toBe("")
     expect(catalog).toMatch(/StudioChatComposerDock/)
-    expect(catalog).toMatch(/import\s*\{[^}]*StudioChatComposerDock[^}]*\}\s*from|import\s+StudioChatComposerDock\s+from/)
+    expect(catalog).toMatch(/import\\s*\\{[^}]*StudioChatComposerDock[^}]*\\}\\s*from|import\\s+StudioChatComposerDock\\s+from/)
   })
 
   it("keeps the removed duplicate stylesheet out of active imports", async () => {
