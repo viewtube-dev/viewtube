@@ -9,7 +9,8 @@
 **Registry ID:** DOC-PLAN-BRAIN-GEMINI-CONTEXT-GROUNDING  
 **Target repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
-**Planning branch:** `plan/brain-gemini-context-grounding-audit`  
+**Planning branch:** `plan/brain-gemini-context-grounding-audit`
+**Implementation branch:** `fix/brain-gemini-context-grounding-phases-0-1`  
 **Related authorities:** `docs/domains/BRAIN.md`, `docs/brain/AI_BRAIN_QUICK_WINS_MASTER_IMPLEMENTATION_PLAN.md`, `docs/brain/AI_BRAIN_FEATURE_MASTER_AND_IMPLEMENTATION_READINESS.md`, `docs/specifications/PROMPTS.md`, `docs/governance/VERIFICATION.md`
 
 ## Objective
@@ -108,8 +109,9 @@ No new owner or parallel data store is permitted. Reuse the current key vault, s
 
 ### Phase 1 — Make model readiness reactive and truthful (H1/H2)
 
-- [ ] Add a failing regression test for key-save/key-change while Brain Hub remains mounted; verify the next send reads current readiness without requiring a full page reload.
-- [ ] Trace the canonical Key Vault write/update notification and the provider's `getAiSettings()/resolveGeminiApiKey()` path. Reuse the existing notification/store contract; do not introduce a second key store.
+- [x] Add regression tests for Gemini-key save/clear notifications in `src/services/keyVault.test.ts` and a mounted-surface contract in `src/views/AIBrainRuntimeSurface.contract.test.ts` (execution still pending).
+- [x] Replace render-only `canUseGemini = hasGeminiKey()` with state refreshed on the canonical key-change event, existing `yt_settings_updated`, and cross-tab `storage` events; clean up listeners on unmount.
+- [x] Trace the canonical Key Vault write/update notification and the provider's `getAiSettings()/resolveGeminiApiKey()` path. Reuse the existing notification/store contract; no second key store was introduced.
 - [ ] Keep key presence separate from provider health. Surface missing key, invalid/rejected key, model-unavailable, quota/rate limit, timeout, and other provider failures only when supported by actual error classification.
 - [ ] Ensure a failed provider call records a truthful fallback reason and never reports Full Brain/model success.
 - [ ] Verify key material is redacted from logs, traces, telemetry, screenshots and test fixtures.
@@ -182,6 +184,16 @@ No new owner or parallel data store is permitted. Reuse the current key vault, s
 - Keep all diagnostic logs redacted and remove temporary debug instrumentation before merge.
 
 ## Current audit status
+
+### Phase 0–1 implementation checkpoint (2026-10-29)
+
+- [x] Confirmed a stale-readiness defect candidate: `canUseGemini` was a render-time constant, so key changes made while the Brain surface remained mounted had no subscription-driven refresh.
+- [x] Added `GEMINI_KEY_UPDATED_EVENT` from the existing Key Vault writer; the event contains no key material and is emitted after Gemini key save/clear.
+- [x] Made Brain Hub readiness reactive to Key Vault updates, the existing Settings `yt_settings_updated` event, and browser `storage` events.
+- [x] Authored focused Key Vault notification tests and a Brain surface contract test.
+- [ ] Execute the focused tests and full typecheck/build on the PR head.
+- [ ] Capture a real redacted turn trace from the reported live failure. The stale-readiness issue is a confirmed source defect for mounted surfaces, but it is not yet proven to be the sole cause of the user's generic responses.
+
 
 - Source-level route and key gate inspected.
 - Source-level fallback/validation transitions inspected.
