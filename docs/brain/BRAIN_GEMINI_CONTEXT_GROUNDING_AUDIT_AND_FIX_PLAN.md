@@ -191,7 +191,8 @@ No new owner or parallel data store is permitted. Reuse the current key vault, s
 - [x] Added `GEMINI_KEY_UPDATED_EVENT` from the existing Key Vault writer; the event contains no key material and is emitted after Gemini key save/clear.
 - [x] Made Brain Hub readiness reactive to Key Vault updates, the existing Settings `yt_settings_updated` event, and browser `storage` events.
 - [x] Authored focused Key Vault notification tests and a Brain surface contract test.
-- [ ] Execute the focused tests and full typecheck/build on the PR head.
+- [x] CI executed the Key Vault regression tests (5/5 passed) and Brain runtime surface contract tests (15/15 passed); production build passed.
+- [ ] Full focused aggregate is not green: unrelated existing Studio-control/Comment Responder contract failures are present. Static typecheck also fails on errors in untouched Studio controls, route loaders, Brain orchestrator, and test dependencies; inspect CI logs before deciding which baseline defects need separate reconciliation.
 - [ ] Capture a real redacted turn trace from the reported live failure. The stale-readiness issue is a confirmed source defect for mounted surfaces, but it is not yet proven to be the sole cause of the user's generic responses.
 
 
@@ -200,7 +201,8 @@ No new owner or parallel data store is permitted. Reuse the current key vault, s
 - Source-level context broker, context-budget resolver and capability selector inspected.
 - Existing relevant test footholds identified.
 - **Not yet reproduced against a live browser/session.**
-- **No tests or production build have been run for this audit.**
+- **PR CI ran:** production build passed; local smoke passed; Brain quality loop passed; the keyVault test file (5 tests) and Brain runtime surface contract file (15 tests) passed inside the focused aggregate.
+- **PR CI is not green overall:** source governance fails in the confirmed Studio catalog audit; the broad focused suite has multiple unrelated existing contract failures; typecheck reports errors in files outside this change. Full-suite result was still running at the time of this update.
 - **No implementation fix is claimed.**
 
 The first implementation commit must be justified by the captured failure and include a regression test that goes red before the fix.
