@@ -81,3 +81,14 @@ Expand later.
 - claim verification that was not performed;
 - treat memory as evidence when repo/PR evidence exists;
 - promote every idea directly to a task.
+
+## Required extraction and reconciliation
+
+1. Extract every distinct user instruction, request, correction, constraint, preference and prohibition into a stable `REQ-###` register. Preserve corrections and supersession.
+2. Link each requirement to related conversation work items, PRs, commits, target branch, delivery state and evidence. Do not create one canonical task per user sentence.
+3. Distinguish local implementation, commit, PR inclusion, merge, target presence, application integration and verification.
+4. Inspect branch and PR history independently. Record PR-opening SHA when recoverable, current head, post-PR commits/files, target presence and recovery disposition. Mark unknown lineage UNKNOWN.
+5. Record feature integration maturity on the existing Task Authority axes: architecture, backend, frontend, integration, tests, runtime, responsive, documentation and release.
+6. Record concrete missing connections; component existence or isolated tests do not prove end-to-end integration.
+7. Route improvement ideas and next-best-action recommendations through existing Conversation OS, Ideas Registry, improvement recommendations, Task Authority and Crown records. Do not create parallel backlogs or mutate canonical task state.
+8. Keep the package open until instruction, branch/PR, integration and work-item reconciliation is complete or explicitly marked unknown/blocked.
