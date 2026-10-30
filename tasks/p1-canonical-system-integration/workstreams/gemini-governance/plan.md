@@ -182,3 +182,21 @@ Branch: `feat/p1-gemini-governance-reconciliation-2026-10-29`
 - Phase 3 remains open: the refreshed inventory at #5496 reported 37 production-referenced exports, 35 exports without static import references, 66 direct SDK invocation sites, two literal dynamic imports (the expected gateway adapter imports), 19 model-ID literals and 18 credential-alias references. The remaining active caller families include analytics/research, planning, thumbnails, scripts, storyboard, end-screen, media transcription, speech and educational timestamp migration now addressed in source but awaiting a new inventory.
 - Phase 4 remains partial: the specialist records preserve prompt receipts, traces and model attribution; standalone tag/timestamp tools do not invent ContentBuild or OperationRecord identities. Full ingestion/retry/usage/cost parity across all caller families remains open.
 - Phase 5 still requires an authorized live Gemini test key and controlled provider scenarios. Phase 6 remains blocked until all active production callers are migrated, exact zero-bypass evidence exists, and live capability parity is certified.
+
+
+## Exact-head caller and verification update — 2026-10-30
+
+Run #5506 at commit `0c8dc4788dc91cb7309ee80babd0484d7eecd73d` produced and uploaded the refreshed exact-head inventory artifact. The audit now reports 73 exported symbols, 36 production-referenced exports, 36 exports without static import references, 66 direct SDK invocation sites, two dynamic Gemini imports (the gateway's provider adapter), 19 model-ID literals and 18 credential-alias references. The migrated legacy tag functions, comment-reply functions and educational timestamp function no longer appear as active production references.
+
+On that exact head:
+- Gemini governance job passed, including caller audit, inventory generation/upload, and all focused key/gateway/asset strategy/provenance tests (including tag, comment and educational timestamp strategies).
+- Production build passed.
+- Local smoke passed.
+- Brain quality loop passed.
+- Conversation handoff contract passed.
+- Source governance failed on the existing Studio confirmed-catalog split text input assertion.
+- Focused-contracts failed on `PublishTransaction.test.ts` because the test referenced `getPublishTransaction` without importing it.
+- Repository typecheck failed on unrelated existing Brain/Studio/test issues. The prior MetadataMaster `generated.output` error is absent after the `generatedAsset.output` correction.
+- The missing `getPublishTransaction` test import was added after run #5506 in commit `1da29fb10b1bc5bfb3228bc1baf959d57ab5f665`; this test-only repair still needs a fresh CI run to verify.
+
+Phase 0 now has a reviewed exact-head artifact for the current migration slice, but classification of all 36 remaining production-referenced exports and 36 no-static-reference exports is not complete. Phase 3 remains open; analytics, planning, thumbnails, scripts, storyboards, end-screen, media transcription, speech and other active caller families remain. Phase 4 remains partial; AssetGenerator receipts exist for the migrated standalone flows, but full ContentBuild/OperationRecord ingestion parity is not claimed. Phase 5 still requires authorized live-key certification; Phase 6 remains blocked until zero active bypasses and live capability parity are proven.
