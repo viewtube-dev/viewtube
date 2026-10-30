@@ -3,7 +3,6 @@ import { withVerifiedPostgresSslMode } from "./account-store.mjs";
 
 const { Pool } = pg;
 const DATABASE_URL = String(process.env.DATABASE_URL || "").trim();
-const NODE_ENV = String(process.env.NODE_ENV || "development");
 
 let pool = null;
 let initialized = false;
@@ -97,7 +96,6 @@ const mergeBrainEventPreservingRedaction = (existing, incoming) => {
 export const initBrainIntelligenceStore = async () => {
   if (initialized) return;
   if (!DATABASE_URL) {
-    if (NODE_ENV === "production") throw new Error("DATABASE_URL is required for production Brain intelligence storage.");
     initialized = true;
     return;
   }

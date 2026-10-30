@@ -1,11 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import {
+process.env.NODE_ENV = "production";
+delete process.env.DATABASE_URL;
+
+const {
   listPersistedBrainEvents,
   listPersistedLifecycleObservations,
   upsertPersistedBrainEvents,
   upsertPersistedLifecycleObservations,
-} from "./brain-intelligence-store.mjs";
+} = await import("./brain-intelligence-store.mjs");
 
 test("Brain intelligence events remain user and channel scoped", async () => {
   const userA = "test-user-a";
