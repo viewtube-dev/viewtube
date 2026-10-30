@@ -863,6 +863,8 @@ describe("confirmed library cleanup and counter module visibility", () => {
     expect(counter).not.toContain("<ConfirmedStudioSideCounterFamily />");
     expect(source).toContain("<ConfirmedStudioCounterFamily />");
     expect(source).toContain("<ConfirmedStudioSideCounterFamily />");
+    expect(source).toContain('defaultOpen={family === "Controls"}');
+    expect(source).toContain('title="Switches / Toggles / Radio / Checkbox" className="vt-confirmed-family-group vt-confirmed-switch-toggle-family" defaultOpen');
     for (const title of [
       "StudioCounter · Supreme + Standard + Compact + Mini + Micro",
       "StudioSideCounter · Supreme + Standard + Compact + Mini + Micro",
