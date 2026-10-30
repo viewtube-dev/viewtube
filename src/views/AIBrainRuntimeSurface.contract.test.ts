@@ -24,6 +24,12 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('window.removeEventListener(GEMINI_KEY_UPDATED_EVENT, refreshGeminiReadiness)')
  })
 
+ it("does not rebuild the runtime snapshot for chat-history or learning-list changes", () => {
+  const runtimeMemo = source.slice(source.indexOf("const runtimeSnapshot = useMemo("), source.indexOf("const snapshot = useMemo(", source.indexOf("const runtimeSnapshot = useMemo("))
+  expect(runtimeMemo).not.toContain("recentTurns")
+  expect(runtimeMemo).not.toContain("learningEntries")
+ })
+
  it("mounts the canonical backend runtime snapshot above the conversation workspace", () => {
   expect(source).toContain('from "../services/brain/BrainRuntimeSnapshot"')
   expect(source).toContain('from "../components/brain/BrainRuntimePanel"')
