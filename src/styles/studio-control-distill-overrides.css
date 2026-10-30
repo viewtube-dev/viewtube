@@ -242,6 +242,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 .vt-studio-value-toggle--bar {
   position: relative;
   isolation: isolate;
+  overflow: visible;
 }
 .vt-studio-value-toggle--bar .vt-studio-value-toggle__bars {
   position: relative;
@@ -254,10 +255,6 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 .vt-studio-value-toggle--bar [data-vt-studio-split-rail] {
   position: relative;
   z-index: 2;
-}
-.vt-studio-value-toggle--bar:focus-within {
-  outline: var(--vt-studio-control-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-control-secondary, var(--pair-b));
-  outline-offset: 0;
 }
 .vt-studio-value-toggle__bar {
   position: relative;
