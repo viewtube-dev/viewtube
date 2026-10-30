@@ -11,6 +11,7 @@ When work touches the desktop/mobile editor, timeline, preview, project state, c
 - use Video Director for asynchronous generative-media provider jobs;
 - persist generated assets through Asset Engine/Vault before final timeline commitment;
 - use Remotion as deterministic render/time authority;
-- update Current Work and append the master resource Update Log before handoff.
+- update Current Work and append the master resource Update Log for material Editor changes as an Editor-domain projection;
+- when global handoff triggers apply, use `docs/governance/CONVERSATION_HANDOFFS.md` and one `tasks/conversation-intake/<conversation-id>/` package for all conversation instructions/work and reconciliation;
 
 A plan, old branch, standalone HTML or prototype is prior art until current source/tests verify it.
