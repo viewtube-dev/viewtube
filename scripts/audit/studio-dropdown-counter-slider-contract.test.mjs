@@ -182,3 +182,11 @@ test("switch and choice tracks retain their intrinsic component widths", () => {
   assert.match(css, /button\\.vt-studio-44-switch\\s*\\{[^}]*width:\\s*75\\.68px/s);
   assert.match(css, /button\\.vt-studio-44-choice\\s*\\{[^}]*width:\\s*44px/s);
 });
+
+
+test("choice and switch primitives do not opt into content-width sizing", () => {
+  const switches = component.slice(component.indexOf("export const Studioswitch:"), component.indexOf("export type StudioChoiceKind"));
+  const choices = component.slice(component.indexOf("export const StudioChoice:"), component.indexOf("export interface StudioWordToggleProps"));
+  assert.doesNotMatch(switches, /data-vt-studio-width="content"/);
+  assert.doesNotMatch(choices, /data-vt-studio-width="content"/);
+});
