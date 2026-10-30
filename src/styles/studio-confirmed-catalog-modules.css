@@ -226,3 +226,17 @@
   min-width: 0;
   max-width: none;
 }
+
+
+.vt-confirmed-representative-heading {
+  grid-column: 1 / -1;
+  margin: 8px 0 0;
+  padding: 6px 8px;
+  border-bottom: 2px solid #000;
+  background: #f4f4f0;
+  color: #000;
+  font: 1000 12px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-confirmed-representative-heading:first-child { margin-top: 0; }
