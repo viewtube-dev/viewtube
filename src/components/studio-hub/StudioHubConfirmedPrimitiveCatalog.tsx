@@ -642,6 +642,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioSplitLeftButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · shared button palettes · square leading icon rail." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
+      <SizeMatrix label="Split-left button size examples"
+        standard={<StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} sizeVariant="standard">EDIT</StudioSplitLeftButton>}
+        compact={[0,1].map(i => compact(<StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} sizeVariant="compact">EDIT</StudioSplitLeftButton>, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} sizeVariant="micro">EDIT</StudioSplitLeftButton>, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row">
         <span>44px standard · edit action</span>
         <StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Standard split-left edit action" data-vt-library-component="StudioSplitLeftButton">EDIT</StudioSplitLeftButton>
@@ -659,6 +663,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioPlayPauseButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Canonical StudioSplitLeftButton composition; stable Play/Pause label geometry; selected-color swap; 44px / 28px sizes." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
+      <SizeMatrix label="Play pause button size examples"
+        standard={<StudioPlayPauseButton sizeVariant="standard" />}
+        compact={[0,1].map(i => compact(<StudioPlayPauseButton sizeVariant="compact" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioPlayPauseButton sizeVariant="micro" />, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row">
         <span>44px standard · click to toggle Play / Pause</span>
         <StudioPlayPauseButton sizeVariant="standard" data-vt-library-component="StudioPlayPauseButton" />
@@ -675,6 +683,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioCircleIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Circular shape wrapper over StudioSquareIconButton; shared V1–V4, sizing, effects, and accessibility contracts." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
+      <SizeMatrix label="Circle icon button size examples"
+        standard={<StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Standard circle icon button" variant="v1" sizeVariant="standard" />}
+        compact={[0,1].map(i => compact(<StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label={"Compact circle icon button "+(i+1)} variant="v1" sizeVariant="compact" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label={"Micro circle icon button "+(i+1)} variant="v1" sizeVariant="micro" />, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row">
         <span>44px standard · variants 1–4</span>
         <div className="vt-confirmed-square-variant-grid">
@@ -703,6 +715,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioUsernameInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Composite of canonical StudioTextInput and split-left icon rail; 44px / 28px geometry; no shadow; wrapper focus ring." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
+      <SizeMatrix label="Username input size examples"
+        standard={<StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label="Standard username" placeholder="USERNAME" />}
+        compact={[0,1].map(i => compact(<StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label={"Compact username "+(i+1)} placeholder="USERNAME" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label={"Micro username "+(i+1)} placeholder="USER" />, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row">
         <span>44px standard · editable username field</span>
         <StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label="Standard username" placeholder="USERNAME" autoComplete="username" data-vt-library-component="StudioUsernameInput" />
