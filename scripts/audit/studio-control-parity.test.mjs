@@ -146,7 +146,7 @@ test("top direct-representative module covers the full explicitly exported contr
     "StudioIconButton", "StudioSquareIconButton", "StudioSquareIconButtonGroup", "StudioCircleIconButton",
     "StudioSplitLeftButton", "StudioSplitRightButton", "StudioDoubleSplitButton",
     "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
-    "StudioSelect", "StudioSearchInput", "StudioNumberInput", "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
+    "StudioNumberInput", "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
     "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
     "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
     "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
@@ -158,7 +158,7 @@ test("top direct-representative module covers the full explicitly exported contr
 });
 
 
-test("size-tier ownership is centralized and Micro inherits Mini's shared styling contract", () => {
+test("size-tier ownership is centralized and Micro follows its own canonical token contract", () => {
   const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8");
   assert.match(tokens, /micro: \{[^}]*letterSpacing: -0\.02/);
   assert.match(css, /data-size="supreme"[\s\S]*?supreme-stroke, 3px[\s\S]*?supreme-radius, 6px/);

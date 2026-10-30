@@ -8,7 +8,6 @@ const read = (path) => readFileSync(resolve(process.cwd(), path), "utf8")
 const coreCss = read("src/styles/studio-control-core.css")
 const systemCss = read("src/styles/studio-control-system.css")
 const overridesCss = read("src/styles/studio-control-distill-overrides.css")
-const recoveryCss = read("src/styles/studio-control-recovery-overrides.css")
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
 
 const blockFor = (source, selector) => {
@@ -33,9 +32,18 @@ test("Studio button labels use the shared clipped-text default, never ellipsis",
 })
 
 test("StudioTextBox uses black glyphs, a primary inset stroke, and a secondary outline", () => {
-  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*-webkit-text-stroke-color:\s*#000\s*!important;[^}]*\}/s)
-  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke\) var\(--vt-field-inline-stroke\) !important;/s)
-  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*outline:\s*var\(--vt-field-focus-outline\) !important;/s)
+  const textBox = blockFor(systemCss, '.vt-studio-text-box[data-vt-studio-control="true"]')
+  assert.match(textBox, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) #000/)
+  assert.match(textBox, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-field-primary/)
+  assert.match(textBox, /outline:\s*calc\(var\(--vt-studio-control-stroke, 3px\) \* var\(--vt-studio-focus-outline-width-ratio, \.65\)\) solid var\(--vt-field-secondary/)
+  const finalRuleStart = systemCss.lastIndexOf('.vt-studio-text-box[data-vt-studio-control="true"] {')
+  const finalTextBox = blockFor(systemCss.slice(finalRuleStart), '.vt-studio-text-box[data-vt-studio-control="true"]')
+  assert.match(finalTextBox, /-webkit-text-stroke-color:\s*#000/)
+  assert.match(finalTextBox, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-field-primary/)
+  for (const tier of ["supreme", "compact", "mini", "micro"]) {
+    const tierRule = blockFor(systemCss, `.vt-studio-text-box[data-vt-studio-control="true"][data-size="${tier}"]`)
+    assert.match(tierRule, /-webkit-text-stroke:[^;]*#000/)
+  }
 })
 
 test("focused textarea keeps a secondary outline without a primary focus text stroke", () => {

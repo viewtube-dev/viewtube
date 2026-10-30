@@ -1177,3 +1177,36 @@ Next steps:
 4. Verify bar tooltip focus visibility, empty/full bar colors, 2.5:1 geometry, and outer-only double-side focus outline.
 5. Complete the public-export-to-family-module coverage check and dependency audit before deleting any retired primitive implementations.
 6. Do not mark this PR merge-ready while release-gates checks remain pending/failing.
+
+## 2026-10-30 follow-up — latest-target field and focus cleanup
+
+- Replayed the remaining work on `studio-controls-system-consolidation-v5`, created directly from the latest `master/consolidated-feature-integration` head after a substantial target update. The new branch preserves the latest primitive-restoration plan, canonical UI docs, and catalog changes.
+- Repaired the malformed textarea selector assertion and aligned audit coverage with the actual TextBox field owner and `StudioValueToggles.tsx` implementation.
+- Removed duplicate editable-field and TextBox declarations from the recovery stylesheet so the recovery layer no longer competes with canonical field styling.
+- Replaced hard-coded Standard and Compact floating-field focus widths with generated tier tokens.
+- Made the Double Side Toggle center divider explicitly outline-free and shadow-free; the outer shell remains the focus owner.
+- Updated vertical word-toggle audit assertions to match the actual multiline CSS declarations while retaining measured-handle and radius checks.
+- Targeted static audit harness: 26 assertions passed across 20 fetched repository fixtures. This is not the repository Node/Vitest runner, a production build, typecheck, or browser verification.
+- Required before merge: `npm run test:studio-controls`, `npm run typecheck`, `npm run build`, and browser/mobile verification.
+
+## 2026-10-30 follow-up — latest-target field and focus cleanup
+
+- Replayed the remaining work on `studio-controls-system-consolidation-v5`, created directly from the latest `master/consolidated-feature-integration` head after the target's primitive-restoration and catalog updates. Those target changes are preserved.
+- Repaired the malformed textarea selector assertion and aligned audit coverage with the actual TextBox field owner and `StudioValueToggles.tsx` implementation.
+- Updated the split-input geometry assertion to check the actual inner-rail width token rather than requiring a grid track that the current implementation no longer uses.
+- Removed duplicate editable-field and TextBox declarations from the recovery stylesheet so the recovery layer no longer competes with canonical field styling.
+- Replaced hard-coded Standard and Compact floating-field focus widths with generated tier tokens.
+- Made the Double Side Toggle center divider explicitly outline-free and shadow-free; the outer shell remains the focus owner.
+- Updated vertical word-toggle audit assertions to match the actual multiline CSS declarations while retaining measured-handle and radius checks.
+- Targeted static audit harness: 26 assertions passed across 20 fetched source fixtures. This is not the repository Node/Vitest runner, a production build, typecheck, or browser verification.
+- Required before merge: `npm run test:studio-controls`, `npm run typecheck`, `npm run build`, and browser/mobile verification.
+
+## 2026-10-30 CI-driven repairs — split input, TextBox, and upload-frame CSS
+
+- The first release-gates run exposed an invalid reduced-motion selector in the Studio Upload Frame block: two hover selectors ended with a comma and no declaration. Replaced it with a valid reduced-motion icon rule that suppresses the hover scale transform. This was the Lightning CSS production-build failure.
+- The Confirmed Catalog audit and split-input geometry test still encoded the older transparent/inset-shadow field model. Updated them to the latest production primitive: badge-owned black perimeter, native input's primary border, 50% resting primary fill, 15% focused primary fill, black focused glyphs, and the shell-owned secondary focus outline.
+- Restored the TextBox's permanent primary inset stroke in the canonical TextBox system rule (not the recovery layer), while retaining black glyphs and its always-present secondary outline.
+- Updated the TextBox text-contract test to inspect the canonical system rule rather than requiring duplicate `!important` recovery declarations.
+- Removed retired StudioSelect and StudioSearchInput from the parity audit's active representative list; corrected the Micro focus expectation to its own 0.65px token rather than Mini's 0.975px.
+- The CI run that exposed the build and catalog failures also reported unrelated existing type errors in Brain/test files and P1 document-registry authority collisions. Those are not represented as Studio Controls fixes.
+- The corrected branch is awaiting the next release-gates run; keep the PR draft until the real Node/Vitest checks and build confirm these repairs.

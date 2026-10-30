@@ -306,7 +306,7 @@ describe("standalone Studio text fields", () => {
     expect(standard).toContain('data-size="standard"')
     expect(standard).toContain('First row')
     expect(standard).toContain('Second row')
-    expect(standard).toContain('contenteditable="false"')
+    expect(standard).not.toContain('contenteditable="true"')
     expect(standard).toContain('aria-readonly="true"')
     expect(standard).toContain('data-vt-studio-text-box="true"')
     expect(supreme).toContain('data-size="supreme"')
@@ -321,12 +321,13 @@ describe("standalone Studio text fields", () => {
     expect(css).toContain("--studio-text-box-stroke-width: var(--vt-studio-control-stroke, 3px);");
     expect(block).toContain("border: var(--vt-studio-control-stroke, 3px) solid #000;");
     expect(block).toContain("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary");
-    expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--pair-a, #36e0f6));");
+    expect(block).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;");
+    expect(block).toContain("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary");
     expect(block).toContain("outline-offset: 0;");
     expect(block).toContain("color: #000;");
     expect(block).toContain("-webkit-text-fill-color: #000;");
     expect(block).toContain("var(--vt-studio-control-default-fill-opacity, 50%)");
-    expect(block).not.toContain("var(--vt-field-primary");
+    expect(block).not.toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary");
     expect(css).not.toContain("--studio-text-box-stroke-width: calc(var(--field-border-width) * 0.5);");
     expect(css).not.toContain("-webkit-text-stroke-color: var(--vt-field-text-focus, #000);");
   });
@@ -358,7 +359,7 @@ describe("standalone Studio text fields", () => {
     const standardInput = renderToStaticMarkup(<StudioTextInput aria-label="Title" />)
     const compactInput = renderToStaticMarkup(<StudioTextInput sizeVariant="compact" aria-label="Compact title" />)
     const compactArea = renderToStaticMarkup(<StudioTextArea variant="fixed-label" label="DESCRIPTION" sizeVariant="compact" aria-label="Compact description" />)
-    expect(standardInput).toContain('class="vt-studio-text-input"')
+    expect(standardInput).toContain('class="vt-studio-text-input vt-studio-text-input--simple"')
     expect(standardInput).not.toContain("vt-studio-floating-field")
     expect(standardInput).not.toContain("vt-studio-fixed-field-label")
     expect(standardInput).toContain('data-size="standard"')

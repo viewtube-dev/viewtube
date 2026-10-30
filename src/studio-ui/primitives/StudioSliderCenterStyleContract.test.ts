@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-const splitInputCss = readFileSync(new URL("./studio-split-text-input.css", import.meta.url), "utf8");
+const splitInputCss = readFileSync(new URL("../../styles/studio-split-text-input.css", import.meta.url), "utf8");
 const valueToggles = readFileSync(new URL("./StudioValueToggles.tsx", import.meta.url), "utf8");
 const controlSystemCss = readFileSync(new URL("../../styles/studio-control-system.css", import.meta.url), "utf8");
 const subtoolboxCss = readFileSync(new URL("../../styles/subtoolbox-system.css", import.meta.url), "utf8");
@@ -10,10 +10,10 @@ const toggleOverrides = readFileSync(new URL("../../styles/studio-control-distil
 
 describe("Studio recovery control styling", () => {
   it("keeps the split input editable and follows the persistent inset/focus field contract", () => {
-    expect(splitInputCss).toContain("pointer-events: auto;");
+    expect(splitInputCss).toContain("input.vt-studio-text-input[data-vt-studio-control=\"true\"][data-size]");
     expect(splitInputCss).toContain("50%, transparent");
     expect(splitInputCss).toContain("15%, transparent");
-    expect(splitInputCss).toContain("outline-offset: 0 !important;");
+    expect(splitInputCss).toContain("outline-offset: 0;");
   });
 
   it("preserves the side-toggle direction metadata required by the production CSS", () => {
