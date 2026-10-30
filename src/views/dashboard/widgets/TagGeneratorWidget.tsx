@@ -1,17 +1,17 @@
 import React, { useState } from "react"
-import { useBrain } from "../../../context/useBrain"
 import { WidgetShell } from "../WidgetShell"
 import { useEntitlement } from "../../../context/entitlementContext"
 import { Sparkles, Save, Check, Tag } from "lucide-react"
 import { fetchVideoSnippetDetails } from "../../../services/youtubeService"
-import { generateTagSuggestions } from "../../../services/gemini"
-import type { TagSuggestion } from "../../../services/gemini"
+import { generateGovernedTagSuggestions } from "../../../services/brain/creatorAssets"
+import type { TagSuggestion } from "../../../services/brain/assetStrategies/tagSuggestions"
+import { useUnifiedAccount } from "../../../context/UnifiedAccountContext"
 import { canAffordAiTokensFromState } from "../../../services/billingEntitlement"
 import { getAiTokenCost } from "../../../services/aiTokenCosts"
 import { WidgetScrollArea, WidgetSelect } from "../WidgetPrimitives"
 
 export const TagGeneratorWidget = ({ widget, instance, editMode, onToggleCollapse, onCycleSize, onDecSize, onCycleHeight, onDecHeight, onRemove, data }: any) => {
- const { brain } = useBrain()
+ const account = useUnifiedAccount()
  const common = {
   widget,
   instance,
@@ -88,17 +88,21 @@ export const TagGeneratorWidget = ({ widget, instance, editMode, onToggleCollaps
    const vid = videos.find((v: any) => v.videoId === selectedVideo)
    const title = vid?.title || selectedTitle || ""
    const desc = selectedDescription || vid?.description || ""
-   const suggestions = await generateTagSuggestions(title, desc, brain)
+   const channelId = account.snapshot.google.channelId
+   if (!channelId) throw new Error("Connect a YouTube channel before generating governed tag suggestions.")
+   const { suggestions } = await generateGovernedTagSuggestions({
+    context: { channelId, channelName: data.channelTitle },
+    title,
+    description: desc,
+    operationId: "tag-generator-widget:" + selectedVideo,
+    workflowId: "workflow:tag-generator:" + selectedVideo,
+   })
    const sorted = [...suggestions].sort((a, b) => b.score - a.score)
    setSuggestedTags(sorted)
   } catch (err) {
    console.error("Tag generation failed:", err)
-   // Fallback tags
-   setSuggestedTags([
-    { tag: "youtube tips", score: 85, searchVolume: 18000, competition: 500, rank: 3, tripleKeyword: true },
-    { tag: "content creation", score: 78, searchVolume: 12000, competition: 800, rank: 5, tripleKeyword: false },
-   ])
-  } finally {
+   setSuggestedTags([])
+    } finally {
    setIsGenerating(false)
   }
  }
