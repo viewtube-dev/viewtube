@@ -184,9 +184,10 @@ export const BrainComposerAccessoryRow: React.FC<{
 export const ChatConversationViewport: React.FC<{
   children: React.ReactNode
   viewportRef: React.Ref<HTMLDivElement>
+  bottomRef?: React.Ref<HTMLDivElement>
   onScroll?: React.UIEventHandler<HTMLDivElement>
   className?: string
-}> = ({ children, viewportRef, onScroll, className = "" }) => (
+}> = ({ children, viewportRef, bottomRef, onScroll, className = "" }) => (
   <div
     ref={viewportRef}
     onScroll={onScroll}
@@ -196,6 +197,7 @@ export const ChatConversationViewport: React.FC<{
     tabIndex={0}
   >
     {children}
+    <div ref={bottomRef} aria-hidden="true" className="h-px w-full shrink-0" />
   </div>
 )
 
