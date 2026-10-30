@@ -60,7 +60,7 @@ const resolvePublicHandleContext = async (input: BrainRuntimeRequest): Promise<{
 }> => {
  const selected = input.publicHandleContext
  const handle = typeof selected?.handle === "string" ? selected.handle.trim() : ""
- if (!handle) return { block: "", metadata: null, evidenceVideos: [] }
+ if (!handle || (input.channelId && input.channelId !== selected?.channelId)) return { block: "", metadata: null, evidenceVideos: [] }
 
  try {
   const snapshot = await fetchPublicChannelSnapshot(handle)
@@ -144,7 +144,7 @@ export const runBrainTask = async (
    surface,
    route: typeof contextWithPublic.route === "string" ? contextWithPublic.route : null,
    toolId: typeof contextWithPublic.toolId === "string" ? contextWithPublic.toolId : null,
-   channelId: input.channelId,
+   channelId: runtimeChannelId,
    projectId: input.projectId || input.project?.id || (typeof contextWithPublic.projectId === "string" ? contextWithPublic.projectId : null),
    contentBuildId: typeof contextWithPublic.contentBuildId === "string" ? contextWithPublic.contentBuildId : input.project?.contentBuildId || null,
    videoId: typeof contextWithPublic.videoId === "string"
