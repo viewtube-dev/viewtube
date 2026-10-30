@@ -461,3 +461,26 @@ Required remediation:
 - Confirmed the Reference Library intentionally renders Hardcoded, Primitive, and Confirmed tracks; this is a comparison/certification surface, not three independent production implementations.
 - No application source code was changed. No catalog track was deleted or promoted.
 - No tests, typecheck, production build, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
+
+
+### F-016 — User Guide search index omits several live Studio Hub modules
+
+**Severity:** P2 — incomplete feature discovery/documentation  
+**Confidence:** Confirmed by current StudioHub imports and User Guide search-index construction
+
+Evidence:
+- `src/views/StudioHub.tsx` mounts Concept + Scene Studio, Video Director, Studio Publishing Cockpit, Metadata Master, Community Posts, Comment Responder, End-Screen Architect, Pre-Launch Priming, and Actionable Tactics as live Studio modules.
+- `src/views/UserGuide.tsx` builds its searchable destination index from `GUIDE_FEATURES`, `GUIDE_TOOLS`, datasets, metrics, and widgets.
+- `src/content/guide-v2/featureRegistry.ts` has a generic Studio Hub feature entry and individual entries for some Studio tools (for example Video Manager, Media Analyzer, Video Publisher, Hook Generator, Script Architect, Packaging Lab Pro, Thumbnail Studio, Algorithm Architect, and Storyboard Studio), but no individual feature entries for the nine modules listed above.
+- `src/content/guide-v2/toolRegistry.ts` derives its tool entries from `SUPER_TOOLS`; the current 16 super-tool definitions are a separate concept inventory and do not provide named entries for those nine StudioHub modules.
+
+Impact:
+- Those modules are accessible within Studio Hub, so this is not a missing-runtime-UI finding.
+- However, users searching the User Guide for these exact tools/functions will not find a dedicated result explaining what the module does or how to reach it.
+- The generic Studio Hub entry does not expose the full module-level feature inventory or their ownership/handoff distinctions.
+
+Required remediation:
+- Reconcile the Guide feature registry against the actual StudioHub module inventory and canonical Studio Hub ownership document.
+- Add module-level guide entries only where a distinct user-facing capability needs its own explanation; use the parent Studio Hub route plus a stable section anchor where available rather than inventing new standalone routes.
+- Preserve the distinction between a module, a subtool, a capability, and a super-tool so the Guide does not create a parallel product taxonomy.
+
