@@ -22,14 +22,14 @@
 6. The original package still needed a populated instruction register and a correction to its stale PR #503 attribution.
 7. The reusable handoff template needed explicit metadata, artifact links, a ten-sentence summary, single-line checkboxes and a one-phrase in-place update contract.
 8. The handoff system remains documentation-only; frontend and backend maturity are not applicable to this workflow.
-9. The PR #1170 release-gate run passed production build, local smoke and Brain quality checks but failed other inherited checks.
-10. Next: merge the follow-up contract/template/package work and run the focused document-system checks.
+9. PR #1177's dedicated handoff/document checks, production build, local smoke and Brain quality loop passed; unrelated Studio, focused-test, full-suite and typecheck gates remain failing.
+10. Next: resolve or explicitly disposition unrelated repository gate failures, then complete PR #1177 review/merge; selected idea IDs remain UNKNOWN.
 
 ## Unfinished work — single-line checklist
 
 - [ ] `VT-CWI-002` — Complete and land the living-log metadata, update phrase, artifact index and ten-sentence/five-idea template — IN_PROGRESS — PR #1170 is the merged foundation; PR #1177 open.
 - [ ] `VT-CWI-003` — Populate the October 29 originating conversation's individual instruction, artifact and branch/PR registers — IN_PROGRESS — PR #1170 merged; follow-up PR pending.
-- [ ] `VT-CWI-004` — Execute the new contract test, `npm run test:document-system` and `npm run audit:documents` in CI — NOT_STARTED — no passing run yet.
+- [x] `VT-CWI-004` — Execute the new contract test, `npm run test:document-system` and `npm run audit:documents` in CI — VERIFIED_IN_CONVERSATION — workflow run 40981740716 passed all three.
 - [ ] `VT-CWI-005` — Recover the exact source meanings of selected ideas 1, 4, 9, 10, 17 and 18 — BLOCKED — source definitions unavailable; do not guess.
 
 ## Links to documents and artifacts
@@ -77,6 +77,7 @@ The checkbox is checked only when a requirement is VERIFIED_DELIVERED. The statu
 | Branch | Target | PR | PR head | Merge SHA | Target presence | Classification |
 |---|---|---|---|---|---|---|
 | `docs/conversation-handoff-complete-register-2026-10-29` | `master/consolidated-feature-integration` | #1170 | `49918598057dcecf46373e778e8a5a205b5919b2` | `0fd1d412758f212d8d6cf34a3a31d22270ea33c4` | YES | MERGED_AND_CURRENT |
+| `docs/living-conversation-handoff-log-2026-10-29` | `master/consolidated-feature-integration` | #1177 | `a07aa2c008a0b89b66d2759c548532e805934572` | — | NO | OPEN_PR |
 
 The original PR-opening SHA is not recoverable. GitHub compare shows the original source branch has zero commits ahead of the merge commit and is 22 commits behind it. No unique post-PR branch work requires recovery. The target has advanced eight commits beyond the merge at the time of the initial comparison.
 
@@ -100,11 +101,11 @@ All five remain proposals; route them through the existing Ideas Registry / impr
 
 ## Exact next action
 
-**Action:** Review PR #1177, resolve any CI findings, and merge after required checks pass.  
+**Action:** Review PR #1177 and resolve or explicitly disposition the unrelated repository gate failures before merge.  
 **Reason:** PR #1170 is merged, but the living-log front page and focused verification were not complete.  
 **Expected outcome:** A reusable in-place update contract, populated originating package, and CI evidence.  
 **Canonical owners:** Conversation Handoffs, Conversation OS, Documentation Governance, Verification and existing Ideas Registry.  
-**Verification:** `npm run test:conversation-handoff-contract`, `npm run test:document-system`, `npm run audit:documents`.
+**Verification:** `npm run test:conversation-handoff-contract`, `npm run test:document-system` and `npm run audit:documents` passed in workflow run https://github.com/viewtube-dev/viewtube/actions/runs/40981740716; wider repository gates remain red.
 
 ## Package links
 
