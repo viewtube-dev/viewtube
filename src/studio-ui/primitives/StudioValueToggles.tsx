@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from "react";
 import "../../styles/studio-control-value-toggles.css";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import { StudioSplitShell, STUDIO_LEFT_WORD_OPTIONS } from "./StudioControls";
-import type { StudioControlSize } from "../tokens";
+import { STUDIO_CONTROL_SIZE_CONTRACT, type StudioControlSize } from "../tokens";
 
 export type StudioToggleAppearance = {
   textColor?: string;
@@ -141,18 +141,13 @@ export type StudioBarToggleProps = {
 };
 
 /** Bar geometry must remain aligned with --vt-bar-* in studio-control-distill-overrides.css. */
-const BAR_METRICS: Record<string, { bar: number; gap: number; pad: number }> = {
-  supreme: { bar: 20.728, gap: 4, pad: 16 },
-  standard: { bar: 15.2, gap: 3, pad: 12 },
-  compact: { bar: 9.6, gap: 2, pad: 8 },
-  mini: { bar: 7, gap: 1.5, pad: 6 },
-  micro: { bar: 4, gap: 1, pad: 4 },
-};
-
-function barCountFromWidth(widthPx: number, size: string): number {
-  const metrics = BAR_METRICS[size] ?? BAR_METRICS.standard;
-  const inner = Math.max(0, widthPx - metrics.pad);
-  const count = Math.floor((inner + metrics.gap) / (metrics.bar + metrics.gap));
+function barCountFromWidth(widthPx: number, size: StudioControlSize): number {
+  const tier = STUDIO_CONTROL_SIZE_CONTRACT[size] ?? STUDIO_CONTROL_SIZE_CONTRACT.standard;
+  const barWidth = tier.height * 0.345;
+  const gap = tier.stroke;
+  const padding = tier.stroke * 4;
+  const innerWidth = Math.max(0, widthPx - padding);
+  const count = Math.floor((innerWidth + gap) / (barWidth + gap));
   return Math.max(4, Math.min(40, count || 4));
 }
 
@@ -271,7 +266,7 @@ export function StudioDoubleSplitWordCounter({
     <ChevronRight aria-hidden="true" focusable="false" />
   </button>;
   return <StudioSplitShell layout="double" sizeVariant={size}
-    className={["vt-studio-word-counter", className].filter(Boolean).join(" ")}
+    className={["vt-studio-value-toggle", "vt-studio-word-counter", className].filter(Boolean).join(" ")}
     shellProps={{
       role: "group", "aria-label": ariaLabel, "aria-disabled": disabled || undefined,
       "data-vt-studio-control-family": "counter",
