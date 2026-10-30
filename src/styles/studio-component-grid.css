@@ -49,8 +49,8 @@
 
 .vt-studio-component-grid[data-size="micro"] {
   --scg-height: var(--vt-studio-micro-height, 12px);
-  --scg-stroke: var(--vt-studio-micro-stroke, 1.5px);
-  --scg-radius: var(--vt-studio-micro-radius, 3px);
+  --scg-stroke: var(--vt-studio-micro-stroke, 1px);
+  --scg-radius: var(--vt-studio-micro-radius, 2px);
 }
 
 .vt-studio-component-grid[data-corners="square"] {
