@@ -40,7 +40,7 @@ test("conversation work-log schema supports the living handoff metadata and evid
 
 test("handoff template gives the one-link, one-phrase update instruction and bounded summary", () => {
   assert.match(template, /Update the unfinished work log\./);
-  assert.match(template, /update this existing document and package in place/i);
+  assert.match(template, /update this existing document and its matching/i);
   assert.match(template, /Conversation date/);
   assert.match(template, /Conversation name/);
   assert.match(template, /Application \/ product/);
