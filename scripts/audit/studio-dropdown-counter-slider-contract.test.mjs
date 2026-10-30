@@ -8,6 +8,8 @@ const css = readFileSync("src/styles/studio-control-system.css", "utf8")
 const generator = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 const fieldCss = readFileSync("src/styles/studio-text-input.css", "utf8")
+const splitInputCss = readFileSync("src/styles/studio-split-text-input.css", "utf8")
+const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
 const dropdown = component.slice(component.indexOf("export const StudioDropdown"), component.indexOf("export interface StudioSimpleDropdownOption"))
 
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
@@ -125,4 +127,77 @@ test("counter and slider shell capture shares focus without replacing hold-repea
     assert.ok(!line.includes("onPointerDown={interactionFocus.start}"), "hold handlers must not be overridden");
     assert.ok(line.includes("onClick={interactionFocus.pulse}"), "keyboard/click activation must pulse focus");
   }
+});
+
+
+test("square icon button badges, tooltips, and ripples escape the shared button shell", () => {
+  assert.match(css, /button\[data-vt-studio-icon-button="true"\]\.vt-studio-square-icon-button\s*\{[^}]*overflow:\s*visible/s);
+  assert.match(css, /button\[data-vt-studio-button="true"\]:not\(\.vt-studio-square-icon-button\),\s*button\[data-vt-studio-action-button="true"\]\s*\{[^}]*overflow:\s*hidden/s);
+});
+
+test("double-split slider uses the reference interaction-focus lifecycle", () => {
+  assert.match(component, /useStudioCounterHold\(-1,[\s\S]*?interactionFocus\)/);
+  assert.match(component, /useStudioCounterHold\(1,[\s\S]*?interactionFocus\)/);
+  assert.match(component, /interactionFocus\?\.start\(\)/);
+  assert.match(component, /interactionFocus\?\.end\(\)/);
+});
+
+
+test("dropdown chevrons read size and stroke directly from all five size-tier tokens", () => {
+  assert.match(dropdown, /size=\{STUDIO_DROPDOWN_TOKENS\.chevronSize\[sizeVariant\]\}/);
+  assert.match(dropdown, /strokeWidth=\{STUDIO_DROPDOWN_TOKENS\.chevronStroke\[sizeVariant\]\}/);
+  assert.doesNotMatch(dropdown, /chevronSize\.standard/);
+});
+
+
+test("split text input follows the reference primary inline-stroke and token-owned rail geometry", () => {
+  assert.match(splitInputCss, /border:\s*var\(--vt-studio-control-stroke,[^)]*\) solid var\(--vt-split-field-primary\)/);
+  assert.match(splitInputCss, /--vt-studio-split-rail-size/);
+  assert.match(splitInputCss, /background:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\)/);
+  assert.doesNotMatch(splitInputCss, /!important/);
+});
+
+test("upload frame uses the reference canvas anatomy without dropping current file APIs", () => {
+  assert.match(component, /data-size=\{sizeVariant\}/);
+  assert.match(component, /vt-studio-upload-frame__label/);
+  assert.match(component, /multiple=\{multiple\}/);
+  assert.match(component, /onFilesChange\?\.\(files\)/);
+  assert.match(css, /\.vt-studio-upload-frame\s*\{[^}]*aspect-ratio:\s*16\s*\/\s*9[^}]*overflow:\s*visible/s);
+});
+
+test("confirmed square icon library groups every requested effect by size", () => {
+  assert.match(catalog, /44px STANDARD · ALL SKINS \+ EFFECTS/);
+  assert.match(catalog, /28px COMPACT · ALL SKINS \+ EFFECTS/);
+  assert.match(catalog, /effect="bell-ring" variant="v3"/);
+  assert.match(catalog, /effect="download" variant="v3"/);
+  assert.match(catalog, /effect="refresh" tooltip="REFRESH"/);
+  assert.match(catalog, /effect="like" badge=\{0\}/);
+  assert.doesNotMatch(catalog, /vt-confirmed-square-effect-pair/);
+});
+
+
+test("switch and choice tracks retain their intrinsic component widths", () => {
+  const contentWidthRules = [...css.matchAll(/(?:\[data-vt-studio-control="true"\]|button)\.vt-studio-44-(?:switch|choice)[\s\S]{0,180}width:\s*max-content\s*!important/g)];
+  assert.equal(contentWidthRules.length, 0, "switch and choice controls must not inherit content-width exceptions");
+  assert.match(css, /button\.vt-studio-44-switch\s*\{[^}]*width:\s*75\.68px/s);
+  assert.match(css, /button\.vt-studio-44-choice\s*\{[^}]*width:\s*44px/s);
+});
+
+
+test("choice and switch primitives do not opt into content-width sizing", () => {
+  const switches = component.slice(component.indexOf("export const Studioswitch:"), component.indexOf("export type StudioChoiceKind"));
+  const choices = component.slice(component.indexOf("export const StudioChoice:"), component.indexOf("export interface StudioWordToggleProps"));
+  assert.doesNotMatch(switches, /data-vt-studio-width="content"/);
+  assert.doesNotMatch(choices, /data-vt-studio-width="content"/);
+});
+
+
+test("single, simple, split-left, and multi-select dropdowns map chevrons across five sizes", () => {
+  for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+    assert.match(css, new RegExp(String.raw`\.vt-studio-dropdown\[data-size="${size}"\]`));
+    assert.match(css, new RegExp(String.raw`\.vt-studio-legend-multi\[data-size="${size}"\]`));
+  }
+  assert.match(css, /\.vt-studio-dropdown-chevron\s*\{[^}]*height:\s*100%/s);
+  assert.match(dropdown, /rightRailClassName="vt-studio-dropdown-chevron is-trailing"/);
+  assert.match(dropdown, /className="vt-studio-dropdown-chevron is-trailing"/);
 });

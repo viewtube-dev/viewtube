@@ -630,3 +630,14 @@ This is a catalog information-architecture contract. It does not change the visu
 - Inter-modules are full width, edge-to-edge, and use square split sections without a default 4px edge inset.
 - Empty bar-toggle segments use 50% white / 50% primary fill; filled segments are black. Bars match the tier text height, use 2.5:1 height-to-width geometry and a slight radius; the percentage tooltip appears on focus. Counter value ratio is named in STUDIO_COUNTER_NUMBER_TOKENS; bar height/ratio/radius/fill are named in STUDIO_BAR_TOGGLE_TOKENS and emitted from the canonical token source. Recovery CSS must not duplicate these geometries.
 - Vertical word-toggle handles use measured word-block bounds (no line-height fudge) and the same side-inset/corner-radius relationship as the horizontal word-toggle handle. Competing fixed-inset recovery overrides are prohibited.
+
+
+## 2026-10-30 — Codex interaction-focus primitive restoration
+
+The canonical square-icon specimen is one family module with two horizontal specimen rows: all standard-size skins/effects together, followed by all compact-size skins/effects together. Do not recreate per-effect family modules. The rows include V1–V4, activation pop, notification badge, heart pop, bell-ring state toggle, download/check toggle, success-only download feedback, refresh spin with tooltip, and like/live count. The row scroller reserves vertical and horizontal space for badges and tooltips; the production button and face must remain overflow-visible.
+
+Choice controls are fixed-geometry controls, not content-width exceptions. `StudioSwitch` and `StudioChoice` must not set `data-vt-studio-width="content"`; their family CSS owns the switch-track and choice-face dimensions. The switch track and choice face retain the Codex reference's visible background fill. Never place switch/choice in the global content-width selector.
+
+Dropdown chevrons are trailing and use `STUDIO_DROPDOWN_TOKENS` by direct size-tier lookup for supreme, standard, compact, mini, and micro. Standard/simple and split-left share the same trailing chevron contract; the multi-select legend dropdown maps its chevron rail and stroke to those same tokens.
+
+The split-left play/pause implementation is already source-identical to the reference branch; keep one production implementation. The double-split slider adopts the reference's primary rails/progress track and interaction-focus lifecycle. The upload frame adopts the reference 16:9 canvas anatomy and centered label while preserving multiple-file callbacks, image/video acceptance, preview URL cleanup, and keyboard activation. Split text input adopts the reference's primary inline field stroke and token-derived split rails. These changes are tracked in `docs/plans/STUDIO_PRIMITIVE_RESTORATION_FROM_CODEX_BRANCH_2026-10-30.md`.
