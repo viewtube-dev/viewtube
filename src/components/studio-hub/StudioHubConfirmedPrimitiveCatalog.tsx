@@ -857,8 +857,8 @@ const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
   "Compositions",
 ]
 
-const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
-  if (!React.isValidElement(node)) return "Compositions"
+const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName | null => {
+  if (!React.isValidElement(node)) return null
   const props = node.props as { title?: unknown }
   const title = typeof props.title === "string" ? props.title : ""
   const componentType = node.type as { displayName?: string; name?: string }
@@ -894,7 +894,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
   if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag/.test(title)) return "Compositions"
   if (/Publishing Card|StudioChatResponseShell|StudioResponseMetaRow/.test(title)) return "Compositions"
-  return "Compositions"
+  return null
 }
 
 const isSwitchToggleChoiceFamily = (title: string): boolean =>
@@ -903,6 +903,7 @@ const isSwitchToggleChoiceFamily = (title: string): boolean =>
 const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const nodes = React.Children.toArray(children)
   const defaults: React.ReactNode[] = []
+  const unclassified: React.ReactNode[] = []
   const switchToggleFamilies: React.ReactNode[] = []
   const grouped = new Map<ConfirmedCatalogFamilyName, React.ReactNode[]>(
     CONFIRMED_CATALOG_FAMILIES.map((family) => [family, []]),
@@ -919,7 +920,12 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
       switchToggleFamilies.push(node)
       continue
     }
-    grouped.get(classifyConfirmedCatalogItem(node))?.push(node)
+    const family = classifyConfirmedCatalogItem(node)
+    if (!family) {
+      unclassified.push(node)
+      continue
+    }
+    grouped.get(family)?.push(node)
   }
   const controls = grouped.get("Controls") ?? []
   if (switchToggleFamilies.length > 0) {
@@ -932,6 +938,13 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
   return (
     <div className="vt-confirmed-catalog">
       {defaults}
+      {unclassified.length > 0 && (
+        <section className="vt-confirmed-unclassified-family" role="alert" data-vt-confirmed-family="unclassified">
+          <strong>Unclassified family</strong>
+          <p>Add an explicit category rule in classifyConfirmedCatalogItem before this specimen can be placed in a confirmed family.</p>
+          <div>{unclassified}</div>
+        </section>
+      )}
       <div className="vt-confirmed-family-grid">
         {CONFIRMED_CATALOG_FAMILIES
           .filter((family) => (grouped.get(family)?.length ?? 0) > 0)
