@@ -35,17 +35,16 @@ test("confirmed catalog CSS owns layout, not production control faces", () => {
   assert.deepEqual(violations, [], "production primitive face styling belongs in studio-control-system.css");
 });
 
-test("switch and choice skin families retain four-column rows at every viewport", () => {
-  assert.match(styles, /\.vt-confirmed-control-variants\s*\{[\s\S]*?grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
-  assert.match(styles, /\.vt-confirmed-control-family \.vt-confirmed-control-variants\s*\{\s*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\) !important/);
-  assert.match(styles, /\.vt-confirmed-control-family \.vt-confirmed-control-variants,[\s\S]*?grid-template-columns: repeat\(4, minmax\(64px, 1fr\)\) !important;[\s\S]*?overflow-x: auto/);
+test("switch and choice skin families use auto-width examples instead of catalog columns", () => {
+  assert.match(styles, /vt-confirmed-control-family \\.vt-confirmed-control-variants/);
+  assert.match(styles, /display:\\s*flex/);
+  assert.doesNotMatch(styles, /grid-template-columns:\\s*repeat\\(4/);
 });
 
-test("standard button specimens span a row and compact default/neutral variants share two columns", () => {
-  assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants\s*\{\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\) !important/);
-  assert.match(styles, /\.vt-confirmed-button-family > \.vt-confirmed-variants > \.vt-confirmed-variant\.is-full-row\s*\{\s*grid-column: 1 \/ -1 !important/);
-  assert.ok(catalog.includes('28px compact · default'));
-  assert.ok(catalog.includes('28px compact · neutral tone'));
+test("confirmed button specimens use full rows or natural auto width", () => {
+  assert.match(styles, /vt-confirmed-family > \\.vt-confirmed-variants/);
+  assert.match(styles, /grid-template-columns:\\s*minmax\\(0, 1fr\) !important/);
+  assert.match(styles, /vt-confirmed-paired-compact-row/);
 });
 
 test("StudioTextInput catalog includes simple, floating-label, and fixed-label variants", () => {
