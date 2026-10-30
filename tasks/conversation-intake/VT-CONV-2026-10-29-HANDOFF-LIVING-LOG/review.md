@@ -109,3 +109,8 @@ These are current repository quality blockers, not failures in the new handoff/d
 ## Updated disposition
 
 The handoff/document contract is VERIFIED by its dedicated CI job. The overall PR remains OPEN and unmerged because repository-wide checks are red. Keep the package PARTIALLY_RECONCILED until the unrelated blockers are resolved or explicitly dispositioned and PR #1177 is merged. The selected idea IDs 1, 4, 9, 10, 17 and 18 remain UNKNOWN pending source recovery.
+
+
+## Post-PR branch snapshot
+
+The PR-opening head was `da40c647ea637a43a0a97cf6408b360f375223c6`. GitHub compare to `f9da934076797693e7bb4c2b1a115e96cfaf7e0e` reports 11 commits ahead, 0 behind, across seven changed paths. The exact commit and path inventory is recorded in `worklog.json` → `branchPrReconciliation` for PR #1177. These are documented follow-up edits to the PR branch, not orphaned work. The current PR metadata is authoritative for the live branch tip after this worklog receipt update.
