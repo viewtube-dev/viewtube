@@ -120,3 +120,14 @@ The following figures belong to the September 2026 governance branch and must no
 - September branch counts, tests and audit figures above are historical evidence only. No tests, build, typecheck, lint, browser, or live governance audit were executed in this documentation pass.
 
 Execution plan: `tasks/p1-canonical-system-integration/workstreams/ai-brain-quality-and-systems-management/plan.md`.
+
+
+### UI coverage audit — initial finding (2026-10-29)
+
+- [ ] Trace each proposed management view from registered route/navigation through mounted component, action, service, authorization and observable result.
+- [ ] Inspect alternate entry points, role/feature gates, mobile layouts and accessibility before classifying missing UI.
+- [ ] Classify each view using the UI Coverage Auditor statuses. Current repository search is insufficient to call the management workspace `MISSING_UI`; it remains `UNVERIFIED`.
+- [ ] Distinguish the proposed AI Systems management workspace from creator-facing Brain Health and attribution panels.
+- [ ] Audit stale labels and dead/legacy controls in both directions (implementation-to-UI and UI-to-implementation).
+
+Initial search found the management workspace listed as unfinished in this task plan and capability map; concept HTML and architecture references are not production-wiring evidence.
