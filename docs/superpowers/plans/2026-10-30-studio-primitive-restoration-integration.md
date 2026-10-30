@@ -71,3 +71,39 @@ The target upload frame is newer than the reference implementation: it supports 
 - [ ] Canonical Studio docs updated.
 - [ ] Focused tests, typecheck, and production build passed.
 - [ ] PR opened after verification.
+
+
+## Additional source: PR #1229 handoff and its code-recovery references
+
+Opened and inspected [PR #1229](https://github.com/viewtube-dev/viewtube/pull/1229), “Document Studio Controls regression conversation handoff”. PR #1229 itself is documentation/provenance only; it does not contain production primitive changes. Its handoff points to PR #923 and the following implementation requirements, now added to this restoration's acceptance scope.
+
+### Field glyph-stroke contract — reconcile before applying
+
+- Simple text input: primary-colored inline glyph stroke in resting and focused states.
+- Labelled/editable inputs and textareas: primary glyph stroke at rest; black glyph stroke on focus, per PR #923's implementation/body.
+- TextBox: black text and black outer border, with the primary inline glyph stroke. The handoff's latest correction explicitly supersedes its older black-glyph interpretation.
+- Keep the secondary focus outline separate from the inline glyph stroke.
+- Do not apply one blanket field selector that erases the per-field/per-state contract. Verify actual JSX field-kind markers and effective CSS cascade.
+
+**Conflict to resolve explicitly:** PR #923's original description says TextBox default glyph stroke black and labelled fields/textareas black on focus; the later handoff says every field, including TextBox, uses primary inline glyph stroke at all times. The later user correction is the current authority for TextBox. Keep the simple-input and labelled/textarea state distinctions unless a newer user instruction explicitly supersedes them.
+
+### Split geometry and layout contract
+
+- Square inner rails for split badges (left/right/double), split-left buttons, top-split modules, counters, toggles, and shared split shells.
+- Rail width and height must match the inner face after subtracting both outer strokes; no stretched full-height rail.
+- Top-split left/right/double grid columns must use the square inner-rail dimension and preserve a flexible center column.
+- Intermodules must occupy the full available row (grid-column: 1 / -1, width 100%, no narrow column cap).
+- Intermodule split rails must themselves be square and use face size minus both strokes.
+- Include regression assertions for field states, square rails, top-split stroke accounting, and full-row intermodules.
+
+### PR #923 live status correction
+
+The current GitHub PR endpoint reports PR #923 as **merged**, with merge commit f4d15cd2488ccb415d2626372577308a78d003e1. The merge commit is an ancestor of the current integration branch (current target is ahead by 2,151 commits from that merge point). This supersedes the stale “closed/unmerged” status recorded in PR #1229's handoff. Do not attempt to recover or cherry-pick PR #923's eight commits as if they were unmerged. Instead, audit current target files for later regressions/overwrites and restore only behavior demonstrably absent. PR #923's own verification explicitly said tests/build and browser visual verification had not been run; these remain required acceptance evidence.
+
+### Required regression coverage added to this restoration plan
+
+- [ ] Field-kind × state matrix: simple input rest/focus; labelled input rest/focus; textarea rest/focus; TextBox default; assert glyph stroke, text/fill, perimeter, caret, and separate focus outline.
+- [ ] Split-rail matrix: left/right/double badges, split-left buttons, top-split modules, counters, toggles, and shared split shells; assert square inner dimensions at each supported size.
+- [ ] Top-split grid: verify left/right/double rail columns subtract both outer strokes and center remains minmax(0, 1fr).
+- [ ] Intermodule layout: verify full-row span, 100% width, no narrow max-width, square rails.
+- [ ] Desktop and mobile visual review for all representative families after automated checks.
