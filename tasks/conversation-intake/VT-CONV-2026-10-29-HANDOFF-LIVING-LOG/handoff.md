@@ -56,7 +56,21 @@
 
 ## Complete user instruction register
 
-See `worklog.json` → `instructions` for REQ-001 through REQ-012. Each distinct request has its own stable ID, status, related work item and evidence. Exact definitions for selected idea numbers remain UNKNOWN.
+The checkbox is checked only when a requirement is VERIFIED_DELIVERED. The status records intermediate delivery stages separately.
+
+- [ ] `REQ-001` — Create a reusable Unfinished Work Living Document Log for oversized conversations without creating a competing task system — Status: PARTIAL — Work: CWI-001 — PR #1170 — Delivery: PRESENT_ON_TARGET — Evidence: https://github.com/viewtube-dev/viewtube/pull/1170
+- [ ] `REQ-002` — Record every distinct user request, correction, constraint and demand as a single-line checkbox with achievement status and PR/commit evidence — Status: IN_PR — Work: CWI-002/CWI-003 — Follow-up PR pending — Delivery: IN_PR — Evidence: this package worklog
+- [ ] `REQ-003` — Show conversation date, conversation name, application/product and source application — Status: IN_PR — Work: CWI-002 — Follow-up PR pending — Delivery: IN_PR
+- [ ] `REQ-004` — Link every document and artifact created or materially changed — Status: IN_PR — Work: CWI-002/CWI-003 — Follow-up PR pending — Delivery: IN_PR — Evidence: Documents table above
+- [ ] `REQ-005` — Limit the executive handoff to ten crucial-fact sentences — Status: IN_PR — Work: CWI-002 — Follow-up PR pending — Delivery: IN_PR
+- [ ] `REQ-006` — Include five best finishing/improvement ideas and route them through existing idea authorities — Status: IN_PR — Work: CWI-002 — Follow-up PR pending — Delivery: IN_PR
+- [ ] `REQ-007` — Update the existing log by supplying its link and saying “Update the unfinished work log.” — Status: IN_PR — Work: CWI-002 — Follow-up PR pending — Delivery: IN_PR
+- [ ] `REQ-008` — Reconcile branches and PRs independently, including opening snapshots, post-PR changes, unmerged work and target presence — Status: MERGED — Work: CWI-001 — PR #1170 — Delivery: PRESENT_ON_TARGET — Evidence: https://github.com/viewtube-dev/viewtube/commit/0fd1d412758f212d8d6cf34a3a31d22270ea33c4
+- [ ] `REQ-009` — Track implemented-but-unconnected features and missing application, UI/frontend or backend integration — Status: MERGED — Work: CWI-001 — PR #1170 — Delivery: PRESENT_ON_TARGET — Evidence: https://github.com/viewtube-dev/viewtube/pull/1170
+- [ ] `REQ-010` — Reuse Task Authority’s nine maturity axes and avoid parallel task, maturity or idea authorities — Status: MERGED — Work: CWI-001 — PR #1170 — Delivery: PRESENT_ON_TARGET — Evidence: docs/governance/TASK_AUTHORITY.md
+- [ ] `REQ-011` — Preserve selected idea references 1, 4, 9, 10, 17 and 18 without guessing their meanings — Status: BLOCKED — Work: CWI-005 — PR/commit: N/A — Delivery: UNKNOWN — Evidence: source idea definitions not recovered
+- [ ] `REQ-012` — Preserve prior instructions, corrections, decisions, artifacts and unresolved work; do not invent links, status or evidence — Status: IN_PR — Work: CWI-003 — Follow-up PR pending — Delivery: IN_PR
+
 
 ## Branch and PR reconciliation
 
