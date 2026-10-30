@@ -84,3 +84,28 @@ test("restored primitive styles contain no malformed escaped newline and honor r
   assert.match(restoredCss, /\.vt-studio-square-icon-button-group > \[aria-pressed="true"\]/);
   assert.match(restoredCss, /prefers-reduced-motion/);
 });
+
+
+test("all interactive Studio controls consume one final focus owner", () => {
+  const focusCss = read("src/styles/studio-control-focus.css");
+  const entryCss = read("src/styles/studio-control-entry.css");
+  const main = read("src/main.tsx");
+  assert.match(focusCss, /--vt-studio-focus-outline-width/);
+  assert.match(focusCss, /--vt-studio-focus-outline-color/);
+  assert.match(focusCss, /--vt-studio-focus-outline-offset/);
+  for (const selector of [
+    ".vt-studio-44-switch", ".vt-studio-44-choice", ".vt-studio-counter",
+    ".vt-studio-side-counter", ".vt-studio-left-counter",
+    ".vt-studio-double-split-slider", ".vt-studio-value-toggle",
+    ".vt-studio-username-input", ".vt-studio-upload-frame",
+    ".vt-studio-spectrum-tag", ".vt-studio-closeable-badge__close",
+    ".vt-studio-tag-editor__square-action"
+  ]) assert.ok(focusCss.includes(selector), selector);
+  assert.ok(entryCss.endsWith('@import "./studio-control-focus.css";\n'));
+  assert.ok(main.includes("import './styles/studio-control-focus.css'"));
+  assert.ok(coreCss.includes(".vt-studio-vertical-word-toggle__word"));
+  assert.ok(restoredCss.includes("transition: color var(--vt-studio-focus-outline-fade-ms, 500ms)"));
+  assert.ok(!toggleCss.includes(".vt-studio-stepper-button {"));
+  assert.ok(toggleCss.includes("overflow: visible"));
+  assert.ok(toggleCss.includes(".vt-studio-value-toggle__bar-tooltip"));
+});
