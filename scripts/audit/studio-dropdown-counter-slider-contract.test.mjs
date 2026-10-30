@@ -126,3 +126,16 @@ test("counter and slider shell capture shares focus without replacing hold-repea
     assert.ok(line.includes("onClick={interactionFocus.pulse}"), "keyboard/click activation must pulse focus");
   }
 });
+
+
+test("square icon button badges, tooltips, and ripples escape the shared button shell", () => {
+  assert.match(css, /button\\[data-vt-studio-icon-button="true"\\]\\.vt-studio-square-icon-button\\s*\\{[^}]*overflow:\\s*visible/s);
+  assert.match(css, /button\\[data-vt-studio-button="true"\\]:not\\(\\.vt-studio-square-icon-button\\),\\s*button\\[data-vt-studio-action-button="true"\\]\\s*\\{[^}]*overflow:\\s*hidden/s);
+});
+
+test("double-split slider uses the reference interaction-focus lifecycle", () => {
+  assert.match(component, /useStudioCounterHold\\(-1,[\\s\\S]*?interactionFocus\\)/);
+  assert.match(component, /useStudioCounterHold\\(1,[\\s\\S]*?interactionFocus\\)/);
+  assert.match(component, /interactionFocus\\?\\.start\\(\\)/);
+  assert.match(component, /interactionFocus\\?\\.end\\(\\)/);
+});
