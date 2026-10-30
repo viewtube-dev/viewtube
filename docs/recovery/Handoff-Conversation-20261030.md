@@ -209,3 +209,58 @@ The following are project decisions/known context from earlier conversations and
 ## 11. Work-log ID
 
 `REC-20261030-chatgpt-001`
+
+## 12. Continuation update — Studio toggle and slider styling (2026-10-30)
+
+This addendum records follow-on implementation requests and independently verified PR outcomes. It updates this existing handoff; it does not create a second conversation package.
+
+### Individual user-instruction register — continuation
+
+- [x] REQ-20261030-001 — Replace Side toggle, Arrow toggle, Double Side toggle, Split Text Input files/design/imports/styles/settings/CSS from the Codex studio controls regression recovery branch while preserving newer target improvements — MERGED — PR [#1135](https://github.com/viewtube-dev/viewtube/pull/1135), merge commit `d59e192e3b311a3345e3cd8171773b00f5a1aebd`; target: `master/consolidated-feature-integration`.
+- [x] REQ-20261030-002 — Replace slider center sections with the requested design/color treatment — MERGED, THEN REFINED — PR #1135 established the first recovery styling; PR [#1140](https://github.com/viewtube-dev/viewtube/pull/1140) subsequently replaced local styling with global defaults.
+- [x] REQ-20261030-003 — Remove hardcoded slider inset-stroke and 50% primary-fill rules, remove handle-corner-radius overrides, use global defaults for primary fill, and retain the two-tone secondary bar styling — MERGED — PR #1140, merge commit `df4f4bd1106ad262f82df25b8582522ea25ab530`.
+- [x] REQ-20261030-004 — Complete the conversation handoff logging process in repository documentation — MERGED — reusable living-log/governance work landed in PR [#1177](https://github.com/viewtube-dev/viewtube/pull/1177); the October 30 handoff and Recovery registration landed in PR [#1223](https://github.com/viewtube-dev/viewtube/pull/1223). This addendum records the later Studio PR outcomes in the same handoff.
+
+### Branch and PR reconciliation
+
+| PR | Source branch | Target | Merge commit | Reconciled outcome |
+|---|---|---|---|---|
+| [#1135](https://github.com/viewtube-dev/viewtube/pull/1135) | `fix/recovery-value-toggles-slider-centers` | `master/consolidated-feature-integration` | `d59e192e3b311a3345e3cd8171773b00f5a1aebd` | MERGED. Six files; restored split-input editability and bar-toggle coloring, added slider-center treatment and a focused contract test. Kept target toggle exports/metadata and current canonical tokens instead of copying obsolete recovery token values. |
+| [#1140](https://github.com/viewtube-dev/viewtube/pull/1140) | `fix/global-slider-defaults-secondary-fill` | `master/consolidated-feature-integration` | `df4f4bd1106ad262f82df25b8582522ea25ab530` | MERGED. Four files; slider centers delegate to `--vt-field-fill-rest` / `--vt-field-fill-focus`; removed local inset stroke and local 50%/15% fill calculations; handle radius inherits global geometry; active bar uses secondary color role. |
+| [#1177](https://github.com/viewtube-dev/viewtube/pull/1177) | `docs/living-conversation-handoff-log-2026-10-29` | `master/consolidated-feature-integration` | `89807ddce6f92e63532ac80af064284707a86c96` | MERGED. Established reusable handoff/worklog/reconciliation process, instruction register, branch/PR reconciliation and integration-gap registers. |
+| [#1223](https://github.com/viewtube-dev/viewtube/pull/1223) | `docs/conversation-handoff-log-completion-2026-10-30` | `master/consolidated-feature-integration` | `db066b9e4c9d6edce85d915618493ebf1ad735da` | MERGED. Added this October 30 recovery handoff, Recovery.md/Recovery.yaml records and Conversation OS process references. |
+
+### Changed implementation paths and evidence
+
+PR #1135 changed:
+- `src/studio-ui/primitives/studio-split-text-input.css`
+- `src/styles/subtoolbox-system.css`
+- `src/styles/studio-control-system.css`
+- `src/styles/studio-control-distill-overrides.css`
+- `src/components/studio-hub/studio-hub-primitive-catalogs.css`
+- `src/studio-ui/primitives/StudioSliderCenterStyleContract.test.ts`
+
+PR #1140 changed:
+- `src/styles/studio-control-system.css`
+- `src/styles/subtoolbox-system.css`
+- `src/components/studio-hub/studio-hub-primitive-catalogs.css`
+- `src/studio-ui/primitives/StudioSliderCenterStyleContract.test.ts`
+
+### Verification and delivery boundaries
+
+- GitHub PR metadata confirms #1135 and #1140 are merged into the requested integration branch.
+- Both PR heads reported three Vercel statuses failing at the account build-rate-limit URL. These are deployment-provider rate-limit failures, not evidence of a source-code test failure.
+- Local Vitest, typecheck, production build, browser/computed-style inspection and Render deployment were NOT run or verified in this work session.
+- Merge proves delivery to the target branch; it does not prove rendered appearance, complete family integration or acceptance behavior.
+
+### Remaining actions
+
+1. Run the focused `StudioSliderCenterStyleContract.test.ts` and related Studio controls tests on the current target.
+2. Run the repository's relevant source-governance, typecheck and production-build gates; record exact commit/run evidence.
+3. Inspect computed styles and rendered slider centers/handles in desktop and mobile layouts. Confirm global fill defaults, secondary two-tone bar, and inherited radius at every production/catalog/SubToolbox surface.
+4. Continue the outstanding Confirmed Primitive Library representative-grid, upload-frame and dropdown visual checks from this handoff's earlier sections.
+5. Complete the full paginated open/closed-unmerged PR audit and hunk-level Round 2 reconciliation. Do not mark the overall handoff fully reconciled until those items have explicit dispositions.
+
+**Continuation work-log ID:** `REC-20261030-chatgpt-002`
+
+**Documentation delivery:** [PR #1227](https://github.com/viewtube-dev/viewtube/pull/1227) is OPEN against `master/consolidated-feature-integration`; the handoff addendum and recovery receipts are proposed but not yet merged. GitHub Actions release-gates run #5703 is in progress. The three Vercel statuses are rate-limit failures; they do not establish a source-code failure.
