@@ -52,6 +52,7 @@ afterEach(async () => {
  root = null
  container?.remove()
  container = null
+ vi.unstubAllGlobals()
 })
 
 describe("Gemini key validation runtime", () => {
@@ -89,4 +90,46 @@ describe("Gemini key validation runtime", () => {
   expect(exposed?.validationError).toMatch(message)
   expect(JSON.stringify(reportDiagnostic.mock.calls)).not.toContain("saved-despite-verification-key")
  })
+
+ it("does not expose an unvalidated credential setter to provider consumers", async () => {
+  listSuccess()
+  await mount()
+  expect(exposed).not.toHaveProperty("setApiKey")
+  expect(exposed).toHaveProperty("validateAndSaveKey")
+ })
+
+
+ it("does not report a key as saved when browser storage rejects persistence", async () => {
+  listSuccess()
+  vi.stubGlobal("localStorage", {
+   getItem: () => null,
+   setItem: () => { throw new Error("storage disabled") },
+   removeItem: () => { throw new Error("storage disabled") },
+  })
+  await mount()
+  let result = true
+  await act(async () => { result = await exposed!.validateAndSaveKey("valid-but-not-persistable") })
+  expect(result).toBe(false)
+  expect(exposed?.apiKey).toBeNull()
+  expect(exposed?.validationError).toMatch(/browser storage is unavailable/i)
+  expect(getVaultKey("gemini")).toBe("")
+ })
+
+
+ it("does not treat degraded provider verification as a successful save when storage is blocked", async () => {
+  listModels.mockRejectedValue(Object.assign(new Error("Service unavailable"), { status: 503 }))
+  vi.stubGlobal("localStorage", {
+   getItem: () => null,
+   setItem: () => { throw new Error("storage disabled") },
+   removeItem: () => { throw new Error("storage disabled") },
+  })
+  await mount()
+  let result = true
+  await act(async () => { result = await exposed!.validateAndSaveKey("degraded-but-not-persistable") })
+  expect(result).toBe(false)
+  expect(exposed?.apiKey).toBeNull()
+  expect(exposed?.validationError).toMatch(/browser storage is unavailable/i)
+  expect(getVaultKey("gemini")).toBe("")
+ })
+
 })

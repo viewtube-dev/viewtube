@@ -11,7 +11,6 @@ import { classifyGeminiKeyValidationError } from './geminiKeyValidation';
 
 interface GeminiKeyContextType {
   apiKey: string | null;
-  setApiKey: (key: string) => void;
   clearApiKey: () => void;
   isValidating: boolean;
   validateAndSaveKey: (key: string) => Promise<boolean>;
@@ -33,9 +32,32 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, []);
 
-  const setApiKey = (key: string) => {
+  const setApiKey = (key: string): boolean => {
     setVaultKey('gemini', key);
+    if (getVaultKey('gemini') !== key) {
+      reportDiagnostic({
+        area: "brain-gemini",
+        event: "api_key_storage_unavailable",
+        level: "error",
+        whatHappened: "The Gemini API key could not be persisted in browser storage.",
+        whatItMeans: "The current browser cannot retain the credential for Gemini consumers after this validation flow.",
+        whatToCheck: ["Enable site storage for ViewTube and try saving the key again."],
+        details: {
+          source: "gemini-key-settings",
+          subsystem: "brain",
+          kind: "api_key_storage",
+          status: "blocked",
+          expected: "The Gemini key can be read back from the shared key vault",
+          actual: "Browser storage did not retain the supplied key",
+          recommendedActions: ["Enable site storage for ViewTube and try saving the key again."],
+          confidence: "confirmed",
+          privacy: "sanitized",
+        },
+      });
+      return false;
+    }
     setApiKeyState(key);
+    return true;
   };
 
   const clearApiKey = () => {
@@ -84,7 +106,11 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         // Do not make the key save depend on one model's generation availability.
       }
 
-      setApiKey(trimmedKey);
+      if (!setApiKey(trimmedKey)) {
+        setValidationError('Gemini API key could not be saved because browser storage is unavailable or blocked. Enable site storage and try again.');
+        setIsValidating(false);
+        return false;
+      }
       setIsValidating(false);
       reportDiagnostic({
         area: "brain-gemini",
@@ -138,7 +164,11 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         });
         return false;
       }
-      setApiKey(trimmedKey);
+      if (!setApiKey(trimmedKey)) {
+        setValidationError('Gemini API key could not be saved because browser storage is unavailable or blocked. Enable site storage and try again.');
+        setIsValidating(false);
+        return false;
+      }
       const permissionDenied = failureClass === "permission_denied";
       const rateLimited = failureClass === "rate_limited";
       const providerUnavailable = failureClass === "provider_unavailable";
@@ -193,7 +223,6 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   return (
     <GeminiKeyContext.Provider value={{
       apiKey,
-      setApiKey,
       clearApiKey,
       isValidating,
       validateAndSaveKey,
