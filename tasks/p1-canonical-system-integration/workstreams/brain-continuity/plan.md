@@ -3,13 +3,13 @@
 **Production Date:** 2026-10-29  
 **Last Edited:** 2026-10-29  
 **Class:** PROGRAM  
-**Status:** ACTIVE — PHASE 0 SOURCE TRACE COMPLETE; RUNTIME CERTIFICATION OPEN  
+**Status:** ACTIVE — PHASE 1 IDENTITY MAP COMPLETE; RUNTIME CERTIFICATION AND PHASES 2–6 OPEN  
 **Concern:** brain continuity  
 **Owner:** BrainRuntime + Creator Context + Evidence/Analytics + Projects/ContentBuild + Outcomes/Learning  
 **Registry ID:** DOC-PLAN-P1-BRAINCONTINUITY  
 **Last Audited Main SHA:** 61cfb726db9b32de53b9c89a5a339db696782a11  
 **Capabilities:** CAP-BRAIN-EXPERIENCE, CAP-CREATOR-CONTEXT, CAP-EVIDENCE-INTELLIGENCE, CAP-PROJECT-CONTENT-IDENTITY, CAP-OUTCOME-LEARNING
-**Status:** PHASE 0 PARTIAL — SOURCE TRACE DOCUMENTED; BROWSER JOURNEY UNVERIFIED | **Owner:** BrainRuntime + Creator Context + Evidence/Analytics + Projects/ContentBuild + Outcomes/Learning
+**Status:** PHASE 0 PARTIAL / PHASE 1 SOURCE MAP COMPLETE — BROWSER JOURNEY UNVERIFIED | **Owner:** BrainRuntime + Creator Context + Evidence/Analytics + Projects/ContentBuild + Outcomes/Learning
 **Capabilities:** CAP-BRAIN-EXPERIENCE, CAP-CREATOR-CONTEXT, CAP-EVIDENCE-INTELLIGENCE, CAP-PROJECT-CONTENT-IDENTITY, CAP-OUTCOME-LEARNING
 
 ## Objective
@@ -129,3 +129,48 @@ The remaining Phase 0 gate is a browser-visible, sanitized journey with one real
 7. inspect the resulting ancestry and verify missing/unverified stages are explicit.
 
 No source code or tests were changed/run as part of this discovery checkpoint. No data store, bridge or legacy path is approved for removal. The next implementation work must close the identified identity/durability/coverage gaps using existing owners and must not create a parallel continuity database or event ledger.
+
+
+## Phase advancement — 2026-10-29
+
+**Phase 1 — identity map: SOURCE MAPPING COMPLETE; producer/runtime certification OPEN.**
+
+The identity inventory above is now the canonical field map for this workstream. The following rules are binding for implementation and diagnostics:
+
+| Identity | Canonical rule | Required proof |
+| --- | --- | --- |
+| Channel scope | Every channel-owned record must retain the exact channelId; a missing channel is not a wildcard. | Cross-channel isolation test at resolver, trace, outcome and event boundaries. |
+| Profile / knowledge | Keep owner record IDs and confirmed/inferred state where the source exposes them; do not synthesize a stable profile ID from channelId or loadedAt. | Context-pack and trace snapshots identify the exact source records and confidence/confirmation semantics. |
+| Evidence | Preserve EvidenceRecord.id plus provenance.evidenceIds; prompt evidence means records actually rendered, not merely retrieved. | Exact prompt-to-trace evidence-set comparison, including stale, missing and unverified markers. |
+| Project / ContentBuild | Carry projectId and contentBuildId independently; validate their relationship and revision at each write boundary. | Wrong-project and stale-revision rejection tests. |
+| Operation / workflow | operationId is the primary cross-system operation join; workflowId groups a multi-step workflow. ActionPacket/request/receipt IDs remain typed source identities, not substitutes. | Same operationId/workflowId survives reasoning, handoff, receipt, outcome and evaluation where applicable. |
+| Events | eventId is unique within its owning ledger; parentEventIds express causality across ledgers only when the referenced parent is explicit and resolvable. | Missing-parent, duplicate-ID, cycle and cross-ledger ancestry tests. |
+| Receipt / outcome / checkpoint | Keep receiptId, outcomeId and checkpoint IDs as separate immutable references; never infer them from time or project membership. | Idempotent retry and exact outcome-to-checkpoint lineage tests. |
+
+**Phase 2 — freshness, provenance, scope and semantic-state verification: PARTIAL (static contract review only).**
+
+Source confirms a canonical analytics snapshot, typed evidence records, exact channel checks in the evidence resolver, and capture of records actually rendered to the prompt. It does not yet prove, in a production session, that:
+- the same evidence IDs and source IDs survive context-pack → model input → trace → action → outcome;
+- freshness and missingness are preserved without converting missing values to zero;
+- confirmed facts remain distinguishable from inferred hypotheses at every downstream consumer;
+- conflicting or stale records remain visible in creator-facing diagnostics;
+- resolver failures are distinguishable from legitimately empty context.
+
+**Phase 3 — interaction attribution: NOT STARTED.** No producer inventory or runtime proof has yet established complete channel/project/operation attribution for instructions, corrections, preferences, approvals, rejections and observations. Preserve the existing consent/redaction rules in BrainCommunicationIngestion and route profile/knowledge changes only through the existing governed promotion path.
+
+**Phase 4 — recommendation-to-evaluation joins: PARTIAL SOURCE SUPPORT; NOT CERTIFIED.** Existing ActionPacket, GenerationRequest, ToolReceipt, BrainOutcomeRecord, publication identity and Algorithm Intelligence event fields provide join material. Runtime snapshot matching is still narrower than the identity contract and must not be repaired with timestamps or project co-membership. Add or extend tests before changing join semantics.
+
+**Phase 5 — representative journey certification: BLOCKED.** Required journeys are success, idempotent retry, and failure/recovery, each with sanitized evidence and exact IDs. The available Browser Use execution service rejected the read-only verification attempt because the project has insufficient credits. No authenticated browser session or real creator/project data was available in this run. No production action was attempted.
+
+**Phase 6 — duplicate-bridge removal: NOT AUTHORIZED.** No caller inventory, parity run, migration proof or rollback evidence has been produced. Keep all existing owners and bridges intact. Do not add a second trace, outcome, profile, evidence or operation store.
+
+### Phase gates and immediate execution order
+
+1. Restore a safe browser-verification environment (or provide an authorized staging session) and complete the Phase 0/5 sanitized end-to-end journey. No production writes.
+2. Build the producer inventory for interaction/outcome events and capture a representative record from each existing owner.
+3. Add failing focused tests for operationId joins, evidence-set continuity, stale/missing/confirmed-vs-inferred semantics, and idempotent retry/failure recovery.
+4. Implement only the smallest changes inside existing canonical owners; register server-backed trace persistence only if an existing authenticated persistence contract is verified. Do not invent a new endpoint or store.
+5. Run the repository's focused test commands from package.json, then the relevant broader suite, typecheck and build; record exact commands and results.
+6. Reconstruct the success/retry/failure chains using the existing lineage diagnostics. Only then consider bridge removal with caller inventory, parity and rollback proof.
+
+**Execution boundary:** Phase 1's field/relationship map is complete as a source-level artifact. Phase 2 is a static review, not a runtime certification. Phases 3–6 remain open. No behavioral code change is claimed, no test is claimed as run, and no data has been changed.
