@@ -180,15 +180,15 @@ No real Gemini API key was used. No live provider availability, quota, unsupport
 The generated `gemini-caller-inventory` artifact reports:
 
 - 73 exported symbols in `src/services/gemini.ts`.
-- 43 exports with production import-and-reference matches; these include non-generation helpers such as configuration, key checks and model selection, so this count is not 43 independent model operations.
-- 29 exports with no static import reference; do not delete them without dynamic/re-export/reachability review.
+- 42 exports with production import-and-reference matches; these include non-generation helpers such as configuration, key checks and model selection, so this count is not 43 independent model operations.
+- 30 exports with no static import reference; do not delete them without dynamic/re-export/reachability review.
 - 66 direct SDK invocation sites, concentrated in `src/services/gemini.ts` plus the explicit SDK model-list validation in `GeminiKeyContext`.
-- Four literal dynamic Gemini imports at the audited SHA: two expected gateway adapter imports and two UI imports (`AskMeWidget` / `TitleRewriterWidget`). The two UI imports were removed in subsequent commits; a fresh exact-head scan is still required to confirm the new count.
+- The run #5469 exact-head audit reports two literal dynamic Gemini imports, both expected gateway adapter imports in `BrainModelGateway`; the AskMeWidget and TitleRewriterWidget UI imports have been removed.
 - 20 model-ID literals and 18 credential-alias references requiring classification.
 
 Active production callers identified by the artifact include ActionableTactics, Channelytics, ResearchLab, Projects, VideoManager, MediaAnalyzer, AlgorithmArchitect, IntelligenceHub, DailyAdviceWidget, dashboard VideoManager/VideoUploader/AIJournal/CollabMatchmaker widgets, EndScreenTool, PreLaunchPriming, HookGenerator, creator-engagement comment response, script architect, project/studio storyboard flows, tag/thumbnail tools, VideoAutopsy and several provider-level Brain orchestration paths. The full per-export path/line list is retained in the workflow artifact rather than duplicated here.
 
-The artifact is from commit `9bd68ab8a657144f80abc71b6384e4ee7c60e1b7`, before the latest VideoPublisher migration. Regenerate it on the current PR head before using it as zero-caller evidence. The static scan remains a reachability lead, not a runtime proof.
+The latest reviewed artifact is from run #5469 at commit `dc36b8961084b303ec8ce9e3c6ea16fd1db423bd`. It remains a static reachability lead, not runtime proof or zero-caller certification.
 
 ## Post-run #5442 caller migrations — 2026-10-30
 
@@ -208,3 +208,12 @@ Together with the earlier VideoPublisher migration, these remove the known activ
 Remaining production call-site families from the run #5442 inventory include analytics/research, project planning, tags, thumbnails, scripts, storyboards, comments, end-screen and social/community operations. Their presence is not proof that every one should use the same pathway: Brain reasoning should use BrainModelGateway; creator assets should use AssetGenerator specialist strategies; media modalities need their existing capability-specific provider path. Each family still needs explicit migration and regression coverage.
 
 Phase 4 remains partial: standalone SeoGenerator and VideoUploader create governed AssetGenerator records and prompt receipts, but exact ContentBuild event/OperationRecord ingestion and retry/cost parity are not yet proven for those flows. No live Gemini key has been used. Do not remove the compatibility map or legacy exports until a fresh exact-head inventory, runtime caller proof and live capability parity support zero-bypass retirement.
+
+
+## Exact-head audit refresh — run #5469
+
+- 73 exports; 42 production-referenced exports; 30 with no static import reference; 66 direct SDK invocation sites; 2 literal dynamic imports; 19 model-ID literals; 18 credential-alias references.
+- Both dynamic imports are the approved provider adapter in `BrainModelGateway`; no UI component dynamically imports `gemini.ts`.
+- The 42 production-referenced exports include non-generation helpers. Remaining production caller families include analytics/research, planning, tags, thumbnails, scripts, storyboards, comments, end-screen, journal/community and media analysis.
+- The audit and artifact upload passed on the exact head. The focused Gemini suite failed three retry-idempotency tests due to reusing the input event key for the output event; a separate `generation-output:v1:` event key namespace has been committed and awaits run #5470.
+- Do not retire provider compatibility paths until all remaining callers are classified/migrated and live capability parity is proven.
