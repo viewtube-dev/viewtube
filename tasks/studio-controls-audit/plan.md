@@ -320,3 +320,32 @@ The existing `studio-public-export-catalog-matrix.mjs` reads only `src/studio-ui
 - No tests, typecheck, build, computed-style capture, keyboard test, or responsive browser test were executed. GitHub source reads do not expose local dirty state or provide a runnable checkout.
 
 **Next audit slice:** complete a component-level call-site graph (including the split-text-input secondary catalog, direct imports, lazy/dynamic references and tests), classify every module-only symbol and wrapper, then build the per-family API/variant matrix. Only after that should the existing tests/matrix be reconciled and executed in a real checkout.
+
+
+## Follow-up correction and expanded stepper/dropdown crosswalk — 2026-10-30
+
+**Inspection ref:** current `master/consolidated-feature-integration` (read via GitHub contents API; no local checkout).
+
+This section supersedes any earlier wording in AUD-017/AUD-018 that said `StudioSimpleDropdown`, `StudioInlineStepper`, or `StudioSplitStepper` are absent from the canonical implementation module. That wording was too broad. The current source contains all three implementations in `src/studio-ui/primitives/StudioControls.tsx`:
+
+- `StudioSimpleDropdown` at lines 2258–2276 is a thin wrapper over `StudioDropdown` with `variant="simple"`; it is not a separate menu engine. The active catalog's dropdown family explicitly says simple/split-left wrappers are compatibility/layout variants, not separate menu engines. This is consistent with the prior consolidation direction: represent it as a supported variant of StudioDropdown, not as a separate primitive family. Its standalone public export status remains absent from `src/studio-ui/index.ts`.
+- `StudioInlineStepper` at lines 3207–3255 is implemented in StudioControls. `src/studio-ui/primitives/StudioInlineStepper.tsx` is explicitly marked deprecated and re-exports the canonical implementation from StudioControls. The dedicated `StudioInlineStepper.test.tsx` exercises its standard/compact behavior and token/CSS contracts. The active Confirmed catalog still has no inline-stepper specimen, while `StudioHubConfirmedInlineStepperCatalog.test.tsx` requires one. This is a real implementation-to-library gap and a test/source mismatch, not a missing implementation.
+- `StudioSplitStepper` at lines 3257–3308 is also implemented in StudioControls and is covered by the same dedicated stepper test. The active Confirmed catalog does not import or render it. The current `StudioControls.test.tsx` asserts that the catalog, implementation, and public barrel all register it; the implementation assertion is source-true, but catalog and public-barrel assertions are currently unsupported by source. Whether it should be public API is a product/API decision; it should not be inferred solely from a test expectation.
+
+The dropdown catalog already contains a canonical `StudioDropdown` family and documents compatibility/layout wrappers; the main catalog also has split-left specimens. Therefore the right remediation is to reconcile obsolete/over-specific tests and provenance against the one canonical dropdown family, not add a duplicate SimpleDropdown representative. Do not delete the compatibility wrapper until all direct imports and external consumer compatibility are traced.
+
+### AUD-021 — Stepper implementation exists but active Confirmed catalog is missing its specimens (P1)
+
+Both stepper variants are real canonical StudioControls implementations with dedicated behavior/CSS tests. The active Confirmed catalog imports neither and has no `data-vt-library-component` entry for either. The InlineStepper catalog test expects standard and compact specimens, but the catalog source currently lacks them. Add both stepper variants to the Controls category in the approved implementation phase, with a single family/provenance record and clearly labelled standard/compact and split anatomy examples. Confirm the actual supported tier subsets from prop types before authoring specimens. Decide public API exposure for SplitStepper and InlineStepper separately; preserve the deprecated InlineStepper compatibility entry point unless a consumer scan proves it safe to remove.
+
+### AUD-022 — Dropdown compatibility wrapper is still present but is not a distinct family (P2)
+
+`StudioSimpleDropdown` remains exported from the implementation module as a wrapper over `StudioDropdown`, but is not exported from the public barrel and is not represented as a separate canonical catalog family. The active catalog already describes simple/split-left wrappers as compatibility/layout variants. Align the focused test with this one-family contract; document whether the wrapper is internal compatibility or should be deprecated/removed after import tracing. Do not create a separate SimpleDropdown specimen that duplicates the canonical dropdown engine.
+
+### Active library route clarification
+
+`ToolboxUIReferenceLibrary.tsx` imports and mounts the nested Confirmed Primitive Catalog and the separate Confirmed Split Text Input Catalog together inside the Confirmed track. It also imports the Complete, Migration, and Production Button catalogs for the other two tracks. The three-track shell is therefore a comparison/migration surface, not a single-catalog route. The root-level `src/components/StudioHubConfirmedPrimitiveCatalog.tsx` remains a duplicate/stale candidate, but this inspection has not established its complete call-site graph; retain it until a full repository search is available.
+
+### Test and verification boundary
+
+The package script includes the dedicated InlineStepper behavior test, the InlineStepper catalog test, and StudioControls catalog assertions. Source inspection confirms the mismatch locations but does not establish which test fails first or the exact runtime output. No test, build, typecheck, browser, or computed-style run occurred.
