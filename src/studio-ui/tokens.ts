@@ -205,6 +205,8 @@ export const STUDIO_STEPPER_BUTTON_TOKENS = {
 
 export const STUDIO_COUNTER_NUMBER_TOKENS = {
   valueAreaAspectRatio: 2,
+  doubleSplitRailCount: 2,
+  sideRailCount: 1,
   defaultWhiteMixPercent: STUDIO_FOCUS_INTERACTION_TOKENS.restTextMixPercent,
   defaultStrokeColor: "same as default fill" as const,
   activeTextColor: STUDIO_FOCUS_INTERACTION_TOKENS.activeTextColor,
