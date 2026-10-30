@@ -7,6 +7,7 @@ import {
  shouldBrainLearnFromInteraction,
 } from "./BrainUserControls"
 import { buildToolChannelProfileContext } from "./ChannelProfileAdapter"
+import { defaultBrainModelGateway } from "./runtime/BrainModelGateway"
 
 // Statically importing "../gemini" here dragged @google/genai into the entry
 // chunk (~50 kB gzip) and forced every route to preload the Gemini SDK before
@@ -183,23 +184,16 @@ const runReflection = async (): Promise<void> => {
  `
 
  try {
-  // Dynamic import defers the ~50 kB Gemini SDK plus the ~30 kB gemini module
-  // until an actual reflection is triggered. Users who never reflect (fresh
-  // session, no analytics activity, no key) never download it.
-  const { getAiClient, getActiveModel, executeWithRetry, cleanJsonString } = await import("../gemini")
-  const result = await executeWithRetry(async () => {
-   const ai = getAiClient()
-   const modelId = getActiveModel("analysis")
-   const res = await ai.models.generateContent({
-    model: modelId,
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    config: {
-     responseMimeType: "application/json",
-    }
-   })
-   const text = cleanJsonString(res.text || "")
-   return JSON.parse(text)
+  // The gateway keeps Brain orchestration provider-neutral while its
+  // compatibility provider dynamically loads Gemini only when generation runs.
+  const result = await defaultBrainModelGateway.generateJsonObject?.({
+   userText: prompt,
+   systemInstruction: "Follow the user message instructions and return only the requested JSON object.",
+   capability: "analysis",
   })
+  if (!result || typeof result !== "object" || Array.isArray(result)) {
+   throw new Error("The Brain reflection model returned an invalid JSON object")
+  }
 
   const newSchema = { 
    ...schema, 
