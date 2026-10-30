@@ -8,6 +8,7 @@ const controls = read("src/studio-ui/primitives/StudioControls.tsx");
 const generated = read("src/styles/studio-control-vars.generated.css");
 const system = read("src/styles/studio-control-system.css");
 const fields = read("src/styles/studio-control-fields.css");
+const standaloneInputCss = read("src/styles/studio-text-input.css");
 const splitInput = read("src/studio-ui/primitives/StudioSplitTextInput.tsx");
 const splitInputCss = read("src/styles/studio-split-text-input.css");
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
@@ -41,7 +42,7 @@ test("component-level size documentation agrees with canonical Supreme and Mini 
 
 test("editable inputs and textareas switch text fill and glyph stroke together on focus", () => {
   const start = fields.indexOf("Focused entered text is black");
-  const end = fields.indexOf("\\n}\\n", start);
+  const end = fields.indexOf("\n}\n", start);
   assert.ok(start >= 0 && end > start, "shared editable-field focus rule must exist");
   const focusRule = fields.slice(start, end);
   assert.ok(focusRule.includes("color: #000;"));
@@ -49,7 +50,11 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
   assert.ok(focusRule.includes("-webkit-text-stroke-color: #000;"));
   assert.ok(fields.includes("-webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out"));
   assert.ok(fields.includes("color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out"));
+  assert.ok(fields.includes('[data-size="mini"]'));
+  assert.ok(fields.includes("--vt-studio-textarea-mini-font-size, 17.5px"));
   assert.ok(system.includes("--vt-field-text-stroke-focus: #000;"));
+  assert.ok(standaloneInputCss.includes("-webkit-text-stroke-color: #000;"));
+  assert.ok(!standaloneInputCss.includes("-webkit-text-stroke-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));"));
 });
 
 test("split text input accepts every canonical size supported by its production badge foundation", () => {
