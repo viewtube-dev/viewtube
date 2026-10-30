@@ -337,11 +337,16 @@
       "targetBranch": "master/consolidated-feature-integration",
       "pullRequest": 1226,
       "openedHeadSha": "f08758b5be25396ed62147a9d12bf2620b330862",
-      "currentHeadSha": "a7433eef3e01d1e18dd46d96097f6ae0b4ddf547",
+      "currentHeadSha": "8486653b1d851abd165dee7f314e6164515e4163",
       "commitsAfterPrOpen": [
         "2dce7c0f8e53a5ff49ca7e3291b38894d84f88ca",
         "da912ee79d0eb92a8489754f2d37fb5db33b7d9c",
-        "a7433eef3e01d1e18dd46d96097f6ae0b4ddf547"
+        "a7433eef3e01d1e18dd46d96097f6ae0b4ddf547",
+        "0e3b3f8f2e9d4be1695e29f4d5c3c7cc8160c2bf",
+        "a737925a6228d7a81f542dfb513fc86f4ceb4c84",
+        "b919a455fecb548ab1e68e777abbea1dfa024606",
+        "5156a3527ac5a564dc37bb5b967f9221663cb330",
+        "8486653b1d851abd165dee7f314e6164515e4163"
       ],
       "postPrChangedPaths": [
         "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/handoff.md",
@@ -355,7 +360,7 @@
       "evidenceRefs": [
         "https://github.com/viewtube-dev/viewtube/pull/1226"
       ],
-      "notes": "PR #1226 was opened at f08758b5be25396ed62147a9d12bf2620b330862. Three follow-up commits update the three package files; GitHub compare reports 3 ahead, 0 behind. PR remains open; target delivery is not yet established."
+      "notes": "PR #1226 opened at f08758b5be25396ed62147a9d12bf2620b330862. Eight post-open receipt commits have been observed through the latest handoff/review update; compare reports 8 ahead, 0 behind. This worklog refresh is itself the final receipt commit and is not self-referenced; use live PR metadata for the current tip."
     }
   ],
   "integrationGaps": [
