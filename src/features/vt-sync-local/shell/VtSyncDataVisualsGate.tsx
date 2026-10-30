@@ -62,7 +62,10 @@ export const VtSyncDataVisualsGate: React.FC<{ snapshot: VtSyncSnapshot }> = ({ 
     if (cancelled) return
     const withApiRows = mergeVtSyncPersistedApiRowsIntoSnapshot(snapshot, persistedApiRows)
     const withAllRows = mergeVtSyncManualImportsIntoSnapshot(withApiRows, manualImports)
-    if (hasSnapshotData(withAllRows) || !hasSnapshotData(snapshot)) setTableSnapshot(withAllRows)
+    // Prefer the richer snapshot. Never replace a live import-backed snapshot
+    // (including session imports with no channel) with an empty hydration result.
+    if (hasSnapshotData(withAllRows)) setTableSnapshot(withAllRows)
+    else if (!hasSnapshotData(snapshot)) setTableSnapshot(withAllRows)
    } catch {
     if (!cancelled) setTableSnapshot(snapshot)
    }
