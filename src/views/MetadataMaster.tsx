@@ -242,7 +242,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
 
       const generationOperationId = "metadata-generation-" + Date.now()
       const suppliedHandle = channelHandle.trim()
-      const channelId = workspaceContext?.build.channelId || brain.channelId || (suppliedHandle ? "public-channel:" + suppliedHandle.toLowerCase() : "")
+      const channelId = workspaceContext?.build.channelId || (brain as any)?.channelId || (suppliedHandle ? "public-channel:" + suppliedHandle.toLowerCase() : "")
       if (!channelId) throw new Error("Connect a channel or enter its public handle before generating governed metadata.")
       const generatedAsset = await generateVideoPublisherSeoPackage({
         context: { channelId, channelName: suppliedHandle || undefined },
