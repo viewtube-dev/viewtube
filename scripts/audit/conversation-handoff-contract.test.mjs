@@ -100,3 +100,28 @@ test("originating conversation package records PR 1170 and its actual delivery b
   assert.match(review, /test:document-system/);
   assert.match(review, /audit:documents/);
 });
+
+test("originating worklog records truthful statuses, document links and all nine maturity axes", () => {
+  const worklog = JSON.parse(fs.readFileSync(new URL("worklog.json", intakeRoot), "utf8"));
+  const instructionStatuses = schema.$defs.instruction.properties.status.enum;
+  const deliveryStates = schema.$defs.instruction.properties.deliveryState.enum;
+  const branchClassifications = schema.$defs.branchPrReconciliation.properties.classification.enum;
+  const axes = [
+    "architecture",
+    "backend",
+    "frontend",
+    "integration",
+    "tests",
+    "runtime",
+    "responsive",
+    "documentation",
+    "release",
+  ];
+
+  assert.ok(worklog.executiveSummary.length <= 10);
+  assert.ok(worklog.instructions.every((entry) => instructionStatuses.includes(entry.status)));
+  assert.ok(worklog.instructions.every((entry) => deliveryStates.includes(entry.deliveryState)));
+  assert.ok(worklog.documents.every((entry) => entry.title && entry.path && entry.url));
+  assert.ok(worklog.branchPrReconciliation.every((entry) => branchClassifications.includes(entry.classification)));
+  assert.ok(worklog.integrationGaps.every((entry) => axes.every((axis) => entry.maturity[axis])));
+});
