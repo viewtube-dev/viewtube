@@ -7186,6 +7186,9 @@ button[data-vt-studio-button="true"][data-vt-studio-split][aria-pressed="true"] 
 }
 
 /* Play/Pause uses the same selected palette swap: secondary label face, primary rail. */
+button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-b));
+}
 button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-split-label] {
   background: var(--vt-studio-control-secondary, var(--pair-b));
 }
