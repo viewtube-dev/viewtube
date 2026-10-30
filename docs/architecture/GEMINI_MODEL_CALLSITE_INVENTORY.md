@@ -276,3 +276,10 @@ The following legacy production caller exports are no longer referenced by produ
 Run #5506 passed the Gemini governance job, production build, local smoke, Brain quality loop and conversation-handoff contract. It still reported independent failures in repository typecheck, Studio confirmed-catalog audit and the focused PublishTransaction test. The missing test import was fixed after that exact-head run; do not treat the repair as verified until CI reruns.
 
 This inventory is a snapshot, not zero-caller proof. Analytics, planning, thumbnail/image/video generation, script, storyboard, end-screen, media analysis/transcription, speech and other active production references still require owner/boundary classification and migration before compatibility retirement.
+
+
+## Script Architect boundary update — 2026-10-30
+
+`generateScript` remains a production-referenced export because Script Architect owns a domain-specific prompt and normalization contract. Its only production caller supplies the existing `runBrainJsonTask` callback through BrainRuntime. The optional direct `getAiClient().models.generateContent` fallback has now been removed; the callback is required and failures propagate through the governed path. A focused gateway-boundary test was added to the Gemini governance CI job.
+
+The current exact-head inventory counts above predate this change. A new artifact is required to refresh the direct SDK invocation count and confirm the caller audit on the new head. Do not interpret the prior count as current after this commit.
