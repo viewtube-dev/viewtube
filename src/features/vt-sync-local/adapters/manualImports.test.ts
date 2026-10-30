@@ -43,7 +43,9 @@ describe("VT-SYNC manual imports snapshot merge", () => {
   ]
 
   expect(toVtSyncManualImportState(records, "channel-a").rowsByTableId.videos).toEqual([{ id: "video-a" }])
-  expect(toVtSyncManualImportState(records, null)).toEqual(emptyImports())
+  // No channel connected: only unscoped (session) imports hydrate so DATA VISUALS
+  // can activate from CSV/JSON without login. Channel-scoped rows stay filtered out.
+  expect(toVtSyncManualImportState(records, null).rowsByTableId.videos).toEqual([{ id: "unscoped" }])
  })
 
  it("maps toolbox table ids to the primary snapshot key from the registry", () => {
