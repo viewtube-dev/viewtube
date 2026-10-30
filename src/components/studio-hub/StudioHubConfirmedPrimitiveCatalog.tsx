@@ -70,6 +70,7 @@ import {
   StudioSelect,
   StudioSearchInput,
 } from "../../studio-ui/primitives/StudioControls"
+import { StudioDoubleSplitWordCounter } from "../../studio-ui/primitives/StudioValueToggles"
 import { StudioChatActionGroup } from "../../studio-ui/primitives/StudioChatActionGroup"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
 import { StudioCalendarEventChip, StudioCalendarMediaRail } from "../../studio-ui/primitives/StudioCalendarPrimitives"
@@ -642,6 +643,29 @@ const ConfirmedStudioLeftWordCounterFamily: React.FC = () => {
   )
 }
 
+
+const ConfirmedStudioDoubleSplitWordCounterFamily: React.FC = () => {
+  const [values, setValues] = React.useState([1, 2, 3, 4, 1])
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  return (
+    <Family
+      title="StudioDoubleSplitWordCounter · Two Chevron Rails + Four-State Word Cycle"
+      nonDefaultSettings={[
+        "Both square rails step the same four-state word sequence; the left rail moves backward and the right rail moves forward.",
+        "Both rails use the same token-backed chevron button styling, click animation, and secondary focus outline as StudioCounter and StudioBarToggle.",
+        "Available in Supreme, Standard, Compact, Mini, and Micro sizes.",
+      ]}
+      provenance={<Provenance primitive="StudioDoubleSplitWordCounter" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="Shared Studio stepper button tokens · double-split 1:2:1 geometry · four-state word cycle." imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/studio-ui/tokens.ts"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioDoubleSplitWordCounter">
+        <div className="vt-confirmed-counter-size-rows">
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]}</small><div className="vt-confirmed-counter-pair"><StudioDoubleSplitWordCounter size={size} value={values[index]} onValueChange={value => setValues(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))} ariaLabel={`${size} double-split word counter`} /></div></div>)}
+        </div>
+      </div>
+    </Family>
+  )
+}
+
 const ConfirmedStudioLeftWordSliderFamily: React.FC = () => {
   const [values, setValues] = React.useState([1, 2, 3, 4, 1])
   const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
@@ -847,6 +871,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     || componentName === "ConfirmedStudioDoubleSplitSliderFamily"
     || componentName === "ConfirmedStudioSideCounterFamily"
     || componentName === "ConfirmedStudioLeftWordCounterFamily"
+    || componentName === "ConfirmedStudioDoubleSplitWordCounterFamily"
     || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Counters & Sliders"
   if (/Dropdown/.test(title) || componentName === "ConfirmedStudioDropdownFamily") return "Dropdowns"
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton/.test(title)
@@ -1640,6 +1665,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioLeftWordCounterFamily />
+    <ConfirmedStudioDoubleSplitWordCounterFamily />
     <ConfirmedStudioLeftWordSliderFamily />
     <Family
       title="Split Accordion · Train Motion"
