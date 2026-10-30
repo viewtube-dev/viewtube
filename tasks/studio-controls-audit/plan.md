@@ -63,6 +63,26 @@ This is a continuation audit, not a restart. The target branch already contains 
 
 **Continuation rule:** Phase 1 refresh should close only the remaining file/import/consumer classification gaps. Reuse the existing Phase 0–6 audit, test suite, and P1 checklist as prior art. Do not create a second registry, duplicate inventory generator, or competing task-status ledger.
 
+## Phase 1 interim findings — 2026-10-30
+
+The following are evidence-backed source findings, not yet runtime-certified defects. Keep their status open until import/reachability and browser verification are complete.
+
+| ID | Finding | Initial priority | Evidence / next check |
+|---|---|---|---|
+| AUD-011 | A second root-level `src/components/StudioHubConfirmedPrimitiveCatalog.tsx` (165,587 bytes) coexists with the active nested catalog (184,924 bytes). Both define a full catalog component with the same exported name. | P1 candidate | `StudioHub.tsx` mounts `ToolboxUIReferenceLibrary`, which imports the nested file. Trace all direct/dynamic imports and tests of the root-level file before classifying it as dead or compatibility-only. |
+| AUD-012 | Split Text Input has two distinct same-purpose stylesheets: `src/studio-ui/primitives/studio-split-text-input.css` (6,393 bytes) and `src/styles/studio-split-text-input.css` (5,347 bytes). The primitive imports the former; the global control entry imports the latter. Their selector sets overlap and declarations differ. | P1 | Compare exact selector/property winners and determine whether both are required; test one source owner without breaking split-left/right/double behavior. No deletion before consumer and visual proof. |
+| AUD-013 | The authoring guide is stale against the current hierarchy/tokens and dedicated primitive modules. It specifies Standard 32px and Compact 14px typography while current tokens specify 38px and 24px; it says all new visual rules belong in `studio-control-system.css`, while current dedicated modules import family stylesheets. | P2 | Reconcile the complete guide with actual module/style ownership and the three current Studio authorities before editing. |
+| AUD-014 | The active catalog classifier ends with `return "Compositions"` for unrecognized valid elements. The source-of-truth contract says an unrecognized primitive must not silently fall back to Compositions. | P1 candidate | Verify every current child is classified intentionally; add an explicit unknown-family failure path and a regression test if no product exception exists. |
+| AUD-015 | `scripts/audit/confirmed-catalog-coverage.mjs` checks for the literal strings `Unclassified family` and `Add an explicit category rule`, but neither appears in the current active catalog source. The script is not wired into the current package scripts shown on this branch. | P2 | Determine whether this is obsolete audit tooling or a broken guard; either repair and register it or retire it through the repository's no-loss process. |
+| AUD-016 | The public export matrix checks presence, not one canonical specimen or variant completeness. Current source scan finds 70/70 public Studio value exports with at least one direct catalog match, but 396 JSX tag occurrences; only 20 exports occur once and 50 occur multiple times. | P1 | Distinguish canonical representative from additional variant/state specimens; map every repeated occurrence to a supported prop/API difference and ensure no duplicate independent family is implied. |
+
+### Additional source ownership observations
+
+- `src/studio-ui/index.ts` imports `studio-control-entry.css`, `studio-led-badge-tab.css`, and `studio-chat-composer-dock.css`.
+- `StudioTextInput.tsx` also imports `studio-control-entry.css` and its dedicated `studio-text-input.css`; `StudioChatComposerDock.tsx` imports its dedicated stylesheet which is also imported by the barrel. Verify whether repeated CSS imports are intentional and how the bundler deduplicates them.
+- Standalone family modules correctly own some dedicated CSS (`StudioSplitAccordion`, `StudioInterModule`, `StudioResponseMetaRow`, `StudioChatResponseShell`, `StudioPublishingCard`, and calendar primitives). The authoring guide must reflect this actual pattern rather than imposing a single giant stylesheet as the only allowed owner.
+- The 70/70 export presence result is a source-level match. It does not certify runtime rendering, correct category, supported variants, default settings, accessibility, or visual correctness.
+
 ## Audit dimensions
 
 1. **Repository and ownership:** target ref/commit, dirty state, instructions, app entry points, active catalog, style import graph, ownership of each file.
