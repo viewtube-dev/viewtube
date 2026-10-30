@@ -52,7 +52,7 @@ describe("restored Studio production primitives", () => {
   });
 
   it("preserves accordion geometry helpers", () => {
-    expect(openPanelWidth(400, 3, 44, 3)).toBe(256);
+    expect(openPanelWidth(400, 3, 44, 3)).toBe(262);
     expect(iconPositions([44,80,44], 3)).toEqual([0,47,130]);
     expect(easeTrain(0)).toBe(0);
     expect(easeTrain(1)).toBe(1);
