@@ -12,21 +12,6 @@ export const StudioNumberInput = React.forwardRef<
 ));
 StudioNumberInput.displayName = "StudioNumberInput";
 
-export const StudioSearchInput = React.forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", type = "search", placeholder = "TYPE HERE", ...props }, ref) => (
-  <input ref={ref} type={type} autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder={placeholder} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioSearchInput.displayName = "StudioSearchInput"
-
-export const StudioSelect = React.forwardRef<
-  HTMLSelectElement,
-  React.SelectHTMLAttributes<HTMLSelectElement> & { sizeVariant?: StudioControlSize }
->(({ sizeVariant = "standard", ...props }, ref) => (
-  <select ref={ref} {...props} {...withStudioAttrs(sizeVariant)} />
-))
-StudioSelect.displayName = "StudioSelect"
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
 import { Bell, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Heart, Image as ImageIcon, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
