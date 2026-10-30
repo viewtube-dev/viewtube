@@ -2,7 +2,7 @@
 
 **Status:** Implementation in progress; validation pending  
 **Priority:** P1  
-**Destination:** Existing Brain Hub; exact route to verify
+**Destination:** Existing Brain Hub at `/ai-brain?tab=evidence`
 
 ## 1. Creator outcome
 Help creators inspect exactly what evidence powers Brain answers: available and missing datasets, freshness, scope, provenance, limitations and turn-specific records.
