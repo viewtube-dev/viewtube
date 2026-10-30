@@ -500,6 +500,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <CanonicalControlFamilies />
     <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
     <Family title="Button"  provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <SizeMatrix label="Button size examples"
+        standard={<StudioButton sizeVariant="standard">BUTTON</StudioButton>}
+        compact={[0,1].map(i => compact(<StudioButton sizeVariant="compact">BUTTON</StudioButton>, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioButton sizeVariant="micro">BUTTON</StudioButton>, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · default</span><StudioButton sizeVariant="standard">button</StudioButton></div>
       <div className="vt-confirmed-variant"><span>28px compact · default</span><StudioButton sizeVariant="compact">button</StudioButton></div><div className="vt-confirmed-variant"><span>28px compact · neutral tone</span><StudioButton sizeVariant="compact" tone="neutral">button</StudioButton></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · selected</span><StudioButton selected sizeVariant="standard">button</StudioButton></div>
@@ -515,6 +519,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "V1–V4 skins change fill and icon color only.",
         "All icon presets and interaction effects live in this single family; success styling must follow a real successful operation.",
       ]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; all icon presets and opt-in interaction effects; no default shell shadow or motion." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
+      <SizeMatrix label="Square icon button size examples"
+        standard={<StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Standard square icon button" variant="v1" sizeVariant="standard" />}
+        compact={[0,1].map(i => compact(<StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label={"Compact square icon button "+(i+1)} variant="v1" sizeVariant="compact" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label={"Micro square icon button "+(i+1)} variant="v1" sizeVariant="micro" />, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row vt-confirmed-square-variant-row">
         <span>44px standard · variants 1–4</span>
         <div className="vt-confirmed-square-variant-grid">
