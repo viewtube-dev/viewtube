@@ -105,33 +105,33 @@ const VERTICAL_WORD_TOGGLE_VARIANTS = [
   { variant: "white-fill" as const, label: "WHITE FILL" },
 ]
 const CanonicalControlFamilies: React.FC = () => {
-  const [switches, setSwitches] = React.useState<boolean[]>(Array(8).fill(false))
-  const [choices, setChoices] = React.useState<boolean[]>(Array(12).fill(false))
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const [switches, setSwitches] = React.useState<boolean[]>(Array(40).fill(false))
+  const [choices, setChoices] = React.useState<boolean[]>(Array(60).fill(false))
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
     <Family title="Switches, Radios & Checkboxes" nonDefaultSettings={[
-        "Family organization only; no visual exception from the canonical control defaults.",
-        "Each example has its own checked state; labels are supplied through the native accessible-name contract.",
-        "Vertical word toggles size to their longest word plus original horizontal padding; the stacked height is content-driven.",
-      ]} provenance={<Provenance primitive="StudioSwitch / StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px tiers for supported switches, radios, and checkboxes." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        "Every supported size tier is shown for both switch shapes, radio, checkmark checkbox, and X-checkbox.",
+        "Each size is paired with all four canonical skins: solid, color-swap, black-indicator, and white-indicator.",
+        "Each example has independent checked state and native accessible-name semantics.",
+      ]} provenance={<Provenance primitive="StudioSwitch / StudioRadio / StudioCheckbox / StudioXCheckbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Supreme / Standard / Compact / Mini / Micro × four canonical skins." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-choice-module">
         <div className="vt-confirmed-choice-names" aria-label="Component names">
           <span>ROUND SWITCH</span><span>RECTANGULAR SWITCH</span><span>RADIO BUTTON</span><span>CHECKMARK CHECKBOX</span><span>X CHECKBOX</span>
         </div>
-        <div className="vt-confirmed-choice-variant-headings" aria-label="Shared palette variants">
-          {CANONICAL_SKINS.map(skin => <span key={skin.skin}>{skin.label}</span>)}
-        </div>
-        <div className="vt-confirmed-choice-examples">
-          {(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-choice-example-row" key={"switch-"+shape} aria-label={shape + " switch examples"}>{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " switch " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div>)}
-          {([{Component:StudioRadio,label:"radio button",shape:"round" as const},{Component:StudioCheckbox,label:"checkmark checkbox",shape:"rect" as const},{Component:StudioXCheckbox,label:"X checkbox",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-choice-example-row" key={item.label} aria-label={item.label + " examples"}>{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div> })}
-        </div>
+        {sizes.map((size, sizeIndex) => <React.Fragment key={size}>
+          <div className="vt-confirmed-choice-variant-headings" aria-label={size + " palette variants"}>
+            <strong>{size.toUpperCase()}</strong>{CANONICAL_SKINS.map(skin => <span key={skin.skin}>{skin.label}</span>)}
+          </div>
+          <div className="vt-confirmed-choice-examples">
+            {(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-choice-example-row" key={size + "-switch-" + shape} aria-label={size + " " + shape + " switch examples"}>{CANONICAL_SKINS.map((skin, col) => { const index = sizeIndex * 8 + row * 4 + col; return <div key={skin.skin}><StudioSwitch shape={shape} skin={skin.skin} sizeVariant={size} checked={switches[index]} aria-label={size + " " + shape + " switch " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div>)}
+            {([{Component:StudioRadio,label:"radio button",shape:"round" as const},{Component:StudioCheckbox,label:"checkmark checkbox",shape:"rect" as const},{Component:StudioXCheckbox,label:"X checkbox",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-choice-example-row" key={size + "-" + item.label} aria-label={size + " " + item.label + " examples"}>{CHOICE_SKINS.map((skin,col) => { const index = sizeIndex * 12 + row * 4 + col; return <div key={skin.skin}><ChoiceComponent shape={item.shape} skin={skin.skin} sizeVariant={size} checked={choices[index]} aria-label={size + " " + item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div> })}
+          </div>
+        </React.Fragment>)}
       </div>
     </Family>
-
-
   </>
 }
-
 
 const CanonicalSplitBadgeFamily: React.FC = () => (
   <>
@@ -191,9 +191,7 @@ const CanonicalSplitBadgeFamily: React.FC = () => (
 )
 
 const CanonicalWordToggleFamily: React.FC = () => {
-  const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
-  const [supremeWord, setSupremeWord] = React.useState(false)
-  const [miniWord, setMiniWord] = React.useState(false)
+  const [words, setWords] = React.useState<boolean[]>(Array(20).fill(false))
   const [verticalWords, setVerticalWords] = React.useState<boolean[]>(Array(12).fill(false))
   const [verticalSupreme, setVerticalSupreme] = React.useState(false)
   const [verticalMini, setVerticalMini] = React.useState(false)
@@ -206,24 +204,12 @@ const CanonicalWordToggleFamily: React.FC = () => {
         "Vertical toggle width follows the longest word plus the original horizontal padding; height remains content-driven.",
       ]} provenance={<Provenance primitive="StudioWordToggle / StudioVerticalWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 12px typography tiers; vertical toggle total height remains content-driven." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
     <div className="vt-confirmed-toggle-subfamily">
-      <strong>WORD TOGGLE · STANDARD + COMPACT</strong>
+      <strong>WORD TOGGLE · ALL FIVE SIZES × FOUR SKINS</strong>
       <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">
-        <div className="vt-confirmed-control-row">
-          <strong>WORD TOGGLE · STANDARD</strong>
-          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-standard" data-control-size="44">{WORD_TOGGLE_SKINS.map((skin,col) => <div key={skin.skin}><StudioWordToggle size="44" skin={skin.skin} value={words[col]} words={col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, col, value)} aria-label={"Standard word toggle variant " + (col + 1)} /></div>)}</div>
-        </div>
-        <div className="vt-confirmed-control-row">
-          <strong>WORD TOGGLE · COMPACT</strong>
-          <div className="vt-confirmed-control-variants vt-confirmed-word-toggle-compact" data-control-size="28">{WORD_TOGGLE_SKINS.map((skin,col) => { const index = 4 + col; return <div key={skin.skin}><StudioWordToggle size="28" skin={skin.skin} value={words[index]} words={["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={"Compact word toggle variant " + (col + 1)} /></div> })}</div>
-        </div>
-        <div className="vt-confirmed-control-row">
-          <strong>WORD TOGGLE · SUPREME</strong>
-          <div className="vt-confirmed-control-variants" data-control-size="60"><StudioWordToggle size="60" value={supremeWord} words={["WRITE", "CREATE"]} onValueChange={setSupremeWord} aria-label="Supreme word toggle specimen" /></div>
-        </div>
-        <div className="vt-confirmed-control-row">
-          <strong>WORD TOGGLE · MINI</strong>
-          <div className="vt-confirmed-control-variants" data-control-size="20"><StudioWordToggle size="20" value={miniWord} words={["OFF", "ON"]} onValueChange={setMiniWord} aria-label="Mini word toggle specimen" /></div>
-        </div>
+        {(["60", "44", "28", "20", "12"] as const).map((size, sizeIndex) => <div className="vt-confirmed-control-row" key={size}>
+          <strong>{({ "60": "SUPREME", "44": "STANDARD", "28": "COMPACT", "20": "MINI", "12": "MICRO" } as const)[size]} · WORD TOGGLE</strong>
+          <div className="vt-confirmed-control-variants" data-control-size={size}>{WORD_TOGGLE_SKINS.map((skin,col) => { const index = sizeIndex * 4 + col; return <div key={skin.skin}><StudioWordToggle size={size} skin={skin.skin} value={words[index]} words={col === 0 ? ["WRITE","CREATE"] : ["OFF","ON"]} onValueChange={value => flip(setWords, index, value)} aria-label={size + " word toggle " + (col + 1)} /></div> })}</div>
+        </div>)}
       </div>
     </div>
     <div className="vt-confirmed-toggle-subfamily">
