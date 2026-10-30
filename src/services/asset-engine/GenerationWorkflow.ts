@@ -1,4 +1,4 @@
-import { getContentBuild } from "./ContentBuildRepository"
+import { getContentBuild, listContentBuildEvents } from "./ContentBuildRepository"
 import { assertContentBuildCapability } from "./ContentBuildCapabilities"
 import type { BrainPromptRunReceipt } from "../brain/BrainPromptGovernance"
 import {
@@ -290,6 +290,26 @@ export const recordToolReceipt = (input: {
  if (!build) {
   throw new Error(`Unknown ContentBuild: ${input.request.contentBuildId}`)
  }
+
+ // Resolve an already-committed completion before revision or lifecycle guards:
+ // appending the first output event changes the build revision, so a legitimate
+ // retry must return its original receipt even after that revision advances.
+ const idempotencyKey = input.request.idempotencyKey || null
+ if (idempotencyKey) {
+  const priorEvent = listContentBuildEvents(build.id).find(event =>
+   event.eventType === "tool.output.recorded" &&
+   event.toolId === input.request.toolId &&
+   event.idempotencyKey === idempotencyKey
+  )
+  const priorReceipt = priorEvent?.metadata?.toolReceipt
+  if (priorReceipt && typeof priorReceipt === "object" &&
+   "idempotencyKey" in priorReceipt &&
+   priorReceipt.idempotencyKey === idempotencyKey
+  ) {
+   return priorReceipt as ToolReceipt
+  }
+ }
+
  assertGenerationStageAllowed(build)
 
  // A prepared request is tied to the exact canonical revision used to build its
