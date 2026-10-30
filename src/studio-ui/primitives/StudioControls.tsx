@@ -7,6 +7,37 @@ import { Bell, Check, ChevronDown, ChevronUp, Download, Heart, Minus, Plus, Refr
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
+export type StudioTextBoxSize = StudioControlSize
+export type StudioTextBoxProps = Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  "contentEditable" | "dangerouslySetInnerHTML" | "children"
+> & {
+  /** Plain display text; embedded line breaks are preserved. */
+  children?: React.ReactNode
+  /** Corresponding textarea typography and surface size. */
+  size?: StudioTextBoxSize
+}
+
+export const StudioTextBox = React.forwardRef<HTMLDivElement, StudioTextBoxProps>(
+  ({ children, size = "standard", className, ...props }, ref) => (
+    <div
+      {...props}
+      ref={ref}
+      contentEditable={false}
+      aria-readonly="true"
+      className={studioClasses("vt-studio-text-box", className)}
+      data-vt-studio-control="true"
+      data-vt-studio-text-box="true"
+      data-vt-studio-field-kind="textarea-display"
+      data-vt-library-component="StudioTextBox"
+      data-size={size}
+    >
+      {children}
+    </div>
+  ),
+)
+StudioTextBox.displayName = "StudioTextBox"
+
 /**
  * Explicit register of intentional departures from the global 44px / 28px
  * Studio control lattice. Exceptions must remain named, source-backed, and
@@ -689,6 +720,275 @@ export const Studioarea = StudioTextArea
 /** Canonical public names; lowercase legacy exports remain compatibility aliases. */
 export const StudioSwitch = Studioswitch
 export const StudioWordToggle = Studiotoggle
+
+export type StudioVerticalWordToggleVariant = "primary-secondary" | "black-fill" | "primary-white-handle" | "white-fill";
+export interface StudioVerticalWordToggleProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onChange"> {
+  value: boolean;
+  onValueChange?: (value: boolean) => void;
+  words?: readonly [string, string];
+  sizeVariant?: StudioControlSize;
+  variant?: StudioVerticalWordToggleVariant;
+}
+export const StudioVerticalWordToggle: React.FC<StudioVerticalWordToggleProps> = ({
+  value,
+  onValueChange,
+  words = ["WRITE", "CREATE"],
+  sizeVariant = "compact",
+  variant = "primary-secondary",
+  className,
+  style,
+  onClick,
+  onKeyDown,
+  disabled,
+  "aria-label": ariaLabel,
+  ...props
+}) => {
+  const rootRef = React.useRef<HTMLButtonElement>(null);
+  const handleRef = React.useRef<HTMLSpanElement>(null);
+  const overlayRef = React.useRef<HTMLSpanElement>(null);
+  const wordRefs = React.useRef<Array<HTMLSpanElement | null>>([]);
+  const frameRef = React.useRef(0);
+  const busyRef = React.useRef(false);
+  const latestValueRef = React.useRef(value);
+  const stepRef = React.useRef(0);
+
+  const getBounds = React.useCallback((index: number) => {
+    const root = rootRef.current;
+    const word = wordRefs.current[index];
+    if (!root || !word) return null;
+    const rootRect = root.getBoundingClientRect();
+    const wordRect = word.getBoundingClientRect();
+    // Mirror the horizontal word-toggle handle: exact word-block bounds with no
+    // line-height fudge. Side insets stay in CSS, so the handle's corner radius
+    // and edge spacing align evenly on all four sides of the module.
+    return { top: wordRect.top - rootRect.top - root.clientTop, height: wordRect.height };
+  }, []);
+
+  const settle = React.useCallback((nextValue: boolean) => {
+    const bounds = getBounds(nextValue ? 1 : 0);
+    const handle = handleRef.current;
+    const overlay = overlayRef.current;
+    const root = rootRef.current;
+    if (root) root.dataset.value = String(nextValue);
+    if (bounds && handle) {
+      // The base stylesheet sets both block edges for the resting handle.
+      // Release the bottom edge whenever JS owns measured top/height, so it cannot
+      // compete with the selected row's position during settle.
+      handle.style.bottom = "auto";
+      handle.style.insetBlockEnd = "auto";
+      handle.style.top = String(bounds.top) + "px";
+      handle.style.height = String(bounds.height) + "px";
+      handle.style.background = "";
+    }
+    if (overlay) {
+      overlay.style.display = "none";
+      overlay.style.opacity = "";
+      overlay.style.clipPath = "";
+      overlay.style.background = "";
+    }
+  }, [getBounds]);
+
+  const cancelAnimation = React.useCallback(() => {
+    if (typeof window !== "undefined") window.cancelAnimationFrame(frameRef.current);
+    busyRef.current = false;
+    settle(latestValueRef.current);
+  }, [settle]);
+
+  const animateToggle = React.useCallback((to: boolean) => {
+    const from = latestValueRef.current;
+    if (busyRef.current || to === from || disabled) return;
+    const root = rootRef.current;
+    const handle = handleRef.current;
+    const overlay = overlayRef.current;
+    const source = getBounds(from ? 1 : 0);
+    const destination = getBounds(to ? 1 : 0);
+    if (!root || !handle || !overlay || !source || !destination) {
+      latestValueRef.current = to;
+      onValueChange?.(to);
+      return;
+    }
+
+    const colorFor = (state: boolean) => {
+      if (variant === "primary-white-handle") return state ? "#ffffff" : "#000000";
+      if (variant === "white-fill" || variant === "black-fill") return "#000000";
+      return state
+        ? "var(--vt-studio-control-secondary, var(--pair-b, #f276c5))"
+        : "var(--vt-studio-control-accent, var(--pair-a, #20f13e))";
+    };
+    const fromColor = colorFor(from);
+    const toColor = colorFor(to);
+    const expandedTop = Math.min(source.top, destination.top);
+    const expandedBottom = Math.max(source.top + source.height, destination.top + destination.height);
+    const expandedHeight = expandedBottom - expandedTop;
+    const velvet = Math.floor(stepRef.current / 2) % 2 === 1;
+    const duration = velvet ? 1250 : 1100;
+    const reachEnd = velvet ? 0.58 : 0.70;
+    const releaseStart = velvet ? 0.72 : 0.84;
+
+    // Keep CSS variant state in lockstep with the optimistic target, not the next React render.
+    latestValueRef.current = to;
+    root.dataset.value = String(to);
+    stepRef.current += 1;
+    busyRef.current = true;
+    root.dataset.motion = velvet ? "Velvet Release" : "Late Silk";
+    handle.style.background = fromColor;
+    overlay.style.background = toColor;
+    overlay.style.display = "block";
+    overlay.style.opacity = velvet ? "1" : "0";
+    overlay.style.clipPath = velvet ? "inset(100% 0 0 0)" : "none";
+    onValueChange?.(to);
+
+    const reducedMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      busyRef.current = false;
+      settle(to);
+      return;
+    }
+
+    const clamp = (number: number) => Math.max(0, Math.min(1, number));
+    const mix = (a: number, b: number, progress: number) => a + (b - a) * progress;
+    const smooth = (number: number) => { const t = clamp(number); return t * t * (3 - 2 * t); };
+    const easeOut = (number: number) => 1 - Math.pow(1 - clamp(number), 3);
+    const easeInOut = (number: number) => {
+      const t = clamp(number);
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
+    const started = performance.now();
+
+    const tick = (now: number) => {
+      const t = clamp((now - started) / duration);
+      const reach = (velvet ? easeOut : smooth)(t / reachEnd);
+      const release = (velvet ? smooth : easeInOut)((t - releaseStart) / (1 - releaseStart));
+      const top = t < releaseStart
+        ? mix(source.top, expandedTop, reach)
+        : mix(expandedTop, destination.top, release);
+      const height = t < releaseStart
+        ? mix(source.height, expandedHeight, reach)
+        : mix(expandedHeight, destination.height, release);
+      handle.style.bottom = "auto";
+      handle.style.insetBlockEnd = "auto";
+      handle.style.top = String(top) + "px";
+      handle.style.height = String(height) + "px";
+      if (velvet) {
+        handle.style.background = fromColor;
+        const wipe = smooth((t - 0.80) / 0.20);
+        overlay.style.clipPath = to
+          ? "inset(" + String((1 - wipe) * 100) + "% 0 0 0)"
+          : "inset(0 0 " + String((1 - wipe) * 100) + "% 0)";
+      } else {
+        overlay.style.opacity = String(smooth((t - 0.92) / 0.08));
+      }
+      if (t < 1) {
+        frameRef.current = requestAnimationFrame(tick);
+      } else {
+        busyRef.current = false;
+        settle(to);
+      }
+    };
+    frameRef.current = requestAnimationFrame(tick);
+  }, [disabled, getBounds, onValueChange, settle, variant]);
+
+  React.useEffect(() => {
+    if (busyRef.current) return;
+    latestValueRef.current = value;
+    const schedule = () => {
+      if (busyRef.current) return;
+      const target = getBounds(value ? 1 : 0);
+      const handle = handleRef.current;
+      if (target && handle) {
+        handle.style.top = String(target.top) + "px";
+        handle.style.height = String(target.height) + "px";
+      }
+    };
+    let frame = 0;
+    const queue = () => {
+      if (typeof window !== "undefined") {
+        window.cancelAnimationFrame(frame);
+        frame = window.requestAnimationFrame(schedule);
+      } else schedule();
+    };
+    queue();
+    const root = rootRef.current;
+    const observer = typeof ResizeObserver !== "undefined" && root ? new ResizeObserver(queue) : null;
+    if (root) observer?.observe(root);
+    wordRefs.current.forEach(word => { if (word) observer?.observe(word); });
+    if (typeof window !== "undefined") window.addEventListener("resize", queue);
+    const reducedMotion = typeof window !== "undefined" && typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : null;
+    reducedMotion?.addEventListener?.("change", cancelAnimation);
+    if (typeof document !== "undefined") document.fonts?.ready?.then(queue);
+    return () => {
+      if (typeof window !== "undefined") {
+        window.cancelAnimationFrame(frame);
+        window.removeEventListener("resize", queue);
+      }
+      reducedMotion?.removeEventListener?.("change", cancelAnimation);
+      observer?.disconnect();
+    };
+  }, [value, words, sizeVariant, getBounds, cancelAnimation]);
+
+  React.useEffect(() => () => {
+    if (typeof window !== "undefined") window.cancelAnimationFrame(frameRef.current);
+  }, []);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    onClick?.(event);
+    if (event.defaultPrevented || disabled) return;
+    animateToggle(!latestValueRef.current);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    onKeyDown?.(event);
+    if (event.defaultPrevented || disabled) return;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      animateToggle(true);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      animateToggle(false);
+    } else if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
+      animateToggle(!latestValueRef.current);
+    }
+  };
+
+  return (
+    <button
+      ref={rootRef}
+      type="button"
+      role="switch"
+      aria-checked={value}
+      disabled={disabled}
+      aria-label={ariaLabel ?? words[0] + " / " + words[1]}
+      data-vt-studio-control="true"
+      data-vt-studio-vertical-word-toggle="true" data-vt-studio-width="content"
+      data-vertical-word-toggle-variant={variant}
+      data-size={sizeVariant}
+      data-value={String(value)}
+      className={studioClasses("vt-studio-vertical-word-toggle", "is-" + sizeVariant, "is-" + variant, className)}
+      style={style}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      {...props}
+    >
+      <span ref={handleRef} className="vt-studio-vertical-word-toggle__handle" aria-hidden="true">
+        <span ref={overlayRef} className="vt-studio-vertical-word-toggle__handle-color" aria-hidden="true" />
+      </span>
+      {words.map((word, index) => (
+        <span
+          key={String(index) + "-" + word}
+          ref={node => { wordRefs.current[index] = node; }}
+          className={"vt-studio-vertical-word-toggle__word" + (value === (index === 1) ? " is-active" : "")}
+          data-word-index={index}
+        >
+          {word}
+        </span>
+      ))}
+    </button>
+  );
+};
+StudioVerticalWordToggle.displayName = "StudioVerticalWordToggle";
 export const StudioRadio = Studioradio
 export const StudioCheckbox = Studiocheck
 export const StudioXCheckbox = Studioxbox
@@ -989,6 +1289,41 @@ export const StudioSquareIconButton = React.forwardRef<HTMLButtonElement, Studio
   },
 )
 StudioSquareIconButton.displayName = "StudioSquareIconButton"
+
+export type StudioSquareIconButtonGroupSize = StudioControlSize
+
+export interface StudioSquareIconButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Two or more square icon button faces, preferably StudioSquareIconButton. */
+  children: React.ReactNode
+  sizeVariant?: StudioSquareIconButtonGroupSize
+  /** Accessible name for the action toolbar. */
+  "aria-label"?: string
+}
+
+export const StudioSquareIconButtonGroup = React.forwardRef<HTMLDivElement, StudioSquareIconButtonGroupProps>(
+  ({ children, sizeVariant = "compact", className, "aria-label": ariaLabel = "Actions", ...rest }, ref) => {
+    const items = React.Children.toArray(children).filter(Boolean)
+    if (process.env.NODE_ENV !== "production" && items.length < 2) {
+      console.warn("[StudioSquareIconButtonGroup] expects 2 or more children; got", items.length)
+    }
+
+    return (
+      <div
+        {...rest}
+        ref={ref}
+        role="toolbar"
+        aria-label={ariaLabel}
+        data-vt-studio-control="true"
+        data-vt-studio-icon-button-group="true"
+        data-size={sizeVariant}
+        className={studioClasses("vt-studio-square-icon-button-group", className)}
+      >
+        {items}
+      </div>
+    )
+  },
+)
+StudioSquareIconButtonGroup.displayName = "StudioSquareIconButtonGroup"
 
 export interface StudioSplitLeftButtonProps extends StudioButtonProps {
   /** Visual comparison preset; outer button geometry is unchanged. */
