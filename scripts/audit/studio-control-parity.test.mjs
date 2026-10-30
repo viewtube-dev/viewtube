@@ -162,7 +162,7 @@ test("size-tier ownership is centralized and Micro inherits Mini's shared stylin
   const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8");
   assert.match(tokens, /micro: \{[^}]*letterSpacing: -0\.02/);
   assert.match(css, /data-size="supreme"[\s\S]*?supreme-stroke, 3px[\s\S]*?supreme-radius, 6px/);
-  assert.match(css, /data-size="micro"[\s\S]*?micro-stroke, 1\.5px[\s\S]*?micro-radius, 3px[\s\S]*?micro-text-stroke, 0\.4px/);
+  assert.match(css, /data-size="micro"[\s\S]*?micro-stroke, 1px[\s\S]*?micro-radius, 2px[\s\S]*?micro-text-stroke, 0\.4px/);
   assert.match(css, /data-size="micro"[\s\S]*?vt-studio-mini-focus-outline-width, 0\.975px/);
   assert.doesNotMatch(css, /\.vt-studio-value-toggle\[data-size="micro"\] \{[^}]*border-width: 1px|\.vt-studio-value-toggle--double\[data-size="micro"\] \{[^}]*control-stroke: 1px/);
   assert.doesNotMatch(core, /data-size="(?:supreme|standard|compact|mini|micro)"\s*\{/);
