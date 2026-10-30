@@ -269,10 +269,11 @@ test("play pause selected state swaps primary/secondary face and rail pair color
 
 test("dropdown colors and trigger alignment use active pair tokens and centered label space", () => {
   const dropdown = styles.slice(styles.indexOf(".vt-studio-dropdown {"), styles.indexOf("/* New independent StudioCounter"));
+  const dropdownDefaults = styles.slice(styles.lastIndexOf("/* Global dropdown menu contract"));
   assert.match(dropdown, /background:\s*var\(--vt-studio-control-accent,\s*var\(--pair-a/);
   assert.match(dropdown, /background:\s*var\(--vt-studio-control-secondary,\s*var\(--pair-b/);
   assert.match(dropdown, /grid-template-columns:\s*var\(--vt-studio-dropdown-rail-size[^;]*minmax\(0,\s*1fr\)\s+var\(--vt-studio-dropdown-rail-size/);
-  assert.match(dropdown, /\[data-vt-studio-dropdown-value\][\s\S]*?text-align:\s*center/);
-  assert.match(dropdown, /\.vt-studio-dropdown-chevron[\s\S]*?padding-inline:\s*var\(--vt-studio-dropdown-chevron-inset/);
-  assert.doesNotMatch(dropdown, /#36e0f6|#ff7f6b/);
+  assert.match(dropdownDefaults, /\[data-vt-studio-dropdown-value\][\s\S]*?text-align:\s*center/);
+  assert.match(dropdownDefaults, /\.vt-studio-dropdown-chevron[\s\S]*?padding-inline:\s*var\(--vt-studio-dropdown-chevron-inset/);
+  assert.doesNotMatch(dropdown + dropdownDefaults, /#36e0f6|#ff7f6b/);
 });
