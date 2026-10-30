@@ -86,6 +86,7 @@ import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommu
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
 import { BrainAnswerModuleGrid } from "../components/brain/BrainAnswerModules"
+import { BrainEvidenceExplorerPanel } from "../components/brain/BrainEvidenceExplorerPanel"
 import { BrainPageTabs, type BrainPageTabId } from "../components/brain/BrainPageTabs"
 import { BrainMyBrainPanel, BrainReviewPanel, BrainControlsPanel } from "../components/brain/BrainHubPanels"
 import { BrainAnswerFirst, BrainChatShell, BrainComposerBar, BrainStatusStrip } from "../components/brain/brainChatCompositionsIndex"
@@ -962,7 +963,7 @@ const AIBrainCommandInterface: React.FC = () => {
  const navigate = useNavigate()
  const [searchParams, setSearchParams] = useSearchParams()
  const requestedPageTab = searchParams.get("tab")
- const pageTab: BrainPageTabId = requestedPageTab === "my-brain" || requestedPageTab === "review" || requestedPageTab === "controls" ? requestedPageTab : "chat"
+ const pageTab: BrainPageTabId = requestedPageTab === "my-brain" || requestedPageTab === "evidence" || requestedPageTab === "review" || requestedPageTab === "controls" ? requestedPageTab : "chat"
  const setPageTab = (tab: BrainPageTabId) => {
   const next = new URLSearchParams(searchParams)
   if (tab === "chat") next.delete("tab")
@@ -2107,6 +2108,8 @@ const AIBrainCommandInterface: React.FC = () => {
           )}
          </BrainChatShell>
          </div>
+         ) : pageTab === "evidence" ? (
+         <BrainEvidenceExplorerPanel channelId={authState.channelId || null} />
         ) : pageTab === "my-brain" ? (
          <BrainMyBrainPanel items={[]} profileIncomplete />
         ) : pageTab === "review" ? (
