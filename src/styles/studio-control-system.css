@@ -4223,8 +4223,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
-  .vt-studio-upload-frame:hover,
-  .vt-studio-upload-frame.is-drag,
+  .vt-studio-upload-frame:hover .vt-studio-upload-frame__icon,
+  .vt-studio-upload-frame.is-drag .vt-studio-upload-frame__icon {
+    transform: none;
+  }
 }
 
 /* Studio control refinement pass: keep side-counter actions truly equal-height. */
