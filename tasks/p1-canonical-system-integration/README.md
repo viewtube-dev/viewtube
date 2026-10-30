@@ -44,3 +44,7 @@ Planning branch: docs/p1-canonical-system-integration-program. Base: master/cons
 Every consequential path has one verified owner, typed connections, preserved identity/provenance, focused regression tests, production-caller runtime proof, actionable secret-safe diagnostics and a no-duplicate-owner review. No workstream is DONE based only on files, routes, registry entries, tests or build success.
 
 **Current state:** all six plans are PLANNED / DISCOVERY REQUIRED. This package does not claim implementation or runtime completion.
+
+
+## Latest reconciliation
+See [Phase 0 reconciliation audit](audits/phase-0-reconciliation-2026-10-30.md) for live PR states, corrected code owners, landed Gemini plans/scanner, Studio source-of-truth, public cache behavior and Priority-25 identity findings. Audited target SHA: `0135fa33bf5cd59503c9feecce4977072ef60fec`.
