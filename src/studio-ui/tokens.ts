@@ -157,6 +157,19 @@ export const STUDIO_DROPDOWN_TOKENS = {
   chevronPlacement: "trailing" as const,
 } as const
 
+/** Global open-menu defaults shared by standard, simple, and split-left dropdowns. */
+export const STUDIO_DROPDOWN_MENU_TOKENS = {
+  menuGap: 8,
+  menuPadding: 4,
+  rowGap: 3,
+  menuRadius: "control" as const,
+  rowRadius: "control" as const,
+  menuFill: "primary" as const,
+  unselectedRowFill: "white" as const,
+  selectedRowFill: "secondary" as const,
+  rowStroke: "control" as const,
+} as const
+
 export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   holdMs: 1500,
   outlineFadeMs: 0,
