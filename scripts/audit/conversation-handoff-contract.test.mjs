@@ -1,7 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import path from "node:path";
 
 const read = (file) => fs.readFileSync(new URL(file, import.meta.url), "utf8");
 const parse = (file) => JSON.parse(read(file));
