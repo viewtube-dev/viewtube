@@ -149,16 +149,18 @@ const SeoGenerator: React.FC<{
 
   setLoading(true)
   try {
-   const data = await generateSeoData(
-    concept,
-    niche,
-    script,
-    durationStats,
-    videoLength,
-    channelHandle,
-    resourceLinks,
-    formatMode === "shorts" ? "Shorts" : "Longform"
-   )
+   const suppliedHandle = channelHandle.trim()
+   const channelId = (authState as any)?.channelId || (suppliedHandle ? "public-channel:" + suppliedHandle.toLowerCase() : "")
+   if (!channelId) throw new Error("Enter a channel handle or connect a YouTube channel before generating a governed SEO package.")
+   const generated = await generateVideoPublisherSeoPackage({
+    context: { channelId, channelName: suppliedHandle || undefined },
+    instruction: "Generate a complete SEO package for the supplied video concept. Ground channel-specific claims only in the provided context.",
+    inputs: {
+     concept, niche, audience, script, stats: durationStats, videoLength, channelHandle, resourceLinks,
+     videoFormat: formatMode === "shorts" ? "Shorts" : "Longform",
+    },
+   })
+   const data = generated.output
    setResult(data)
    setSeoState({
     winningTitle: data.titleSets[0].title,
