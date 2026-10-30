@@ -26,7 +26,7 @@ test("StudioCounter is a new button-only double-split primitive across all three
   assert.doesNotMatch(styles, /vt-studio-counter-width/)
   assert.match(styles, /\.vt-studio-counter__button svg\s*\{[^}]*width:\s*24px;[^}]*height:\s*24px;/s)
   assert.doesNotMatch(styles, /\.vt-studio-counter\[data-vt-studio-split="double"\][^}]*2fr/)
-  for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
+  for (const size of ["supreme", "standard", "compact", "mini", "micro"]) assert.match(catalog, new RegExp('StudioCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
 })
 
 test("StudioSideCounter is a new button-only split-right primitive with a divided action rail", () => {
@@ -45,7 +45,7 @@ test("StudioSideCounter is a new button-only split-right primitive with a divide
   assert.match(styles, /\.vt-studio-side-counter__actions button svg\s*\{[^}]*width:\s*14px;[^}]*height:\s*14px;/s)
   assert.doesNotMatch(styles, /\.vt-studio-side-counter\[data-vt-studio-split="right"\][^}]*2fr/)
   assert.match(styles, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s);
-  for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioSideCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
+  for (const size of ["supreme", "standard", "compact", "mini", "micro"]) assert.match(catalog, new RegExp('StudioSideCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
 })
 
 test("counter affordances have hold-repeat, enlarged icons, activation motion, and aligned right divider", () => {
