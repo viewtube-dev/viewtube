@@ -64,13 +64,13 @@
   --vt-studio-control-focus-outline-width: .65px;
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: .65px;
-  --vt-studio-control-height: var(--vt-studio-14-height, 14px);
-  --vt-studio-control-stroke: var(--vt-studio-14-stroke, 1px);
-  --vt-studio-control-radius: var(--vt-studio-14-radius, 2px);
-  --vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px);
+  --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
   --vt-studio-control-font-weight: var(--vt-studio-14-font-weight, 1000);
-  --vt-studio-control-text-stroke: var(--vt-studio-14-text-stroke, .25px);
-  --vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px);
+  --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, .4px);
+  --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
   --vt-studio-control-icon-stroke: var(--vt-studio-14-icon-stroke, 1.5);
 }
 
@@ -2993,12 +2993,18 @@ no shell shadows{
   border: 0;
   border-radius: 0;
 }
+.vt-studio-split-left-badge[data-size="supreme"],
+.vt-studio-split-right-badge[data-size="supreme"],
+.vt-studio-double-split-badge[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-font-weight: 1000; --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px); --vt-studio-control-text-stroke: 1px; }
 .vt-studio-split-left-badge[data-size="standard"],
 .vt-studio-split-right-badge[data-size="standard"],
 .vt-studio-double-split-badge[data-size="standard"] { --vt-studio-control-height: var(--vt-studio-44-height, 44px); --vt-studio-control-stroke: var(--vt-studio-44-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-44-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-44-font-size, 38px); --vt-studio-control-font-weight: var(--vt-studio-44-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-44-icon-size, 38px); --vt-studio-control-text-stroke: var(--vt-studio-44-text-stroke, 1px); }
 .vt-studio-split-left-badge[data-size="compact"],
 .vt-studio-split-right-badge[data-size="compact"],
 .vt-studio-double-split-badge[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-28-height, 28px); --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-28-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-28-font-size, 24px); --vt-studio-control-font-weight: var(--vt-studio-28-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-28-icon-size, 24px); --vt-studio-control-text-stroke: var(--vt-studio-28-text-stroke, .5px); }
+.vt-studio-split-left-badge[data-size="mini"],
+.vt-studio-split-right-badge[data-size="mini"],
+.vt-studio-double-split-badge[data-size="mini"] { --vt-studio-control-height: var(--vt-studio-mini-height, 20px); --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px); --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px); --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px); --vt-studio-control-font-weight: 1000; --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 17.5px); --vt-studio-control-text-stroke: .4px; }
 .vt-studio-split-left-badge[data-size="micro"],
 .vt-studio-split-right-badge[data-size="micro"],
 .vt-studio-double-split-badge[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-14-height, 14px); --vt-studio-control-stroke: var(--vt-studio-14-stroke, 1px); --vt-studio-control-radius: var(--vt-studio-14-radius, 2px); --vt-studio-control-font-size: var(--vt-studio-14-font-size, 10px); --vt-studio-control-font-weight: var(--vt-studio-14-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-14-icon-size, 10px); --vt-studio-control-text-stroke: var(--vt-studio-14-text-stroke, .25px); }
