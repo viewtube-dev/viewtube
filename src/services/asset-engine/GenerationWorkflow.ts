@@ -341,6 +341,7 @@ export const recordToolReceipt = (input: {
   traceId: receipt.traceId,
   summary: input.summary || "",
   metadata: {
+   ...(input.metadata || {}),
    receiptId: receipt.id,
    requestId: receipt.requestId,
    operationId: receipt.operationId || input.request.operationId || input.request.id,
@@ -361,7 +362,6 @@ export const recordToolReceipt = (input: {
     workflowId: receipt.workflowId || input.request.workflowId || `workflow:${input.request.contentBuildId}`,
     channelId: input.request.channelId,
    }),
-   ...(input.metadata || {}),
   },
  })
 
