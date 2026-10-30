@@ -1,4 +1,14 @@
 # P1-05 Public Resolver Production Integration
+
+**Production Date:** 2026-10-29  
+**Last Edited:** 2026-10-29  
+**Class:** PROGRAM  
+**Status:** ACTIVE — PLANNED / DISCOVERY REQUIRED  
+**Concern:** public resolver production integration  
+**Owner:** Existing Public Channel Resolver + BrainRuntime caller + public-handle mode/cache  
+**Registry ID:** DOC-PLAN-P1-PUBLICRESOLVER  
+**Last Audited Main SHA:** 61cfb726db9b32de53b9c89a5a339db696782a11  
+**Capabilities:** CAP-BRAIN-EXPERIENCE, CAP-CREATOR-CONTEXT, CAP-EVIDENCE-INTELLIGENCE
 **Status:** PLANNED / DISCOVERY REQUIRED | **Owner:** existing Public Channel Resolver + BrainRuntime caller + public-handle mode/cache
 **Capabilities:** CAP-BRAIN-EXPERIENCE, CAP-CREATOR-CONTEXT, CAP-EVIDENCE-INTELLIGENCE
 
