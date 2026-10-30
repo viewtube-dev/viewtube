@@ -36,13 +36,11 @@ describe("Brain provider architecture guard", () => {
   expect(violations).toEqual([])
  })
 
- it("keeps UI-level direct generation debt isolated to the known migration target", () => {
+ it("keeps all UI surfaces free of direct provider generation calls", () => {
   const uiViolations = collect(path.join(ROOT, "views"))
    .filter((absolute) => containsDirectProviderInvocation(fs.readFileSync(absolute, "utf8")))
    .map(normalize)
 
-  expect(uiViolations).toEqual([
-   "src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx",
-  ])
+  expect(uiViolations).toEqual([])
  })
 })
