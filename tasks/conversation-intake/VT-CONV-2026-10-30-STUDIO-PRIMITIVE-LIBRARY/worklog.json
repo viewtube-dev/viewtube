@@ -562,45 +562,72 @@
   ],
   "integrationGaps": [
     {
-      "feature": "Confirmed Primitive Library family organization",
-      "architecture": "IMPLEMENTED",
-      "backend": "NOT_APPLICABLE",
-      "frontend": "IMPLEMENTED",
-      "integration": "PARTIAL",
-      "tests": "PARTIAL",
-      "runtime": "NONE",
-      "responsive": "PARTIAL",
-      "documentation": "PARTIAL",
-      "release": "PARTIAL",
+      "featureId": "CAP-STUDIO-CONTROLS",
+      "title": "Confirmed Primitive Library family organization",
+      "maturity": {
+        "architecture": "IMPLEMENTED",
+        "backend": "NOT_APPLICABLE",
+        "frontend": "IMPLEMENTED",
+        "integration": "PARTIAL",
+        "tests": "PARTIAL",
+        "runtime": "NONE",
+        "responsive": "PARTIAL",
+        "documentation": "PARTIAL",
+        "release": "PARTIAL"
+      },
       "gaps": [
-        "Focused tests and build not run.",
-        "Desktop/mobile browser review remains outstanding."
+        {
+          "category": "TESTS_WITHOUT_RUNTIME_PROOF",
+          "description": "Focused tests, audit scripts and production build were not run in this conversation.",
+          "userImpact": "Merged code is not yet proven buildable or behaviorally correct.",
+          "dependency": "Run focused Studio tests and npm run build.",
+          "acceptanceEvidence": [
+            "PR #1073 merge 873fd4c5a3ebb38ae353788de27fca07335dac49",
+            "PR #1080 merge d5ace77cb716670c785411a69e7584f9b2f4ec0a"
+          ]
+        },
+        {
+          "category": "IMPLEMENTED_BUT_UNCONNECTED",
+          "description": "Browser-level desktop/mobile review has not verified the resulting family order, representatives and empty-group behavior.",
+          "userImpact": "The catalog may still have visual or responsive defects despite merged source.",
+          "dependency": "Desktop and mobile browser review.",
+          "acceptanceEvidence": []
+        }
       ],
-      "userImpact": "Source changes are merged but visual/runtime correctness is not proven.",
-      "acceptanceEvidence": [
-        "PR #1073 merge 873fd4c5a3ebb38ae353788de27fca07335dac49",
-        "PR #1080 merge d5ace77cb716670c785411a69e7584f9b2f4ec0a"
+      "sourceRefs": [
+        "PR #1073",
+        "PR #1080"
       ]
     },
     {
-      "feature": "Conversation handoff workflow",
-      "architecture": "VERIFIED",
-      "backend": "NOT_APPLICABLE",
-      "frontend": "NOT_APPLICABLE",
-      "integration": "PARTIAL",
-      "tests": "PARTIAL",
-      "runtime": "NOT_APPLICABLE",
-      "responsive": "NOT_APPLICABLE",
-      "documentation": "PARTIAL",
-      "release": "PARTIAL",
+      "featureId": "DOC-GOV-CONVERSATION-HANDOFFS",
+      "title": "Conversation handoff workflow",
+      "maturity": {
+        "architecture": "VERIFIED",
+        "backend": "NOT_APPLICABLE",
+        "frontend": "NOT_APPLICABLE",
+        "integration": "PARTIAL",
+        "tests": "PARTIAL",
+        "runtime": "NOT_APPLICABLE",
+        "responsive": "NOT_APPLICABLE",
+        "documentation": "PARTIAL",
+        "release": "PARTIAL"
+      },
       "gaps": [
-        "This package/docs changes are in a pending PR.",
-        "Schema/document-system checks have not run on this branch."
+        {
+          "category": "DOCUMENTATION_WITHOUT_IMPLEMENTATION",
+          "description": "The current conversation package and process refinements are proposed in a documentation PR and are not yet merged.",
+          "userImpact": "The package is not yet available from the target branch.",
+          "dependency": "Merge documentation PR and run document-system checks.",
+          "acceptanceEvidence": [
+            "Existing conversation-work-log schema",
+            "Documentation PR for this package"
+          ]
+        }
       ],
-      "userImpact": "Handoff content is prepared but package delivery and validation remain pending.",
-      "acceptanceEvidence": [
-        "This documentation PR",
-        "Existing conversation work-log schema"
+      "sourceRefs": [
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "docs/governance/conversation-work-log.schema.json"
       ]
     }
   ]
