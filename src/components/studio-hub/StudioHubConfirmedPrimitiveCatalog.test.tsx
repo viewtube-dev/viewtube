@@ -864,7 +864,7 @@ describe("confirmed library cleanup and counter module visibility", () => {
     expect(source).toContain("<ConfirmedStudioCounterFamily />");
     expect(source).toContain("<ConfirmedStudioSideCounterFamily />");
     for (const title of [
-      "Studio Counter Family · Double-Side / Side / Left",
+      "StudioCounter · Supreme + Standard + Compact + Mini + Micro",
       "StudioSideCounter · Supreme + Standard + Compact + Mini + Micro",
       "StudioDoubleSplitSlider · Supreme + Standard + Compact + Mini + Micro",
       "StudioLeftWordCounter · Four-State Cycle + Five Sizes",
