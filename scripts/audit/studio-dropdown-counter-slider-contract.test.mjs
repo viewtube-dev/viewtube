@@ -190,3 +190,14 @@ test("choice and switch primitives do not opt into content-width sizing", () => 
   assert.doesNotMatch(switches, /data-vt-studio-width="content"/);
   assert.doesNotMatch(choices, /data-vt-studio-width="content"/);
 });
+
+
+test("single, simple, split-left, and multi-select dropdowns map chevrons across five sizes", () => {
+  for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+    assert.match(css, new RegExp(String.raw`\\.vt-studio-dropdown\\[data-size="${size}"\\]`));
+    assert.match(css, new RegExp(String.raw`\\.vt-studio-legend-multi\\[data-size="${size}"\\]`));
+  }
+  assert.match(css, /\\.vt-studio-dropdown-chevron\\s*\\{[^}]*height:\\s*100%/s);
+  assert.match(dropdown, /rightRailClassName="vt-studio-dropdown-chevron is-trailing"/);
+  assert.match(dropdown, /className="vt-studio-dropdown-chevron is-trailing"/);
+});
