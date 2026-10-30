@@ -4,7 +4,7 @@
   "created": "2026-10-29",
   "lastEdited": "2026-10-29",
   "sourceHost": "ChatGPT",
-  "conversationName": "Unfinished Work Living Document Log — PR #1170 implementation and reconciliation",
+  "conversationName": "UNKNOWN — descriptive package label: Unfinished Work Living Document Log / PR #1170",
   "application": "ViewTube",
   "sourceApplication": "ChatGPT",
   "sourceConversationUrl": null,
@@ -230,6 +230,73 @@
       "status": "MERGED",
       "relatedItemIds": [
         "CWI-001"
+      ]
+    },
+    {
+      "title": "Conversation Intake Index",
+      "path": "tasks/conversation-intake/INDEX.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/INDEX.md",
+      "kind": "NAVIGATION",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002",
+        "CWI-003"
+      ]
+    },
+    {
+      "title": "Conversation Intake README",
+      "path": "tasks/conversation-intake/README.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/README.md",
+      "kind": "DOCUMENT",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002",
+        "CWI-003"
+      ]
+    },
+    {
+      "title": "This living handoff",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/handoff.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/handoff.md",
+      "kind": "DOCUMENT",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002",
+        "CWI-003"
+      ]
+    },
+    {
+      "title": "This structured worklog",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/worklog.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/worklog.json",
+      "kind": "STRUCTURED_RECORD",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002",
+        "CWI-003"
+      ]
+    },
+    {
+      "title": "This reconciliation review",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/review.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/review.md",
+      "kind": "DOCUMENT",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002",
+        "CWI-003"
+      ]
+    },
+    {
+      "title": "PR #1177",
+      "path": "PR #1177",
+      "url": "https://github.com/viewtube-dev/viewtube/pull/1177",
+      "kind": "PULL_REQUEST",
+      "status": "OPEN",
+      "relatedItemIds": [
+        "CWI-002",
+        "CWI-003",
+        "CWI-004"
       ]
     }
   ],
