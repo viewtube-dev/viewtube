@@ -17,6 +17,7 @@ const splitInputCss = read("src/styles/studio-split-text-input.css");
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
 const publicIndex = read("src/studio-ui/index.ts");
 const catalogCss = read("src/components/studio-hub/studio-hub-primitive-catalogs.css");
+const componentGridCss = read("src/styles/studio-component-grid.css");
 
 const tiers = {
   supreme: { height: 60, stroke: 3, radius: 6, fontSize: 52, iconSize: 52 },
@@ -37,6 +38,10 @@ test("all five size tiers are canonical, generated, and consumed by the system",
       assert.ok(generated.includes("--vt-studio-" + tier + "-" + cssKey + ": " + value + "px;"), tier + "." + key + " generated variable");
     }
     assert.ok(system.includes('data-size="' + tier + '"'), tier + " is consumed by the system stylesheet");
+    if (tier === "micro") {
+      assert.ok(componentGridCss.includes("--vt-studio-micro-stroke, 1px"));
+      assert.ok(componentGridCss.includes("--vt-studio-micro-radius, 2px"));
+    }
   }
 });
 
