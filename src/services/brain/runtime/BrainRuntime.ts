@@ -66,7 +66,7 @@ const resolvePublicHandleContext = async (input: BrainRuntimeRequest): Promise<{
   if (selected?.channelId && selected.channelId !== snapshot.channelId) return { block: "", metadata: null }
   const requestedHandle = normalizeHandle(handle)
   const resolvedHandle = normalizeHandle(snapshot.handle)
-  if (requestedHandle.startsWith("UC")) {
+  if (requestedHandle.startsWith("uc")) {
    if (requestedHandle !== snapshot.channelId.toLowerCase()) return { block: "", metadata: null }
   } else if (resolvedHandle && requestedHandle !== resolvedHandle) {
    return { block: "", metadata: null }
