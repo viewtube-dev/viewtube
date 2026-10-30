@@ -224,8 +224,8 @@ test("confirmed library describes the actual default icon preset and component-s
   const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8");
   const css = controlStyles;
   assert.match(controls, /iconSizeVariant = "large"/);
-  assert.match(controls, /default large icon preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 stroke compact/);
-  assert.match(css, /Icon buttons default to the large production preset: 38px\/1\.9 standard and 24px\/2 compact/);
+  assert.match(tokens, /standard: \{[^}]*iconSize: 38, iconStroke: 1\.9/);\n  assert.match(tokens, /STUDIO_CONTROL_SIZE_BASE_COMPACT = \{[^}]*iconSize: 24, iconStroke: 2\.0/);
+  assert.match(css, /--vt-studio-control-icon-size:38px; --vt-studio-control-icon-stroke:1\.9;/);\n  assert.match(css, /--vt-studio-control-icon-size:24px; --vt-studio-control-icon-stroke:2\.0;/);
   assert.match(catalog, /default production preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 compact/);
   assert.match(catalog, /Icon presets:<\/b> the default production preset is 38px \/ 1\.9 stroke standard and 24px \/ 2\.0 compact/);
   assert.match(css, /button\.vt-studio-44-choice\.is-rect\s*\{\s*border-radius:\s*7\.333px/);
