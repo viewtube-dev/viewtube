@@ -471,7 +471,7 @@ const buildProvenanceChain = (input: {
   Boolean(event.actionPacketId && actionPacketIds.includes(event.actionPacketId))
   || Boolean(event.workflowId && workflowIds.includes(event.workflowId))
  )
- const algorithmEvents = descendantAlgorithmEvents(
+ const algorithmEvents = collectDescendantAlgorithmEvents(
   input.algorithmEvents,
   new Set(directAlgorithmEvents.map(event => event.id)),
  )

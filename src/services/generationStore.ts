@@ -1,6 +1,7 @@
 import type { GenerationRecord, GenerationStatus } from "@/types"
 
 const GENERATION_STORAGE_KEY = "vt_supertool_generations_v1"
+export const GENERATION_RECORDS_CHANGED = "vt_generation_records_changed"
 
 const canUseStorage = () => typeof window !== "undefined" && typeof localStorage !== "undefined"
 
@@ -16,9 +17,12 @@ const readRecords = (): GenerationRecord[] => {
  }
 }
 
-const writeRecords = (records: GenerationRecord[]) => {
+const writeRecords = (records: GenerationRecord[], operation: "create" | "update" = "update") => {
  if (!canUseStorage()) return
  localStorage.setItem(GENERATION_STORAGE_KEY, JSON.stringify(records))
+ window.dispatchEvent(new CustomEvent(GENERATION_RECORDS_CHANGED, {
+  detail: { operation, count: records.length, latestId: records[0]?.id || null },
+ }))
 }
 
 export const listGenerationRecords = (): GenerationRecord[] =>
@@ -38,7 +42,7 @@ export const createGenerationRecord = (
   updatedAt: now,
  }
  const next = [record, ...readRecords()]
- writeRecords(next)
+ writeRecords(next, "create")
  return record
 }
 
@@ -74,4 +78,7 @@ export const setGenerationStatus = (
 export const clearGenerationRecords = () => {
  if (!canUseStorage()) return
  localStorage.removeItem(GENERATION_STORAGE_KEY)
+ window.dispatchEvent(new CustomEvent(GENERATION_RECORDS_CHANGED, {
+  detail: { operation: "clear", count: 0, latestId: null },
+ }))
 }

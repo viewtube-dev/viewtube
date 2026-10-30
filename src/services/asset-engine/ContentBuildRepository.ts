@@ -18,6 +18,7 @@ import {
 
 const BUILDS_KEY = "viewtube_content_builds_v1"
 const EVENTS_KEY = "viewtube_content_build_events_v1"
+export const CONTENT_BUILD_REPOSITORY_CHANGED = "vt_content_build_repository_changed"
 
 let memoryBuilds: ContentBuildSnapshot[] = []
 let memoryEvents: ContentBuildEvent[] = []
@@ -115,6 +116,12 @@ const writeEvents = (events: ContentBuildEvent[]) => {
   localStorage.setItem(EVENTS_KEY, JSON.stringify(events))
  } catch {
   throw new Error("ContentBuild events could not be persisted; refusing to report an unrecorded lifecycle event.")
+ }
+ const latest = events[events.length - 1]
+ if (typeof window !== "undefined" && latest) {
+  window.dispatchEvent(new CustomEvent(CONTENT_BUILD_REPOSITORY_CHANGED, {
+   detail: { contentBuildId: latest.contentBuildId, eventId: latest.id, eventType: latest.eventType },
+  }))
  }
 }
 

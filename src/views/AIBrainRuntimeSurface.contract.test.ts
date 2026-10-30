@@ -29,9 +29,9 @@ describe("AI Brain runtime surface integration", () => {
    source.indexOf("const [runtimeSnapshot, setRuntimeSnapshot]"),
    source.indexOf("const snapshot = useMemo(", source.indexOf("const [runtimeSnapshot, setRuntimeSnapshot]")),
   )
-  expect(runtimeEffect).toContain("[channelId, brain.activeProjectId, brain.projects]")
-  expect(runtimeEffect).toContain("window.requestIdleCallback(refreshRuntimeSnapshot, { timeout: 1200 })")
-  expect(runtimeEffect).toContain("setTimeout(refreshRuntimeSnapshot, 0)")
+  expect(runtimeEffect).toContain("[channelId, brain.activeProjectId, brain.projects, initialBootstrapSnapshot?.manifestId]")
+  expect(runtimeEffect).toContain("window.requestIdleCallback(runScheduledRefresh, { timeout: 1200 })")
+  expect(runtimeEffect).toContain("setTimeout(runScheduledRefresh, 0)")
   expect(runtimeEffect).not.toContain("recentTurns")
   expect(runtimeEffect).not.toContain("learningEntries")
  })
@@ -45,6 +45,17 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain("refreshInitialChannelBootstrap")
   expect(source).toContain("result.status === \"partial\"")
   expect(source).toContain("result.status === \"error\"")
+ })
+
+ it("invalidates the runtime snapshot when canonical evidence and generation stores change", () => {
+  expect(source).toContain("ALGORITHM_INTELLIGENCE_EVENT_CHANGED")
+  expect(source).toContain("BRAIN_TRACE_EVENT")
+  expect(source).toContain("BRAIN_OUTCOME_EVENT")
+  expect(source).toContain("CONTENT_BUILD_REPOSITORY_CHANGED")
+  expect(source).toContain("GENERATION_RECORDS_CHANGED")
+  expect(source).toContain('window.addEventListener("storage", scheduleRefresh)')
+  expect(source).toContain("if (!active || scheduled) return")
+  expect(source).toContain("invalidationEvents.forEach(eventName => window.removeEventListener(eventName, scheduleRefresh))")
  })
 
  it("constructs the runtime snapshot after render instead of during render", () => {
