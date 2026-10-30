@@ -139,3 +139,12 @@ Branch: `feat/p1-gemini-governance-reconciliation-2026-10-29`
 - The latest code commits after run #5442 have not yet received exact-head CI. Do not claim their typecheck/build/tests passed until a new run verifies them.
 - Phase 5 remains blocked on an authorized live Gemini test credential and controlled provider scenarios. Do not ask the user to paste a secret into chat; use the approved key vault or CI secret path.
 - Phase 6 remains blocked: retain the provider compatibility map and legacy paths until every active production caller is migrated, a fresh exact-head inventory plus runtime tracing proves zero bypasses, and live capability parity is certified.
+
+## Exact-head inventory refresh — run #5469
+
+- Exact-head v2 audit at `dc36b8961084b303ec8ce9e3c6ea16fd1db423bd`: 73 exports, 42 production-referenced exports, 30 with no static import reference, 66 direct SDK invocation sites, 2 literal dynamic Gemini imports, 19 model-ID literals and 18 credential-alias references.
+- The only two dynamic imports are the approved provider-adapter imports inside `BrainModelGateway`; AskMeWidget and TitleRewriterWidget no longer import `gemini.ts` dynamically.
+- The 42 production references include helpers, not 42 independent model operations. Active remaining groups include analytics/research, project planning, tags, thumbnails, scripts, storyboards, comments, end-screen, journal/community and media analysis.
+- Run #5469 caller audit and inventory upload passed; production build and conversation-handoff passed. The Gemini focused suite failed three GenerationWorkflow tests because output event idempotency reused the input event key. The correction namespaces output keys separately while retaining the request key in metadata.
+- Run #5470 is queued for the correction; do not claim the corrected focused suite passed until exact-head results are inspected.
+- Phase 0 remains partial until every export and direct SDK hit is classified as provider owner, credential validation, governed adapter, active legacy caller, test or unreachable code.
