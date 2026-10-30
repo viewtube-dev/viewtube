@@ -832,7 +832,6 @@ type ConfirmedCatalogFamilyName =
   | "Buttons & Badges"
   | "Dropdowns"
   | "Controls"
-  | "Counters & Sliders"
   | "Modules & Frames"
   | "Compositions"
 
@@ -841,7 +840,6 @@ const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
   "Buttons & Badges",
   "Dropdowns",
   "Controls",
-  "Counters & Sliders",
   "Modules & Frames",
   "Compositions",
 ]
@@ -854,6 +852,9 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   const componentName = typeof node.type === "function"
     ? (componentType.displayName || componentType.name || "")
     : ""
+
+  if (/Compatibility Field Exports/.test(title)) return "Text Fields"
+  if (/Compatibility Control Exports/.test(title)) return "Controls"
 
   // Choice primitives share one top-level family; check this before broad button rules.
   if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle|StudioChoice/.test(title)
@@ -872,7 +873,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     || componentName === "ConfirmedStudioSideCounterFamily"
     || componentName === "ConfirmedStudioLeftWordCounterFamily"
     || componentName === "ConfirmedStudioDoubleSplitWordCounterFamily"
-    || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Counters & Sliders"
+    || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Controls"
   if (/Dropdown/.test(title) || componentName === "ConfirmedStudioDropdownFamily") return "Dropdowns"
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton/.test(title)
     || componentName === "ConfirmedStudioButtonFamily"
@@ -931,7 +932,7 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
   )
 }
 
-const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
+const useConfirmedAdditionalPrimitiveSections = (): React.ReactNode[] => {
   const [choiceChecked, setChoiceChecked] = React.useState(false)
   const [leftCounterValue, setLeftCounterValue] = React.useState(6)
   const [username, setUsername] = React.useState("CREATOR")
@@ -943,8 +944,8 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
     { value: "focused", label: "FOCUSED" },
     { value: "explore", label: "EXPLORE" },
   ]
-  return (
-    <ConfirmedCatalogFamilyGroups>
+  const content = (
+    <>
       <Family title="StudioChatComposerDock · Message Composer Layout" nonDefaultSettings={[
         "The dock owns responsive placement only; field state, tool state, and message submission remain caller-owned.",
         "The inline-actions variant puts tools before the field row; toolbar-actions moves tools and actions below the field.",
@@ -1006,16 +1007,9 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
         </div>
       </Family>
 
-      <Family title="Compatibility Exports + Composition Helpers · Standard" nonDefaultSettings={[
-        "Compatibility-only examples preserve the old exported names; use the canonical StudioTextInput, StudioTextArea, StudioSwitch, StudioRadio, StudioCheckbox, and StudioXCheckbox APIs for new work.",
-        "Composition helpers arrange existing controls; they do not add control faces, token tiers, or a separate style contract.",
-      ]} provenance={<Provenance
-        primitive="StudioInput · Studioarea · Studiotoggle · Studioswitch · Studioradio · Studiocheck · Studioxbox · StudioComponentGridRow · StudioComponentGridSpecimen · StudioComponentGridSpecimenPair"
-        tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioComponentGrid.tsx + src/studio-ui/primitives/StudioComponentGridSpecimen.tsx"
-        css="src/styles/studio-control-system.css + src/styles/studio-component-grid.css"
-        tokens="Canonical standard-tier primitives; compatibility aliases inherit the canonical component's token contract."
-        imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioComponentGrid.tsx", "src/studio-ui/primitives/StudioComponentGridSpecimen.tsx"]}
-      />}>
+      <Family title="Compatibility Field Exports · Standard" nonDefaultSettings={[
+        "Legacy field aliases are retained for compatibility; new work should use StudioTextInput and StudioTextArea.",
+      ]} provenance={<Provenance primitive="StudioInput · Studioarea" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Compatibility aliases inherit the canonical text-field token contract." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInput">
           <span>STUDIO INPUT · COMPATIBILITY EXPORT</span>
           <StudioInput sizeVariant="standard" aria-label="Compatibility StudioInput specimen" placeholder="CREATOR TITLE" />
@@ -1024,6 +1018,11 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
           <span>STUDIOAREA · COMPATIBILITY EXPORT</span>
           <Studioarea sizeVariant="standard" rows={2} aria-label="Compatibility Studioarea specimen" placeholder="DESCRIPTION" />
         </div>
+      </Family>
+
+      <Family title="Compatibility Control Exports · Standard" nonDefaultSettings={[
+        "Legacy switch, toggle, radio, checkbox, and X-checkbox aliases remain under Controls; use canonical Studio control APIs for new work.",
+      ]} provenance={<Provenance primitive="Studiotoggle · Studioswitch · Studioradio · Studiocheck · Studioxbox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Compatibility aliases inherit their canonical control token contracts." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="Studiotoggle">
           <span>STUDIOTOGGLE · COMPATIBILITY EXPORT</span>
           <Studiotoggle size="44" value={false} words={["OFF", "ON"]} aria-label="Compatibility Studiotoggle specimen" />
@@ -1044,6 +1043,11 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
           <span>STUDIOXBOX · COMPATIBILITY EXPORT</span>
           <Studioxbox sizeVariant="standard" shape="rect" skin="solid" checked={false} aria-label="Compatibility Studioxbox specimen" />
         </div>
+      </Family>
+
+      <Family title="Composition Helpers · Standard" nonDefaultSettings={[
+        "Composition helpers arrange existing controls; they do not add control faces, token tiers, or a separate style contract.",
+      ]} provenance={<Provenance primitive="StudioComponentGridRow · StudioComponentGridSpecimen · StudioComponentGridSpecimenPair" tsx="src/studio-ui/primitives/StudioComponentGrid.tsx + src/studio-ui/primitives/StudioComponentGridSpecimen.tsx" css="src/styles/studio-component-grid.css" tokens="Composition-only layout helpers; embedded controls retain their owning family contracts." imports={["src/studio-ui/primitives/StudioComponentGrid.tsx", "src/studio-ui/primitives/StudioComponentGridSpecimen.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGridRow">
           <span>STUDIO COMPONENT GRID ROW · COMPOSITION HELPER</span>
           <StudioComponentGrid cols={2} rows={1} size="standard" aria-label="Component grid row helper specimen">
@@ -1073,11 +1077,14 @@ const ConfirmedAdditionalPrimitiveSections: React.FC = () => {
       <Family title="StudioLeftCounter · Standard" nonDefaultSettings={["Left-action counter variant with the same 2:1 numeric display as the standard counter."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>STANDARD · LEFT ACTION RAIL</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter dedicated specimen" /></div>
       </Family>
-    </ConfirmedCatalogFamilyGroups>
+    </>
   )
+  return React.Children.toArray((content as React.ReactElement<{ children?: React.ReactNode }>).props.children)
 }
 
-export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
+export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
+  const additionalPrimitiveSections = useConfirmedAdditionalPrimitiveSections()
+  return (
   <>
     <div className="vt-confirmed-catalog">
       <ConfirmedPrimitiveGridOverview />
@@ -1800,11 +1807,11 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
           </div>
         </div>
       </Family>
-  </ConfirmedCatalogFamilyGroups>
-    {/* Core controls are already represented in the canonical grouped families above. */}
-    <ConfirmedAdditionalPrimitiveSections />
+      {additionalPrimitiveSections}
+    </ConfirmedCatalogFamilyGroups>
   </>
-)
+  )
+}
 
 const ConfirmedStudioValueToggleFamily: React.FC = () => {
   const [arrowStd, setArrowStd] = React.useState("ONE")
