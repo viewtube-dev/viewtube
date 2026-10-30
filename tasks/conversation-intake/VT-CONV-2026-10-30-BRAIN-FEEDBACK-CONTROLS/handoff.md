@@ -33,7 +33,7 @@
 ## Complete user instruction register
 
 - [x] `REQ-001` — Continue the previously submitted Brain feedback-control repair by checking its delivery and validation state — Status: MERGED — Work: `CWI-001` — PR/commit: [#993](https://github.com/viewtube-dev/viewtube/pull/993), `8fffa6f8adc05f9002953e999a448e787c611fd4` — Delivery: PRESENT_ON_TARGET — Evidence: [target comparison](https://github.com/viewtube-dev/viewtube/compare/8fffa6f8adc05f9002953e999a448e787c611fd4...db066b9e4c9d6edce85d915618493ebf1ad735da)
-- [ ] `REQ-002` — Complete the conversation handoff/log process in the repository documentation — Status: IN_PROGRESS — Work: this package — PR/commit: documentation branch created; PR not yet opened — Delivery: IN_PR — Evidence: this handoff package after merge.
+- [ ] `REQ-002` — Complete the conversation handoff/log process in the repository documentation — Status: IN_PROGRESS — Work: this package — PR/commit: [#1226](https://github.com/viewtube-dev/viewtube/pull/1226) — Delivery: IN_PR — Evidence: [PR #1226](https://github.com/viewtube-dev/viewtube/pull/1226).
 
 ## Links to documents created or changed
 
@@ -52,6 +52,7 @@
 | This handoff | Living log | tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/handoff.md | NEW | CWI-004 |
 | This worklog | Structured provenance | tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/worklog.json | NEW | CWI-004 |
 | This review | Reconciliation review | tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/review.md | NEW | CWI-004 |
+| PR #1226 | Documentation delivery | https://github.com/viewtube-dev/viewtube/pull/1226 | OPEN — mergeability pending | CWI-004 |
 
 ## Work and delivery register
 
@@ -67,6 +68,7 @@
 | Branch | Target | PR | Opened SHA | Current SHA | Post-PR work | Merge SHA | Target presence | Classification |
 |---|---|---:|---|---|---|---|---|---|
 | `fix/brain-feedback-controls-undefined-symbols` | `master/consolidated-feature-integration` | #993 | UNKNOWN (opening snapshot not independently recoverable) | `578babfe6c2c837de3512929813ce6d86c8f7c13` | No later branch-tip commits observed; changed path: `src/views/AIBrainCommandInterface.tsx` | `8fffa6f8adc05f9002953e999a448e787c611fd4` | YES — merge commit is ancestor of inspected target SHA `db066b9e4c9d6edce85d915618493ebf1ad735da` | MERGED_AND_CURRENT |
+| `docs/conversation-handoff-brain-feedback-2026-10-30` | `master/consolidated-feature-integration` | #1226 | `f08758b5be25396ed62147a9d12bf2620b330862` | `f08758b5be25396ed62147a9d12bf2620b330862` | None observed after PR creation; 4 package/index files | N/A — open PR | UNKNOWN — not merged | OPEN_PR |
 
 The merge run checked the synthetic PR merge ref `91faf676f16e23b73784d432c0dbeca90d669a28`. This is not the same as the later current target SHA. The branch ref still resolves to the PR head commit; no post-PR branch changes were observed.
 
@@ -118,6 +120,7 @@ The Studio catalog and shared-control failures are a separate system-level quali
 - [x] Every unfinished item has a single-line checkbox and next action.
 - [x] All known created/changed artifacts are linked.
 - [x] PR #993 and target-branch presence are reconciled; opening SHA remains UNKNOWN.
+- [ ] PR #1226 documentation package delivery is pending review/merge.
 - [x] Integration gaps use Task Authority's nine maturity axes.
 - [x] Decisions, failures and blockers are preserved.
 - [x] Five improvement proposals are evaluated and routed as proposals, not approved work.
