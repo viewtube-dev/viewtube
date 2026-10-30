@@ -49,6 +49,11 @@ export {
   StudioCheckbox,
   StudioXCheckbox,
   StudioUploadFrame,
+  StudioArrowToggle,
+  StudioSideToggle,
+  StudioDoubleSideToggle,
+  StudioBarToggle,
+  StudioDoubleSplitWordCounter,
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
@@ -77,6 +82,12 @@ export type {
   StudioTextAreaProps,
   StudioSimpleDropdownProps,
   StudioUploadFrameProps,
+  StudioToggleAppearance,
+  StudioArrowToggleProps,
+  StudioSideToggleProps,
+  StudioDoubleSideToggleProps,
+  StudioBarToggleProps,
+  StudioDoubleSplitWordCounterProps,
 } from "./primitives/StudioControls"
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
