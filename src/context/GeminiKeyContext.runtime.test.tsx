@@ -97,4 +97,21 @@ describe("Gemini key validation runtime", () => {
   expect(exposed).toHaveProperty("validateAndSaveKey")
  })
 
+
+ it("does not report a key as saved when browser storage rejects persistence", async () => {
+  listSuccess()
+  vi.stubGlobal("localStorage", {
+   getItem: () => null,
+   setItem: () => { throw new Error("storage disabled") },
+   removeItem: () => { throw new Error("storage disabled") },
+  })
+  await mount()
+  let result = true
+  await act(async () => { result = await exposed!.validateAndSaveKey("valid-but-not-persistable") })
+  expect(result).toBe(false)
+  expect(exposed?.apiKey).toBeNull()
+  expect(exposed?.validationError).toMatch(/browser storage is unavailable/i)
+  expect(getVaultKey("gemini")).toBe("")
+ })
+
 })
