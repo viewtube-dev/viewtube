@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioHubConfirmedPrimitiveCatalog } from "./StudioHubConfirmedPrimitiveCatalog"
+import { classifyConfirmedCatalogItem, StudioHubConfirmedPrimitiveCatalog } from "./StudioHubConfirmedPrimitiveCatalog"
 
 const readStudioControlCss = () => [
   "studio-control-system.css",
@@ -630,6 +630,21 @@ describe("responsive Studio upload frame", () => {
 
 
 describe("confirmed primitive family taxonomy", () => {
+  it("requires explicit classification and keeps dropdown menus and value controls in their canonical groups", () => {
+    const specimen = (title: string) => React.createElement("div", { title })
+
+    expect(classifyConfirmedCatalogItem(specimen("Dropdown Menu Rows · Standard"))).toBe("Dropdowns")
+    expect(classifyConfirmedCatalogItem(specimen("Dropdown Family · Standard / Split-Left / Multi-Select"))).toBe("Dropdowns")
+    expect(classifyConfirmedCatalogItem(specimen("StudioCounter · Standard"))).toBe("Controls")
+    expect(classifyConfirmedCatalogItem(specimen("StudioDoubleSplitSlider · Standard"))).toBe("Controls")
+    expect(classifyConfirmedCatalogItem(specimen("Arrow / Side / Double Side / Bar Toggles"))).toBe("Controls")
+    expect(classifyConfirmedCatalogItem(specimen("Studio Text Input · Standard"))).toBe("Text Fields")
+    expect(classifyConfirmedCatalogItem(specimen("Split-left Button · Standard"))).toBe("Buttons & Badges")
+    expect(classifyConfirmedCatalogItem(specimen("StudioInterModule · Standard"))).toBe("Modules & Frames")
+    expect(classifyConfirmedCatalogItem(specimen("Publishing Card · Standard"))).toBe("Compositions")
+    expect(() => classifyConfirmedCatalogItem(specimen("Unregistered New Primitive"))).toThrow(/Unclassified family/)
+  })
+
   it("renders one canonical parent group per category and nests every specimen in the shared grouping pass", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
