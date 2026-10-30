@@ -174,3 +174,11 @@ test("confirmed square icon library groups every requested effect by size", () =
   assert.match(catalog, /effect="like" badge=\{0\}/);
   assert.doesNotMatch(catalog, /vt-confirmed-square-effect-pair/);
 });
+
+
+test("switch and choice tracks retain their intrinsic component widths", () => {
+  const contentWidthRules = [...css.matchAll(/(?:\\[data-vt-studio-control="true"\\]|button)\\.vt-studio-44-(?:switch|choice)[\\s\\S]{0,180}width:\\s*max-content\\s*!important/g)];
+  assert.equal(contentWidthRules.length, 0, "switch and choice controls must not inherit content-width exceptions");
+  assert.match(css, /button\\.vt-studio-44-switch\\s*\\{[^}]*width:\\s*75\\.68px/s);
+  assert.match(css, /button\\.vt-studio-44-choice\\s*\\{[^}]*width:\\s*44px/s);
+});
