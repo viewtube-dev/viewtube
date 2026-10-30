@@ -113,3 +113,11 @@ A deeper current-main source trace confirms this is not merely a settings-only h
 - `src/components/SidebarChatbot.tsx`, `src/views/AIBrainCommandInterface.tsx` (two call paths), and `src/views/dashboard/widgets/BrainHubWidget.tsx` pass `readSelectedPublicHandleContext()` only when `!authState.isAuthenticated && !channelConnection.isConnected`.
 - `src/views/Settings.tsx` persists the explicit public selection and displays source/limitations.
 Therefore the public resolver has production source wiring across the three main Brain surfaces. Remaining gate is runtime verification of logged-out public handle success, invalid/unknown handle, cache hit/stale state, resolver outage and strict public-only data; source wiring alone is not runtime certification.
+
+
+### Public resolver backend and scaffold ownership
+The recursive target tree confirms the real server endpoint `api/public-channel.mjs` plus `api/public-channel.node.test.mjs` and `api/public-channel.test.ts`. The endpoint is GET-only, validates YouTube handle/channel URL forms, fetches only allowlisted YouTube hosts, validates redirects, caps response size/time, parses public channel page metadata and RSS uploads, and does not require OAuth or YouTube Data API credentials. Service tests cover handle resolution, RSS ingestion, external URL rejection, redirect rejection, no-key operation, fixture labeling, identity mismatch and cache provenance.
+
+A second folder, `src/features/capabilities/public-channel-resolution/`, is a scaffold: `PublicChannelResolutionApi.ts` still uses `scaffold://public-channel-resolution` and its write method throws; `usePublicChannelResolution.ts` wraps that stub. Code search found no production imports of the scaffold page/hook/API. Treat it as stale duplicate scaffolding, not the canonical resolver. Do not delete it until route/consumer/import checks and donor-harvest evidence are recorded; then quarantine/remove via a separate no-loss cleanup.
+
+The canonical path is `Settings → publicHandleMode.ts → api/public-channel.mjs → BrainRuntime → SidebarChatbot / AIBrainCommandInterface / BrainHubWidget`. Runtime proof still needs to demonstrate the complete logged-out user journey and deployed endpoint.
