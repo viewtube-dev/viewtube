@@ -1041,7 +1041,7 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
     )
   }
   return (
-    <div className="vt-confirmed-catalog vt-confirmed-direct-representatives">
+    <div className="vt-confirmed-catalog">
       {defaults}
       {unclassified.length > 0 && (
         <section className="vt-confirmed-unclassified-family" role="alert" data-vt-confirmed-family="unclassified">
@@ -1197,7 +1197,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
   const additionalPrimitiveSections = useConfirmedAdditionalPrimitiveSections()
   return (
   <>
-    <div className="vt-confirmed-catalog">
+    <div className="vt-confirmed-catalog vt-confirmed-direct-representatives">
       <ConfirmedPrimitiveGridOverview />
       <ConfirmedDirectPrimitiveRows />
     </div>
