@@ -26,12 +26,12 @@ test("counter primitives use global full-row width without fixed widths or 2:1 v
 test("double-split word counter uses the primitive's solid primary face and black focus text", () => {
   const wordStart = styles.indexOf("/* Double-split word counter")
   const wordStyles = styles.slice(wordStart)
-  const shell = wordStyles.match(/\\.vt-studio-word-counter\\s*\\{[^}]*\\}/)?.[0] ?? ""
-  assert.match(shell, /background:\\s*var\\(--vt-studio-control-accent/)
-  assert.doesNotMatch(shell, /color-mix\\([^;]*50%/)
-  assert.match(wordStyles, /\\.vt-studio-word-counter > \\[data-vt-studio-split-label\\][\\s\\S]*?background:\\s*var\\(--vt-studio-control-accent/)
-  assert.match(wordStyles, /:focus-within[\\s\\S]*?color:\\s*#000/)
-  assert.doesNotMatch(styles + distill + recovery, /\\.vt-studio-value-toggle--arrow[^}]*background:\\s*color-mix\\([^}]*50%/)
+  const shell = wordStyles.match(/\.vt-studio-word-counter\s*\{[^}]*\}/)?.[0] ?? ""
+  assert.match(shell, /background:\s*var\(--vt-studio-control-accent/)
+  assert.doesNotMatch(shell, /color-mix\([^;]*50%/)
+  assert.match(wordStyles, /\.vt-studio-word-counter > \[data-vt-studio-split-label\][\s\S]*?background:\s*var\(--vt-studio-control-accent/)
+  assert.match(wordStyles, /:focus-within[\s\S]*?color:\s*#000/)
+  assert.doesNotMatch(styles + distill + recovery, /\.vt-studio-value-toggle--arrow[^}]*background:\s*color-mix\([^}]*50%/)
 })
 
 test("bar toggle tooltip is focus-only, the shell has a focus outline, and bars layer above rails", () => {
