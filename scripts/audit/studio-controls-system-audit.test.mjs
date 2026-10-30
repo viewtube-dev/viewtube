@@ -7,6 +7,7 @@ const tokens = read("src/studio-ui/tokens.ts");
 const controls = read("src/studio-ui/primitives/StudioControls.tsx");
 const generated = read("src/styles/studio-control-vars.generated.css");
 const system = read("src/styles/studio-control-system.css");
+const recovery = read("src/styles/studio-control-recovery-overrides.css");
 const fields = read("src/styles/studio-control-fields.css");
 const recovery = read("src/styles/studio-control-recovery-overrides.css");
 const standaloneInputCss = read("src/styles/studio-text-input.css");
@@ -65,6 +66,25 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
   assert.ok(system.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary"));
   assert.ok(system.includes("-webkit-text-stroke-color: var(--vt-field-primary"));
   assert.ok(fields.includes("textarea[data-vt-studio-control=\\"true\\"][data-vt-studio-field-kind=\\"textarea\\"],"));
+});
+
+test("vertical word-toggle handles use measured word bounds and match horizontal handle spacing", () => {
+  assert.ok(controls.includes("return { top: wordRect.top - rootRect.top - root.clientTop, height: wordRect.height }"));
+  assert.ok(system.includes("left: var(--vt-studio-vertical-word-handle-inset); right: var(--vt-studio-vertical-word-handle-inset);"));
+  assert.ok(system.includes("border-radius: calc(var(--vt-studio-vertical-word-radius) * .5);"));
+  assert.ok(system.includes("border-radius: calc(var(--vt-word-radius)*.5)"));
+  assert.ok(!recovery.includes("vt-studio-vertical-word-toggle__handle { inset: 3px !important"));
+});
+
+test("double-side toggles reuse the same side-arrow controls and only the outer shell owns focus outline", () => {
+  const start = controls.indexOf("export function StudioDoubleSideToggle");
+  const end = controls.indexOf("export function StudioBarToggle", start);
+  const doubleSide = controls.slice(start, end);
+  assert.ok(doubleSide.includes("<StudioSideToggle"));
+  assert.ok(doubleSide.includes("arrowSide=\"left\""));
+  assert.ok(doubleSide.includes("arrowSide=\"right\""));
+  assert.ok(system.includes(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider{outline:none!important;box-shadow:none!important}"));
+  assert.ok(system.includes(".vt-studio-value-toggle--double:focus-within"));
 });
 
 test("split badge labels share the full outer-shell center axis without affecting editable split inputs", () => {
