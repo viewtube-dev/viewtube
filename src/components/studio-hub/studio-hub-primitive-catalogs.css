@@ -2492,7 +2492,8 @@
   max-width: 100%;
   overflow-x: auto;
   overflow-y: visible;
-\n  padding-block: 14px;}
+
+  padding-block: 14px;}
 .vt-confirmed-square-variant-grid > button[data-vt-studio-icon-button="true"] {
   flex: 0 0 auto;
   margin: 0;
@@ -2568,7 +2569,8 @@
     gap: 8px;
     overflow-x: auto;
     overflow-y: visible;
-  \n  padding-block: 14px;}
+  
+  padding-block: 14px;}
   .vt-confirmed-stepper-row-grid {
     grid-template-columns: repeat(2, minmax(0, max-content));
     gap: 10px;
@@ -3169,14 +3171,18 @@
   min-width: 0;
   width: 100%;
 }
-.vt-confirmed-square-variant-grid {\n  grid-auto-flow: column;\n  grid-auto-columns: max-content;
+.vt-confirmed-square-variant-grid {
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
   display: grid;
   grid-template-columns: none;
   gap: var(--vt-confirmed-space-2);
   min-width: 0;
   max-width: 100%;
   overflow-x: auto;
-\n  overflow-y: visible;\n  padding-block: 14px;}
+
+  overflow-y: visible;
+  padding-block: 14px;}
 .vt-confirmed-spectrum-tag-grid {
   display: flex;
   flex-wrap: wrap;
@@ -3272,11 +3278,15 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--vt-confirmed-space-2);
   }
-  .vt-confirmed-square-variant-grid {\n  grid-auto-flow: column;\n  grid-auto-columns: max-content;
+  .vt-confirmed-square-variant-grid {
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
     grid-template-columns: none;
     gap: var(--vt-confirmed-space-2);
     overflow-x: auto;
-  \n  overflow-y: visible;\n  padding-block: 14px;}
+  
+  overflow-y: visible;
+  padding-block: 14px;}
   .vt-confirmed-control-family,
   .vt-confirmed-control-row,
   .vt-confirmed-choice-module,
