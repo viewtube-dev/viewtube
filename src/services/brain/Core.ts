@@ -186,7 +186,11 @@ const runReflection = async (): Promise<void> => {
  try {
   // The gateway keeps Brain orchestration provider-neutral while its
   // compatibility provider dynamically loads Gemini only when generation runs.
-  const result = await defaultBrainModelGateway.generateJsonObject?.({
+  const generateJsonObject = defaultBrainModelGateway.generateJsonObject
+  if (!generateJsonObject) {
+   throw new Error("The Brain model gateway does not support JSON generation")
+  }
+  const result = await generateJsonObject({
    userText: prompt,
    systemInstruction: "Follow the user message instructions and return only the requested JSON object.",
    capability: "analysis",
