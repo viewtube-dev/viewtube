@@ -4904,18 +4904,6 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
   border-radius: 2px;
 }
 
-/* Upload-frame prompt badge only: compact two-line label.
-   Do not apply upload-specific typography to shared double-split controls. */
-.vt-studio-upload-frame__label .vt-studio-upload-frame__badge-text {
-  font-size: 3.2cqw;
-  line-height: .9;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  text-overflow: clip;
-  max-height: 1.8em;
-}
-
-
 /* Brain status badges: one 20px rectangular contract with realistic LED optics. */
 .vt-studio-brain-status-badge {
   --vt-brain-led-color: #42f55b;
