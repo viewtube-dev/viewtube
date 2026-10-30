@@ -782,3 +782,39 @@ describe("Studio Calendar confirmed primitive representatives", () => {
   })
 
 });
+
+
+describe("confirmed representatives counter and slider design coverage", () => {
+  it("shows each distinct numeric, directional, word, and slider design in the direct representatives section", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf('data-vt-confirmed-representatives="true"');
+    const end = source.indexOf("</Family>", start);
+    const representatives = source.slice(start, end);
+
+    for (const primitive of [
+      "StudioCounter",
+      "StudioSideCounter",
+      "StudioLeftCounter",
+      "StudioLeftWordCounter",
+      "StudioDoubleSplitWordCounter",
+      "StudioDoubleSplitSlider",
+      "StudioLeftWordSlider",
+    ]) {
+      expect(representatives, `${primitive} has a direct representative`).toContain(`data-vt-library-component="${primitive}"`);
+    }
+    expect(representatives).toContain("DOUBLE-SPLIT WORD COUNTER");
+    expect(representatives).toContain("LEFT WORD SLIDER");
+  });
+
+  it("keeps the full five-tier size matrix visible for both slider designs and word counters", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const slider = source.slice(source.indexOf("const ConfirmedStudioDoubleSplitSliderFamily"), source.indexOf("const ConfirmedStudioSideCounterFamily"));
+    const wordSlider = source.slice(source.indexOf("const ConfirmedStudioLeftWordSliderFamily"), source.indexOf("const ConfirmedStudioButtonFamily"));
+    const wordCounter = source.slice(source.indexOf("const ConfirmedStudioLeftWordCounterFamily"), source.indexOf("const ConfirmedStudioDoubleSplitWordCounterFamily"));
+    for (const tier of ['"supreme"', '"standard"', '"compact"', '"mini"', '"micro"']) {
+      expect(slider, `double-split slider includes ${tier}`).toContain(tier);
+      expect(wordSlider, `left word slider includes ${tier}`).toContain(tier);
+      expect(wordCounter, `left word counter includes ${tier}`).toContain(tier);
+    }
+  });
+});
