@@ -77,7 +77,7 @@ The checkbox is checked only when a requirement is VERIFIED_DELIVERED. The statu
 | Branch | Target | PR | PR head | Merge SHA | Target presence | Classification |
 |---|---|---|---|---|---|---|
 | `docs/conversation-handoff-complete-register-2026-10-29` | `master/consolidated-feature-integration` | #1170 | `49918598057dcecf46373e778e8a5a205b5919b2` | `0fd1d412758f212d8d6cf34a3a31d22270ea33c4` | YES | MERGED_AND_CURRENT |
-| `docs/living-conversation-handoff-log-2026-10-29` | `master/consolidated-feature-integration` | #1177 | `a07aa2c008a0b89b66d2759c548532e805934572` | — | NO | OPEN_PR |
+| `docs/living-conversation-handoff-log-2026-10-29` | `master/consolidated-feature-integration` | #1177 | `bd3d7562d20b123d4bd9f97cacb3f34a7d49a47a` (reconciliation snapshot) | — | NO | OPEN_PR |
 
 The original PR-opening SHA is not recoverable. GitHub compare shows the original source branch has zero commits ahead of the merge commit and is 22 commits behind it. No unique post-PR branch work requires recovery. The target has advanced eight commits beyond the merge at the time of the initial comparison.
 
@@ -128,4 +128,4 @@ All five remain proposals; route them through the existing Ideas Registry / impr
 
 ## Follow-up PR #1177
 
-The living-log completion is proposed in [PR #1177](https://github.com/viewtube-dev/viewtube/pull/1177), targeting `master/consolidated-feature-integration`. PR head at opening: `da40c647ea637a43a0a97cf6408b360f375223c6`. The first contract-test run exposed two assertion/template wording mismatches, corrected in commits `e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6` and `a07aa2c008a0b89b66d2759c548532e805934572`. GitHub compare from the PR-opening head to snapshot `f9da934076797693e7bb4c2b1a115e96cfaf7e0e` shows 11 post-open commits across seven paths; all are reconciled in the worklog. The dedicated handoff/document CI job passed. Do not mark this follow-up delivered until it is merged and the dedicated checks pass.
+The living-log completion is proposed in [PR #1177](https://github.com/viewtube-dev/viewtube/pull/1177), targeting `master/consolidated-feature-integration`. PR head at opening: `da40c647ea637a43a0a97cf6408b360f375223c6`. The first contract-test run exposed two assertion/template wording mismatches, corrected in commits `e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6` and `a07aa2c008a0b89b66d2759c548532e805934572`. GitHub compare from the PR-opening head to reconciliation snapshot `bd3d7562d20b123d4bd9f97cacb3f34a7d49a47a` shows 14 post-open commits across seven paths; all are reconciled in the worklog. The dedicated handoff/document CI job passed. Do not mark this follow-up delivered until it is merged and the dedicated checks pass.
