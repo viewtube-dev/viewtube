@@ -16,7 +16,7 @@ test("counter primitives keep the canonical 2:1 number area without recovery-lay
   assert.ok(start >= 0 && end > start)
   assert.match(counters, /\.vt-studio-counter,[\s\S]*?\.vt-studio-side-counter,[\s\S]*?\.vt-studio-left-counter\s*\{[^}]*width:\s*100%/)
   assert.doesNotMatch(counters, /vt-studio-counter-width|2fr/)
-  assert.match(styles, /\.vt-studio-counter__value,\s*\[data-vt-studio-counter-value\]\{aspect-ratio:2\/1/);
+  assert.match(styles, /\.vt-studio-counter__value,\s*\[data-vt-studio-counter-value\]\{aspect-ratio:var\(--vt-studio-counter-value-area-aspect-ratio,2\/1\)/);
   assert.doesNotMatch(recovery, /\.vt-studio-counter__value[^}]*aspect-ratio:\s*2\s*\/\s*1/)
   const wordStart = styles.indexOf("/* Double-split word counter")
   const wordStyles = styles.slice(wordStart)
