@@ -103,7 +103,6 @@ export const BrainComposerDock: React.FC<BrainComposerDockProps> = ({
                   sizeVariant="mini"
                   className="vt-brain-composer-attachment"
                   aria-label={`Draft source: ${activePromptTitle}`}
-                  title="Draft source"
                 />
                 <StudioButton
                   type="button"
