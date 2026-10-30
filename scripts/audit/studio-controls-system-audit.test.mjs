@@ -11,7 +11,6 @@ const split = read("src/styles/studio-control-split.css");
 const recovery = read("src/styles/studio-control-recovery-overrides.css");
 const distill = read("src/styles/studio-control-distill-overrides.css");
 const fields = read("src/styles/studio-control-fields.css");
-const recovery = read("src/styles/studio-control-recovery-overrides.css");
 const standaloneInputCss = read("src/styles/studio-text-input.css");
 const splitInput = read("src/studio-ui/primitives/StudioSplitTextInput.tsx");
 const splitInputCss = read("src/styles/studio-split-text-input.css");
