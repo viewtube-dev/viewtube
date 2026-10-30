@@ -67,10 +67,8 @@ test("inventory includes direct SDK calls, dynamic provider imports, model IDs, 
   ].join("\n"));
 
   const inventory = buildGenerationCallerInventory(rootDir);
-  assert.deepEqual(
-    inventory.surface.directProviderInvocations.map((entry) => entry.path),
-    ["src/services/provider.ts"],
-  );
+  assert.equal(inventory.surface.directProviderInvocations.length, 3);
+  assert.ok(inventory.surface.directProviderInvocations.every((entry) => entry.path === "src/services/provider.ts"));
   assert.deepEqual(
     inventory.surface.dynamicGeminiImports.map((entry) => entry.path),
     ["src/services/lazyProvider.ts"],
