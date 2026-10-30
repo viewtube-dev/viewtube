@@ -844,44 +844,45 @@ const CONFIRMED_CATALOG_FAMILIES: ConfirmedCatalogFamilyName[] = [
   "Compositions",
 ]
 
-const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
-  if (!React.isValidElement(node)) return "Compositions"
+export const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFamilyName => {
+  if (!React.isValidElement(node)) {
+    throw new Error("[Confirmed Primitive Library] Expected a family element; non-element catalog children must be filtered before classification.")
+  }
   const props = node.props as { title?: unknown }
   const title = typeof props.title === "string" ? props.title : ""
   const componentType = node.type as { displayName?: string; name?: string }
   const componentName = typeof node.type === "function"
     ? (componentType.displayName || componentType.name || "")
     : ""
+  const familyLabel = title || componentName || "unnamed family"
 
-  if (/Compatibility Field Exports/.test(title)) return "Text Fields"
-  if (/Compatibility Control Exports/.test(title)) return "Controls"
+  if (/Compatibility Field Exports|Studio Text Input|Studio Text Area|Studio Text Box|StudioTextInput|StudioTextArea|StudioTextBox|StudioUsernameInput|StudioSplitLeftInput|StudioSearchInput|StudioNumberInput|Split Text Input/.test(title)) return "Text Fields"
 
-  // Choice primitives share one top-level family; check this before broad button rules.
-  if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle|StudioChoice/.test(title)
+  // Choice/value primitives are controls, not buttons or compositions.
+  if (/Compatibility Control Exports|Switches, Radios & Checkboxes|Switches \/ Toggles \/ Radio \/ Checkbox|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioChoice|StudioDoubleSplitWordCounter|Studio Counter Family|StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|Double Split Slider|Side Counter|Left Word Counter/.test(title)
     || componentName === "CanonicalControlFamilies"
     || componentName === "CanonicalWordToggleFamily"
-    || componentName === "ConfirmedStudioValueToggleFamily") {
-    return "Controls"
-  }
-
-  if (/Split-left Badge|Split-right Badge|Double-split Badge|Brain Status LED Badges|Status \/ navigation|StudioBrainStatusBadge|StudioBrainStatusIndicator|StudioLedBadgeTab|StudioSplitLeftBadge|StudioSplitRightBadge|StudioDoubleSplitBadge/.test(title)
-    || componentName === "CanonicalSplitBadgeFamily") return "Buttons & Badges"
-  if (/Studio Text Input|Studio Text Area|Studio Text Box|StudioTextInput|StudioTextArea|StudioTextBox|UsernameInput|SplitLeftInput|SearchInput|NumberInput|Split Text Input|StudioSplitTextInput/.test(title)) return "Text Fields"
-  if (/StudioCounter|StudioDoubleSplitSlider|StudioSideCounter|StudioLeftCounter|StudioLeftWordCounter|StudioLeftWordSlider|Double Split Slider|Side Counter|Left Word Counter|Slider/.test(title)
+    || componentName === "ConfirmedStudioValueToggleFamily"
     || componentName === "ConfirmedStudioCounterFamily"
     || componentName === "ConfirmedStudioDoubleSplitSliderFamily"
     || componentName === "ConfirmedStudioSideCounterFamily"
     || componentName === "ConfirmedStudioLeftWordCounterFamily"
     || componentName === "ConfirmedStudioDoubleSplitWordCounterFamily"
     || componentName === "ConfirmedStudioLeftWordSliderFamily") return "Controls"
+
   if (/Dropdown/.test(title) || componentName === "ConfirmedStudioDropdownFamily") return "Dropdowns"
-  if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton/.test(title)
+
+  if (/Split-left Badge|Split-right Badge|Double-split Badge|Brain Status LED Badges|Status \/ navigation|StudioBrainStatusBadge|StudioBrainStatusIndicator|StudioLedBadgeTab|StudioSplitLeftBadge|StudioSplitRightBadge|StudioDoubleSplitBadge/.test(title)
+    || /Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton/.test(title)
+    || componentName === "CanonicalSplitBadgeFamily"
     || componentName === "ConfirmedStudioButtonFamily"
     || componentName === "ConfirmedStudioSplitButtonFamily") return "Buttons & Badges"
-  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
-  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag/.test(title)) return "Compositions"
-  if (/Publishing Card|StudioChatResponseShell|StudioChatActionGroup|StudioResponseMetaRow/.test(title)) return "Compositions"
-  return "Compositions"
+
+  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame/.test(title)) return "Modules & Frames"
+
+  if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag|Publishing Card|StudioChatComposerDock|StudioChatResponseShell|StudioChatActionGroup|StudioResponseMetaRow|Response Meta Row|Composition Helpers|Direct Imported Primitive Representatives|Calendar Event & Media Rails|Studio Hub Certification/.test(title)) return "Compositions"
+
+  throw new Error(`[Confirmed Primitive Library] Unclassified family "${familyLabel}". Add an explicit category rule before registering this specimen.`)
 }
 
 const isSwitchToggleChoiceFamily = (title: string): boolean =>
