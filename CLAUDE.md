@@ -105,7 +105,7 @@ For any work touching the desktop/mobile editor, editor project state, timeline,
 - docs/editor/VIEWTUBE_YOUTUBE_EDITOR_SYSTEM_MASTER_RESOURCE.md
 - .claude/skills/viewtube-youtube-editor-system/SKILL.md
 
-The master resource is the shared current-state, plan, reference/resource, branch-donor and update-log authority for the editor program. Every editor-related agent/conversation must append its work to the Update Log before handoff. Desktop and mobile remain one product with one project model; AI routes through BrainRuntime, generative media through Video Director, generated assets through Asset Engine/Vault, and deterministic output through Remotion.
+The master resource is the shared current-state, plan, reference/resource, branch-donor and Editor-domain update-log authority. Material Editor changes update its Current Work and append-only Update Log as a domain projection. Long-thread continuity, the complete user-instruction register, all-domain work capture and reconciliation use the single global process in `docs/governance/CONVERSATION_HANDOFFS.md` and `tasks/conversation-intake/`; do not create an Editor-only conversation log. Desktop and mobile remain one product with one project model; AI routes through BrainRuntime, generative media through Video Director, generated assets through Asset Engine/Vault, and deterministic output through Remotion.
 
 ## Loss-safety pattern for big consolidations
 
