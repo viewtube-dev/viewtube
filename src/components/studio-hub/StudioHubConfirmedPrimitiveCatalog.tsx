@@ -31,6 +31,15 @@ import {
   StudioSimpleDropdown,
   StudioSplitLeftDropdown,
   StudioUploadFrame,
+  StudioTextBox,
+  StudioVerticalWordToggle,
+  StudioSquareIconButtonGroup,
+  StudioSplitAccordion,
+  StudioArrowToggle,
+  StudioSideToggle,
+  StudioDoubleSideToggle,
+  StudioBarToggle,
+  StudioDoubleSplitWordCounter,
   STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
 } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-catalogs.css"
@@ -248,6 +257,41 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
   )
 }
 
+
+const RestoredPrimitiveShowcase: React.FC = () => {
+  const [vertical, setVertical] = React.useState(false);
+  const [arrow, setArrow] = React.useState("TWO");
+  const [side, setSide] = React.useState("MID");
+  const [doubleLeft, setDoubleLeft] = React.useState("LOW");
+  const [doubleRight, setDoubleRight] = React.useState("HIGH");
+  const [level, setLevel] = React.useState(55);
+  const [wordCount, setWordCount] = React.useState(2);
+  const [selectedSquare, setSelectedSquare] = React.useState(0);
+  return <>
+    <Family title="Representatives · Canonical Production Primitives" nonDefaultSettings={[
+      "This curated overview is separate from the detailed family modules below; every specimen is a real exported production primitive.",
+      "No mock replicas, inverse-color counter/slider examples, or column-based catalog layout.",
+    ]}>
+      <div className="vt-confirmed-variant is-full-row"><span>Standard · Split arrow toggle</span><StudioArrowToggle value={arrow} options={["ONE","TWO","THREE","FOUR"]} onValueChange={setArrow} size="standard" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>Standard · Double split word counter</span><StudioDoubleSplitWordCounter value={wordCount} onValueChange={setWordCount} size="standard" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>Standard · Split accordion</span><StudioSplitAccordion sizeVariant="standard" items={[{accessibleLabel:"Overview",icon:<Check/>,content:<span>OVERVIEW CONTENT</span>},{accessibleLabel:"Settings",icon:<Settings2/>,content:<span>SETTINGS CONTENT</span>},{accessibleLabel:"Details",icon:<Sparkles/>,content:<span>DETAILS CONTENT</span>}]} /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>Standard · Five-square action group</span><StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Representative five action buttons">{[0,1,2,3,4].map(index => <StudioSquareIconButton key={index} icon={<Settings2 aria-hidden="true"/>} label={`Select action ${index+1}`} selected={selectedSquare===index} onSelectedChange={selected=>setSelectedSquare(selected?index:-1)} sizeVariant="standard" data-vt-studio-icon-button="true"/>)}</StudioSquareIconButtonGroup></div>
+    </Family>
+    <Family title="Restored Value Toggle Family · Shared Split Foundation" nonDefaultSettings={[
+      "Arrow, side, double-side, bar, and double-split word counter all use StudioSplitShell and the shared five-tier size tokens.",
+      "Default family fill is primary; the selected double-side appearance remains explicit and documented.",
+    ]}>
+      <div className="vt-confirmed-variant is-full-row"><span>Arrow Toggle · Standard</span><StudioArrowToggle value={arrow} options={["ONE","TWO","THREE","FOUR"]} onValueChange={setArrow} size="standard" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>Side Toggle · Standard</span><StudioSideToggle value={side} options={["LOW","MID","HIGH"]} onValueChange={setSide} arrowSide="left" size="standard" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>Double Side Toggle · Standard</span><StudioDoubleSideToggle left={{value:doubleLeft,options:["LOW","HIGH"],onValueChange:setDoubleLeft}} right={{value:doubleRight,options:["LOW","HIGH"],onValueChange:setDoubleRight}} size="standard"/></div>
+      <div className="vt-confirmed-variant is-full-row"><span>Bar Toggle · Standard</span><StudioBarToggle value={level} onValueChange={setLevel} size="standard" ariaLabel="Intensity" /></div>
+      <div className="vt-confirmed-variant is-full-row"><span>Double Split Word Counter · Standard</span><StudioDoubleSplitWordCounter value={wordCount} onValueChange={setWordCount} size="standard"/></div>
+      <div className="vt-confirmed-variant is-full-row"><span>Vertical Word Toggle · Standard</span><StudioVerticalWordToggle value={vertical} onValueChange={setVertical} sizeVariant="standard" words={["WRITE","CREATE"]}/></div>
+      <div className="vt-confirmed-variant is-full-row"><span>Read-only Text Box</span><StudioTextBox>READ ONLY DISPLAY TEXT</StudioTextBox></div>
+    </Family>
+  </>;
+};
+
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
@@ -329,6 +373,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextArea className="is-reverse-colors" variant="fixed-label" label="DESCRIPTION" aria-label="Studio fixed-label textarea compact B reverse colors" sizeVariant="compact" rows={4} data-vt-library-component="StudioTextArea" /></div>
       </div>
     </Family>
+    <RestoredPrimitiveShowcase />
     <CanonicalControlFamilies />
     <p className="vt-confirmed-intro">Production primitives · standard + compact.</p>
     <Family title="Button"  provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Button-only shadow; canonical size defaults." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
