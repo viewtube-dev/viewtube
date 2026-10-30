@@ -1,4 +1,14 @@
 # P1-04 Priority-25 Capability Runtime Verification
+
+**Production Date:** 2026-10-29  
+**Last Edited:** 2026-10-29  
+**Class:** PROGRAM  
+**Status:** ACTIVE — BLOCKED ON IDENTITY RESOLUTION  
+**Concern:** priority-25 capability runtime verification  
+**Owner:** Owning capability + production caller + Verification  
+**Registry ID:** DOC-PLAN-P1-PRIORITY25RUNTIME  
+**Last Audited Main SHA:** 61cfb726db9b32de53b9c89a5a339db696782a11  
+**Capabilities:** UNRESOLVED — do not invent a CAP or task ID
 **Status:** BLOCKED ON IDENTITY RESOLUTION / DISCOVERY | **Owner:** owning capability + production caller + Verification
 **Capability ID:** UNRESOLVED — do not invent a CAP or task ID.
 
