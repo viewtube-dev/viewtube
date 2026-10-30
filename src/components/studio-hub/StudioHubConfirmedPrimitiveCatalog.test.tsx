@@ -629,31 +629,35 @@ describe("responsive Studio upload frame", () => {
 });
 
 
-describe("confirmed primitive family section boundaries", () => {
-  it("groups root, individual, and additional primitive sections independently", () => {
+describe("confirmed primitive family taxonomy", () => {
+  it("renders one canonical parent group per category and nests every specimen in the shared grouping pass", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
-    const additionalStart = source.indexOf("const ConfirmedAdditionalPrimitiveSections")
-    const rootStart = source.indexOf("export const StudioHubConfirmedPrimitiveCatalog")
-    const individualStart = source.indexOf("const ConfirmedIndividualPrimitiveSections")
-    const toggleStart = source.indexOf("const ConfirmedStudioValueToggleFamily")
-    expect(additionalStart).toBeGreaterThanOrEqual(0)
-    expect(rootStart).toBeGreaterThan(additionalStart)
-    expect(individualStart).toBeGreaterThan(rootStart)
-    expect(toggleStart).toBeGreaterThan(individualStart)
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    const categoryCount = (title: string) => [...html.matchAll(new RegExp(`<summary[^>]*>${title}</summary>`, "g"))].length
 
-    const additional = source.slice(additionalStart, rootStart)
-    const root = source.slice(rootStart, individualStart)
-    const individual = source.slice(individualStart, toggleStart)
-    expect(additional).toContain("return (")
-    expect(additional).toContain("<ConfirmedCatalogFamilyGroups>")
-    expect(individual).toContain("return <ConfirmedCatalogFamilyGroups>")
-    expect(individual).not.toContain("<ConfirmedAdditionalPrimitiveSections />")
-    expect(root).toContain("<ConfirmedIndividualPrimitiveSections />")
-    expect(root).toContain("<ConfirmedAdditionalPrimitiveSections />")
-    expect(root).toContain("</ConfirmedCatalogFamilyGroups>")
+    for (const category of ["Text Fields", "Buttons & Badges", "Dropdowns", "Controls", "Modules & Frames", "Compositions"]) {
+      expect(categoryCount(category), `${category} parent module count`).toBe(1)
+    }
+    expect(html).not.toContain("Counters & Sliders")
+    expect(source).toContain('return "Controls"')
+    expect(source).toContain('return "Dropdowns"')
+    expect(source).toContain('return "Text Fields"')
+    expect(source).toContain("useConfirmedAdditionalPrimitiveSections")
+    expect(source).not.toContain("const ConfirmedAdditionalPrimitiveSections")
+    expect(source).not.toContain("<ConfirmedAdditionalPrimitiveSections />")
+    expect(source).toContain("{additionalPrimitiveSections}")
+    expect(source).toContain('title="Compatibility Field Exports · Standard"')
+    expect(source).toContain('title="Compatibility Control Exports · Standard"')
+    expect(source).toContain('title="Composition Helpers · Standard"')
+    expect(source).toContain('title="Dropdown Family · Standard / Split-Left / Multi-Select"')
+    expect(source).toContain('title="StudioDropdown · Single Selection"')
+    expect(source).toContain('title="Studio Text Input · Standalone + Simple + Floating + Fixed Label"')
+    expect(source).toContain('title="Studio Text Area · Standalone + Simple + Floating + Fixed Label"')
+    expect(source).toContain('title="Studio Text Box · Supreme + Standard + Compact + Mini + Micro"')
+    expect(source).toContain('title="StudioLeftCounter · Standard"')
+    expect(source).toContain('title="Arrow / Side / Double Side / Bar Toggles"')
   })
 })
-
 
 describe("confirmed live primitive grid inventory", () => {
   it("keeps the live grid at the top and exposes all core and advanced production designs", () => {
