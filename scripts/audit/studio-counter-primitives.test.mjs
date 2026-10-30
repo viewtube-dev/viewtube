@@ -3,6 +3,8 @@ import { readFileSync } from "node:fs"
 import test from "node:test"
 
 const component = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
+const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
+const tokenEmitter = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const valueToggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8")
 const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
 const distill = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8")
@@ -178,4 +180,25 @@ test("bar toggle exposes a rounded percentage tooltip and preserves visible bars
   assert.match(distill, /\.vt-studio-value-toggle:focus-within/);
   assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar > \[data-vt-studio-split-label\]\s*\{[^}]*flex:\s*1 1 0[^}]*width:\s*auto/s);
   assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{\s*overflow:\s*visible/s);
+});
+
+test("dropdown menus share separated primary-filled defaults across standard, simple, and split-left variants", () => {
+  assert.match(tokens, /export const STUDIO_DROPDOWN_MENU_TOKENS\\s*=\\s*\\{/);
+  assert.match(tokens, /menuGap:\\s*8/);
+  assert.match(tokens, /menuPadding:\\s*4/);
+  assert.match(tokens, /rowGap:\\s*3/);
+  assert.match(tokens, /menuFill:\\s*"primary"/);
+  assert.match(tokens, /unselectedRowFill:\\s*"white"/);
+  assert.match(tokens, /selectedRowFill:\\s*"secondary"/);
+  assert.match(tokenEmitter, /STUDIO_DROPDOWN_MENU_TOKENS/);
+  const menuContract = styles.slice(styles.lastIndexOf("/* Global dropdown menu contract"));
+  assert.match(menuContract, /top:\\s*calc\\(100% \\+ var\\(--vt-studio-dropdown-menu-gap/);
+  assert.match(menuContract, /border-radius:\\s*var\\(--vt-studio-dropdown-menu-radius/);
+  assert.match(menuContract, /background:\\s*var\\(--vt-studio-dropdown-menu-fill/);
+  assert.match(menuContract, /border:\\s*var\\(--vt-studio-dropdown-row-stroke[^;]*solid #000/);
+  assert.match(menuContract, /border-radius:\\s*var\\(--vt-studio-dropdown-row-radius/);
+  assert.match(menuContract, /background:\\s*var\\(--vt-studio-dropdown-row-fill/);
+  assert.match(menuContract, /\\[data-selected="true"\\][\\s\\S]*?background:\\s*var\\(--vt-studio-dropdown-selected-fill/);
+  assert.match(menuContract, /\\.vt-studio-dropdown\\.is-simple \\.vt-studio-dropdown-menu/);
+  assert.match(menuContract, /\\.vt-studio-dropdown\\.is-split-left \\.vt-studio-dropdown-menu/);
 });
