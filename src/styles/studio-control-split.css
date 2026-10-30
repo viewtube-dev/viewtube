@@ -1,5 +1,6 @@
 /* One split-shell contract for split-left/right/double faces and rails. */
 [data-vt-studio-control="true"][data-vt-studio-split] {
+  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
   position: relative;
   display: grid;
   align-items: stretch;
