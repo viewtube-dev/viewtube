@@ -75,7 +75,7 @@ export const tagSuggestionsStrategy: AssetGeneratorStrategy<TagSuggestion[]> = {
    if (normalized) seen.add(normalized)
    if (!Number.isInteger(item.score) || item.score < 1 || item.score > 100) findings.push({ rule: "tag_score_range", detail: `Tag ${index + 1} score must be an integer from 1 to 100.`, severity: "blocking" })
    if (![item.searchVolume, item.competition].every(value => Number.isInteger(value) && value >= 0)) findings.push({ rule: "tag_estimate_nonnegative", detail: `Tag ${index + 1} search and competition estimates must be non-negative integers.`, severity: "blocking" })
-   if (!Number.isInteger(item.rank) || item.rank < 1) findings.push({ rule: "tag_rank_positive", detail: `Tag ${index + 1} potential rank must be a positive integer.`, severity: "blocking" })
+   if (!Number.isInteger(item.rank) || item.rank < 0) findings.push({ rule: "tag_rank_nonnegative", detail: `Tag ${index + 1} potential rank must be a non-negative integer; zero means unknown.`, severity: "blocking" })
    if (typeof item.tripleKeyword !== "boolean") findings.push({ rule: "tag_keyword_flag", detail: `Tag ${index + 1} must declare its title/description keyword match.`, severity: "blocking" })
   })
   return findings
