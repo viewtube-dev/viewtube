@@ -109,7 +109,8 @@ describe("confirmed composite primitive catalog", () => {
     expect(classifier).toContain('"Buttons & Badges"')
     expect(classifier).toContain('"Dropdowns"')
     expect(classifier).toContain('"Controls"')
-    expect(classifier).toContain('"Counters & Sliders"')
+    expect(classifier).not.toContain('"Counters & Sliders"')
+    expect(classifier).toMatch(/StudioCounter[\\s\\S]*return "Controls"/)
     expect(classifier).toContain('"Modules & Frames"')
     expect(classifier).toContain('"Compositions"')
     expect(classifier).toMatch(/StudioCounter\|StudioSideCounter\|StudioLeftCounter\|StudioLeftWordCounter/)
@@ -121,6 +122,22 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain("InterModule · Standard")
     expect(html).toContain("Top Split Module · Left / Right / Double / None")
     expect(html).toContain("Split Accordion · Train Motion")
+  })
+
+  it("renders one canonical parent module per catalog category and classifies all value controls as Controls", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const categoryCount = (title: string) => [...html.matchAll(new RegExp(`<summary[^>]*>${title}</summary>`, "g"))].length
+
+    for (const category of ["Text Fields", "Buttons & Badges", "Dropdowns", "Controls", "Modules & Frames", "Compositions"]) {
+      expect(categoryCount(category), `${category} parent module count`).toBe(1)
+    }
+    expect(html).not.toContain("Counters & Sliders")
+    expect(source).not.toContain("<ConfirmedCatalogFamilyGroups>\n       <Family title=\"StudioChatComposerDock")
+    expect(source).toContain("useConfirmedAdditionalPrimitiveSections")
+    expect(source).toContain('title="Compatibility Field Exports · Standard"')
+    expect(source).toContain('title="Compatibility Control Exports · Standard"')
+    expect(source).toContain('title="Composition Helpers · Standard"')
   })
 
   it("registers the independent Split Accordion at standard, compact, and micro sizes", () => {
