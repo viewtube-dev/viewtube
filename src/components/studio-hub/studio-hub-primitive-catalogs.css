@@ -2419,60 +2419,6 @@
 }
 
 
-/* Confirmed-library Square Icon Button effect matrix — all previews use StudioSquareIconButton. */
-.vt-confirmed-square-effects-wrap {
-  display: grid;
-  gap: 8px;
-}
-.vt-confirmed-square-effect-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  width: 100%;
-  min-width: 0;
-}
-.vt-confirmed-square-effect-pair {
-  display: grid;
-  align-content: start;
-  gap: 8px;
-  min-width: 0;
-  padding: 8px;
-  border: 2px solid #000;
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--pair-a, #36e0f6) 10%, #fff);
-}
-.vt-confirmed-square-effect-pair > strong {
-  font-size: 10px;
-  line-height: 1.2;
-  font-weight: 1000;
-  letter-spacing: .025em;
-  text-transform: uppercase;
-  overflow-wrap: anywhere;
-}
-.vt-confirmed-square-effect-sizes {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  min-width: 0;
-}
-.vt-confirmed-square-effect-sizes > button[data-vt-studio-icon-button="true"] {
-  flex: 0 0 auto;
-  margin: 0;
-}
-@media (max-width: 520px) {
-  .vt-confirmed-square-effect-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .vt-confirmed-square-effect-pair {
-    padding: 6px;
-  }
-  .vt-confirmed-square-effect-sizes {
-    gap: 8px;
-  }
-}
-
-
 /* Shared production icon-size comparison specimens. */
 
 
@@ -3089,8 +3035,6 @@
   .vt-confirmed-choice-names,
   .vt-confirmed-choice-variant-headings,
   .vt-confirmed-choice-example-row,
-  .vt-confirmed-square-effect-pair,
-  .vt-confirmed-square-effect-sizes,
   .vt-confirmed-vertical-word-toggle-specimen,
   .vt-catalog-brain-status-badges__group { gap: var(--vt-confirmed-grid-unit); }
 }
