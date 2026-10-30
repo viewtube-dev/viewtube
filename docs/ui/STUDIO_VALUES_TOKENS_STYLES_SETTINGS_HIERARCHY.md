@@ -193,7 +193,7 @@ The following discrepancies were visible when comparing the target branch's `src
 |---|---|---|
 | Supreme stroke/radius | 3px / 6px Standard system | TypeScript tokens and recovery CSS agree; superseded proportional values remain in historical documentation and catalog notes and must not be treated as current global defaults |
 | Mini type/icon size | 17.5px | Token source and generated CSS declare 17.5px; system selector consumes generated variables | Source aligned; runtime verification outstanding |
-| Micro stroke/radius | 1.5px / 3px Mini system | Tokens, generated CSS, and system selector align; duplicate tier declarations removed from core/recovery | Source aligned; runtime verification outstanding |
+| Micro stroke/radius | 1px / 2px explicit Micro geometry | Tokens, generated CSS, and system selector align; duplicate tier declarations removed from core/recovery | Source aligned; runtime verification outstanding |
 | Micro focus outline | 0.975px (65% of the 1.5px Mini-system stroke), offset 0 | Token and generated CSS values are consumed by the system selector | Source aligned; runtime verification outstanding |
 | Focused text fields | Black outer border and black text/glyph stroke; primary inset remains; secondary outline | Verify all field selectors and textarea variants; any primary outer/focus stroke is a regression |
 | TextBox | Black text and glyph stroke; primary inset; secondary outline | Verify no inherited generic primary glyph rule overrides the TextBox contract |
@@ -290,7 +290,7 @@ A catalog row is evidence of registration and wiring, not by itself evidence of 
 ### Verified implementation/documentation conflicts
 
 - `src/studio-ui/tokens.ts` defines Mini as 20px / 1.5px stroke / 3px radius / 17.5px type and icon. Generated CSS now reflects 17.5px; core/recovery no longer redeclare the tier.
-- Micro is 12px / 1.5px stroke / 3px radius / 10px type and icon, with a 0.975px outline. It shares Mini's stroke/radius/outline and global `-0.02em` letter-spacing.
+- Micro is 12px / 1px stroke / 2px radius / 10px type and icon, with a 0.65px outline and global `-0.02em` letter-spacing.
 - Micro uses the global `-0.02em` letter-spacing token; no Micro-specific exception is registered.
 - `StudioSplitTextInput` imports `src/styles/studio-split-text-input.css` for shell anatomy. Shared typography and field states remain owned by `studio-control-fields.css`; the entry stylesheet no longer carries split-input-specific rules.
 - Editable fields use primary text/stroke and a primary inset at rest; focused fields switch text/stroke to black while retaining the primary inset and using a secondary outline at 65% of border width. TextBox remains black text/stroke with primary inset and secondary outline. The border, inset, and outline are independent layers.
