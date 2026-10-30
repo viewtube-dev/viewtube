@@ -12,7 +12,7 @@
 **Last updated:** YYYY-MM-DD  
 **Package status:** UNREVIEWED / PARTIALLY_RECONCILED / RECONCILED / CLOSED
 
-## Ten facts to resume safely
+## Executive handoff — no more than 10 sentences
 
 Write no more than ten short, factual sentences. Include the goal, current repository state, verified completion, unmerged/local work, key user constraints, integration gaps, blockers, canonical authorities and exact next action.
 
