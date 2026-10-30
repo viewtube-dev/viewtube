@@ -12,7 +12,7 @@ const skill = read("../../.claude/skills/viewtube-conversation-handoff/SKILL.md"
 const documentation = read("../../docs/governance/DOCUMENTATION.md");
 const spec = read("../../docs/governance/CONVERSATION_HANDOFFS.md");
 const worklogTemplate = parse("../../.claude/skills/viewtube-conversation-handoff/templates/worklog-template.json");
-const intakeRoot = "../../tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG";
+const intakeRoot = new URL("../../tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/", import.meta.url);
 
 test("conversation work-log schema supports the living handoff metadata and evidence registers", () => {
   const properties = schema.properties;
