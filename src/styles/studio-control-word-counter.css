@@ -1,16 +1,16 @@
 /* Default word counter inherits the global field/counter 50% primary treatment. */
 .vt-studio-left-word-counter {
-  --vt-studio-number-background: color-mix(in srgb, #fff 50%, var(--pair-a) 50%);
+  --vt-studio-number-background: var(--vt-field-fill-rest, color-mix(in srgb, #fff 50%, var(--vt-field-primary, var(--pair-a)) 50%));
 }
 .vt-studio-left-word-counter .vt-studio-side-counter__value {
-  background: color-mix(in srgb, #fff 50%, var(--pair-a) 50%);
-  color: var(--pair-a);
-  -webkit-text-fill-color: var(--pair-a);
-  -webkit-text-stroke-color: var(--pair-a);
+  background: var(--vt-field-fill-rest, color-mix(in srgb, #fff 50%, var(--vt-field-primary, var(--pair-a)) 50%));
+  color: var(--vt-field-primary, var(--pair-a));
+  -webkit-text-fill-color: var(--vt-field-primary, var(--pair-a));
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--pair-a));
 }
 .vt-studio-left-word-counter[data-vt-interaction-focus="true"] .vt-studio-side-counter__value,
 .vt-studio-left-word-counter:focus-within .vt-studio-side-counter__value {
-  background: color-mix(in srgb, var(--pair-a) 15%, transparent);
+  background: var(--vt-field-fill-focus, color-mix(in srgb, var(--vt-field-primary, var(--pair-a)) 15%, transparent));
   color: #000;
   -webkit-text-fill-color: #000;
   -webkit-text-stroke-color: #000;
@@ -18,7 +18,7 @@
 
 /* Explicit color-cycle variant. Color changes are opt-in and never alter the default primitive. */
 .vt-studio-left-word-counter[data-vt-studio-word-variant="color-cycle"][data-vt-studio-word-index="1"] .vt-studio-side-counter__value {
-  background: var(--pair-a);
+  background: var(--vt-field-primary, var(--pair-a));
   color: #000;
   -webkit-text-fill-color: #000;
   -webkit-text-stroke-color: #000;
@@ -31,20 +31,20 @@
 }
 .vt-studio-left-word-counter[data-vt-studio-word-variant="color-cycle"][data-vt-studio-word-index="3"] .vt-studio-side-counter__value {
   background: #000;
-  color: var(--pair-a);
-  -webkit-text-fill-color: var(--pair-a);
-  -webkit-text-stroke-color: var(--pair-a);
+  color: var(--vt-field-primary, var(--pair-a));
+  -webkit-text-fill-color: var(--vt-field-primary, var(--pair-a));
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--pair-a));
 }
 .vt-studio-left-word-counter[data-vt-studio-word-variant="color-cycle"][data-vt-studio-word-index="4"] .vt-studio-side-counter__value {
   background: #fff;
-  color: var(--pair-a);
-  -webkit-text-fill-color: var(--pair-a);
-  -webkit-text-stroke-color: var(--pair-a);
+  color: var(--vt-field-primary, var(--pair-a));
+  -webkit-text-fill-color: var(--vt-field-primary, var(--pair-a));
+  -webkit-text-stroke-color: var(--vt-field-primary, var(--pair-a));
 }
 
 /* The word slider composes the canonical double-split slider, counter rails, divider, and numeric output. */
 .vt-studio-left-word-slider {
-  --vt-studio-number-background: var(--pair-a);
+  --vt-studio-number-background: var(--vt-field-primary, var(--pair-a));
 }
 .vt-studio-left-word-slider .vt-studio-double-split-slider__value {
   min-width: 0;
