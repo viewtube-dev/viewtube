@@ -248,7 +248,9 @@ export const prepareGenerationRequest = (input: {
   metadata: {
    requestId: request.id,
    operationId: request.operationId || request.id,
-   idempotencyKey: request.idempotencyKey,
+   // The input event records this key descriptively; only the output event
+   // owns the canonical event-level idempotency key.
+   generationIdempotencyKey: request.idempotencyKey,
    workflowId: request.workflowId || `workflow:${request.contentBuildId}`,
    contextManifestId: request.contextManifestId,
    contextRevision: request.contextRevision,
