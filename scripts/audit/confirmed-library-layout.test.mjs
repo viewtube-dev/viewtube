@@ -130,7 +130,7 @@ test("single-line inputs use global 38px/24px typography while textareas alone u
   const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
   assert.match(tokens, /standard:\s*\{[^}]*fontSize:\s*38/);
   assert.match(tokens, /STUDIO_CONTROL_SIZE_BASE_COMPACT\s*=\s*\{[^}]*fontSize:\s*24/);
-  assert.match(tokens, /textInput:\s*\{\s*standardFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.standard\.fontSize,\s*compactFontSize:\s*STUDIO_CONTROL_SIZE_BASE\.compact\.fontSize/);
+  assert.match(tokens, /STUDIO_CONTROL_SIZE_CONTRACT = \{[\s\S]*?textInput: \{ supremeFontSize: STUDIO_CONTROL_SIZE_BASE\.supreme\.fontSize, standardFontSize: STUDIO_CONTROL_SIZE_BASE\.standard\.fontSize, compactFontSize: STUDIO_CONTROL_SIZE_BASE\.compact\.fontSize/);
   assert.match(tokens, /inlineStrokeWidth: "same as border width"/);
   assert.match(css, /font-size:\s*var\(--vt-studio-control-font-size,\s*38px\);/);
   assert.doesNotMatch(css, /--vt-studio-text-input-standard-font-size|--vt-studio-text-input-compact-font-size/);
@@ -194,11 +194,11 @@ test("removed standalone labeled components have no remaining source references"
 
 test("word toggle library has three skins, one standard toggle per row, and centered compact toggles", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(catalog, /const WORD_TOGGLE_SKINS = CANONICAL_SKINS\.slice\(0, 3\)/);
-  assert.match(catalog, /Array\(6\)\.fill\(false\)/);
-  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="44"\][\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\) !important/);
+  assert.match(catalog, /const WORD_TOGGLE_SKINS = CANONICAL_SKINS/);
+  assert.match(catalog, /Array\(8\)\.fill\(false\)/);
+  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants,[\s\S]*?display:\s*flex !important;\s*flex-flow:\s*row wrap !important/);
   assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="28"\][\s\S]*?justify-items:\s*center/);
-  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="28"\][\s\S]*?justify-self:\s*center !important/);
+  assert.ok(catalog.includes("V1–V4 skins change the active fill and indicator colors only"));
   assert.match(completeCatalog, /CONTROL_SKINS\.slice\(0, 3\)/);
   assert.match(completeCatalog, /Array\(6\)\.fill\(false\)/);
   assert.match(fieldCss, /\.vt-complete-catalog \.vt-catalog-word-toggle-families \.vt-catalog-control-variants\.is-word-toggle-44\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\) !important/);
