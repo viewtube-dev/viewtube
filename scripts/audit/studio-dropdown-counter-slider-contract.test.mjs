@@ -177,10 +177,10 @@ test("confirmed square icon library groups every requested effect by size", () =
 
 
 test("switch and choice tracks retain their intrinsic component widths", () => {
-  const contentWidthRules = [...css.matchAll(/(?:\\[data-vt-studio-control="true"\\]|button)\\.vt-studio-44-(?:switch|choice)[\\s\\S]{0,180}width:\\s*max-content\\s*!important/g)];
+  const contentWidthRules = [...css.matchAll(/(?:\[data-vt-studio-control="true"\]|button)\.vt-studio-44-(?:switch|choice)[\s\S]{0,180}width:\s*max-content\s*!important/g)];
   assert.equal(contentWidthRules.length, 0, "switch and choice controls must not inherit content-width exceptions");
-  assert.match(css, /button\\.vt-studio-44-switch\\s*\\{[^}]*width:\\s*75\\.68px/s);
-  assert.match(css, /button\\.vt-studio-44-choice\\s*\\{[^}]*width:\\s*44px/s);
+  assert.match(css, /button\.vt-studio-44-switch\s*\{[^}]*width:\s*75\.68px/s);
+  assert.match(css, /button\.vt-studio-44-choice\s*\{[^}]*width:\s*44px/s);
 });
 
 
@@ -194,10 +194,10 @@ test("choice and switch primitives do not opt into content-width sizing", () => 
 
 test("single, simple, split-left, and multi-select dropdowns map chevrons across five sizes", () => {
   for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
-    assert.match(css, new RegExp(String.raw`\\.vt-studio-dropdown\\[data-size="${size}"\\]`));
-    assert.match(css, new RegExp(String.raw`\\.vt-studio-legend-multi\\[data-size="${size}"\\]`));
+    assert.match(css, new RegExp(String.raw`\.vt-studio-dropdown\[data-size="${size}"\]`));
+    assert.match(css, new RegExp(String.raw`\.vt-studio-legend-multi\[data-size="${size}"\]`));
   }
-  assert.match(css, /\\.vt-studio-dropdown-chevron\\s*\\{[^}]*height:\\s*100%/s);
+  assert.match(css, /\.vt-studio-dropdown-chevron\s*\{[^}]*height:\s*100%/s);
   assert.match(dropdown, /rightRailClassName="vt-studio-dropdown-chevron is-trailing"/);
   assert.match(dropdown, /className="vt-studio-dropdown-chevron is-trailing"/);
 });
