@@ -63,9 +63,10 @@ test("counter and slider catalogs expose only the canonical primary-fill design"
 test("all counter, slider, and value-toggle chevrons share one button owner and focus token contract", () => {
   assert.match(controls, /vt-studio-stepper-button/);
   assert.match(toggles, /vt-studio-stepper-button/);
-  assert.match(splitCss, /\.vt-studio-stepper-button:focus-visible/);
-  assert.match(splitCss, /var\(--vt-studio-focus-outline-width/);
-  assert.match(splitCss, /var\(--vt-studio-focus-outline-color/);
+  assert.match(splitCss, /\.vt-studio-stepper-button\s*\{/);
+  assert.match(toggleCss, /var\(--vt-studio-focus-outline-width/);
+  assert.match(toggleCss, /var\(--vt-studio-focus-outline-color/);
+  assert.match(coreCss, /\[data-vt-studio-control="true"\]:focus-visible/);
   assert.match(toggleCss, /:focus-within/);
   assert.match(toggleCss, /prefers-reduced-motion/);
 });
