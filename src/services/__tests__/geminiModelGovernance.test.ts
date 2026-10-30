@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import {
   GEMINI_MODEL_REGISTRY,
   getGeminiModel,
@@ -7,6 +7,8 @@ import {
   resolveGeminiModel,
   classifyGeminiFailure,
   resolveGeminiGenerationProfile,
+  executeGeminiWithFallback,
+  pickGeminiGenerationOverrides,
 } from "../geminiModelGovernance"
 
 describe("canonical Gemini model governance", () => {
@@ -69,6 +71,58 @@ describe("canonical Gemini model governance", () => {
       capability: "text",
       taskOverride: { thinkingLevel: "HIGH" },
     })).toThrow(/only be set for thinking or analysis/)
+  })
+
+  it("falls back only for classified provider failures and reports the served model", async () => {
+    const execute = vi.fn()
+      .mockRejectedValueOnce({ status: 404, message: "model not found" })
+      .mockResolvedValueOnce({ ok: true })
+    const onFallback = vi.fn()
+    const result = await executeGeminiWithFallback({
+      modelCandidates: ["model-a", "model-b"],
+      execute,
+      onFallback,
+    })
+    expect(result).toEqual({ response: { ok: true }, servedModel: "model-b", attempts: 2 })
+    expect(onFallback).toHaveBeenCalledWith({
+      sourceModel: "model-a",
+      fallbackModel: "model-b",
+      reason: "unsupported_model",
+      attempt: 1,
+    })
+  })
+
+  it.each([
+    [{ status: 401, message: "invalid API key" }, "authentication"],
+    [{ status: 403, message: "permission denied" }, "permission"],
+    [{ status: 429, message: "quota exceeded" }, "quota"],
+    [{ status: 400, message: "invalid argument" }, "unknown"],
+  ])("does not fallback for terminal provider failures", async (error) => {
+    const execute = vi.fn().mockRejectedValue(error)
+    await expect(executeGeminiWithFallback({
+      modelCandidates: ["model-a", "model-b"],
+      execute,
+    })).rejects.toBe(error)
+    expect(execute).toHaveBeenCalledTimes(1)
+  })
+
+  it("limits transient retries to one alternate model", async () => {
+    const error = { status: 503, message: "temporarily unavailable" }
+    const execute = vi.fn().mockRejectedValue(error)
+    await expect(executeGeminiWithFallback({
+      modelCandidates: ["model-a", "model-b", "model-c"],
+      execute,
+    })).rejects.toBe(error)
+    expect(execute).toHaveBeenCalledTimes(2)
+  })
+
+  it("extracts only generation profile fields from provider config", () => {
+    expect(pickGeminiGenerationOverrides({
+      temperature: 0.2,
+      maxOutputTokens: 900,
+      responseSchema: { type: "OBJECT" },
+      tools: [{ googleSearch: {} }],
+    })).toEqual({ temperature: 0.2, maxOutputTokens: 900 })
   })
 
   it("does not permit fallback for credential, permission, or quota failures", () => {
