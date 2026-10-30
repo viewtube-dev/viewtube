@@ -3,7 +3,7 @@
   --vt-vwt-face: var(--vt-studio-control-height, 28px);
   --vt-vwt-stroke: var(--vt-studio-control-stroke, 2px);
   position: relative; display: flex; flex-direction: column; align-items: stretch; justify-content: stretch;
-  width: max-content; min-width: 0; max-width: 100%; padding: 3px; gap: 2px;
+  width: 100%; min-width: 0; max-width: none; align-self: stretch; padding: 3px; gap: 2px;
   overflow: hidden; isolation: isolate; box-sizing: border-box;
   border: var(--vt-vwt-stroke) solid #000; border-radius: var(--vt-studio-control-radius, 4px);
   background: var(--pair-a); color: #000; cursor: pointer;
