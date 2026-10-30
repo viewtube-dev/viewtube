@@ -4541,58 +4541,6 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   color: var(--vt-studio-number-active-color);
 }
 
-/* Shared interaction-focus contract: token-generated timing and one outline rule. */
-/* Focus variables are emitted from STUDIO_FOCUS_INTERACTION_TOKENS by the token generator. */
-
-.vt-studio-counter,
-.vt-studio-side-counter,
-.vt-studio-left-counter,
-.vt-studio-double-split-slider {
-  outline: 0 solid transparent;
-  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
-  transition:
-    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
-}
-
-.vt-studio-counter .vt-studio-counter__value,
-.vt-studio-side-counter .vt-studio-side-counter__value,
-.vt-studio-double-split-slider .vt-studio-double-split-slider__value,
-[data-vt-studio-counter-value] {
-  color: var(--vt-studio-number-rest-color);
-  -webkit-text-stroke-color: var(--vt-studio-number-rest-color);
-  transition:
-    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
-}
-
-.vt-studio-counter:focus-within,
-.vt-studio-side-counter:focus-within,
-.vt-studio-left-counter:focus-within,
-.vt-studio-double-split-slider:focus-within,
-.vt-studio-counter.is-interaction-focus,
-.vt-studio-side-counter.is-interaction-focus,
-.vt-studio-left-counter.is-interaction-focus,
-.vt-studio-double-split-slider.is-interaction-focus,
-[data-vt-studio-control-family="counter"][data-vt-interaction-focus="true"],
-[data-vt-studio-slider][data-vt-interaction-focus="true"] {
-  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * 0.65)) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
-  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
-}
-
-.vt-studio-counter:focus-within .vt-studio-counter__value,
-.vt-studio-side-counter:focus-within .vt-studio-side-counter__value,
-.vt-studio-left-counter:focus-within .vt-studio-side-counter__value,
-.vt-studio-double-split-slider:focus-within .vt-studio-double-split-slider__value,
-.vt-studio-counter.is-interaction-focus .vt-studio-counter__value,
-.vt-studio-side-counter.is-interaction-focus .vt-studio-side-counter__value,
-.vt-studio-left-counter.is-interaction-focus .vt-studio-side-counter__value,
-.vt-studio-double-split-slider.is-interaction-focus .vt-studio-double-split-slider__value,
-[data-vt-interaction-focus="true"] [data-vt-studio-counter-value] {
-  color: var(--vt-studio-number-active-color, #000000);
-  -webkit-text-stroke-color: var(--vt-studio-number-active-color, #000000);
-}
-
 /* Five-tier sizing for the shared switch / radio / checkbox production primitives. */
 .vt-studio-44-switch[data-size="supreme"], .vt-studio-44-choice[data-size="supreme"] {
   --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
