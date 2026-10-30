@@ -89,3 +89,13 @@ Mode: Audit-first; no production edits before Gate 6 approval.
 - [ ] Tests/build pass with pre-existing failures distinguished.
 - [ ] Desktop/mobile visual and accessibility evidence recorded.
 - [ ] Remaining risks and unverified cases documented.
+
+
+### Phase 1–2 continuation checkpoint — 2026-10-30
+- [x] T1.x Confirm the active shell mounts both the nested Confirmed Primitive Catalog and a separate Confirmed Split Text Input Catalog; include both in the whole-library crosswalk.
+- [x] T2.x Verify the exact `test:studio-controls` command and trace contradictory InlineStepper/SplitStepper/SimpleDropdown assertions to their test-file locations.
+- [ ] T1.x Finish direct/dynamic/test call-site tracing for both catalog implementations and all Studio-related component candidates.
+- [ ] T2.x Classify module-only exports and helpers; decide lifecycle for InlineStepper/SplitStepper and reconcile SimpleDropdown tests with the existing StudioDropdown consolidation.
+- [ ] T2.x Expand the existing public-export matrix to include documented internal/module-only dispositions after lifecycle decisions; do not create a second registry.
+- [ ] T3.x Reconcile or retire the unregistered legacy `confirmed-catalog-coverage.mjs` assertions against the current token/style contract before treating it as a gate.
+- [ ] T5.x Execute the focused suite and browser certification only from a real target-branch checkout; current remote-only inspection has not run tests or visual checks.
