@@ -2950,6 +2950,14 @@
 }
 .vt-confirmed-size-matrix__item { display: flex; align-items: center; min-width: 0; width: 100%; }
 .vt-confirmed-size-matrix__item > * { min-width: 0; width: 100%; }
+.vt-confirmed-size-matrix__item > :is(button[data-vt-studio-icon-button="true"], button[data-vt-studio-circle-icon-button="true"]) {
+  width: var(--vt-studio-control-height, 44px);
+  flex: 0 0 auto;
+}
+.vt-confirmed-size-matrix__item > .vt-studio-square-icon-button-group {
+  width: max-content;
+  max-width: 100%;
+}
 .vt-confirmed-size-matrix__micro .vt-studio-split-accordion { min-width: 0; }
 .vt-confirmed-representatives > .vt-confirmed-variants { gap: 8px; }
 .vt-confirmed-representatives .vt-confirmed-variant > span {
