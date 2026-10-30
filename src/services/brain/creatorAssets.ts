@@ -320,7 +320,7 @@ export const generateGovernedTagSuggestions = async (input: {
   evidence,
   runner: geminiAssetModelRunner,
  })
- if (result.record.status === "failed" || !result.record.output?.length) {
+ if (result.record.status === "failed" || result.record.status === "needs_review" || !result.record.output?.length) {
   throw new Error("ViewTube could not produce verified tag suggestions. Review the generation trace and try again.")
  }
  return { suggestions: result.record.output, record: result.record }
