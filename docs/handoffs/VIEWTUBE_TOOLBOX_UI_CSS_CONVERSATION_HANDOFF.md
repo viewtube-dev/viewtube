@@ -1087,3 +1087,50 @@ CURRENT MAIN CODE + TESTS
 ```
 
 That ordering is intentional.
+
+
+---
+
+# 34. Studio Controls consolidation continuation — 2026-10-30
+
+Target branch: `master/consolidated-feature-integration`
+
+Working branch: `studio-controls-system-consolidation`
+
+## Confirmed source contracts
+
+- Five canonical tiers are `supreme`, `standard`, `compact`, `mini`, and `micro`.
+- Mini is 20px high, 1.5px stroke, 3px radius, 17.5px type/icon.
+- Micro retains the simplified 12px / 1px stroke / 2px radius / 10px type geometry.
+- Generated size variables must be emitted from `src/studio-ui/tokens.ts`; hand-edited fallbacks must not become a second authority.
+- Split text input now accepts the shared `StudioControlSize` type rather than a narrowed standard/compact union.
+- Editable input/textarea focus text and glyph stroke must both resolve to black; default text and glyph stroke remain primary.
+- The simple input must not retain a special focused-primary glyph-stroke exception.
+- Text boxes retain black text, a primary inline inset stroke, black outer border, and secondary outline.
+- The Confirmed Library Representatives section is intended to use a single full-width column.
+- Vertical word-toggle handle overrides that forced a fixed 3px inset were removed so the primitive's measured word-bound geometry can own placement.
+- Side-counter and counter number cells retain the 2:1 width/height contract; side-counter remains a separate family rather than nested in the counter family.
+
+## Changes made on the continuation branch
+
+- Added `scripts/audit/studio-controls-system-audit.test.mjs` and wired it into `test:studio-controls`.
+- Corrected the Supreme/Mini size documentation in `StudioControls.tsx`.
+- Corrected focused text stroke color for shared field rules and standalone text inputs.
+- Removed the special simple-input focus rule that held glyph stroke primary while text fill turned black.
+- Added Mini textarea typography coverage.
+- Expanded split text input's size type to the canonical five-tier type.
+- Aligned Micro token values and generated CSS with the 1px / 2px contract; removed a duplicate legacy Micro declaration and corrected remaining fallbacks.
+- Removed competing vertical word-toggle handle inset overrides.
+- Updated representative-module title matching so the full-width layout applies to the Representatives section.
+
+## Required verification still outstanding
+
+The GitHub source-editing workflow did not provide a local checkout or a test runner. Do not report the new tests, generated-token parity, browser behavior, typecheck, or production build as passing until CI executes them.
+
+Next steps:
+1. Run the new audit and the existing Studio Controls suite in CI.
+2. Repair any audit assumptions that do not match actual component exports.
+3. Run browser geometry and interaction tests at all five sizes.
+4. Verify split input typing/focus, field default/focus glyph colors, focus fade timing, counter ratios, toggle handle bounds, bar tooltip visibility, and outer-only double-side focus outline.
+5. Finish the family-module/catalog coverage audit before deleting any obsolete primitive implementation.
+6. Update this handoff with actual test and browser evidence before requesting merge.
