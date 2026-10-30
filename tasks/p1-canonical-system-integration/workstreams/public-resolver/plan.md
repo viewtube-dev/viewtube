@@ -98,3 +98,9 @@ Production Brain task path invokes the existing resolver when a public handle is
 
 ## Production caller trace — confirmed in source (2026-10-30)
 `BrainRuntime.ts` consumes `publicHandleContext` explicitly and fetches through `fetchPublicChannelSnapshot`; `BrainRuntimeContracts.ts` keeps public identity distinct from authenticated `channelId`. SidebarChatbot, AIBrainCommandInterface (both task entry paths), and BrainHubWidget pass the Settings-selected public context only for logged-out, disconnected sessions. Settings persists the selection. This satisfies source-wiring discovery, not runtime verification. Next: exercise all logged-out public states and verify no connected/private Analytics or OAuth source enters the prompt/evidence path.
+
+
+## Backend and duplicate-scaffold reconciliation
+The actual server endpoint is `api/public-channel.mjs`, covered by `api/public-channel.node.test.mjs` and `api/public-channel.test.ts`. It is GET-only, allowlists YouTube hosts/redirects, bounds time/response size, parses public channel page metadata and RSS, and requires neither OAuth nor YouTube Data API credentials. The client service and BrainRuntime caller path are source-wired.
+
+A separate `src/features/capabilities/public-channel-resolution/` scaffold still contains a `scaffold://public-channel-resolution` stub and a throwing write method; no production imports were found for its page/hook/API. It is not the canonical resolver. Preserve it pending no-loss/import/route audit, then remove or quarantine in a separate cleanup slice. Do not wire this scaffold as a second implementation.
