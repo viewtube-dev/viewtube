@@ -94,7 +94,7 @@ test("split badge labels share the full outer-shell center axis without affectin
   assert.ok(block.includes("position: absolute;"));
   assert.ok(block.includes("inset: 0;"));
   assert.ok(block.includes("justify-content: center;"));
-  assert.ok(block.includes("grid-column: 3;"));
+  assert.ok(block.includes("margin-left: auto;"));
   assert.ok(block.includes(":not(.vt-studio-split-text-input"));
 });
 
