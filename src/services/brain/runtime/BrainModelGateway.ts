@@ -12,6 +12,7 @@ export interface BrainJsonGenerationInput {
  responseSchema?: Record<string, unknown>
  capability?: "analysis" | "thinking"
  history?: any[]
+ tools?: Array<Record<string, unknown>>
 }
 
 /**
