@@ -2408,7 +2408,7 @@ export const normalizeStudioLeftWordIndex = (value: number): number => {
   return ((Math.round(value) - 1 + STUDIO_LEFT_WORD_OPTIONS.length) % STUDIO_LEFT_WORD_OPTIONS.length + STUDIO_LEFT_WORD_OPTIONS.length) % STUDIO_LEFT_WORD_OPTIONS.length + 1;
 };
 
-/** Three-part counter: square decrement, 2:1 display, square increment. */
+/** Three-part counter: square action rails and a flexible full-row value pane. */
 export const StudioCounter: React.FC<StudioCounterProps> = ({
   value, onValueChange, min = 0, max = 100, step = 1,
   size = "standard", disabled = false, ariaLabel = "Value",
@@ -2444,7 +2444,7 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
 };
 StudioCounter.displayName = "StudioCounter";
 
-/** Side counter: 2:1 display plus a square right-side rail with two equal button cells. */
+/** Side counter: flexible full-row value pane plus a square right rail with two equal button cells. */
 export const StudioSideCounter: React.FC<StudioCounterProps> = ({
   value, onValueChange, min = 0, max = 100, step = 1,
   size = "standard", disabled = false, ariaLabel = "Value",
