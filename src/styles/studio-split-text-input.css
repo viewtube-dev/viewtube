@@ -25,7 +25,20 @@ html body .vt-studio-split-text-input > [data-vt-studio-control="true"] {
   gap: 0;
   background: transparent;
 }
-html body .vt-studio-split-text-input [data-vt-studio-split-label] {
+html body .vt-studio-split-text-input[data-split="left"] > [data-vt-studio-control="true"] {
+  grid-template-columns: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px))) minmax(0, 1fr);
+}
+html body .vt-studio-split-text-input[data-split="right"] > [data-vt-studio-control="true"] {
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
+}
+html body .vt-studio-split-text-input[data-split="double"] > [data-vt-studio-control="true"] {
+  grid-template-columns:
+    var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)))
+    minmax(0, 1fr)
+    var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
+}
+html body .vt-studio-split-text-input [data-vt-studio-split-label],
+html body .vt-studio-split-text-input [data-vt-studio-split-field] {
   --vt-split-field-inner-radius: max(0px, calc(var(--vt-studio-control-radius, 6px) - var(--vt-studio-control-stroke, 3px)));
   box-sizing: border-box;
   display: grid;
@@ -51,10 +64,27 @@ html body .vt-studio-split-text-input[data-split="right"] [data-vt-studio-split-
   border-radius: var(--vt-split-field-inner-radius) 0 0 var(--vt-split-field-inner-radius);
 }
 html body .vt-studio-split-text-input [data-vt-studio-split-rail] {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
   width: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
   min-width: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
   height: 100%;
+  overflow: hidden;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+html body .vt-studio-split-text-input [data-vt-studio-split-rail] svg {
+  display: block;
+  width: 86%;
+  height: 86%;
+  max-width: 86%;
+  max-height: 86%;
+}
+html body .vt-studio-split-text-input [data-vt-studio-split-field] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  height: 100%;
 }
 /* Border-box includes the primary border in the native field dimensions.
  * Grid stretch removes baseline and independently rounded height offsets. */
