@@ -86,3 +86,26 @@ No canonical Task Index mutation or parallel task/idea system was created.
 - Post-open correction: `e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6` updates the contract-test assertion to match the template wording.
 - Initial dedicated job `conversation-handoff-contract` failed on that assertion only; correction pushed. Await the new run before classifying the contract as verified.
 - PR #1177 is OPEN and mergeable. It is not yet delivered to the target.
+
+
+## Completed verification — workflow run 40981740716
+
+[View GitHub Actions run](https://github.com/viewtube-dev/viewtube/actions/runs/40981740716)
+
+Passed:
+- `conversation-handoff-contract` — all three steps passed: `npm run test:conversation-handoff-contract`, `npm run test:document-system`, `npm run audit:documents`.
+- `production-build`.
+- `local-smoke`.
+- `brain-quality-loop`.
+
+Failed outside the files changed by PR #1177:
+- `source-governance`: `audit:confirmed-catalog` reports the StudioSplitTextInput badge-shell/rail/native-field contract mismatch.
+- `focused-contracts`: `test:focused` fails in `src/services/asset-engine/PublishTransaction.test.ts` with `ReferenceError: getPublishTransaction is not defined`.
+- `full-suite`: a Studio Hub mobile regression test expects an obsolete/missing `accessibleLabel=\"Three section split accordion standard specimen\"` string in `StudioHubProductionButtonCatalog`.
+- `static-quality`: `typecheck` reports unrelated StudioControls token exports, missing StudioPanelAccordion module, AIBrainCommandInterface test exports and missing `@testing-library/react` types.
+
+These are current repository quality blockers, not failures in the new handoff/documentation job. PR #1177 changes no runtime feature files. Vercel checks also report account deployment-rate-limit failures; they are external to the GitHub document checks.
+
+## Updated disposition
+
+The handoff/document contract is VERIFIED by its dedicated CI job. The overall PR remains OPEN and unmerged because repository-wide checks are red. Keep the package PARTIALLY_RECONCILED until the unrelated blockers are resolved or explicitly dispositioned and PR #1177 is merged. The selected idea IDs 1, 4, 9, 10, 17 and 18 remain UNKNOWN pending source recovery.
