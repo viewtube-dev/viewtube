@@ -732,6 +732,23 @@
         "docs/architecture/PRODUCT_ARCHITECTURE.md",
         "docs/programs/INTEGRATED_APPLICATION.md"
       ]
+    },
+    {
+      "id": "DOC-SPEC-P1-CROSS-SYSTEM-IDENTITY",
+      "path": "tasks/p1-canonical-system-integration/identity-map.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "existing typed identity and provenance crosswalk for six canonical systems",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "0135fa33bf5cd59503c9feecce4977072ef60fec",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/architecture/PRODUCT_ARCHITECTURE.md",
+        "docs/domains/BRAIN.md",
+        "docs/governance/VERIFICATION.md"
+      ]
     }
   ],
   "legacyGlobalSources": [
