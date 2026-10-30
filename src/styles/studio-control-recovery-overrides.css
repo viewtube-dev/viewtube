@@ -153,9 +153,7 @@ button[data-vt-studio-control="true"].vt-studio-44-switch,
 button[data-vt-studio-control="true"].vt-studio-44-choice,
 .vt-studio-44-word-toggle,
 .vt-studio-vertical-word-toggle,
-.vt-studio-word-toggle,
-.vt-studio-value-toggle,
-.vt-studio-split-shell.vt-studio-value-toggle {
+.vt-studio-word-toggle {
   background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, white) !important;
 }
 button[data-vt-studio-control="true"].vt-studio-44-switch.is-on,
@@ -185,9 +183,6 @@ button[data-vt-studio-control="true"].vt-studio-44-choice.is-color-swap[aria-che
 .vt-studio-44-choice.is-checked .vt-studio-44-dot,
 .vt-studio-44-choice[aria-checked="true"] .vt-studio-44-dot {
   opacity: 1;
-}
-.vt-studio-value-toggle__face {
-  background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, white) !important;
 }
 .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack,
 .vt-studio-value-toggle--double .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack,
