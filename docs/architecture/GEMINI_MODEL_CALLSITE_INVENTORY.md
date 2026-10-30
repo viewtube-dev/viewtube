@@ -258,3 +258,21 @@ The same exact-head scan no longer lists the legacy tag functions `generateTagSu
 The next source slice moves `generateEducationalTimestampQuestions` callers in VideoUploaderWidget and VideoManagerWidget to `educationalTimestampStrategy` through Creator Assets. This slice is after run #5496 and needs a new exact-head artifact before counts are refreshed. Suggested timecodes are explicitly planning markers, not verified video timestamps.
 
 Remaining active production caller families still include analytics/research, planning, thumbnails, scripts, storyboards, end-screen, media transcription, speech and other creator surfaces. Provider SDK calls remain in the provider owner and GeminiKeyContext validation boundary; the static count of 66 is not 66 UI bypasses.
+
+
+## Exact-head inventory refresh — 2026-10-30
+
+Run #5506 / commit `0c8dc4788dc91cb7309ee80babd0484d7eecd73d` generated and uploaded the exact-head JSON inventory. Counts at that head:
+
+- 73 exported symbols in `gemini.ts`.
+- 36 production-referenced exports.
+- 36 exports without a static import reference; inspect dynamic/re-export reachability before removal.
+- 66 direct SDK invocation sites, which remain concentrated in the provider owner and credential-validation boundary rather than representing 66 UI bypasses.
+- Two literal dynamic Gemini imports, the expected provider adapter imports behind BrainModelGateway.
+- 19 model-ID literals and 18 credential-alias references.
+
+The following legacy production caller exports are no longer referenced by production UI after the current migration slice: `generateTagSuggestions`, `analyzeExistingTags`, `generatePerfectReply`, `recommendVideoForComment`, and `generateEducationalTimestampQuestions`. Their callers now use the governed AssetGenerator specialist strategies or BrainModelGateway.
+
+Run #5506 passed the Gemini governance job, production build, local smoke, Brain quality loop and conversation-handoff contract. It still reported independent failures in repository typecheck, Studio confirmed-catalog audit and the focused PublishTransaction test. The missing test import was fixed after that exact-head run; do not treat the repair as verified until CI reruns.
+
+This inventory is a snapshot, not zero-caller proof. Analytics, planning, thumbnail/image/video generation, script, storyboard, end-screen, media analysis/transcription, speech and other active production references still require owner/boundary classification and migration before compatibility retirement.
