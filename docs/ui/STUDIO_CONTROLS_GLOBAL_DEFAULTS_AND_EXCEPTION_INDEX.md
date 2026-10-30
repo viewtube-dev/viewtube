@@ -15,7 +15,7 @@ The Confirmed Primitive Library is a production-component specimen and provenanc
 
 **NON-DEFAULT SETTINGS** must list only true departures from shared defaults. Do not repeat the 44px/28px lattice, global typography, ordinary selected/disabled behavior, or generic interaction rules under every family. Keep family-specific anatomy, real variants, and registered exceptions; put global contracts in the defaults strip and this index.
 
-The canonical five-tier ladder is Supreme (60px), Standard (44px), Compact (28px), Mini (20px), and Micro (12px). Mini uses 1.5px stroke, 3px radius, and 17.5px type/icons. Micro keeps 12px height and 10px type/icons while inheriting Mini's 1.5px stroke, 3px radius, 0.975px outline, and global `-0.02em` letter-spacing. TypeScript tokens are the only sizing authority; generated CSS is emitted from tokens and `studio-control-system.css` consumes it.
+The canonical five-tier ladder is Supreme (60px), Standard (44px), Compact (28px), Mini (20px), and Micro (12px). Mini uses 1.5px stroke, 3px radius, and 17.5px type/icons. Micro keeps 12px height / 1px stroke / 2px radius / 10px type-icons / 0.65px outline and global `-0.02em` letter-spacing. TypeScript tokens are the only sizing authority; generated CSS is emitted from tokens and `studio-control-system.css` consumes it.
 
 A family is **source-confirmed** only when its specimen uses the production export, provenance identifies TSX/CSS/tokens/import paths, exception notes are concise, and source/API regression tests cover the public contract. Full visual certification additionally requires computed-style/browser evidence for standard, compact, and applicable exception sizes. The word “confirmed” alone is not proof that visual regression passed.
 
@@ -61,7 +61,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 ## 2. Size-based global defaults
 
-The intended size contract is Supreme (60px / 3px / 6px / 52px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1.5px / 3px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro reuses the Mini stroke/radius system. Global line-height `1` remains the single-line default; textarea uses the explicit multiline exception `0.85`.
+The intended size contract is Supreme (60px / 3px / 6px / 52px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1px / 2px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro has its explicit 1px / 2px stroke/radius system. Global line-height `1` remains the single-line default; textarea uses the explicit multiline exception `0.85`.
 
 | Property | Supreme | Standard | Compact | Mini | Micro |
 |---|---:|---:|---:|---:|
@@ -139,9 +139,9 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Focus fill: primary color at 15% opacity.
 - Focus text and inline text stroke: black (`#000000`), matching one another.
 - Focus caret: primary color (`--pair-a`), not black.
-- Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px standard / 1.3px compact / 0.975px Mini and Micro), outline offset 0.
+- Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px standard / 1.3px compact / 0.975px Mini and 0.65px Micro), outline offset 0.
 - Focus must not shift layout. Do not add a gap between the field and its focus outline.
-- Micro inherits Mini's 0.975px outline (65% of the 1.5px stroke). All controls and floating-field wrappers consume the same tier token; no Micro-specific override is permitted.
+- Micro uses its 0.65px outline (65% of its 1px stroke). All controls and floating-field wrappers consume the same tier token; no Micro-specific override is permitted.
 
 ### Multiline textarea (registered typography exception)
 
@@ -213,7 +213,7 @@ The split-left button, split-left/right/double badges, and username composite in
 
 ### Stabilized defaults
 
-- Supreme / standard / compact / mini / micro face geometry: 60px / 44px / 28px / 20px / 12px; border: 3px / 3px / 2px / 1.5px / 1.5px; radius: 6px / 6px / 4px / 3px / 3px; typography and icon: 52px / 38px / 24px / 17.5px / 10px.
+- Supreme / standard / compact / mini / micro face geometry: 60px / 44px / 28px / 20px / 12px; border: 3px / 3px / 2px / 1.5px / 1px; radius: 6px / 6px / 4px / 3px / 2px; typography and icon: 52px / 38px / 24px / 17.5px / 10px.
 - Inter-component gap remains 4px for all tiers; micro is an explicit 12px tier and is not derived by halving Compact.
 - Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
 - Both rails in a double split use the secondary color role.
@@ -235,7 +235,7 @@ Visual verification is still required in the running app for supreme/standard/co
 ## Vertical Studio word toggle — registered height exception
 
 - Canonical primitive: `StudioVerticalWordToggle` in `src/studio-ui/primitives/StudioControls.tsx`; CSS owner: `src/styles/studio-control-system.css`; live specimens: `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`.
-- The two stacked word faces create a content-driven height. This is the sole size-lattice exception: standard typography/stroke/radius tokens remain 38px / 3px / 6px, compact remains 24px / 2px / 4px, and Micro uses 10px type with the shared Mini 1.5px / 3px stroke/radius system. The resulting overall height is content-driven and is not forced to the 60px / 44px / 28px / 12px lattice.
+- The two stacked word faces create a content-driven height. This is the sole size-lattice exception: standard typography/stroke/radius tokens remain 38px / 3px / 6px, compact remains 24px / 2px / 4px, and Micro uses 10px type with its explicit 1px / 2px stroke/radius system. The resulting overall height is content-driven and is not forced to the 60px / 44px / 28px / 12px lattice.
 - Four variants: primary/secondary pair; black fill with the inactive word colored to match the handle color at the start of the last transition and the active word black on the colored handle; primary fill/border with secondary text and a white handle; white fill/border with a black handle and inverse text.
 - Word colors change quickly at the beginning of the handle animation; the handle expands vertically, releases to the other word, and uses a vertical color wipe on alternating transitions. Reduced-motion settles immediately.
 - Catalog layout: standard two per row; compact three per row; a 2×2 micro matrix occupies the remaining two cells at the end of compact row two. Every specimen has independent state.
