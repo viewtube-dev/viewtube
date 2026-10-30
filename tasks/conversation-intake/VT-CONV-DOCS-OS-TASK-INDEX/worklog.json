@@ -459,7 +459,7 @@
       "summary": "Unify scattered Editor, Toolbox, Vault and other domain handoff/update-log conventions under the global conversation handoff system.",
       "details": "Existing domain masters still contain their own update-log/handoff instructions; these should become projections or references to the global process where possible.",
       "kind": "MIGRATION",
-      "conversationState": "PLANNED",
+      "conversationState": "COMPLETED_IN_CONVERSATION",
       "domains": [
         "editor",
         "toolbox-ui",
@@ -473,13 +473,21 @@
         "docs/editor/VIEWTUBE_YOUTUBE_EDITOR_SYSTEM_MASTER_RESOURCE.md",
         "docs/architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md"
       ],
-      "changedPaths": [],
-      "branchPrRefs": [],
+      "changedPaths": [
+        "docs/architecture/toolbox-ui-master-resource/HANDOFF_UPDATE_PROTOCOL.md",
+        "docs/editor/VIEWTUBE_YOUTUBE_EDITOR_SYSTEM_MASTER_RESOURCE.md",
+        "docs/architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md",
+        "docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ],
+      "branchPrRefs": [
+        "docs/complete-conversation-handoff-log-process-2026-10-30"
+      ],
       "evidenceRefs": [
-        "repo search found scattered handoff/update-log conventions"
+        "Domain-specific update/handoff boundaries aligned with docs/governance/CONVERSATION_HANDOFFS.md; global handoff remains authoritative."
       ],
       "dependencies": [
-        "merge global handoff system first"
+        "global handoff system merged (PR #1170 and PR #1177)"
       ],
       "blockers": [],
       "similarityKeys": [
@@ -499,17 +507,25 @@
         "implementationRisk": "LOW",
         "rationale": "Prevents parallel handoff protocols from recreating documentation fragmentation."
       },
-      "relationship": "EXPANDS",
-      "suggestedDestination": "Integrated Application Program / future Task Authority proposal",
+      "relationship": "COMPLETED_ALREADY",
+      "suggestedDestination": "Global Conversation Handoffs + domain authority projections",
       "reviewStatus": "RECONCILED",
-      "disposition": "UPDATE_INTEGRATED_APPLICATION_PROGRAM",
+      "disposition": "UPDATE_DOMAIN_AUTHORITY",
       "targetRefs": [
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "docs/architecture/toolbox-ui-master-resource/HANDOFF_UPDATE_PROTOCOL.md",
+        "docs/editor/VIEWTUBE_YOUTUBE_EDITOR_SYSTEM_MASTER_RESOURCE.md",
+        "docs/architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md",
+        "docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md",
         "docs/programs/INTEGRATED_APPLICATION.md"
       ],
       "harvestedMaterial": [
-        "domain-specific handoff/update-log patterns to preserve during migration"
+        "one global conversation package",
+        "domain logs remain narrow append-only technical histories",
+        "existing recovery artifacts remain provenance",
+        "single-link update phrase updates package in place"
       ],
-      "reviewNotes": "Do after this system is merged and proven."
+      "reviewNotes": "Completed the remaining domain-protocol migration after global handoff PR #1177 merged. Specialized technical evidence is retained as domain projections; no parallel conversation log/task ledger is created."
     },
     {
       "itemId": "VT-CWI-DOCS-009",
