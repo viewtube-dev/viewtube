@@ -89,4 +89,12 @@ describe("Gemini key validation runtime", () => {
   expect(exposed?.validationError).toMatch(message)
   expect(JSON.stringify(reportDiagnostic.mock.calls)).not.toContain("saved-despite-verification-key")
  })
+
+ it("does not expose an unvalidated credential setter to provider consumers", async () => {
+  listSuccess()
+  await mount()
+  expect(exposed).not.toHaveProperty("setApiKey")
+  expect(exposed).toHaveProperty("validateAndSaveKey")
+ })
+
 })
