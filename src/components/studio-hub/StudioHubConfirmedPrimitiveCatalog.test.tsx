@@ -57,7 +57,7 @@ describe("confirmed composite primitive catalog", () => {
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
       "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
       "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioBrainStatusIndicator", "StudioTagEditor", "StudioUploadFrame",
-      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
+      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell",
     ]) {
       expect(representative).toContain(`data-vt-library-component="${primitive}"`)
     }
@@ -97,7 +97,7 @@ describe("confirmed composite primitive catalog", () => {
     const styles = readFileSync(resolve(process.cwd(), "src/styles/studio-confirmed-catalog-modules.css"), "utf8")
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
 
-    expect(source).toContain('className="vt-confirmed-catalog vt-confirmed-direct-representatives"')
+    expect(source).toContain('className="vt-confirmed-direct-representatives vt-confirmed-direct-primitive-rows"')
     expect(styles).toMatch(/\.vt-confirmed-direct-representatives\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s)
     expect(styles).toMatch(/\.vt-confirmed-direct-primitive-rows\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s)
     expect(styles).toMatch(/\.vt-confirmed-direct-primitive-rows\s*>\s*\.vt-confirmed-variant\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/s)
