@@ -866,6 +866,7 @@ describe("confirmed library cleanup and counter module visibility", () => {
     for (const title of [
       "StudioCounter · Supreme + Standard + Compact + Mini + Micro",
       "StudioSideCounter · Supreme + Standard + Compact + Mini + Micro",
+      "StudioLeftCounter · Standard",
       "StudioDoubleSplitSlider · Supreme + Standard + Compact + Mini + Micro",
       "StudioLeftWordCounter · Four-State Cycle + Five Sizes",
       "StudioDoubleSplitWordCounter · Two Chevron Rails + Four-State Word Cycle",
