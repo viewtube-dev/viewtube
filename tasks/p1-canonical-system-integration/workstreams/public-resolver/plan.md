@@ -55,7 +55,7 @@ Logged-out identity is the Settings channel handle. Use YouTube-first public met
 ## Phases
 
 0. Inspect resolver/API/cache/normalization/production Brain caller/tests/PRs. **Complete.**
-1. Define typed result/provenance and negative/error taxonomy. **Partially implemented:** positive-result provenance and bounded browser cache added; typed negative/error taxonomy, stale fallback and identity-mismatch hardening remain.
+1. Define typed result/provenance and negative/error taxonomy. **Partially implemented:** positive-result provenance and bounded browser cache added; typed negative/error taxonomy, stale fallback and full identity-mismatch hardening remain. Focused resolver CI passed; typecheck and wider CI remain failing.
 2. Connect resolver through the canonical async Brain task boundary without another context broker or changing the synchronous snapshot-builder contract.
 3. Enforce public-only policy at access boundaries, including logged-out identity and isolation from connected/private channel data.
 4. Test freshness, invalidation, negative cache and handle isolation.
@@ -84,5 +84,5 @@ Production Brain task path invokes the existing resolver when a public handle is
 - Phase 0 source inspection and PR reconciliation performed against `master/consolidated-feature-integration` at base SHA `cfafde00519ce29a4507dcc7ec7d2cad96798303`.
 - Source and existing test files were inspected through GitHub.
 - Phase 1 added a versioned, bounded (20-entry) browser cache, normalized request-identity keys, positive-result provenance, source references, limitations, original fetchedAt preservation, and null metric enforcement. Tests were added for cache reuse, handle isolation, malformed storage, and metric redaction.
-- Tests are **not verified**: the runtime container has no network access and a local clone could not be obtained. GitHub reports no check runs for the implementation head; no test/typecheck/build pass is claimed.
-- Phase 1 remains incomplete: typed negative/error taxonomy, expiry/stale behavior tests, robust handle-vs-channel identity checks, and runtime integration are still outstanding.
+- GitHub Actions did execute the branch at head `3d33002943dbeda4b415709e0495a33ae13c5712`: `npm run test:public-page-resolver` **passed**; production `npm run build` **passed**; typecheck **failed**; the broader focused-contract and full-suite jobs **failed**; source-governance also failed at the confirmed-catalog audit. The local container still cannot clone GitHub, so no local run is claimed. The focused resolver result validates the new cache tests, but the PR is not green.
+- Phase 1 remains incomplete: typed negative/error taxonomy, expiry/stale behavior tests, robust handle-vs-channel identity checks, and runtime integration are still outstanding. The generic `BrainRuntimeRequest` currently has no explicit public-handle identity/mode field; the only confirmed identity source is Settings-owned local storage. Do not couple the generic runtime to browser storage or infer public mode from `channelId` (which may represent a connected/private channel). Add an explicit, caller-provided public-handle context contract and tests before wiring refresh.
