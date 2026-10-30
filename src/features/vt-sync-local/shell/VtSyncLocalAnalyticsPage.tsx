@@ -142,10 +142,11 @@ const refreshManualImports = useCallback(async (payload?: {
  // or a second async read.
  if (payload) {
   setManualImports((current) => {
-   const currentValue =
-    current.channelId === channelId
-     ? current.value
-     : EMPTY_MANUAL_IMPORTS
+   const sameScope =
+    current.channelId === channelId ||
+    current.channelId == null ||
+    channelId == null
+   const currentValue = sameScope ? current.value : EMPTY_MANUAL_IMPORTS
 
    const capturedAtByTableId = Object.fromEntries(
     Object.keys(payload.rowsByTableId).map((tableId) => [
@@ -172,10 +173,10 @@ const refreshManualImports = useCallback(async (payload?: {
   return
  }
 
- // Persisted imports are account data. Wait for a resolved channel rather than
- // hydrating or assigning anonymous records to whichever account appears first.
- if (!channelId) return
-
+ // Persisted imports can be channel-scoped or unscoped (session-only while
+ // no account/channel is connected). Always attempt hydration so DATA VISUALS
+ // activate from CSV/JSON imports without login. Never erase known-good
+ // in-memory rows with an empty async result.
  try {
   const next = await loadVtSyncManualImports(channelId)
 
@@ -185,12 +186,12 @@ const refreshManualImports = useCallback(async (payload?: {
    const currentHasRows = Object.values(current.value.rowsByTableId)
     .some((rows) => Array.isArray(rows) && rows.length > 0)
 
-   // Never let an empty async hydration result erase known-good CSV rows.
-   // This is the race that makes mobile visuals appear, disappear, then
-   // sometimes reappear while account/channel state settles.
    if (!nextHasRows && currentHasRows) return current
 
-   const canMergeCurrent = current.channelId === channelId
+   const canMergeCurrent =
+    current.channelId === channelId ||
+    current.channelId == null ||
+    channelId == null
 
    return {
     channelId,
@@ -207,8 +208,7 @@ const refreshManualImports = useCallback(async (payload?: {
    }
   })
  } catch {
-  // IndexedDB may be unavailable on mobile/private browsing.
-  // Keep the active in-memory CSV instead of clearing it.
+  // keep in-memory CSV
  }
 }, [snapshot.channelId])
 
@@ -291,10 +291,13 @@ const refreshManualImports = useCallback(async (payload?: {
   setPrivacyFilters(readVtSyncPrivacyFilters())
  }, [])
 
- // Anonymous imports are session-only. Once account hydration resolves a
- // channel, only that channel's persisted or freshly imported rows are active.
+ // Keep session imports (null channel) active for DATA VISUALS even when no
+ // account is logged in and no channel is connected. When both sides are
+ // unresolved (null/undefined), treat them as the same anonymous scope.
  const activeManualImports =
-  manualImports.channelId === snapshot.channelId
+  manualImports.channelId === snapshot.channelId ||
+  manualImports.channelId == null ||
+  snapshot.channelId == null
    ? manualImports.value
    : EMPTY_MANUAL_IMPORTS
  const activePersistedApiRows = persistedApiRows.channelId === snapshot.channelId
