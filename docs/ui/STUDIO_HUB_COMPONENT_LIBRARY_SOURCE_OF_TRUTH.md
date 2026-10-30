@@ -29,13 +29,13 @@ The Confirmed Primitive Library renders one canonical parent group for each of t
 
 The parent category is rendered once by `ConfirmedCatalogFamilyGroups`. Individual family specimens remain nested inside that parent; multiple specimen modules within a category are intentional and do not create duplicate category parents. Additional primitive specimens must be supplied to the same grouping pass rather than wrapped in a second independent category grid.
 
-Classification must be explicit for newly added families. Counters and sliders must never be classified as a separate category. A dropdown menu or option-list specimen must remain under Dropdowns even when it is rendered as a standalone menu state. A composition is an assembled user-facing experience, not a fallback category for an unrecognized primitive.
+Classification must be explicit for newly added families. Counters and sliders must never be classified as a separate category. A dropdown menu or option-list specimen must remain under Dropdowns even when it is rendered as a standalone menu state. A composition is an assembled user-facing experience, not a fallback category for an unrecognized primitive. Unknown items remain ungrouped and surface an actionable Unclassified family warning until an explicit rule is added; they must never silently fall into Compositions.
 
 This taxonomy changes catalog organization only. It does not authorize changes to production primitive APIs, tokens, styling, or runtime behavior.
 
 ## Studio Controls size-tier authority — 2026-10-20
 
-The canonical production size ladder is **Supreme 60px / Standard 44px / Compact 28px / Mini 20px / Micro 12px**. TypeScript tokens are authoritative, generated CSS is emitted from those tokens, and `studio-control-system.css` owns shared tier selectors. Supreme type/icons are rounded to 52px. Mini uses 17.5px type/icons; Micro keeps 12px height and 10px type/icons while inheriting Mini's 1.5px stroke, 3px radius, 0.975px outline, and global `-0.02em` letter-spacing. The canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` emits `src/styles/studio-control-vars.generated.css`; production geometry is applied by `src/styles/studio-control-system.css` and the family-specific styles. Supreme dimensional tokens scale Standard by 60/44 while preserving typography ratios, color roles, and flat-shell behavior. Mini has explicit 20px height / 1.5px stroke / 3px radius and is not interpolated from neighboring tiers. Micro has an explicit 12px height and is not derived from half Compact. Mini and Micro remain family-aware and must not be added to a component whose inner geometry cannot fit. The Confirmed Primitive Library may show a tier only after the production API and rendered behavior support it.
+The canonical production size ladder is **Supreme 60px / Standard 44px / Compact 28px / Mini 20px / Micro 12px**. TypeScript tokens are authoritative, generated CSS is emitted from those tokens, and `studio-control-system.css` owns shared tier selectors. Supreme type/icons are rounded to 52px. Mini uses 17.5px type/icons; Micro keeps 12px height and 10px type/icons with its explicit 1px stroke, 2px radius, 0.65px outline, and global `-0.02em` letter-spacing. The canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` emits `src/styles/studio-control-vars.generated.css`; production geometry is applied by `src/styles/studio-control-system.css` and the family-specific styles. Supreme dimensional tokens scale Standard by 60/44 while preserving typography ratios, color roles, and flat-shell behavior. Mini has explicit 20px height / 1.5px stroke / 3px radius and is not interpolated from neighboring tiers. Micro has explicit 12px height / 1px stroke / 2px radius and is not derived from half Compact. Mini and Micro remain family-aware and must not be added to a component whose inner geometry cannot fit. The Confirmed Primitive Library may show a tier only after the production API and rendered behavior support it.
 
 `ToolboxUIReferenceLibrary.tsx` is the Studio Hub entry point and shell. It must not maintain an independent subset of component examples.
 
@@ -598,8 +598,8 @@ Selectable split-left, split-right, and double-split buttons swap their label an
 
 ## Counter width and state defaults — 2026-10-30
 
-- Every counter primitive inherits the same global full-row width default as other Studio primitives. Remove fixed counter widths and 2:1 value-pane ratios; square action rails remain tied to the selected size tier and the value pane flexes into the remaining space.
-- The double-split word counter uses the shared 50%-white / 50%-primary value-pane fill and primary numeral color/stroke at rest. During interaction focus, its numeral fill and stroke turn black.
+- StudioCounter and StudioSideCounter retain a 2:1 width-to-height number-value region as a registered family geometry exception; their action rails remain square to the selected size tier. Do not remove this ratio as a mistaken fixed-width override.
+- The double-split word counter uses its solid primary value-pane fill and primary numeral color/stroke at rest. Remove accidental 50%-primary blend overrides. During interaction focus, its numeral fill and stroke turn black.
 - Bar-toggle rails must not cover the center visualization. The center cell and bars paint above the rails, the outer shell retains its zero-offset secondary focus outline, and the percentage tooltip is hidden at rest and shown only while focus is within the control.
 - Selected split buttons swap as one state: text pane to secondary and rails to primary. Play/Pause follows the same swap; it does not use a 50%-primary intermediate fill.
 - Dropdown menus use the active Toolbox primary/secondary pair tokens. Keep unselected rows white and selected rows secondary; center trigger labels independently of the chevron and use the token-owned horizontal chevron inset.
@@ -617,3 +617,16 @@ The taxonomy is enforced by `classifyConfirmedCatalogItem` in `src/components/st
 - The catalog renders the defaults contract once, then the six parent groups once each. All primitive specimens—including compatibility exports and composition helpers—enter the same grouping pass.
 
 This is a catalog information-architecture contract. It does not change the visual treatment, public primitive APIs, control tokens, or runtime behavior.
+
+
+## Studio Controls representatives and geometry contract — 2026-10-30
+
+- The Representatives module is a one-column, full-width inventory. Each representative uses the actual production export at Standard size; related primitives are grouped together. The current inventory names 22 primitive representatives and each must have a matching `data-vt-library-component` specimen.
+- Every primitive has a family module with a real production implementation and provenance. A representative is not a catalog-only recreation. Counter and Side Counter are distinct family modules; Side Counter must not be nested inside Counter.
+- Split-left, split-right, and double-split badge labels are centered against the full outside shell edges. Their label center axes must match at equal shell widths, regardless of how many square rails each anatomy has. Split text input is excluded from that centering rule and remains editable/left-aligned.
+- StudioCounter and StudioSideCounter use 2:1 number-value areas; all associated action rails remain square (1:1) to the selected size tier.
+- Split text input has one canonical stylesheet: `src/styles/studio-split-text-input.css`. `StudioSplitTextInput.tsx` imports it directly; `studio-control-entry.css` does not import a duplicate. The input is a normal editable native field inside the badge-owned shell, with a primary inset and black focused glyph fill/stroke.
+- The side/double-side chevron controls share one implementation and sizing contract. Double-side's center divider has no independent secondary focus outline; only the outside shell receives it.
+- Inter-modules are full width, edge-to-edge, and use square split sections without a default 4px edge inset.
+- Empty bar-toggle segments use 50% white / 50% primary fill; filled segments are black. Bars match the tier text height, use 2.5:1 height-to-width geometry and a slight radius; the percentage tooltip appears on focus.
+- Vertical word-toggle handles use measured word-block bounds (no line-height fudge) and the same side-inset/corner-radius relationship as the horizontal word-toggle handle. Competing fixed-inset recovery overrides are prohibited.
