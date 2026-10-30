@@ -217,3 +217,80 @@ Phase 4 remains partial: standalone SeoGenerator and VideoUploader create govern
 - The 42 production-referenced exports include non-generation helpers. Remaining production caller families include analytics/research, planning, tags, thumbnails, scripts, storyboards, comments, end-screen, journal/community and media analysis.
 - The audit and artifact upload passed on the exact head. The focused Gemini suite failed three retry-idempotency tests due to reusing the input event key for the output event; a separate `generation-output:v1:` event key namespace has been committed and awaits run #5470.
 - Do not retire provider compatibility paths until all remaining callers are classified/migrated and live capability parity is proven.
+
+
+## Tag-generation caller migration — 2026-10-30
+
+The new follow-up branch `feat/p1-gemini-tag-governance-2026-10-30` moves the known production callers of legacy `generateTagSuggestions` and `analyzeExistingTags` to `generateGovernedTagSuggestions`:
+
+- `src/views/VideoManager.tsx`: tag generation and analysis.
+- `src/views/dashboard/widgets/TagGeneratorWidget.tsx`: governed tag generation; fabricated hard-coded fallback suggestions removed.
+- `src/views/dashboard/widgets/VideoUploaderWidget.tsx`: governed tag generation.
+
+The shared `tagSuggestionsStrategy` validates the structured output and labels market volume, competition and potential rank as estimates, not live YouTube measurements. A zero potential-rank value means unknown. The dedicated Gemini CI job includes its strategy contract test.
+
+This is a source migration awaiting exact-head CI and a refreshed caller-inventory artifact. The older run #5442 inventory is not evidence for the new branch head. Standalone tag generation persists an AssetGenerator record and prompt receipt; ContentBuild/OperationRecord ingestion is not claimed when the caller supplies no canonical ContentBuild identity. Other active production caller families remain.
+
+
+## Comment engagement caller migration — 2026-10-30
+
+The creator comment responder no longer imports `generatePerfectReply` or `recommendVideoForComment` from the legacy Gemini module. It calls `draftCommentReply` and `recommendVideoForComment` in `src/services/brain/commentEngagement.ts`, both backed by the existing `BrainModelGateway.generateJsonObject` contract.
+
+- Reply generation is a draft-only operation; posting still occurs through the existing explicit user action.
+- Suggested video IDs are validated against the supplied creator-owned video list; unknown IDs cannot be emitted as recommendations.
+- Gateway contract tests are included in the dedicated Gemini CI job.
+- Exact-head verification is pending. The tag strategy test was corrected after run #5485 exposed an expectation mismatch (the test expected a failure for rank zero even though zero is intentionally the unknown sentinel). A fresh run must verify both migrations.
+
+
+## Timestamp and comment/tag migration audit — 2026-10-30
+
+The exact-head inventory at run #5496 / commit `69a09e5f1a0373fe94f3e027f49f02f363c122cb` reports:
+
+- 73 exported symbols in `gemini.ts`.
+- 37 production import-and-reference matches (not all are generation functions).
+- 35 exports without a static import reference; dynamic/re-export reachability still requires review before removal.
+- 66 direct SDK invocation sites concentrated in the provider owner and credential validation boundary.
+- Two literal dynamic imports, the expected BrainModelGateway provider adapter imports.
+- 19 model-ID literals and 18 credential-alias references.
+
+The same exact-head scan no longer lists the legacy tag functions `generateTagSuggestions` / `analyzeExistingTags` or comment functions `generatePerfectReply` / `recommendVideoForComment` as production callers. Those surfaces now use the existing AssetGenerator specialist path or BrainModelGateway.
+
+The next source slice moves `generateEducationalTimestampQuestions` callers in VideoUploaderWidget and VideoManagerWidget to `educationalTimestampStrategy` through Creator Assets. This slice is after run #5496 and needs a new exact-head artifact before counts are refreshed. Suggested timecodes are explicitly planning markers, not verified video timestamps.
+
+Remaining active production caller families still include analytics/research, planning, thumbnails, scripts, storyboards, end-screen, media transcription, speech and other creator surfaces. Provider SDK calls remain in the provider owner and GeminiKeyContext validation boundary; the static count of 66 is not 66 UI bypasses.
+
+
+## Exact-head inventory refresh — 2026-10-30
+
+Run #5506 / commit `0c8dc4788dc91cb7309ee80babd0484d7eecd73d` generated and uploaded the exact-head JSON inventory. Counts at that head:
+
+- 73 exported symbols in `gemini.ts`.
+- 36 production-referenced exports.
+- 36 exports without a static import reference; inspect dynamic/re-export reachability before removal.
+- 66 direct SDK invocation sites, which remain concentrated in the provider owner and credential-validation boundary rather than representing 66 UI bypasses.
+- Two literal dynamic Gemini imports, the expected provider adapter imports behind BrainModelGateway.
+- 19 model-ID literals and 18 credential-alias references.
+
+The following legacy production caller exports are no longer referenced by production UI after the current migration slice: `generateTagSuggestions`, `analyzeExistingTags`, `generatePerfectReply`, `recommendVideoForComment`, and `generateEducationalTimestampQuestions`. Their callers now use the governed AssetGenerator specialist strategies or BrainModelGateway.
+
+Run #5506 passed the Gemini governance job, production build, local smoke, Brain quality loop and conversation-handoff contract. It still reported independent failures in repository typecheck, Studio confirmed-catalog audit and the focused PublishTransaction test. The missing test import was fixed after that exact-head run; do not treat the repair as verified until CI reruns.
+
+This inventory is a snapshot, not zero-caller proof. Analytics, planning, thumbnail/image/video generation, script, storyboard, end-screen, media analysis/transcription, speech and other active production references still require owner/boundary classification and migration before compatibility retirement.
+
+
+## Script Architect boundary update — 2026-10-30
+
+`generateScript` remains a production-referenced export because Script Architect owns a domain-specific prompt and normalization contract. Its only production caller supplies the existing `runBrainJsonTask` callback through BrainRuntime. The optional direct `getAiClient().models.generateContent` fallback has now been removed; the callback is required and failures propagate through the governed path. A focused gateway-boundary test was added to the Gemini governance CI job.
+
+The current exact-head inventory counts above predate this change. A new artifact is required to refresh the direct SDK invocation count and confirm the caller audit on the new head. Do not interpret the prior count as current after this commit.
+
+
+## Latest exact-head inventory — 2026-10-30
+
+Run #5518 at `51d8f3957ab804b9d085ce7fd15c8afdf11ab455` regenerated and uploaded the exact-commit inventory. It reports 73 exports, 36 production-referenced exports, 36 exports without static import references, 65 direct SDK invocation sites, two dynamic Gemini imports, 19 model-ID literals and 18 credential-alias references.
+
+The production caller references for legacy tag generation/analysis, comment reply generation/recommendation and educational timestamp questions are absent. Script Architect still imports the `generateScript` prompt/normalization function, but its direct provider fallback has been removed; the function now requires the BrainRuntime task callback. The direct SDK invocation count decreased from 66 to 65.
+
+The exact-head Gemini governance job and production build passed, as did local smoke, Brain quality loop and conversation handoff. Repository-wide typecheck and Studio source/catalog gates still fail on separate pre-existing issues; the full suite was still running at documentation time.
+
+The remaining production references are not automatically provider bypasses: some are provider-owner exports, compatibility utilities, domain prompt builders, tests or functions still awaiting caller-owner classification. Keep the compatibility map until every active caller is classified, migrated or proven unreachable and live parity is certified.

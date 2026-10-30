@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { generatePerfectReply, recommendVideoForComment } from "../../services/gemini"
+import { draftCommentReply, recommendVideoForComment } from "../../services/brain/commentEngagement"
 import { fetchAllSimpleCommentThreads, fetchSimpleOwnedVideo, postSimpleCommentReply, toSimpleVideoDetails } from "../../services/simpleYouTubeApi"
 import { readBrainUserControls } from "../../services/brain/BrainUserControls"
 import type { CommentResponderController, CommentResponderTab, CreatorEngagementContext } from "./types"
@@ -192,14 +192,13 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
   try {
    const comment = currentThread.snippet.topLevelComment.snippet
    const { sourceVideoId, sourceTitle, candidateVideos } = sourceVideoContext()
-   const result = await generatePerfectReply(
-    `${comment.textOriginal}\n\nThis comment was left on: "${sourceTitle}". If recommending another video, choose a DIFFERENT video and only when it genuinely helps the viewer.`,
-    comment.authorDisplayName.replace(/@/g, ""),
-    context.channelName || "Content Creation",
-    candidateVideos.map((video) => ({ title: video.title, id: video.videoId })),
-    context.brain,
-    mode === "refine" ? replyText[currentId]?.trim() || "" : "",
-   )
+   const result = await draftCommentReply({
+    commentText: `${comment.textOriginal}\n\nThis comment was left on: "${sourceTitle}". If recommending another video, choose a DIFFERENT video and only when it genuinely helps the viewer.`,
+    authorName: comment.authorDisplayName.replace(/@/g, ""),
+    channelContext: context.channelName || "Content Creation",
+    availableVideos: candidateVideos.map((video) => ({ title: video.title, id: video.videoId })),
+    existingReply: mode === "refine" ? replyText[currentId]?.trim() || "" : "",
+   })
    const suggestedVideoId = resolveSuggestedVideoId(result.suggestedVideoId, candidateVideos, sourceVideoId)
    const reply = suggestedVideoId
     ? `${result.reply}\n\nCheck this out for more details: https://youtu.be/${suggestedVideoId}`
@@ -226,11 +225,10 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
     setError("No other channel videos are available to recommend.")
     return
    }
-   const recommendation = await recommendVideoForComment(
-    `${comment.textOriginal}\n\nSOURCE VIDEO: "${sourceTitle}". Recommend a DIFFERENT creator-owned video only if it meaningfully answers or extends what this viewer wants.`,
-    candidateVideos.map((video) => ({ title: video.title, id: video.videoId })),
-    context.brain,
-   )
+   const recommendation = await recommendVideoForComment({
+    commentText: `${comment.textOriginal}\n\nSOURCE VIDEO: "${sourceTitle}". Recommend a DIFFERENT creator-owned video only if it meaningfully answers or extends what this viewer wants.`,
+    availableVideos: candidateVideos.map((video) => ({ title: video.title, id: video.videoId })),
+   })
    const suggestedVideoId = resolveSuggestedVideoId(
     recommendation.recommendedVideoId,
     candidateVideos,

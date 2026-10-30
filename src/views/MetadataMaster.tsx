@@ -254,7 +254,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         operationId: generationOperationId,
         workflowId: "workflow:metadata-master:" + generationOperationId,
       })
-      const result = generated.output
+      const result = generatedAsset.output
 
       const generated = packageFromSeoResult(result, {
         goal,

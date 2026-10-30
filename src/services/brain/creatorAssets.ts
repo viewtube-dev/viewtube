@@ -20,6 +20,8 @@ import {
 import { geminiAssetModelRunner } from "./assetModelRunner"
 import { pinnedCommentStrategy, type PinnedCommentDraft } from "./assetStrategies/commentReply"
 import { videoPublisherSeoStrategy } from "./assetStrategies/videoPublisherSeo"
+import { tagSuggestionsStrategy, type TagSuggestion } from "./assetStrategies/tagSuggestions"
+import { educationalTimestampStrategy } from "./assetStrategies/educationalTimestamps"
 import type { SeoResult } from "../../types"
 import {
  communityPostStrategy,
@@ -279,4 +281,75 @@ export const generateVideoPublisherSeoPackage = async (input: {
   },
   record: result.record,
  }
+}
+
+
+/** Generate or assess tags through the shared specialist asset governance path. */
+export const generateGovernedTagSuggestions = async (input: {
+ context: CreatorChannelContext
+ title: string
+ description: string
+ tags?: string[]
+ mode?: "generate" | "analyze"
+ projectId?: string
+ operationId?: string
+ workflowId?: string
+}): Promise<{ suggestions: TagSuggestion[]; record: AssetRecord<TagSuggestion[]> }> => {
+ if (!input.context.channelId.trim()) {
+  throw new Error("A connected or explicitly identified channel is required for governed tag suggestions.")
+ }
+ const mode = input.mode || "generate"
+ const evidence = buildChannelAssetEvidence(input.context, tagSuggestionsStrategy.evidenceClasses)
+ const result = await generateAsset<TagSuggestion[]>({
+  request: {
+   channelId: input.context.channelId,
+   assetType: "tags",
+   instruction: mode === "analyze"
+    ? "Assess the supplied YouTube tags against the supplied video metadata."
+    : "Suggest relevant YouTube tags for the supplied video metadata.",
+   ...(input.projectId ? { projectId: input.projectId } : {}),
+   ...(input.operationId ? { operationId: input.operationId } : {}),
+   ...(input.workflowId ? { workflowId: input.workflowId } : {}),
+   inputs: { mode, title: input.title, description: input.description, tags: input.tags || [] },
+  },
+  strategy: tagSuggestionsStrategy,
+  evidence,
+  runner: geminiAssetModelRunner,
+ })
+ if (result.record.status === "failed" || result.record.status === "needs_review" || !result.record.output?.length) {
+  throw new Error("ViewTube could not produce verified tag suggestions. Review the generation trace and try again.")
+ }
+ return { suggestions: result.record.output, record: result.record }
+}
+
+
+/** Create educational timestamp questions as explicitly suggested planning markers. */
+export const generateGovernedTimestampQuestions = async (input: {
+ context: CreatorChannelContext
+ title: string
+ description: string
+ tags?: string[]
+ operationId?: string
+ workflowId?: string
+}): Promise<{ questions: string[]; record: AssetRecord<string[]> }> => {
+ if (!input.context.channelId.trim()) {
+  throw new Error("A connected or explicitly identified channel is required for timestamp suggestions.")
+ }
+ const result = await generateAsset<string[]>({
+  request: {
+   channelId: input.context.channelId,
+   assetType: "timestamps",
+   instruction: "Prepare five educational timestamp planning questions for the supplied video.",
+   ...(input.operationId ? { operationId: input.operationId } : {}),
+   ...(input.workflowId ? { workflowId: input.workflowId } : {}),
+   inputs: { title: input.title, description: input.description, tags: input.tags || [] },
+  },
+  strategy: educationalTimestampStrategy,
+  evidence: buildChannelAssetEvidence(input.context, educationalTimestampStrategy.evidenceClasses),
+  runner: geminiAssetModelRunner,
+ })
+ if (result.record.status === "failed" || result.record.status === "needs_review" || !result.record.output?.length) {
+  throw new Error("ViewTube could not produce verified timestamp planning questions. Review the generation trace and try again.")
+ }
+ return { questions: result.record.output, record: result.record }
 }
