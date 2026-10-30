@@ -275,6 +275,7 @@ test("dropdown colors and trigger alignment use active pair tokens and centered 
   assert.match(dropdown, /grid-template-columns:\s*var\(--vt-studio-dropdown-rail-size[^;]*minmax\(0,\s*1fr\)\s+var\(--vt-studio-dropdown-rail-size/);
   assert.match(dropdownDefaults, /\[data-vt-studio-dropdown-value\][\s\S]*?text-align:\s*center/);
   assert.match(dropdownDefaults, /\.vt-studio-dropdown-chevron[\s\S]*?padding-inline:\s*var\(--vt-studio-dropdown-chevron-inset/);
+  assert.match(dropdownDefaults, /\.vt-studio-dropdown\[data-open="true"\] button\[data-dropdown-trigger="true"\][\s\S]*?border-radius:\s*var\(--vt-studio-dropdown-menu-radius/);
   assert.doesNotMatch(dropdown + dropdownDefaults, /#36e0f6|#ff7f6b/);
   assert.match(tokens, /chevronInset:\s*6/);
   assert.match(tokenEmitter, /dropdownChevronInset/);
