@@ -1,4 +1,4 @@
-import { getComplexAdvice } from "./gemini"
+import { defaultBrainModelGateway } from "./brain/runtime/BrainModelGateway"
 import { annotateSystemPrompt, consultBrainSync } from "./brain/Utils"
 
 export type ChannelPlanningKind = "todo" | "goal"
@@ -8,6 +8,24 @@ export interface ChannelPlanningSuggestion {
   category: "Growth" | "Content" | "Audience" | "Publishing" | "Revenue" | "Operations"
   rationale: string
   evidence: string
+}
+
+const CATEGORIES: ChannelPlanningSuggestion["category"][] = [
+  "Growth", "Content", "Audience", "Publishing", "Revenue", "Operations",
+]
+
+const CHANNEL_PLANNING_SCHEMA: Record<string, unknown> = {
+  type: "ARRAY",
+  items: {
+    type: "OBJECT",
+    properties: {
+      text: { type: "STRING" },
+      category: { type: "STRING", enum: CATEGORIES },
+      rationale: { type: "STRING" },
+      evidence: { type: "STRING" },
+    },
+    required: ["text", "category", "rationale", "evidence"],
+  },
 }
 
 const clean = (value: unknown, fallback = "Unknown") => {
@@ -28,27 +46,24 @@ const channelProfileContext = (brain: any) => ({
   })) : [],
 })
 
-const parseSuggestions = (raw: string): ChannelPlanningSuggestion[] => {
-  const jsonMatch = raw.match(/\[[\s\S]*\]/)
-  if (jsonMatch) {
-    try {
-      const parsed = JSON.parse(jsonMatch[0])
-      if (Array.isArray(parsed)) return parsed.slice(0, 6).map((item: any) => ({
-        text: clean(item.text ?? item.title, "Channel action"),
-        category: (["Growth", "Content", "Audience", "Publishing", "Revenue", "Operations"].includes(item.category) ? item.category : "Growth") as ChannelPlanningSuggestion["category"],
-        rationale: clean(item.rationale ?? item.why, "Recommended from current channel context."),
-        evidence: clean(item.evidence, "AI Brain + channel profile"),
-      }))
-    } catch {
-      // Fall through to line parsing for providers that wrap otherwise useful output.
-    }
-  }
+const parseSuggestions = (raw: unknown): ChannelPlanningSuggestion[] => {
+  const candidates = Array.isArray(raw)
+    ? raw
+    : typeof raw === "string"
+      ? (() => {
+        const match = raw.match(/\[[\s\S]*\]/)
+        if (!match) return []
+        try { return JSON.parse(match[0]) } catch { return [] }
+      })()
+      : []
+  if (!Array.isArray(candidates)) return []
 
-  return raw.split("\n")
-    .map((line) => line.replace(/^[-*\d.)\s]+/, "").trim())
-    .filter((line) => line.length > 8)
-    .slice(0, 6)
-    .map((text) => ({ text, category: "Growth" as const, rationale: "Recommended from current channel context.", evidence: "AI Brain + channel profile" }))
+  return candidates.slice(0, 6).filter((item: any) => item && typeof item === "object").map((item: any) => ({
+    text: clean(item.text ?? item.title, "Channel action"),
+    category: (CATEGORIES.includes(item.category) ? item.category : "Growth") as ChannelPlanningSuggestion["category"],
+    rationale: clean(item.rationale ?? item.why, "Recommended from current channel context."),
+    evidence: clean(item.evidence, "AI Brain + channel profile"),
+  }))
 }
 
 export const buildChannelPlanningPrompt = (kind: ChannelPlanningKind, brain: any) => {
@@ -76,10 +91,13 @@ RULES:
 }
 
 export const generateChannelPlanningSuggestions = async (kind: ChannelPlanningKind, brain: any): Promise<ChannelPlanningSuggestion[]> => {
-  const prompt = buildChannelPlanningPrompt(kind, brain)
-  const raw = await getComplexAdvice(
-    prompt,
-    "Treat the supplied AI Brain packet and channel profile as the authoritative creator context. Return only the requested JSON array.",
-  )
+  const generateJsonObject = defaultBrainModelGateway.generateJsonObject
+  if (!generateJsonObject) throw new Error("BrainModelGateway JSON generation is unavailable.")
+  const raw = await generateJsonObject({
+    systemInstruction: buildChannelPlanningPrompt(kind, brain),
+    userText: "Treat the supplied AI Brain packet and channel profile as authoritative creator context. Return only the requested JSON array.",
+    responseSchema: CHANNEL_PLANNING_SCHEMA,
+    capability: "thinking",
+  })
   return parseSuggestions(raw)
 }
