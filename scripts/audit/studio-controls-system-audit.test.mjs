@@ -139,6 +139,8 @@ test("split input rails use the inner square size and recovery CSS cannot stretc
   assert.ok(splitInputCss.includes("var(--vt-studio-split-rail-size"));
   assert.ok(!splitInputCss.includes("grid-template-columns: var(--vt-studio-control-height"));
   assert.ok(split.includes("--vt-studio-split-rail-size"));
+  assert.ok(!split.includes("width: var(--vt-studio-control-height, 44px)"));
+  assert.ok(!split.includes("min-width: var(--vt-studio-control-height, 44px)"));
   assert.ok(!recovery.includes(".vt-studio-split-shell__rail, [data-vt-studio-split-rail]"));
   assert.ok(!recovery.includes("width: var(--vt-studio-control-height) !important"));
 });
@@ -149,7 +151,8 @@ test("split text input accepts every canonical size supported by its production 
   assert.ok(splitInput.includes("../../styles/studio-split-text-input.css"));
   assert.ok(!splitInput.includes('sizeVariant?: "standard" | "compact"'));
   assert.ok(splitInputCss.includes("height: var(--vt-studio-control-height, 44px)"));
-  assert.ok(splitInputCss.includes("grid-template-columns: var(--vt-studio-control-height, 44px)"));
+  assert.ok(splitInputCss.includes("grid-template-columns: var(--vt-studio-split-rail-size"));
+  assert.ok(!splitInputCss.includes("grid-template-columns: var(--vt-studio-control-height, 44px)"));
 });
 
 
