@@ -788,43 +788,50 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 }
 
 
-const ConfirmedStudioSplitButtonFamily: React.FC = () => (
-  <Family title="Split Button Family · Left / Right / Double / Two-Line" nonDefaultSettings={[
-    "Split-left and split-right use one square rail; double-split uses two square rails; all keep a single black divider per boundary.",
-    "Two-line variants keep both lines inside one face at the selected size; no second control or increased shell height is introduced.",
-  ]} provenance={<Provenance primitive="StudioSplitLeftButton · StudioSplitRightButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · secondary square rails · single black divider · clipped centered labels" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-    <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitButtonFamily">
-      <span>STANDARD · SPLIT VARIANTS</span>
-      <StudioSplitLeftButton sizeVariant="standard" icon={<Check aria-hidden="true" />} aria-label="Split left variant">LEFT</StudioSplitLeftButton>
-      <StudioSplitRightButton sizeVariant="standard" icon={<Settings2 aria-hidden="true" />} aria-label="Split right variant">RIGHT</StudioSplitRightButton>
-      <StudioDoubleSplitButton sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Double split variant">DOUBLE</StudioDoubleSplitButton>
-      <StudioTwoLineButton sizeVariant="standard" firstLine="TWO LINE" secondLine="BUTTON" aria-label="Two line variant" />
-      <StudioSplitTwoLineButton sizeVariant="standard" icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label="Two line split variant" />
-    </div>
-    <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitButtonFamily-compact">
-      <span>COMPACT · SPLIT VARIANTS</span>
-      <StudioSplitLeftButton sizeVariant="compact" icon={<Check aria-hidden="true" />} aria-label="Compact split left variant">LEFT</StudioSplitLeftButton>
-      <StudioSplitRightButton sizeVariant="compact" icon={<Settings2 aria-hidden="true" />} aria-label="Compact split right variant">RIGHT</StudioSplitRightButton>
-      <StudioDoubleSplitButton sizeVariant="compact" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Compact double split variant">DOUBLE</StudioDoubleSplitButton>
-      <StudioTwoLineButton sizeVariant="compact" firstLine="TWO LINE" secondLine="BUTTON" aria-label="Compact two line variant" />
-      <StudioSplitTwoLineButton sizeVariant="compact" icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label="Compact two line split variant" />
-    </div>
-  </Family>
-)
+const ConfirmedStudioSplitButtonFamily: React.FC = () => {
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  return (
+    <Family title="Split Button Family · All Sizes × Left / Right / Double / Two-Line" nonDefaultSettings={[
+      "Every supported size is shown for split-left, split-right, double-split, two-line, and split two-line designs.",
+      "Split-left and split-right use one square rail; double-split uses two square rails; all keep a single black divider per boundary.",
+      "Two-line variants keep both lines inside one face at the selected size; no second control or increased shell height is introduced.",
+      "Primary face and secondary rails remain the canonical palette; no catalog-only style overrides are applied.",
+    ]} provenance={<Provenance primitive="StudioSplitLeftButton · StudioSplitRightButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Supreme / Standard / Compact / Mini / Micro · secondary square rails · single black divider · clipped centered labels" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      {sizes.map(size => <div className="vt-confirmed-variant is-full-row" data-vt-library-component={`StudioSplitButtonFamily-${size}`} key={size}>
+        <span>{size.toUpperCase()} · SPLIT VARIANTS</span>
+        <StudioSplitLeftButton sizeVariant={size} icon={<Check aria-hidden="true" />} aria-label={`${size} split-left button`}>LEFT</StudioSplitLeftButton>
+        <StudioSplitRightButton sizeVariant={size} icon={<Settings2 aria-hidden="true" />} aria-label={`${size} split-right button`}>RIGHT</StudioSplitRightButton>
+        <StudioDoubleSplitButton sizeVariant={size} leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label={`${size} double-split button`}>DOUBLE</StudioDoubleSplitButton>
+        <StudioTwoLineButton sizeVariant={size} firstLine="TWO LINE" secondLine="BUTTON" aria-label={`${size} two-line button`} />
+        <StudioSplitTwoLineButton sizeVariant={size} icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label={`${size} two-line split button`} />
+      </div>)}
+    </Family>
+  )
+}
 
 const ConfirmedStudioDropdownFamily: React.FC = () => {
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
   const options = [{ value: "balanced", label: "BALANCED" }, { value: "focused", label: "FOCUSED" }, { value: "explore", label: "EXPLORE" }]
   const multiOptions = [{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }, { value: "live", label: "LIVE" }]
   return (
-    <Family title="Dropdown Family · Standard / Split-Left / Multi-Select" nonDefaultSettings={[
-      "The split-left variant adds a fixed square leading rail; multi-select adds selection/count behavior; the standard trigger remains the baseline.",
-      "All dropdown variants in this family are shown at Standard size for direct geometry comparison.",
-    ]} provenance={<Provenance primitive="StudioDropdown · StudioSplitLeftDropdown · StudioLegendMultiDropdown" tsx="src/studio-ui/primitives/StudioDropdown.tsx + src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard · canonical primary/secondary tokens" imports={["src/studio-ui/primitives/StudioDropdown.tsx", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdownFamily">
-        <span>STANDARD · SPLIT-LEFT · MULTI-SELECT</span>
-        <StudioDropdown sizeVariant="standard" defaultValue="balanced" options={options} ariaLabel="Standard dropdown variant" />
-        <StudioSplitLeftDropdown sizeVariant="standard" defaultValue="balanced" options={options} ariaLabel="Split-left dropdown variant" />
-        <StudioLegendMultiDropdown sizeVariant="standard" label="FORMAT" defaultValue={["videos"]} options={multiOptions} />
+    <Family title="Dropdown Family · All Sizes × Single / Simple / Split-Left / Multi-Select" nonDefaultSettings={[
+      "All supported size tiers are represented for the canonical single-select, simple presentation, split-left layout, and multi-select menu.",
+      "Simple is a presentation variant of StudioDropdown, not a second menu engine; split-left is a layout variant.",
+      "Multi-select preserves independent selected values and selected-count presentation; disabled state is shown separately.",
+      "Trigger, chevron, and menu rows use the same selected size tier and shared tokens.",
+    ]} provenance={<Provenance primitive="StudioDropdown · StudioSplitLeftDropdown · StudioLegendMultiDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Supreme / Standard / Compact / Mini / Micro · primary trigger · secondary chevron rail · size-matched menu rows" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      {sizes.map(size => <div className="vt-confirmed-variant is-full-row" data-vt-library-component={`StudioDropdownFamily-${size}`} key={size}>
+        <span>{size.toUpperCase()} · SINGLE / SIMPLE / SPLIT-LEFT / MULTI</span>
+        <StudioDropdown sizeVariant={size} defaultValue="balanced" options={options} ariaLabel={`${size} single-select dropdown`} />
+        <StudioDropdown sizeVariant={size} variant="simple" defaultValue="focused" options={options} ariaLabel={`${size} simple dropdown`} />
+        <StudioSplitLeftDropdown sizeVariant={size} defaultValue="explore" options={options} ariaLabel={`${size} split-left dropdown`} />
+        <StudioLegendMultiDropdown sizeVariant={size} label="FORMAT" defaultValue={["videos"]} options={multiOptions} />
+      </div>)}
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdown-disabled">
+        <span>STANDARD · DISABLED / NO OPTIONS / CONNECTION MESSAGE</span>
+        <StudioDropdown sizeVariant="standard" defaultValue="" options={[]} disabled placeholder="UNAVAILABLE" ariaLabel="Disabled dropdown specimen" />
+        <StudioDropdown sizeVariant="standard" defaultValue="balanced" options={options} connectionMessage="CONNECT TO LOAD OPTIONS" ariaLabel="Connection-state dropdown specimen" />
+        <StudioLegendMultiDropdown sizeVariant="standard" label="LOCKED FORMAT" defaultValue={["videos"]} options={multiOptions} disabled />
       </div>
     </Family>
   )
@@ -975,9 +982,6 @@ const useConfirmedAdditionalPrimitiveSections = (): React.ReactNode[] => {
             action={<StudioButton sizeVariant="compact" onClick={() => undefined}>SEND</StudioButton>}
           />
         </div>
-      </Family>
-      <Family title="StudioDropdown · Single Selection" nonDefaultSettings={["This is the public canonical dropdown; simple/split-left wrappers are compatibility/layout variants, not separate menu engines.", "Chevron rail and option rows follow the selected size tier."]} provenance={<Provenance primitive="StudioDropdown" tsx="src/studio-ui/primitives/StudioDropdown.tsx" css="src/styles/studio-control-system.css" tokens="Five-tier dropdown rail/chevron tokens; primary trigger and secondary rail." imports={["src/studio-ui/primitives/StudioDropdown.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdown"><span>STANDARD · SINGLE SELECT</span><StudioDropdown sizeVariant="standard" ariaLabel="Canonical dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
       </Family>
       <Family title="StudioUsernameInput · Split Identity Field" nonDefaultSettings={["Leading identity rail is fixed-width and the editable area is one native text input inside a single split shell.", "Focus outline is owned by the outer shell; the native field adds neither a second outline nor an inset shadow."]} provenance={<Provenance primitive="StudioUsernameInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="44px standard split shell with shared field focus contract." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>STANDARD · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Standard username" value={username} onChange={(event) => setUsername(event.currentTarget.value)} placeholder="CREATOR NAME" /></div>
@@ -1457,72 +1461,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
     </Family>
 
     <Family
-      title="StudioLegendMultiDropdown · Multi Selection"
-      nonDefaultSettings={[
-        "Floating-label placement and selected-item count are dropdown-specific; they do not alter the shared menu-row tokens.",
-        "Options retain menu-item semantics; the floating panel is stationary and does not inherit button press movement.",
-      ]}
-      provenance={<Provenance
-        primitive="StudioLegendMultiDropdown · 140"
-        tsx="src/studio-ui/primitives/StudioControls.tsx"
-        css="src/styles/studio-control-system.css"
-        tokens="Fixed floating label; trigger value typography independent of label; 28px/18px chevrons; 44px/28px menu rows; no menu-option shadows or press motion."
-        imports={["src/studio-ui/primitives/StudioControls.tsx"]}
-      />}
-    >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown">
-        <span>44px standard · selected values · multiselect trigger</span>
-        <StudioLegendMultiDropdown
-          label="dropdown"
-          defaultValue={["videos", "shorts"]}
-          options={[
-            { value: "videos", label: "VIDEOS" },
-            { value: "shorts", label: "SHORTS" },
-            { value: "live", label: "LIVE" },
-            { value: "playlists", label: "PLAYLISTS" },
-            { value: "podcasts", label: "PODCASTS" },
-            { value: "music", label: "MUSIC" },
-            { value: "gaming", label: "GAMING" },
-            { value: "news", label: "NEWS" },
-            { value: "sports", label: "SPORTS" },
-          ]}
-        />
-      </div>
-      <div className="vt-confirmed-paired-compact-row">
-        <div className="vt-confirmed-variant">
-          <span>28px compact A · closed trigger and count</span>
-          <StudioLegendMultiDropdown
-            label="dropdown"
-            sizeVariant="compact"
-            placeholder="dropdown A"
-            options={[
-              { value: "default", label: "DEFAULT" },
-              { value: "bold", label: "BOLD" },
-              { value: "minimal", label: "MINIMAL" },
-              { value: "cinematic", label: "CINEMATIC" },
-              { value: "educational", label: "EDUCATIONAL" },
-              { value: "documentary", label: "DOCUMENTARY" },
-            ]}
-          />
-        </div>
-        <div className="vt-confirmed-variant">
-          <span>28px compact B · closed trigger and count</span>
-          <StudioLegendMultiDropdown
-            label="dropdown"
-            sizeVariant="compact"
-            placeholder="dropdown B"
-            options={[
-              { value: "tutorial", label: "TUTORIAL" },
-              { value: "storytelling", label: "STORYTELLING" },
-              { value: "review", label: "REVIEW" },
-              { value: "commentary", label: "COMMENTARY" },
-              { value: "shorts", label: "SHORTS" },
-            ]}
-          />
-        </div>
-      </div>
-    </Family>
-    <Family
       title="StudioSpectrumTag · Vault Metadata Exception"
       nonDefaultSettings={[
         "Dense metadata exception: 15px height, spectrum-derived border/text, 35% color fill, and opt-in selected glow.",
@@ -1640,22 +1578,6 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
         <StudioUploadFrame aria-label="Standard upload frame example" />
         <span>Compact · image upload</span>
         <StudioUploadFrame sizeVariant="compact" accept="image/*" aria-label="Compact image upload example" />
-      </div>
-    </Family>
-    <Family
-      title="Split-left Dropdown · Fixed Chevron Rail"
-      nonDefaultSettings={[
-        "Single-select dropdown with a fixed square leading rail and chevron.",
-        "All dropdown variants use fixed side-aligned chevrons: 38px icon in the 44px standard rail and 24px icon in the 28px compact rail.",
-        "Menu options inherit the canonical 44px / 28px row heights and 3px / 2px divider strokes.",
-      ]}
-      provenance={<Provenance primitive="StudioSplitLeftDropdown / StudioDropdown / StudioDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · fixed square chevron rails · consistent menu row ratio" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftDropdown">
-        <span>Standard · split-left chevron</span>
-        <StudioSplitLeftDropdown aria-label="Split-left dropdown example" defaultValue="balanced" options={[{ value: "light", label: "Light" }, { value: "balanced", label: "Balanced" }, { value: "aggressive", label: "Aggressive" }]} />
-        <span>Compact · split-left chevron</span>
-        <StudioSplitLeftDropdown aria-label="Compact split-left dropdown example" sizeVariant="compact" defaultValue="three" options={[{ value: "one", label: "One set" }, { value: "three", label: "Three sets" }, { value: "five", label: "Five sets" }]} />
       </div>
     </Family>
     <Family
