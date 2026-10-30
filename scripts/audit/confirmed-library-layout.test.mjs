@@ -567,8 +567,10 @@ test("split-left, split-right, double-split, and two-line buttons share one fami
     "StudioTwoLineButton",
     "StudioSplitTwoLineButton",
   ]) assert.ok(family.includes(primitive), `split family is missing ${primitive}`);
-  assert.match(family, /StudioSplitLeftButton sizeVariant="compact"/);
-  assert.match(family, /StudioSplitRightButton sizeVariant="compact"/);
-  assert.match(family, /StudioDoubleSplitButton sizeVariant="compact"/);
+  assert.match(family, /const sizes = \["supreme", "standard", "compact", "mini", "micro"\] as const/);
+  assert.match(family, /StudioSplitLeftButton sizeVariant=\{size\}/);
+  assert.match(family, /size === "standard" \|\| size === "compact"/);
+  assert.match(family, /StudioSplitRightButton sizeVariant=\{size\}/);
+  assert.match(family, /StudioDoubleSplitButton sizeVariant=\{size\}/);
   assert.doesNotMatch(catalog, /title="StudioSplitRightButton · Standard"|title="Two-Line Button · Standard \+ Compact"|title="Split Two-Line Button · Standard \+ Compact"/);
 });
