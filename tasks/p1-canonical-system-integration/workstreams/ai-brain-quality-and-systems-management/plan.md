@@ -229,3 +229,12 @@ Use existing Task Authority / Crown / Herald / Conversation OS contracts. Do not
 **Build/typecheck/runtime/browser checks:** not executed.  
 **Certification:** not claimed.  
 **Next action:** Phase 0 exact-head baseline, then focused Phase 1/2 tests and UI/reachability inventory.
+
+
+## 9. Initial UI coverage reconnaissance
+
+A first repository search was performed using the UI Coverage Auditor workflow. It found the management workspace remains explicitly listed as unfinished in `tasks/ai-systems-management/todo.md` and `tasks/ai-systems-management/plan.md`. Search also surfaced a standalone Studio Hub concept HTML and architecture documents, but those do not prove a production-mounted Brain Hub management route.
+
+The available search results did not establish the live route → component → action → service → authorization → persisted/runtime effect path for the proposed Overview, Systems, Agents/Runs, Prompts, Plans, Evidence/Traces, Knowledge/Learning, Audit and Health views. Therefore the management workspace is **UNVERIFIED**, not conclusively `MISSING_UI`. The next audit must inspect router/navigation registries, actual component imports/usages, feature/permission gates, mobile variants and runtime call paths before classifying each surface.
+
+The creator-facing Brain Health panel and attribution panel are separate from the proposed AI Systems management workspace. Their existence in earlier task notes is not proof that canonical live source adapters and all assistant surfaces consume them.
