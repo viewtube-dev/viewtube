@@ -607,7 +607,7 @@ Selectable split-left, split-right, and double-split buttons swap their label an
 
 ## Confirmed Primitive Library taxonomy enforcement — 2026-10-30
 
-The taxonomy is enforced by `classifyConfirmedCatalogItem` in `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`. Classification is fail-closed: an unrecognized family throws an actionable error naming the specimen and requiring an explicit category rule. There is no implicit Compositions fallback.
+The taxonomy is enforced by `classifyConfirmedCatalogItem` in `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`. Classification is fail-closed: an unrecognized family remains ungrouped and is surfaced in an actionable Unclassified family warning that requires an explicit category rule. There is no implicit Compositions fallback.
 
 - Dropdown triggers, dropdown menu rows, option lists, and menu-state specimens classify as **Dropdowns**, regardless of whether the menu is shown as a standalone specimen.
 - Counters, word counters, sliders, word sliders, switches, radios, checkboxes, and all toggle orientations classify as **Controls**.
