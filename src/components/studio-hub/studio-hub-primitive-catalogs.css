@@ -2482,11 +2482,16 @@
 }
 .vt-confirmed-square-variant-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, max-content));
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  grid-template-columns: none;
   align-items: center;
   justify-content: start;
   gap: 10px;
   min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
 }
 .vt-confirmed-square-variant-grid > button[data-vt-studio-icon-button="true"] {
   flex: 0 0 auto;
@@ -2557,8 +2562,12 @@
 
 @media (max-width: 560px) {
   .vt-confirmed-square-variant-grid {
-    grid-template-columns: repeat(4, minmax(0, max-content));
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    grid-template-columns: none;
     gap: 8px;
+    overflow-x: auto;
+    overflow-y: visible;
   }
   .vt-confirmed-stepper-row-grid {
     grid-template-columns: repeat(2, minmax(0, max-content));
