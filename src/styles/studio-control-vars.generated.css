@@ -82,7 +82,7 @@
   --vt-studio-28-icon-size: var(--vt-studio-compact-icon-size);
   --vt-studio-secondary-focus-width-ratio: 0.65;
   --vt-studio-focus-hold-ms: 1500ms;
-  --vt-studio-focus-outline-fade-ms: 0ms;
+  --vt-studio-focus-outline-fade-ms: 500ms;
   --vt-studio-focus-outline-width-ratio: 0.65;
   --vt-studio-focus-outline-offset: 0px;
   --vt-studio-dropdown-menu-gap: 8px;
