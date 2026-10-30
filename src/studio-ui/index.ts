@@ -117,8 +117,8 @@ export type {
   StudioCloseableBadgeProps,
   StudioTagEditorProps,
 } from "./primitives/StudioControls"
-export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle } from "./primitives/StudioValueToggles";
-export type { StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioToggleAppearance } from "./primitives/StudioValueToggles";
+export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, StudioDoubleSplitWordCounter } from "./primitives/StudioValueToggles";
+export type { StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioDoubleSplitWordCounterProps, StudioToggleAppearance } from "./primitives/StudioValueToggles";
 export { StudioComponentGrid, StudioComponentGridCell, StudioComponentGridRow } from "./primitives/StudioComponentGrid";
 export type { StudioComponentGridProps, StudioComponentGridCellProps, StudioGridSize, StudioGridCorners } from "./primitives/StudioComponentGrid";
 export { StudioComponentGridSpecimen, StudioComponentGridSpecimenPair } from "./primitives/StudioComponentGridSpecimen";
