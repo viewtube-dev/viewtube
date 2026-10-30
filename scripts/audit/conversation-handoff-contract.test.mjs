@@ -9,6 +9,7 @@ const schema = parse("../../docs/governance/conversation-work-log.schema.json");
 const template = read("../../.claude/skills/viewtube-conversation-handoff/templates/handoff-template.md");
 const skill = read("../../.claude/skills/viewtube-conversation-handoff/SKILL.md");
 const documentation = read("../../docs/governance/DOCUMENTATION.md");
+const index = read("../../docs/Index.md");
 const spec = read("../../docs/governance/CONVERSATION_HANDOFFS.md");
 const worklogTemplate = parse("../../.claude/skills/viewtube-conversation-handoff/templates/worklog-template.json");
 const intakeRoot = new URL("../../tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/", import.meta.url);
@@ -61,6 +62,7 @@ test("Documentation Governance recognizes the handoff as provenance, not a compe
   assert.match(documentation, /Conversation handoff and living logs/i);
   assert.match(documentation, /CONVERSATION_HANDOFFS\.md/);
   assert.match(documentation, /not a second Task Index or canonical task ledger/i);
+  assert.match(index, /Update the unfinished work log\./);
   assert.match(spec, /Update the unfinished work log\./);
 });
 
@@ -86,9 +88,9 @@ test("worklog template exposes all optional living-log collections", () => {
 });
 
 test("originating conversation package records PR 1170 and its actual delivery boundary", () => {
-  const worklog = parse(path.join(intakeRoot, "worklog.json"));
-  const handoff = read(path.join(intakeRoot, "handoff.md"));
-  const review = read(path.join(intakeRoot, "review.md"));
+  const worklog = JSON.parse(fs.readFileSync(new URL("worklog.json", intakeRoot), "utf8"));
+  const handoff = fs.readFileSync(new URL("handoff.md", intakeRoot), "utf8");
+  const review = fs.readFileSync(new URL("review.md", intakeRoot), "utf8");
 
   assert.ok(Array.isArray(worklog.instructions) && worklog.instructions.length > 0);
   assert.ok(worklog.branchPrReconciliation.some((record) => record.pullRequest === 1170));
