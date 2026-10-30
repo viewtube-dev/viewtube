@@ -18,6 +18,7 @@ import {
  subscribeBrainConversationChanges,
 } from "../services/brain/BrainConversationController"
 import { runBrainTask } from "../services/brain/runtime/BrainRuntime"
+import { readSelectedPublicHandleContext } from "../services/publicHandleMode"
 import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommunicationIngestion"
 import {
  readBrainUserControls,
@@ -178,6 +179,7 @@ export const SidebarChatbot: React.FC = () => {
 
    const result = await runBrainTask({
     surface: "sidebar-chatbot",
+    publicHandleContext: readSelectedPublicHandleContext(),
     projectId: selection?.projectId ?? surface.projectId ?? null,
     project: activeProject,
     projects: brain.projects,
