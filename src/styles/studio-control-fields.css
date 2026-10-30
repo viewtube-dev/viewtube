@@ -134,6 +134,11 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
   -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="mini"],
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="mini"] {
+  font-size: var(--vt-studio-textarea-mini-font-size, 17.5px);
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, 0.4px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"],
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="micro"] {
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
@@ -344,4 +349,12 @@ html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"] {
   color: #000;
   -webkit-text-fill-color: #000;
   -webkit-text-stroke-color: #000 !important;
+}
+
+/* State color wins over every size-specific glyph-width declaration. */
+html body input[data-vt-studio-control="true"][data-size]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size]:is(:focus, :focus-visible) {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
 }
