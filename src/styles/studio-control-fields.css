@@ -57,6 +57,7 @@ textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   color: #000;
   -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
   caret-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
   background-color: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent);
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-field-secondary, var(--pair-b, #ff7f6b));
