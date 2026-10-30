@@ -1,12 +1,13 @@
 import React, { useMemo } from "react"
-import { BookOpen, MessageSquare, Settings2, UserRound } from "lucide-react"
+import { BookOpen, Database, MessageSquare, Settings2, UserRound } from "lucide-react"
 import { StudioSplitAccordion, type StudioSplitAccordionItem } from "../../studio-ui"
 
-export type BrainPageTabId = "chat" | "my-brain" | "review" | "controls"
+export type BrainPageTabId = "chat" | "my-brain" | "evidence" | "review" | "controls"
 
 const DEFAULT_TABS: Array<{ id: BrainPageTabId; label: string; icon: React.ReactNode }> = [
   { id: "chat", label: "CHAT", icon: <MessageSquare aria-hidden="true" /> },
   { id: "my-brain", label: "PROFILE", icon: <UserRound aria-hidden="true" /> },
+  { id: "evidence", label: "EVIDENCE", icon: <Database aria-hidden="true" /> },
   { id: "review", label: "LEARNING", icon: <BookOpen aria-hidden="true" /> },
   { id: "controls", label: "ACCESS", icon: <Settings2 aria-hidden="true" /> },
 ]
