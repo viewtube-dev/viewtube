@@ -100,6 +100,16 @@
   --vt-studio-dropdown-compact-chevron-stroke: 1.65;
   --vt-studio-dropdown-mini-chevron-stroke: 1.2;
   --vt-studio-dropdown-micro-chevron-stroke: 1;
+  --vt-studio-stepper-supreme-chevron-size: 42px;
+  --vt-studio-stepper-standard-chevron-size: 36px;
+  --vt-studio-stepper-compact-chevron-size: 24px;
+  --vt-studio-stepper-mini-chevron-size: 16px;
+  --vt-studio-stepper-micro-chevron-size: 12px;
+  --vt-studio-stepper-supreme-chevron-stroke: 3.75;
+  --vt-studio-stepper-standard-chevron-stroke: 2.5;
+  --vt-studio-stepper-compact-chevron-stroke: 3;
+  --vt-studio-stepper-mini-chevron-stroke: 2.5;
+  --vt-studio-stepper-micro-chevron-stroke: 2.25;
   --vt-studio-number-default-white-mix: 50%;
   --vt-studio-number-rest-mix: 50%;
   --vt-studio-number-active-color: #000000;
