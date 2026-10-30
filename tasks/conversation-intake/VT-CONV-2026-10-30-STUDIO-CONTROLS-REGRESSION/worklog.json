@@ -622,11 +622,13 @@
       "targetBranch": "master/consolidated-feature-integration",
       "pullRequest": 1229,
       "openedHeadSha": "97651224b3d05fe02a5e907258763157bc467e14",
-      "currentHeadSha": "251fe13f50fb8a827185dec7ee1edff6ac79129d",
+      "currentHeadSha": "7e57710e4288f14c4ec63522bade6b2e32ceb481",
       "commitsAfterPrOpen": [
         "89f2bb0a34759aedfe19632552385f799fe18f4e",
         "472362f7565572c14e057fcfd1640b4d7da993e3",
-        "251fe13f50fb8a827185dec7ee1edff6ac79129d"
+        "251fe13f50fb8a827185dec7ee1edff6ac79129d",
+        "db46383ad33f6dfc7e81cd6ca910a7a34ff6abe7",
+        "7e57710e4288f14c4ec63522bade6b2e32ceb481"
       ],
       "postPrChangedPaths": [
         "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/handoff.md",
@@ -640,7 +642,7 @@
       "evidenceRefs": [
         "https://github.com/viewtube-dev/viewtube/pull/1229"
       ],
-      "notes": "The opening head was 97651224b3d05fe02a5e907258763157bc467e14. Three subsequent commits updated the handoff, review and worklog. currentHeadSha records the last independently inspected head before this final reconciliation write; refresh on next update."
+      "notes": "Opening head 97651224b3d05fe02a5e907258763157bc467e14. Five subsequent commits updated handoff.md, review.md and worklog.json. Current head is the latest independently observed docs/review update; the final worklog refresh itself advances the branch. Latest base/head compare reports 11 ahead and 4 behind; GitHub reports mergeable=false."
     }
   ],
   "integrationGaps": [
