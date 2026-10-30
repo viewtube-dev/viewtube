@@ -2634,8 +2634,8 @@
 }
 .vt-confirmed-catalog [data-vt-studio-username-input="true"],
 .vt-confirmed-catalog [data-vt-studio-username-input="true"] input { width: 100%; min-width: 0; }
-.vt-confirmed-square-effect-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.vt-confirmed-square-effect-pair { gap: 5px; padding: 6px; }
+.vt-confirmed-square-effect-grid { display:flex; flex-flow:column nowrap; align-items:stretch; gap:8px; }
+.vt-confirmed-square-effect-pair { width:100%; max-width:none; gap:5px; padding:6px; }
 .vt-confirmed-square-effect-pair > strong {
   max-width: 40ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
@@ -2651,7 +2651,7 @@
   .vt-confirmed-composite-grid,
   .vt-confirmed-username-grid,
   .vt-confirmed-stepper-row-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-  .vt-confirmed-square-effect-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+  .vt-confirmed-square-effect-grid { display:flex; flex-flow:column nowrap; gap:5px; }
   .vt-confirmed-spectrum-tag-grid { gap: 5px; }
 }
 
