@@ -924,6 +924,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Studio Controls standard/compact sizes, Inter 1000 uppercase, inherited palette pair" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
+      <SizeMatrix label="Simple dropdown size examples"
+        standard={<StudioSimpleDropdown sizeVariant="standard" ariaLabel="Standard simple dropdown" defaultValue="balanced" options={[{value:"light",label:"Light"},{value:"balanced",label:"Balanced"},{value:"aggressive",label:"Aggressive"}]} />}
+        compact={[0,1].map(i => compact(<StudioSimpleDropdown sizeVariant="compact" ariaLabel={"Compact simple dropdown "+(i+1)} defaultValue="balanced" options={[{value:"light",label:"Light"},{value:"balanced",label:"Balanced"},{value:"aggressive",label:"Aggressive"}]} />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioSimpleDropdown sizeVariant="micro" ariaLabel={"Micro simple dropdown "+(i+1)} defaultValue="balanced" options={[{value:"light",label:"Light"},{value:"balanced",label:"Balanced"},{value:"aggressive",label:"Aggressive"}]} />, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row">
         <span>Standard · single select</span>
         <StudioSimpleDropdown aria-label="Example simple dropdown" defaultValue="balanced" options={[{ value: "light", label: "Light" }, { value: "balanced", label: "Balanced" }, { value: "aggressive", label: "Aggressive" }]} />
