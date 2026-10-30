@@ -39,6 +39,7 @@ describe("Brain model gateway boundary", () => {
    userText: "Create an action plan.",
    systemInstruction: "Return valid JSON.",
    responseSchema: { type: "object" },
+   tools: [{ googleSearch: {} }],
   }
 
   await expect(gateway.generateStructuredResponse(structuredInput)).resolves.toBe(structuredOutput)
