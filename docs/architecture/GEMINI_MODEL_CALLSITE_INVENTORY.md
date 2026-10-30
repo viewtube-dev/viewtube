@@ -230,3 +230,13 @@ The new follow-up branch `feat/p1-gemini-tag-governance-2026-10-30` moves the kn
 The shared `tagSuggestionsStrategy` validates the structured output and labels market volume, competition and potential rank as estimates, not live YouTube measurements. A zero potential-rank value means unknown. The dedicated Gemini CI job includes its strategy contract test.
 
 This is a source migration awaiting exact-head CI and a refreshed caller-inventory artifact. The older run #5442 inventory is not evidence for the new branch head. Standalone tag generation persists an AssetGenerator record and prompt receipt; ContentBuild/OperationRecord ingestion is not claimed when the caller supplies no canonical ContentBuild identity. Other active production caller families remain.
+
+
+## Comment engagement caller migration — 2026-10-30
+
+The creator comment responder no longer imports `generatePerfectReply` or `recommendVideoForComment` from the legacy Gemini module. It calls `draftCommentReply` and `recommendVideoForComment` in `src/services/brain/commentEngagement.ts`, both backed by the existing `BrainModelGateway.generateJsonObject` contract.
+
+- Reply generation is a draft-only operation; posting still occurs through the existing explicit user action.
+- Suggested video IDs are validated against the supplied creator-owned video list; unknown IDs cannot be emitted as recommendations.
+- Gateway contract tests are included in the dedicated Gemini CI job.
+- Exact-head verification is pending. The tag strategy test was corrected after run #5485 exposed an expectation mismatch (the test expected a failure for rank zero even though zero is intentionally the unknown sentinel). A fresh run must verify both migrations.
