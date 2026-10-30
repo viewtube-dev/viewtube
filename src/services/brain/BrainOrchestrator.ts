@@ -853,7 +853,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
      requestedModel = repairedOutput.modelIdentity.requestedModel
      servedModel = repairedOutput.modelIdentity.servedModel
      modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
-     questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
+     questionTrace.recordModelIdentity({ provider: modelProvider, requested: requestedModel, served: servedModel, status: modelIdentityStatus })
     }
     const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot, [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords])
     const repairedCandidate = {
