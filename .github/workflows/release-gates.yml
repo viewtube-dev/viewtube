@@ -48,6 +48,15 @@ jobs:
       - run: npm run test:ai-systems-governance
       - run: npm run test:ai-systems-herald
       - run: npm run test:brain-runtime-snapshot
+      - run: npm run test:ai-generation-callers
+      - name: Generate exact-commit Gemini caller inventory
+        run: npm run audit:ai-generation-callers > "$RUNNER_TEMP/ai-generation-callers.json"
+      - name: Upload Gemini caller inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-caller-inventory-${{ github.sha }}
+          path: ${{ runner.temp }}/ai-generation-callers.json
+          if-no-files-found: error
       - run: npm run audit:ai-systems
       - run: npm run test:convergence-governance
 
