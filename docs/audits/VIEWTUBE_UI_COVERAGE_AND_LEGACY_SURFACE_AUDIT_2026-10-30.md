@@ -267,3 +267,82 @@ Required remediation:
 - Confirmed the inspected primary navigation and application menu consume separate contracts rather than the page-registry projection.
 - No application source code was changed. No capability was promoted. No legacy code was deleted.
 - No test suite, typecheck, production build, or browser runtime test was executed in this pass. Findings are source-evidence findings, not a claim of runtime certification.
+
+
+## Third-pass addendum — exhaustive Priority 25 module and rollout wiring
+
+**Audit pass date:** 2026-10-30  
+**Source branch:** `master/consolidated-feature-integration`  
+**Scope:** Exhaustive directory inventory of the 25 capability modules, route-loader key construction, shared page shell, feature-flag registry, capability hub, and existing route governance tests.
+
+### F-009 — All 25 capability route loader keys mismatch the actual page-module filenames
+
+**Severity:** P1 — all Priority 25 detail routes are expected to fail on lazy module resolution  
+**Confidence:** Confirmed by exhaustive source directory inventory and loader implementation
+
+Evidence:
+- `CAPABILITIES` contains 25 kebab-case slugs and declares an explicit `files.page` path for each capability.
+- The `src/features/capabilities` directory contains 25 matching capability directories (excluding the shared support directory); every capability directory has its own PascalCase `*Page.tsx` module.
+- The actual filenames follow the explicit registry paths, for example `ChannelIntelligenceEnginePage.tsx`, `EvidenceConnectedBrainPage.tsx`, `AiVideoEditorPage.tsx`, `KpiTimeWindowControlsPage.tsx`, and `CsvDocumentAnalyticsPage.tsx`.
+- `src/app/capabilitiesRoutes.tsx` ignores the already-declared `files.page` field and instead constructs `../features/capabilities/${slug}/${slug}Page.tsx`.
+- The Vite glob is keyed by actual source paths, so kebab-case generated keys do not match the PascalCase filenames.
+- The loader throws `Capability page module not found` when the computed key is absent.
+
+Impact:
+- The two mismatches in F-006 are representative, not isolated: the mismatch applies to all 25 capability detail routes.
+- `/capabilities` can render the capability index, but selecting any detail route attempts a missing lazy module key.
+- The capability detail page's shared flag gate cannot protect or render a page whose module never resolves.
+- Existing route-governance tests only parse static `<Route path>` strings and therefore do not validate the Vite glob key or lazy import resolution.
+
+Required remediation:
+- Use the canonical `CAPABILITIES[].files.page` value to resolve each Vite glob module, normalizing it to the glob's exact relative key; do not duplicate filename conventions or rename all page files.
+- Add a test that iterates all 25 capability records and asserts that each declared page path exists and resolves to one exact Vite glob key.
+- Add a route-level test that renders or resolves every capability route so lazy import failures are caught before release.
+
+### F-010 — Rollout flags exist and are enforced in the shared page shell, but only after lazy module resolution
+
+**Severity:** P1 — rollout gate ordering / misleading discoverability  
+**Confidence:** Confirmed by source
+
+Evidence:
+- `src/features/capabilities/shared/CapabilityPageShell.tsx` calls `isCapabilityFlagEnabled(capability.id)` and wraps page content in `FlagGate`.
+- `src/flags/featureFlags.ts` defines all 25 capability flags and defaults only the first two review previews to enabled; the other 23 default off.
+- `CapabilityHub.tsx` displays each capability's enabled/disabled flag state and links to its detail route.
+- The route loader resolves the page module before the page component can render its shared shell and flag gate.
+
+Impact:
+- The rollout gate is present; this is not a finding that all 25 pages bypass flags.
+- However, the gate is downstream of the broken lazy import. It cannot make any detail route load successfully.
+- After the loader is fixed, verify that direct URL access, hub links, and local-storage overrides all retain the intended hidden/lab policy. A feature flag is not a substitute for route lifecycle or authorization.
+
+Required remediation:
+- Preserve the existing canonical flag registry and shared `CapabilityPageShell`; do not add another flag system.
+- Resolve the module first using the declared page path, then retain the shared shell's flag gate.
+- Add tests for default-off behavior, the two preview exceptions, unknown slugs, and explicit local override behavior.
+
+### F-011 — Existing governance tests miss the capability lazy-loader contract
+
+**Severity:** P2 — regression detection gap  
+**Confidence:** Confirmed from test source
+
+Evidence:
+- `src/app/__tests__/pageRegistry.test.ts` extracts static route paths from `AppRoutes.tsx` and checks page-registry classification.
+- `src/app/__tests__/routeRegistryGovernance.test.ts` checks that primary-navigation and application-menu paths occur in the statically parsed route set, plus duplicate IDs in selected registries.
+- Neither test imports or validates `CAPABILITIES`, inspects the Vite glob keys, checks each `files.page` path, or resolves each lazy loader.
+
+Impact:
+- CI can pass route and registry governance while every Priority 25 detail route still has an invalid lazy module key.
+- This is a concrete example of why route existence and UI registration must be distinguished from functional user access.
+
+Required remediation:
+- Add a dedicated capability-route governance test around the declared page-module paths and the loader-key mapping.
+- Keep static route-registry tests; extend them rather than replacing them.
+
+## Third-pass status
+
+- Exhaustively inspected all 25 capability directories and their page-module filenames.
+- Confirmed the slug-derived lazy-loader key is incompatible with all 25 actual PascalCase page filenames.
+- Confirmed the shared feature-flag gate exists and is applied by the page shell; it is reached only after the detail module loads.
+- Confirmed current route governance tests do not exercise capability lazy-module resolution.
+- No application source code was changed. No feature was promoted. No legacy code was deleted.
+- No tests, typecheck, production build, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
