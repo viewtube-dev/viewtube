@@ -60,8 +60,8 @@ const CANONICAL_SKINS = [{ skin: "solid" as const, label: "V1 · PRIMARY / SECON
 const CHOICE_SKINS = CANONICAL_SKINS
 const WORD_TOGGLE_SKINS = CANONICAL_SKINS
 const CanonicalControlFamilies: React.FC = () => {
-  const [switches, setSwitches] = React.useState<boolean[]>(Array(8).fill(false))
-  const [choices, setChoices] = React.useState<boolean[]>(Array(12).fill(false))
+  const [switches, setSwitches] = React.useState<boolean[]>(Array(40).fill(false))
+  const [choices, setChoices] = React.useState<boolean[]>(Array(60).fill(false))
   const [words, setWords] = React.useState<boolean[]>(Array(8).fill(false))
   const flip = (setter: React.Dispatch<React.SetStateAction<boolean[]>>, index: number, value?: boolean) => setter(current => current.map((old, i) => i === index ? (value ?? !old) : old))
   return <>
@@ -79,6 +79,21 @@ const CanonicalControlFamilies: React.FC = () => {
         <div className="vt-confirmed-choice-examples">
           {(["round", "rect"] as const).map((shape, row) => <div className="vt-confirmed-choice-example-row" key={"switch-"+shape} aria-label={shape + " switch examples"}>{CANONICAL_SKINS.map((skin, col) => { const index = row * 4 + col; return <div key={skin.skin}><StudioSwitch shape={shape} skin={skin.skin} checked={switches[index]} aria-label={shape + " switch " + skin.label} onClick={() => flip(setSwitches, index)} /></div> })}</div>)}
           {([{Component:StudioRadio,label:"radio button",shape:"round" as const},{Component:StudioCheckbox,label:"checkmark checkbox",shape:"rect" as const},{Component:StudioXCheckbox,label:"X checkbox",shape:"rect" as const}]).map((item,row) => { const ChoiceComponent = item.Component; return <div className="vt-confirmed-choice-example-row" key={item.label} aria-label={item.label + " examples"}>{CHOICE_SKINS.map((skin,col) => { const index = row * 4 + col; return <div key={skin.skin}><ChoiceComponent shape={item.shape} skin={skin.skin} checked={choices[index]} aria-label={item.label + " " + skin.label} onClick={() => flip(setChoices, index)} /></div> })}</div> })}
+        </div>
+        <div className="vt-confirmed-size-examples" aria-label="Switch size examples">
+          <div className="vt-confirmed-size-standard"><StudioSwitch sizeVariant="standard" checked={switches[12]} aria-label="Standard switch" onClick={() => flip(setSwitches, 12)}/></div>
+          <div className="vt-confirmed-size-compact"><StudioSwitch sizeVariant="compact" checked={switches[13]} aria-label="Compact switch one" onClick={() => flip(setSwitches, 13)}/><StudioSwitch sizeVariant="compact" checked={switches[14]} aria-label="Compact switch two" onClick={() => flip(setSwitches, 14)}/></div>
+          <div className="vt-confirmed-size-micro"><StudioSwitch sizeVariant="micro" checked={switches[15]} aria-label="Micro switch one" onClick={() => flip(setSwitches, 15)}/><StudioSwitch sizeVariant="micro" checked={switches[16]} aria-label="Micro switch two" onClick={() => flip(setSwitches, 16)}/><StudioSwitch sizeVariant="micro" checked={switches[17]} aria-label="Micro switch three" onClick={() => flip(setSwitches, 17)}/><StudioSwitch sizeVariant="micro" checked={switches[18]} aria-label="Micro switch four" onClick={() => flip(setSwitches, 18)}/></div>
+        </div>
+        <div className="vt-confirmed-size-examples" aria-label="Radio size examples">
+          <div className="vt-confirmed-size-standard"><StudioRadio sizeVariant="standard" checked={choices[12]} aria-label="Standard radio" onClick={() => flip(setChoices, 12)}/></div>
+          <div className="vt-confirmed-size-compact"><StudioRadio sizeVariant="compact" checked={choices[13]} aria-label="Compact radio one" onClick={() => flip(setChoices, 13)}/><StudioRadio sizeVariant="compact" checked={choices[14]} aria-label="Compact radio two" onClick={() => flip(setChoices, 14)}/></div>
+          <div className="vt-confirmed-size-micro"><StudioRadio sizeVariant="micro" checked={choices[15]} aria-label="Micro radio one" onClick={() => flip(setChoices, 15)}/><StudioRadio sizeVariant="micro" checked={choices[16]} aria-label="Micro radio two" onClick={() => flip(setChoices, 16)}/><StudioRadio sizeVariant="micro" checked={choices[17]} aria-label="Micro radio three" onClick={() => flip(setChoices, 17)}/><StudioRadio sizeVariant="micro" checked={choices[18]} aria-label="Micro radio four" onClick={() => flip(setChoices, 18)}/></div>
+        </div>
+        <div className="vt-confirmed-size-examples" aria-label="Checkbox size examples">
+          <div className="vt-confirmed-size-standard"><StudioCheckbox sizeVariant="standard" checked={choices[24]} aria-label="Standard checkbox" onClick={() => flip(setChoices, 24)}/></div>
+          <div className="vt-confirmed-size-compact"><StudioCheckbox sizeVariant="compact" checked={choices[25]} aria-label="Compact checkbox one" onClick={() => flip(setChoices, 25)}/><StudioCheckbox sizeVariant="compact" checked={choices[26]} aria-label="Compact checkbox two" onClick={() => flip(setChoices, 26)}/></div>
+          <div className="vt-confirmed-size-micro"><StudioCheckbox sizeVariant="micro" checked={choices[27]} aria-label="Micro checkbox one" onClick={() => flip(setChoices, 27)}/><StudioCheckbox sizeVariant="micro" checked={choices[28]} aria-label="Micro checkbox two" onClick={() => flip(setChoices, 28)}/><StudioCheckbox sizeVariant="micro" checked={choices[29]} aria-label="Micro checkbox three" onClick={() => flip(setChoices, 29)}/><StudioCheckbox sizeVariant="micro" checked={choices[30]} aria-label="Micro checkbox four" onClick={() => flip(setChoices, 30)}/></div>
         </div>
       </div>
     </Family>
