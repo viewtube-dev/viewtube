@@ -10,6 +10,17 @@ export const STUDIO_DROPDOWN_TOKENS = {
   chevronPlacement: "trailing",
 } as const
 
+/** Shared custom-menu geometry and opening motion; menu rows inherit the trigger's selected size tier. */
+export const STUDIO_DROPDOWN_MENU_TOKENS = {
+  menuGap: 8,
+  menuPadding: 4,
+  rowGap: 3,
+  menuRadius: "control",
+  rowRadius: "control",
+  animationDurationMs: 140,
+  animationDistancePx: 4,
+} as const;
+
 /** Shared interaction-focus dwell and visual contract for counters, sliders, and text fields. */
 export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   holdMs: 1500,
