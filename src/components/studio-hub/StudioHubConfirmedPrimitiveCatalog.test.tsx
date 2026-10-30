@@ -818,3 +818,29 @@ describe("confirmed representatives counter and slider design coverage", () => {
     }
   });
 });
+
+
+describe("confirmed individual module variant completeness", () => {
+  it("renders every supported size tier in the dropdown and split-button family modules", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const dropdown = source.slice(source.indexOf('const ConfirmedStudioDropdownFamily'), source.indexOf('type ConfirmedCatalogFamilyName'));
+    const splitButtons = source.slice(source.indexOf('const ConfirmedStudioSplitButtonFamily'), source.indexOf('const ConfirmedStudioDropdownFamily'));
+    const tiers = ['"supreme"', '"standard"', '"compact"', '"mini"', '"micro"'];
+    for (const tier of tiers) {
+      expect(dropdown, `dropdown family includes ${tier}`).toContain(tier);
+      expect(splitButtons, `split button family includes ${tier}`).toContain(tier);
+    }
+  });
+
+  it("keeps the full palette and behavior variants represented in their owning module galleries", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const choiceFamily = source.slice(source.indexOf('const CanonicalControlFamilies'), source.indexOf('const CanonicalSplitBadgeFamily'));
+    const wordFamily = source.slice(source.indexOf('const CanonicalWordToggleFamily'), source.indexOf('const Provenance'));
+    const dropdownFamily = source.slice(source.indexOf('const ConfirmedStudioDropdownFamily'), source.indexOf('type ConfirmedCatalogFamilyName'));
+    expect(choiceFamily).toContain("CANONICAL_SKINS.map");
+    expect(choiceFamily).toContain("CHOICE_SKINS.map");
+    expect(wordFamily).toContain("WORD_TOGGLE_SKINS.map");
+    expect(dropdownFamily).toContain("StudioLegendMultiDropdown");
+    expect(dropdownFamily).toContain("StudioSplitLeftDropdown");
+  });
+});
