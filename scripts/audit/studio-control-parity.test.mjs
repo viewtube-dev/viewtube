@@ -20,7 +20,7 @@ test("canonical size tokens preserve the five-tier geometry contract", () => {
     standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, iconSize: 38, focusOutlineWidth: 1.95 },
     compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, iconSize: 24, focusOutlineWidth: 1.3 },
     mini: { height: 20, stroke: 1.5, radius: 3, fontSize: 17.5, iconSize: 17.5, focusOutlineWidth: 0.975 },
-    micro: { height: 12, stroke: 1.5, radius: 3, fontSize: 10, iconSize: 10, focusOutlineWidth: 0.975 },
+    micro: { height: 12, stroke: 1, radius: 2, fontSize: 10, iconSize: 10, focusOutlineWidth: 0.65 },
   };
   for (const [tier, values] of Object.entries(tiers)) {
     const match = tokens.match(new RegExp(tier + ":\\s*\\{([^}]+)\\}"));
@@ -175,7 +175,7 @@ test("size-tier ownership is centralized and Micro inherits Mini's shared stylin
   assert.equal(focusRatio, 0.65, "focus outline ratio remains canonical");
   assert.match(generated, new RegExp("--vt-studio-focus-outline-width-ratio: " + focusRatio + ";"));
   assert.match(generated, new RegExp("--vt-studio-secondary-focus-width-ratio: " + focusRatio + ";"));
-  for (const [tier, stroke] of Object.entries({ supreme: 3, standard: 3, compact: 2, mini: 1.5, micro: 1.5 })) {
+  for (const [tier, stroke] of Object.entries({ supreme: 3, standard: 3, compact: 2, mini: 1.5, micro: 1 })) {
     const outline = Number(tokens.match(new RegExp(tier + ":\\s*\\{[^}]*focusOutlineWidth:\\s*([\\d.]+)"))?.[1]);
     assert.ok(Math.abs(outline - stroke * focusRatio) < 1e-9, tier + " focus outline must derive from the tier stroke");
     assert.match(generated, new RegExp("--vt-studio-" + tier + "-secondary-outline-width: " + outline + "px;"));
