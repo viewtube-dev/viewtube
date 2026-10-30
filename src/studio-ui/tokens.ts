@@ -26,7 +26,7 @@ export const STUDIO_GLOBAL_DEFAULTS = {
   focusOutlineColor: "secondary" as const,
   focusOutlineWidthRatio: 0.65,
   focusOutlineOffset: 0,
-  focusTransitionMs: 0,
+  focusTransitionMs: 500,
   borderColor: "#000000",
   defaultFillOpacity: 50,
   focusFillOpacity: 15,
@@ -174,7 +174,7 @@ export const STUDIO_DROPDOWN_MENU_TOKENS = {
 
 export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   holdMs: 1500,
-  outlineFadeMs: 0,
+  outlineFadeMs: 500,
   restTextMixPercent: 50,
   activeTextColor: "#000000",
   outlineColorRole: "secondary" as const,
