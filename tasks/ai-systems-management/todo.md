@@ -39,12 +39,12 @@
 - [x] Herald adapter/normalization for current + legacy thread shapes.
 
 ## Runtime projection
-- [ ] BrainTrace projection.
-- [ ] GenerationRequest/ContextManifest/ToolReceipt projection.
-- [ ] ContentBuild/Project projection.
-- [ ] Vault/Asset refs.
-- [ ] Outcome/evaluation/learning refs.
-- [ ] Prompt/model provenance joins.
+- [~] BrainTrace projection. `src/services/brain/BrainRuntimeSnapshot.ts` already projects trace summaries and provenance chains; management-surface integration and completeness remain open.
+- [~] GenerationRequest/ContextManifest/ToolReceipt projection. Existing `BrainRuntimeSnapshot.ts` joins these records; verify missing joins and expose them through the read-only management projection.
+- [~] ContentBuild/Project projection. Existing `BrainRuntimeSnapshot.ts` summarizes active Project and ContentBuild; full workspace/UI coverage remains open.
+- [~] Vault/Asset refs. Existing snapshot exposes asset, version, variant and relationship IDs from receipts/builds; verify Vault resolution and durable asset details.
+- [~] Outcome/evaluation/learning refs. Snapshot links outcomes and algorithm evaluation/candidate/review/promotion event IDs; verify canonical record resolution and full evaluation payload references.
+- [~] Prompt/model provenance joins. Snapshot exposes prompt versions and requested/served model where trace reports it; complete registry caller coverage and prompt-to-output joins remain open.
 
 ## Health / CI
 - [x] Multi-registry audit coverage.
@@ -94,7 +94,9 @@
 - [ ] read-only AI Systems management workspace verified before any managed action is enabled.
 
 
-## Current branch evidence
+## Historical branch evidence — not current-target certification
+
+The following figures belong to the September 2026 governance branch and must not be treated as current target evidence until rerun on the exact current target SHA.
 
 - audited main: `fbc7d25c71fa89c312da32280d9f77182065b42a`
 - branch: `feat/ai-systems-governance-mainline-2026-09-26`
@@ -106,3 +108,15 @@
 - Herald projection tests: 8/8
 - live governance audit: 5 registries / 41 records / 9 claims / 5 receipts / 0 blockers
 - current-main merge: pending
+
+
+## Current-target reconciliation — 2026-10-29
+
+- Target ref inspected: `master/consolidated-feature-integration`.
+- Current exact branch HEAD SHA was not independently returned by the available branch lookup; refresh and record it in Phase 0 before certifying registry freshness.
+- Confirmed reusable runtime projection: `src/services/brain/BrainRuntimeSnapshot.ts` and `src/services/brain/BrainRuntimeSnapshot.test.ts`. It already joins Project/ContentBuild, GenerationRequest, ContextManifest, ToolReceipt, BrainTrace, BrainOutcome and explicit AlgorithmIntelligenceEvent ancestry, including evaluation and learning lifecycle event IDs.
+- Confirmed current canonical prompt authority: `docs/specifications/PROMPTS.md` and `docs/specifications/prompt-registry.json`.
+- Do not build a second projector until Phase 6 inventories the precise gaps (Vault resolution, durable evaluation/learning record resolution, registry joins, freshness/main SHA and management UI adoption).
+- September branch counts, tests and audit figures above are historical evidence only. No tests, build, typecheck, lint, browser, or live governance audit were executed in this documentation pass.
+
+Execution plan: `tasks/p1-canonical-system-integration/workstreams/ai-brain-quality-and-systems-management/plan.md`.
