@@ -307,7 +307,7 @@ test("confirmed spectrum tag gallery shows 50 alphabetically sorted production s
   assert.deepEqual(labels, [...labels].sort((a, b) => a.localeCompare(b)), "tag labels stay in alphabetical order");
   assert.equal(new Set(labels).size, 50, "each specimen label is unique");
   for (const initial of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") assert.ok(labels.some(label => label.startsWith(initial)), `spectrum gallery includes ${initial}`);
-  assert.match(styles, /\.vt-confirmed-spectrum-tag-grid\s*\{[^}]*grid-template-columns:\s*repeat\(5, minmax\(0, max-content\)\)/);
+  assert.match(styles, /\.vt-confirmed-spectrum-tag-grid\s*\{[^}]*display:\s*flex[^}]*flex-wrap:\s*wrap/);
 });
 
 test("alphabetical tag colors interpolate continuously between canonical palette stops", () => {
