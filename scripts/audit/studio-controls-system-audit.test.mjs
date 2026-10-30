@@ -8,6 +8,7 @@ const controls = read("src/studio-ui/primitives/StudioControls.tsx");
 const generated = read("src/styles/studio-control-vars.generated.css");
 const system = read("src/styles/studio-control-system.css");
 const fields = read("src/styles/studio-control-fields.css");
+const recovery = read("src/styles/studio-control-recovery-overrides.css");
 const standaloneInputCss = read("src/styles/studio-text-input.css");
 const splitInput = read("src/studio-ui/primitives/StudioSplitTextInput.tsx");
 const splitInputCss = read("src/styles/studio-split-text-input.css");
@@ -64,6 +65,35 @@ test("split text input accepts every canonical size supported by its production 
   assert.ok(!splitInput.includes('sizeVariant?: "standard" | "compact"'));
   assert.ok(splitInputCss.includes("height: var(--vt-studio-control-height, 44px)"));
   assert.ok(splitInputCss.includes("grid-template-columns: var(--vt-studio-control-height, 44px)"));
+});
+
+
+test("vertical word-toggle handle retains measured word bounds and shared side insets", () => {
+  assert.ok(system.includes("top: var(--vt-studio-vertical-word-padding)"));
+  assert.ok(system.includes("left: var(--vt-studio-vertical-word-handle-inset) right: var(--vt-studio-vertical-word-handle-inset)"));
+  assert.ok(!system.includes("inset:3px;border-radius:calc(var(--vt-studio-control-radius) - 1px)"));
+  assert.ok(!recovery.includes("inset: 3px !important"));
+});
+
+test("counter values and bar toggles preserve their canonical ratios and value colors", () => {
+  assert.ok(system.includes("aspect-ratio: 2 / 1"));
+  assert.ok(system.includes(".vt-studio-side-counter__value"));
+  assert.ok(recovery.includes("aspect-ratio: 1 / 2.5"));
+  assert.ok(recovery.includes("height: calc(var(--vt-studio-control-font-size) * 1)"));
+  assert.ok(recovery.includes("color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, #fff)"));
+  assert.ok(recovery.includes(".vt-studio-value-toggle__bar[data-active=\"true\"] { background: #000; }"));
+});
+
+test("double-side controls focus only the outside shell, never the center divider", () => {
+  assert.ok(system.includes(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider"));
+  assert.ok(system.includes("outline:none!important;box-shadow:none!important"));
+  assert.ok(system.includes(".vt-studio-value-toggle--double:focus-within"));
+});
+
+test("inter-modules are full-width and the representative section is a single full-width column", () => {
+  assert.ok(recovery.includes(".vt-studio-inter-module { width: 100% !important; max-width: 100% !important;"));
+  assert.ok(catalogCss.includes('[data-vt-primitive-title*="Representatives"]'));
+  assert.ok(catalogCss.includes("grid-template-columns: minmax(0, 1fr)"));
 });
 
 test("Confirmed Library keeps the split text input in the canonical Text Fields family", () => {
