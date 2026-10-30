@@ -56,6 +56,7 @@ const normalizeHandle = (value: string | null | undefined): string =>
 const resolvePublicHandleContext = async (input: BrainRuntimeRequest): Promise<{
  block: string
  metadata: Record<string, unknown> | null
+ evidenceVideos: AIBrainEvidenceVideo[]
 }> => {
  const selected = input.publicHandleContext
  const handle = typeof selected?.handle === "string" ? selected.handle.trim() : ""
@@ -68,19 +69,24 @@ const resolvePublicHandleContext = async (input: BrainRuntimeRequest): Promise<{
   const requestedHandle = normalizeHandle(handle)
   const resolvedHandle = normalizeHandle(snapshot.handle)
   if (requestedHandle.startsWith("uc")) {
-   if (requestedHandle !== snapshot.channelId.toLowerCase()) return { block: "", metadata: null }
+   if (requestedHandle !== snapshot.channelId.toLowerCase()) return { block: "", metadata: null, evidenceVideos: [] }
   } else if (resolvedHandle && requestedHandle !== resolvedHandle) {
-   return { block: "", metadata: null }
+   return { block: "", metadata: null, evidenceVideos: [] }
   }
 
   const videos = snapshot.topVideos
    .filter((video) => video.videoId && video.title.trim())
    .slice(0, 25)
-   .map((video) => ({
-    videoId: video.videoId,
-    title: video.title,
-    publishedAt: video.publishedAt || null,
-   }))
+  const evidenceVideos: AIBrainEvidenceVideo[] = videos.map((video) => ({
+   id: `public:${video.videoId}`,
+   evidenceId: `public-video:${video.videoId}`,
+   title: video.title,
+   publishedAt: video.publishedAt || null,
+   format: null,
+   descriptionSnippet: null,
+   tags: [],
+   metrics: { views: null, watchTime: null, subscribers: null, revenue: null, ctr: null, averagePercentageViewed: null, likes: null, comments: null },
+  }))
   const provenance = snapshot.provenance
   const metadata = {
    mode: "public_handle",
@@ -92,7 +98,7 @@ const resolvePublicHandleContext = async (input: BrainRuntimeRequest): Promise<{
     `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(snapshot.channelId)}`,
    ],
    limitations: provenance?.limitations || ["Public titles and publish dates only; performance metrics and ownership are not verified."],
-   videoCount: videos.length,
+   videoCount: evidenceVideos.length,
   }
   const block = [
    "PUBLIC CHANNEL EVIDENCE (explicitly selected public-handle source)",
@@ -100,12 +106,12 @@ const resolvePublicHandleContext = async (input: BrainRuntimeRequest): Promise<{
    `Fetched at: ${snapshot.fetchedAt || "unknown"} · cache status: ${metadata.cacheStatus}`,
    "Source: public YouTube channel page and RSS feed.",
    "Limitations: title/date metadata only. Do not infer ownership, private analytics, subscriber counts, views, watch time, revenue, likes, or comments. Missing metrics remain unavailable.",
-   ...videos.map((video) => `- ${video.title}${video.publishedAt ? ` (published ${video.publishedAt})` : ""} [video ID: ${video.videoId}]`),
+   ...evidenceVideos.map((video) => `- ${video.title}${video.publishedAt ? ` (published ${video.publishedAt})` : ""} [video ID: ${video.id.replace(/^public:/, "")}]`),
   ].join("\n")
   return { block, metadata, evidenceVideos }
  } catch {
   // Public resolver failures are non-fatal and never become negative evidence.
-  return { block: "", metadata: null }
+  return { block: "", metadata: null, evidenceVideos: [] }
  }
 }
 
@@ -114,8 +120,8 @@ const resolvePublicHandleContext = async (input: BrainRuntimeRequest): Promise<{
  *
  * Existing orchestration remains delegated to BrainOrchestrator. Public
  * metadata is refreshed only through an explicit publicHandleContext supplied
- * by the caller; connected-channel identity and the synchronous snapshot
- * builder are left untouched.
+ * by a logged-out caller; connected-channel identity and the synchronous
+ * snapshot builder are left untouched.
  */
 export const runBrainTask = async (
  input: BrainRuntimeRequest,
@@ -161,8 +167,43 @@ export const runBrainTask = async (
   ],
   evidenceIds,
  })
+ const runtimeSnapshot = publicContext.metadata
+  ? {
+    ...input.snapshot,
+    channel: {
+     ...input.snapshot.channel,
+     connected: false,
+     label: String((publicContext.metadata.identity as { handle?: string | null }).handle || "Public channel"),
+     handle: (publicContext.metadata.identity as { handle?: string | null }).handle || null,
+     subscribers: null,
+     totalViews: null,
+    },
+    evidencePack: {
+     ...input.snapshot.evidencePack,
+     channelId: (publicContext.metadata.identity as { channelId: string }).channelId,
+     channelName: String((publicContext.metadata.identity as { handle?: string | null }).handle || "Public channel"),
+     channelDescription: null,
+     capturedAt: String(publicContext.metadata.fetchedAt || ""),
+     dataStatus: publicContext.evidenceVideos.length ? "partial" as const : "missing" as const,
+     topVideos: publicContext.evidenceVideos,
+     recentVideos: publicContext.evidenceVideos,
+     searchTerms: [],
+     trafficSources: [],
+     items: publicContext.evidenceVideos.map((video) => ({
+      id: video.evidenceId,
+      label: video.title,
+      source: "public YouTube metadata",
+      detail: video.publishedAt ? `published ${video.publishedAt}; performance metrics unavailable` : "performance metrics unavailable",
+     })),
+     availableMetrics: [],
+     missingInputs: ["public titles and publish dates only; performance metrics and ownership are unavailable"],
+     evidenceIds: publicContext.evidenceVideos.map((video) => video.evidenceId),
+    },
+   }
+  : input.snapshot
  const runtimeInput: BrainRuntimeRequest = {
   ...input,
+  snapshot: runtimeSnapshot,
   systemPrompt: [
    input.systemPrompt,
    `ASSISTANT CONTINUITY TRACE (scope metadata, not additional evidence)\n${JSON.stringify(continuity.trace, null, 2)}\nRespect the declared channel/project/video scope. Omitted context is unavailable, not negative evidence.`,
