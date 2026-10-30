@@ -150,7 +150,7 @@ export const buildGenerationCallerInventory = (rootDir = process.cwd()) => {
   const productionFiles = files.filter((file) => file.path.startsWith("src/") && !isTestFile(file.path));
   const directProviderInvocations = collectLineMatches(
     files,
-    /\b(?:new\s+GoogleGenAI\s*\(|[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*\.models\.(?:generateContent|generateContentStream|embedContent|generateImages|countTokens)\s*\()/,
+    /\b(?:new\s+GoogleGenAI\s*\(|models\.(?:generateContent|generateContentStream|embedContent|generateImages|generateVideos|countTokens)\s*\()/,
     (file, line, lineNumber) => ({ path: file.path, line: lineNumber, excerpt: line.trim() }),
   );
   const dynamicGeminiImports = collectLineMatches(
