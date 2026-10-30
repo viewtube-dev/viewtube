@@ -578,7 +578,11 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           })
         : null
 
-      const channelId = contentContext?.build.channelId || (authState as any)?.channelId || ""
+      const suppliedHandle = channelHandle.trim()
+      const publicHandleIdentity = suppliedHandle && !/yourchannel/i.test(suppliedHandle)
+        ? `public-channel:${suppliedHandle.toLowerCase()}`
+        : ""
+      const channelId = contentContext?.build.channelId || (authState as any)?.channelId || publicHandleIdentity
       const generated = await generateVideoPublisherSeoPackage({
         context: {
           channelId,
