@@ -2439,7 +2439,8 @@
   overflow-x: auto;
   overflow-y: visible;
 
-  padding-block: 14px;}
+  padding-block: 28px;
+  padding-inline: 8px;}
 .vt-confirmed-square-variant-grid > button[data-vt-studio-icon-button="true"] {
   flex: 0 0 auto;
   margin: 0;
@@ -2516,7 +2517,8 @@
     overflow-x: auto;
     overflow-y: visible;
   
-  padding-block: 14px;}
+  padding-block: 28px;
+  padding-inline: 8px;}
   .vt-confirmed-stepper-row-grid {
     grid-template-columns: repeat(2, minmax(0, max-content));
     gap: 10px;
@@ -3082,7 +3084,8 @@
   overflow-x: auto;
 
   overflow-y: visible;
-  padding-block: 14px;}
+  padding-block: 28px;
+  padding-inline: 8px;}
 .vt-confirmed-spectrum-tag-grid {
   display: flex;
   flex-wrap: wrap;
@@ -3182,7 +3185,8 @@
     overflow-x: auto;
   
   overflow-y: visible;
-  padding-block: 14px;}
+  padding-block: 28px;
+  padding-inline: 8px;}
   .vt-confirmed-control-family,
   .vt-confirmed-control-row,
   .vt-confirmed-choice-module,
