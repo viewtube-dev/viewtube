@@ -37,7 +37,7 @@ No canonical Task Index mutation is made. Proposed domain-authority updates rema
 - Compare reports eight commits ahead, 1,903 behind, 21 changed paths.
 - PR-opening SHA and post-opening commit/path lineage are UNKNOWN; empty post-PR arrays are not evidence that there were no post-PR commits.
 - Recovery disposition: do not merge the stale branch; inspect all unique commits and target files, then selectively recover missing, still-correct changes.
-- Documentation branch: docs/studio-controls-regression-handoff-2026-10-30; PR #1229 is open against the intended target. GitHub reports mergeable=false; no merge is claimed.
+- Documentation branch: docs/studio-controls-regression-handoff-2026-10-30; PR #1229 is open against the intended target. GitHub reports mergeable=false; no merge is claimed. After PR creation, commits 89f2bb0a34759aedfe19632552385f799fe18f4e, 472362f7565572c14e057fcfd1640b4d7da993e3 and 251fe13f50fb8a827185dec7ee1edff6ac79129d updated handoff.md, review.md and worklog.json respectively.
 
 ## Integration gap review
 
