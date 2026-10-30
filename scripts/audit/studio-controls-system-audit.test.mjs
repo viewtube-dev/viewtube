@@ -90,7 +90,7 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
   assert.ok(fields.includes("data-vt-studio-field-kind"));
   assert.ok(system.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary"));
   assert.ok(system.includes("-webkit-text-stroke-color: var(--vt-field-primary"));
-  assert.ok(fields.includes("textarea[data-vt-studio-control=\\"true\\"][data-vt-studio-field-kind=\\"textarea\\"],"));
+  assert.ok(fields.includes('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"],'));
 });
 
 test("side-counter and side-toggle rails share square geometry and generated size/icon tokens", () => {
