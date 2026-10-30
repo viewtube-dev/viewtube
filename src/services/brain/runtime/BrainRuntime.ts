@@ -1,4 +1,5 @@
 import { runBrainTurn, type RunBrainTurnInput } from "../BrainOrchestrator"
+import type { AIBrainEvidenceVideo } from "../../../types"
 import { fetchPublicChannelSnapshot } from "../../publicHandleMode"
 import { defaultBrainModelGateway } from "./BrainModelGateway"
 import { resolveBrainAssistantContinuity, type BrainAssistantEvidenceTrace } from "../BrainAssistantContinuity"
@@ -58,12 +59,12 @@ const resolvePublicHandleContext = async (input: BrainRuntimeRequest): Promise<{
 }> => {
  const selected = input.publicHandleContext
  const handle = typeof selected?.handle === "string" ? selected.handle.trim() : ""
- if (!handle) return { block: "", metadata: null }
+ if (!handle) return { block: "", metadata: null, evidenceVideos: [] }
 
  try {
   const snapshot = await fetchPublicChannelSnapshot(handle)
-  if (!snapshot || snapshot.source !== "public_page") return { block: "", metadata: null }
-  if (selected?.channelId && selected.channelId !== snapshot.channelId) return { block: "", metadata: null }
+  if (!snapshot || snapshot.source !== "public_page") return { block: "", metadata: null, evidenceVideos: [] }
+  if (selected?.channelId && selected.channelId !== snapshot.channelId) return { block: "", metadata: null, evidenceVideos: [] }
   const requestedHandle = normalizeHandle(handle)
   const resolvedHandle = normalizeHandle(snapshot.handle)
   if (requestedHandle.startsWith("uc")) {
@@ -101,7 +102,7 @@ const resolvePublicHandleContext = async (input: BrainRuntimeRequest): Promise<{
    "Limitations: title/date metadata only. Do not infer ownership, private analytics, subscriber counts, views, watch time, revenue, likes, or comments. Missing metrics remain unavailable.",
    ...videos.map((video) => `- ${video.title}${video.publishedAt ? ` (published ${video.publishedAt})` : ""} [video ID: ${video.videoId}]`),
   ].join("\n")
-  return { block, metadata }
+  return { block, metadata, evidenceVideos }
  } catch {
   // Public resolver failures are non-fatal and never become negative evidence.
   return { block: "", metadata: null }
