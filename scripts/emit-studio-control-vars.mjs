@@ -7,6 +7,7 @@ const tokenSource = await readFile(resolve(root, "src/studio-ui/tokens.ts"), "ut
 const sizeBaseBlock = tokenSource.match(/export const STUDIO_CONTROL_SIZE_BASE = \{([\s\S]*?)\n\} as const/)?.[1] ?? "";
 const compactSizeLine = tokenSource.match(/const STUDIO_CONTROL_SIZE_BASE_COMPACT = \{([^\n]*)\} as const/)?.[1] ?? "";
 const dropdownContract = tokenSource.match(/export const STUDIO_DROPDOWN_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
+const dropdownMenuContract = tokenSource.match(/export const STUDIO_DROPDOWN_MENU_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 const focusContract = tokenSource.match(/export const STUDIO_FOCUS_INTERACTION_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 const numberContract = tokenSource.match(/export const STUDIO_COUNTER_NUMBER_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 
