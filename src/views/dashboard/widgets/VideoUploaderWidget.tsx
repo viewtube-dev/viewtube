@@ -17,8 +17,7 @@ import {
   updateVideoThumbnail,
   uploadVideo,
 } from "../../../services/youtubeService"
-import { generateEducationalTimestampQuestions } from "../../../services/gemini"
-import { generateGovernedTagSuggestions, generateVideoPublisherSeoPackage } from "../../../services/brain/creatorAssets"
+import { generateGovernedTagSuggestions, generateGovernedTimestampQuestions, generateVideoPublisherSeoPackage } from "../../../services/brain/creatorAssets"
 import { useUnifiedAccount } from "../../../context/UnifiedAccountContext"
 import type { DashboardData } from "../useDashboardData"
 import type { CommonWidgetProps } from "../types"
@@ -281,7 +280,17 @@ export const VideoUploaderWidget = ({ data, ...common }: WidgetProps) => {
     setTimestampsLoading(true)
     setError("")
     try {
-      setTimestampQuestions(await generateEducationalTimestampQuestions({ title, description, tags }, data.brain))
+      const channelId = account.snapshot.google.channelId
+      if (!channelId) throw new Error("Connect a YouTube channel before generating timestamp suggestions.")
+      const generated = await generateGovernedTimestampQuestions({
+        context: { channelId, channelName: account.snapshot.google.channelTitle || undefined },
+        title,
+        description,
+        tags,
+        operationId: "video-uploader-timestamps-" + Date.now(),
+        workflowId: "workflow:video-uploader-timestamps:" + channelId,
+      })
+      setTimestampQuestions(generated.questions)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to generate timestamp questions.")
     } finally {
