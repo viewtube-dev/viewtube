@@ -40,6 +40,7 @@ import {
   StudioDoubleSideToggle,
   StudioBarToggle,
   StudioDoubleSplitWordCounter,
+  StudioLeftWordCounter,
   STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS,
 } from "../../studio-ui/primitives/StudioControls"
 import "./studio-hub-primitive-catalogs.css"
