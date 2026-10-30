@@ -148,9 +148,20 @@ This package remains PARTIALLY_RECONCILED. The work and evidence are routed to e
 
 - PR: https://github.com/viewtube-dev/viewtube/pull/1226
 - Branch: `docs/conversation-handoff-brain-feedback-2026-10-30`
-- PR opening/current head: `f08758b5be25396ed62147a9d12bf2620b330862`
+- PR opening head: `f08758b5be25396ed62147a9d12bf2620b330862`
+- Current head: `a7433eef3e01d1e18dd46d96097f6ae0b4ddf547`
+- Post-open commits: `2dce7c0f8e53a5ff49ca7e3291b38894d84f88ca`, `da912ee79d0eb92a8489754f2d37fb5db33b7d9c`, `a7433eef3e01d1e18dd46d96097f6ae0b4ddf547`
+- Post-open paths: handoff.md, worklog.json, review.md
 - Changed files: three intake package files plus `tasks/conversation-intake/INDEX.md`.
 - Status: OPEN; mergeability reported false at creation. Inspect current PR metadata and CI before any merge attempt.
 - Target delivery: not yet established.
 
 The package is committed to the documentation branch and indexed there. It remains undelivered to target until PR #1226 merges.
+
+
+## PR #1226 current CI snapshot
+
+- Workflow run: https://github.com/viewtube-dev/viewtube/actions/runs/41092494639
+- Run #5702 was pending at the latest inspection; no pass/fail conclusion is claimed.
+- PR metadata reports the PR open and mergeable at the latest inspection.
+- GitHub compare from opening head `f08758b5be25396ed62147a9d12bf2620b330862` to current head `a7433eef3e01d1e18dd46d96097f6ae0b4ddf547` reports three post-open commits, zero behind, changing the three package files. This post-PR work is documented, not orphaned.
