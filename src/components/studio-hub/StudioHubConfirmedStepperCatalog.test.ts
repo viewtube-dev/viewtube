@@ -18,12 +18,12 @@ describe("confirmed canonical split stepper representative", () => {
 
   it("uses the canonical five-tier Studio Controls source and shared split-stepper implementation", () => {
     const controls = source("src/studio-ui/primitives/StudioControls.tsx")
-    const styles = source("src/styles/studio-control-system.css")
+    const styles = source("src/styles/studio-control-split.css")
 
     expect(controls).toContain('export interface StudioSplitStepperProps')
     expect(controls).toContain('className={studioClasses("vt-studio-split-stepper"')
     expect(controls).toContain('data-vt-studio-control-kind="split-stepper"')
     expect(styles).toContain(".vt-studio-split-stepper")
-    expect(styles).toContain("--vt-studio-control-height")
+    expect(styles).toContain("--vt-studio-split-rail-size")
   })
 })
