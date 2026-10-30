@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 const getPublishTransaction = vi.hoisted(() => vi.fn())
 const completePublishStep = vi.hoisted(() => vi.fn())
 const failPublishTransaction = vi.hoisted(() => vi.fn())
+const markPublishStepRunning = vi.hoisted(() => vi.fn())
+const markPublishStepAmbiguous = vi.hoisted(() => vi.fn())
 const getContentBuild = vi.hoisted(() => vi.fn())
 const uploadUnifiedVideo = vi.hoisted(() => vi.fn())
 const updateUnifiedVideo = vi.hoisted(() => vi.fn())
@@ -13,6 +15,8 @@ vi.mock("../asset-engine/PublishTransaction", () => ({
  completePublishStep,
  failPublishTransaction,
  getPublishTransaction,
+ markPublishStepRunning,
+ markPublishStepAmbiguous,
 }))
 
 vi.mock("../asset-engine/ContentBuildRepository", () => ({
@@ -61,6 +65,31 @@ describe("PublishTransactionYouTubeBridge capability boundary", () => {
   })).rejects.toThrow(/does not allow capability publish/i)
 
   expect(uploadUnifiedVideo).not.toHaveBeenCalled()
+ })
+
+ it("does not redispatch an upload after a provider error leaves the remote outcome ambiguous", async () => {
+  getContentBuild.mockReturnValue({
+   id: "content-build-1",
+   stage: "package",
+   workflow: { blockerIds: [] },
+  })
+  uploadUnifiedVideo.mockRejectedValueOnce(new Error("connection lost after dispatch"))
+  markPublishStepRunning.mockImplementation(() => {
+   getPublishTransaction.mockReturnValue(transaction({ steps: { "upload-video": { status: "running" } } }))
+  })
+  markPublishStepAmbiguous.mockImplementation(() => {
+   getPublishTransaction.mockReturnValue(transaction({ steps: { "upload-video": { status: "ambiguous" } } }))
+  })
+  const input = {
+   transactionId: "publish-transaction-1",
+   file: new Blob(["video"]),
+   metadata: {} as never,
+  }
+
+  await expect(uploadPublishTransactionVideo(input)).rejects.toThrow("connection lost after dispatch")
+  expect(markPublishStepAmbiguous).toHaveBeenCalledTimes(1)
+  await expect(uploadPublishTransactionVideo(input)).rejects.toThrow(/ambiguous remote result/i)
+  expect(uploadUnifiedVideo).toHaveBeenCalledTimes(1)
  })
 
  it("blocks metadata provider dispatch before execution for a published build", async () => {
