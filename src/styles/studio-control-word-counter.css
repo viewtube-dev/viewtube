@@ -1,9 +1,9 @@
 /* Default word counter inherits the global field/counter 50% primary treatment. */
 .vt-studio-left-word-counter {
-  --vt-studio-number-background: var(--vt-field-fill-rest, color-mix(in srgb, #fff 50%, var(--vt-field-primary, var(--pair-a)) 50%));
+  --vt-studio-number-background: var(--pair-a);
 }
 .vt-studio-left-word-counter .vt-studio-side-counter__value {
-  background: var(--vt-field-fill-rest, color-mix(in srgb, #fff 50%, var(--vt-field-primary, var(--pair-a)) 50%));
+  background: var(--pair-a);
   color: var(--vt-studio-number-rest-color);
   -webkit-text-fill-color: var(--vt-studio-number-rest-color);
   -webkit-text-stroke-color: var(--vt-studio-number-rest-color);
