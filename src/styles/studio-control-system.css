@@ -193,7 +193,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   gap: 0;
   padding: 0;
   overflow: hidden;
-  background: color-mix(in srgb, var(--vt-studio-control-accent) 50%, #fff);
+  background: color-mix(in srgb, var(--vt-studio-control-accent) 50%, white);
   text-align: left;
 }
 .vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] {
@@ -211,7 +211,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   height: 100%;
   min-height: 0;
   place-items: center;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
 }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] > svg {
@@ -233,7 +233,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   justify-self: stretch;
   box-sizing: border-box;
   border-left: var(--vt-studio-control-stroke, 3px) solid #000;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
   pointer-events: none;
 }
@@ -247,8 +247,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-dropdown-chevron.is-leading { border-left: 0; border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; display: flex; align-items: center; justify-content: flex-start; min-width: 0; height: 100%; padding: 0 10px; overflow: hidden; text-overflow: clip; white-space: nowrap; font-weight: var(--vt-studio-control-font-weight, 1000); font-size: var(--vt-studio-control-font-size, 38px); line-height: 1; }
 .vt-studio-dropdown.is-split-left .vt-studio-dropdown-chevron.is-trailing { grid-column: 3; grid-row: 1; border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
-.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] { background: var(--vt-studio-control-secondary, var(--pair-b)); }
+.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: var(--vt-studio-control-secondary, var(--pair-b)); }
 .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] { display: grid; place-items: center; }
 .vt-studio-dropdown .vt-studio-dropdown-chevron[data-rail="end"] svg { width: var(--vt-studio-dropdown-chevron-size); height: var(--vt-studio-dropdown-chevron-size); }
 .vt-studio-dropdown:not(.is-split-left) [data-vt-studio-dropdown-value] { grid-column: 1; grid-row: 1; display: flex; align-items: center; min-width: 0; height: 100%; padding: 0 8px 0 12px; font-weight: var(--vt-studio-control-font-weight, 1000); font-size: var(--vt-studio-control-font-size, 38px); line-height: 1; }
@@ -272,7 +272,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   overscroll-behavior: contain;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px) var(--vt-studio-control-radius, 6px) 0 0;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-accent, var(--pair-a));
   padding: 4px;
   box-sizing: border-box;
   scrollbar-width: thin;
@@ -287,7 +287,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   margin-bottom: 3px;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
-  background: #fff;
+  background: white;
   color: #000;
   cursor: pointer;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -303,10 +303,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-dropdown-option:last-child { margin-bottom: 0; }
 .vt-studio-dropdown-option:hover:not(:disabled):not([data-selected="true"]),
 .vt-studio-dropdown-option:focus-visible:not([data-selected="true"]) {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 22%, #fff);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 22%, white);
 }
 .vt-studio-dropdown-option[data-selected="true"] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
 }
 .vt-studio-dropdown-option:focus-visible {
@@ -346,9 +346,9 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-dropdown-chevron-stroke: var(--vt-studio-dropdown-supreme-chevron-stroke, 3.41);
 }
 .vt-studio-dropdown-option + .vt-studio-dropdown-option { border-top: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: 0; }
-.vt-studio-dropdown-option[data-active="true"] { background: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) 22%, #fff); }
+.vt-studio-dropdown-option[data-active="true"] { background: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b)) 22%, white); }
 .vt-studio-dropdown-option[data-selected="true"] {
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-primary, var(--pair-a));
   color: #000;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -434,7 +434,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   box-sizing: border-box;
   padding: 0;
   overflow: hidden;
-  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  color: var(--vt-studio-control-accent, var(--pair-a));
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: var(--vt-studio-floating-label-size);
   font-weight: 1000;
@@ -459,7 +459,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   left: 10px;
   padding: 2.25px 4.5px;
   border-radius: 3px;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-accent, var(--pair-a));
   color: #000;
   font-size: var(--vt-studio-floating-label-risen-font-size, 12px) !important;
   -webkit-text-stroke: .5px currentColor;
@@ -478,19 +478,19 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 /* Compact B uses the exact secondary color and focus-outline width for both
    the input outline and the floating label's matching secondary outline. */
 .vt-studio-floating-field.is-reverse-colors {
-  --vt-studio-control-accent: var(--pair-b, #ff7f6b);
-  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
+  --vt-studio-control-accent: var(--pair-b);
+  --vt-studio-control-secondary: var(--pair-a);
 }
 .vt-studio-floating-field.is-reverse-colors > [data-vt-studio-control="true"] {
-  --vt-studio-control-accent: var(--pair-b, #ff7f6b);
-  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
+  --vt-studio-control-accent: var(--pair-b);
+  --vt-studio-control-secondary: var(--pair-a);
 }
 .vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) {
-  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b));
   outline-offset: 0;
 }
 .vt-studio-floating-field[data-vt-floating-variant="b"] > :is(input, textarea)[data-size="compact"]:is(:focus, :focus-visible) + .vt-studio-floating-field-label {
-  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline: var(--vt-studio-control-focus-outline-width, 2px) solid var(--vt-studio-control-secondary, var(--pair-b));
   outline-width: var(--vt-studio-control-focus-outline-width, 2px);
   outline-offset: 0;
 }
@@ -521,12 +521,12 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 /* B specimens reverse the paired colors without changing label geometry or type. */
 .vt-studio-fixed-label-field.is-reverse-colors {
-  --vt-studio-control-accent: var(--pair-b, #ff7f6b);
-  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
+  --vt-studio-control-accent: var(--pair-b);
+  --vt-studio-control-secondary: var(--pair-a);
 }
 .vt-studio-fixed-label-field.is-reverse-colors > [data-vt-studio-control="true"] {
-  --vt-studio-control-accent: var(--pair-b, #ff7f6b);
-  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
+  --vt-studio-control-accent: var(--pair-b);
+  --vt-studio-control-secondary: var(--pair-a);
 }
 .vt-studio-fixed-label-field > [data-vt-studio-control="true"] {
   display: block;
@@ -551,7 +551,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   margin: 0;
   border: var(--vt-studio-fixed-label-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: var(--vt-studio-fixed-label-font-size);
@@ -568,7 +568,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 /* Focus styling belongs to the field surface. Permanent label boxes stay unchanged;
    the secondary-color label outline is reserved for floating-label compact variant B. */
 .vt-studio-fixed-label-field:focus-within > :is(input, textarea) {
-  outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b));
   outline-offset: 0;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -577,8 +577,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 
 /* Canonical 09/V2 Legend Multi dropdown, translated into the shared Studio token contract. */
 .vt-studio-legend-multi {
-  --vt-legend-a: var(--pair-a, #36e0f6);
-  --vt-legend-b: var(--pair-b, #ff7f6b);
+  --vt-legend-a: var(--pair-a);
+  --vt-legend-b: var(--pair-b);
   --vt-legend-height: 44px;
   --vt-legend-stroke: 3px;
   --vt-legend-radius: 6px;
@@ -638,14 +638,14 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height);
   margin-bottom: 3px; padding: 2px 8px; border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius);
   /* Open panel is primary-filled; option rows are white until selected. */
-  background: #fff; color: #000; cursor: pointer; text-align: left;
+  background: white; color: #000; cursor: pointer; text-align: left;
   font-size: 38px; font-weight: 1000; line-height: 1; letter-spacing: -.02em; text-transform: uppercase;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-option { font-size: 24px; margin-bottom: 2px; padding-inline: 6px; }
 .vt-studio-legend-option:last-child { border-bottom: 0; }
 .vt-studio-legend-option:hover:not(:disabled):not([data-selected="true"]),
 .vt-studio-legend-option:focus-visible:not([data-selected="true"]) {
-  background: color-mix(in srgb, var(--vt-legend-b) 22%, #fff);
+  background: color-mix(in srgb, var(--vt-legend-b) 22%, white);
 }
 .vt-studio-legend-option[data-selected="true"] {
   background: var(--vt-legend-b);
@@ -712,8 +712,8 @@ select[data-vt-studio-control="true"] {
   min-height: var(--vt-studio-control-height, 44px);
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
-  background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
-  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, transparent);
+  color: var(--vt-studio-control-accent, var(--pair-a));
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
@@ -726,9 +726,9 @@ select[data-vt-studio-control="true"] {
 select[data-vt-studio-control="true"][data-size="compact"] { padding-left: 8px; font-size: 24px; }
 select[data-vt-studio-control="true"]:focus,
 select[data-vt-studio-control="true"]:focus-visible {
-  background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 15%, transparent);
+  background-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 15%, transparent);
   color: #000;
-  outline: var(--vt-studio-control-outline-stroke, 1.5px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline: var(--vt-studio-control-outline-stroke, 1.5px) solid var(--vt-studio-control-secondary, var(--pair-b));
   outline-offset: 0;
 }
 select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .55; }
@@ -742,50 +742,50 @@ select[data-vt-studio-control="true"]:disabled { cursor: not-allowed; opacity: .
 
 /* Canonical Studio Controls ownership: migrated switch, choice, and word-toggle primitives. */
 /* Canonical 44px control family — ratios mirror the supplied reference specimen. */
-.vt-studio-44-switch,.vt-studio-44-choice{appearance:none;-webkit-appearance:none;position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;margin:0;padding:0;border:0;background:color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);cursor:pointer;touch-action:manipulation;}
+.vt-studio-44-switch,.vt-studio-44-choice{appearance:none;-webkit-appearance:none;position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;margin:0;padding:0;border:0;background:color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, transparent);cursor:pointer;touch-action:manipulation;}
 .vt-studio-44-switch{width:75.68px;height:44px}
 .vt-studio-44-switch.is-round{border-radius:999px}
 .vt-studio-44-switch.is-rect{border-radius:7.333px}
-.vt-studio-44-handle{position:absolute;top:3.667px;left:3.667px;width:36.667px;height:36.667px;background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));transform:translateX(0);}
+.vt-studio-44-handle{position:absolute;top:3.667px;left:3.667px;width:36.667px;height:36.667px;background:var(--vt-studio-control-secondary, var(--pair-b));transform:translateX(0);}
 .vt-studio-44-switch.is-round .vt-studio-44-handle{border-radius:50%}
 .vt-studio-44-switch.is-rect .vt-studio-44-handle{border-radius:3.667px}
 .vt-studio-44-switch.is-on .vt-studio-44-handle{transform:translateX(31.68px)}
 .vt-studio-44-choice{width:44px;height:44px}
 .vt-studio-44-choice.is-round{border-radius:50%}
 .vt-studio-44-choice.is-rect{border-radius:7.333px}
-.vt-studio-44-choice .vt-studio-44-dot{display:block;width:33px;height:33px;background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));transform:scale(0);opacity:0;}
+.vt-studio-44-choice .vt-studio-44-dot{display:block;width:33px;height:33px;background:var(--vt-studio-control-secondary, var(--pair-b));transform:scale(0);opacity:0;}
 .vt-studio-44-choice.is-radio.is-round .vt-studio-44-dot{border-radius:50%}
 .vt-studio-44-choice.is-radio.is-rect .vt-studio-44-dot{border-radius:1.833px}
 .vt-studio-44-choice.is-on .vt-studio-44-dot{transform:scale(1);opacity:1}
-.vt-studio-44-choice.is-checkbox svg{width:96%;height:96%;stroke:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;}
-.vt-studio-44-choice.is-color-swap.is-checkbox:is(.is-on, .is-checked, [aria-checked="true"]) svg{stroke:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
-.vt-studio-44-choice.is-white-indicator.is-checkbox svg{stroke:#fff}
+.vt-studio-44-choice.is-checkbox svg{width:96%;height:96%;stroke:var(--vt-studio-control-secondary, var(--pair-b));stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;}
+.vt-studio-44-choice.is-color-swap.is-checkbox:is(.is-on, .is-checked, [aria-checked="true"]) svg{stroke:var(--vt-studio-control-accent, var(--pair-a))}
+.vt-studio-44-choice.is-white-indicator.is-checkbox svg{stroke:white}
 .vt-studio-44-choice.is-black-indicator.is-checkbox svg{stroke:#000}
 .vt-studio-44-choice.is-checkbox.is-on svg{stroke-dashoffset:0}
-.vt-studio-44-switch.is-color-swap:not(.is-on):not(.is-checked):not([aria-checked="true"]),.vt-studio-44-choice.is-color-swap:not(.is-on):not(.is-checked):not([aria-checked="true"]){background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
-.vt-studio-44-switch.is-color-swap.is-on,.vt-studio-44-switch.is-color-swap.is-checked,.vt-studio-44-switch.is-color-swap[aria-checked="true"],.vt-studio-44-choice.is-color-swap.is-on,.vt-studio-44-choice.is-color-swap.is-checked,.vt-studio-44-choice.is-color-swap[aria-checked="true"]{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
-.vt-studio-44-switch.is-color-swap.is-on .vt-studio-44-handle,.vt-studio-44-choice.is-color-swap.is-on .vt-studio-44-dot{background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
+.vt-studio-44-switch.is-color-swap:not(.is-on):not(.is-checked):not([aria-checked="true"]),.vt-studio-44-choice.is-color-swap:not(.is-on):not(.is-checked):not([aria-checked="true"]){background:var(--vt-studio-control-accent, var(--pair-a))}
+.vt-studio-44-switch.is-color-swap.is-on,.vt-studio-44-switch.is-color-swap.is-checked,.vt-studio-44-switch.is-color-swap[aria-checked="true"],.vt-studio-44-choice.is-color-swap.is-on,.vt-studio-44-choice.is-color-swap.is-checked,.vt-studio-44-choice.is-color-swap[aria-checked="true"]{background:var(--vt-studio-control-secondary, var(--pair-b))}
+.vt-studio-44-switch.is-color-swap.is-on .vt-studio-44-handle,.vt-studio-44-choice.is-color-swap.is-on .vt-studio-44-dot{background:var(--vt-studio-control-accent, var(--pair-a))}
 .vt-studio-44-switch.is-black-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-black-indicator .vt-studio-44-dot{background:#000}
-.vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-white-indicator .vt-studio-44-dot{background:#fff;}
-.vt-studio-44-switch.is-solid:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-choice.is-solid:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-switch.is-white-indicator:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-choice.is-white-indicator:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-switch.is-black-indicator:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-choice.is-black-indicator:is(.is-on, .is-checked, [aria-checked="true"]){background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
-.vt-studio-44-switch:focus-visible,.vt-studio-44-choice:focus-visible,.vt-studio-44-word-toggle button:focus-visible{outline:3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));outline-offset:3px}
-.vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:38px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:3px solid #000;background:color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000;letter-spacing:-.02em;line-height:1}
+.vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,.vt-studio-44-choice.is-white-indicator .vt-studio-44-dot{background:white;}
+.vt-studio-44-switch.is-solid:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-choice.is-solid:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-switch.is-white-indicator:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-choice.is-white-indicator:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-switch.is-black-indicator:is(.is-on, .is-checked, [aria-checked="true"]),.vt-studio-44-choice.is-black-indicator:is(.is-on, .is-checked, [aria-checked="true"]){background:var(--vt-studio-control-accent, var(--pair-a))}
+.vt-studio-44-switch:focus-visible,.vt-studio-44-choice:focus-visible,.vt-studio-44-word-toggle button:focus-visible{outline:3px solid var(--vt-studio-control-secondary, var(--pair-b));outline-offset:3px}
+.vt-studio-44-word-toggle{--vt-word-height:44px;--vt-word-font-size:38px;--vt-word-radius:7.333px;position:relative;display:inline-flex;align-items:center;height:var(--vt-word-height);border-radius:var(--vt-word-radius);border:3px solid #000;background:color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, transparent);overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:1000;letter-spacing:-.02em;line-height:1}
 .vt-studio-44-word-toggle.is-size-28{--vt-word-height:28px;--vt-word-font-size:24px;--vt-word-radius:4px;border-width:2px}
-.vt-studio-44-word-handle{position:absolute;top:2.75px;bottom:2.75px;left:var(--vt-word-toggle-handle-left, 2.75px);width:var(--vt-word-toggle-handle-width, calc(50% - 5.5px));border-radius:calc(var(--vt-word-radius)*.5);background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));pointer-events:none;overflow:hidden;z-index:0}
+.vt-studio-44-word-handle{position:absolute;top:2.75px;bottom:2.75px;left:var(--vt-word-toggle-handle-left, 2.75px);width:var(--vt-word-toggle-handle-width, calc(50% - 5.5px));border-radius:calc(var(--vt-word-radius)*.5);background:var(--vt-studio-control-secondary, var(--pair-b));pointer-events:none;overflow:hidden;z-index:0}
 .vt-studio-44-word-handle-color{position:absolute;inset:0;display:none;border-radius:inherit;pointer-events:none;clip-path:inset(0 0 0 100%)}
 .vt-studio-44-word-toggle.is-size-28 .vt-studio-44-word-handle{top:2px;bottom:2px;left:var(--vt-word-toggle-handle-left, 2px);width:var(--vt-word-toggle-handle-width, calc(50% - 4px));border-radius:2.3px}
-.vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle{background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
-.vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="false"]){background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
-.vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="true"]){background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
-.vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="true"]) .vt-studio-44-word-handle{background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
-.vt-studio-44-word-toggle.is-solid:has(.vt-studio-44-word-handle[data-active="true"]),.vt-studio-44-word-toggle.is-white-indicator:has(.vt-studio-44-word-handle[data-active="true"]),.vt-studio-44-word-toggle.is-black-indicator:has(.vt-studio-44-word-handle[data-active="true"]){background:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
+.vt-studio-44-word-toggle.is-color-swap .vt-studio-44-word-handle{background:var(--vt-studio-control-secondary, var(--pair-b))}
+.vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="false"]){background:var(--vt-studio-control-accent, var(--pair-a))}
+.vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="true"]){background:var(--vt-studio-control-secondary, var(--pair-b))}
+.vt-studio-44-word-toggle.is-color-swap:has(.vt-studio-44-word-handle[data-active="true"]) .vt-studio-44-word-handle{background:var(--vt-studio-control-accent, var(--pair-a))}
+.vt-studio-44-word-toggle.is-solid:has(.vt-studio-44-word-handle[data-active="true"]),.vt-studio-44-word-toggle.is-white-indicator:has(.vt-studio-44-word-handle[data-active="true"]),.vt-studio-44-word-toggle.is-black-indicator:has(.vt-studio-44-word-handle[data-active="true"]){background:var(--vt-studio-control-accent, var(--pair-a))}
 .vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle{background:#000}
-.vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle{background:#fff}
+.vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle{background:white}
 .vt-studio-44-word-toggle button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;height:100%;padding:0 20px;border:0;background:transparent;color:#000;font:1000 var(--vt-word-font-size)/.86 Inter,ui-sans-serif,system-ui,sans-serif;letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap;-webkit-text-stroke:.5px currentColor}
 .vt-studio-44-word-toggle.is-size-28 button{padding:0 6px}
-.vt-studio-44-word-toggle.is-color-swap button.is-active{color:var(--vt-studio-control-accent, var(--pair-a, #36e0f6))}
-.vt-studio-44-word-toggle.is-black-indicator button.is-active{color:#fff}
-.vt-studio-44-word-toggle.is-white-indicator button.is-active{color:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))}
+.vt-studio-44-word-toggle.is-color-swap button.is-active{color:var(--vt-studio-control-accent, var(--pair-a))}
+.vt-studio-44-word-toggle.is-black-indicator button.is-active{color:white}
+.vt-studio-44-word-toggle.is-white-indicator button.is-active{color:var(--vt-studio-control-secondary, var(--pair-b))}
 @media(prefers-reduced-motion:reduce){.vt-studio-44-switch,.vt-studio-44-handle,.vt-studio-44-choice,.vt-studio-44-choice span,.vt-studio-44-choice svg,.vt-studio-44-word-handle{animation:none!important}}
 
 /* The choice family is not a raised action button; keep its square/track geometry flat. */
@@ -804,7 +804,7 @@ button.vt-studio-44-choice:active:not(:disabled) {
 
 button.vt-studio-44-switch:not(.is-on),
 button.vt-studio-44-choice:not(.is-on) {
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 38%, white);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 38%, white);
 }
  
 /* UI audit correction: switch/choice anatomy must not inherit generic action-button strokes. */
@@ -821,7 +821,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice {
 }
 button[data-vt-studio-control="true"].vt-studio-44-switch:focus-visible,
 button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
-  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b)) !important;
   outline-offset: 0.3cqw;
 }
 /* Word toggles keep their intentional 3px/2px frame, but size to their own
@@ -969,7 +969,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   border-top-width: 0 !important;
   border-bottom-left-radius: var(--vt-dropdown-radius, 6px) !important;
   border-bottom-right-radius: var(--vt-dropdown-radius, 6px) !important;
-  background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, #fff) !important;
+  background: color-mix(in srgb, var(--pair-a) 50%, white) !important;
   
   padding: 3px !important;
 }
@@ -994,7 +994,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 .vt-studio-dropdown-option:last-child { margin-bottom: 0 !important; }
 .vt-studio-dropdown-option[data-active="true"],
 .vt-studio-dropdown-option[data-selected="true"] {
-  background: var(--pair-b, #ff7f6b) !important;
+  background: var(--pair-b) !important;
 }
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
   font-size: 24px !important;
@@ -1010,7 +1010,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-menu {
   
 }
-.vt-studio-dropdown-option:focus-visible { outline: 1.5px solid var(--pair-b, #ff7f6b) !important; outline-offset: -4px !important; }
+.vt-studio-dropdown-option:focus-visible { outline: 1.5px solid var(--pair-b) !important; outline-offset: -4px !important; }
 
 /* The clear/close action in the multi-dropdown follows the same size contract as its rows. */
 .vt-studio-legend-clear {
@@ -1099,8 +1099,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   textarea
 ) {
-  --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  --vt-field-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a));
+  --vt-field-secondary: var(--vt-studio-control-secondary, var(--pair-b));
   --vt-field-stroke: var(--vt-studio-control-stroke);
   --vt-field-outline-stroke: var(--vt-studio-control-secondary-outline-width);
   --vt-field-focus-outline-width: var(--vt-studio-control-focus-outline-width);
@@ -1246,7 +1246,7 @@ button.vt-studio-44-choice {
 
 button.vt-studio-44-switch {
   width: 75.68px;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
 }
 button.vt-studio-44-switch.is-round { border-radius: 999px; }
 button.vt-studio-44-switch.is-rect { border-radius: 7.333px; }
@@ -1257,7 +1257,7 @@ button.vt-studio-44-switch.is-rect { border-radius: 7.333px; }
   left: 3.667px;
   width: 36.667px;
   height: 36.667px;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   transform: translateX(0);
   
 }
@@ -1267,7 +1267,7 @@ button.vt-studio-44-switch.is-rect { border-radius: 7.333px; }
 
 button.vt-studio-44-choice {
   width: 44px;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 40%, #fff);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 40%, white);
 }
 button.vt-studio-44-choice.is-round { border-radius: 50%; }
 button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
@@ -1275,7 +1275,7 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
   display: block;
   width: 33px;
   height: 33px;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   transform: scale(0);
   opacity: 0;
   
@@ -1286,7 +1286,7 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 .vt-studio-44-choice.is-checkbox svg {
   width: 96%;
   height: 96%;
-  stroke: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  stroke: var(--vt-studio-control-secondary, var(--pair-b));
   stroke-width: 8;
   fill: none;
   stroke-linecap: round;
@@ -1297,32 +1297,32 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 }
 .vt-studio-44-choice.is-checkbox.is-on svg { stroke-dashoffset: 0; }
 .vt-studio-44-switch.is-solid.is-on,
-.vt-studio-44-choice.is-solid.is-on { background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); }
+.vt-studio-44-choice.is-solid.is-on { background: var(--vt-studio-control-accent, var(--pair-a)); }
 .vt-studio-44-switch.is-color-swap.is-on,
-.vt-studio-44-choice.is-color-swap.is-on { background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+.vt-studio-44-choice.is-color-swap.is-on { background: var(--vt-studio-control-secondary, var(--pair-b)); }
 .vt-studio-44-switch.is-color-swap.is-on .vt-studio-44-handle,
 .vt-studio-44-choice.is-color-swap.is-on .vt-studio-44-dot {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-accent, var(--pair-a));
 }
-.vt-studio-44-choice.is-checkbox.is-color-swap.is-on svg { stroke: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important; }
+.vt-studio-44-choice.is-checkbox.is-color-swap.is-on svg { stroke: var(--vt-studio-control-accent, var(--pair-a)) !important; }
 .vt-studio-44-switch.is-black-indicator .vt-studio-44-handle,
 .vt-studio-44-choice.is-black-indicator .vt-studio-44-dot { background: #000; }
 .vt-studio-44-choice.is-checkbox.is-black-indicator svg { stroke: #000 !important; }
 .vt-studio-44-switch.is-white-indicator .vt-studio-44-handle,
 .vt-studio-44-choice.is-white-indicator .vt-studio-44-dot {
-  background: #fff;
+  background: white;
   
 }
 .vt-studio-44-switch.is-black-indicator.is-on,
 .vt-studio-44-choice.is-black-indicator.is-on,
 .vt-studio-44-switch.is-white-indicator.is-on,
 .vt-studio-44-choice.is-white-indicator.is-on {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
 }
-.vt-studio-44-choice.is-checkbox.is-white-indicator svg { stroke: #fff !important; }
+.vt-studio-44-choice.is-checkbox.is-white-indicator svg { stroke: white !important; }
 .vt-studio-44-switch:focus-visible,
 .vt-studio-44-choice:focus-visible {
-  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b)) !important;
   outline-offset: 3px;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1378,7 +1378,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
   box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: var(--vt-studio-space-unit, 4px);
   width: 100%; min-width: 0; min-height: var(--vt-studio-control-height, 60px); height: var(--vt-studio-control-height, 60px); padding: 4px 8px;
   border: var(--vt-studio-control-stroke, var(--vt-studio-supreme-stroke, 3px)) solid #000; border-radius: var(--vt-studio-control-radius, var(--vt-studio-supreme-radius, 6px));
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));  color: #000;
+  background: var(--vt-studio-control-accent, var(--pair-a));  color: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: var(--vt-studio-control-font-size, 52px); font-weight: 1000; line-height: 1; letter-spacing: -.02em;
   text-transform: uppercase; -webkit-text-stroke: var(--vt-studio-supreme-text-stroke, 1px) currentColor;
@@ -1386,14 +1386,14 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
 }
 
 
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: var(--vt-studio-control-secondary-outline-width, var(--vt-studio-supreme-secondary-outline-width, 1.95px)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 0; }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: var(--vt-studio-control-secondary-outline-width, var(--vt-studio-supreme-secondary-outline-width, 1.95px)) solid var(--vt-studio-control-secondary, var(--pair-b)); outline-offset: 0; }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {  }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:var(--vt-studio-space-unit, 4px); width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:var(--vt-studio-control-font-weight,1000); line-height:var(--vt-studio-control-line-height,1); letter-spacing:var(--vt-studio-control-letter-spacing,-.02em); text-transform:var(--vt-studio-control-text-transform,uppercase); -webkit-text-stroke:var(--vt-studio-control-text-stroke,1px) currentColor; transform:none;  }
+button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:var(--vt-studio-space-unit, 4px); width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:var(--vt-studio-control-font-weight,1000); line-height:var(--vt-studio-control-line-height,1); letter-spacing:var(--vt-studio-control-letter-spacing,-.02em); text-transform:var(--vt-studio-control-text-transform,uppercase); -webkit-text-stroke:var(--vt-studio-control-text-stroke,1px) currentColor; transform:none;  }
 /* Compact text buttons follow the global row-fill default. Icon-only controls retain their fixed square geometry. */
 button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {
   box-sizing: border-box;
@@ -1453,11 +1453,11 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-siz
   -webkit-text-stroke: .5px currentColor;
 }
 
-button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); outline-offset:3px; }
+button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b)); outline-offset:3px; }
 button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }
 /* Selected faces switch to the secondary pair without changing geometry. */
 
-button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+button[data-vt-studio-button="true"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b)); }
 button[data-vt-studio-button="true"][data-icon-only="true"] { box-sizing:border-box; width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); max-width:var(--vt-studio-control-height); aspect-ratio:1 / 1; flex:0 0 var(--vt-studio-control-height); }
 button[data-vt-studio-button="true"][data-icon-only="true"] > [data-vt-studio-button-face] { box-sizing:border-box; width:100%; min-width:100%; max-width:100%; height:100%; padding:0; flex:0 0 100%; }
 [data-vt-studio-button-icon] { display:grid; flex:0 0 auto; place-items:center; }
@@ -1472,17 +1472,17 @@ button[data-vt-studio-icon-button="true"][data-icon-variant="v2"] {
   
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v2"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"] {
   
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v3"][aria-pressed="true"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v4"] > [data-vt-studio-button-face] {
   background: #000;
-  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  color: var(--vt-studio-control-accent, var(--pair-a));
 }
 button[data-vt-studio-icon-button="true"][data-icon-variant="v4"] [data-vt-studio-button-icon] svg {
   stroke: currentColor;
@@ -1492,14 +1492,14 @@ button[data-vt-studio-icon-button="true"][data-icon-variant="v4"] [data-vt-studi
 /* Sole split-left geometry contract: rail equals control height and divider uses the shared stroke token. */
 button[data-vt-studio-button="true"][data-split-left="true"] { appearance:none; display:inline-flex; width:100%; padding:0; border:0; outline:0; background:transparent; overflow:visible; }
 button[data-vt-studio-button="true"][data-split-left="true"] > [data-vt-studio-button-face] { display:grid; box-sizing:border-box; grid-template-columns:var(--vt-studio-control-height) minmax(0,1fr); align-items:stretch; justify-content:stretch; gap:0; padding:0; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); overflow:hidden; text-align:left; }
-button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-rail] { box-sizing:border-box; display:grid; place-items:center; align-self:stretch; width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); height:100%; border-right:var(--vt-studio-control-stroke) solid #000; background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-rail] { box-sizing:border-box; display:grid; place-items:center; align-self:stretch; width:var(--vt-studio-control-height); min-width:var(--vt-studio-control-height); height:100%; border-right:var(--vt-studio-control-stroke) solid #000; background:var(--vt-studio-control-secondary,var(--pair-b)); }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-rail] > svg { display:block; width:var(--vt-studio-control-icon-size,28px); height:var(--vt-studio-control-icon-size,28px); min-width:var(--vt-studio-control-icon-size,28px); min-height:var(--vt-studio-control-icon-size,28px); stroke-width:var(--vt-studio-control-icon-stroke,2.5); }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] { height:100%; padding-inline:10px; color:#000; }
 button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="left"] [data-vt-studio-split-label] { padding-inline:8px; }
-button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
-button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
-button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-label], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-label] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
-button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-rail], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
+button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b)); }
+button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] { background:var(--vt-studio-control-accent,var(--pair-a)); }
+button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-label], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-label] { background:var(--vt-studio-control-secondary,var(--pair-b)); }
+button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-rail], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a)); }
 
 /* Right and double split buttons deliberately mirror the split-left foundation:
    one outer face grid, zero internal gaps, fixed height-sized rails, and one
@@ -1564,7 +1564,7 @@ button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-stu
   height: 100%;
   min-height: 0;
   padding: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
 }
 button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-rail],
@@ -1612,25 +1612,25 @@ button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="
 }
 button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-label],
 button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-label] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-accent, var(--pair-a));
 }
 button[data-vt-studio-button="true"][data-vt-studio-split="right"][data-selected="true"] [data-vt-studio-split-label],
 button[data-vt-studio-button="true"][data-vt-studio-split="double"][data-selected="true"] [data-vt-studio-split-label],
 button[data-vt-studio-button="true"][data-vt-studio-split="right"][aria-pressed="true"] [data-vt-studio-split-label],
 button[data-vt-studio-button="true"][data-vt-studio-split="double"][aria-pressed="true"] [data-vt-studio-split-label] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
 }
 button[data-vt-studio-button="true"][data-vt-studio-split="right"][data-selected="true"] > [data-vt-studio-button-face],
 button[data-vt-studio-button="true"][data-vt-studio-split="double"][data-selected="true"] > [data-vt-studio-button-face],
 button[data-vt-studio-button="true"][data-vt-studio-split="right"][aria-pressed="true"] > [data-vt-studio-button-face],
 button[data-vt-studio-button="true"][data-vt-studio-split="double"][aria-pressed="true"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
 }
 button[data-vt-studio-button="true"][data-vt-studio-split="right"][data-selected="true"] [data-vt-studio-split-rail],
 button[data-vt-studio-button="true"][data-vt-studio-split="double"][data-selected="true"] [data-vt-studio-split-rail],
 button[data-vt-studio-button="true"][data-vt-studio-split="right"][aria-pressed="true"] [data-vt-studio-split-rail],
 button[data-vt-studio-button="true"][data-vt-studio-split="double"][aria-pressed="true"] [data-vt-studio-split-rail] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-accent, var(--pair-a));
 }
 
 /* Also ensure split-left face uses display:contents for the faceOnly shell */
@@ -1710,7 +1710,7 @@ button[data-vt-studio-icon-button="true"].vt-studio-square-icon-button {
   isolation: isolate;
 }
 button[data-vt-studio-icon-button="true"]:focus-visible {
-  outline: var(--vt-studio-control-focus-outline-width) solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  outline: var(--vt-studio-control-focus-outline-width) solid var(--vt-studio-control-secondary,var(--pair-b));
   outline-offset: var(--vt-studio-control-focus-outline-offset);
 }
 button[data-vt-studio-icon-button="true"].vt-studio-square-icon-button > [data-vt-studio-button-face] {
@@ -1750,7 +1750,7 @@ button[data-vt-studio-icon-button="true"].is-effect-notification[data-has-badge=
   padding: 0 3px;
   border: 2px solid #000;
   border-radius: 999px;
-  background: var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  background: var(--vt-studio-control-secondary,var(--pair-b));
   color: #000;
   font: 1000 10px/1 Inter,ui-sans-serif,system-ui,sans-serif;
   letter-spacing: 0;
@@ -1851,7 +1851,7 @@ button[data-vt-studio-icon-button="true"] [data-vt-square-success-label] {
   margin: 0;
   border: var(--vt-studio-fixed-label-stroke) solid #000;
   border-radius: var(--vt-studio-control-radius);
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
   font-family: Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   font-size: var(--vt-studio-fixed-label-font-size);
@@ -1884,7 +1884,7 @@ button[data-vt-studio-icon-button="true"].is-effect-tooltip:focus-visible [data-
   transform: translate(-50%,0) scale(1);
 }
 button[data-vt-studio-icon-button="true"][data-success="true"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  background: var(--vt-studio-control-secondary,var(--pair-b));
 }
 button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-icon-current] {
   animation: vt-studio-square-pop 220ms cubic-bezier(.2,.8,.2,1);
@@ -1991,10 +1991,10 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] > svg {
   fill: none;
 }
 button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-split-rail] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-accent, var(--pair-a));
 }
 button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
 }
 
 /* Circle Icon Button keeps canonical outer geometry and behavior while its
@@ -2040,7 +2040,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 .vt-studio-closeable-badge {
   --vt-badge-primary: var(--pair-a, var(--vt-c-0, #fa618a));
   --vt-badge-secondary: var(--pair-b, var(--vt-c-6, #4ee4be));
-  --vt-badge-text: color-mix(in srgb, var(--vt-badge-primary) 50%, #fff);
+  --vt-badge-text: color-mix(in srgb, var(--vt-badge-primary) 50%, white);
   box-sizing: border-box;
   position: relative;
   display: inline-flex;
@@ -2203,7 +2203,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   position: fixed;
   z-index: 50;
   pointer-events: none;
-  color: color-mix(in srgb, var(--pair-a, #fa618a) 50%, #fff);
+  color: color-mix(in srgb, var(--pair-a, #fa618a) 50%, white);
   font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
@@ -2238,7 +2238,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   padding: 6px;
   border: var(--vt-studio-control-stroke, 3px) solid var(--vt-studio-control-border, #000);
   border-radius: var(--vt-studio-control-radius, 6px);
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, transparent);
   color: var(--pair-a, #000);
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
 }
@@ -2261,7 +2261,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   box-sizing: border-box;
   min-width: 0;
   flex: 1 1 auto;
-  background: var(--pair-b, #fff);
+  background: var(--pair-b, white);
   color: var(--pair-a, #000);
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   font-weight: var(--vt-studio-control-font-weight, 1000);
@@ -2287,8 +2287,8 @@ opaque secondary action rail,
 inset primary
    strokes,
 black compound dividers{
-  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a));
+  --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b));
   --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-stepper-height: var(--vt-studio-control-height, 44px);
   --vt-stepper-radius: var(--vt-studio-control-radius, 6px);
@@ -2311,9 +2311,9 @@ black compound dividers{
 
 /* Simple dropdown is a visual variant of the shared Studio dropdown family. */
 .vt-studio-dropdown.is-simple { --vt-dropdown-height: var(--vt-studio-control-height, 44px); }
-.vt-studio-dropdown.is-simple .vt-studio-dropdown-menu { background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, #fff) !important; }
-.vt-studio-dropdown.is-simple .vt-studio-dropdown-option { background: #fff !important; }
-.vt-studio-dropdown.is-simple .vt-studio-dropdown-option[aria-selected="true"] { background: var(--pair-b, #ff7f6b) !important; }
+.vt-studio-dropdown.is-simple .vt-studio-dropdown-menu { background: color-mix(in srgb, var(--pair-a) 50%, white) !important; }
+.vt-studio-dropdown.is-simple .vt-studio-dropdown-option { background: white !important; }
+.vt-studio-dropdown.is-simple .vt-studio-dropdown-option[aria-selected="true"] { background: var(--pair-b) !important; }
 .vt-studio-tag-editor__square-action[data-size="compact"] { width: 28px; min-width: 28px; height: 28px; min-height: 28px; border-width: 2px; border-radius: 4px; }
 
 
@@ -2330,7 +2330,7 @@ button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="
   position: absolute;
   z-index: 4;
   inset: 0;
-  border: 2px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  border: 2px solid var(--vt-studio-control-secondary, var(--pair-b));
   pointer-events: none;
   animation: vt-studio-square-ripple 460ms cubic-bezier(.16,1,.3,1) both;
 }
@@ -2362,7 +2362,7 @@ button[data-vt-studio-icon-button="true"].is-effect-like[data-has-badge="true"] 
   padding: 0 3px;
   border: 2px solid #000;
   border-radius: 999px;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
   font: 1000 10px/1 Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: 0;
@@ -2374,7 +2374,7 @@ button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle > [data-vt-st
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle[data-icon-active="true"] > [data-vt-studio-button-face] {
   background: #000 !important;
-  color: var(--pair-a, #36e0f6);
+  color: var(--pair-a);
 }
 button[data-vt-studio-icon-button="true"].is-effect-rotated-toggle [data-vt-square-morph-inner] {
   
@@ -2415,7 +2415,7 @@ button[data-vt-studio-icon-button="true"].is-effect-tooltip [data-vt-square-tool
   padding: 6px 8px;
   border: 2px solid #000;
   border-radius: 4px;
-  background: var(--pair-b, #fff);
+  background: var(--pair-b, white);
   color: var(--pair-a, #000);
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   font-size: 14px;
@@ -2436,12 +2436,12 @@ button[data-vt-studio-icon-button="true"][data-size="compact"].is-effect-tooltip
   100% { inset: -12px; border-width: 6px; opacity: 0; }
 }
 @keyframes vt-studio-heart-face {
-  0%, 100% { background-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)); }
-  18%, 62% { background-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+  0%, 100% { background-color: var(--vt-studio-control-accent, var(--pair-a)); }
+  18%, 62% { background-color: var(--vt-studio-control-secondary, var(--pair-b)); }
 }
 @keyframes vt-studio-heart-fill {
   0%, 100% { fill: transparent; }
-  18%, 62% { fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
+  18%, 62% { fill: var(--vt-studio-control-secondary, var(--pair-b)); }
 }
 @media (prefers-reduced-motion: reduce) {
   button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-pop="true"] > [data-vt-studio-button-face],
@@ -2455,8 +2455,8 @@ button[data-vt-studio-icon-button="true"][data-size="compact"].is-effect-tooltip
 
 button[data-vt-studio-icon-button="true"].is-effect-unlock[data-icon-active="true"] > [data-vt-studio-button-face],
 button[data-vt-studio-icon-button="true"].is-effect-download[data-icon-active="true"] > [data-vt-studio-button-face] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b)) !important;
+  color: var(--vt-studio-control-accent, var(--pair-a));
   
 }
 @keyframes vt-studio-square-shake {
@@ -2484,7 +2484,7 @@ button[data-vt-studio-icon-button="true"].is-effect-pop-on-activation[data-icon-
   position: absolute;
   z-index: 5;
   inset: -2px;
-  border: 5px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  border: 5px solid var(--vt-studio-control-secondary,var(--pair-b));
   border-radius: inherit;
   pointer-events: none;
   opacity: 1;
@@ -2503,7 +2503,7 @@ button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"]::
   content: "";
   position: absolute;
   inset: -2px;
-  border: 2px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  border: 2px solid var(--vt-studio-control-secondary,var(--pair-b));
   border-radius: inherit;
   pointer-events: none;
   animation: vt-studio-square-ripple 520ms ease-out both;
@@ -2517,7 +2517,7 @@ button[data-vt-studio-icon-button="true"] [data-vt-square-alert-dot] {
   height: 8px;
   border: 2px solid #000;
   border-radius: 50%;
-  background: var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b));
+  background: var(--vt-studio-control-secondary,var(--pair-b));
   pointer-events: none;
 }
 button[data-vt-studio-icon-button="true"].is-effect-bell-ring[data-pop="true"] [data-vt-square-alert-dot] {
@@ -2696,7 +2696,7 @@ not button faces.
 }
 [data-vt-studio-control]:is(input, textarea, select):focus-visible {
   outline: var(--vt-studio-control-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid
-    var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+    var(--vt-studio-control-secondary, var(--pair-b));
   outline-offset: 0;
 }
 .vt-studio-split-left-badge,
@@ -3178,14 +3178,14 @@ button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studi
   border-radius: 0;
   box-shadow: none;
   outline: none;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
 }
 button[data-vt-studio-button="true"][data-split-left="true"][data-selected="true"] [data-vt-studio-split-rail],
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-rail],
 button[data-vt-studio-button="true"][data-split-left="true"][aria-pressed="true"] [data-vt-studio-split-rail],
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-rail] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-accent, var(--pair-a));
 }
 button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-split-rail] svg,
 button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-rail] svg,
@@ -3243,7 +3243,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   border: 0;
   border-right: var(--vt-studio-control-stroke) solid #000;
   border-radius: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
   line-height: 0;
 }
@@ -3333,9 +3333,9 @@ input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"],
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-weight: 1000;
-  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a)));
   -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a)));
   text-shadow: none;
 }
 input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"] {
@@ -3343,7 +3343,7 @@ input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"] {
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
 }
 input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"] {
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a)));
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   line-height: var(--vt-studio-textarea-standard-line-height, 1.25);
@@ -3351,7 +3351,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
 }
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
   line-height: var(--vt-studio-textarea-compact-line-height, 1.2);
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, .5px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a)));
 }
 /* Floating-label transitions are owned by studio-control-motion.css. */
 .vt-studio-floating-field > :is(input, textarea) {
@@ -3391,7 +3391,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
    the icon rail remains secondary. Selected/pressed state colors stay owned
    by the existing selected-state rules above. */
 html body button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]):not([data-selected="true"]):not([aria-pressed="true"]) > [data-vt-studio-button-face] [data-vt-studio-split-label] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
+  background: var(--vt-studio-control-accent, var(--pair-a)) !important;
   color: #000;
   -webkit-text-fill-color: #000;
   -webkit-text-stroke-color: #000;
@@ -7165,4 +7165,26 @@ details.vt-studio-two-line-module > :not(summary) {
 .vt-studio-dropdown.is-split-left .vt-studio-dropdown-menu,
 .vt-studio-dropdown.is-simple .vt-studio-dropdown-menu {
   background: var(--vt-studio-dropdown-menu-fill, var(--vt-studio-control-accent, var(--pair-a))) !important;
+}
+
+/* Selected split-button contract: swap the label face and both rails as one state. */
+button[data-vt-studio-button="true"][data-vt-studio-split][data-selected="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"][data-vt-studio-split][aria-pressed="true"] > [data-vt-studio-button-face] {
+  background: var(--vt-studio-control-secondary, var(--pair-b));
+}
+button[data-vt-studio-button="true"][data-vt-studio-split][data-selected="true"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-vt-studio-split][aria-pressed="true"] [data-vt-studio-split-label] {
+  background: var(--vt-studio-control-secondary, var(--pair-b));
+}
+button[data-vt-studio-button="true"][data-vt-studio-split][data-selected="true"] [data-vt-studio-split-rail],
+button[data-vt-studio-button="true"][data-vt-studio-split][aria-pressed="true"] [data-vt-studio-split-rail] {
+  background: var(--vt-studio-control-accent, var(--pair-a));
+}
+
+/* Play/Pause uses the same selected palette swap: secondary label face, primary rail. */
+button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-split-label] {
+  background: var(--vt-studio-control-secondary, var(--pair-b));
+}
+button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-split-rail] {
+  background: var(--vt-studio-control-accent, var(--pair-a));
 }
