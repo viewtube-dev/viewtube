@@ -206,3 +206,27 @@ The source edits and tests have been added to the reconciliation branch, but no 
 ### Phase 4 verification gate
 
 The merged Phase 0–3 workflow showed a passing production build and local smoke job, but failures in focused contracts, typecheck, the confirmed-catalog audit, and full tests. Some failures are unrelated Studio catalog/style assertions and existing Brain test fixture typing. Gemini-relevant regressions include the old routing expectation and the architecture guard counting `GeminiKeyContext.test.ts` as a production call. This branch corrects the two source-contract regressions and adds unknown-model/fallback hardening; all checks must rerun before Phase 4 can be marked complete.
+
+
+## Phase 4 — provider execution convergence — 2026-10-29
+
+Phase 4 moves the registry/profile policy into the shared provider execution boundary.
+
+### Implemented on `feat/gemini-provider-execution-convergence-phase-4`
+
+- Extracted bounded retry orchestration into `executeGeminiWithFallback` in `geminiModelGovernance.ts`. It returns the actual served model and attempt count, emits structured fallback metadata through a callback, permits only one alternate retry for transient failures, and terminates immediately for authentication, permission, quota, and unknown failures.
+- Added a typed config-field picker so SDK-only configuration such as response schemas and tools is not accidentally treated as a generation-profile override.
+- The shared `getAiClient()` wrapper now resolves request modality, applies the canonical generation profile while preserving explicit task config, resolves the capability-compatible model before preflight metering, and uses the bounded execution helper for both non-streaming and streaming requests.
+- The provider wrapper records the served model associated with the response/stream and uses it for post-response metering when the provider does not return an explicit `modelVersion`.
+- Modality resolution is performed before profile validation, so a text preference used for an image/video/audio request is routed to the model required by that capability rather than rejected as an invalid combination.
+
+### Phase 4 constraints / follow-up evidence
+
+- Request modality inference is intentionally conservative: explicit thinking config and media MIME/data markers are used; otherwise requests default to text. Callers with unusual payload formats should pass through a future explicit capability parameter rather than rely on heuristic inference.
+- The legacy provider compatibility candidate map remains in place as a bounded bridge. It must not be removed until exact live availability checks exist for the supported credentials and each operation type.
+- Static registry prices remain unverified estimates. Actual served-model metering is now attributed correctly, but the commercial rate table still needs a source-backed review.
+- No live-key test is run in CI. Runtime model availability remains unverified without a controlled credential/project/API-version probe.
+
+### Phase 4 verification
+
+Focused governance tests have been added for fallback eligibility, terminal failures, one-retry transient behavior, served-model reporting, and safe extraction of generation overrides. The target branch's previous Phase 0–3 merge workflow reported failures in unrelated Studio catalog/style tests, Brain TypeScript contracts, and the old model-routing expectation; the production build and smoke jobs passed. Phase 4 must be evaluated against the new PR's own workflow results, and the unrelated baseline failures must not be represented as Phase 4 regressions without comparison to the target baseline.
