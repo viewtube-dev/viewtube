@@ -394,7 +394,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
     { value: "expanded", label: "EXPANDED" },
   ]
   return (
-    <section className="vt-confirmed-direct-primitive-rows" data-vt-confirmed-representatives="true" aria-label="Canonical primitive representatives">
+    <section className="vt-confirmed-direct-representatives vt-confirmed-direct-primitive-rows" data-vt-confirmed-representatives="true" aria-label="Canonical primitive representatives">
       <h3 className="vt-confirmed-representative-heading" title="Direct Imported Primitive Representatives · Standard">Direct Imported Primitive Representatives · Standard</h3>
         <Family title="Studio Button · Standard Representative" nonDefaultSettings={["Directly imported production primitive; the representative uses its canonical Standard configuration."]} provenance={<Provenance primitive="StudioButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Canonical Studio global defaults and supported size contract; no catalog geometry overrides." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-system.css"]} />}>
           <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioButton"><span>Studio Button · STANDARD</span><StudioButton sizeVariant="standard" aria-label="Studio button standard specimen">STUDIO BUTTON</StudioButton></div>
@@ -1197,7 +1197,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
   const additionalPrimitiveSections = useConfirmedAdditionalPrimitiveSections()
   return (
   <>
-    <div className="vt-confirmed-catalog vt-confirmed-direct-representatives">
+    <div className="vt-confirmed-catalog">
       <ConfirmedPrimitiveGridOverview />
       <ConfirmedDirectPrimitiveRows />
     </div>
