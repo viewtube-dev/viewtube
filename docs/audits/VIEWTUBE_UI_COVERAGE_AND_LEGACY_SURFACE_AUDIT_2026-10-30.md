@@ -484,3 +484,73 @@ Required remediation:
 - Add module-level guide entries only where a distinct user-facing capability needs its own explanation; use the parent Studio Hub route plus a stable section anchor where available rather than inventing new standalone routes.
 - Preserve the distinction between a module, a subtool, a capability, and a super-tool so the Guide does not create a parallel product taxonomy.
 
+
+
+## Sixth-pass addendum — Settings, Brain controls, and Gemini provider surfaces
+
+**Audit pass date:** 2026-10-30  
+**Source branch:** `master/consolidated-feature-integration`  
+**Scope:** Settings AI panel, model selector, key-vault persistence, Gemini model governance, Brain user-control storage, and public-handle selection boundaries.
+
+### F-017 — Settings describes the Gemini key store as a secure vault, but the implementation is browser localStorage
+
+**Severity:** P1 — credential-storage disclosure and security-expectation mismatch  
+**Classification:** `MISLEADING_UI`  
+**Confidence:** Confirmed by Settings copy and key-vault implementation
+
+Evidence:
+- `src/views/settings/SettingsAiPanel.tsx` tells users: “The existing secure vault remains the storage authority.”
+- `src/services/keyVault.ts` implements `getBrowserStorage()` by returning browser `localStorage`; Gemini key aliases are read from and written to `yt_api_key`, `vt_gemini_api_key`, `gemini_api_key`, and `google_api_key`.
+- `setVaultKey("gemini", value)` writes the trimmed API key to each of those localStorage entries. There is no encryption or server-side secret-vault operation in this implementation.
+- `src/services/gemini.ts` retrieves the key through `getVaultKey` and constructs the provider client in the browser.
+
+Impact:
+- “Secure vault” can reasonably lead users to expect protected secret storage, while the current implementation is same-origin JavaScript-accessible browser storage.
+- This is a security disclosure/UI-copy mismatch, not evidence that the key is transmitted to an unintended third party.
+- Existing key aliases may preserve backward compatibility; do not remove them without a migration and consumer audit.
+
+Required remediation:
+- Either migrate BYOK credentials to an appropriately protected server-side secret store with an explicit threat model, or accurately disclose browser-local storage and its limitations in Settings.
+- Do not call localStorage-backed storage encrypted or secure.
+- Preserve the canonical `keyVault.ts` API and key-updated event while changing the backing store; do not create a second vault abstraction.
+- Add tests for storage behavior, migration/alias cleanup, and the user-facing disclosure.
+
+### F-018 — Gemini API-key save state confirms persistence, but the Settings flow has no provider-validation state
+
+**Severity:** P2 — incomplete credential setup feedback  
+**Classification:** `PARTIAL_UI`  
+**Confidence:** Confirmed by Settings event path and provider-client construction
+
+Evidence:
+- `src/views/Settings.tsx` initializes the key field from `getVaultSnapshot().gemini`; its save handler calls `setVaultSnapshot({ gemini: geminiKey })` and reports “API key saved.”
+- `src/views/settings/SettingsAiPanel.tsx` exposes a key input and Save action, but no Validate/Test action or validation status.
+- `src/services/gemini.ts` checks only that a key exists before constructing `GoogleGenAI`; provider rejection is surfaced later when a generation operation runs.
+- The save confirmation is accurate as a persistence confirmation; it does not establish that the key is valid, enabled for the requested API, or authorized for the selected model.
+
+Impact:
+- Users can complete the visible setup flow with a malformed, revoked, or unauthorized key and only discover the failure on a later generation attempt.
+- Do not change the save message to imply validation. A separate, explicit validation state would make the setup contract clearer.
+
+Required remediation:
+- Keep Save and provider validation as distinct states/actions.
+- If a safe validation operation is added, use a minimal provider-supported request, avoid logging or echoing key material, and report valid / invalid / unavailable distinctly.
+- Retain the current persistence path and do not add an alternate key registry.
+
+### Sixth-pass positive evidence and boundaries
+
+- `src/config/aiConfig.ts` derives the model selector's options directly from `GEMINI_MODEL_REGISTRY`; it is a projection, not a competing model list.
+- `AIModelSelector` persists the user preference through the existing Brain context and calls `resolveGeminiModel` to display the effective text model when substitution occurs.
+- `src/services/gemini.ts` applies canonical model resolution, capability-specific generation profiles, bounded fallback, and emits model-fallback telemetry through the existing governance layer. This is a meaningful canonical foundation; do not replace it with a parallel provider registry.
+- The model governance registry explicitly marks retained pricing as `legacy-app-estimate` and `verified: false`. Preserve that uncertainty; do not present those figures as verified current provider pricing.
+- `src/services/brain/BrainUserControls.ts` provides a channel-scoped control record with a global fallback and explicit controls for analytics, projects, comments, Vault, Publisher, interaction learning, and external-action approval. Existing Brain services consume these controls; this audit did not establish a missing controls surface or bypass.
+- `src/services/publicHandleMode.ts` reads the user's explicit `vt_ingest_mode === "public_handle"` selection. Public-page snapshots deliberately null subscriber/video/view counts and per-video engagement counts rather than inventing private analytics. The generic Brain runtime is documented not to read browser storage directly; callers supply selected public-handle context.
+- The public-handle evidence inspected here is not a complete end-to-end proof that every Brain entry point enforces public-only boundaries. Continue tracing each caller and context-pack builder before certifying that boundary.
+
+### Sixth-pass status
+
+- Confirmed the mismatch between “secure vault” UI copy and browser localStorage credential persistence.
+- Confirmed the Settings save action persists a key but does not validate it with the provider.
+- Confirmed the model selector projects from the canonical Gemini governance registry and the generation client consumes the canonical resolver/profile/fallback layer.
+- Confirmed public-page ingestion strips analytics counts rather than fabricating them; end-to-end public-only Brain enforcement remains unverified.
+- No application source code was changed. No key, model, or Brain policy was modified.
+- No tests, typecheck, production build, provider request, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
