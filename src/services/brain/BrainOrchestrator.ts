@@ -437,7 +437,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   : await beginAIBrainTurn({
    channelId: input.channelId,
    userText: input.userText,
-   metadata: { source: "brain_orchestrator", ...(input.promptOrigin ? { promptOrigin: input.promptOrigin } : {}), promptVersion: BRAIN_PROMPT_VERSION,
+   metadata: { operationId: input.operationId || null, source: "brain_orchestrator", ...(input.promptOrigin ? { promptOrigin: input.promptOrigin } : {}), promptVersion: BRAIN_PROMPT_VERSION,
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
     requestedModel,
@@ -904,6 +904,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    confidence: evaluation.passed ? "high" : "medium",
    evidence: response.modules?.map((module) => module.title) || [],
    metadata: {
+    operationId,
     evaluationId: evaluation.id,
     rawUserMessage: input.userText,
     capabilities: capabilityIds,
@@ -939,6 +940,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    evaluation,
    learningEntryIds: learning ? [learning.id] : [],
    metadata: {
+    operationId,
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
     generationPath,
@@ -1070,6 +1072,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    evaluation,
    learningEntryIds: learning ? [learning.id] : [],
    metadata: {
+    operationId,
     orchestrationError: error instanceof Error ? error.message : String(error),
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
