@@ -847,6 +847,10 @@ describe("confirmed individual module variant completeness", () => {
     expect(wordFamily).toContain("WORD_TOGGLE_SKINS.map");
     expect(wordFamily).toContain('["60", "44", "28", "20", "12"]');
     expect(dropdownFamily).toContain("StudioLegendMultiDropdown");
+    expect(source).toContain("StudioIconButton · All Five Sizes");
+    expect(source).toContain('data-vt-library-component="StudioSplitLeftInput"');
+    expect(source).toContain('Compact split-left text input');
+    expect(source).toContain('["supreme", "mini", "micro"] as const');
     expect(dropdownFamily).toContain("StudioSplitLeftDropdown");
   });
 });
