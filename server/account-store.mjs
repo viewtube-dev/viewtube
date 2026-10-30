@@ -8,11 +8,10 @@ const { Pool } = pg;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..");
-const DATA_DIR = path.join(ROOT, ".account");
+const DATA_DIR = String(process.env.ACCOUNT_STORE_DIR || path.join(ROOT, ".account")).trim();
 const ACCOUNT_FILE = path.join(DATA_DIR, "account-store.json");
 
 const DATABASE_URL = String(process.env.DATABASE_URL || "").trim();
-const NODE_ENV = String(process.env.NODE_ENV || "development");
 const SESSION_TTL_MS = Math.max(15 * 60 * 1000, Number(process.env.ACCOUNT_SESSION_TTL_MS || 30 * 24 * 60 * 60 * 1000));
 
 export const withVerifiedPostgresSslMode = (connectionString) => {
@@ -118,7 +117,6 @@ const updateFileDb = async (mutator) => {
 export const initAccountStore = async () => {
   if (initialized) return;
   if (!DATABASE_URL) {
-    if (NODE_ENV === "production") throw new Error("DATABASE_URL is required for production account storage.");
     await ensureFileDb();
     initialized = true;
     return;
