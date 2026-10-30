@@ -677,7 +677,6 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
    
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
-  --vt-studio-micro-height: 12px; --vt-studio-micro-stroke: 1px; --vt-studio-micro-radius: 2px; --vt-studio-micro-font-size: 10px; --vt-studio-micro-font-weight: 1000; --vt-studio-micro-icon-size: 10px; --vt-studio-micro-icon-stroke: 1.5;
    
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
