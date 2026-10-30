@@ -321,10 +321,7 @@ const RestoredPrimitiveShowcase: React.FC = () => {
       "Read-only text display uses black text, persistent primary inset stroke, and the secondary outer focus-style outline at rest.",
       "Unlike editable fields, the text box has no separate focused state.",
     ]} provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-restored-primitives.css" tokens="Inherits the global five-size geometry and text-box field exception." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <SizeMatrix label="Text box size examples"
-        standard={<StudioTextBox size="standard">READ-ONLY DISPLAY TEXT</StudioTextBox>}
-        compact={[0,1].map(i => compact(<StudioTextBox size="compact">COMPACT DISPLAY</StudioTextBox>, "compact-"+i))}
-        micro={[0,1,2,3].map(i => micro(<StudioTextBox size="micro">MICRO TEXT</StudioTextBox>, "micro-"+i))} />
+      <div className="vt-confirmed-variant is-full-row"><span>READ-ONLY DISPLAY · MULTILINE EXCEPTION</span><StudioTextBox size="standard">READ-ONLY DISPLAY TEXT</StudioTextBox></div>
     </Family>
     <Family title="Split Accordion · Standard / Compact / Micro" nonDefaultSettings={[
       "Uses the existing split-accordion production primitive, not a new accordion implementation.",
