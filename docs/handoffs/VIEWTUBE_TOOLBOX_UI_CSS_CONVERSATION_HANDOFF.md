@@ -1177,3 +1177,14 @@ Next steps:
 4. Verify bar tooltip focus visibility, empty/full bar colors, 2.5:1 geometry, and outer-only double-side focus outline.
 5. Complete the public-export-to-family-module coverage check and dependency audit before deleting any retired primitive implementations.
 6. Do not mark this PR merge-ready while release-gates checks remain pending/failing.
+
+## 2026-10-30 follow-up — post-merge consolidation
+
+- PR #1234 landed the earlier split-rail and initial audit repairs. The remaining work was replayed on `studio-controls-system-consolidation-v4`, created from the then-current `master/consolidated-feature-integration` head, to avoid stale-base drift.
+- Repaired the malformed textarea selector assertion and aligned field/TextBox ownership assertions with the current canonical system stylesheet.
+- Pointed the Double Side Toggle source audit at `StudioValueToggles.tsx`, where the primitive is actually implemented, and made the center-divider focus isolation explicit in the system stylesheet.
+- Replaced hard-coded Standard and Compact floating-field focus widths with generated tier tokens.
+- Removed the duplicate editable-field and TextBox declarations from the recovery stylesheet so it no longer competes with the canonical field styling layer.
+- Updated vertical word-toggle assertions to tolerate the source's multiline left/right inset declarations while retaining checks for the measured handle bounds and shared radius.
+- Targeted static audit harness: 26 assertions passed across 20 fetched source fixtures. This validates source contracts only; it is not the Node test runner, Vitest, build, typecheck, or browser verification.
+- Remaining release gate: run `npm run test:studio-controls`, `npm run typecheck`, `npm run build`, then browser/mobile verification before marking the replacement PR ready.
