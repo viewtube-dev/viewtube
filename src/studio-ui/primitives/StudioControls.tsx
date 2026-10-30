@@ -2771,6 +2771,7 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   accept = "image/*,video/*",
   prompt = "Drag or drop\nImage / video here · or click to upload",
   disabled = false,
+  sizeVariant = "standard",
   multiple = false,
   onFileChange,
   onFilesChange,
@@ -2834,7 +2835,7 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
       data-vt-studio-control-family="upload"
       data-vt-studio-upload-frame="true"
       data-vt-library-component="StudioUploadFrame"
-      data-size="standard"
+      data-size={sizeVariant}
       aria-disabled={disabled ? "true" : undefined}
       role="button"
       tabIndex={disabled ? -1 : 0}
@@ -2881,11 +2882,7 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
       </span>
-      <span className="vt-studio-upload-frame__file-bar" data-has-file={selectedName ? "true" : "false"} aria-live="polite">
-        <span className="vt-studio-upload-frame__file-action" aria-hidden="true"><Upload /></span>
-        <span className="vt-studio-upload-frame__file-name">{selectedName || prompt}</span>
-        <span className="vt-studio-upload-frame__file-kind" aria-hidden="true"><ImageIcon /></span>
-      </span>
+      <span className="vt-studio-upload-frame__label" aria-live="polite">{selectedName || prompt}</span>
     </label>
   );
 };
