@@ -22,6 +22,7 @@ import {
  ThumbsUp,
  X,
  Zap,
+ RefreshCw,
 } from "lucide-react"
 import { Toolbox } from "../components/Toolbox"
 import { BrainComposerDock } from "../components/brain/BrainComposerDock"
@@ -31,6 +32,7 @@ import { useVisualViewportHeight } from "../components/brain/useVisualViewportHe
 import { StudioButton, StudioSplitLeftButton, StudioSplitTwoLineButton, StudioSplitLeftBadge, StudioInterModule, StudioTextArea, StudioTextInput, StudioSquareIconButton, StudioSquareIconButtonGroup } from "../studio-ui"
 import "../components/brain/brain-hub-redesign/brain-hub-shell.css"
 import { useBrain } from "../context/useBrain"
+import { useInitialChannelBootstrap } from "../context/InitialChannelBootstrapContext"
 import { TOOLBOX_PALETTE } from "../styles/toolboxPalette"
 import { hasGeminiKey } from "../services/gemini"
 import { GEMINI_KEY_UPDATED_EVENT } from "../services/keyVault"
@@ -964,6 +966,10 @@ const AIBrainCommandInterface: React.FC = () => {
  }
  const brainContext = useBrain()
  const {
+  snapshot: initialBootstrapSnapshot,
+  refresh: refreshInitialChannelBootstrap,
+ } = useInitialChannelBootstrap()
+ const {
   brain,
   authState,
   channelConnection,
@@ -1063,6 +1069,39 @@ const AIBrainCommandInterface: React.FC = () => {
  }, [channelId, input, activePromptTitle, draftPromptOrigin])
  const [brainControls, setBrainControls] = useState(() => readBrainUserControls(channelId))
  const [runtimeSnapshot, setRuntimeSnapshot] = useState<ReturnType<typeof readBrainRuntimeSnapshot> | null>(null)
+ const [evidenceRefreshState, setEvidenceRefreshState] = useState<"idle" | "updating" | "updated" | "partial" | "error">("idle")
+ const [evidenceRefreshMessage, setEvidenceRefreshMessage] = useState("")
+
+ const handleUpdateBrainEvidence = async () => {
+  if (!channelConnection.isConnected) {
+   setEvidenceRefreshState("error")
+   setEvidenceRefreshMessage("Connect your YouTube channel to update channel evidence.")
+   return
+  }
+  setEvidenceRefreshState("updating")
+  setEvidenceRefreshMessage("Refreshing channel evidence and rebuilding Brain context…")
+  try {
+   const result = await refreshInitialChannelBootstrap(true)
+   if (!result) {
+    setEvidenceRefreshState("error")
+    setEvidenceRefreshMessage("Channel evidence could not be refreshed. Check your YouTube connection.")
+    return
+   }
+   if (result.status === "partial") {
+    setEvidenceRefreshState("partial")
+    setEvidenceRefreshMessage(result.error?.message || "Some channel evidence could not be refreshed. Previously saved evidence was kept.")
+   } else if (result.status === "error") {
+    setEvidenceRefreshState("error")
+    setEvidenceRefreshMessage(result.error?.message || "Channel evidence could not be refreshed. Previously saved evidence was kept.")
+   } else {
+    setEvidenceRefreshState("updated")
+    setEvidenceRefreshMessage("Channel evidence updated. Brain context is rebuilding from the refreshed data.")
+   }
+  } catch (error) {
+   setEvidenceRefreshState("error")
+   setEvidenceRefreshMessage(error instanceof Error ? error.message : "Channel evidence refresh failed.")
+  }
+ }
 
  useEffect(() => {
   let active = true
@@ -1092,7 +1131,7 @@ const AIBrainCommandInterface: React.FC = () => {
    }
    if (timeoutHandle !== null) clearTimeout(timeoutHandle)
   }
- }, [channelId, brain.activeProjectId, brain.projects])
+ }, [channelId, brain.activeProjectId, brain.projects, initialBootstrapSnapshot?.manifestId])
 
  const snapshot = useMemo(
   () =>
@@ -1104,7 +1143,7 @@ const AIBrainCommandInterface: React.FC = () => {
     brainOnboardingSnapshot: onboardingSnapshot,
     recentConversationTurns: recentTurns,
    }),
-  [brain, authState, channelConnection, onboardingSnapshot, recentTurns],
+  [brain, authState, channelConnection, onboardingSnapshot, recentTurns, initialBootstrapSnapshot?.manifestId],
  )
  useEffect(() => {
   setIntakeContext(loadAiBrainContext(channelId, snapshot.channel.label, [authState.channelHandle]))
@@ -1954,6 +1993,23 @@ const AIBrainCommandInterface: React.FC = () => {
         onOpenTools={() => { setContextRailOpen(false); setLauncherMode("capabilities"); setPromptRailOpen(true) }}
        />
       <div data-vt-brain-workspace-part="runtime-context" className="vt-brain-studio-workspace__runtime shrink-0 bg-[#f3f4f6]">
+       <div className="flex min-w-0 items-center justify-between gap-2 px-3 pt-2">
+        <div className="min-w-0" aria-live="polite">
+         {evidenceRefreshMessage ? <p data-vt-brain-part="evidence-refresh-status" data-status={evidenceRefreshState} className="text-[10px] font-bold">{evidenceRefreshMessage}</p> : null}
+        </div>
+        <StudioSplitLeftButton
+         sizeVariant="compact"
+         icon={<RefreshCw aria-hidden="true" className={evidenceRefreshState === "updating" ? "animate-spin" : ""} />}
+         type="button"
+         aria-label="Update Brain evidence"
+         title="Refresh channel evidence and rebuild Brain context"
+         disabled={!channelConnection.isConnected || evidenceRefreshState === "updating"}
+         onClick={() => { void handleUpdateBrainEvidence() }}
+         className="shrink-0"
+        >
+         {evidenceRefreshState === "updating" ? "Updating…" : "Update evidence"}
+        </StudioSplitLeftButton>
+       </div>
        {runtimeSnapshot ? <BrainRuntimePanel snapshot={runtimeSnapshot} embedded /> : <div role="status" className="px-3 py-2 text-xs font-bold">Loading Brain status…</div>}
       </div>
       <div data-vt-brain-workspace-part="grid" className="vt-brain-studio-workspace__grid grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
