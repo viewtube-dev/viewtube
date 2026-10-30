@@ -267,7 +267,7 @@ test("global defaults use a compact collapsed panel with an explicit expand affo
 
 test("confirmed Square Icon Button family catalogs every interaction effect at standard and compact sizes", () => {
   const squareStart = catalog.indexOf('<Family title="Square Icon Button · 44px + 28px"');
-  const splitStart = catalog.indexOf('<Family title="Split-left"', squareStart);
+  const splitStart = catalog.indexOf('title="Split-left Button', squareStart);
   assert.ok(squareStart >= 0, "confirmed Square Icon Button family exists");
   assert.ok(splitStart > squareStart, "Square Icon Button family has a bounded catalog section");
   const squareFamily = catalog.slice(squareStart, splitStart);
