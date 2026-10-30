@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import {
   StudioTextBox, StudioVerticalWordToggle, StudioSquareIconButton, StudioSquareIconButtonGroup,
   StudioSplitAccordion, StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle,
-  StudioBarToggle, StudioDoubleSplitWordCounter, openPanelWidth, iconPositions, easeTrain,
+  StudioBarToggle, StudioDoubleSplitWordCounter, StudioLeftWordCounter, openPanelWidth, iconPositions, easeTrain,
 } from "./StudioControls";
 
 describe("restored Studio production primitives", () => {
@@ -51,7 +51,7 @@ describe("restored Studio production primitives", () => {
     expect(counter).toContain('studio-double-split-word-counter');
   });
 
-  it("preserves accordion geometry helpers", () => {
+  it("renders the four-state left word counter using the canonical left rail", () => {\n    const html = renderToStaticMarkup(<StudioLeftWordCounter value={3} onValueChange={() => {}} />);\n    expect(html).toContain("THREE");\n    expect(html).toContain("studio-left-word-counter");\n  });\n\n  it("preserves accordion geometry helpers", () => {
     expect(openPanelWidth(400, 3, 44, 3)).toBe(262);
     expect(iconPositions([44,80,44], 3)).toEqual([0,47,130]);
     expect(easeTrain(0)).toBe(0);
