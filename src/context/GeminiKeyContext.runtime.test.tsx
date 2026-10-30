@@ -114,4 +114,21 @@ describe("Gemini key validation runtime", () => {
   expect(getVaultKey("gemini")).toBe("")
  })
 
+
+ it("does not treat degraded provider verification as a successful save when storage is blocked", async () => {
+  listModels.mockRejectedValue(Object.assign(new Error("Service unavailable"), { status: 503 }))
+  vi.stubGlobal("localStorage", {
+   getItem: () => null,
+   setItem: () => { throw new Error("storage disabled") },
+   removeItem: () => { throw new Error("storage disabled") },
+  })
+  await mount()
+  let result = true
+  await act(async () => { result = await exposed!.validateAndSaveKey("degraded-but-not-persistable") })
+  expect(result).toBe(false)
+  expect(exposed?.apiKey).toBeNull()
+  expect(exposed?.validationError).toMatch(/browser storage is unavailable/i)
+  expect(getVaultKey("gemini")).toBe("")
+ })
+
 })
