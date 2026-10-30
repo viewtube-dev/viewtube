@@ -102,7 +102,7 @@ export const TagGeneratorWidget = ({ widget, instance, editMode, onToggleCollaps
   } catch (err) {
    console.error("Tag generation failed:", err)
    setSuggestedTags([])
-    } finally {
+  } finally {
    setIsGenerating(false)
   }
  }
