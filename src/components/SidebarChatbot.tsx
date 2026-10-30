@@ -179,7 +179,7 @@ export const SidebarChatbot: React.FC = () => {
 
    const result = await runBrainTask({
     surface: "sidebar-chatbot",
-    publicHandleContext: readSelectedPublicHandleContext(),
+    publicHandleContext: !authState.isAuthenticated && !channelConnection.isConnected ? readSelectedPublicHandleContext() : null,
     projectId: selection?.projectId ?? surface.projectId ?? null,
     project: activeProject,
     projects: brain.projects,
