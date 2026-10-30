@@ -99,10 +99,12 @@ export const recordContentBuildToolOutput = (input: {
  evidenceIds?: string[]
  generationRecordId?: string | null
  traceId?: string | null
+ idempotencyKey?: string | null
  summary?: string
  metadata?: Record<string, unknown>
 }) => appendContentBuildEvent({
  contentBuildId: input.contentBuildId,
+ idempotencyKey: input.idempotencyKey || null,
  eventType: "tool.output.recorded",
  entityType: "tool-output",
  entityId: input.toolId,
