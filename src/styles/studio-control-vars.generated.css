@@ -120,6 +120,12 @@
   --vt-studio-stepper-compact-chevron-stroke: 3;
   --vt-studio-stepper-mini-chevron-stroke: 2.5;
   --vt-studio-stepper-micro-chevron-stroke: 2.25;
+  --vt-studio-counter-value-area-aspect-ratio: 2 / 1;
+  --vt-studio-bar-height-to-text-ratio: 1;
+  --vt-studio-bar-height-to-width-ratio: 2.5;
+  --vt-studio-bar-radius: 2px;
+  --vt-studio-bar-empty-white-mix: 50%;
+  --vt-studio-bar-full-fill: #000000;
   --vt-studio-number-default-white-mix: 50%;
   --vt-studio-number-rest-mix: 50%;
   --vt-studio-number-active-color: #000000;
