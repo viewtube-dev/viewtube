@@ -260,18 +260,26 @@ export const clearVtSyncTableDataFromSnapshot = (snapshot: VtSyncSnapshot, table
  return normalizeVtSyncSnapshot(next)
 }
 
-// Data visuals must be able to hydrate from whatever table data is already present.
-// When account/channel identity is still loading, accept persisted rows from any
-// channel instead of rendering an empty visual state. Once channelId exists, keep
-// the normal channel filter so one signed-in channel cannot borrow another's data.
+// Data visuals must activate from imported CSV/JSON even with no channel connected
+// and no account logged in. When channel identity is unresolved, hydrate unscoped
+// manual-import rows so the visuals toolbox is not empty. Once channelId exists,
+// keep the normal channel filter so one signed-in channel cannot borrow another's data.
 export const toVtSyncManualImportState = (records: VtSyncDatasetTableRowsRecord[], channelId?: string | null): VtSyncManualImportState => {
  const state: VtSyncManualImportState = { rowsByTableId: {}, capturedAtByTableId: {} }
- // Manual-import rows are creator-scoped evidence. Without a resolved channel,
- // even a legacy unscoped record must not be hydrated into the active snapshot.
- if (!channelId) return state
+ // Data visuals must activate from CSV/JSON imports even with no channel connected
+ // and no account logged in. When channelId is unresolved, hydrate unscoped
+ // (session / anonymous) manual-import records so the visuals toolbox is not empty.
+ // Once a channel is known, keep the strict channel filter so one account cannot
+ // borrow another's persisted imports.
  for (const record of records) {
   if (record.provenance !== "csv" || !record.id.startsWith(MANUAL_IMPORT_ID_PREFIX)) continue
-  if (channelId && record.channelId !== channelId) continue
+  if (channelId) {
+   if (record.channelId !== channelId) continue
+  } else if (record.channelId) {
+   // While identity is unresolved, only accept unscoped rows (no channelId).
+   // Channel-scoped rows wait until the matching channel resolves.
+   continue
+  }
   const rows = Array.isArray(record.rows) ? record.rows as unknown[] : []
   if (!rows.length) continue
   const tableId = getVtSyncTableIdForDataset(record.datasetId) || record.datasetId
