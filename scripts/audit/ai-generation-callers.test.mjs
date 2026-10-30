@@ -45,3 +45,41 @@ test("buildGenerationCallerInventory does not treat documentation mentions as ru
   const inventory = buildGenerationCallerInventory(rootDir);
   assert.equal(inventory.exports[0].status, "no_static_import_reference");
 });
+
+
+test("inventory includes direct SDK calls, dynamic provider imports, model IDs, credential aliases, and provider allowlist", () => {
+  const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "vt-generation-surface-"));
+  fs.mkdirSync(path.join(rootDir, "src/services/brain/__tests__"), { recursive: true });
+  fs.mkdirSync(path.join(rootDir, "src/context"), { recursive: true });
+  fs.writeFileSync(path.join(rootDir, "src/services/gemini.ts"), 'export const generateScript = () => {};\nconst model = "gemini-3.1-flash-lite";\n');
+  fs.writeFileSync(path.join(rootDir, "src/services/provider.ts"), [
+    "const client = new GoogleGenAI({ apiKey: secret });",
+    "await client.models.generateContent({ model: \"gemini-3.1-pro-preview\" });",
+    "await client.models.generateContentStream({ model: \"gemini-3-flash-preview\" });",
+  ].join("\n"));
+  fs.writeFileSync(path.join(rootDir, "src/services/lazyProvider.ts"), 'const provider = await import("../gemini");\n');
+  fs.writeFileSync(path.join(rootDir, "src/context/keyVault.ts"), 'const aliases = ["yt_api_key", "vt_gemini_api_key", "gemini_api_key", "google_api_key"];\n');
+  fs.writeFileSync(path.join(rootDir, "src/services/brain/__tests__/brainProviderArchitectureGuard.test.ts"), [
+    "const ALLOWED_DIRECT_PROVIDER_CALLS = new Set([",
+    '  "src/services/gemini.ts",',
+    '  "src/context/GeminiKeyContext.tsx",',
+    "]);",
+  ].join("\n"));
+
+  const inventory = buildGenerationCallerInventory(rootDir);
+  assert.deepEqual(
+    inventory.surface.directProviderInvocations.map((entry) => entry.path),
+    ["src/services/provider.ts"],
+  );
+  assert.deepEqual(
+    inventory.surface.dynamicGeminiImports.map((entry) => entry.path),
+    ["src/services/lazyProvider.ts"],
+  );
+  assert.ok(inventory.surface.modelIdLiterals.some((entry) => entry.id === "gemini-3.1-flash-lite"));
+  assert.ok(inventory.surface.modelIdLiterals.some((entry) => entry.id === "gemini-3.1-pro-preview"));
+  assert.ok(inventory.surface.credentialAliasReferences.some((entry) => entry.alias === "yt_api_key"));
+  assert.deepEqual(inventory.surface.providerAllowlist, [
+    "src/services/gemini.ts",
+    "src/context/GeminiKeyContext.tsx",
+  ]);
+});
