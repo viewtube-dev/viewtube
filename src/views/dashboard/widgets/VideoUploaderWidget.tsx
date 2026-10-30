@@ -17,7 +17,8 @@ import {
   updateVideoThumbnail,
   uploadVideo,
 } from "../../../services/youtubeService"
-import { generateEducationalTimestampQuestions, generateSeoData, generateTagSuggestions } from "../../../services/gemini"
+import { generateEducationalTimestampQuestions, generateTagSuggestions } from "../../../services/gemini"
+import { generateVideoPublisherSeoPackage } from "../../../services/brain/creatorAssets"
 import { useUnifiedAccount } from "../../../context/UnifiedAccountContext"
 import type { DashboardData } from "../useDashboardData"
 import type { CommonWidgetProps } from "../types"
@@ -219,19 +220,26 @@ export const VideoUploaderWidget = ({ data, ...common }: WidgetProps) => {
     setGenerationLoading("description")
     setError("")
     try {
-      const generated = await generateSeoData(
-        concept,
-        String(data.brain?.targetNiche || "General").trim() || "General",
-        "",
-        "",
-        "10:00",
-        "",
-        "",
-        "Longform",
-        undefined,
-        data.brain,
-      )
-      setDescription(String(generated.description || "").slice(0, 5000))
+      const channelId = account.snapshot.google.channelId
+      if (!channelId) throw new Error("Connect a YouTube channel before generating publishing metadata.")
+      const generated = await generateVideoPublisherSeoPackage({
+        context: { channelId, channelName: account.snapshot.google.channelTitle || undefined },
+        instruction: "Generate a ready-to-paste description and the supporting SEO package for this video. Ground channel-specific claims only in the supplied context.",
+        inputs: {
+          concept,
+          niche: String(data.brain?.targetNiche || "General").trim() || "General",
+          script: "",
+          stats: "",
+          videoLength: "10:00",
+          channelHandle: account.snapshot.google.channelHandle || "",
+          resourceLinks: "",
+          videoFormat: "Longform",
+          videoTitle: title,
+        },
+        operationId: "video-uploader-description-" + Date.now(),
+        workflowId: "workflow:video-uploader:" + channelId,
+      })
+      setDescription(String(generated.output.description || "").slice(0, 5000))
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to generate a description.")
     } finally {
