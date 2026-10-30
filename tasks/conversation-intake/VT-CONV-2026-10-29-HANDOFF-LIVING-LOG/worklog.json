@@ -224,7 +224,7 @@
     },
     {
       "title": "PR #1170",
-      "path": "",
+      "path": "PR #1170",
       "url": "https://github.com/viewtube-dev/viewtube/pull/1170",
       "kind": "PULL_REQUEST",
       "status": "MERGED",
@@ -535,7 +535,7 @@
         "implementationRisk": "LOW",
         "rationale": "Avoids corrupting the user's selected idea references through ordinal guessing."
       },
-      "relationship": "UNKNOWN",
+      "relationship": "CONTINUATION",
       "suggestedDestination": "Existing ideas/registry.json after source recovery",
       "reviewStatus": "UNREVIEWED",
       "disposition": null,
