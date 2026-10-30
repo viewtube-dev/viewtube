@@ -1,4 +1,6 @@
 import React from "react"
+import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
+import { Bell, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Heart as HeartIcon, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, STUDIO_FOCUS_INTERACTION_TOKENS, type StudioControlSize, type StudioControlInteractiveSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
@@ -12,8 +14,6 @@ export const StudioNumberInput = React.forwardRef<
 ));
 StudioNumberInput.displayName = "StudioNumberInput";
 
-import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -1317,7 +1317,7 @@ const StudioLockUnlockGlyph = ({ unlocked = false }: { unlocked?: boolean }) => 
 /** Canonical icon pair mapping; feature presets use consistent Lucide SVGs rather than placeholder glyphs. */
 const getStudioSquarePresetIcons = (preset?: StudioSquareIconPreset): { icon: React.ReactNode; activeIcon?: React.ReactNode } | undefined => {
   switch (preset) {
-    case "heart": return { icon: <Heart />, activeIcon: <Heart /> }
+    case "heart": return { icon: <HeartIcon />, activeIcon: <HeartIcon /> }
     case "bell": return { icon: <Bell />, activeIcon: <Bell /> }
     case "sun-moon": return { icon: <StudioSunGlyph />, activeIcon: <StudioMoonGlyph /> }
     case "download-check": return { icon: <Download />, activeIcon: <Check /> }
