@@ -180,3 +180,50 @@
 - [ ] No duplicate canonical persistence owner was introduced.
 - [ ] Any removed widgets have capability-parity and layout-migration evidence.
 - [ ] Exact Task Authority identities are reconciled before permanent VT task allocation.
+
+
+## Phase 2b — Twenty complete workflows
+
+**Execution plan:** `tasks/toolbox-workflow-convergence/PLAN-TWENTY-COMPLETE-WORKFLOWS.md` (to be added in this branch).  
+**Rule:** each workflow requires a canonical ActionPacket hop, real inbox-state advancement, preserved evidence IDs, an approval gate for external writes, a focused contract test, and no new persistence owner.
+
+### Wave 1 — Foundation certification
+
+- [ ] WF-01 — Comment → Brain → Project; preserve source comment evidence IDs; require creator confirmation before project creation.
+- [ ] WF-02 — Thumbnail → Publisher → Manager; preserve ContentBuild identity and generating-tool provenance.
+- [ ] WF-03 — Metadata Master → optional Thumbnail Studio → Publisher; join the existing publish package rather than create a parallel copy.
+- [ ] WF-04 — Vault asset → Editor; stage the canonical asset with provenance.
+- [ ] WF-05 — Content Analysis → Metadata Master → Thumbnail Studio → Pre-Launch; preserve one evidence trail.
+
+### Wave 2 — Remaining pilots
+
+- [ ] WF-06 — Editor missing-shot recovery; retain timeline range and commit only the selected canonical asset.
+- [ ] WF-07 — 72-hour launch review; carry the exact ApprovedPublishSnapshot and comparable analytics evidence.
+- [ ] WF-08 — Missing Asset Finder; search Vault before generating and preserve package-slot provenance.
+- [ ] WF-09 — Thumbnail refresh experiment; preserve baseline, selected/used variant, and approval-gated Manager update.
+- [ ] WF-10 — Opportunity → Tactic → Experiment; preserve opportunity evidence and experiment identity.
+
+### Wave 3 — Audience and lifecycle
+
+- [ ] WF-11 — Batched audience request → Brain clustering → Community proposal → Project; never auto-post.
+- [ ] WF-12 — Script → storyboard → Asset Engine → thumbnail → Editor; enforce reuse-before-generate.
+- [ ] WF-13 — Storyboard → generated sequence; preserve continuity fingerprint and hero-frame approval.
+- [ ] WF-14 — Longform → Shorts; retain parent packet and transcript/chapter evidence lineage.
+- [ ] WF-15 — Evergreen revival; block promotion copy when freshness evidence is stale.
+
+### Wave 4 — Governance and closure
+
+- [ ] WF-16 — Underperforming upload rescue; serialize one hypothesis at a time and preserve baseline/window.
+- [ ] WF-17 — Packaging learning; use exact used-variant receipt and governed, non-automatic learning promotion.
+- [ ] WF-18 — Hook learning; attribute the exact used hook to a comparable retention window.
+- [ ] WF-19 — Project postmortem; reference every artifact and preserve rejected directions.
+- [ ] WF-20 — Full creator improvement loop; close action → outcome → evaluation → governed learning → next cycle.
+
+### Phase 2b verification gate
+
+- [ ] Verify each chain against the current capability registry and real producer/receiver paths before marking implementation complete.
+- [ ] Extend existing contract tests; do not create a parallel chain registry or packet protocol.
+- [ ] Prove evidence-ID preservation for every workflow.
+- [ ] Prove creator approval for every external-write hop.
+- [ ] Confirm paused/stopped/failed/complete state derives from real inbox/workflow state.
+- [ ] Record focused lint, Vitest, and scoped type-check evidence per workflow.
