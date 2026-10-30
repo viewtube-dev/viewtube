@@ -371,6 +371,9 @@ export const recordToolReceipt = (input: {
  ) {
   return canonicalReceipt as ToolReceipt
  }
+ if (receipt.idempotencyKey) {
+  throw new Error("Generation receipt idempotency key is already owned by an incompatible ContentBuild event.")
+ }
 
  return receipt
 }
