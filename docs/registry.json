@@ -13,13 +13,15 @@
       "concern": "documentation-governance",
       "owner": "Documentation Governance",
       "productionDate": "2026-09-26",
-      "lastEdited": "2026-09-26",
+      "lastEdited": "2026-10-29",
       "lastAuditedMainSha": "ee02fdbd1af2be30e81de7955dad188999a03ac4",
       "supersedes": [
         "docs/DOCUMENTATION_GOVERNANCE.md"
       ],
       "relatedAuthorities": [
-        "docs/registry.json"
+        "docs/registry.json",
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "docs/governance/CONVERSATION_OS.md"
       ]
     },
     {
