@@ -982,7 +982,7 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Action:** Reconciled the Side/Arrow/Double Side/Split Text Input recovery work and subsequent slider-center cleanup against merged PR metadata; extended the existing October 30 handoff rather than creating a duplicate.
 - **Source:** Current conversation requests, existing `docs/recovery/Handoff-Conversation-20261030.md`, GitHub PR metadata and commit status checks.
 - **Evidence:** PR #1135 merged as `d59e192e3b311a3345e3cd8171773b00f5a1aebd`; PR #1140 merged as `df4f4bd1106ad262f82df25b8582522ea25ab530`. PR #1177 and #1223 are also confirmed merged, establishing the handoff process and original October 30 handoff.
-- **Status:** MERGED TO TARGET / RENDERED BEHAVIOR AND LOCAL TESTS NOT VERIFIED.
+- **Status:** PR #1135/#1140 MERGED TO TARGET; this documentation addendum is proposed in PR #1227 (OPEN) / rendered behavior and local tests not verified.
 - **Artifacts:** `docs/recovery/Handoff-Conversation-20261030.md`; `Recovery.md`; `Recovery.yaml`; `docs/recovery/History.md`.
 - **External identifiers:** [PR #1135](https://github.com/viewtube-dev/viewtube/pull/1135); [PR #1140](https://github.com/viewtube-dev/viewtube/pull/1140); [PR #1177](https://github.com/viewtube-dev/viewtube/pull/1177); [PR #1223](https://github.com/viewtube-dev/viewtube/pull/1223).
 - **Result:** The first slider recovery styling was superseded/refined by a follow-up that delegates fill/focus to global defaults, removes local inset-stroke and opacity rules, inherits handle radius, and uses secondary color for the active two-tone bar. Existing token ownership was retained.
