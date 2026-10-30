@@ -270,7 +270,7 @@ export function StudioDoubleSplitWordCounter({
     <ChevronRight aria-hidden="true" focusable="false" />
   </button>;
   return <StudioSplitShell layout="double" sizeVariant={size}
-    className={[\"vt-studio-word-counter\", className].filter(Boolean).join(" ")}
+    className={["vt-studio-word-counter", className].filter(Boolean).join(" ")}
     shellProps={{
       role: "group", "aria-label": ariaLabel, "aria-disabled": disabled || undefined,
       "data-vt-studio-control-family": "counter",
