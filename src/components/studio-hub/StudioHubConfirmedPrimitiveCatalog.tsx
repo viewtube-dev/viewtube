@@ -256,7 +256,11 @@ const StudioPrimitiveRepresentatives: React.FC = () => (
 
 const RestoredPrimitiveShowcase: React.FC = () => {
   const [verticalValue, setVerticalValue] = React.useState(false)
-  const [groupSelection, setGroupSelection] = React.useState<boolean[]>([false, false, false, false, false])
+  const [groupSelection, setGroupSelection] = React.useState<Record<"standard" | "compact" | "micro", boolean[]>>({
+    standard: [false, false, false, false, false],
+    compact: [false, false, false, false, false],
+    micro: [false, false, false, false, false],
+  })
   const [leftWord, setLeftWord] = React.useState(2)
   const [arrowWord, setArrowWord] = React.useState("TWO")
   const [sideWord, setSideWord] = React.useState("MID")
@@ -281,8 +285,11 @@ const RestoredPrimitiveShowcase: React.FC = () => {
       label={item.label}
       variant="v1"
       sizeVariant={sizeVariant}
-      selected={groupSelection[index]}
-      onSelectedChange={(selected) => setGroupSelection(current => current.map((value, itemIndex) => itemIndex === index ? selected : value))}
+      selected={groupSelection[sizeVariant][index]}
+      onSelectedChange={(selected) => setGroupSelection(current => ({
+        ...current,
+        [sizeVariant]: current[sizeVariant].map((value, itemIndex) => itemIndex === index ? selected : value),
+      }))}
       data-vt-library-component="StudioSquareIconButton"
     />
   ))
