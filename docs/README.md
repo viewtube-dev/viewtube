@@ -170,7 +170,7 @@ The unified desktop/mobile editor program now has a single living integration au
 - editor/VIEWTUBE_YOUTUBE_EDITOR_SYSTEM_MASTER_RESOURCE.md
 - editor/EDITOR_BRAIN_HUB_ASSISTANT_PLAN.md
 
-Every editor-related agent/conversation must update the master resource Current Work and append-only Update Log before handoff. Specialized editor/Brain/Asset/Toolbox documents remain authoritative for their bounded concerns as declared by DOCUMENTATION_REGISTRY.md.
+Material Editor changes update the master resource Current Work and append-only Update Log as an Editor-domain projection. Long-thread continuity, the complete user-instruction register, all-domain work capture and reconciliation use the single global process in [Conversation Handoffs](./governance/CONVERSATION_HANDOFFS.md) and `tasks/conversation-intake/`; do not treat the Editor Update Log as a substitute or create a parallel conversation log. Specialized Editor/Brain/Asset/Toolbox documents remain authoritative for their bounded concerns as declared by DOCUMENTATION_REGISTRY.md.
 
 
 ## Auth / Editor / Deployment / Guide boundaries
