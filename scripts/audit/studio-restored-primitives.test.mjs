@@ -11,6 +11,8 @@ const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatal
 const catalogCss = read("src/components/studio-hub/studio-hub-primitive-catalogs.css");
 const restoredCss = read("src/styles/studio-control-restored-primitives.css");
 const toggleCss = read("src/styles/studio-control-value-toggles.css");
+const splitCss = read("src/styles/studio-control-split.css");
+const coreCss = read("src/styles/studio-control-core.css");
 
 test("restored production primitives are publicly exported and catalogued", () => {
   for (const name of [
@@ -60,9 +62,9 @@ test("counter and slider catalogs expose only the canonical primary-fill design"
 test("all counter, slider, and value-toggle chevrons share one button owner and focus token contract", () => {
   assert.match(controls, /vt-studio-stepper-button/);
   assert.match(toggles, /vt-studio-stepper-button/);
-  assert.match(toggleCss, /\.vt-studio-stepper-button:focus-visible/);
-  assert.match(toggleCss, /var\(--vt-studio-focus-outline-width/);
-  assert.match(toggleCss, /var\(--vt-studio-focus-outline-color/);
+  assert.match(splitCss, /\.vt-studio-stepper-button:focus-visible/);
+  assert.match(splitCss, /var\(--vt-studio-focus-outline-width/);
+  assert.match(splitCss, /var\(--vt-studio-focus-outline-color/);
   assert.match(toggleCss, /:focus-within/);
   assert.match(toggleCss, /prefers-reduced-motion/);
 });
@@ -75,7 +77,8 @@ test("value toggles reuse StudioSplitShell and derive bar count from canonical s
 
 test("restored primitive styles contain no malformed escaped newline and honor reduced motion", () => {
   assert.doesNotMatch(restoredCss, /\\\\n\s+--vt-studio-control-font-size/);
-  assert.match(restoredCss, /\.vt-studio-vertical-word-toggle:focus-visible/);
+  assert.doesNotMatch(restoredCss, /\.vt-studio-vertical-word-toggle:focus-visible/);
+  assert.match(coreCss, /\[data-vt-studio-control="true"\]:focus-visible/);
   assert.match(restoredCss, /\.vt-studio-square-icon-button-group > \[aria-pressed="true"\]/);
   assert.match(restoredCss, /prefers-reduced-motion/);
 });
