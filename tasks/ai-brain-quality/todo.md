@@ -9,21 +9,21 @@
 
 ## Channel knowledge
 - [ ] Inventory Channel Profile + learning governance types.
-- [ ] Define typed Channel Knowledge projection.
-- [ ] Add temporal/reinforcement/contradiction semantics.
-- [ ] Add scoped retrieval.
-- [ ] Connect governed promotion.
+- [~] Define typed Channel Knowledge projection. Partial implementation exists in `src/services/brain/ChannelKnowledgeProjection.ts`; certify full producer coverage and consumer adoption.
+- [~] Add temporal/reinforcement/contradiction semantics. Staleness, expiry, supersession and contradiction projection/retrieval exist; reinforcement thresholds and decay governance still need verification.
+- [~] Add scoped retrieval. Channel-scoped projection/retrieval exists; verify all production consumers and project/video/time-window constraints.
+- [~] Connect governed promotion. Candidate/review projection exists and explicitly prevents approval-only promotion; verify canonical promotion writer and persistence end-to-end.
 
 ## Context + prompts
-- [ ] Capability-specific context requirements.
+- [~] Capability-specific context requirements. `BrainContextResolution.ts` combines task and capability evidence requirements; complete and certify the live capability matrix.
 - [x] Task-aware ranking/deduplication/character budget and explicit omission reporting (`BrainContextResolution.ts`; test execution pending).
-- [ ] Prompt inventory.
-- [ ] Prompt constitution.
-- [ ] Versioned prompt families + provenance.
+- [~] Prompt inventory. `docs/specifications/prompt-registry.json` exists; production caller reachability population remains incomplete.
+- [x] Prompt constitution. Canonical policy is documented in `docs/specifications/PROMPTS.md`; runtime inheritance/reachability remains a separate open verification task.
+- [~] Versioned prompt families + provenance. Registry contract and prompt families exist; populate every reachable caller and verify runtime receipts.
 
 ## Quality + outcomes
-- [ ] Task-specific quality-loop profiles.
-- [ ] Deterministic validators.
+- [~] Task-specific quality-loop profiles. `BrainTaskProfileRegistry.ts` exists; verify complete task coverage and caller use.
+- [~] Deterministic validators. Bounded validation/repair foundations exist; certify validator coverage on real caller paths.
 - [ ] Evidence-backed critique.
 - [ ] Outcome attribution completeness.
 - [ ] Cohort/window evaluation.
@@ -32,7 +32,7 @@
 - [ ] Learning candidate reinforcement.
 - [ ] Promotion/hold/reject/supersede flow.
 - [ ] Knowledge decay/review.
-- [ ] Shared assistant context resolver.
+- [~] Shared assistant context resolver. `BrainContextBroker` and task-aware resolver exist; remaining work is production caller parity and runtime verification.
 - [ ] Explainability/Brain health surface.
 
 ## Final gates
@@ -188,3 +188,18 @@
 - [ ] Verify stable project revision / ContentBuild revision propagation from the canonical project/build source; do not synthesize revision IDs.
 - [ ] Run the focused Brain quality-loop CI job and exact-head typecheck/build; attach the resulting workflow run before marking this slice verified.
 - [ ] Full phase certification remains blocked by the separately recorded full-suite, focused-contract, runtime-lint, source-governance, live UI adoption, persistence/consent, and real lifecycle validation gates.
+
+
+## Current-target reconciliation — 2026-10-29
+
+The following source files were fetched from `master/consolidated-feature-integration` during this reconciliation. This updates task state from historical planning assumptions; it does not certify runtime or CI behavior.
+
+- `src/services/brain/BrainEvidenceContract.ts`: additive epistemic/provenance projection, scope assessment and evidence-health calculation are present.
+- `src/services/brain/BrainContextResolution.ts`: task/capability-specific required evidence, ranking, deduplication, explicit omissions, model-window-aware budgeting when supplied, and explicit character fallback are present.
+- `src/services/brain/ChannelKnowledgeProjection.ts` plus `src/services/brain/__tests__/ChannelKnowledgeProjection.test.ts`: typed channel-scoped knowledge projection, temporal staleness/supersession, contradiction handling, scoped retrieval and review-not-promotion behavior are present.
+- `src/services/brain/BrainRuntimeSnapshot.ts` plus its test: Project/ContentBuild, GenerationRequest, ContextManifest, ToolReceipt, BrainTrace, outcome and explicit algorithm-event lineage projection is present. Treat this as a reusable foundation, not proof that all creator-facing callers or management UI consume it.
+- `docs/specifications/PROMPTS.md` and `docs/specifications/prompt-registry.json`: prompt constitution/family taxonomy and registry governance contract are present; per-entry production caller and provenance population remains open.
+
+Legend: `[~]` means a code/documentation foundation was observed but full acceptance, caller reachability, persistence or certification remains open. Do not convert it to `[x]` without exact-target test/runtime evidence.
+
+Execution plan: `tasks/p1-canonical-system-integration/workstreams/ai-brain-quality-and-systems-management/plan.md`.
