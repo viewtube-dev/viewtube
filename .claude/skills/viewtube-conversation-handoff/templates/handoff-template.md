@@ -37,9 +37,9 @@ Every meaningful unfinished action gets one concise line. Keep each checkbox on 
 
 Record every distinct user instruction, request, correction, constraint, preference and prohibition separately. Do not collapse materially different requests.
 
-| ID | User instruction / requirement | Status | Related work item | PR(s) / commit(s) | Delivery state | Evidence |
-|---|---|---|---|---|---|---|
-| REQ-001 | | NOT_STARTED | | | UNKNOWN | |
+- [ ] `REQ-001` — [one distinct user instruction] — Status: NOT_STARTED — Work: [CWI-ID] — PR/commit: [reference or N/A] — Delivery: UNKNOWN — Evidence: [link or UNKNOWN]
+
+Use one single-line checkbox per distinct instruction. The checkbox is checked only when the requirement is VERIFIED_DELIVERED; the explicit status still records intermediate stages such as MERGED or IN_PR.
 
 Allowed statuses: NOT_STARTED, IN_PROGRESS, PARTIAL, IMPLEMENTED_LOCALLY, COMMITTED, IN_PR, MERGED, VERIFIED_DELIVERED, BLOCKED, DEFERRED, REJECTED_WITH_REASON, SUPERSEDED_WITH_REFERENCE.
 
