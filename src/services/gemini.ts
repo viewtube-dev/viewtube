@@ -5091,6 +5091,7 @@ export const generateSchemaJsonObject = async <TOutput = unknown>(input: {
  responseSchema: Schema
  capability?: Parameters<typeof getActiveModel>[0]
  mediaAttachments?: string[]
+ tools?: Array<Record<string, unknown>>
 }): Promise<{
  output: TOutput
  requestedModel: string
@@ -5124,6 +5125,7 @@ export const generateSchemaJsonObject = async <TOutput = unknown>(input: {
     },
     responseMimeType: "application/json",
     responseSchema: input.responseSchema,
+    ...(input.tools?.length ? { tools: input.tools as any } : {}),
    },
   })
 
