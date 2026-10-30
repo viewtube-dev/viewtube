@@ -196,6 +196,169 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
   </section>
 )
 
+
+// The size matrix is deliberately label-free: one standard specimen, two compact,
+// and four micro specimens remain visually adjacent as a single primitive family.
+const compact = (child: React.ReactNode, key: React.Key) => (
+  <div className="vt-confirmed-size-matrix__item" key={key}>{child}</div>
+)
+const micro = (child: React.ReactNode, key: React.Key) => (
+  <div className="vt-confirmed-size-matrix__item" key={key}>{child}</div>
+)
+const SizeMatrix: React.FC<{
+  label: string
+  standard: React.ReactNode
+  compact: React.ReactNode[]
+  micro: React.ReactNode[]
+}> = ({ label, standard, compact: compactItems, micro: microItems }) => (
+  <div className="vt-confirmed-size-matrix" role="group" aria-label={label}>
+    <div className="vt-confirmed-size-matrix__standard">{standard}</div>
+    <div className="vt-confirmed-size-matrix__compact">{compactItems}</div>
+    <div className="vt-confirmed-size-matrix__micro">{microItems}</div>
+  </div>
+)
+
+const StudioPrimitiveRepresentatives: React.FC = () => (
+  <Family
+    title="Representatives · Production Primitives"
+    nonDefaultSettings={[
+      "Curated overview of real exported production components; detailed family behavior and size specimens remain in their own modules below.",
+      "All examples use the canonical primitive exports, not mock replicas or inverse-color counter/slider variants.",
+    ]}
+    provenance={<Provenance primitive="Studio UI production exports" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Canonical token-driven defaults and shared focus/split foundations." imports={["src/studio-ui/index.ts"]} />}
+  >
+    <div className="vt-confirmed-variant is-full-row">
+      <span>PRIMARY ACTION</span>
+      <StudioButton sizeVariant="standard">CREATE</StudioButton>
+    </div>
+    <div className="vt-confirmed-variant is-full-row">
+      <span>TEXT ENTRY</span>
+      <StudioTextInput sizeVariant="standard" aria-label="Representative text input" placeholder="TYPE HERE" />
+    </div>
+    <div className="vt-confirmed-variant is-full-row">
+      <span>TEXT DISPLAY</span>
+      <StudioTextBox size="standard">READ-ONLY TEXT BOX</StudioTextBox>
+    </div>
+    <div className="vt-confirmed-variant is-full-row">
+      <span>COUNTER</span>
+      <StudioCounter value={12} onValueChange={() => {}} size="standard" min={0} max={100} ariaLabel="Representative counter" />
+    </div>
+    <div className="vt-confirmed-variant is-full-row">
+      <span>SPLIT ACTION</span>
+      <StudioSplitLeftButton icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Representative split action">SETTINGS</StudioSplitLeftButton>
+    </div>
+  </Family>
+)
+
+const RestoredPrimitiveShowcase: React.FC = () => {
+  const [verticalValue, setVerticalValue] = React.useState(false)
+  const [groupSelection, setGroupSelection] = React.useState<boolean[]>([false, false, false, false, false])
+  const [leftWord, setLeftWord] = React.useState(2)
+  const [arrowWord, setArrowWord] = React.useState("TWO")
+  const [sideWord, setSideWord] = React.useState("MID")
+  const [rightWord, setRightWord] = React.useState("HIGH")
+  const [barValue, setBarValue] = React.useState(55)
+  const [doubleWord, setDoubleWord] = React.useState(2)
+  const accordionItems = [
+    { id: "overview", accessibleLabel: "Overview", icon: <Settings2 aria-hidden="true" />, content: <strong>OVERVIEW PANEL</strong> },
+    { id: "activity", accessibleLabel: "Activity", icon: <Check aria-hidden="true" />, content: <strong>ACTIVITY PANEL</strong> },
+    { id: "insights", accessibleLabel: "Insights", icon: <Sparkles aria-hidden="true" />, content: <strong>INSIGHTS PANEL</strong> },
+  ]
+  const squareButtons = (sizeVariant: "standard" | "compact" | "micro") => (
+    <StudioSquareIconButtonGroup sizeVariant={sizeVariant} aria-label={sizeVariant + " action group"}>
+      {[
+        { icon: <Settings2 aria-hidden="true" />, label: "Settings" },
+        { icon: <Check aria-hidden="true" />, label: "Confirm" },
+        { icon: <Sparkles aria-hidden="true" />, label: "Generate" },
+        { icon: <Heart aria-hidden="true" />, label: "Favorite" },
+        { icon: <Bell aria-hidden="true" />, label: "Notifications" },
+      ].map((item, index) => (
+        <StudioSquareIconButton
+          key={item.label}
+          icon={item.icon}
+          label={item.label}
+          variant="v1"
+          sizeVariant={sizeVariant}
+          selected={groupSelection[index]}
+          onSelectedChange={(selected) => setGroupSelection(current => current.map((value, itemIndex) => itemIndex === index ? selected : value))}
+          data-vt-library-component="StudioSquareIconButton"
+        />
+      ))}
+    </StudioSquareIconButtonGroup>
+  )
+  return <>
+    <Family title="Vertical Word Toggle · Standard / Compact / Micro" nonDefaultSettings={[
+      "Original two-word vertical layout and animated primary/secondary handle are retained.",
+      "Focused word color and handle color share the canonical 500ms fade; reduced motion disables the handle animation.",
+    ]} provenance={<Provenance primitive="StudioVerticalWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-restored-primitives.css" tokens="60 / 44 / 28 / 20 / 12px size tiers; shared secondary focus outline." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <SizeMatrix label="Vertical word toggle size examples"
+        standard={<StudioVerticalWordToggle value={verticalValue} onValueChange={setVerticalValue} sizeVariant="standard" words={["WRITE", "CREATE"]} aria-label="Standard vertical word toggle" />}
+        compact={[0,1].map(i => compact(<StudioVerticalWordToggle value={verticalValue} onValueChange={setVerticalValue} sizeVariant="compact" words={["WRITE", "CREATE"]} aria-label={"Compact vertical word toggle " + (i+1)} />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioVerticalWordToggle value={verticalValue} onValueChange={setVerticalValue} sizeVariant="micro" words={["OFF", "ON"]} aria-label={"Micro vertical word toggle " + (i+1)} />, "micro-"+i))} />
+    </Family>
+    <Family title="Square Icon Button Group · Five Primary Squares" nonDefaultSettings={[
+      "All five squares begin with primary fill. Selecting a square changes only that square to the secondary fill; each selection is independent.",
+      "The group is a single auto-width toolbar and inherits the selected Studio size tier.",
+    ]} provenance={<Provenance primitive="StudioSquareIconButtonGroup / StudioSquareIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-restored-primitives.css" tokens="Five 1:1 squares; primary resting fill; secondary selected fill; black shared dividers." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <div className="vt-confirmed-variant is-full-row"><span>STANDARD · FIVE SQUARES</span>{squareButtons("standard")}</div>
+      <div className="vt-confirmed-variant is-full-row"><span>COMPACT · FIVE SQUARES</span>{squareButtons("compact")}</div>
+      <div className="vt-confirmed-variant is-full-row"><span>MICRO · FIVE SQUARES</span>{squareButtons("micro")}</div>
+    </Family>
+    <Family title="Text Box · Read-only Display Surface" nonDefaultSettings={[
+      "Read-only text display uses black text, persistent primary inset stroke, and the secondary outer focus-style outline at rest.",
+      "Unlike editable fields, the text box has no separate focused state.",
+    ]} provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-restored-primitives.css" tokens="Inherits the global five-size geometry and text-box field exception." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <SizeMatrix label="Text box size examples"
+        standard={<StudioTextBox size="standard">READ-ONLY DISPLAY TEXT</StudioTextBox>}
+        compact={[0,1].map(i => compact(<StudioTextBox size="compact">COMPACT DISPLAY</StudioTextBox>, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioTextBox size="micro">MICRO TEXT</StudioTextBox>, "micro-"+i))} />
+    </Family>
+    <Family title="Split Accordion · Standard / Compact / Micro" nonDefaultSettings={[
+      "Uses the existing split-accordion production primitive, not a new accordion implementation.",
+      "Panel expansion, interrupted motion, keyboard navigation, and reduced-motion behavior remain owned by StudioSplitAccordion.",
+    ]} provenance={<Provenance primitive="StudioSplitAccordion" tsx="src/studio-ui/primitives/StudioSplitAccordion.tsx" css="src/styles/studio-split-accordion.css" tokens="Five global size tiers; one shared accordion behavior and geometry owner." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <SizeMatrix label="Split accordion size examples"
+        standard={<StudioSplitAccordion items={accordionItems} sizeVariant="standard" accessibleLabel="Standard split accordion" />}
+        compact={[0,1].map(i => compact(<StudioSplitAccordion items={accordionItems} sizeVariant="compact" accessibleLabel={"Compact split accordion "+(i+1)} />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioSplitAccordion items={accordionItems} sizeVariant="micro" accessibleLabel={"Micro split accordion "+(i+1)} />, "micro-"+i))} />
+    </Family>
+    <Family title="Arrow / Side / Double-side / Bar Toggles + Double-split Word Counter" nonDefaultSettings={[
+      "All split controls reuse StudioSplitShell rails, size tokens, black dividers, and the same chevron button class used by the counters.",
+      "The bar toggle keeps its tooltip inside the active bar and exposes a labelled 0–100 meter.",
+      "No inverse-color counter or slider specimens are included.",
+    ]} provenance={<Provenance primitive="StudioArrowToggle / StudioSideToggle / StudioDoubleSideToggle / StudioBarToggle / StudioDoubleSplitWordCounter" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-value-toggles.css" tokens="Shared split shell, square rails, secondary rail fill, and global focus outline." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <SizeMatrix label="Arrow toggle size examples"
+        standard={<StudioArrowToggle value={arrowWord} options={["ONE","TWO","THREE","FOUR"]} onValueChange={setArrowWord} size="standard" ariaLabel="Standard arrow toggle" />}
+        compact={[0,1].map(i => compact(<StudioArrowToggle value={arrowWord} options={["ONE","TWO","THREE","FOUR"]} onValueChange={setArrowWord} size="compact" ariaLabel={"Compact arrow toggle "+(i+1)} />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioArrowToggle value={arrowWord} options={["ONE","TWO","THREE","FOUR"]} onValueChange={setArrowWord} size="micro" ariaLabel={"Micro arrow toggle "+(i+1)} />, "micro-"+i))} />
+      <SizeMatrix label="Side toggle size examples"
+        standard={<StudioSideToggle value={sideWord} options={["LOW","MID","HIGH"]} onValueChange={setSideWord} size="standard" arrowSide="right" />}
+        compact={[0,1].map(i => compact(<StudioSideToggle value={sideWord} options={["LOW","MID","HIGH"]} onValueChange={setSideWord} size="compact" arrowSide="right" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioSideToggle value={sideWord} options={["LOW","MID","HIGH"]} onValueChange={setSideWord} size="micro" arrowSide="right" />, "micro-"+i))} />
+      <SizeMatrix label="Double side toggle size examples"
+        standard={<StudioDoubleSideToggle left={{value:"LOW",options:["LOW","HIGH"],onValueChange:()=>{}}} right={{value:rightWord,options:["LOW","MID","HIGH"],onValueChange:setRightWord}} size="standard" />}
+        compact={[0,1].map(i => compact(<StudioDoubleSideToggle left={{value:"LOW",options:["LOW","HIGH"],onValueChange:()=>{}}} right={{value:rightWord,options:["LOW","MID","HIGH"],onValueChange:setRightWord}} size="compact" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioDoubleSideToggle left={{value:"LOW",options:["LOW","HIGH"],onValueChange:()=>{}}} right={{value:rightWord,options:["LOW","MID","HIGH"],onValueChange:setRightWord}} size="micro" />, "micro-"+i))} />
+      <SizeMatrix label="Bar toggle size examples"
+        standard={<StudioBarToggle value={barValue} onValueChange={setBarValue} size="standard" barCount={10} ariaLabel="Standard bar toggle" />}
+        compact={[0,1].map(i => compact(<StudioBarToggle value={barValue} onValueChange={setBarValue} size="compact" barCount={8} ariaLabel={"Compact bar toggle "+(i+1)} />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioBarToggle value={barValue} onValueChange={setBarValue} size="micro" barCount={6} ariaLabel={"Micro bar toggle "+(i+1)} />, "micro-"+i))} />
+      <SizeMatrix label="Double split word counter size examples"
+        standard={<StudioDoubleSplitWordCounter value={doubleWord} onValueChange={setDoubleWord} size="standard" />}
+        compact={[0,1].map(i => compact(<StudioDoubleSplitWordCounter value={doubleWord} onValueChange={setDoubleWord} size="compact" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioDoubleSplitWordCounter value={doubleWord} onValueChange={setDoubleWord} size="micro" />, "micro-"+i))} />
+    </Family>
+    <Family title="Left Word Counter · Standard / Compact / Micro" nonDefaultSettings={[
+      "Four-state ONE / TWO / THREE / FOUR counter uses the same canonical left-counter chevron buttons and split shell.",
+    ]} provenance={<Provenance primitive="StudioLeftWordCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Shared counter rails, chevrons, focus interaction, and five-size token ladder." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      <SizeMatrix label="Left word counter size examples"
+        standard={<StudioLeftWordCounter value={leftWord} onValueChange={setLeftWord} size="standard" />}
+        compact={[0,1].map(i => compact(<StudioLeftWordCounter value={leftWord} onValueChange={setLeftWord} size="compact" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioLeftWordCounter value={leftWord} onValueChange={setLeftWord} size="micro" />, "micro-"+i))} />
+    </Family>
+  </>
+}
+
 const ConfirmedStudioCounterFamily: React.FC = () => {
   const [values, setValues] = React.useState([22, 3, 4, 7, 8, 9, 10])
   const update = (index: number) => (value: number) => setValues(current => current.map((old, i) => i === index ? value : old))
