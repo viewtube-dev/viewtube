@@ -17,8 +17,8 @@ import {
   updateVideoThumbnail,
   uploadVideo,
 } from "../../../services/youtubeService"
-import { generateEducationalTimestampQuestions, generateTagSuggestions } from "../../../services/gemini"
-import { generateVideoPublisherSeoPackage } from "../../../services/brain/creatorAssets"
+import { generateEducationalTimestampQuestions } from "../../../services/gemini"
+import { generateGovernedTagSuggestions, generateVideoPublisherSeoPackage } from "../../../services/brain/creatorAssets"
 import { useUnifiedAccount } from "../../../context/UnifiedAccountContext"
 import type { DashboardData } from "../useDashboardData"
 import type { CommonWidgetProps } from "../types"
@@ -256,7 +256,15 @@ export const VideoUploaderWidget = ({ data, ...common }: WidgetProps) => {
     setGenerationLoading("tags")
     setError("")
     try {
-      const suggestions = await generateTagSuggestions(concept, description, data.brain)
+      const channelId = account.snapshot.google.channelId
+      if (!channelId) throw new Error("Connect a YouTube channel before generating governed tag suggestions.")
+      const { suggestions } = await generateGovernedTagSuggestions({
+        context: { channelId, channelName: account.snapshot.google.channelTitle || undefined },
+        title: concept,
+        description,
+        operationId: "video-uploader-tags-" + Date.now(),
+        workflowId: "workflow:video-uploader-tags:" + channelId,
+      })
       setTags(limitTagsToCharacterBudget(
         [...suggestions]
           .sort((left, right) => right.score - left.score)
