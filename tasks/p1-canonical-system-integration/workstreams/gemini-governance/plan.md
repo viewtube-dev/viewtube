@@ -200,3 +200,13 @@ On that exact head:
 - The missing `getPublishTransaction` test import was added after run #5506 in commit `1da29fb10b1bc5bfb3228bc1baf959d57ab5f665`; this test-only repair still needs a fresh CI run to verify.
 
 Phase 0 now has a reviewed exact-head artifact for the current migration slice, but classification of all 36 remaining production-referenced exports and 36 no-static-reference exports is not complete. Phase 3 remains open; analytics, planning, thumbnails, scripts, storyboards, end-screen, media transcription, speech and other active caller families remain. Phase 4 remains partial; AssetGenerator receipts exist for the migrated standalone flows, but full ContentBuild/OperationRecord ingestion parity is not claimed. Phase 5 still requires authorized live-key certification; Phase 6 remains blocked until zero active bypasses and live capability parity are proven.
+
+
+## Script Architect provider-boundary closure — 2026-10-30
+
+- The only production caller of `generateScript` is Script Architect, and it already supplies a `runBrainJsonTask` callback backed by BrainRuntime.
+- Removed the optional direct Gemini SDK fallback from `generateScript`; the governed task callback is now required and its failures propagate without falling back to a provider-specific direct call.
+- Added `scriptGenerationGateway.test.ts` to verify the supplied task receives the prompt/schema, output is normalized, and a BrainRuntime failure is not retried through a direct provider path.
+- Added the test to the dedicated Gemini governance CI job.
+- This reduces the remaining direct-generation compatibility surface while preserving Script Architect's domain prompt and normalization logic. It does not claim that all other direct SDK calls are UI bypasses; provider ownership and credential validation remain valid SDK boundaries.
+- Exact-head CI for this script-boundary change is pending. The previous run #5506 passed Gemini governance and production build but did not include this follow-up.
