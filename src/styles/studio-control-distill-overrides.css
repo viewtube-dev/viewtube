@@ -551,7 +551,7 @@ html body .vt-studio-inter-module__rail {
   opacity: 0;
   z-index: 8;
 }
-.vt-studio-split-shell.vt-studio-value-toggle--bar:focus-within .vt-studio-value-toggle__bar-tooltip {
+.vt-studio-split-shell.vt-studio-value-toggle--bar:is(:hover, :focus-within) .vt-studio-value-toggle__bar-tooltip {
   visibility: visible;
   opacity: 1;
 }
