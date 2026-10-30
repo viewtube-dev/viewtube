@@ -1,6 +1,6 @@
 {
   "schemaVersion": "viewtube.plan-families.v1",
-  "lastEdited": "2026-09-27",
+  "lastEdited": "2026-10-29",
   "families": [
     {
       "id": "PLAN-FAMILY-BRAIN-AI",
@@ -162,6 +162,31 @@
         "archive/removed/tasks/viewtube-finish-program-2026-09-24.md"
       ],
       "status": "RECONCILING"
+    },
+    {
+      "id": "PLAN-FAMILY-P1-CANONICAL-INTEGRATION",
+      "title": "P1 Canonical System Integration",
+      "capabilityIds": [
+        "CAP-BRAIN-EXPERIENCE",
+        "CAP-CREATOR-CONTEXT",
+        "CAP-EVIDENCE-INTELLIGENCE",
+        "CAP-CREATOR-OPERATIONS",
+        "CAP-OUTCOME-LEARNING",
+        "CAP-VERIFICATION",
+        "CAP-WIDGET-SURFACES"
+      ],
+      "survivor": "tasks/p1-canonical-system-integration/plan.md",
+      "members": [
+        "tasks/p1-canonical-system-integration/README.md",
+        "tasks/p1-canonical-system-integration/inventory.md",
+        "tasks/p1-canonical-system-integration/workstreams/brain-continuity/plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/gemini-governance/plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/public-resolver/plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/studio-controls/plan.md"
+      ],
+      "status": "ACTIVE"
     }
   ]
 }
