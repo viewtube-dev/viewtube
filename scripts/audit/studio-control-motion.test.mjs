@@ -18,7 +18,7 @@ test("Studio selection controls animate only their inner state", () => {
   }
   assert.match(css, /background-color\s+180ms/)
   assert.match(css, /transform\s+220ms/)
-  assert.match(css, /stroke-dashoffset\s+220ms/)
+  assert.match(css, /stroke-dashoffset\s+330ms/)
 })
 
 test("flat-shell policy does not suppress inner field motion or inline strokes", () => {
@@ -86,6 +86,7 @@ test("focus mode fades out using the token-owned 500ms outline duration", () => 
   assert.match(generated, /--vt-studio-focus-outline-fade-ms:\s*500ms/)
   assert.match(system, /outline-color\s+var\(--vt-studio-focus-outline-fade-ms\)\s+ease-out/)
   assert.match(system, /outline-width\s+var\(--vt-studio-focus-outline-fade-ms\)\s+ease-out/)
+  assert.match(system, /\.vt-studio-word-counter,[\s\S]*?\.vt-studio-value-toggle,[\s\S]*?\[data-vt-studio-value-toggle\]/)
 });
 
 test("bar percentage tooltip is exposed on hover and keyboard focus", () => {
