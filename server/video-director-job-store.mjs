@@ -11,7 +11,6 @@ const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..");
 
 const DATABASE_URL = String(process.env.DATABASE_URL || "").trim();
-const NODE_ENV = String(process.env.NODE_ENV || "development");
 const FILE_PATH = String(
   process.env.VIDEO_DIRECTOR_JOB_STORE_FILE ||
   path.join(ROOT, ".video-director", "job-store.json"),
@@ -185,9 +184,6 @@ export const initVideoDirectorJobStore = async () => {
   if (initialized) return;
 
   if (!DATABASE_URL) {
-    if (NODE_ENV === "production") {
-      throw new Error("DATABASE_URL is required for production Video Director job storage.");
-    }
     await ensureFileDb();
     initialized = true;
     return;
