@@ -32,6 +32,7 @@ export const geminiAssetModelRunner: AssetModelRunner = async <TOutput>(
   userText: call.userText,
   responseSchema: call.schema,
   capability: "text",
+  ...(call.tools?.length ? { tools: call.tools } : {}),
   ...(call.mediaAttachments?.length
    ? { mediaAttachments: call.mediaAttachments }
    : {}),
