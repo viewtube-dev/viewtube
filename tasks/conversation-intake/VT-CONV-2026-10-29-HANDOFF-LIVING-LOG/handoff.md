@@ -100,11 +100,11 @@ This is a documentation/workflow capability; do not invent frontend/backend gaps
 
 ## Five best finishing and improvement ideas
 
-1. **Deterministic intake validator:** validate every package against the JSON schema and report missing requirements, evidence and links; extend the existing document-system audit.
-2. **Generated unreconciled-package report:** surface open handoffs and missing dispositions from the existing intake files without creating another task database.
-3. **Branch/PR evidence collector:** capture PR opening head, current head, merge ancestry and post-PR changed paths as evidence in the existing worklog.
-4. **Integration-gap audit:** check each feature's nine maturity axes and flag missing UI, backend, persistence, authorization or runtime proof only where applicable.
-5. **Conversation artifact indexer:** build a link-only index from the existing `documents` collection so agents can find all artifacts without copying them into another registry.
+1. **Deterministic intake validator:** validate every package against the JSON schema and report missing requirements, evidence and links; extend the existing document-system audit. **First step:** inspect the current schema and document audit tests, then list uncovered contract cases.
+2. **Generated unreconciled-package report:** surface open handoffs and missing dispositions from the existing intake files without creating another task database. **First step:** inventory existing intake packages and identify status fields already sufficient to derive the report.
+3. **Branch/PR evidence collector:** capture PR opening head, current head, merge ancestry and post-PR changed paths as evidence in the existing worklog. **First step:** map the current `branchPrReconciliation` schema to available GitHub evidence before proposing any new fields.
+4. **Integration-gap audit:** check each feature's nine maturity axes and flag missing UI, backend, persistence, authorization or runtime proof only where applicable. **First step:** inspect Task Authority's existing maturity definitions and reuse its current evidence vocabulary.
+5. **Conversation artifact indexer:** build a link-only index from the existing `documents` collection so agents can find all artifacts without copying them into another registry. **First step:** inspect the existing `documents` collection and current documentation indexes to determine whether a view can be generated without new storage.
 
 All five remain proposals; route them through the existing Ideas Registry / improvement recommendations before implementation.
 
