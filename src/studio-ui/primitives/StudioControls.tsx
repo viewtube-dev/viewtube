@@ -266,157 +266,8 @@ const studioSkinClass = (skin: StudioControlSkin) => ({
   "white-indicator": "is-white-indicator",
 }[skin]);
 export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", sizeVariant = "standard", type = "button", ...props }) => (
-  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-vt-studio-width="content" data-size={sizeVariant} className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
+  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-size={sizeVariant} className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
 );
-export type StudioChoiceKind = "radio" | "checkbox";
-export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
-const STUDIO_RADIO_MOTIONS = ["build", "orbit", "spiral"] as const
-type StudioRadioMotion = typeof STUDIO_RADIO_MOTIONS[number]
-const StudioRadioMotion: React.FC<{ motion: "build" | "orbit" | "spiral"; direction: "on" | "off"; run: number; checked: boolean; onEmpty: () => void }> = ({ motion, direction, run, checked, onEmpty }) => {
-  const svgRef = React.useRef<SVGSVGElement>(null)
-  const progressRef = React.useRef(0)
-
-  React.useEffect(() => {
-    const svg = svgRef.current
-    if (!svg) return
-
-    const outer = svg.querySelector<SVGCircleElement>(".vt-studio-radio-ring-outer")
-    const middle = svg.querySelector<SVGCircleElement>(".vt-studio-radio-ring-inner")
-    const core = svg.querySelector<SVGCircleElement>(".vt-studio-radio-core")
-    const rings = svg.querySelector<SVGGElement>(".vt-studio-radio-rings")
-    const arms = svg.querySelector<SVGGElement>(".vt-studio-radio-spirals")
-    const spiralA = svg.querySelector<SVGPathElement>(".vt-studio-radio-spiral-a")
-    const spiralB = svg.querySelector<SVGPathElement>(".vt-studio-radio-spiral-b")
-    const solid = svg.querySelector<SVGCircleElement>(".vt-studio-radio-solid")
-    if (!outer || !middle || !core || !rings || !arms || !spiralA || !spiralB || !solid) return
-
-    const ease = (value: number) => 1 - Math.pow(1 - Math.max(0, Math.min(1, value)), 3)
-    const opacity = (element: SVGElement, value: number) => element.setAttribute("opacity", String(Math.max(0, Math.min(1, value))))
-    const scale = (element: SVGElement, value: number) => element.setAttribute("transform", `translate(22 22) scale(${value}) translate(-22 -22)`)
-    const spiralPath = (phase: number) => {
-      let path = ""
-      for (let i = 0; i <= 180; i += 1) {
-        const t = i / 180
-        const radius = 2 + 12.5 * t
-        const angle = phase + t * Math.PI * 2
-        path += (i ? " L " : "M ") + (22 + radius * Math.cos(angle)).toFixed(3) + " " + (22 + radius * Math.sin(angle)).toFixed(3)
-      }
-      return path
-    }
-    spiralA.setAttribute("d", spiralPath(0))
-    spiralB.setAttribute("d", spiralPath(Math.PI))
-    const lengthA = spiralA.getTotalLength()
-    const lengthB = spiralB.getTotalLength()
-    spiralA.setAttribute("stroke-dasharray", String(lengthA))
-    spiralB.setAttribute("stroke-dasharray", String(lengthB))
-
-    const render = (t: number) => {
-      ;[outer, middle, core].forEach(element => {
-        element.removeAttribute("transform")
-        element.removeAttribute("stroke-dasharray")
-        opacity(element, 1)
-      })
-      const merge = ease((t - 0.64) / 0.36)
-      opacity(solid, merge)
-      scale(solid, 0.24 + 0.76 * merge)
-      opacity(rings, motion === "spiral" ? 0 : 1 - merge)
-      opacity(arms, motion === "spiral" ? ease(t / 0.12) * (1 - merge) : 0)
-
-      if (motion === "build") {
-        scale(core, ease(t / 0.22))
-        scale(middle, ease((t - 0.1) / 0.36))
-        scale(outer, ease((t - 0.22) / 0.4))
-        opacity(core, ease(t / 0.15))
-        opacity(middle, ease((t - 0.1) / 0.18))
-        opacity(outer, ease((t - 0.22) / 0.18))
-      } else if (motion === "orbit") {
-        const q = ease(t / 0.78)
-        outer.setAttribute("stroke-dasharray", `${23.17 + 23.17 * q} ${23.17 * (1 - q)}`)
-        middle.setAttribute("stroke-dasharray", `${12.96 + 12.96 * q} ${12.96 * (1 - q)}`)
-        outer.setAttribute("transform", `rotate(${-110 + 220 * q} 22 22)`)
-        middle.setAttribute("transform", `rotate(${110 - 220 * q} 22 22)`)
-        scale(core, ease(t / 0.22))
-        opacity(rings, ease(t / 0.12) * (1 - merge))
-      } else {
-        const q = ease(t / 0.7)
-        spiralA.setAttribute("stroke-dashoffset", String(lengthA * (1 - q)))
-        spiralB.setAttribute("stroke-dashoffset", String(lengthB * (1 - ease((t - 0.05) / 0.65))))
-        arms.setAttribute("transform", `rotate(${-65 + 200 * q} 22 22)`)
-      }
-
-      if (t === 0) {
-        opacity(rings, 0)
-        opacity(arms, 0)
-        opacity(solid, 0)
-      }
-      if (t === 1) {
-        // Match the reference animation: collapse the motion motif into the
-        // selected 75%-diameter indicator, leaving no overlapping rings behind.
-        opacity(rings, 0)
-        opacity(arms, 0)
-        opacity(solid, 1)
-        scale(solid, 1)
-      }
-    }
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
-    if (run === 0) {
-      progressRef.current = checked ? 1 : 0
-      render(progressRef.current)
-      return
-    }
-
-    let frame = 0
-    const target = direction === "on" ? 1 : 0
-    const from = progressRef.current
-    const duration = 1000 * Math.abs(target - from)
-    if (reducedMotion.matches || duration === 0) {
-      progressRef.current = target
-      render(target)
-      if (target === 0) onEmpty()
-      return
-    }
-
-    const start = performance.now()
-    const tick = (now: number) => {
-      const fraction = Math.max(0, Math.min(1, (now - start) / duration))
-      const progress = from + (target - from) * fraction
-      progressRef.current = progress
-      render(progress)
-      if (fraction < 1) frame = requestAnimationFrame(tick)
-      else if (target === 0) onEmpty()
-    }
-    frame = requestAnimationFrame(tick)
-    const onMotionPreferenceChange = (event: MediaQueryListEvent) => {
-      if (!event.matches) return
-      cancelAnimationFrame(frame)
-      progressRef.current = target
-      render(target)
-      if (target === 0) onEmpty()
-    }
-    reducedMotion.addEventListener?.("change", onMotionPreferenceChange)
-    return () => {
-      cancelAnimationFrame(frame)
-      reducedMotion.removeEventListener?.("change", onMotionPreferenceChange)
-    }
-  }, [motion, direction, run, checked, onEmpty])
-
-  return (
-    <svg ref={svgRef} className="vt-studio-radio-motion" viewBox="0 0 44 44" aria-hidden="true">
-      <g className="vt-studio-radio-rings" opacity="0">
-        <circle className="vt-studio-radio-ring vt-studio-radio-ring-outer" cx="22" cy="22" r="14.75" />
-        <circle className="vt-studio-radio-ring vt-studio-radio-ring-inner" cx="22" cy="22" r="8.25" />
-        <circle className="vt-studio-radio-core" cx="22" cy="22" r="3.75" />
-      </g>
-      <g className="vt-studio-radio-spirals" opacity="0">
-        <path className="vt-studio-radio-spiral vt-studio-radio-spiral-a" d="" />
-        <path className="vt-studio-radio-spiral vt-studio-radio-spiral-b" d="" />
-      </g>
-      <circle className="vt-studio-radio-solid" cx="22" cy="22" r="16.5" opacity="0" />
-    </svg>
-  )
-}
-
 export const StudioChoice: React.FC<StudioChoiceProps> = ({
   kind, mark = "check", skin = "solid", checked, className, shape = "round", sizeVariant = "standard",
   type = "button", onClick, disabled, ...props
@@ -450,7 +301,7 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
       type={type}
       role={kind}
       aria-checked={isChecked}
-      data-vt-studio-control="true" data-vt-studio-width="content"
+      data-vt-studio-control="true" 
       data-size={sizeVariant}
       data-radio-motion={kind === "radio" ? radioMotion : undefined}
       data-radio-direction={kind === "radio" ? motionDirection : undefined}
