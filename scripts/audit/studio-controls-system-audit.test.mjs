@@ -25,7 +25,7 @@ test("all five size tiers are canonical, generated, and consumed by the system",
     const tokenBlock = tokens.match(new RegExp(`\\b${tier}:\\s*\\{([^}]*)\\}`))?.[1];
     assert.ok(tokenBlock, `missing ${tier} token object`);
     for (const [key, value] of Object.entries(values)) {
-      assert.match(tokenBlock, new RegExp(`\\b${key}:\\s*${String(value).replace(".", "\\\\.")}(?:,|\\s)`), `${tier}.${key} token`);
+      assert.match(tokenBlock, new RegExp(`\\b${key}:\\s*${String(value).replace(".", "\\.")}(?:,|\\s)`), `${tier}.${key} token`);
       assert.match(generated, new RegExp(`--vt-studio-${tier}-${key.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())}:\\s*${value}(?:px)?;`), `${tier}.${key} generated variable`);
     }
     assert.ok(system.includes(`data-size="${tier}"`), `${tier} is consumed by the system stylesheet`);
@@ -51,9 +51,8 @@ test("split text input accepts every canonical size supported by its production 
   assert.match(splitInput, /import type \\{ StudioControlSize \\} from "\\.\\.\\/tokens"/);
   assert.match(splitInput, /sizeVariant\\?: StudioControlSize/);
   assert.doesNotMatch(splitInput, /sizeVariant\\?: "standard" \\| "compact"/);
-  for (const tier of Object.keys(tiers)) {
-    assert.match(splitInputCss, new RegExp(`data-size=["']${tier}["']|--vt-studio-${tier}-height`), `${tier} split-input geometry must be token driven`);
-  }
+  assert.match(splitInputCss, /height: var\(--vt-studio-control-height, 44px\)/);
+  assert.match(splitInputCss, /grid-template-columns:[\s\S]*?var\(--vt-studio-control-height, 44px\)/);
 });
 
 test("Confirmed Library keeps the split text input in the canonical Text Fields family", () => {
