@@ -2,7 +2,7 @@
   "schemaVersion": "viewtube.conversation-work-log.v1",
   "conversationId": "VT-CONV-DOCS-OS-TASK-INDEX",
   "created": "2026-09-27",
-  "lastEdited": "2026-10-29",
+  "lastEdited": "2026-10-30",
   "sourceHost": "ChatGPT",
   "reviewStatus": "PARTIALLY_RECONCILED",
   "items": [
@@ -478,7 +478,18 @@
         "docs/editor/VIEWTUBE_YOUTUBE_EDITOR_SYSTEM_MASTER_RESOURCE.md",
         "docs/architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md",
         "docs/vault/VAULT_ASSET_WORKBENCH_MASTER.md",
-        "docs/programs/INTEGRATED_APPLICATION.md"
+        "docs/programs/INTEGRATED_APPLICATION.md",
+        "Recovery.md",
+        "docs/recovery/Agent.md",
+        "docs/architecture/VIEWTUBE_WIDGET_DASHBOARD_MASTER_RESOURCE.md",
+        "docs/architecture/toolbox-ui-master-resource/README.md",
+        "docs/README.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".github/copilot-instructions.md",
+        "skills/viewtube-youtube-editor-system/SKILL.md",
+        ".claude/skills/viewtube-youtube-editor-system/SKILL.md",
+        ".codex/skills/viewtube-youtube-editor-system/SKILL.md"
       ],
       "branchPrRefs": [
         "docs/complete-conversation-handoff-log-process-2026-10-30"
