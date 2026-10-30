@@ -486,7 +486,7 @@
       "owner": "Integrated Application Program",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -503,7 +503,7 @@
       "owner": "Integrated Application Program",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -520,7 +520,7 @@
       "owner": "Integrated Application Program",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -537,7 +537,7 @@
       "owner": "Verification",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -554,7 +554,7 @@
       "owner": "Integrated Application Program",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -571,7 +571,7 @@
       "owner": "Verification",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -588,7 +588,7 @@
       "owner": "Verification",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -605,7 +605,7 @@
       "owner": "Integrated Application Program",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -622,7 +622,7 @@
       "owner": "BrainRuntime",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -639,7 +639,7 @@
       "owner": "BrainModelGateway + Creator Operations",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -656,7 +656,7 @@
       "owner": "Diagnostics + Verification",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -673,7 +673,7 @@
       "owner": "Owning capability + Verification",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -690,7 +690,7 @@
       "owner": "Public Channel Resolver",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
@@ -707,7 +707,7 @@
       "owner": "Toolbox UI + Studio Controls",
       "productionDate": "2026-10-29",
       "lastEdited": "2026-10-29",
-      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "lastAuditedMainSha": "61cfb726db9b32de53b9c89a5a339db696782a11",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/DOCUMENTATION.md",
