@@ -139,3 +139,10 @@ test("double-split slider uses the reference interaction-focus lifecycle", () =>
   assert.match(component, /interactionFocus\\?\\.start\\(\\)/);
   assert.match(component, /interactionFocus\\?\\.end\\(\\)/);
 });
+
+
+test("dropdown chevrons read size and stroke directly from all five size-tier tokens", () => {
+  assert.match(dropdown, /size=\\{STUDIO_DROPDOWN_TOKENS\\.chevronSize\\[sizeVariant\\]\\}/);
+  assert.match(dropdown, /strokeWidth=\\{STUDIO_DROPDOWN_TOKENS\\.chevronStroke\\[sizeVariant\\]\\}/);
+  assert.doesNotMatch(dropdown, /chevronSize\\.standard/);
+});
