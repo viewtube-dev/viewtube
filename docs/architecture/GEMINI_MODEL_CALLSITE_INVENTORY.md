@@ -163,6 +163,11 @@ Phase 4 does not claim every caller explicitly annotates capability. Requests wi
 
 ### CI evidence
 
+Run #5408 (before the latest nullable receipt typing correction) was not a Gemini certification run: the source-governance job stopped at the unrelated Studio split-text-input catalog assertion, and therefore did not produce the caller artifact. Repository-wide typecheck also reported multiple unrelated Brain/Studio/test typing failures plus one GenerationWorkflow nullable-idempotency error from this branch; the branch-specific error was corrected afterward. The focused-contracts job reported an unrelated `PublishTransaction.test.ts` undefined `getPublishTransaction` failure (309 passed, 1 failed). Brain quality loop and conversation handoff jobs passed; full suite was cancelled.
+
+A separate `gemini-governance` job now runs the exact PR head independently of those unrelated jobs. It runs the static caller audit, focused key/gateway/creator-asset/provenance/architecture tests, and uploads the JSON inventory. The latest run has not yet completed; do not treat the artifact or tests as passed until the job reports success.
+
+
 The release-gates workflow now runs `test:ai-generation-callers`, generates `audit:ai-generation-callers` from the checked-out commit, and uploads the JSON inventory as an artifact. This is an exact-commit static scan of exports from `src/services/gemini.ts`; it is not by itself proof of runtime reachability or a complete scan of every direct SDK invocation. Review the artifact and architecture guard together before declaring Phase 0 complete.
 
 ### Remaining evidence boundary
