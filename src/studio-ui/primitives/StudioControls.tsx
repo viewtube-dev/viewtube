@@ -1,4 +1,5 @@
 import React from "react"
+import "../../styles/studio-control-restored-primitives.css"
 import { STUDIO_CONTROL_SIZE_CONTRACT, STUDIO_DROPDOWN_TOKENS, STUDIO_FOCUS_INTERACTION_TOKENS, type StudioControlSize, type StudioIconSizeVariant } from "../tokens"
 import { StudioTextInput, StudioInput } from "./StudioTextInput"
 import { StudioTextArea } from "./StudioTextArea"
