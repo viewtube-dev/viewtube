@@ -583,7 +583,7 @@ The matrix test now requires every public Studio value export to have direct JSX
 ## Confirmed library organization contract
 
 - Use one canonical family section for each control family. Put size, skin, orientation, and registered behavior variants inside that family rather than repeating the same controls in standalone duplicate sections.
-- Keep navigation groups stable and ordered: Text Fields, Buttons & Badges, Dropdowns, Controls, Counters & Sliders, Modules & Frames, and Compositions.
+- Keep the six canonical parent groups stable and ordered: Text Fields, Buttons & Badges, Dropdowns, Controls, Modules & Frames, and Compositions. Counters and sliders belong inside Controls; dropdown menus and option rows belong inside Dropdowns.
 - Global Defaults + Exceptions stays a dedicated source-contract section; it is not a primitive specimen family.
 - Compatibility aliases and composition helpers are documented as such and do not create parallel primitive implementations.
 - Keep one canonical owner for each CSS behavior. In particular, empty Bar Toggle segments must preserve the 50% white + 50% primary blend so they remain visible against the background; active segments remain black.
@@ -603,3 +603,17 @@ Selectable split-left, split-right, and double-split buttons swap their label an
 - Bar-toggle rails must not cover the center visualization. The center cell and bars paint above the rails, the outer shell retains its zero-offset secondary focus outline, and the percentage tooltip is hidden at rest and shown only while focus is within the control.
 - Selected split buttons swap as one state: text pane to secondary and rails to primary. Play/Pause follows the same swap; it does not use a 50%-primary intermediate fill.
 - Dropdown menus use the active Toolbox primary/secondary pair tokens. Keep unselected rows white and selected rows secondary; center trigger labels independently of the chevron and use the token-owned horizontal chevron inset.
+
+
+## Confirmed Primitive Library taxonomy enforcement — 2026-10-30
+
+The taxonomy is enforced by `classifyConfirmedCatalogItem` in `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`. Classification is fail-closed: an unrecognized family throws an actionable error naming the specimen and requiring an explicit category rule. There is no implicit Compositions fallback.
+
+- Dropdown triggers, dropdown menu rows, option lists, and menu-state specimens classify as **Dropdowns**, regardless of whether the menu is shown as a standalone specimen.
+- Counters, word counters, sliders, word sliders, switches, radios, checkboxes, and all toggle orientations classify as **Controls**.
+- Text entry/display primitives classify as **Text Fields**; action buttons and badge families classify as **Buttons & Badges**.
+- Structural shells classify as **Modules & Frames**. Assembled experiences and layout compositions classify as **Compositions**.
+- The classifier contract test covers representative examples from every group and asserts that an unregistered family fails instead of silently entering a catch-all group.
+- The catalog renders the defaults contract once, then the six parent groups once each. All primitive specimens—including compatibility exports and composition helpers—enter the same grouping pass.
+
+This is a catalog information-architecture contract. It does not change the visual treatment, public primitive APIs, control tokens, or runtime behavior.
