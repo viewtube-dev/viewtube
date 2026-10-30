@@ -242,7 +242,7 @@ test("catalog labels dropdown and action specimens according to their actual ini
 });
 
 test("word-toggle settings document alternate skins; behavior stays in the production primitive", () => {
-  assert.ok(catalog.includes("Alternate active-handle skins: COLOR SWAP and BLACK."));
+  assert.ok(catalog.includes("Alternate indicator skins include COLOR SWAP, WHITE, and BLACK."));
   assert.ok(!catalog.includes("False selects the first word and true the second; custom words change labels, not the boolean state contract."));
   assert.match(controls, /aria-pressed=\\{value === \\(index === 1\\)\\}/);
   assert.match(controls, /onClick=\\{\\(\\) => onValueChange\\?\\.\\(index === 1\\)\\}/);
@@ -250,7 +250,7 @@ test("word-toggle settings document alternate skins; behavior stays in the produ
 
 test("icon-effect examples are clearly static previews, not live outcome claims", () => {
   const squareStart = catalog.indexOf('<Family title="Square Icon Button · 44px + 28px"');
-  const splitStart = catalog.indexOf('<Family title="Split-left"', squareStart);
+  const splitStart = catalog.indexOf('title="Split-left Button', squareStart);
   const squareFamily = catalog.slice(squareStart, splitStart);
   assert.ok(squareFamily.includes("NOTIFICATION BADGE · STATIC PREVIEW"));
   assert.ok(squareFamily.includes("SUCCESS STATE · STATIC PREVIEW"));
@@ -277,8 +277,8 @@ test("confirmed Square Icon Button family catalogs every interaction effect at s
   assert.match(squareFamily, /44px standard · variants 1–4/);
   assert.match(squareFamily, /28px compact · variants 1–4/);
   assert.match(squareFamily, /StudioSquareIconButton · v1\/v2\/v3\/v4 \+ seven effects/);
-  assert.match(styles, /\.vt-confirmed-square-effect-grid\s*\{[\s\S]*?grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.match(styles, /@media \(max-width: 520px\)\s*\{[\s\S]*?\.vt-confirmed-square-effect-grid\s*\{\s*grid-template-columns: minmax\(0, 1fr\)/);
+  assert.match(styles, /\.vt-confirmed-square-effect-grid\s*\{[^}]*display:\s*flex[^}]*flex-flow:\s*column nowrap/);
+  assert.match(styles, /\.vt-confirmed-square-effect-pair\s*\{[^}]*width:\s*100%/);
   assert.match(controls, /squareIconButtonDefaults:[\s\S]*?rotatedToggle:[\s\S]*?flip:[\s\S]*?tooltip:[\s\S]*?morph:[\s\S]*?success:/);
 });
 
@@ -294,9 +294,13 @@ test("square icon interaction effect specimens use full-width cards rather than 
   assert.match(styles, /\.vt-confirmed-square-effect-pair\s*\{[^}]*width:\s*100%/);
 });
 
-test("confirmed stepper standard and compact specimens share one comparison row", () => {
-  assert.match(catalog, /vt-confirmed-stepper-row[^]*?44px standard · interactive[^]*?size="standard"[^]*?28px compact · interactive[^]*?size="compact"/);
-  assert.match(styles, /\.vt-confirmed-stepper-row-grid\s*\{[^}]*display:\s*flex[^}]*flex-flow:\s*row wrap/);
+test("counter, slider and restored stepper modules show one standard, two compact and four micro specimens", () => {
+  assert.match(catalog, /SizeMatrix label="Counter size examples"/);
+  assert.match(catalog, /SizeMatrix label="Double split slider size examples"/);
+  assert.match(catalog, /SizeMatrix label="Double split word counter size examples"/);
+  assert.match(styles, /\.vt-confirmed-size-matrix__standard\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/);
+  assert.match(styles, /\.vt-confirmed-size-matrix__compact\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /\.vt-confirmed-size-matrix__micro\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\)/);
 });
 
 test("confirmed spectrum tag gallery shows 50 alphabetically sorted production specimens", () => {
@@ -321,7 +325,7 @@ test("alphabetical tag colors interpolate continuously between canonical palette
 test("44px switch/choice controls use the registered rectangular reference radius", () => {
   assert.match(controlStyles, /button\.vt-studio-44-choice\.is-rect\s*\{[^}]*border-radius:\s*7\.333px/s);
   assert.ok(catalog.includes("CHECKMARK CHECKBOX"));
-  assert.ok(catalog.includes("WIDE-X CHECKBOX"));
+  assert.ok(catalog.includes("X CHECKBOX"));
 });
 
 
