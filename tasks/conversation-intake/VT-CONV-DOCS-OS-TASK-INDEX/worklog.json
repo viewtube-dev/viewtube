@@ -387,7 +387,7 @@
       "summary": "Create a cross-agent process for long-thread handoffs and comprehensive conversation work intake.",
       "details": "Current branch adds specification, schemas, workflow, skills, templates, intake workspace and Conversation OS/Documentation wiring.",
       "kind": "WORKFLOW",
-      "conversationState": "STARTED",
+      "conversationState": "PARTIAL",
       "domains": [
         "governance",
         "agents",
