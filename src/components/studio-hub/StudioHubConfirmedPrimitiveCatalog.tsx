@@ -508,7 +508,7 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
   const [microReversed, setMicroReversed] = React.useState(7)
   return (
     <Family
-      title="Studio Counter Family · Double-Side / Side / Left" defaultOpen
+      title="StudioCounter · Supreme + Standard + Compact + Mini + Micro" defaultOpen
       nonDefaultSettings={[
         "Uses button-only increment/decrement rails; no legacy stepper shell or nested numeric field.",
         "Left rail uses the opposite palette; right rail remains primary across size variants.",
