@@ -21,6 +21,10 @@ export interface BrainOutcomeRecord {
  sourceRecordId?: string | null
  /** Shared orchestration identity from the producing operation, when available. */
  operationId?: string | null
+ /** Shared trace identity linking this outcome to diagnostic and operation events. */
+ correlationId?: string | null
+ /** Event identity that directly caused this outcome, when available. */
+ causationId?: string | null
  contextRevision?: number | null
  /** Generation trace and asset identity, when this outcome came from Asset Engine. */
  traceId?: string | null
@@ -85,7 +89,7 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
    // Conflicting identity must not be hidden by returning an older local row.
    const immutableFields = [
     "sourceToolId", "targetToolId", "outcome", "summary", "confidence",
-    "operationId", "contextRevision", "traceId", "assetId", "assetType", "contentBuildId", "projectId",
+    "operationId", "correlationId", "causationId", "contextRevision", "traceId", "assetId", "assetType", "contentBuildId", "projectId",
     "actionPacketId", "workflowId", "recommendationId", "experimentId",
     "publishTransactionId", "approvedSnapshotId", "approvedSnapshotHash",
     "publishedVideoId", "publicationIdentity", "evidence",
@@ -98,7 +102,7 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
     }
    }
    const enrichableFields = [
-    "targetToolId", "operationId", "contextRevision", "traceId", "assetId", "assetType", "contentBuildId", "projectId",
+    "targetToolId", "operationId", "correlationId", "causationId", "contextRevision", "traceId", "assetId", "assetType", "contentBuildId", "projectId",
     "actionPacketId", "workflowId", "recommendationId", "experimentId",
     "publishTransactionId", "approvedSnapshotId", "approvedSnapshotHash",
     "publishedVideoId", "publicationIdentity",
@@ -153,6 +157,8 @@ export const recordBrainOutcome = async (input: Omit<BrainOutcomeRecord, "id" | 
    workflowId: input.workflowId || null,
    sourceRecordId: input.sourceRecordId || null,
    operationId: input.operationId || null,
+   correlationId: input.correlationId || null,
+   causationId: input.causationId || null,
    contextRevision: input.contextRevision ?? null,
    traceId: input.traceId || null,
    assetId: input.assetId || null,
