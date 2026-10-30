@@ -2308,6 +2308,7 @@ function useStudioInteractionFocus(holdMs = STUDIO_FOCUS_INTERACTION_TOKENS.hold
 const useStudioCounterHold = (
   direction: -1 | 1, current: number, min: number, max: number, step: number,
   adjust: (direction: -1 | 1) => void, disabled: boolean,
+  interactionFocus?: ReturnType<typeof useStudioInteractionFocus>,
 ) => {
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentRef = React.useRef(current);
@@ -2319,15 +2320,17 @@ const useStudioCounterHold = (
   const suppressClick = React.useRef(false);
   const [isHolding, setIsHolding] = React.useState(false);
   const stop = React.useCallback(() => {
+    interactionFocus?.end();
     if (timer.current) clearTimeout(timer.current);
     timer.current = null;
     if (held.current) suppressClick.current = true;
     held.current = false;
     setIsHolding(false);
-  }, []);
+  }, [interactionFocus]);
   React.useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   const onPointerDown = React.useCallback((event: React.PointerEvent<HTMLButtonElement>) => {
     if (disabled || (event.pointerType === "mouse" && event.button !== 0)) return;
+    interactionFocus?.start();
     if (timer.current) clearTimeout(timer.current);
     try { event.currentTarget.setPointerCapture(event.pointerId); } catch { /* Embedded webviews may not support pointer capture. */ }
     held.current = false;
@@ -2985,8 +2988,8 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
     const next = Number((base + direction * safeStep).toFixed(precision));
     onValueChange(Math.min(max, Math.max(min, next)));
   }, [max, min, onValueChange, safeStep]);
-  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current <= min);
-  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current >= max);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current <= min, interactionFocus);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current >= max, interactionFocus);
   const progress = validBounds ? ((current - min) / (max - min)) * 100 : 0;
   const rangeStyle = { "--vt-studio-slider-progress": `${progress}%` } as React.CSSProperties;
   const changeValue = (raw: string) => {
