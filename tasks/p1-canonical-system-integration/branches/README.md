@@ -25,3 +25,10 @@ This is a discovery index only, not authoritative PR status. Always query GitHub
 - Harvest unique useful commits/files selectively; record donor SHA and destination.
 - Do not merge stale branches wholesale or create parallel implementations.
 - Create separate implementation branches after scope and task identity are accepted.
+
+
+## Live status refresh — 2026-10-30
+- #1109, #1168, #1169, #1174, #1178 and #1203 are merged.
+- #935, #988 and #992 remain open and non-mergeable. Their file sets overlap across tokens, emitter, generated CSS, field CSS, catalog and tests; harvest only after current-target comparison.
+- Current audited target SHA: `0135fa33bf5cd59503c9feecce4977072ef60fec`.
+- Phase 0 evidence: `../audits/phase-0-reconciliation-2026-10-30.md`.
