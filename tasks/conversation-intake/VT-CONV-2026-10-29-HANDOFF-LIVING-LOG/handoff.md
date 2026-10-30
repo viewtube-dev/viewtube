@@ -27,7 +27,7 @@
 
 ## Unfinished work — single-line checklist
 
-- [ ] `VT-CWI-002` — Complete and land the living-log metadata, update phrase, artifact index and ten-sentence/five-idea template — IN_PROGRESS — PR #1170 is the merged foundation; follow-up PR pending.
+- [ ] `VT-CWI-002` — Complete and land the living-log metadata, update phrase, artifact index and ten-sentence/five-idea template — IN_PROGRESS — PR #1170 is the merged foundation; PR #1177 open.
 - [ ] `VT-CWI-003` — Populate the October 29 originating conversation's individual instruction, artifact and branch/PR registers — IN_PROGRESS — PR #1170 merged; follow-up PR pending.
 - [ ] `VT-CWI-004` — Execute the new contract test, `npm run test:document-system` and `npm run audit:documents` in CI — NOT_STARTED — no passing run yet.
 - [ ] `VT-CWI-005` — Recover the exact source meanings of selected ideas 1, 4, 9, 10, 17 and 18 — BLOCKED — source definitions unavailable; do not guess.
@@ -59,7 +59,7 @@
 The checkbox is checked only when a requirement is VERIFIED_DELIVERED. The status records intermediate delivery stages separately.
 
 - [ ] `REQ-001` — Create a reusable Unfinished Work Living Document Log for oversized conversations without creating a competing task system — Status: PARTIAL — Work: CWI-001 — PR #1170 — Delivery: PRESENT_ON_TARGET — Evidence: https://github.com/viewtube-dev/viewtube/pull/1170
-- [ ] `REQ-002` — Record every distinct user request, correction, constraint and demand as a single-line checkbox with achievement status and PR/commit evidence — Status: IN_PR — Work: CWI-002/CWI-003 — Follow-up PR pending — Delivery: IN_PR — Evidence: this package worklog
+- [ ] `REQ-002` — Record every distinct user request, correction, constraint and demand as a single-line checkbox with achievement status and PR/commit evidence — Status: IN_PR — Work: CWI-002/CWI-003 — PR #1177 — Delivery: IN_PR — Evidence: this package worklog
 - [ ] `REQ-003` — Show conversation date, conversation name, application/product and source application — Status: IN_PR — Work: CWI-002 — Follow-up PR pending — Delivery: IN_PR
 - [ ] `REQ-004` — Link every document and artifact created or materially changed — Status: IN_PR — Work: CWI-002/CWI-003 — Follow-up PR pending — Delivery: IN_PR — Evidence: Documents table above
 - [ ] `REQ-005` — Limit the executive handoff to ten crucial-fact sentences — Status: IN_PR — Work: CWI-002 — Follow-up PR pending — Delivery: IN_PR
@@ -100,7 +100,7 @@ All five remain proposals; route them through the existing Ideas Registry / impr
 
 ## Exact next action
 
-**Action:** Open the follow-up PR from `docs/living-conversation-handoff-log-2026-10-29` and run its dedicated handoff/documentation checks.  
+**Action:** Review PR #1177, resolve any CI findings, and merge after required checks pass.  
 **Reason:** PR #1170 is merged, but the living-log front page and focused verification were not complete.  
 **Expected outcome:** A reusable in-place update contract, populated originating package, and CI evidence.  
 **Canonical owners:** Conversation Handoffs, Conversation OS, Documentation Governance, Verification and existing Ideas Registry.  
@@ -123,3 +123,8 @@ All five remain proposals; route them through the existing Ideas Registry / impr
 - [ ] Document contract, document-system test and audit have passed.
 - [ ] Selected idea references 1, 4, 9, 10, 17 and 18 are resolved from source evidence.
 - [ ] No duplicate task, idea or governance authority was created.
+
+
+## Follow-up PR #1177
+
+The living-log completion is proposed in [PR #1177](https://github.com/viewtube-dev/viewtube/pull/1177), targeting `master/consolidated-feature-integration`. PR head at opening: `da40c647ea637a43a0a97cf6408b360f375223c6`. The first contract-test run failed because an assertion expected different wording than the template; the assertion was corrected in `e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6`. The corrected CI run is pending. Do not mark this follow-up delivered until it is merged and the dedicated checks pass.
