@@ -106,7 +106,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   splitIconRailColor: "secondary (--pair-b) by default; size-tier icon dimensions; centered on both axes",
   badgeTypography: "Inter, font-weight 1000, font-synthesis none; labels centered; no thin-weight inheritance",
   splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
-  globalSizeLattice: "supreme 60px / 3px border / 6px radius / 51.82px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; mini 20px / 1.5px border / 3px radius / 16px type and icon; micro 12px / 1.5px border / 3px radius / 10px type and icon",
+  globalSizeLattice: "supreme 60px / 3px border / 6px radius / 52px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; mini 20px / 1.5px border / 3px radius / 17.5px type and icon; micro 12px / 1.5px border / 3px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
   textContainment: "Global rule for all single-line text-bearing Studio primitives: split-left, split-right, and double-split labels center against the full component outer border box, independent of rail placement; use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls. Multiline textareas are excluded.",
