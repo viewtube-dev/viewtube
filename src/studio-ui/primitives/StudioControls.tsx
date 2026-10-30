@@ -1888,7 +1888,7 @@ export interface StudioSimpleDropdownProps {
   className?: string
   id?: string
   ariaLabel?: string
-  sizeVariant?: "standard" | "compact"
+  sizeVariant?: StudioControlSize
 }
 
 /** Simple single-select child variant of the canonical StudioDropdown family. */
@@ -2135,7 +2135,7 @@ export interface StudioCloseableBadgeProps {
   onClose?: () => void;
   className?: string;
   entering?: boolean;
-  sizeVariant?: "standard" | "compact" | "micro";
+  sizeVariant?: StudioControlSize;
 }
 export const StudioCloseableBadge: React.FC<StudioCloseableBadgeProps> = ({
   label,
