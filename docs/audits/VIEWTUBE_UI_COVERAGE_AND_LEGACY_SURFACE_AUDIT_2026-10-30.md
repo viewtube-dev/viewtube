@@ -610,3 +610,39 @@ Required remediation:
 - Clarified that key validation exists in the global navigation dialog, while the main Settings panel does not surface it.
 - No application source code, key, model, permission, or runtime policy was changed.
 - No tests, typecheck, production build, provider request, or browser runtime tests were executed. This remains source-level verification; F-019 requires a targeted regression test and runtime confirmation.
+
+### F-020 — Gemini generation governance is incomplete for video and misclassifies image/TTS requests
+
+**Severity:** P1 — generation-operation governance and model/modality mismatch  
+**Classification:** BROKEN_WIRING  
+**Confidence:** Confirmed from the canonical client wrapper, model registry, and provider callsites
+
+Evidence:
+- src/services/gemini.ts:getAiClient() wraps models.generateContent and models.generateContentStream with withCanonicalModel, which applies model resolution, generation profiles, bounded fallback, entitlement/usage quoting, and metering.
+- The wrapper's getRequestCapability recognizes thinkingConfig and searches serialized contents for video/audio/image MIME markers. It does not inspect config.imageConfig, config.responseModalities, or config.speechConfig.
+- generateImage() sends a text-only prompt with config.imageConfig but hardcodes gemini-3.1-pro. The model registry declares that model for text/thinking/analysis, not image. Because the request classifier does not inspect imageConfig, the canonical wrapper treats this as text and the resolver can retain the incompatible Pro model instead of selecting the image-capable model.
+- generateVisualImage() does select getActiveModel("image"), but its text-only prompt plus imageConfig is still classified as text, so it receives the text generation profile rather than the image profile.
+- generateSpeech() selects getActiveModel("tts") and sets responseModalities: ["AUDIO"] plus speechConfig. The request classifier does not inspect those fields, and the current model registry's capability policy has no tts modality requirement/default. The operation therefore lacks an explicit, verified TTS model route/profile.
+- generateVideo() and generateVisualVideo() call ai.models.generateVideos() directly. They choose a model through getActiveModel("video"), so the model ID does use the canonical preference resolver, but these calls do not pass through withCanonicalModel, bounded fallback, generation-profile validation, or the content/stream usage-metering wrapper. generateVisualVideo() also bypasses the task queue used by generateVideo().
+- The provider architecture guard scans for models.generateContent and new GoogleGenAI(, but does not assert that generateVideos operations are routed through an operation-governance contract. Both video callsites live inside the allowed provider-owner file, so the current guard cannot detect this gap.
+
+Impact:
+- Image requests can be routed/profiled as text even when the caller explicitly requested image generation.
+- TTS requests have no explicit capability-compatible model policy and are classified as text by the wrapper.
+- Video generation has canonical model preference resolution but bypasses the shared fallback/profile/metering wrapper. This makes its governance weaker than text and streaming generation and can leave operation cost/usage attribution inconsistent.
+- This finding does not assert that all image, audio, or video operations fail at the provider. It identifies missing or misapplied governance before dispatch.
+
+Required remediation:
+- Make modality classification operation-aware: inspect image configuration/output, audio response modalities and speech configuration, audio/video input parts, and the SDK operation being invoked rather than relying only on serialized prompt contents.
+- Add an explicit TTS capability/model policy only after verifying provider-supported model IDs and account availability; do not invent or assume model support.
+- Change generateImage() to resolve the image capability through the canonical registry rather than hardcoding a text-only Pro model.
+- Route video generation through a dedicated canonical operation-governance path that handles capability validation, safe pre-acceptance fallback, queueing, idempotency/operation IDs, usage attribution, and diagnostics. Do not blindly retry an accepted asynchronous video job.
+- Extend the provider architecture guard and add focused tests for text, image, TTS, video, and streaming operations. Verify both requested and actually served model identities and that each billable operation produces exactly one usage receipt.
+
+### Eighth-pass status
+
+- Confirmed the generateContent and streaming wrapper applies canonical model resolution, generation profiles, bounded fallback, and metering.
+- Confirmed image/TTS modality fields are omitted from request-capability classification.
+- Confirmed image generation includes a hardcoded text-only model ID in generateImage(); visual image generation uses the canonical image selection but still receives text classification.
+- Confirmed video generation uses canonical model preference resolution but bypasses the shared content/stream governance wrapper.
+- No application source code was changed and no provider generation was attempted. No tests, typecheck, production build, or browser certification were run.
