@@ -1,7 +1,7 @@
 # ViewTube Documentation Governance
 
 **Production Date:** 2026-09-26  
-**Last Edited:** 2026-09-27  
+**Last Edited:** 2026-10-29  
 **Class:** CONSTITUTION  
 **Status:** ACTIVE  
 **Concern:** documentation authority, lifecycle, consolidation, archive, and knowledge governance  
@@ -159,3 +159,10 @@ Before creating a new plan, workflow, tool/system specification, idea document o
 A new filename is not evidence of a new concern.
 
 When plans overlap, preserve all unique material through a Plan Merge record and keep one survivor.
+
+
+## Conversation handoff and living logs
+
+Long or multi-agent conversations use the existing [Conversation Handoffs specification](CONVERSATION_HANDOFFS.md) and the Conversation & Improvement OS. The handoff package is stored at `tasks/conversation-intake/<conversation-id>/` as `handoff.md`, `worklog.json` and `review.md`. The handoff is the living human-readable continuation log; the worklog is structured provenance; the review records reconciliation and evidence. They are not competing canonical task or idea ledgers.
+
+When a user supplies the existing log link and says **“Update the unfinished work log.”**, update that package in place. Preserve individual instructions, single-line unfinished-work checkboxes, links to all created/changed artifacts, a maximum ten-sentence executive handoff, branch/PR/post-PR evidence and five improvement proposals routed through existing authorities. Task Authority, Ideas Registry and Crown retain their existing ownership boundaries.
