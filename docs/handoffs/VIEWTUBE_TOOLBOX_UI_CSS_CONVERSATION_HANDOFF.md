@@ -1087,3 +1087,93 @@ CURRENT MAIN CODE + TESTS
 ```
 
 That ordering is intentional.
+
+
+---
+
+# 34. Studio Controls consolidation continuation — 2026-10-30
+
+Target branch: `master/consolidated-feature-integration`
+
+Working branch: `studio-controls-system-consolidation-v2`
+
+## Confirmed source contracts
+
+- Five canonical tiers are `supreme`, `standard`, `compact`, `mini`, and `micro`.
+- Mini is 20px high, 1.5px stroke, 3px radius, 17.5px type/icon.
+- Micro retains the simplified 12px / 1px stroke / 2px radius / 10px type geometry.
+- Generated size variables must be emitted from `src/studio-ui/tokens.ts`; hand-edited fallbacks must not become a second authority.
+- Split text input now accepts the shared `StudioControlSize` type rather than a narrowed standard/compact union.
+- Editable input/textarea focus text and glyph stroke must both resolve to black; default text and glyph stroke remain primary.
+- The simple input must not retain a special focused-primary glyph-stroke exception.
+- Text boxes retain black text, a primary inline inset stroke, black outer border, and secondary outline.
+- The Confirmed Library Representatives section is intended to use a single full-width column.
+- Vertical word-toggle handle overrides that forced a fixed 3px inset were removed so the primitive's measured word-bound geometry can own placement.
+- Side-counter and counter number cells retain the 2:1 width/height contract; side-counter remains a separate family rather than nested in the counter family.
+
+## Changes made on the continuation branch
+
+- Added `scripts/audit/studio-controls-system-audit.test.mjs` and wired it into `test:studio-controls`.
+- Corrected the Supreme/Mini size documentation in `StudioControls.tsx`.
+- Corrected focused text stroke color for shared field rules and standalone text inputs.
+- Removed the special simple-input focus rule that held glyph stroke primary while text fill turned black.
+- Added Mini textarea typography coverage.
+- Expanded split text input's size type to the canonical five-tier type.
+- Aligned Micro token values and generated CSS with the 1px / 2px contract; removed a duplicate legacy Micro declaration and corrected remaining fallbacks.
+- Removed competing vertical word-toggle handle inset overrides.
+- Updated representative-module title matching so the full-width layout applies to the Representatives section.
+- Consolidated split text input styling into one canonical stylesheet at `src/styles/studio-split-text-input.css`; the primitive imports it directly, the global entry no longer imports a duplicate, and the duplicate primitive-local stylesheet was deleted.
+- Updated the catalog audit to verify the actual badge-shell + square-rail + primary-inset editable-field contract instead of the stale contradictory primary-border expectation.
+- Corrected the disclosure audit so it tests the actual default state and explicit counter-family expansions rather than mistaking `open={defaultOpen || undefined}` for an always-open panel.
+- Changed catalog family classification to fail closed: unknown items are surfaced in an explicit Unclassified family warning instead of silently falling into Compositions.
+
+Pull request: `https://github.com/viewtube-dev/viewtube/pull/1232` (draft; replaces closed draft PR #1231). The release-gates workflow now runs `npm run test:studio-controls` in the focused-contracts job.
+
+## Required verification still outstanding
+
+The GitHub source-editing workflow did not provide a local checkout or a test runner. Do not report the new tests, generated-token parity, browser behavior, typecheck, or production build as passing until CI executes them.
+
+Next steps:
+1. Run the new audit and the existing Studio Controls suite in CI.
+2. Repair any audit assumptions that do not match actual component exports.
+3. Run browser geometry and interaction tests at all five sizes.
+4. Verify split input typing/focus, field default/focus glyph colors, focus fade timing, counter ratios, toggle handle bounds, bar tooltip visibility, and outer-only double-side focus outline.
+5. Finish the family-module/catalog coverage audit before deleting any obsolete primitive implementation.
+6. Update this handoff with actual test and browser evidence before requesting merge.
+
+
+---
+
+# 35. Studio Controls contract reconciliation and CI follow-up — 2026-10-30
+
+## Additional implementation and contract changes
+
+- Reconciled Micro to the canonical 12px / 1px stroke / 2px radius / 10px type-icon / 0.65px focus-outline bundle. Updated the conflicting parity test and size documentation; Mini remains 20px / 1.5px / 3px / 17.5px.
+- Split-left, split-right, and double-split badge labels now center against the complete outer shell. Rails are explicitly placed in their square grid columns and paint above the full-width label. Split text input is excluded and remains left-aligned/editable.
+- Promoted counter value-area ratio and bar geometry into family tokens: STUDIO_COUNTER_NUMBER_TOKENS.valueAreaAspectRatio and STUDIO_BAR_TOGGLE_TOKENS (height/text 1:1, height/width 2.5:1, 2px radius, 50% white/primary empty fill, black full fill). The emitter generates the variables; system CSS owns the rules.
+- Removed duplicate bar, arrow-stack, and double-side divider/focus geometry from the recovery stylesheet. The canonical system layer now owns those declarations.
+- Counter and Side Counter now have ratio-derived shell widths: value width is 2× the inner control height (outer height minus two border strokes); Counter adds two square rails, Side Counter adds one, and the outer border strokes are added back. The value-area ratio and rail counts are canonical tokens; split-family CSS applies the family width exception after the global row-width default.
+- Confirmed Double Split Word Counter keeps its solid primary face; removed the stale audit expectation for a 50%-white blend. The audit also rejects an arrow-toggle-specific 50% fill override.
+- Removed the duplicate :root size ladder from studio-side-rail-unify.css. Side-counter and side-toggle rails now use the shared inner square rail size (control height minus two border strokes) and the global per-tier icon-stroke token; redundant per-tier SVG/divider overrides were removed.
+- Added static regression checks for measured vertical word-toggle handle bounds, shared horizontal/vertical handle radius and side inset, shared side-arrow implementation, and outer-only double-side focus outline.
+- Updated the three canonical Studio UI documents to remove stale Micro, counter, word-counter, split-input, and catalog-classifier requirements.
+- Audited the requested retired library entries against the current target branch: StudioSearchInput, StudioSelectStandard, StudioChatActionGroup, Chat Action Group, Select Standard, and Designs Compilations are absent from the Confirmed Library and public Studio barrel. No corresponding dedicated implementation files exist to delete. Added a guard test so these entries cannot silently return.
+
+## Latest CI evidence observed
+
+- test:studio-component-grid-css passed.
+- audit:confirmed-catalog passed after the split-input stylesheet and catalog fail-closed repairs.
+- check:src-governance passed in the same run.
+- A production build completed successfully in an earlier run on this branch.
+- The existing focused regression step for counter/dropdown contracts passed after its stale word-counter fill expectation was corrected.
+- test:studio-controls previously exposed a stale Micro parity expectation; the parity audit was updated to 1px / 2px / 0.65px. The latest full release-gates run is required to confirm the complete suite after that change and the additional outer-centering tests.
+- audit:documents remains blocked by pre-existing competing ACTIVE document records for the P1 workstreams (four documents claiming the same execution-packet concern for each of several workstreams). These are outside the Studio Controls change set and need separate document-registry reconciliation.
+
+## Remaining release requirements
+
+1. Confirm the latest test:studio-controls, test:confirmed-library-layout, typecheck, production build, and full suite results.
+2. Run browser measurements at all five sizes for badge label center coordinates, square rails, Counter/Side Counter 2:1 value regions, vertical word-toggle handle bounds, and InterModule full-bleed geometry.
+3. Exercise split text input typing, cursor placement, focus/blur, and text/stroke transitions.
+4. Verify bar tooltip focus visibility, empty/full bar colors, 2.5:1 geometry, and outer-only double-side focus outline.
+5. Complete the public-export-to-family-module coverage check and dependency audit before deleting any retired primitive implementations.
+6. Do not mark this PR merge-ready while release-gates checks remain pending/failing.

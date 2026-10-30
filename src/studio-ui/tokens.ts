@@ -70,14 +70,14 @@ const STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS = {
 } as const
 
 // ─── Five explicit size tiers (global defaults) ──────────────────────────────
-// Supreme matches Standard stroke geometry; Micro matches Mini stroke geometry. All values stay explicit in this canonical token object.
+// Supreme and Standard share structural stroke geometry; Micro retains its compact 1px / 2px footprint. All values stay explicit in this canonical token object.
 
 export const STUDIO_CONTROL_SIZE_BASE = {
   supreme: { height: 60, stroke: 3, radius: 6, fontSize: 52, fontWeight: 1000, textStroke: 1, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 52, iconStroke: 1.9, floatingLabelHeight: 52, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, floatingLabelHeight: 38, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, fontWeight: 1000, textStroke: 0.5, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.3, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.3, iconSize: 24, iconStroke: 2, floatingLabelHeight: 24, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   mini: { height: 20, stroke: 1.5, radius: 3, fontSize: 17.5, fontWeight: 1000, textStroke: 0.4, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.975, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.975, iconSize: 17.5, iconStroke: 1.6, floatingLabelHeight: 17.5, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
-  micro: { height: 12, stroke: 1.5, radius: 3, fontSize: 10, fontWeight: 1000, textStroke: 0.4, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.975, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.975, iconSize: 10, iconStroke: 1.6, floatingLabelHeight: 10, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  micro: { height: 12, stroke: 1, radius: 2, fontSize: 10, fontWeight: 1000, textStroke: 0.4, width: "row" as const, textTransform: "uppercase" as const, letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.65, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.65, iconSize: 10, iconStroke: 1.5, floatingLabelHeight: 10, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
 } as const
 
 export type StudioControlSize = keyof typeof STUDIO_CONTROL_SIZE_BASE
@@ -182,6 +182,16 @@ export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   outlineOffsetPx: 0,
 } as const
 
+// ─── Bar toggle family geometry and value colors ──────────────────────────────
+
+export const STUDIO_BAR_TOGGLE_TOKENS = {
+  heightToTextRatio: 1,
+  heightToWidthRatio: 2.5,
+  radius: 2,
+  emptyWhiteMixPercent: 50,
+  fullFillColor: "#000000",
+} as const
+
 export const STUDIO_STEPPER_BUTTON_TOKENS = {
   chevronSize: { supreme: 42, standard: 36, compact: 24, mini: 16, micro: 12 },
   chevronStroke: { supreme: 3.75, standard: 2.5, compact: 3, mini: 2.5, micro: 2.25 },
@@ -194,6 +204,9 @@ export const STUDIO_STEPPER_BUTTON_TOKENS = {
 } as const
 
 export const STUDIO_COUNTER_NUMBER_TOKENS = {
+  valueAreaAspectRatio: 2,
+  doubleSplitRailCount: 2,
+  sideRailCount: 1,
   defaultWhiteMixPercent: STUDIO_FOCUS_INTERACTION_TOKENS.restTextMixPercent,
   defaultStrokeColor: "same as default fill" as const,
   activeTextColor: STUDIO_FOCUS_INTERACTION_TOKENS.activeTextColor,

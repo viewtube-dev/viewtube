@@ -36,11 +36,12 @@
   --vt-studio-control-line-height: 1;
   --vt-studio-textarea-line-height: .85;
   
+  --vt-studio-control-outline-stroke: calc(var(--vt-studio-control-stroke, 3px) * 0.5);
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
-  --vt-studio-control-focus-outline-width: 1.95px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-standard-focus-outline-width, 1.95px);
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: 1.95px;
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-standard-secondary-outline-width, 1.95px);
   --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
   --vt-studio-control-icon-stroke: var(--vt-studio-standard-icon-stroke, 1.9);
   --vt-studio-control-accent: var(--pair-a, #36e0f6);
@@ -79,10 +80,9 @@
   --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px);
   --vt-studio-control-font-weight: var(--vt-studio-compact-font-weight, 1000);
   
-  --vt-studio-control-outline-stroke: 1px;
-  --vt-studio-control-focus-outline-width: 1.3px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-compact-focus-outline-width, 1.3px);
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: 1.3px;
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-compact-secondary-outline-width, 1.3px);
   --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px);
   --vt-studio-control-icon-stroke: var(--vt-studio-compact-icon-stroke, 2.0);
 }
@@ -94,10 +94,9 @@
   --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
   --vt-studio-control-font-weight: var(--vt-studio-standard-font-weight, 1000);
   
-  --vt-studio-control-outline-stroke: 1.5px;
-  --vt-studio-control-focus-outline-width: 1.95px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-standard-focus-outline-width, 1.95px);
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: 1.95px;
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-standard-secondary-outline-width, 1.95px);
   --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
   --vt-studio-control-icon-stroke: var(--vt-studio-standard-icon-stroke, 1.9);
 }
@@ -109,7 +108,6 @@
   --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
   --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
   --vt-studio-control-font-weight: var(--vt-studio-mini-font-weight, 1000);
-  --vt-studio-control-outline-stroke: .75px;
   --vt-studio-control-focus-outline-width: var(--vt-studio-mini-focus-outline-width, 0.975px);
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: var(--vt-studio-mini-secondary-outline-width, 0.975px);
@@ -118,17 +116,17 @@
 }
 [data-vt-studio-control][data-size="micro"] {
   --vt-field-text-stroke-width: var(--vt-studio-micro-text-stroke, 0.4px);
-  --vt-studio-control-focus-outline-width: var(--vt-studio-micro-focus-outline-width, 0.975px);
+  --vt-studio-control-focus-outline-width: var(--vt-studio-micro-focus-outline-width, 0.65px);
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: var(--vt-studio-micro-secondary-outline-width, 0.975px);
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-micro-secondary-outline-width, 0.65px);
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
   --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
   --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000);
   --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, 0.4px);
   --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
-  --vt-studio-control-icon-stroke: var(--vt-studio-micro-icon-stroke, 1.6);
+  --vt-studio-control-icon-stroke: var(--vt-studio-micro-icon-stroke, 1.5);
 }
 
 /* Compatibility controls consume the same inherited SubToolbox pair as
@@ -419,7 +417,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-floating-field[data-size="micro"] {
   --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);
-  --vt-studio-control-focus-outline-width: var(--vt-studio-micro-focus-outline-width, 0.975px);
+  --vt-studio-control-focus-outline-width: var(--vt-studio-micro-focus-outline-width, 0.65px);
 }
 .vt-studio-floating-field > [data-vt-studio-control="true"] {
   display: block;
@@ -677,7 +675,6 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-44-height: 44px; --vt-studio-44-stroke: 3px; --vt-studio-44-radius: 6px; --vt-studio-44-font-size: 38px; --vt-studio-44-font-weight: 1000;
    
   --vt-studio-28-height: 28px; --vt-studio-28-stroke: 2px; --vt-studio-28-radius: 4px; --vt-studio-28-font-size: 24px; --vt-studio-28-font-weight: 1000;
-  --vt-studio-micro-height: 12px; --vt-studio-micro-stroke: 1px; --vt-studio-micro-radius: 2px; --vt-studio-micro-font-size: 10px; --vt-studio-micro-font-weight: 1000; --vt-studio-micro-icon-size: 10px; --vt-studio-micro-icon-stroke: 1.5;
    
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-font-weight: 1000; --vt-studio-control-text-transform: uppercase;
@@ -3136,7 +3133,7 @@ no shell shadows{
 .vt-studio-double-split-badge[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-font-weight: var(--vt-studio-compact-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px); --vt-studio-control-text-stroke: var(--vt-studio-compact-text-stroke, .5px); }
 .vt-studio-split-left-badge[data-size="micro"],
 .vt-studio-split-right-badge[data-size="micro"],
-.vt-studio-double-split-badge[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, 0.4px); }
+.vt-studio-double-split-badge[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, 0.4px); }
 .vt-studio-split-left-badge[data-size="compact"] > [data-vt-studio-split-label], .vt-studio-split-right-badge[data-size="compact"] > [data-vt-studio-split-label], .vt-studio-double-split-badge[data-size="compact"] > [data-vt-studio-split-label] { padding-inline: 8px; }
 .vt-studio-split-left-badge[data-size="micro"] > [data-vt-studio-split-label], .vt-studio-split-right-badge[data-size="micro"] > [data-vt-studio-split-label], .vt-studio-double-split-badge[data-size="micro"] > [data-vt-studio-split-label] { padding-inline: 2px; }
 .vt-studio-split-left-badge,
@@ -3430,13 +3427,12 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-counter,
 .vt-studio-side-counter,
 .vt-studio-left-counter {
-  display: grid;
-  width: 100%;
+  display: flex;
+  width: max-content;
   min-width: 0;
   max-width: none;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   box-sizing: border-box;
-  grid-template-rows: minmax(0, 1fr);
   height: var(--vt-studio-control-height, 44px);
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
@@ -3459,8 +3455,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter[data-size="micro"],
 .vt-studio-left-counter[data-size="micro"] {
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
 }
 .vt-studio-counter [data-vt-studio-split-rail],
 .vt-studio-side-counter [data-vt-studio-split-rail],
@@ -3932,8 +3928,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-double-split-slider[data-size="micro"] {
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
   --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
 }
 .vt-studio-double-split-slider[data-size="micro"] .vt-studio-double-split-slider__reset {
@@ -5417,7 +5413,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-value-toggle[data-size="supreme"] { min-height: var(--vt-studio-supreme-height, 60px); }
 .vt-studio-value-toggle[data-size="standard"] { min-height: var(--vt-studio-standard-height, 44px); }
 .vt-studio-value-toggle[data-size="compact"] { min-height: 28px; font-size: var(--vt-studio-compact-font-size, 24px); border-width: var(--vt-studio-compact-stroke, 2px); border-radius: var(--vt-studio-compact-radius, 4px); }
-.vt-studio-value-toggle[data-size="micro"] { min-height: var(--vt-studio-micro-height, 12px); font-size: var(--vt-studio-micro-font-size, 10px); border-width: var(--vt-studio-micro-stroke, 1.5px); border-radius: var(--vt-studio-micro-radius, 3px); }
+.vt-studio-value-toggle[data-size="micro"] { min-height: var(--vt-studio-micro-height, 12px); font-size: var(--vt-studio-micro-font-size, 10px); border-width: var(--vt-studio-micro-stroke, 1px); border-radius: var(--vt-studio-micro-radius, 2px); }
 .vt-studio-value-toggle__face { display: flex; align-items: center; justify-content: center; flex: 1 1 auto; min-width: 0; padding: 0 4px; overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1; color: var(--vt-toggle-text); }
 .vt-studio-value-toggle__arrow { display: grid; place-items: center; flex: 0 0 auto; padding: 0; border: 0; border-radius: 0; color: var(--vt-toggle-icon); background: var(--vt-toggle-icon-fill); cursor: pointer; }
 .vt-studio-value-toggle__arrow:disabled { opacity: .35; cursor: not-allowed; }
@@ -5541,7 +5537,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 /* Double Side Toggle owns one perimeter; propagate the same size tokens into both nested shells. */
 .vt-studio-value-toggle--double[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px); }
 .vt-studio-value-toggle--double[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px); }
-.vt-studio-value-toggle--double[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); }
+.vt-studio-value-toggle--double[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); }
 .vt-studio-value-toggle--double .vt-studio-value-toggle__double-side > .vt-studio-split-shell { height: 100%; min-height: 100%; font-size: var(--vt-studio-control-font-size); }
 .vt-studio-value-toggle--double[data-variant="v2"] .vt-studio-value-toggle__divider { display: none; }
 
@@ -5908,8 +5904,8 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
 
 .vt-studio-square-icon-button-group[data-size="micro"] {
   --vt-icon-group-size: var(--vt-studio-micro-height, 12px);
-  --vt-icon-group-stroke: var(--vt-studio-micro-stroke, 1.5px);
-  --vt-icon-group-radius: var(--vt-studio-micro-radius, 3px);
+  --vt-icon-group-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-icon-group-radius: var(--vt-studio-micro-radius, 2px);
 }
 
 .vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"],
@@ -6235,7 +6231,7 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
    Keep character fill and glyph stroke sourced from the same state token. */
 [data-vt-studio-control] {
   --vt-field-text-stroke: var(--vt-field-text);
-  --vt-field-text-stroke-focus: var(--vt-field-primary);
+  --vt-field-text-stroke-focus: #000;
   --vt-studio-control-text-transition: var(--vt-studio-focus-outline-fade-ms, 500ms);
 }
 [data-vt-studio-control]:is(input, textarea, select) {
@@ -6301,13 +6297,6 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
   outline: 0;
   box-shadow: none;
 }
-.vt-studio-vertical-word-toggle__handle {
-  box-sizing: border-box;
-  top: var(--vt-studio-vertical-word-handle-inset, 3px);
-  bottom: var(--vt-studio-vertical-word-handle-inset, 3px);
-  height: auto;
-  border-radius: var(--vt-studio-vertical-word-handle-radius, var(--vt-studio-control-radius, 6px));
-}
 
 input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus,:focus-visible),textarea[data-vt-studio-control="true"]:is(:focus,:focus-visible){color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke-color:#000;caret-color:var(--vt-field-primary);box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary);outline:var(--vt-field-focus-outline);outline-offset:0}
 .vt-studio-text-box,[data-vt-studio-field-kind="textarea-display"],[data-vt-studio-field-kind="text-box"]{color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke-color:#000;box-shadow:inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-primary);outline:var(--vt-field-focus-outline);outline-offset:0}
@@ -6318,30 +6307,57 @@ input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):
 .vt-studio-split-shell__label,[data-vt-studio-split-label]{box-sizing:border-box;display:flex;flex:1 1 auto;align-items:center;justify-content:center;min-width:0;height:100%;padding:0 4px;overflow:hidden;white-space:nowrap;text-overflow:clip;font-size:var(--vt-studio-control-font-size);font-weight:1000;line-height:1;letter-spacing:-.02em;text-transform:uppercase;color:#000;-webkit-text-stroke:var(--vt-studio-control-text-stroke) currentColor}
 .vt-studio-split-shell__rail,.vt-studio-split-shell__label{align-self:stretch}
 .vt-studio-value-toggle__bars{display:flex;flex:1 1 auto;align-items:center;justify-content:center;gap:4px;width:100%;height:100%;padding:4px;box-sizing:border-box}
-.vt-studio-value-toggle__bar{display:block;flex:0 0 auto;box-sizing:border-box;width:max(6px,calc(var(--vt-studio-control-font-size,38px)*.28));height:max(14px,calc(var(--vt-studio-control-font-size,38px)*.72));border-radius:2px;border:2px solid #000;background:color-mix(in srgb,#fff 75%,var(--vt-studio-control-accent,var(--pair-a,#36e0f6)));pointer-events:none}
-.vt-studio-value-toggle__bar[data-active="true"]{background:#000;border-color:#000}
-.vt-studio-vertical-word-toggle__handle,.vt-studio-vertical-word-toggle .vt-studio-word-toggle__handle{box-sizing:border-box;position:absolute;inset:3px;border-radius:calc(var(--vt-studio-control-radius) - 1px)}
+.vt-studio-value-toggle__bar{display:block;flex:0 0 auto;box-sizing:border-box;width:calc(var(--vt-studio-control-font-size,38px)*var(--vt-studio-bar-height-to-text-ratio,1)/var(--vt-studio-bar-height-to-width-ratio,2.5));height:calc(var(--vt-studio-control-font-size,38px)*var(--vt-studio-bar-height-to-text-ratio,1));aspect-ratio:1/var(--vt-studio-bar-height-to-width-ratio,2.5);border-radius:var(--vt-studio-bar-radius,2px);border:0;background:color-mix(in srgb,#fff var(--vt-studio-bar-empty-white-mix,50%),var(--vt-studio-control-accent,var(--pair-a,#36e0f6)));pointer-events:none}
+.vt-studio-value-toggle__bar[data-active="true"]{background:var(--vt-studio-bar-full-fill,#000);border-color:var(--vt-studio-bar-full-fill,#000)}
 .vt-studio-value-toggle__arrow-stack{position:relative;display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);width:100%;height:100%}
 .vt-studio-value-toggle__arrow-stack::after{content:"";position:absolute;z-index:2;left:0;right:0;top:50%;transform:translateY(-50%);height:var(--vt-studio-control-stroke,3px);background:#000;pointer-events:none;box-shadow:none;border:0;margin:0}
 .vt-studio-value-toggle--double .vt-studio-value-toggle__divider{position:absolute;z-index:3;top:0;bottom:0;left:50%;width:var(--vt-studio-control-stroke);transform:translateX(-50%);background:#000;pointer-events:none;outline:none!important;box-shadow:none!important}
 .vt-studio-value-toggle--double:focus-within{outline:var(--vt-studio-control-focus-outline-width) solid var(--vt-studio-control-secondary,var(--pair-b));outline-offset:0}
-.vt-studio-counter__value,[data-vt-studio-counter-value]{aspect-ratio:2/1;flex:1 1 auto;min-width:0}
+.vt-studio-counter__value,[data-vt-studio-counter-value]{aspect-ratio:var(--vt-studio-counter-value-area-aspect-ratio,2/1);flex:1 1 auto;min-width:0}
 /* Intermodule host: zero horizontal padding so horizontal rules meet host vertical borders.
    Rails stay perfectly square (inner face height = face - 2*stroke). */
-[data-vt-studio-inter-host="true"] {
+[data-vt-studio-inter-host="true"],
+.vt-confirmed-intermodule-host,
+.vt-confirmed-variant [data-vt-studio-inter-host="true"] {
   padding-left: 0;
   padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
 }
-.vt-studio-inter-module {
+.vt-studio-inter-module,
+.vt-studio-intermodule,
+[data-vt-studio-intermodule="true"],
+[data-vt-studio-inter-module="true"] {
+  box-sizing: border-box;
   width: 100%;
+  min-width: 0;
+  max-width: none;
+  grid-column: 1 / -1;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
   border-left: 0;
   border-right: 0;
 }
 .vt-studio-inter-module__rail {
-  width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
-  min-width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
-  max-width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  box-sizing: border-box;
+  width: var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
+  min-width: var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
+  max-width: var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
+  height: var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
+  min-height: var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
+  max-height: var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
+  flex: 0 0 var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
   aspect-ratio: 1 / 1;
+}
+.vt-studio-inter-module__head {
+  display: grid;
+  gap: 0;
+  grid-template-columns:
+    var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))))
+    minmax(0, 1fr)
+    var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
 }
 
 /* Collapsed modules: single bottom border only (outer shell).
@@ -6368,37 +6384,6 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collap
    The collapsed state above removes this line so only the outer bottom border remains. */
 .vt-studio-collapsing-split-module[open] > .vt-studio-collapsing-split-module__head {
   border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
-}
-
-/* Intermodule: eliminate any residual host/body inset so rails flush to outer vertical borders. */
-[data-vt-studio-inter-host="true"],
-.vt-confirmed-intermodule-host,
-.vt-confirmed-variant [data-vt-studio-inter-host="true"] {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-.vt-studio-inter-module,
-.vt-studio-inter-module__head {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-/* Rails use full face height so they are square to the outer chrome and flush to host edges. */
-.vt-studio-inter-module__rail {
-  width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
-  min-width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
-  max-width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
-  aspect-ratio: 1 / 1;
-  height: 100%;
-}
-.vt-studio-inter-module__head {
-  grid-template-columns:
-    var(--vt-im-face, var(--vt-studio-control-height, 44px))
-    minmax(0, 1fr)
-    var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
 }
 
 /* Content-width exemptions: switches, radios, checkboxes, word toggles are content-sized, not row-fill. */
@@ -7202,3 +7187,37 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
 button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-split-rail] {
   background: var(--vt-studio-control-accent, var(--pair-a));
 }
+
+/* Split badge labels center against the complete outer shell, not the remaining grid cell.
+   This keeps left, right, and double-split labels on the same vertical center axis.
+   Editable split-text inputs are deliberately excluded and keep their start-aligned cursor. */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  position: relative;
+}
+.vt-studio-split-left-badge:not(.vt-studio-split-text-input .vt-studio-split-left-badge) > .vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge:not(.vt-studio-split-text-input .vt-studio-split-right-badge) > .vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge:not(.vt-studio-split-text-input .vt-studio-double-split-badge) > .vt-studio-double-split-badge__label {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  pointer-events: none;
+}
+.vt-studio-split-left-badge > .vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge > .vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge > .vt-studio-double-split-badge__rail {
+  position: relative;
+  z-index: 2;
+}
+.vt-studio-split-right-badge > .vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge > .vt-studio-double-split-badge__rail:last-child { margin-left: auto; }
+

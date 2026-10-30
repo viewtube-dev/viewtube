@@ -15,7 +15,7 @@ The Confirmed Primitive Library is a production-component specimen and provenanc
 
 **NON-DEFAULT SETTINGS** must list only true departures from shared defaults. Do not repeat the 44px/28px lattice, global typography, ordinary selected/disabled behavior, or generic interaction rules under every family. Keep family-specific anatomy, real variants, and registered exceptions; put global contracts in the defaults strip and this index.
 
-The canonical five-tier ladder is Supreme (60px), Standard (44px), Compact (28px), Mini (20px), and Micro (12px). Mini uses 1.5px stroke, 3px radius, and 17.5px type/icons. Micro keeps 12px height and 10px type/icons while inheriting Mini's 1.5px stroke, 3px radius, 0.975px outline, and global `-0.02em` letter-spacing. TypeScript tokens are the only sizing authority; generated CSS is emitted from tokens and `studio-control-system.css` consumes it.
+The canonical five-tier ladder is Supreme (60px), Standard (44px), Compact (28px), Mini (20px), and Micro (12px). Mini uses 1.5px stroke, 3px radius, and 17.5px type/icons. Micro keeps 12px height / 1px stroke / 2px radius / 10px type-icons / 0.65px outline and global `-0.02em` letter-spacing. TypeScript tokens are the only sizing authority; generated CSS is emitted from tokens and `studio-control-system.css` consumes it.
 
 A family is **source-confirmed** only when its specimen uses the production export, provenance identifies TSX/CSS/tokens/import paths, exception notes are concise, and source/API regression tests cover the public contract. Full visual certification additionally requires computed-style/browser evidence for standard, compact, and applicable exception sizes. The word “confirmed” alone is not proof that visual regression passed.
 
@@ -61,7 +61,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 ## 2. Size-based global defaults
 
-The intended size contract is Supreme (60px / 3px / 6px / 52px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1.5px / 3px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro reuses the Mini stroke/radius system. Global line-height `1` remains the single-line default; textarea uses the explicit multiline exception `0.85`.
+The intended size contract is Supreme (60px / 3px / 6px / 52px), Standard (44px / 3px / 6px / 38px), Compact (28px / 2px / 4px / 24px), Mini (20px / 1.5px / 3px / 17.5px), and Micro (12px / 1px / 2px / 10px), expressed as height / border stroke / radius / type size. Supreme deliberately reuses the Standard stroke/radius system; Micro has its explicit 1px / 2px stroke/radius system. Global line-height `1` remains the single-line default; textarea uses the explicit multiline exception `0.85`.
 
 | Property | Supreme | Standard | Compact | Mini | Micro |
 |---|---:|---:|---:|---:|
@@ -139,9 +139,9 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Focus fill: primary color at 15% opacity.
 - Focus text and inline text stroke: black (`#000000`), matching one another.
 - Focus caret: primary color (`--pair-a`), not black.
-- Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px standard / 1.3px compact / 0.975px Mini and Micro), outline offset 0.
+- Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px standard / 1.3px compact / 0.975px Mini and 0.65px Micro), outline offset 0.
 - Focus must not shift layout. Do not add a gap between the field and its focus outline.
-- Micro inherits Mini's 0.975px outline (65% of the 1.5px stroke). All controls and floating-field wrappers consume the same tier token; no Micro-specific override is permitted.
+- Micro uses its 0.65px outline (65% of its 1px stroke). All controls and floating-field wrappers consume the same tier token; no Micro-specific override is permitted.
 
 ### Multiline textarea (registered typography exception)
 
@@ -213,7 +213,7 @@ The split-left button, split-left/right/double badges, and username composite in
 
 ### Stabilized defaults
 
-- Supreme / standard / compact / mini / micro face geometry: 60px / 44px / 28px / 20px / 12px; border: 3px / 3px / 2px / 1.5px / 1.5px; radius: 6px / 6px / 4px / 3px / 3px; typography and icon: 52px / 38px / 24px / 17.5px / 10px.
+- Supreme / standard / compact / mini / micro face geometry: 60px / 44px / 28px / 20px / 12px; border: 3px / 3px / 2px / 1.5px / 1px; radius: 6px / 6px / 4px / 3px / 2px; typography and icon: 52px / 38px / 24px / 17.5px / 10px.
 - Inter-component gap remains 4px for all tiers; micro is an explicit 12px tier and is not derived by halving Compact.
 - Studio shells are flat: no shadow, hover/press transform, or geometry-moving transition.
 - Both rails in a double split use the secondary color role.
@@ -235,7 +235,7 @@ Visual verification is still required in the running app for supreme/standard/co
 ## Vertical Studio word toggle — registered height exception
 
 - Canonical primitive: `StudioVerticalWordToggle` in `src/studio-ui/primitives/StudioControls.tsx`; CSS owner: `src/styles/studio-control-system.css`; live specimens: `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`.
-- The two stacked word faces create a content-driven height. This is the sole size-lattice exception: standard typography/stroke/radius tokens remain 38px / 3px / 6px, compact remains 24px / 2px / 4px, and Micro uses 10px type with the shared Mini 1.5px / 3px stroke/radius system. The resulting overall height is content-driven and is not forced to the 60px / 44px / 28px / 12px lattice.
+- The two stacked word faces create a content-driven height. This is the sole size-lattice exception: standard typography/stroke/radius tokens remain 38px / 3px / 6px, compact remains 24px / 2px / 4px, and Micro uses 10px type with its explicit 1px / 2px stroke/radius system. The resulting overall height is content-driven and is not forced to the 60px / 44px / 28px / 12px lattice.
 - Four variants: primary/secondary pair; black fill with the inactive word colored to match the handle color at the start of the last transition and the active word black on the colored handle; primary fill/border with secondary text and a white handle; white fill/border with a black handle and inverse text.
 - Word colors change quickly at the beginning of the handle animation; the handle expands vertically, releases to the other word, and uses a vertical color wipe on alternating transitions. Reduced-motion settles immediately.
 - Catalog layout: standard two per row; compact three per row; a 2×2 micro matrix occupies the remaining two cells at the end of compact row two. Every specimen has independent state.
@@ -276,7 +276,7 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 |---|---|---|---|
 | Supreme | 60px height; Standard stroke/radius system (3px / 6px); 52px type/icon | TypeScript tokens and recovery CSS agree on 3px / 6px | Source-aligned; browser verification outstanding |
 | Mini type/icon | 20px height; 1.5px / 3px geometry; 17.5px type/icon | Token and generated CSS align; duplicate tier declarations removed from core/recovery | Source aligned; runtime verification outstanding |
-| Micro | 12px; Mini stroke/radius system (1.5px / 3px); 10px type/icon; 0.975px outline; `-0.02em` letter-spacing | Tokens, generated CSS, and system selector align | Source aligned; runtime verification outstanding |
+| Micro | 12px; 1px stroke / 2px radius; 10px type/icon; 0.65px outline; `-0.02em` letter-spacing | Tokens, generated CSS, and system selector align | Source aligned; runtime verification outstanding |
 | Micro letter spacing | Shared `-0.02em` | TypeScript token matches the global contract | Source aligned; runtime verification outstanding |
 | Editable field inset | Primary inset persists at rest and focus; focus changes text/glyph to black | Shared field rules own editable text/stroke/color/caret; recovery field rules preserve the standard inset; split input owns its shell border and gradient inset in `studio-split-text-input.css` and routes focus through its shell | Source aligned; computed-style/browser verification outstanding |
 | TextBox | Black text/glyph; primary inset; secondary outline | Recovery CSS declares black text/glyph, primary inset, secondary outline | Source-aligned; browser verification outstanding |
@@ -312,13 +312,13 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 
 ## Simplification ownership rule — 2026-10-27
 
-The token source in `src/studio-ui/tokens.ts` is authoritative. The emitter must derive tier values from that source; generated CSS is never hand-edited. Shared tier aliases and global shell defaults must have one CSS owner, while field appearance, split anatomy, and accordion motion remain in their family sheets. Do not remove recovery/parity styles until their required selectors have been migrated and covered by ownership tests. Preserve Mini's 17.5px type/icons and Micro's Mini-matched stroke/radius/outline (1.5px / 3px / 0.975px). Global letter-spacing remains `-0.02em`; field defaults retain the black outer border, primary inset stroke, primary caret, and black focused text/glyph stroke with secondary zero-offset outline.
+The token source in `src/studio-ui/tokens.ts` is authoritative. The emitter must derive tier values from that source; generated CSS is never hand-edited. Shared tier aliases and global shell defaults must have one CSS owner, while field appearance, split anatomy, and accordion motion remain in their family sheets. Do not remove recovery/parity styles until their required selectors have been migrated and covered by ownership tests. Preserve Mini's 17.5px type/icons and Micro's explicit 1px stroke / 2px radius / 0.65px outline. Global letter-spacing remains `-0.02em`; field defaults retain the black outer border, primary inset stroke, primary caret, and black focused text/glyph stroke with secondary zero-offset outline.
 
 ## Studio counter, split-selection, and bar-toggle refinements — 2026-10-29
 
 - **StudioCounter controls:** the standard double-split counter uses the same left/right chevron glyphs as StudioBarToggle. Hold-repeat, min/max bounds, keyboard activation, and the existing split-shell rails remain unchanged.
-- **Word-counter defaults:** `StudioLeftWordCounter` retains its registered primary value-pane treatment and shared 50%-white / 50%-primary resting numeral token (`--vt-studio-number-rest-color`). `StudioDoubleSplitWordCounter` uses the same 50%-white / 50%-primary value-pane fill and primary numeral color/stroke at rest; interaction focus switches its numeral fill/stroke to black. The opt-in color-cycle variant remains an explicit exception.
-- **All counter widths:** `StudioCounter`, `StudioSideCounter`, `StudioLeftCounter`, `StudioLeftWordCounter`, and `StudioDoubleSplitWordCounter` inherit the global full-row width default. Split rails remain square to the selected size tier; no counter primitive may set a fixed total width or a 2:1 value-area ratio.
+- **Word-counter defaults:** `StudioLeftWordCounter` retains its registered primary value-pane treatment and shared 50%-white / 50%-primary resting numeral token (`--vt-studio-number-rest-color`). `StudioDoubleSplitWordCounter` uses its solid primary value-pane fill and primary numeral color/stroke at rest; remove catalog/recovery overrides that introduce an unintended 50%-primary blend. Interaction focus switches its numeral fill/stroke to black. The opt-in color-cycle variant remains an explicit exception.
+- **All counter widths:** `StudioCounter` and `StudioSideCounter` retain a 2:1 width-to-height number-value area as a registered family geometry exception; their action rails remain square to the selected size tier. Other counter/word-counter families retain their own documented production geometry and must not receive an accidental fixed-width override.
 - **Selectable split buttons:** the label/text pane and rail exchange semantic pair fills on selection. Resting label = primary and rail = secondary; selected label = secondary and rail = primary. This applies consistently to split-left, split-right, and double-split buttons without changing their shared geometry or dividers.
 - **StudioBarToggle:** the bar track occupies only the flexible center cell between the square rails and paints above the rails without being clipped. Its focus outline uses the shared zero-offset secondary outline at 65% of the control stroke. The rightmost filled bar carries a compact, no-stroke secondary-fill / black-text percentage tooltip only while the control is focused; the displayed value is rounded to the nearest whole percent.
 
@@ -334,3 +334,20 @@ All canonical Studio single-select dropdown variants (standard, simple, and spli
 - Unselected rows are white. Selected rows are secondary fill with black text. Hover/focus does not replace the selected/unselected palette contract. Menu and selected-row colors resolve through the active primary/secondary Toolbox pair; do not embed fallback pair hex values.
 - Trigger labels are centered independently of the trailing chevron. Split-left labels center within the full text pane, and the trailing chevron has a token-owned 6px horizontal inset.
 - These defaults are shared by standard, simple, and split-left variants. Do not add variant-specific menu color, spacing, or radius overrides; exceptions require a token-owned, documented reason.
+
+
+## Studio Controls consolidation contract — 2026-10-30
+
+- Global ownership order: global component defaults → five global size tiers → family defaults → registered primitive exceptions → generated variables and production consumers. Do not create a parallel token source or duplicate family override layer.
+- Five tiers: Supreme 60px / 3px / 6px / 52px; Standard 44px / 3px / 6px / 38px; Compact 28px / 2px / 4px / 24px; Mini 20px / 1.5px / 3px / 17.5px; Micro 12px / 1px / 2px / 10px. The sequence and values live in `STUDIO_CONTROL_SIZE_BASE`.
+- Text alignment for split-left, split-right, and double-split badges is measured against the full outer shell. The internal rail count must not move the label's center axis. Editable split text input is excluded and remains left-aligned.
+- Editable field glyph stroke always matches glyph fill: primary at rest, black on focus. The primary inline inset remains present in both states. TextBox always has black text/glyph, primary inline inset, and secondary zero-offset outline.
+- Focused text fill and glyph stroke share the same transition duration/easing. Focus outline fade-out must animate instead of disappearing abruptly.
+- Inter-modules default to full width and flush edges; split rails are square to their tier, with no inherited 4px container inset.
+- Counter and side-counter number areas use 2:1 width-to-height geometry; split action rails remain 1:1 squares. The double-split Counter shell derives total width from four inner-height units (two square rails plus a 2h value area) plus the outer border strokes; Side Counter derives width from three inner-height units (one rail plus the 2h value area) plus the outer border strokes. This is a named family geometry exception, not a generic content-width exception. Side Counter is a separate Confirmed Library family module, not nested in Counter. The ratio and rail counts are named by STUDIO_COUNTER_NUMBER_TOKENS.valueAreaAspectRatio, doubleSplitRailCount, and sideRailCount, and emitted as --vt-studio-counter-value-area-aspect-ratio / --vt-studio-counter-double-rail-count / --vt-studio-counter-side-rail-count.
+- Double-split word counter keeps the primitive's solid primary face; do not apply a 50%-white blend override. Arrow toggles must not receive an accidental 50%-primary override.
+- Bar-toggle empty bars use the 50%-white / 50%-primary blend; full bars are black. Bar height follows the current type size, aspect ratio is 2.5:1, corner radius is slight, and the percentage tooltip appears only during focus. Geometry and fill are sourced from STUDIO_BAR_TOGGLE_TOKENS; the system stylesheet owns the rendering, not recovery overrides.
+- Side/double-side arrow buttons share one button implementation and metrics. The double-side center divider never owns a secondary outline; the outer shell alone receives focus outline.
+- The Confirmed Library begins with one full-width Standard production specimen for each representative primitive, grouped by like primitive. Every primitive must also have a real family module with production provenance; no catalog-only lookalikes.
+- Split text input owns one canonical stylesheet at `src/styles/studio-split-text-input.css`, imported by the primitive. Do not maintain a second primitive-local duplicate or a competing global import.
+- The permanent audit is `scripts/audit/studio-controls-system-audit.test.mjs`, wired into `npm run test:studio-controls` and the release-gates workflow. Source tests are necessary but do not replace browser geometry/interaction certification at all supported sizes.

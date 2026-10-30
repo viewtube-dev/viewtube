@@ -41,15 +41,15 @@
   --vt-studio-mini-focus-outline-width: 0.975px;
   --vt-studio-mini-secondary-outline-width: 0.975px;
   --vt-studio-micro-height: 12px;
-  --vt-studio-micro-stroke: 1.5px;
-  --vt-studio-micro-radius: 3px;
+  --vt-studio-micro-stroke: 1px;
+  --vt-studio-micro-radius: 2px;
   --vt-studio-micro-font-size: 10px;
   --vt-studio-micro-icon-size: 10px;
   --vt-studio-micro-font-weight: 1000;
   --vt-studio-micro-text-stroke: 0.4px;
-  --vt-studio-micro-icon-stroke: 1.6;
-  --vt-studio-micro-focus-outline-width: 0.975px;
-  --vt-studio-micro-secondary-outline-width: 0.975px;
+  --vt-studio-micro-icon-stroke: 1.5;
+  --vt-studio-micro-focus-outline-width: 0.65px;
+  --vt-studio-micro-secondary-outline-width: 0.65px;
   /* Textarea-specific typography is a named family exception, sourced from tokens.ts multiline. */
   --vt-studio-textarea-supreme-font-size: 24.55px;
   --vt-studio-textarea-standard-font-size: 18px;
@@ -120,6 +120,14 @@
   --vt-studio-stepper-compact-chevron-stroke: 3;
   --vt-studio-stepper-mini-chevron-stroke: 2.5;
   --vt-studio-stepper-micro-chevron-stroke: 2.25;
+  --vt-studio-counter-value-area-aspect-ratio: 2 / 1;
+  --vt-studio-counter-double-rail-count: 2;
+  --vt-studio-counter-side-rail-count: 1;
+  --vt-studio-bar-height-to-text-ratio: 1;
+  --vt-studio-bar-height-to-width-ratio: 2.5;
+  --vt-studio-bar-radius: 2px;
+  --vt-studio-bar-empty-white-mix: 50%;
+  --vt-studio-bar-full-fill: #000000;
   --vt-studio-number-default-white-mix: 50%;
   --vt-studio-number-rest-mix: 50%;
   --vt-studio-number-active-color: #000000;

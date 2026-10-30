@@ -3,18 +3,6 @@
  * Rail dimensions, chevrons, and interaction are globally owned.
  */
 
-:root {
-  --vt-studio-standard-height: 44px;
-  --vt-studio-standard-stroke: 3px;
-  --vt-studio-compact-height: 28px;
-  --vt-studio-compact-stroke: 2px;
-  --vt-studio-mini-height: 20px;
-  --vt-studio-mini-stroke: 1.5px;
-  --vt-studio-micro-height: 12px;
-  --vt-studio-micro-stroke: 1.5px;
-  --vt-studio-supreme-height: 60px;
-  --vt-studio-supreme-stroke: 3px;
-}
 
 /* Unified rail geometry for side toggles and side counters */
 [data-vt-studio-side-rail="true"],
@@ -23,9 +11,9 @@
   position: relative;
   display: grid;
   grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
-  max-width: var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
+  min-width: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
+  max-width: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
   height: 100%;
   min-height: 0;
   align-self: stretch;
@@ -77,47 +65,14 @@
 .vt-studio-side-counter__actions svg,
 .vt-studio-value-toggle__arrow-stack svg {
   display: block;
-  width: min(calc(var(--vt-studio-control-height, 44px) * 0.62), 100%);
-  height: min(calc(var(--vt-studio-control-height, 44px) * 0.62), 100%);
+  width: min(calc(var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px))) * 0.62), 100%);
+  height: min(calc(var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px))) * 0.62), 100%);
   stroke: #000;
-  stroke-width: 2.5;
+  stroke-width: var(--vt-studio-control-icon-stroke, 2.5);
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
   transform-origin: center;
-}
-
-/* Size tier adjustments */
-[data-size="supreme"][data-vt-studio-side-rail="true"] svg,
-[data-size="supreme"] .vt-studio-side-counter__actions svg,
-[data-size="supreme"] .vt-studio-value-toggle__arrow-stack svg {
-  width: min(calc(60px * 0.62), 100%);
-  height: min(calc(60px * 0.62), 100%);
-  stroke-width: 3;
-}
-
-[data-size="compact"][data-vt-studio-side-rail="true"] svg,
-[data-size="compact"] .vt-studio-side-counter__actions svg,
-[data-size="compact"] .vt-studio-value-toggle__arrow-stack svg {
-  width: min(calc(28px * 0.62), 100%);
-  height: min(calc(28px * 0.62), 100%);
-  stroke-width: 2;
-}
-
-[data-size="mini"][data-vt-studio-side-rail="true"] svg,
-[data-size="mini"] .vt-studio-side-counter__actions svg,
-[data-size="mini"] .vt-studio-value-toggle__arrow-stack svg {
-  width: min(calc(20px * 0.62), 100%);
-  height: min(calc(20px * 0.62), 100%);
-  stroke-width: 1.5;
-}
-
-[data-size="micro"][data-vt-studio-side-rail="true"] svg,
-[data-size="micro"] .vt-studio-side-counter__actions svg,
-[data-size="micro"] .vt-studio-value-toggle__arrow-stack svg {
-  width: min(calc(12px * 0.62), 100%);
-  height: min(calc(12px * 0.62), 100%);
-  stroke-width: 1.25;
 }
 
 /* Interaction feedback */
@@ -169,21 +124,3 @@
   }
 }
 
-/* Divider stroke scales with size tier */
-[data-size="compact"][data-vt-studio-side-rail="true"]::after,
-[data-size="compact"] .vt-studio-side-counter__actions::after,
-[data-size="compact"] .vt-studio-value-toggle__arrow-stack::after {
-  height: 2px;
-}
-
-[data-size="mini"][data-vt-studio-side-rail="true"]::after,
-[data-size="mini"] .vt-studio-side-counter__actions::after,
-[data-size="mini"] .vt-studio-value-toggle__arrow-stack::after {
-  height: 1.5px;
-}
-
-[data-size="micro"][data-vt-studio-side-rail="true"]::after,
-[data-size="micro"] .vt-studio-side-counter__actions::after,
-[data-size="micro"] .vt-studio-value-toggle__arrow-stack::after {
-  height: 1.5px;
-}

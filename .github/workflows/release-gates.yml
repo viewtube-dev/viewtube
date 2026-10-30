@@ -86,6 +86,7 @@ jobs:
           npm run studio:tokens
           git diff --exit-code -- src/styles/studio-control-vars.generated.css
           node --test scripts/audit/studio-counter-dropdown-regression.test.mjs
+      - run: npm run test:studio-controls
       - run: npm run test:focused
       - run: npm run test:unified-diagnostics
       - run: npm run account:test

@@ -3,32 +3,30 @@ import { readFileSync } from "node:fs"
 import test from "node:test"
 
 const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
+const split = readFileSync("src/styles/studio-control-split.css", "utf8")
 const distill = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8")
 const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8")
 const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
 const emitter = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 
-test("counter primitives use global full-row width without fixed widths or 2:1 value ratios", () => {
-  const start = styles.indexOf("/* New independent StudioCounter")
-  const end = styles.indexOf("/* Side Toggle arrow", start)
-  const counters = styles.slice(start, end)
-  assert.ok(start >= 0 && end > start)
-  assert.match(counters, /\.vt-studio-counter,[\s\S]*?\.vt-studio-side-counter,[\s\S]*?\.vt-studio-left-counter\s*\{[^}]*width:\s*100%/)
-  assert.doesNotMatch(counters, /vt-studio-counter-width|2fr/)
-  assert.doesNotMatch(recovery, /\.vt-studio-counter__value[^}]*aspect-ratio:\s*2\s*\/\s*1/)
-  const wordStart = styles.indexOf("/* Double-split word counter")
-  const wordStyles = styles.slice(wordStart)
-  assert.match(wordStyles, /\.vt-studio-word-counter[\s\S]*?width:\s*100%/)
-  assert.doesNotMatch(wordStyles, /176px|2fr/)
+test("counter shells size from a 2:1 inner value pane plus square rails and outer border", () => {
+  assert.match(split, /--vt-studio-counter-root-width:\s*calc\(\(var\(--vt-studio-control-height,\s*44px\)\s*-\s*2\s*\*\s*var\(--vt-studio-control-stroke,\s*3px\)\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,\s*2\)\s*\+\s*var\(--vt-studio-counter-double-rail-count,\s*2\)\)\s*\+\s*2\s*\*\s*var\(--vt-studio-control-stroke,\s*3px\)\)/)
+  assert.match(split, /--vt-studio-counter-root-width:\s*calc\(\(var\(--vt-studio-control-height,\s*44px\)\s*-\s*2\s*\*\s*var\(--vt-studio-control-stroke,\s*3px\)\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,\s*2\)\s*\+\s*var\(--vt-studio-counter-side-rail-count,\s*1\)\)\s*\+\s*2\s*\*\s*var\(--vt-studio-control-stroke,\s*3px\)\)/)
+  assert.match(styles, /\.vt-studio-counter__value,\[data-vt-studio-counter-value\]\{aspect-ratio:var\(--vt-studio-counter-value-area-aspect-ratio,2\/1\)/)
+  assert.match(styles, /\.vt-studio-split-shell__rail,\[data-vt-studio-split-rail\][\s\S]*?flex:0 0 var\(--vt-studio-control-height\)/)
+  assert.doesNotMatch(recovery, /vt-studio-counter.*width|vt-studio-side-counter.*width/)
 })
 
-test("double-split word counter uses the shared 50-percent resting fill and black focus text", () => {
+test("double-split word counter uses the primitive's solid primary face and black focus text", () => {
   const wordStart = styles.indexOf("/* Double-split word counter")
   const wordStyles = styles.slice(wordStart)
-  assert.match(wordStyles, /background:\s*color-mix\(in srgb,\s*white 50%,\s*var\(--vt-studio-control-accent/)
-  assert.match(wordStyles, /color:\s*var\(--vt-studio-control-accent/)
+  const shell = wordStyles.match(/\.vt-studio-word-counter\s*\{[^}]*\}/)?.[0] ?? ""
+  assert.match(shell, /background:\s*var\(--vt-studio-control-accent/)
+  assert.doesNotMatch(shell, /color-mix\([^;]*50%/)
+  assert.match(wordStyles, /\.vt-studio-word-counter > \[data-vt-studio-split-label\][\s\S]*?background:\s*var\(--vt-studio-control-accent/)
   assert.match(wordStyles, /:focus-within[\s\S]*?color:\s*#000/)
+  assert.doesNotMatch(styles + distill + recovery, /\.vt-studio-value-toggle--arrow[^}]*background:\s*color-mix\([^}]*50%/)
 })
 
 test("bar toggle tooltip is focus-only, the shell has a focus outline, and bars layer above rails", () => {
