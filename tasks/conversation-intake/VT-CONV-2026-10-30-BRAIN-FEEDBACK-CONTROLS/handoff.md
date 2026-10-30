@@ -68,7 +68,7 @@
 | Branch | Target | PR | Opened SHA | Current SHA | Post-PR work | Merge SHA | Target presence | Classification |
 |---|---|---:|---|---|---|---|---|---|
 | `fix/brain-feedback-controls-undefined-symbols` | `master/consolidated-feature-integration` | #993 | UNKNOWN (opening snapshot not independently recoverable) | `578babfe6c2c837de3512929813ce6d86c8f7c13` | No later branch-tip commits observed; changed path: `src/views/AIBrainCommandInterface.tsx` | `8fffa6f8adc05f9002953e999a448e787c611fd4` | YES — merge commit is ancestor of inspected target SHA `db066b9e4c9d6edce85d915618493ebf1ad735da` | MERGED_AND_CURRENT |
-| `docs/conversation-handoff-brain-feedback-2026-10-30` | `master/consolidated-feature-integration` | #1226 | `f08758b5be25396ed62147a9d12bf2620b330862` | `f08758b5be25396ed62147a9d12bf2620b330862` | None observed after PR creation; 4 package/index files | N/A — open PR | UNKNOWN — not merged | OPEN_PR |
+| `docs/conversation-handoff-brain-feedback-2026-10-30` | `master/consolidated-feature-integration` | #1226 | `f08758b5be25396ed62147a9d12bf2620b330862` | `a7433eef3e01d1e18dd46d96097f6ae0b4ddf547` | 3 commits after opening; handoff.md, worklog.json and review.md updated | N/A — open PR | UNKNOWN — not merged | OPEN_PR |
 
 The merge run checked the synthetic PR merge ref `91faf676f16e23b73784d432c0dbeca90d669a28`. This is not the same as the later current target SHA. The branch ref still resolves to the PR head commit; no post-PR branch changes were observed.
 
