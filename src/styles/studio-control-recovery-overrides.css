@@ -7,31 +7,6 @@
   --vt-field-inline-stroke: var(--vt-field-primary);
 }
 
-/* Editable fields: matching text/stroke, persistent primary inset, black focus text/stroke. */
-input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-textarea[data-vt-studio-control="true"], .vt-studio-text-input input:not(.vt-studio-split-text-input__field), .vt-studio-text-area textarea {
-  box-sizing: border-box; border: var(--vt-studio-control-stroke) solid #000 !important; border-radius: var(--vt-studio-control-radius);
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-inline-stroke) !important;
-  background: var(--vt-field-fill-rest) !important; color: var(--vt-field-text) !important;
-  -webkit-text-fill-color: var(--vt-field-text) !important; -webkit-text-stroke-color: var(--vt-field-text-stroke) !important;
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width) !important; caret-color: var(--vt-field-text) !important; outline: none;
-}
-input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus,:focus-visible),
-textarea[data-vt-studio-control="true"]:is(:focus,:focus-visible), .vt-studio-text-input:focus-within input:not(.vt-studio-split-text-input__field), .vt-studio-text-area:focus-within textarea {
-  color: var(--vt-field-text-focus) !important; -webkit-text-fill-color: var(--vt-field-text-focus) !important;
-  -webkit-text-stroke-color: var(--vt-field-text-stroke-focus) !important; background: var(--vt-field-fill-focus) !important;
-  caret-color: var(--vt-field-caret-focus) !important;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-inline-stroke) !important;
-  outline: var(--vt-field-focus-outline) !important; outline-offset: 0 !important;
-}
-.vt-studio-text-box, [data-vt-studio-field-kind="text-box"], [data-vt-studio-field-kind="textarea-display"] {
-  border: var(--vt-studio-control-stroke) solid #000 !important; border-radius: var(--vt-studio-control-radius);
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-field-inline-stroke) !important;
-  outline: var(--vt-field-focus-outline) !important; outline-offset: 0 !important; color: #000 !important;
-  -webkit-text-fill-color: #000 !important; -webkit-text-stroke-color: #000 !important;
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width) !important; background: var(--vt-field-fill-rest) !important;
-}
-
 /* Flush buttons, centered icon buttons, and tighter two-line labels. */
 button[data-vt-studio-button="true"], button[data-vt-studio-action-button="true"] {
   padding: 0 !important; border: var(--vt-studio-control-stroke) solid #000; border-radius: var(--vt-studio-control-radius);
