@@ -116,7 +116,7 @@
         "Current-target gate rerun"
       ],
       "blockers": [
-        "No current-target rerun in this conversation"
+        "Current-target Vercel checks are failing due to build-rate-limit contexts; no successful current-target test run was retrieved."
       ],
       "similarityKeys": [
         "confirmed catalog audit",
@@ -232,11 +232,12 @@
         "docs/conversation-handoff-brain-feedback-2026-10-30",
         "PR #1226"
       ],
-      "evidenceRefs": [],
-      "dependencies": [],
-      "blockers": [
-        "PR #1226 is open and not yet merged"
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1226",
+        "https://github.com/viewtube-dev/viewtube/commit/8c3818d0a1b0bef8f25066d1f73e98300a3f2ef3"
       ],
+      "dependencies": [],
+      "blockers": [],
       "similarityKeys": [
         "conversation handoff",
         "living unfinished work log"
@@ -264,7 +265,8 @@
         "Branch/PR lineage and target-presence evidence",
         "Nine-axis integration maturity and current verification gaps"
       ],
-      "reviewNotes": "Package is complete as a branch artifact; delivery to target awaits PR merge."
+      "reviewNotes": "Package is complete as a branch artifact; delivery to target awaits PR merge.",
+      "status": "DONE"
     }
   ],
   "instructions": [
@@ -295,7 +297,7 @@
     {
       "instructionId": "REQ-002",
       "text": "Complete the conversation handoff log process in the repository documentation.",
-      "status": "IN_PR",
+      "status": "MERGED",
       "relatedItemIds": [
         "VT-CWI-004"
       ],
@@ -305,11 +307,14 @@
       "pullRequests": [
         1226
       ],
-      "commits": [],
+      "commits": [
+        "8c3818d0a1b0bef8f25066d1f73e98300a3f2ef3"
+      ],
       "targetBranch": "master/consolidated-feature-integration",
-      "deliveryState": "IN_PR",
+      "deliveryState": "PRESENT_ON_TARGET",
       "evidenceRefs": [
-        "https://github.com/viewtube-dev/viewtube/pull/1226"
+        "https://github.com/viewtube-dev/viewtube/pull/1226",
+        "https://github.com/viewtube-dev/viewtube/commit/8c3818d0a1b0bef8f25066d1f73e98300a3f2ef3"
       ]
     }
   ],
@@ -337,7 +342,7 @@
       "targetBranch": "master/consolidated-feature-integration",
       "pullRequest": 1226,
       "openedHeadSha": "f08758b5be25396ed62147a9d12bf2620b330862",
-      "currentHeadSha": "8486653b1d851abd165dee7f314e6164515e4163",
+      "currentHeadSha": "ccad707a66f7035aa8a7fcb8efb1776d36378f16",
       "commitsAfterPrOpen": [
         "2dce7c0f8e53a5ff49ca7e3291b38894d84f88ca",
         "da912ee79d0eb92a8489754f2d37fb5db33b7d9c",
@@ -353,14 +358,15 @@
         "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/worklog.json",
         "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/review.md"
       ],
-      "mergeCommitSha": null,
-      "targetContainsChanges": "UNKNOWN",
-      "classification": "OPEN_PR",
+      "mergeCommitSha": "8c3818d0a1b0bef8f25066d1f73e98300a3f2ef3",
+      "targetContainsChanges": "YES",
+      "classification": "MERGED_AND_CURRENT",
       "recoveryDestination": null,
       "evidenceRefs": [
-        "https://github.com/viewtube-dev/viewtube/pull/1226"
+        "https://github.com/viewtube-dev/viewtube/pull/1226",
+        "https://github.com/viewtube-dev/viewtube/commit/8c3818d0a1b0bef8f25066d1f73e98300a3f2ef3"
       ],
-      "notes": "PR #1226 opened at f08758b5be25396ed62147a9d12bf2620b330862. Eight post-open receipt commits have been observed through the latest handoff/review update; compare reports 8 ahead, 0 behind. This worklog refresh is itself the final receipt commit and is not self-referenced; use live PR metadata for the current tip."
+      "notes": "PR #1226 merged 2026-10-30T16:52:46Z. Merge commit lists all four package/index paths; all four files fetched successfully from master/consolidated-feature-integration. Post-open receipt commits are part of the merged PR head."
     }
   ],
   "integrationGaps": [
@@ -474,6 +480,16 @@
       "url": "https://github.com/viewtube-dev/viewtube/pull/1226",
       "kind": "PULL_REQUEST",
       "status": "OPEN",
+      "relatedItemIds": [
+        "VT-CWI-004"
+      ]
+    },
+    {
+      "title": "PR #1226 merge commit",
+      "path": "8c3818d0a1b0bef8f25066d1f73e98300a3f2ef3",
+      "url": "https://github.com/viewtube-dev/viewtube/commit/8c3818d0a1b0bef8f25066d1f73e98300a3f2ef3",
+      "kind": "MERGE_COMMIT",
+      "status": "MERGED",
       "relatedItemIds": [
         "VT-CWI-004"
       ]
