@@ -116,16 +116,23 @@ test("vertical word-toggle handle retains measured word bounds and shared side i
   assert.ok(!recovery.includes("inset: 3px !important"));
 });
 
-test("counter values and bar toggles preserve their canonical ratios and value colors", () => {
-  assert.match(system, /aspect-ratio:\s*2\s*\/\s*1/);
+test("counter and bar family geometry comes from canonical family tokens and the system stylesheet", () => {
+  assert.ok(tokens.includes("valueAreaAspectRatio: 2"));
+  assert.ok(tokens.includes("heightToTextRatio: 1"));
+  assert.ok(tokens.includes("heightToWidthRatio: 2.5"));
+  assert.ok(generated.includes("--vt-studio-counter-value-area-aspect-ratio: 2 / 1;"));
+  assert.ok(generated.includes("--vt-studio-bar-height-to-text-ratio: 1;"));
+  assert.ok(generated.includes("--vt-studio-bar-height-to-width-ratio: 2.5;"));
+  assert.ok(system.includes("var(--vt-studio-counter-value-area-aspect-ratio"));
+  assert.ok(system.includes("var(--vt-studio-bar-height-to-text-ratio"));
+  assert.ok(system.includes("var(--vt-studio-bar-height-to-width-ratio"));
+  assert.ok(system.includes("var(--vt-studio-bar-radius"));
+  assert.ok(system.includes("var(--vt-studio-bar-empty-white-mix"));
   assert.ok(system.includes(".vt-studio-side-counter__value"));
-  assert.ok(recovery.includes("aspect-ratio: 1 / 2.5"));
-  assert.ok(recovery.includes("height: calc(var(--vt-studio-control-font-size) * 1)"));
-  assert.ok(recovery.includes("color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, #fff)"));
+  assert.ok(!recovery.includes(".vt-studio-value-toggle__bar {"));
   assert.ok(tokens.includes("micro: { height: 12, stroke: 1, radius: 2"));
   assert.ok(generated.includes("--vt-studio-micro-stroke: 1px;"));
   assert.ok(generated.includes("--vt-studio-micro-radius: 2px;"));
-  assert.ok(recovery.includes(".vt-studio-value-toggle__bar[data-active=\"true\"] { background: #000; }"));
 });
 
 test("double-side controls focus only the outside shell, never the center divider", () => {
