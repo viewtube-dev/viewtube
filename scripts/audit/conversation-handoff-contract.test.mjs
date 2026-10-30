@@ -32,7 +32,9 @@ test("conversation work-log schema supports the living handoff metadata and evid
   }
   assert.equal(properties.executiveSummary.maxItems, 10);
   assert.equal(properties.executiveSummary.items.type, "string");
-  assert.equal(properties.documents.items.type, "object");
+  assert.equal(properties.documents.items.$ref, "#/$defs/document");
+  assert.equal(schema.$defs.document.type, "object");
+  assert.equal(schema.$defs.document.properties.path.minLength, 1);
 });
 
 test("handoff template gives the one-link, one-phrase update instruction and bounded summary", () => {
