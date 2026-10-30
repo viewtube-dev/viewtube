@@ -49,6 +49,7 @@ describe("Video Publisher SEO strategy", () => {
    instruction: "Build metadata",
   })
   expect(findings?.map(item => item.rule)).toEqual([
+   "title_candidate_count",
    "title_candidate_uniqueness",
    "description_required",
    "tags_required",
