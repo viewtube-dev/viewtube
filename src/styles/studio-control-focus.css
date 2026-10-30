@@ -5,6 +5,7 @@ html body .vt-studio-legend-trigger { --vt-studio-control-stroke: var(--vt-legen
 html body .vt-studio-spectrum-tag { --vt-studio-control-stroke: var(--vt-spectrum-tag-stroke, 2px); }
 html body .vt-studio-closeable-badge__close { --vt-studio-control-stroke: 1px; }
 html body .vt-studio-tag-editor__square-action { --vt-studio-control-stroke: 2px; }
+html body .vt-studio-split-accordion { --vt-studio-control-stroke: var(--vt-sa-stroke, 3px); }
 
 html body :is(
   [data-vt-studio-control="true"]:focus-visible,
@@ -14,6 +15,7 @@ html body :is(
   .vt-studio-44-switch:focus-visible,
   .vt-studio-44-choice:focus-visible,
   .vt-studio-44-word-toggle:focus-within,
+  .vt-studio-split-accordion:focus-within,
   .vt-studio-legend-trigger:focus-visible,
   .vt-studio-simple-dropdown select:focus-visible,
   .vt-studio-spectrum-tag:focus-visible,
