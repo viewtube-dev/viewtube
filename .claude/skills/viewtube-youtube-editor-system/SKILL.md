@@ -31,7 +31,8 @@ Use viewtube-skill-finder to choose the smallest supporting skill set.
 7. Asset Engine/Vault owns generated asset identity and provenance.
 8. AI edits are proposal-first, previewable, approval-aware and undoable.
 9. Editor UI never calls a model/media provider directly.
-10. Every editor work pass updates the living master resource and its append-only Update Log.
+10. Every material Editor work pass updates the living master resource and its append-only Update Log as a domain-specific projection.
+11. Long-thread continuity and complete conversation work capture use the single global process in `docs/governance/CONVERSATION_HANDOFFS.md`; do not create Editor-only conversation logs. When a handoff trigger applies, update the same `tasks/conversation-intake/<conversation-id>/` package in place, including `handoff.md`, `worklog.json` and `review.md`.
 
 ## Supporting-skill routing
 

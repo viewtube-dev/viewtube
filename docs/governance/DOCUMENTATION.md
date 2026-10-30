@@ -162,6 +162,8 @@ When plans overlap, preserve all unique material through a Plan Merge record and
 
 
 ## Conversation handoff and living logs
+Domain-specific update logs, implementation checkpoints and certification ledgers remain valid only for their bounded technical evidence; they are projections and must not become alternate conversation handoffs, cross-domain worklogs or task ledgers. The global handoff specification defines their relationship and the single-package rule.
+
 
 Long or multi-agent conversations use the existing [Conversation Handoffs specification](CONVERSATION_HANDOFFS.md) and the Conversation & Improvement OS. The handoff package is stored at `tasks/conversation-intake/<conversation-id>/` as `handoff.md`, `worklog.json` and `review.md`. The handoff is the living human-readable continuation log; the worklog is structured provenance; the review records reconciliation and evidence. They are not a second Task Index or canonical task ledger, and they are not competing idea registries.
 

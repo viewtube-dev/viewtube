@@ -3,7 +3,7 @@
 **Conversation ID:** VT-CONV-DOCS-OS-TASK-INDEX  
 **Reviewed:** 2026-09-27  
 **Reviewer:** ChatGPT / Conversation Work Reconciliation  
-**Status:** PARTIALLY_RECONCILED
+**Status:** PARTIALLY_RECONCILED — VT-CWI-DOCS-008 migration completed in this branch; overall package remains open for Task Index VNext and other unrelated items.
 
 ## Sources reviewed
 
@@ -34,10 +34,22 @@ No runtime implementation claim is being made for Task Index VNext because its t
 | VT-CWI-DOCS-005 | VERIFIED | COMPLETED_ALREADY | High | ATTACH_RECEIPT_EVIDENCE | Brain / Prompts / PR #481 | merged |
 | VT-CWI-DOCS-006 | PARTIAL | CONTINUATION | Critical leverage | ALREADY_TRACKED | Integrated Application Program + Task Authority | resume Phase E |
 | VT-CWI-DOCS-007 | STARTED | EXPANDS | Critical leverage | UPDATE_SPECIFICATION | Conversation Handoffs + Conversation OS | current branch |
-| VT-CWI-DOCS-008 | PLANNED | EXPANDS | High leverage | UPDATE_INTEGRATED_APPLICATION_PROGRAM | Integrated Application Program | migrate domain handoff protocols later |
+| VT-CWI-DOCS-008 | COMPLETED_IN_CONVERSATION | COMPLETED_ALREADY | High leverage | UPDATE_DOMAIN_AUTHORITY | Global Conversation Handoffs + Editor / Toolbox / Vault authorities | Domain-specific handoff protocols consolidated into global process; technical logs retained as narrow projections |
 | VT-CWI-DOCS-009 | PLANNED | ALREADY_TRACKED | Critical leverage | ALREADY_TRACKED | Integrated Application Program | Phase F after Task Index |
 | VT-CWI-DOCS-010 | PLANNED | ALREADY_TRACKED | High leverage | ALREADY_TRACKED | Documentation Governance + Integrated Application Program | family-by-family consolidation |
 | VT-CWI-DOCS-011 | DISCOVERED | NEW | Medium confidence | CREATE_OPPORTUNITY | future opportunity record | defer until workflow proven |
+
+## Domain handoff/update-log migration — completed 2026-10-30
+
+The global Conversation Handoffs system is current on target (PR #1170 and PR #1177 merged). The remaining domain migration is now reflected in the Editor, Toolbox and Vault authorities:
+
+- Editor Update Log / Current Work remain editor-only architecture and evidence projections; they no longer act as per-conversation handoff authority.
+- Toolbox `HANDOFF_UPDATE_PROTOCOL.md` is a domain change-review extension and delegates complete conversation capture/reconciliation to the global package.
+- Toolbox master update log remains append-only for system-level Toolbox changes only.
+- Vault phase/audit records remain technical implementation evidence; global conversation packages own complete instructions, cross-domain work and resumption.
+- Historical recovery/handoff artifacts remain provenance and are not rewritten as active competing handoffs.
+
+Updated in migration branch / PR #1224; merge/delivery remains pending. Dedicated handoff contract and document-system tests passed. Broader audit:documents fails on competing authority metadata across six P1 workstream folders outside this migration's changed files.
 
 ## Plan / task merges
 

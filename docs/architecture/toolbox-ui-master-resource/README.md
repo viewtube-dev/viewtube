@@ -37,4 +37,4 @@ Do not treat standalone HTML, screenshots or historical DOCX snapshots as produc
 
 `TOKENS -> CODED PRIMITIVE -> UI REFERENCE LIBRARY -> PRODUCTION CONSUMER -> MASTER RESOURCE / CERTIFICATION LOG`
 
-Every future system-level conversation should append one row to the master Living update log and update only the affected authority, component registry, decision, page-status and certification sections.
+For every material Toolbox system change, append one row to the master Living update log and update only the affected authority, component registry, decision, page-status and certification sections. For conversation-level continuity, use the single global package in docs/governance/CONVERSATION_HANDOFFS.md; this folder README and the Toolbox master are domain projections, not separate handoff logs.
