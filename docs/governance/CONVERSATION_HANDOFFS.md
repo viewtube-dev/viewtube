@@ -69,6 +69,19 @@ It is explicitly **not**:
 - a second project-management system;
 - proof that implementation is complete.
 
+## Domain update logs are projections, not handoffs
+
+A domain authority may retain an append-only update log, Current Work table, implementation checkpoint, certification ledger or technical recovery record when it serves a distinct domain purpose. These records own only their scoped decisions, implementation evidence and acceptance gaps.
+
+They do **not** replace or duplicate the global conversation package:
+- the global `handoff.md` owns resumable cross-domain context and the individual instruction/unfinished-action checklist;
+- the global `worklog.json` captures all meaningful conversation work, including completed, partial, planned, blocked, abandoned and discovered work;
+- the global `review.md` owns reconciliation, deduplication, disposition and canonical-target evidence.
+
+Domain logs should link to the global package when relevant and receive only the domain-specific projection. Do not require every short conversation to create a handoff; apply the global triggers below. Do not create separate Editor, Toolbox, Vault, Widget or other domain conversation handoff packages for the same conversation.
+
+Project-wide recovery ledgers are also scoped records: use them for explicit recovery/activation campaigns and shared recovery-state changes, not as a second mandatory per-conversation log. Link recovery evidence from the global package when both apply.
+
 ## Handoff triggers
 
 Create/update a handoff when any of these applies:
