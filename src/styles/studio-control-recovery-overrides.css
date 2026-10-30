@@ -95,14 +95,21 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-siz
 .vt-studio-split-shell.vt-studio-value-toggle--bar {
   overflow: visible;
 }
-.vt-studio-split-shell.vt-studio-value-toggle--bar > .vt-studio-value-toggle__bars {
+.vt-studio-split-shell.vt-studio-value-toggle--bar > [data-vt-studio-split-label] {
   box-sizing: border-box;
   flex: 1 1 0;
   width: auto;
   min-width: 0;
   max-width: 100%;
+  overflow: visible;
   position: relative;
-  z-index: 1;
+  z-index: 3;
+}
+.vt-studio-split-shell.vt-studio-value-toggle--bar .vt-studio-value-toggle__bars {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: visible;
 }
 .vt-studio-split-shell.vt-studio-value-toggle--bar > [data-vt-studio-split-rail] {
   position: relative;
