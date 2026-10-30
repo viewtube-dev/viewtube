@@ -38,30 +38,30 @@
 |---|---|---|
 | PR #1170 | Merged pull request | https://github.com/viewtube-dev/viewtube/pull/1170 |
 | PR #1170 merge commit | Git evidence | https://github.com/viewtube-dev/viewtube/commit/0fd1d412758f212d8d6cf34a3a31d22270ea33c4 |
-| Conversation Handoffs specification | Canonical specification | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/CONVERSATION_HANDOFFS.md |
-| Conversation OS | Canonical constitution | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/CONVERSATION_OS.md |
-| Documentation Governance | Canonical constitution | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/DOCUMENTATION.md |
-| Work-log JSON schema | Schema | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/conversation-work-log.schema.json |
-| Handoff skill | Skill | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/SKILL.md |
-| Handoff template | Template | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/templates/handoff-template.md |
-| Worklog template | Template | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/templates/worklog-template.json |
-| Reconciliation skill | Skill | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-work-reconciliation/SKILL.md |
-| Workflow contract | Agent contract | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/agent/contracts/conversation-handoff-workflow.md |
-| Document registry | Registry | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/registry.json |
-| Documentation index | Index | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/Index.md |
-| Document history | History ledger | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/recovery/History.md |
-| Original intake handoff | Historical package | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/handoff.md |
-| Original intake worklog | Historical package | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/worklog.json |
-| Original intake review | Historical package | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/review.md |
+| Conversation Handoffs specification | Canonical specification | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/governance/CONVERSATION_HANDOFFS.md |
+| Conversation OS | Canonical constitution | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/governance/CONVERSATION_OS.md |
+| Documentation Governance | Canonical constitution | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/governance/DOCUMENTATION.md |
+| Work-log JSON schema | Schema | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/governance/conversation-work-log.schema.json |
+| Handoff skill | Skill | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.claude/skills/viewtube-conversation-handoff/SKILL.md |
+| Handoff template | Template | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.claude/skills/viewtube-conversation-handoff/templates/handoff-template.md |
+| Worklog template | Template | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.claude/skills/viewtube-conversation-handoff/templates/worklog-template.json |
+| Reconciliation skill | Skill | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.claude/skills/viewtube-conversation-work-reconciliation/SKILL.md |
+| Workflow contract | Agent contract | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/agent/contracts/conversation-handoff-workflow.md |
+| Document registry | Registry | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/registry.json |
+| Documentation index | Index | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/Index.md |
+| Document history | History ledger | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/recovery/History.md |
+| Original intake handoff | Historical package | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/handoff.md |
+| Original intake worklog | Historical package | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/worklog.json |
+| Original intake review | Historical package | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/review.md |
 | PR #1177 | Open follow-up pull request | https://github.com/viewtube-dev/viewtube/pull/1177 |
-| Living-log contract test | Test | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/scripts/audit/conversation-handoff-contract.test.mjs |
-| Release-gates workflow | CI workflow | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.github/workflows/release-gates.yml |
-| Package scripts | Test registration | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/package.json |
-| Intake index | Navigation | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/INDEX.md |
-| Intake README | Operating instructions | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/README.md |
-| This handoff | Living handoff | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/handoff.md |
-| This worklog | Structured instruction and evidence register | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/worklog.json |
-| This review | Reconciliation and CI evidence | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/review.md |
+| Living-log contract test | Test | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/scripts/audit/conversation-handoff-contract.test.mjs |
+| Release-gates workflow | CI workflow | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.github/workflows/release-gates.yml |
+| Package scripts | Test registration | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/package.json |
+| Intake index | Navigation | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/INDEX.md |
+| Intake README | Operating instructions | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/README.md |
+| This handoff | Living handoff | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/handoff.md |
+| This worklog | Structured instruction and evidence register | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/worklog.json |
+| This review | Reconciliation and CI evidence | https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/review.md |
 
 ## Complete user instruction register
 
