@@ -10,6 +10,6 @@ describe("confirmed Studio inline stepper catalog entry", () => {
     expect(html).toContain('data-vt-library-component="StudioInlineStepper"')
     expect(html).toContain('aria-label="Standard inline stepper"')
     expect(html).toContain('aria-label="Compact inline stepper"')
-    expect(html).toContain('title="Inline Stepper · 44px + 28px"')
+    expect(html).toContain('title="Studio Inline Stepper · Standard + Compact"')
   })
 })
