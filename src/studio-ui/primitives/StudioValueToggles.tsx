@@ -228,7 +228,11 @@ export function StudioBarToggle({
     <div ref={barsRef} className="vt-studio-value-toggle__bars" role="meter" aria-label={ariaLabel}
       aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round((filled / barCount) * 100)} data-bar-count={barCount}>
       {Array.from({ length: barCount }, (_, index) => (
-        <span key={index} className="vt-studio-value-toggle__bar" data-active={index < filled ? "true" : "false"} />
+        <span key={index} className="vt-studio-value-toggle__bar" data-active={index < filled ? "true" : "false"}>
+          {index === Math.max(0, filled - 1) && filled > 0 ? (
+            <span className="vt-studio-value-toggle__bar-tooltip" role="status">{Math.round(Math.max(0, Math.min(100, value)))}%</span>
+          ) : null}
+        </span>
       ))}
     </div>
   </StudioSplitShell>;
