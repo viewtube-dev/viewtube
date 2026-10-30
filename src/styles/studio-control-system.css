@@ -6989,26 +6989,33 @@ details.vt-studio-two-line-module > :not(summary) {
   transform: translateX(-50%);
 }
 
-/* New double-split word counter reuses the same three-cell counter shell geometry. */
+/* Double-split word counter: square rails, flexible center, global full-row width. */
 .vt-studio-word-counter {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr) var(--vt-studio-control-height, 44px);
   grid-template-rows: minmax(0, 1fr);
-  width: 176px;
-  min-width: 176px;
-  max-width: 176px;
-  flex: 0 0 176px;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  flex: 1 1 auto;
   height: var(--vt-studio-control-height, 44px);
   box-sizing: border-box;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   overflow: hidden;
-  background: var(--pair-a);
+  background: var(--vt-studio-control-accent, var(--pair-a));
   color: #000;
 }
-.vt-studio-word-counter[data-size="supreme"] { width: 240px; min-width: 240px; max-width: 240px; flex-basis: 240px; }
-.vt-studio-word-counter[data-size="compact"] { width: 112px; min-width: 112px; max-width: 112px; flex-basis: 112px; --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); }
-.vt-studio-word-counter[data-size="micro"] { width: 48px; min-width: 48px; max-width: 48px; flex-basis: 48px; --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px); }
+.vt-studio-word-counter[data-size="compact"] {
+  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
+}
+.vt-studio-word-counter[data-size="micro"] {
+  --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+}
 .vt-studio-word-counter > [data-vt-studio-split-rail] {
   display: grid;
   place-items: center;
@@ -7016,7 +7023,7 @@ details.vt-studio-two-line-module > :not(summary) {
   min-width: 0;
   max-width: none;
   height: 100%;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-secondary, var(--pair-b));
 }
 .vt-studio-word-counter > [data-vt-studio-split-rail][data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-word-counter > [data-vt-studio-split-rail][data-rail="end"] { border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
@@ -7029,13 +7036,15 @@ details.vt-studio-two-line-module > :not(summary) {
   height: 100%;
   padding: 0 2px;
   overflow: hidden;
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  background: color-mix(in srgb, white 50%, var(--vt-studio-control-accent, var(--pair-a)) 50%);
 }
 .vt-studio-word-counter__value {
   display: block;
   width: 100%;
   overflow: hidden;
-  color: #000;
+  color: var(--vt-studio-control-accent, var(--pair-a));
+  -webkit-text-fill-color: var(--vt-studio-control-accent, var(--pair-a));
+  -webkit-text-stroke: 1px var(--vt-studio-control-accent, var(--pair-a));
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
   line-height: 1;
@@ -7044,7 +7053,12 @@ details.vt-studio-two-line-module > :not(summary) {
   text-overflow: clip;
   text-transform: uppercase;
   white-space: nowrap;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+.vt-studio-word-counter:focus-within .vt-studio-word-counter__value,
+.vt-studio-word-counter[data-vt-interaction-focus="true"] .vt-studio-word-counter__value {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
 }
 .vt-studio-word-counter[data-size="compact"] .vt-studio-word-counter__value { font-size: var(--vt-studio-compact-font-size, 24px); }
 .vt-studio-word-counter[data-size="micro"] .vt-studio-word-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
