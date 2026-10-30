@@ -1,0 +1,40 @@
+name: Gemini live certification
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Gemini text model to certify"
+        required: true
+        default: "gemini-2.5-flash"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gemini-live-certification
+  cancel-in-progress: false
+
+jobs:
+  certify:
+    name: Authorized Gemini live smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Run sanitized unit tests
+        run: node --test scripts/gemini/live-certification.test.mjs
+
+      - name: Run live discovery and text generation
+        env:
+          GEMINI_LIVE_TEST_API_KEY: ${{ secrets.GEMINI_LIVE_TEST_API_KEY }}
+          GEMINI_LIVE_TEST_MODEL: ${{ inputs.model }}
+        run: node scripts/gemini/live-certification.mjs
