@@ -1406,7 +1406,7 @@ const AIBrainCommandInterface: React.FC = () => {
    }
    const result = await runBrainTask({
     surface: "ai-brain",
-    publicHandleContext: readSelectedPublicHandleContext(),
+    publicHandleContext: !authState.isAuthenticated && !channelConnection.isConnected ? readSelectedPublicHandleContext() : null,
     channelId,
     projectId: activeProject?.id || null,
     project: activeProject,
@@ -1543,7 +1543,7 @@ const AIBrainCommandInterface: React.FC = () => {
 
     const result = await runBrainTask({
      surface: "ai-brain",
-    publicHandleContext: readSelectedPublicHandleContext(),
+    publicHandleContext: !authState.isAuthenticated && !channelConnection.isConnected ? readSelectedPublicHandleContext() : null,
      channelId,
      retryTurnId: message.id,
      projectId: activeProject?.id || null,
