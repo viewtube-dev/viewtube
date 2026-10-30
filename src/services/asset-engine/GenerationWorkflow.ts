@@ -360,7 +360,7 @@ export const recordToolReceipt = (input: {
   evidenceIds: receipt.evidenceIds,
   generationRecordId: receipt.generationRecordId,
   traceId: receipt.traceId,
-  idempotencyKey: receipt.idempotencyKey,
+  idempotencyKey: receipt.idempotencyKey ? "generation-output:v1:" + receipt.idempotencyKey : null,
   summary: input.summary || "",
   metadata: {
    ...(input.metadata || {}),
