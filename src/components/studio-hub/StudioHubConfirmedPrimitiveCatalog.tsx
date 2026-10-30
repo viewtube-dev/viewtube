@@ -177,9 +177,12 @@ const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens
   </div>
 )
 
-const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[]; className?: string }> = ({ title, children, provenance, nonDefaultSettings = [], className }) => (
-  <section className={[`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`, className].filter(Boolean).join(" ")}>
-    <h3 title={title}>{title}</h3>
+const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[]; className?: string }> = ({ title, children, provenance, nonDefaultSettings = [], className }) => {
+  const representative = className?.split(/\\s+/).includes("vt-confirmed-representatives") ?? false
+  const headingId = representative ? "vt-confirmed-representatives-title" : undefined
+  return (
+  <section className={[`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`, className].filter(Boolean).join(" ")} aria-labelledby={headingId}>
+    <h3 id={headingId} title={title}>{title}</h3>
     <div className="vt-confirmed-variants">{children}</div>
     {(nonDefaultSettings.length > 0 || provenance) && (
       <details className="vt-confirmed-source-details">
@@ -265,26 +268,27 @@ const RestoredPrimitiveShowcase: React.FC = () => {
     { id: "activity", accessibleLabel: "Activity", icon: <Check aria-hidden="true" />, content: <strong>ACTIVITY PANEL</strong> },
     { id: "insights", accessibleLabel: "Insights", icon: <Sparkles aria-hidden="true" />, content: <strong>INSIGHTS PANEL</strong> },
   ]
-  const squareButtons = (sizeVariant: "standard" | "compact" | "micro") => (
+  const squareButtonItems = (sizeVariant: "standard" | "compact" | "micro") => [
+    { icon: <Settings2 aria-hidden="true" />, label: "Settings" },
+    { icon: <Check aria-hidden="true" />, label: "Confirm" },
+    { icon: <Sparkles aria-hidden="true" />, label: "Generate" },
+    { icon: <Heart aria-hidden="true" />, label: "Favorite" },
+    { icon: <Bell aria-hidden="true" />, label: "Notifications" },
+  ].map((item, index) => (
+    <StudioSquareIconButton
+      key={item.label}
+      icon={item.icon}
+      label={item.label}
+      variant="v1"
+      sizeVariant={sizeVariant}
+      selected={groupSelection[index]}
+      onSelectedChange={(selected) => setGroupSelection(current => current.map((value, itemIndex) => itemIndex === index ? selected : value))}
+      data-vt-library-component="StudioSquareIconButton"
+    />
+  ))
+  const squareButtons = (sizeVariant: "compact" | "micro") => (
     <StudioSquareIconButtonGroup sizeVariant={sizeVariant} aria-label={sizeVariant + " action group"}>
-      {[
-        { icon: <Settings2 aria-hidden="true" />, label: "Settings" },
-        { icon: <Check aria-hidden="true" />, label: "Confirm" },
-        { icon: <Sparkles aria-hidden="true" />, label: "Generate" },
-        { icon: <Heart aria-hidden="true" />, label: "Favorite" },
-        { icon: <Bell aria-hidden="true" />, label: "Notifications" },
-      ].map((item, index) => (
-        <StudioSquareIconButton
-          key={item.label}
-          icon={item.icon}
-          label={item.label}
-          variant="v1"
-          sizeVariant={sizeVariant}
-          selected={groupSelection[index]}
-          onSelectedChange={(selected) => setGroupSelection(current => current.map((value, itemIndex) => itemIndex === index ? selected : value))}
-          data-vt-library-component="StudioSquareIconButton"
-        />
-      ))}
+      {squareButtonItems(sizeVariant)}
     </StudioSquareIconButtonGroup>
   )
   return <>
@@ -301,7 +305,7 @@ const RestoredPrimitiveShowcase: React.FC = () => {
       "All five squares begin with primary fill. Selecting a square changes only that square to the secondary fill; each selection is independent.",
       "The group is a single auto-width toolbar and inherits the selected Studio size tier.",
     ]} provenance={<Provenance primitive="StudioSquareIconButtonGroup / StudioSquareIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-restored-primitives.css" tokens="Five 1:1 squares; primary resting fill; secondary selected fill; black shared dividers." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>STANDARD · FIVE SQUARES</span>{squareButtons("standard")}</div>
+      <div className="vt-confirmed-variant is-full-row"><span>STANDARD · FIVE SQUARES</span><StudioSquareIconButtonGroup sizeVariant="standard" aria-label="standard action group">{squareButtonItems("standard")}</StudioSquareIconButtonGroup></div>
       <div className="vt-confirmed-variant is-full-row"><span>COMPACT · FIVE SQUARES</span>{squareButtons("compact")}</div>
       <div className="vt-confirmed-variant is-full-row"><span>MICRO · FIVE SQUARES</span>{squareButtons("micro")}</div>
     </Family>
