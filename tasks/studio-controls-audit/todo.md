@@ -16,16 +16,17 @@ Mode: Audit-first; no production edits before Gate 6 approval.
 ## Phase 1 — File and dependency inventory
 - [x] T1.1 Enumerate all files under `src/studio-ui/` (64 recursive tree entries, including tests and nested modules).
 - [x] T1.2 Enumerate `src/styles/` (45 entries) and trace `studio-control-entry.css` import order; family/consumer reachability classification remains open.
-- [ ] T1.3 Enumerate Studio-related files under `src/components/`, including catalog, shell, consumers, and compositions.
+- [ ] T1.3 (in progress) Enumerate and classify Studio-related files under `src/components/`; a second root-level full catalog file is present alongside the active nested catalog and needs call-site tracing.
 - [ ] T1.4 (in progress) Identify canonical tokens, palette, emitter, generated CSS, stylesheet entry, and existing validation scripts; complete theme and consumer trace.
-- [ ] T1.5 Classify all files by production, composition, catalog, generated, test, compatibility, deprecated, or unknown ownership.
+- [ ] T1.5 Classify all files by production, composition, catalog, generated, test, compatibility, deprecated, or unknown ownership; include the two split-text-input stylesheets and possible repeated CSS imports.
 
 ### Checkpoint 1
 - [ ] Complete file inventory and reproducible import/style dependency graph.
 - [ ] Remaining component consumers, duplicate catalog candidate, and per-file lifecycle ownership classified.
+- [ ] Resolve split-text-input duplicate stylesheet ownership and repeated stylesheet import behavior.
 
 ## Phase 2 — Primitive registry
-- [ ] T2.1 (in progress) Static pass found 70 `Studio*` value exports and 70 direct catalog JSX/component-map matches; classify each export as primitive, composition, layout, utility, compatibility, or internal.
+- [ ] T2.1 (in progress) Static pass found 70 `Studio*` value exports with 70 direct catalog matches (396 JSX occurrences); classify each export as primitive, composition, layout, utility, compatibility, or internal.
 - [ ] T2.2 Trace production consumers and determine public/internal/deprecated/dead status.
 - [ ] T2.3 Classify all live families into the six canonical categories.
 - [ ] T2.4 Record each family's API, supported tiers, variants, states, anatomy, responsive/accessibility constraints, and exceptions.
@@ -47,7 +48,7 @@ Mode: Audit-first; no production edits before Gate 6 approval.
 - [ ] T4.1 Map every Confirmed catalog specimen to a real production implementation/export.
 - [ ] T4.2 Build bidirectional registry/catalog crosswalk and classify coverage gaps.
 - [ ] T4.3 Verify six-category order and family placement.
-- [ ] T4.4 Verify one canonical representative per primitive and accurate variant/state specimens.
+- [ ] T4.4 Verify one canonical representative per primitive and accurate variant/state specimens; source presence alone is insufficient (20 exports have one tag occurrence, 50 have multiple occurrences).
 - [ ] T4.5 Verify specimen provenance, defaults/non-default settings, supported tiers, and production-import boundaries.
 
 ### Checkpoint 4
