@@ -422,7 +422,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-control-floating-label-height: var(--vt-studio-standard-font-size, 38px);
   --vt-studio-control-floating-label-offset-ratio: var(--vt-studio-floating-label-offset-ratio, 1.2);
   --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height);
-  --vt-studio-control-focus-outline-width: 1.95px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-standard-focus-outline-width, 1.95px);
   position: relative;
   display: block;
   width: 100%;
@@ -431,7 +431,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-floating-field[data-size="compact"] {
   --vt-studio-control-floating-label-height: var(--vt-studio-compact-font-size, 24px);
-  --vt-studio-control-focus-outline-width: 1.3px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-compact-focus-outline-width, 1.3px);
 }
 .vt-studio-floating-field[data-size="micro"] {
   --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);
@@ -521,7 +521,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-fixed-label-font-size: 14px;
   --vt-studio-fixed-label-stroke: 3px;
   --vt-studio-control-radius: 6px;
-  --vt-studio-control-focus-outline-width: 1.95px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-standard-focus-outline-width, 1.95px);
   position: relative;
   display: block;
   width: 100%;
@@ -533,7 +533,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-fixed-label-font-size: 9px;
   --vt-studio-fixed-label-stroke: 2px;
   --vt-studio-control-radius: 4px;
-  --vt-studio-control-focus-outline-width: 1.3px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-compact-focus-outline-width, 1.3px);
 }
 /* B specimens reverse the paired colors without changing label geometry or type. */
 .vt-studio-fixed-label-field.is-reverse-colors {
@@ -735,7 +735,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-control-font-size: var(--vt-studio-44-font-size);
   --vt-studio-control-font-weight: var(--vt-studio-44-font-weight);
   --vt-studio-control-default-fill-opacity: 50%; --vt-studio-control-focus-fill-opacity: 15%;
-  --vt-studio-control-focus-outline-width: 1.95px; --vt-studio-control-focus-outline-offset: 0px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-standard-focus-outline-width, 1.95px); --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: 1.95px;
 }
 [data-vt-studio-control][data-size="compact"] {
@@ -745,7 +745,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-control-radius: var(--vt-studio-28-radius);
   --vt-studio-control-font-size: var(--vt-studio-28-font-size);
   --vt-studio-control-font-weight: var(--vt-studio-28-font-weight);
-  --vt-studio-control-focus-outline-width: 1.3px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-compact-focus-outline-width, 1.3px);
   --vt-studio-control-secondary-outline-width: 1.3px;
 }
 /* Button-only shadows; fields remain flat. */
@@ -5443,6 +5443,10 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
 .vt-studio-value-toggle--double { height: var(--vt-studio-control-height, 44px); min-height: var(--vt-studio-control-height, 44px); }
 
 /* Double Side Toggle focus belongs to the shared outside perimeter, never the center divider. */
+.vt-studio-value-toggle--double .vt-studio-value-toggle__divider {
+  outline: none;
+  box-shadow: none;
+}
 .vt-studio-value-toggle--double:focus-within {
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
     solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
