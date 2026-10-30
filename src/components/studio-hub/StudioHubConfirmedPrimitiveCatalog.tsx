@@ -944,6 +944,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
       ]}
       provenance={<Provenance primitive="StudioSplitLeftDropdown / StudioDropdown / StudioSimpleDropdown" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · fixed square chevron rails · consistent menu row ratio" imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
+      <SizeMatrix label="Split-left dropdown size examples"
+        standard={<StudioSplitLeftDropdown sizeVariant="standard" aria-label="Standard split-left dropdown" defaultValue="balanced" options={[{value:"balanced",label:"Balanced"},{value:"fast",label:"Fast"}]} />}
+        compact={[0,1].map(i => compact(<StudioSplitLeftDropdown sizeVariant="compact" aria-label={"Compact split-left dropdown "+(i+1)} defaultValue="balanced" options={[{value:"balanced",label:"Balanced"},{value:"fast",label:"Fast"}]} />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioSplitLeftDropdown sizeVariant="micro" aria-label={"Micro split-left dropdown "+(i+1)} defaultValue="balanced" options={[{value:"balanced",label:"Balanced"},{value:"fast",label:"Fast"}]} />, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftDropdown">
         <span>Standard · split-left chevron</span>
         <StudioSplitLeftDropdown aria-label="Split-left dropdown example" defaultValue="balanced" options={[{ value: "light", label: "Light" }, { value: "balanced", label: "Balanced" }, { value: "aggressive", label: "Aggressive" }]} />
