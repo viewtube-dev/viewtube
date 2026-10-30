@@ -428,9 +428,12 @@
         "tasks/conversation-intake/INDEX.md"
       ],
       "branchPrRefs": [
-        "docs/studio-controls-regression-handoff-2026-10-30"
+        "docs/studio-controls-regression-handoff-2026-10-30",
+        "PR #1229"
       ],
-      "evidenceRefs": [],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1229"
+      ],
       "dependencies": [],
       "blockers": [
         "Source conversation URL unavailable",
@@ -575,21 +578,23 @@
     {
       "instructionId": "REQ-006",
       "text": "Complete the conversation handoff log process in repository documentation.",
-      "status": "IN_PROGRESS",
+      "status": "IN_PR",
       "relatedItemIds": [
         "VT-CWI-006"
       ],
       "branchRefs": [
         "docs/studio-controls-regression-handoff-2026-10-30"
       ],
-      "pullRequests": [],
+      "pullRequests": [
+        1229
+      ],
       "commits": [
         "ebe995f4d76e796f702c78fb29887af549c8a4c9"
       ],
       "targetBranch": "master/consolidated-feature-integration",
-      "deliveryState": "COMMITTED",
+      "deliveryState": "IN_PR",
       "evidenceRefs": [
-        "https://github.com/viewtube-dev/viewtube/commit/ebe995f4d76e796f702c78fb29887af549c8a4c9"
+        "https://github.com/viewtube-dev/viewtube/pull/1229"
       ]
     }
   ],
@@ -611,6 +616,23 @@
         "https://github.com/viewtube-dev/viewtube/compare/master/consolidated-feature-integration...codex/studio-controls-regression-recovery"
       ],
       "notes": "Compare reports 8 commits ahead and 1,903 behind; PR-opening SHA and post-open lineage unknown. Compare lists 21 changed paths; do not treat empty post-PR arrays as proof of none."
+    },
+    {
+      "branch": "docs/studio-controls-regression-handoff-2026-10-30",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1229,
+      "openedHeadSha": "97651224b3d05fe02a5e907258763157bc467e14",
+      "currentHeadSha": "97651224b3d05fe02a5e907258763157bc467e14",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": null,
+      "targetContainsChanges": "NO",
+      "classification": "OPEN_PR",
+      "recoveryDestination": null,
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1229"
+      ],
+      "notes": "Opening snapshot recorded. Package was subsequently updated in this same branch after PR creation; refresh current head and post-PR path evidence after final update."
     }
   ],
   "integrationGaps": [
