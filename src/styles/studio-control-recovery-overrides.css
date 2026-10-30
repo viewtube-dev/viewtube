@@ -115,16 +115,6 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-siz
   position: relative;
   z-index: 2;
 }
-/* Bar / word / side toggle geometry. */
-.vt-studio-value-toggle__bar { width: calc(var(--vt-studio-control-font-size) * .4); height: calc(var(--vt-studio-control-font-size) * 1); aspect-ratio: 1 / 2.5; border-radius: 2px; border: 0; background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, #fff); }
-.vt-studio-value-toggle__bar[data-active="true"] { background: #000; }
-.vt-studio-value-toggle__bars { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 4px; height: 100%; box-sizing: border-box; }
-.vt-studio-value-toggle__arrow-stack { position: relative; display: grid; grid-template-rows: minmax(0,1fr) minmax(0,1fr); width: 100%; height: 100%; }
-.vt-studio-value-toggle__arrow-stack::after { content: ""; position: absolute; z-index: 3; inset-inline: 0; top: 50%; height: var(--vt-studio-control-stroke); background: #000; transform: translateY(-50%); pointer-events: none; }
-.vt-studio-value-toggle--double:focus-within { outline: var(--vt-studio-control-focus-outline-width) solid var(--vt-studio-control-secondary, var(--pair-b)); outline-offset: 0; }
-.vt-studio-value-toggle--double .vt-studio-value-toggle__divider { outline: none !important; box-shadow: none !important; }
-/* Counter value cells use the full flexible center cell; no 2:1 aspect ratio. */
-
 /* Intermodules span the host; closed modules keep one bottom edge only. */
 [data-vt-studio-inter-host="true"] { padding-left: 0 !important; padding-right: 0 !important; width: 100% !important; }
 .vt-studio-inter-module { width: 100% !important; max-width: 100% !important; border-left: 0 !important; border-right: 0 !important; }
