@@ -2,6 +2,7 @@ import {
  getContentBuild,
 } from "./ContentBuildRepository"
 import { assertContentBuildCapability } from "./ContentBuildCapabilities"
+import type { BrainPromptRunReceipt } from "../brain/BrainPromptGovernance"
 import {
  operationRecordFromGenerationRequest,
  operationRecordFromToolReceipt,
@@ -86,6 +87,8 @@ export interface ToolReceipt {
  relationshipIds: string[]
  traceId: string | null
  completedAt: string
+ /** Exact prompt/model receipt from the governed asset runner, when available. */
+ promptReceipt?: BrainPromptRunReceipt | null
 }
 
 const createId = (prefix: string): string => {
@@ -273,6 +276,7 @@ export const recordToolReceipt = (input: {
  variantGroupId?: string | null
  relationshipIds?: string[]
  traceId?: string | null
+ promptReceipt?: BrainPromptRunReceipt | null
  summary?: string
  metadata?: Record<string, unknown>
 }): ToolReceipt => {
@@ -316,6 +320,7 @@ export const recordToolReceipt = (input: {
   relationshipIds: unique(input.relationshipIds || []),
   traceId: input.traceId || input.request.traceId || null,
   completedAt,
+  promptReceipt: input.promptReceipt || null,
  }
 
  recordContentBuildToolOutput({
@@ -340,6 +345,7 @@ export const recordToolReceipt = (input: {
    variantGroupId: receipt.variantGroupId,
    relationshipIds: receipt.relationshipIds,
    toolReceipt: receipt,
+   promptReceipt: receipt.promptReceipt || null,
    operationRecord: operationRecordFromToolReceipt(receipt, {
     operationId: receipt.operationId || input.request.operationId || input.request.id,
     workflowId: receipt.workflowId || input.request.workflowId || `workflow:${input.request.contentBuildId}`,
