@@ -229,12 +229,13 @@
         "tasks/conversation-intake/INDEX.md"
       ],
       "branchPrRefs": [
-        "docs/conversation-handoff-brain-feedback-2026-10-30"
+        "docs/conversation-handoff-brain-feedback-2026-10-30",
+        "PR #1226"
       ],
       "evidenceRefs": [],
       "dependencies": [],
       "blockers": [
-        "Documentation branch has not yet been merged"
+        "PR #1226 is open and not yet merged"
       ],
       "similarityKeys": [
         "conversation handoff",
@@ -294,19 +295,21 @@
     {
       "instructionId": "REQ-002",
       "text": "Complete the conversation handoff log process in the repository documentation.",
-      "status": "IN_PROGRESS",
+      "status": "IN_PR",
       "relatedItemIds": [
         "VT-CWI-004"
       ],
       "branchRefs": [
         "docs/conversation-handoff-brain-feedback-2026-10-30"
       ],
-      "pullRequests": [],
+      "pullRequests": [
+        1226
+      ],
       "commits": [],
       "targetBranch": "master/consolidated-feature-integration",
       "deliveryState": "IN_PR",
       "evidenceRefs": [
-        "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/"
+        "https://github.com/viewtube-dev/viewtube/pull/1226"
       ]
     }
   ],
@@ -328,6 +331,23 @@
         "https://github.com/viewtube-dev/viewtube/compare/8fffa6f8adc05f9002953e999a448e787c611fd4...db066b9e4c9d6edce85d915618493ebf1ad735da"
       ],
       "notes": "Opening SHA not independently recoverable. PR changed one path. Current branch ref equals recorded PR head; target compare confirms merge ancestry."
+    },
+    {
+      "branch": "docs/conversation-handoff-brain-feedback-2026-10-30",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1226,
+      "openedHeadSha": "f08758b5be25396ed62147a9d12bf2620b330862",
+      "currentHeadSha": "f08758b5be25396ed62147a9d12bf2620b330862",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": null,
+      "targetContainsChanges": "UNKNOWN",
+      "classification": "OPEN_PR",
+      "recoveryDestination": null,
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1226"
+      ],
+      "notes": "Documentation handoff branch; four files changed. PR is open; target delivery is not yet established."
     }
   ],
   "integrationGaps": [
@@ -431,6 +451,16 @@
       "path": "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/review.md",
       "kind": "DOCUMENT",
       "status": "NEW",
+      "relatedItemIds": [
+        "VT-CWI-004"
+      ]
+    },
+    {
+      "title": "PR #1226",
+      "path": "https://github.com/viewtube-dev/viewtube/pull/1226",
+      "url": "https://github.com/viewtube-dev/viewtube/pull/1226",
+      "kind": "PULL_REQUEST",
+      "status": "OPEN",
       "relatedItemIds": [
         "VT-CWI-004"
       ]
