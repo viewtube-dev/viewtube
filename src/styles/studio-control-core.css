@@ -69,7 +69,8 @@
 }
 [data-vt-studio-control="true"]:focus-visible :is(
   [data-vt-studio-split-label], [data-vt-studio-control-label],
-  [data-vt-studio-button-face], [data-vt-studio-counter-value]
+  [data-vt-studio-button-face], [data-vt-studio-counter-value],
+  .vt-studio-vertical-word-toggle__word
 ) {
   color: #000;
   -webkit-text-stroke-color: #000;
