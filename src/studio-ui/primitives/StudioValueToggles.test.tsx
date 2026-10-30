@@ -11,6 +11,7 @@ describe("Studio value toggle primitives", () => {
     expect(html).toContain("TWO");
     expect(html).toContain('aria-label="Previous option"');
     expect(html).toContain('aria-label="Next option"');
+    expect(html).toContain('vt-studio-stepper-button vt-studio-value-toggle__arrow');
   });
 
   it("renders the side toggle with its arrow rail on the requested side", () => {
@@ -40,6 +41,7 @@ describe("Studio value toggle primitives", () => {
     expect(html).toContain('data-vt-studio-control-kind="studio-double-split-word-counter"');
     expect(html).toContain('aria-label="Previous Word"');
     expect(html).toContain('aria-label="Next Word"');
+    expect(html).toContain('vt-studio-stepper-button vt-studio-word-counter__button');
     expect(html).toContain("TWO");
   });
 });
