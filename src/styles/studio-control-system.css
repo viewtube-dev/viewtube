@@ -7134,6 +7134,9 @@ details.vt-studio-two-line-module > :not(summary) {
   background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, white);
   text-align: center;
 }
+.vt-studio-dropdown[data-open="true"] button[data-dropdown-trigger="true"] {
+  border-radius: var(--vt-studio-dropdown-menu-radius, var(--vt-studio-control-radius, 6px)) !important;
+}
 .vt-studio-dropdown [data-vt-studio-dropdown-value] {
   position: absolute;
   inset: 0;
