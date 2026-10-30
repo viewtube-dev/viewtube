@@ -86,6 +86,8 @@ test("double-side toggles reuse the same side-arrow controls and only the outer 
   assert.ok(doubleSide.includes("arrowSide=\"right\""));
   assert.ok(system.includes(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider{outline:none!important;box-shadow:none!important}"));
   assert.ok(system.includes(".vt-studio-value-toggle--double:focus-within"));
+  assert.ok(!recovery.includes(".vt-studio-value-toggle--double:focus-within"));
+  assert.ok(!recovery.includes(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider"));
 });
 
 test("split badge labels share the full outer-shell center axis without affecting editable split inputs", () => {
