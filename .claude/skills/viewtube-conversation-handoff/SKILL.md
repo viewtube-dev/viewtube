@@ -16,7 +16,7 @@ Storage:
 
 ## Living-log update shortcut
 
-When a user provides a handoff/document link and says **“Update the unfinished work log.”**, resolve the linked existing conversation package and update its `handoff.md`, `worklog.json` and `review.md` in place. Preserve prior history, add individual instruction/work/evidence records, and link every new artifact. Do not create a second living log or duplicate package unless the user is explicitly starting a different conversation.
+When a user provides a handoff/document link and says **“Update the unfinished work log.”**, resolve the linked package and update the existing handoff package in place, including its `handoff.md`, `worklog.json` and `review.md`. Preserve prior history, add individual instruction/work/evidence records, and link every new artifact. Do not create a second living log or duplicate package unless the user is explicitly starting a different conversation.
 
 ## Trigger
 
