@@ -17,12 +17,12 @@ test("split text input styles target the actual rendered shell, rails, and edita
 });
 
 test("split input has one stable geometry rule and the canonical resting/focus field contract", () => {
-  assert.equal((splitCss.match(/html body \.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\],/g) || []).length, 1);
+  assert.equal((splitCss.match(/html body \.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\]\[data-size\]/g) || []).length, 1);
   assert.doesNotMatch(splitCss, /data-geometry-variant|padding-reference|half-vertical-padding|username-height/);
-  assert.match(splitCss, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-split-field-primary\)/);
-  assert.match(splitCss, /background-color:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\)/);
-  assert.match(splitCss, /:focus-visible[\s\S]*?15%, transparent[\s\S]*?-webkit-text-stroke-color:\s*#000/);
-  assert.match(splitCss, /:focus-within\s*\{[\s\S]*?focus-outline-width-ratio, \.65[\s\S]*?var\(--vt-split-field-secondary\)/);
+  assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\)/);
+  assert.match(splitCss, /background:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\)/);
+  assert.match(splitCss, /:is\(:focus, :focus-visible\)[\s\S]*?15%, transparent[\s\S]*?-webkit-text-stroke-color:\s*#000/);
+  assert.match(splitCss, /\.vt-studio-split-text-input:focus-within[\s\S]*?outline:\s*calc\(var\(--vt-studio-control-stroke, 3px\) \* \.65\) solid var\(--vt-studio-control-secondary/);
   assert.match(splitCss, /caret-color:\s*var\(--vt-split-field-primary\)/);
   assert.doesNotMatch(splitComponent, /geometryVariant|data-geometry-variant/);
 });
@@ -40,7 +40,7 @@ test("split text input stylesheet is complete and closes the nested field rule",
   assert.doesNotThrow(() => postcss.parse(splitCss), "split text input stylesheet must parse as valid CSS");
   assert.match(
     splitCss,
-    /--vt-split-field-pad:\s*max\(10px, calc\(var\(--vt-studio-control-stroke, 3px\) \+ 8px\)\);[\s\S]*?caret-color:\s*var\(--vt-split-field-primary\);[\s\S]*?\n}\s*$/,
+    /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\);[\s\S]*?caret-color:\s*var\(--vt-split-field-primary\);[\s\S]*?\n}\s*$/,
     "nested field declarations must be complete and the rule must close",
   );
 });
