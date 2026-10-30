@@ -8,6 +8,8 @@ const css = readFileSync("src/styles/studio-control-system.css", "utf8")
 const generator = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 const fieldCss = readFileSync("src/styles/studio-text-input.css", "utf8")
+const splitInputCss = readFileSync("src/styles/studio-split-text-input.css", "utf8")
+const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
 const dropdown = component.slice(component.indexOf("export const StudioDropdown"), component.indexOf("export interface StudioSimpleDropdownOption"))
 
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
@@ -145,4 +147,30 @@ test("dropdown chevrons read size and stroke directly from all five size-tier to
   assert.match(dropdown, /size=\\{STUDIO_DROPDOWN_TOKENS\\.chevronSize\\[sizeVariant\\]\\}/);
   assert.match(dropdown, /strokeWidth=\\{STUDIO_DROPDOWN_TOKENS\\.chevronStroke\\[sizeVariant\\]\\}/);
   assert.doesNotMatch(dropdown, /chevronSize\\.standard/);
+});
+
+
+test("split text input follows the reference primary inline-stroke and token-owned rail geometry", () => {
+  assert.match(splitInputCss, /border:\\s*var\\(--vt-studio-control-stroke,[^)]*\\) solid var\\(--vt-split-field-primary\\)/);
+  assert.match(splitInputCss, /--vt-studio-split-rail-size/);
+  assert.match(splitInputCss, /background:\\s*color-mix\\(in srgb, var\\(--vt-split-field-primary\\) 50%, transparent\\)/);
+  assert.doesNotMatch(splitInputCss, /!important/);
+});
+
+test("upload frame uses the reference canvas anatomy without dropping current file APIs", () => {
+  assert.match(component, /data-size=\\{sizeVariant\\}/);
+  assert.match(component, /vt-studio-upload-frame__label/);
+  assert.match(component, /multiple=\\{multiple\\}/);
+  assert.match(component, /onFilesChange\\?\\.\\(files\\)/);
+  assert.match(css, /\\.vt-studio-upload-frame\\s*\\{[^}]*aspect-ratio:\\s*16\\s*\\/\\s*9[^}]*overflow:\\s*visible/s);
+});
+
+test("confirmed square icon library groups every requested effect by size", () => {
+  assert.match(catalog, /44px STANDARD · ALL SKINS \\+ EFFECTS/);
+  assert.match(catalog, /28px COMPACT · ALL SKINS \\+ EFFECTS/);
+  assert.match(catalog, /effect="bell-ring" variant="v3"/);
+  assert.match(catalog, /effect="download" variant="v3"/);
+  assert.match(catalog, /effect="refresh" tooltip="REFRESH"/);
+  assert.match(catalog, /effect="like" badge=\\{0\\}/);
+  assert.doesNotMatch(catalog, /vt-confirmed-square-effect-pair/);
 });
