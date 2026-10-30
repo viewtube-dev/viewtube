@@ -16,6 +16,23 @@ Every Confirmed representative must state its source module, production styleshe
 
 The specimen-grid tier list must stay in parity with the global five-tier vocabulary (Supreme, Standard, Compact, Mini, Micro). A tier appearing in the grid does not assert that every primitive supports it; each family must still be constrained to the sizes its production API and rendered behavior support.
 
+## Confirmed Primitive Library category taxonomy — 2026-10-30
+
+The Confirmed Primitive Library renders one canonical parent group for each of these six categories, in this order:
+
+1. **Text Fields** — native text inputs, text areas, text boxes, number inputs, identity/search/split fields, and compatibility field exports.
+2. **Buttons & Badges** — action buttons, split buttons, icon buttons, Play/Pause, badges, and status/navigation badge families.
+3. **Dropdowns** — single-select, split-left, multi-select dropdowns, dropdown triggers, option/menu rows, chevrons, and menu states. Dropdown menus are part of the Dropdowns family, not Compositions.
+4. **Controls** — all counters, word counters, sliders, word sliders, arrow/side/double-side/bar toggles, switches, radios, and checkboxes, including compatibility control exports.
+5. **Modules & Frames** — structural modules, InterModules, collapsing modules, accordions, and upload frames.
+6. **Compositions** — assembled experiences such as Tag Editor, Publishing Card, Primitive Grid, Spectrum Tags, chat/composer layouts, and composition-only layout helpers.
+
+The parent category is rendered once by `ConfirmedCatalogFamilyGroups`. Individual family specimens remain nested inside that parent; multiple specimen modules within a category are intentional and do not create duplicate category parents. Additional primitive specimens must be supplied to the same grouping pass rather than wrapped in a second independent category grid.
+
+Classification must be explicit for newly added families. Counters and sliders must never be classified as a separate category. A dropdown menu or option-list specimen must remain under Dropdowns even when it is rendered as a standalone menu state. A composition is an assembled user-facing experience, not a fallback category for an unrecognized primitive.
+
+This taxonomy changes catalog organization only. It does not authorize changes to production primitive APIs, tokens, styling, or runtime behavior.
+
 ## Studio Controls size-tier authority — 2026-10-20
 
 The canonical production size ladder is **Supreme 60px / Standard 44px / Compact 28px / Mini 20px / Micro 12px**. TypeScript tokens are authoritative, generated CSS is emitted from those tokens, and `studio-control-system.css` owns shared tier selectors. Supreme type/icons are rounded to 52px. Mini uses 17.5px type/icons; Micro keeps 12px height and 10px type/icons while inheriting Mini's 1.5px stroke, 3px radius, 0.975px outline, and global `-0.02em` letter-spacing. The canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` emits `src/styles/studio-control-vars.generated.css`; production geometry is applied by `src/styles/studio-control-system.css` and the family-specific styles. Supreme dimensional tokens scale Standard by 60/44 while preserving typography ratios, color roles, and flat-shell behavior. Mini has explicit 20px height / 1.5px stroke / 3px radius and is not interpolated from neighboring tiers. Micro has an explicit 12px height and is not derived from half Compact. Mini and Micro remain family-aware and must not be added to a component whose inner geometry cannot fit. The Confirmed Primitive Library may show a tier only after the production API and rendered behavior support it.
