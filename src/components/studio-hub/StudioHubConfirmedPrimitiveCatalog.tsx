@@ -194,29 +194,17 @@ const ConfirmedStudioCounterFamily: React.FC = () => {
 }
 
 const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
-  const [standardValue, setStandardValue] = React.useState(62)
-  const [compactValue, setCompactValue] = React.useState(38)
-  const [microValue, setMicroValue] = React.useState(7)
-  return (
-    <Family
-      title="StudioDoubleSplitSlider · Standard + Compact + Micro"
-      nonDefaultSettings={[
-        "L1 range-slider track and live numeric readout on the canonical double-split shell.",
-        "Rectangular v2 handle with a black structural stroke; no shell shadow or movement.",
-        "Standard, compact, and micro specimens use 0–100 values and paired palette variants.",
-      ]}
-      provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
-        <div className="vt-confirmed-counter-size-rows">
-          <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard slider" /><StudioDoubleSplitSlider className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard slider secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact slider" /><StudioDoubleSplitSlider className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact slider secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>COUNTER-CONTROLLED · UP / DOWN</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardValue} onValueChange={setStandardValue} size="standard" leftControls="counter" ariaLabel="Counter-controlled slider" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider" /><StudioDoubleSplitSlider className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider secondary palette" /></div></div>
-        </div>
-      </div>
-    </Family>
-  )
+  const [values, setValues] = React.useState({ supreme: 62, standard: 62, compact: 38, mini: 20, micro: 7 })
+  const update = (size: keyof typeof values) => (value: number) => setValues(current => ({ ...current, [size]: value }))
+  return <Family title="StudioDoubleSplitSlider · Five Size Tiers" nonDefaultSettings={[
+    "One canonical primary-fill design per size; inverse-color variants are intentionally excluded.",
+    "L1 range-slider track and live numeric readout on the shared double-split shell.",
+    "All specimens use a 0–100 value range.",
+  ]} provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px supreme / 44px standard / 28px compact / 20px mini / 12px micro." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row"><div className="vt-confirmed-counter-size-rows">
+      {(["supreme","standard","compact","mini","micro"] as const).map(size => <div className="vt-confirmed-counter-size-row" key={size}><small>{size.toUpperCase()} · {({supreme:60,standard:44,compact:28,mini:20,micro:12})[size]}PX</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={values[size]} onValueChange={update(size)} size={size} ariaLabel={`${size} slider`} /></div></div>)}
+    </div></div>
+  </Family>
 }
 
 const ConfirmedStudioSideCounterFamily: React.FC = () => {
