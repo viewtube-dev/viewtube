@@ -1,5 +1,5 @@
 import React from "react"
-import { Check, Settings2, Sparkles } from "lucide-react"
+import { Bell, Check, Heart, Settings2, Sparkles } from "lucide-react"
 import {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
