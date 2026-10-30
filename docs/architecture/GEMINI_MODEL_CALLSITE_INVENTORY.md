@@ -160,7 +160,7 @@ Phase 4 does not claim every caller explicitly annotates capability. Requests wi
 - `recordToolReceipt` accepts and carries the prompt receipt into ContentBuild output event metadata.
 - `operationRecordFromToolReceipt` retains the prompt receipt in its metadata projection.
 - ConceptSceneStudio now passes the generated asset's prompt receipt into its ToolReceipt.
-- Legacy VideoPublisher SEO generation is still an identified gap; its current `providerPath: "legacy-generateSeoData"` receipt does not include a governed prompt/model receipt.
+- VideoPublisher SEO now uses the governed `videoPublisherSeoStrategy`; its AssetGenerator prompt receipt and trace are passed into ToolReceipt and OperationRecord metadata. Other SEO entry points were subsequently migrated to this same specialist strategy.
 
 ### CI evidence
 
@@ -183,9 +183,28 @@ The generated `gemini-caller-inventory` artifact reports:
 - 43 exports with production import-and-reference matches; these include non-generation helpers such as configuration, key checks and model selection, so this count is not 43 independent model operations.
 - 29 exports with no static import reference; do not delete them without dynamic/re-export/reachability review.
 - 66 direct SDK invocation sites, concentrated in `src/services/gemini.ts` plus the explicit SDK model-list validation in `GeminiKeyContext`.
-- Four literal dynamic Gemini imports: two expected gateway adapter imports and two remaining UI imports (`AskMeWidget` / `TitleRewriterWidget`).
+- Four literal dynamic Gemini imports at the audited SHA: two expected gateway adapter imports and two UI imports (`AskMeWidget` / `TitleRewriterWidget`). The two UI imports were removed in subsequent commits; a fresh exact-head scan is still required to confirm the new count.
 - 20 model-ID literals and 18 credential-alias references requiring classification.
 
 Active production callers identified by the artifact include ActionableTactics, Channelytics, ResearchLab, Projects, VideoManager, MediaAnalyzer, AlgorithmArchitect, IntelligenceHub, DailyAdviceWidget, dashboard VideoManager/VideoUploader/AIJournal/CollabMatchmaker widgets, EndScreenTool, PreLaunchPriming, HookGenerator, creator-engagement comment response, script architect, project/studio storyboard flows, tag/thumbnail tools, VideoAutopsy and several provider-level Brain orchestration paths. The full per-export path/line list is retained in the workflow artifact rather than duplicated here.
 
 The artifact is from commit `9bd68ab8a657144f80abc71b6384e4ee7c60e1b7`, before the latest VideoPublisher migration. Regenerate it on the current PR head before using it as zero-caller evidence. The static scan remains a reachability lead, not a runtime proof.
+
+## Post-run #5442 caller migrations — 2026-10-30
+
+Run #5442 at `7c56011318b04029008cbe98c3b16f29650106a9` passed the dedicated Gemini governance job (audit, inventory artifact, 15 focused files / 70 tests) and production build. The exact artifact at that SHA still reported four literal dynamic imports; subsequent code edits removed the two UI imports:
+
+- `AskMeWidget` now calls `defaultBrainModelGateway.generateJsonObject` with an answer schema.
+- `TitleRewriterWidget` now calls `defaultBrainModelGateway.generateJsonObject` with a title/score schema and validates the response.
+
+The following `generateSeoData` callers from that inventory were also migrated after the audited SHA to `generateVideoPublisherSeoPackage` and `videoPublisherSeoStrategy`:
+
+- `src/views/SeoGenerator.tsx`
+- `src/views/MetadataMaster.tsx`
+- `src/views/dashboard/widgets/VideoUploaderWidget.tsx`
+
+Together with the earlier VideoPublisher migration, these remove the known active `generateSeoData` UI callers from the audited inventory. This is a source inspection result, not yet a fresh audit artifact.
+
+Remaining production call-site families from the run #5442 inventory include analytics/research, project planning, tags, thumbnails, scripts, storyboards, comments, end-screen and social/community operations. Their presence is not proof that every one should use the same pathway: Brain reasoning should use BrainModelGateway; creator assets should use AssetGenerator specialist strategies; media modalities need their existing capability-specific provider path. Each family still needs explicit migration and regression coverage.
+
+Phase 4 remains partial: standalone SeoGenerator and VideoUploader create governed AssetGenerator records and prompt receipts, but exact ContentBuild event/OperationRecord ingestion and retry/cost parity are not yet proven for those flows. No live Gemini key has been used. Do not remove the compatibility map or legacy exports until a fresh exact-head inventory, runtime caller proof and live capability parity support zero-bypass retirement.
