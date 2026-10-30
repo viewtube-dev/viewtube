@@ -53,7 +53,7 @@ Important interpretation: these footholds change several previously “not start
 **Purpose:** establish an exact, reproducible baseline before changing runtime behavior.
 
 Tasks:
-- Pin the target branch HEAD SHA and compare it with the audited SHA stored in AI-system registries.
+- Pin the target branch HEAD SHA and compare it with the audited SHA stored in AI-system registries. PR #1190 creation reported the target base SHA as `45d21d09d0e69b280d6f28f11a64bed6577f3097`; refresh this value if the target branch advances.
 - Inspect repository instructions, canonical domain docs, Prompt System spec, Task Authority and existing P1 workstream plans.
 - Reconcile PR/branch donors; do not wholesale-merge stale or divergent donor branches.
 - Run focused baseline tests for evidence, context, Channel Knowledge, BrainRuntimeSnapshot and publication/evaluation contracts.
