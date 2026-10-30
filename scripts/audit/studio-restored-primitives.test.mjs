@@ -93,6 +93,10 @@ test("all interactive Studio controls consume one final focus owner", () => {
   assert.match(focusCss, /--vt-studio-focus-outline-width/);
   assert.match(focusCss, /--vt-studio-focus-outline-color/);
   assert.match(focusCss, /--vt-studio-focus-outline-offset/);
+  assert.match(focusCss, /--vt-studio-focus-outline-width: calc\(var\(--vt-studio-control-stroke/);
+  assert.ok(!focusCss.includes(":root {"));
+  assert.ok(focusCss.includes(".vt-studio-split-accordion:focus-within"));
+  assert.ok(focusCss.includes(".vt-studio-counter.is-interaction-focus"));
   for (const selector of [
     ".vt-studio-44-switch", ".vt-studio-44-choice", ".vt-studio-counter",
     ".vt-studio-side-counter", ".vt-studio-left-counter",
