@@ -83,11 +83,13 @@ Track components without application entry points, missing UI/frontend, disconne
 
 Provide exactly five useful proposals when evidence supports five; otherwise state why fewer are justified. Route proposals through the existing Ideas Registry / improvement recommendations. Do not create a parallel backlog or treat proposals as approved work.
 
-1. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **Disposition:** PROPOSED
-2. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **Disposition:** PROPOSED
-3. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **Disposition:** PROPOSED
-4. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **Disposition:** PROPOSED
-5. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **Disposition:** PROPOSED
+For each proposal, state what to do, why it matters, how it connects to existing work, and the first concrete implementation step. Keep proposals evidence-based and clearly separate from approved requirements.
+
+1. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
+2. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
+3. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
+4. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
+5. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
 
 ## Exact next action
 
