@@ -262,3 +262,5 @@ PR #1140 changed:
 5. Complete the full paginated open/closed-unmerged PR audit and hunk-level Round 2 reconciliation. Do not mark the overall handoff fully reconciled until those items have explicit dispositions.
 
 **Continuation work-log ID:** `REC-20261030-chatgpt-002`
+
+**Documentation delivery:** [PR #1227](https://github.com/viewtube-dev/viewtube/pull/1227) is OPEN against `master/consolidated-feature-integration`; the handoff addendum and recovery receipts are proposed but not yet merged. GitHub Actions release-gates run #5703 is in progress. The three Vercel statuses are rate-limit failures; they do not establish a source-code failure.
