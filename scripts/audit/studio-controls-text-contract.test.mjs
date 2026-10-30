@@ -8,7 +8,6 @@ const read = (path) => readFileSync(resolve(process.cwd(), path), "utf8")
 const coreCss = read("src/styles/studio-control-core.css")
 const systemCss = read("src/styles/studio-control-system.css")
 const overridesCss = read("src/styles/studio-control-distill-overrides.css")
-const recoveryCss = read("src/styles/studio-control-recovery-overrides.css")
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx")
 
 const blockFor = (source, selector) => {
