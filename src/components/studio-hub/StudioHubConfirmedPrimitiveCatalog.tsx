@@ -466,6 +466,10 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "Single-line input typography remains 38px standard / 24px compact / 10px micro across all label variants.",
         "Floating labels raise to 80% of the input font size; fixed label boxes match StudioLegendMultiDropdown.",
       ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx" css="src/styles/studio-control-system.css + src/styles/studio-text-input.css" tokens="One native input family with simple, floating-label, and fixed-label variants; standard 44px / 38px, compact 28px / 24px, micro 12px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/styles/studio-control-entry.css", "src/styles/studio-text-input.css"]} />}>
+      <SizeMatrix label="Text input size examples"
+        standard={<StudioTextInput sizeVariant="standard" aria-label="Standard text input" placeholder="TYPE HERE" />}
+        compact={[0,1].map(i => compact(<StudioTextInput sizeVariant="compact" aria-label={"Compact text input "+(i+1)} placeholder="TYPE HERE" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioTextInput sizeVariant="micro" aria-label={"Micro text input "+(i+1)} placeholder="TYPE" />, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · simple input</span><StudioTextInput sizeVariant="standard" aria-label="Studio plain text input standard" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>28px compact · simple input</span><StudioTextInput sizeVariant="compact" aria-label="Studio plain text input compact" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>Floating label · 44px standard · A</span><StudioTextInput variant="floating-label" floatingLabelVariant="a" label="TITLE" aria-label="Studio floating-label input standard A" data-vt-library-component="StudioTextInput" /></div>
