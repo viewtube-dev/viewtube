@@ -7,23 +7,25 @@ Mode: Audit-first; no production edits before Gate 6 approval.
 ## Phase 0 — Target and preservation
 - [ ] T0.1 Confirm repository, target HEAD, working tree, instructions, test/build commands, and browser tooling.
 - [ ] T0.2 Confirm active Confirmed catalog, shell routes, and legacy/comparison track consumers.
-- [ ] T0.3 Read current Studio hierarchy, library source of truth, defaults/exception index, import inventory, authoring guide, palette/theme, and emitter instructions.
+- [x] T0.3 Read current Studio hierarchy, library source of truth, defaults/exception index, import inventory, authoring guide, palette/theme, and emitter instructions; reconcile with the existing 2026-10-29 audit and P1 workstream checklist.
 
 ### Checkpoint 0
-- [ ] One explicit target ref recorded; existing user work preserved; current authority files confirmed.
+- [x] Repository identity and target branch confirmed; HEAD recorded as `aa472be1b9bd7561fcfc1d8c97db4a420e410feb`; canonical Studio documents and existing audit work inspected.
+- [ ] Local working-tree cleanliness and browser/runtime access still require a real checkout/session.
 
 ## Phase 1 — File and dependency inventory
-- [ ] T1.1 Enumerate all files under `src/studio-ui/`.
-- [ ] T1.2 Enumerate all Studio-related files under `src/styles/` and build the CSS import/cascade graph.
+- [x] T1.1 Enumerate all files under `src/studio-ui/` (64 recursive tree entries, including tests and nested modules).
+- [x] T1.2 Enumerate `src/styles/` (45 entries) and trace `studio-control-entry.css` import order; family/consumer reachability classification remains open.
 - [ ] T1.3 Enumerate Studio-related files under `src/components/`, including catalog, shell, consumers, and compositions.
-- [ ] T1.4 Trace token/theme/emitter/generated CSS ownership and validation scripts.
+- [ ] T1.4 (in progress) Identify canonical tokens, palette, emitter, generated CSS, stylesheet entry, and existing validation scripts; complete theme and consumer trace.
 - [ ] T1.5 Classify all files by production, composition, catalog, generated, test, compatibility, deprecated, or unknown ownership.
 
 ### Checkpoint 1
 - [ ] Complete file inventory and reproducible import/style dependency graph.
+- [ ] Remaining component consumers, duplicate catalog candidate, and per-file lifecycle ownership classified.
 
 ## Phase 2 — Primitive registry
-- [ ] T2.1 Extract component/export inventory and reconcile barrels, aliases, wrappers, and compatibility exports.
+- [ ] T2.1 (in progress) Static pass found 70 `Studio*` value exports and 70 direct catalog JSX/component-map matches; classify each export as primitive, composition, layout, utility, compatibility, or internal.
 - [ ] T2.2 Trace production consumers and determine public/internal/deprecated/dead status.
 - [ ] T2.3 Classify all live families into the six canonical categories.
 - [ ] T2.4 Record each family's API, supported tiers, variants, states, anatomy, responsive/accessibility constraints, and exceptions.
