@@ -7071,4 +7071,14 @@ details.vt-studio-two-line-module > :not(summary) {
 }
 .vt-studio-word-counter[data-size="compact"] .vt-studio-word-counter__value { font-size: var(--vt-studio-compact-font-size, 24px); }
 .vt-studio-word-counter[data-size="micro"] .vt-studio-word-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
+/* Ensure the bar rails consume the exact same button defaults as both counter primitives. */
+.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-stepper-button {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-stepper-button svg {
+  width: min(var(--vt-stepper-chevron-size, var(--vt-studio-stepper-standard-chevron-size, 36px)), 100%);
+  height: min(var(--vt-stepper-chevron-size, var(--vt-studio-stepper-standard-chevron-size, 36px)), 100%);
+  stroke-width: var(--vt-stepper-chevron-stroke, var(--vt-studio-stepper-standard-chevron-stroke, 2.5));
+}
 
