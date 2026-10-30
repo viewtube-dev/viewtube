@@ -6,8 +6,7 @@ describe("initial channel bootstrap freshness", () => {
  it("treats a missing restored snapshot as stale instead of dereferencing it", () => {
   expect(isInitialInventoryFresh(null, false)).toBe(false)
  })
-})
- 
+
  it("forces inventory stale even when the restored inventory is fresh", () => {
   const restored = {
    channelId: "channel-1",
