@@ -251,3 +251,10 @@ The AI/Brain documentation family was re-audited against current main `c494d96aa
 - `tasks/system-convergence/SYSTEM-CLASSIFICATION.md` — working KEEP / MERGE / PROJECT / ADAPTER / PAIR / QUARANTINE / REMOVE registry.
 
 Destructive consolidation decisions require current-code reachability, donor-harvest and parity evidence. Historical documents are not removal authorization.
+
+
+## Conversation handoff recovery — 2026-10-30
+
+| ID | Path | Domain | Lifecycle | Disposition | Notes |
+| --- | --- | --- | --- | --- | --- |
+| 122 | `docs/recovery/Handoff-Conversation-20261030.md` | recovery | `evidence` | `retain-current` | Dated conversation handoff capturing Studio primitive-grid/representative requirements, upload-frame and dropdown requests, PR lineage, user constraints, and resumable next actions. Round 1 capture; Round 2 reconciliation remains open. |

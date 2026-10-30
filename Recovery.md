@@ -954,3 +954,21 @@ Every substantial conversation must actively search for bugs, code-structure pro
 - **Required action:** authenticate to Render, change the Publisher start command to `npm run start:production`, deploy manually, and verify the three API routes and startup logs.
 - **Limitations:** no production settings changed; no deployment triggered; repository test suite remains unverified because the execution environment could not resolve github.com for a clone.
 - **Artifact:** `docs/recovery/Publisher-Render-API-Startup-Blocker-2026-10-16.md`.
+
+
+## REC-20261030-chatgpt-001 — Studio Library and integration conversation handoff
+
+- **Timestamp:** 2026-10-30
+- **Agent / conversation:** ChatGPT ViewTube engineering conversation
+- **Round:** 1 — independent recovery; Round 2 remains open
+- **Category:** HANDOFF / STUDIO UI / GITHUB RECONCILIATION
+- **Action:** Captured current Studio primitive-grid and representative requirements, upload-frame and dropdown design requests, relevant PR lineage, known Brain/deployment context, user constraints, and resumable next actions in a dated handoff.
+- **Source:** Current ViewTube conversation, available prior-conversation summaries, and GitHub PR metadata fetched on 2026-10-30.
+- **Evidence:** GitHub reports #1114 merged on 2026-10-28; #1112 closed unmerged and superseded by #1114; #1111 open at last query; #1070, #1080, and #1073 merged. Handoff records that #1114's top-grid and dropdown changes still require current CI/browser verification.
+- **Status:** IMPLEMENTED — handoff and log entries created; complete repository-wide unmerged-PR audit and Round 2 reconciliation remain outstanding.
+- **Artifact:** `docs/recovery/Handoff-Conversation-20261030.md`
+- **External identifier:** [PR #1114](https://github.com/viewtube-dev/viewtube/pull/1114); [PR #1112](https://github.com/viewtube-dev/viewtube/pull/1112); [PR #1111](https://github.com/viewtube-dev/viewtube/pull/1111); documentation branch `docs/conversation-handoff-log-completion-2026-10-30`.
+- **Dependencies:** Current integration branch source, current CI checks, complete paginated PR inventory, browser access for visual checks.
+- **Result:** Conversation decisions and unfinished work are now persisted in a repository handoff rather than relying on chat history. Recovery log and structured state are being synchronized in this PR.
+- **Next action:** Verify the documentation diff; then execute Round 2 by reconciling the full PR candidate set against current target source and verifying the Confirmed Library in desktop/mobile browsers.
+- **Verification:** Handoff file creation succeeded on the documentation branch. Repository tests/build and full PR audit have not been run.
