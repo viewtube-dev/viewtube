@@ -657,12 +657,12 @@ describe("collectDescendantAlgorithmEvents", () => {
    { id: "unrelated", parentEventIds: [], createdAt: 0 },
    { id: "middle", parentEventIds: ["root"], createdAt: 2 },
    { id: "root", parentEventIds: [], createdAt: 1 },
-   { id: "cycle-a", parentEventIds: ["cycle-b"], createdAt: 4 },
+   { id: "cycle-a", parentEventIds: ["leaf", "cycle-b"], createdAt: 4 },
    { id: "cycle-b", parentEventIds: ["cycle-a"], createdAt: 5 },
   ] as any
 
   expect(collectDescendantAlgorithmEvents(events, new Set(["root"])).map(event => event.id))
-   .toEqual(["root", "middle", "leaf"])
+   .toEqual(["root", "middle", "leaf", "cycle-a", "cycle-b"])
  })
 
  it("keeps multiple branches and deduplicates shared descendants", () => {
