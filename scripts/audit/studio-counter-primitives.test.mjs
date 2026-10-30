@@ -21,11 +21,10 @@ test("StudioCounter is a new button-only double-split primitive across all three
   assert.match(source, /data-vt-library-component": "StudioCounter"/)
   assert.match(source, /<span className="vt-studio-counter__value"/)
   assert.doesNotMatch(source, /<input|StudioInlineStepper|StudioSplitStepper|normalizeStudioInlineStepperValue/)
-  assert.match(styles, /\.vt-studio-counter\s*\{\s*--vt-studio-counter-width:\s*176px;/)
-  assert.match(styles, /\.vt-studio-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*112px;/)
-  assert.match(styles, /\.vt-studio-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*56px;/)
+  assert.match(styles, /\.vt-studio-counter,[\s\S]*?width:\s*100%/)
+  assert.doesNotMatch(styles, /vt-studio-counter-width/)
   assert.match(styles, /\.vt-studio-counter__button svg\s*\{[^}]*width:\s*24px;[^}]*height:\s*24px;/s)
-  assert.match(styles, /\.vt-studio-counter\[data-vt-studio-split="double"\]\s*\{[^}]*minmax\(0, 2fr\)/s)
+  assert.doesNotMatch(styles, /\.vt-studio-counter\[data-vt-studio-split="double"\][^}]*2fr/)
   for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
 })
 
@@ -40,11 +39,10 @@ test("StudioSideCounter is a new button-only split-right primitive with a divide
   assert.match(source, /<ChevronUp/)
   assert.match(source, /<ChevronDown/)
   assert.doesNotMatch(source, /<input|StudioInlineStepper|StudioSplitStepper|normalizeStudioInlineStepperValue/)
-  assert.match(styles, /\.vt-studio-side-counter\s*\{\s*--vt-studio-counter-width:\s*132px;/)
-  assert.match(styles, /\.vt-studio-side-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*84px;/)
-  assert.match(styles, /\.vt-studio-side-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*42px;/)
+  assert.match(styles, /\.vt-studio-side-counter,[\s\S]*?width:\s*100%/)
+  assert.doesNotMatch(styles, /vt-studio-counter-width/)
   assert.match(styles, /\.vt-studio-side-counter__actions button svg\s*\{[^}]*width:\s*14px;[^}]*height:\s*14px;/s)
-  assert.match(styles, /\.vt-studio-side-counter\[data-vt-studio-split="right"\]\s*\{[^}]*minmax\(0, 2fr\)/s)
+  assert.doesNotMatch(styles, /\.vt-studio-side-counter\[data-vt-studio-split="right"\][^}]*2fr/)
   assert.match(styles, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s);
   for (const size of ["standard", "compact", "micro"]) assert.match(catalog, new RegExp('StudioSideCounter value={[^}]+} onValueChange={[^}]+} size="' + size + '"'))
 })
@@ -140,9 +138,8 @@ test("StudioLeftCounter places the two-button action rail on the left and is ava
   assert.match(source, /data-vt-library-component": "StudioLeftCounter"/);
   assert.match(source, /"data-vt-studio-control-kind": "studio-left-counter"/);
   assert.match(source, /<span className="vt-studio-side-counter__value"/);
-  assert.match(styles, /\.vt-studio-left-counter\s*\{\s*--vt-studio-counter-width:\s*132px;/);
-  assert.match(styles, /\.vt-studio-left-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*84px;/);
-  assert.match(styles, /\.vt-studio-left-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*42px;/);
+  assert.match(styles, /\.vt-studio-left-counter,[\s\S]*?width:\s*100%/)
+  assert.doesNotMatch(styles, /vt-studio-counter-width/)
   assert.match(styles, /\.vt-studio-left-counter__rail\[data-rail="start"\]\s*\{[^}]*border-right:/s);
   assert.match(catalog, /StudioLeftCounter className="is-reversed"/);
   assert.doesNotMatch(catalog, /StudioSideCounter className="is-reversed"/);
@@ -234,7 +231,7 @@ test("dropdown menus share separated primary-filled menu defaults across standar
 
 
 test("all counter primitives inherit full-row width without a 2:1 center ratio", () => {
-  const counterStyles = styles.slice(styles.indexOf("/* New independent StudioCounter"), styles.indexOf("/* Side Toggle arrow"));
+  const counterStyles = styles.slice(styles.indexOf("/* Counter primitives inherit"), styles.indexOf("/* Side Toggle arrow"));
   assert.match(counterStyles, /\.vt-studio-counter,[\s\S]*?width:\s*100%/);
   assert.match(counterStyles, /min-width:\s*0/);
   assert.doesNotMatch(counterStyles, /vt-studio-counter-width|grid-template-columns:\s*minmax\(0,\s*1fr\)\s+minmax\(0,\s*2fr\)/);
@@ -245,13 +242,13 @@ test("all counter primitives inherit full-row width without a 2:1 center ratio",
 
 test("double split word counter uses the shared 50-percent resting treatment and black focus text", () => {
   const wordStyles = styles.slice(styles.indexOf("/* New double-split word counter"));
-  assert.match(wordStyles, /background:\s*color-mix\(in srgb,\s*var\(--vt-studio-control-accent[^;]+50%/);
-  assert.match(wordStyles, /color:\s*var\(--vt-field-text,\s*var\(--vt-field-primary/);
+  assert.match(wordStyles, /background:\s*color-mix\(in srgb,\s*white 50%,\s*var\(--vt-studio-control-accent/);
+  assert.match(wordStyles, /color:\s*var\(--vt-studio-control-accent/);
   assert.match(wordStyles, /:focus-within[\s\S]*?color:\s*#000/);
 });
 
 test("bar toggle tooltip is hidden at rest, visible only on focus, and the center bars sit above rails", () => {
-  const barStyles = styles.slice(styles.indexOf("/* The bar shell and its center cell"));
+  const barStyles = distill.slice(distill.indexOf("/* Bar percentage appears only while the control is focused"));
   assert.match(barStyles, /\.vt-studio-value-toggle__bar-tooltip\s*\{[^}]*visibility:\s*hidden/);
   assert.match(barStyles, /:focus-within[\s\S]*?\.vt-studio-value-toggle__bar-tooltip[\s\S]*?visibility:\s*visible/);
   assert.match(barStyles, /\.vt-studio-value-toggle--bar:focus-within[\s\S]*?outline:/);
@@ -264,14 +261,14 @@ test("selected split buttons swap face and rail colors using the canonical pair 
 });
 
 test("play pause selected state swaps primary/secondary face and rail pair colors", () => {
-  const playPause = styles.slice(styles.indexOf("Play/Pause split-left variant"));
+  const playPause = styles.slice(styles.indexOf("/* Play/Pause uses the same selected palette swap"));
   assert.match(playPause, /aria-pressed="true"\]\s*\[data-vt-studio-split-rail\][\s\S]*?background:\s*var\(--vt-studio-control-accent/);
   assert.match(playPause, /aria-pressed="true"\]\s*>\s*\[data-vt-studio-button-face\][\s\S]*?background:\s*var\(--vt-studio-control-secondary/);
   assert.doesNotMatch(playPause, /color-mix\([^;]+50%/);
 });
 
 test("dropdown colors and trigger alignment use active pair tokens and centered label space", () => {
-  const dropdown = styles.slice(styles.indexOf(".vt-studio-dropdown {"), styles.indexOf("/* New independent StudioCounter"));
+  const dropdown = styles.slice(styles.indexOf(".vt-studio-dropdown {"), styles.indexOf("/* Counter primitives inherit"));
   assert.match(dropdown, /background:\s*var\(--vt-studio-control-accent,\s*var\(--pair-a/);
   assert.match(dropdown, /background:\s*var\(--vt-studio-control-secondary,\s*var\(--pair-b/);
   assert.match(dropdown, /grid-template-columns:\s*var\(--vt-studio-dropdown-rail-size[^;]*minmax\(0,\s*1fr\)\s+var\(--vt-studio-dropdown-rail-size/);
