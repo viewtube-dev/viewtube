@@ -107,6 +107,25 @@ test("inter-modules are full-width and the representative section is a single fu
   assert.ok(catalogCss.includes("grid-template-columns: minmax(0, 1fr)"));
 });
 
+test("every primitive named by the full-width representatives has a real catalog specimen", () => {
+  const representativeList = catalog.match(/primitive="(StudioButton · StudioSplitLeftButton[^"]+)"/)?.[1];
+  assert.ok(representativeList, "canonical representatives inventory must exist");
+  const specimenNames = new Set([...catalog.matchAll(/data-vt-library-component="([^"]+)"/g)].map((match) => match[1]));
+  for (const primitive of representativeList.split(" · ")) {
+    assert.ok(specimenNames.has(primitive), primitive + " must have a real catalog specimen");
+  }
+});
+
+test("side counter is a separate family module, not nested in the counter family", () => {
+  const counterStart = catalog.indexOf("const ConfirmedStudioCounterFamily");
+  const sideCounterStart = catalog.indexOf("const ConfirmedStudioSideCounterFamily");
+  assert.ok(counterStart >= 0 && sideCounterStart > counterStart);
+  const counterFamilySource = catalog.slice(counterStart, sideCounterStart);
+  assert.ok(!counterFamilySource.includes("<ConfirmedStudioSideCounterFamily"));
+  assert.ok(catalog.includes("<ConfirmedStudioCounterFamily />"));
+  assert.ok(catalog.includes("<ConfirmedStudioSideCounterFamily />"));
+});
+
 test("Confirmed Library keeps the split text input in the canonical Text Fields family", () => {
   assert.ok(catalog.includes("StudioSplitTextInput"));
   assert.ok(catalog.includes("Text Fields"));
