@@ -47,8 +47,8 @@ Mode: Audit-first; no production edits before Gate 6 approval.
 ## Phase 4 — Library completeness
 - [ ] T4.1 Map every Confirmed catalog specimen to a real production implementation/export.
 - [ ] T4.2 Build bidirectional registry/catalog crosswalk and classify coverage gaps.
-- [ ] T4.3 Verify six-category order and family placement.
-- [ ] T4.4 Verify one canonical representative per primitive and accurate variant/state specimens; source presence alone is insufficient (20 exports have one tag occurrence, 50 have multiple occurrences).
+- [ ] T4.3 Verify six-category order and family placement; explicitly classify composer dock, certification surface, composition helpers, and unknown-family failure behavior.
+- [ ] T4.4 Verify one canonical representative per primitive and accurate variant/state specimens; source presence alone is insufficient (20 exports have one tag occurrence, 50 have multiple occurrences). Reconcile the full-width baseline ledger with detailed family specimens.
 - [ ] T4.5 Verify specimen provenance, defaults/non-default settings, supported tiers, and production-import boundaries.
 
 ### Checkpoint 4
