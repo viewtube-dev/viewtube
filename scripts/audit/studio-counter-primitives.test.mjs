@@ -228,3 +228,25 @@ test("dropdown menus share separated primary-filled menu defaults across standar
   assert.match(menuContract, /border:\s*var\(--vt-studio-dropdown-row-stroke[^;]*solid #000/);
   assert.match(menuContract, /border-radius:\s*var\(--vt-studio-dropdown-menu-radius[^;]*!important/);
 });
+
+
+test("counter families are independent modules and solid-fill word counter faces stay solid", () => {
+  const counterFamilyStart = catalog.indexOf("const ConfirmedStudioCounterFamily");
+  const counterFamilyEnd = catalog.indexOf("const ConfirmedStudioDoubleSplitSliderFamily", counterFamilyStart);
+  const counterFamily = catalog.slice(counterFamilyStart, counterFamilyEnd);
+  assert.ok(counterFamilyStart >= 0 && counterFamilyEnd > counterFamilyStart);
+  assert.doesNotMatch(counterFamily, /<ConfirmedStudioSideCounterFamily\s*\/>/);
+  assert.match(catalog, /<ConfirmedStudioSideCounterFamily\s*\/>/);
+  assert.match(catalog, /title="StudioDoubleSplitWordCounter[\s\S]*?defaultOpen/);
+  assert.match(styles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\]\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s);
+  assert.doesNotMatch(styles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\][^{]*\{[^}]*50%/s);
+});
+
+test("value-toggle recovery defaults do not repaint arrow-toggle faces with half-primary fill", () => {
+  const recoveryFillStart = recovery.indexOf("/* Restore visible toggle/switch silhouettes");
+  const recoveryFillEnd = recovery.indexOf("/* Supreme + Mini double-split slider counter rails", recoveryFillStart);
+  const recoveryFill = recovery.slice(recoveryFillStart, recoveryFillEnd);
+  assert.ok(recoveryFillStart >= 0 && recoveryFillEnd > recoveryFillStart);
+  assert.doesNotMatch(recoveryFill, /\.vt-studio-value-toggle\s*,/);
+  assert.doesNotMatch(recoveryFill, /\.vt-studio-split-shell\.vt-studio-value-toggle\s*\{/);
+});
