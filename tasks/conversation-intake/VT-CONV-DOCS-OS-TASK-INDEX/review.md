@@ -49,7 +49,7 @@ The global Conversation Handoffs system is current on target (PR #1170 and PR #1
 - Vault phase/audit records remain technical implementation evidence; global conversation packages own complete instructions, cross-domain work and resumption.
 - Historical recovery/handoff artifacts remain provenance and are not rewritten as active competing handoffs.
 
-Updated in this migration branch; merge/delivery status is pending PR review.
+Updated in migration branch / PR #1224; merge/delivery remains pending. Dedicated handoff contract and document-system tests passed. Broader audit:documents fails on competing authority metadata across six P1 workstream folders outside this migration's changed files.
 
 ## Plan / task merges
 
