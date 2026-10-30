@@ -49,6 +49,8 @@ describe("BrainRuntime", () => {
   const result = await runBrainTask({
    channelId: "channel-1",
    userText: "What should I make next?",
+   operationId: "creator-action-123",
+   operationId: "creator-action-123",
    snapshot: snapshot as any,
    systemPrompt: "system",
    growthContext: growthContext as any,
