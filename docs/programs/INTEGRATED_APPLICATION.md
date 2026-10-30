@@ -256,3 +256,8 @@ Use the following sources as reconciliation inputs, not live status authorities:
 The first Task Authority proposal batch should be limited to high-confidence surviving work after dedupe: publishing durability/recovery; post-publish identity/outcomes; Project page Subtoolbox/popover visual correction; application-wide responsive/visual certification; auth/diagnostics reliability; outcome/evaluation/learning closure; analytics comparability/provenance; and documentation/Task Index migration.
 
 Do **not** reopen completed greenfield programs listed above. Do **not** promote every `IDEA-*` opportunity to a task. Do **not** archive the September donor/audit sources until their unique acceptance criteria, references and unresolved work have been harvested.
+
+
+## P1 Canonical System Integration coordination
+
+The coordinated six-workstream P1 execution workspace is indexed at [P1 Canonical System Integration](../../tasks/p1-canonical-system-integration/README.md). It coordinates, but does not replace, the existing Brain, provider, diagnostics, capability, public resolver and Studio authorities. Its inventory records code/test/PR leads; its workstream plans define focused implementation and runtime acceptance. Exact task lifecycle remains in Task Authority and the Task Index. No new owner, ledger or parallel implementation is authorized by this coordination program.
