@@ -62,6 +62,18 @@ function readPair(contract, property) {
   return values;
 }
 
+function readMenuNumber(property) {
+  const match = dropdownMenuContract.match(new RegExp(`${property}:\\s*([\\d.]+)`));
+  if (!match) throw new Error(`Missing Studio dropdown menu token: ${property}`);
+  return Number(match[1]);
+}
+
+function readMenuName(property) {
+  const match = dropdownMenuContract.match(new RegExp(`${property}:\\s*"([^"]+)"`));
+  if (!match) throw new Error(`Missing Studio dropdown menu token: ${property}`);
+  return match[1];
+}
+
 const dropdownRail = readPair(dropdownContract, "railSize");
 const dropdownChevron = readPair(dropdownContract, "chevronSize");
 const dropdownChevronStroke = readPair(dropdownContract, "chevronStroke");
