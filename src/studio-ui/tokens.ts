@@ -2,9 +2,9 @@ import { SUBTOOLBOX_TOKENS, TOOLBOX_LEVEL_DNA } from "../components/subtoolbox/t
 
 /** Shared dropdown chevron contract: the multi-select side chevron defines every dropdown's rail and glyph geometry. */
 export const STUDIO_DROPDOWN_TOKENS = {
-  railSize: { standard: 44, compact: 28 },
-  chevronSize: { standard: 28, compact: 18 },
-  chevronStroke: { standard: 2.5, compact: 1.65 },
+  railSize: { supreme: 60, standard: 44, compact: 28, mini: 20, micro: 12 },
+  chevronSize: { supreme: 38, standard: 28, compact: 18, mini: 14, micro: 8 },
+  chevronStroke: { supreme: 3.41, standard: 2.5, compact: 1.65, mini: 1.2, micro: 1 },
   railFill: "secondary",
   splitIconFill: "black",
   chevronPlacement: "trailing",
