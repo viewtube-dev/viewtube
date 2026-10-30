@@ -854,3 +854,46 @@ describe("confirmed individual module variant completeness", () => {
     expect(dropdownFamily).toContain("StudioSplitLeftDropdown");
   });
 });
+
+
+describe("confirmed library cleanup and counter module visibility", () => {
+  it("keeps side counter in its own Controls module and expands counter galleries by default", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const counter = source.slice(source.indexOf("const ConfirmedStudioCounterFamily"), source.indexOf("const ConfirmedStudioDoubleSplitSliderFamily"));
+    expect(counter).not.toContain("<ConfirmedStudioSideCounterFamily />");
+    expect(source).toContain("<ConfirmedStudioCounterFamily />");
+    expect(source).toContain("<ConfirmedStudioSideCounterFamily />");
+    for (const title of [
+      "Studio Counter Family · Double-Side / Side / Left",
+      "StudioSideCounter · Supreme + Standard + Compact + Mini + Micro",
+      "StudioDoubleSplitSlider · Supreme + Standard + Compact + Mini + Micro",
+      "StudioLeftWordCounter · Four-State Cycle + Five Sizes",
+      "StudioDoubleSplitWordCounter · Two Chevron Rails + Four-State Word Cycle",
+      "StudioLeftWordSlider · Slider + Numeric Right Rail",
+    ]) {
+      const familyStart = source.indexOf(`title="${title}"`);
+      const familyEnd = source.indexOf("</Family>", familyStart);
+      expect(familyStart, `${title} exists`).toBeGreaterThanOrEqual(0);
+      expect(source.slice(familyStart, familyEnd)).toContain("defaultOpen");
+    }
+  });
+
+  it("groups representative rows by primitive family and excludes retired library-only demos", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf('data-vt-confirmed-representatives="true"');
+    const end = source.indexOf("</Family>", start);
+    const representatives = source.slice(start, end);
+    const headings = ["BUTTONS", "DROPDOWNS", "TEXT FIELDS", "CONTROLS", "BADGES", "MODULES & COMPOSITIONS"];
+    let last = -1;
+    for (const heading of headings) {
+      const next = representatives.indexOf(heading);
+      expect(next, `representative group ${heading}`).toBeGreaterThan(last);
+      last = next;
+    }
+    for (const retired of ["StudioChatActionGroup", "StudioSelect", "StudioSearchInput", "StudioHubCertification", "StudioComponentGridSpecimen"]) {
+      expect(source).not.toContain(retired);
+    }
+    expect(source).toContain('data-vt-library-component="StudioComponentGrid"');
+    expect(source).toContain('data-vt-library-component="StudioComponentGridCell"');
+  });
+});
