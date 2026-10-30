@@ -39,3 +39,11 @@ Extend the already-tracked reliability work rather than opening a competing enve
 - VT-035: correlation IDs across the creator loop.
 - VT-036: structured error/failure-state taxonomy.
 Current producers/owners include Brain traces, GenerationRecord/ToolReceipt, ContentBuild event stream, Algorithm Intelligence event ledger, AnalyticsErrorReporter and existing diagnostics services. No universal event store or diagnostics DB.
+
+
+## Existing typed identity contract — source inspected
+- `OperationEnvelope v1` already provides eventId/eventType/operationId/correlationId/causationId/idempotencyKey, channel/project/contentBuild scope, actor, evidenceRefs and artifactRefs.
+- `OperationRecord v1` already models operation lifecycle/approval and lineage to trace, ActionPacket, ToolReceipt, GenerationRecord, publish transaction/snapshot, recommendation/experiment and parent operation.
+- `UnifiedDiagnosticEvent` currently provides optional correlationId, evidenceRefs, recommendedActions and privacy, but no first-class eventId/operationId/causation/parent ancestry or channel/project/contentBuild scope. Determine safe optional projection from existing envelope; do not require these for non-operation diagnostics.
+- `diagnostics.ts` already sanitizes secret-shaped keys, bearer tokens and sensitive query values. `unified.ts` uses adapters and the bounded in-memory ring; do not add durable diagnostics persistence.
+- BrainOutcomeLedger and AlgorithmIntelligenceEventLedger already carry operation/trace/source/parent/evidence/outcome links. The gap is consistent adoption and cross-producer correlation, not another event schema or ledger. See [identity map](../identity-map.md).
