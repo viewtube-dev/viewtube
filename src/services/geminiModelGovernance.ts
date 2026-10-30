@@ -261,6 +261,73 @@ export const resolveGeminiGenerationProfile = (input: {
   return { capability: input.capability, modelId: input.modelId, settings, sources }
 }
 
+export interface GeminiExecutionAttempt<T> {
+  response: T
+  servedModel: string
+  attempts: number
+}
+
+export interface GeminiExecutionFallbackInput<T> {
+  modelCandidates: readonly string[]
+  execute: (modelId: string) => Promise<T>
+  classify?: (error: unknown) => GeminiFailureClassification
+  onFallback?: (event: { sourceModel: string; fallbackModel: string; reason: GeminiFailureClassification["kind"]; attempt: number }) => void
+}
+
+/**
+ * Execute a bounded, ordered provider candidate list. Authentication, permission,
+ * quota, and unknown failures are terminal. Transient failures get one retry;
+ * unsupported-model failures may advance through the supplied capability-safe list.
+ */
+export const executeGeminiWithFallback = async <T>(
+  input: GeminiExecutionFallbackInput<T>,
+): Promise<GeminiExecutionAttempt<T>> => {
+  if (input.modelCandidates.length === 0) throw new Error("No Gemini model candidates were supplied.")
+  let transientRetries = 0
+  let lastError: unknown
+  for (let index = 0; index < input.modelCandidates.length; index += 1) {
+    const modelId = input.modelCandidates[index]
+    try {
+      const response = await input.execute(modelId)
+      return { response, servedModel: modelId, attempts: index + 1 }
+    } catch (error) {
+      lastError = error
+      const failure = (input.classify ?? ((value) => classifyGeminiFailure(
+        value && typeof value === "object"
+          ? value as { status?: unknown; code?: unknown; message?: unknown }
+          : { message: String(value) },
+      )))(error)
+      const nextModel = input.modelCandidates[index + 1]
+      if (!failure.fallbackAllowed || !nextModel) throw error
+      if (failure.kind === "transient") {
+        if (transientRetries >= 1) throw error
+        transientRetries += 1
+      }
+      input.onFallback?.({
+        sourceModel: modelId,
+        fallbackModel: nextModel,
+        reason: failure.kind,
+        attempt: index + 1,
+      })
+    }
+  }
+  throw lastError
+}
+
+export const pickGeminiGenerationOverrides = (
+  config: Record<string, unknown> | undefined,
+): GeminiGenerationSettings => {
+  const keys: Array<keyof GeminiGenerationSettings> = [
+    "temperature", "topP", "topK", "maxOutputTokens", "responseMimeType",
+  ]
+  const overrides: GeminiGenerationSettings = {}
+  for (const key of keys) {
+    const value = config?.[key]
+    if (value !== undefined) Object.assign(overrides, { [key]: value })
+  }
+  return overrides
+}
+
 export type GeminiFailureClassification = {
   kind: "authentication" | "permission" | "quota" | "unsupported_model" | "transient" | "unknown"
   fallbackAllowed: boolean
