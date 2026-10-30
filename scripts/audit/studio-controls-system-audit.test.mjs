@@ -67,6 +67,17 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
   assert.ok(fields.includes("textarea[data-vt-studio-control=\\"true\\"][data-vt-studio-field-kind=\\"textarea\\"],"));
 });
 
+test("split badge labels share the full outer-shell center axis without affecting editable split inputs", () => {
+  const start = system.indexOf("/* Split badge labels center against the complete outer shell");
+  assert.ok(start >= 0, "outer-shell centering contract must be documented in the system stylesheet");
+  const block = system.slice(start);
+  assert.ok(block.includes("position: absolute;"));
+  assert.ok(block.includes("inset: 0;"));
+  assert.ok(block.includes("justify-content: center;"));
+  assert.ok(block.includes("grid-column: 3;"));
+  assert.ok(block.includes(":not(.vt-studio-split-text-input"));
+});
+
 test("split text input accepts every canonical size supported by its production badge foundation", () => {
   assert.ok(splitInput.includes('import type { StudioControlSize } from "../tokens"'));
   assert.ok(splitInput.includes("sizeVariant?: StudioControlSize"));
