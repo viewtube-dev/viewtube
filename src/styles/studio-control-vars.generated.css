@@ -35,6 +35,11 @@
   --vt-studio-focus-outline-width-ratio: 0.65;
   --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65));
   --vt-studio-focus-outline-offset: 0px;
+  --vt-studio-dropdown-menu-gap: 8px;
+  --vt-studio-dropdown-menu-padding: 4px;
+  --vt-studio-dropdown-row-gap: 3px;
+  --vt-studio-dropdown-menu-duration: 140ms;
+  --vt-studio-dropdown-menu-distance: 4px;
   --vt-studio-dropdown-supreme-rail-size: 60px;
   --vt-studio-dropdown-supreme-chevron-size: 38px;
   --vt-studio-dropdown-supreme-chevron-stroke: 3.41;
