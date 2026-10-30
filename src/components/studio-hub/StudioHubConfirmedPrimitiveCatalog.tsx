@@ -181,30 +181,17 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
 )
 
 const ConfirmedStudioCounterFamily: React.FC = () => {
-  const [standardValue, setStandardValue] = React.useState(22)
-  const [compactValue, setCompactValue] = React.useState(3)
-  const [microValue, setMicroValue] = React.useState(7)
-  return (
-    <Family
-      title="StudioCounter · Standard + Compact + Micro"
-      nonDefaultSettings={[
-        "Independent button-only counter; no legacy stepper composition.",
-        "Each size pairs the primary right-side rail with an opposite-palette left-side rail.",
-        "Catalog range is 0–100 for all counter sizes.",
-      ]}
-      provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px · fixed geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
-        <div className="vt-confirmed-counter-size-rows">
-          <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard counter" /><StudioCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard counter secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact counter" /><StudioCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact counter secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>14px MICRO</small><div className="vt-confirmed-counter-pair"><StudioCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro counter" /><StudioCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro counter secondary palette" /></div></div>
-        </div>
-      </div>
-    </Family>
-  )
+  const [values, setValues] = React.useState({ supreme: 22, standard: 22, compact: 3, mini: 2, micro: 7 })
+  const update = (size: keyof typeof values) => (value: number) => setValues(current => ({ ...current, [size]: value }))
+  return <Family title="StudioCounter · Five Size Tiers" nonDefaultSettings={[
+    "One canonical primary-fill design per size; inverse-color variants are intentionally excluded.",
+    "Independent button-only counter; range is 0–100 for every supported tier.",
+  ]} provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px supreme / 44px standard / 28px compact / 20px mini / 12px micro." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row"><div className="vt-confirmed-counter-size-rows">
+      {(["supreme","standard","compact","mini","micro"] as const).map(size => <div className="vt-confirmed-counter-size-row" key={size}><small>{size.toUpperCase()} · {({supreme:60,standard:44,compact:28,mini:20,micro:12})[size]}PX</small><div className="vt-confirmed-counter-pair"><StudioCounter value={values[size]} onValueChange={update(size)} size={size} min={0} max={100} ariaLabel={`${size} counter`} /></div></div>)}
+    </div></div>
+  </Family>
 }
-
 
 const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
   const [standardValue, setStandardValue] = React.useState(62)
@@ -218,14 +205,14 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
         "Rectangular v2 handle with a black structural stroke; no shell shadow or movement.",
         "Standard, compact, and micro specimens use 0–100 values and paired palette variants.",
       ]}
-      provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px · double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
         <div className="vt-confirmed-counter-size-rows">
           <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard slider" /><StudioDoubleSplitSlider className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" ariaLabel="Standard slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact slider" /><StudioDoubleSplitSlider className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" ariaLabel="Compact slider secondary palette" /></div></div>
           <div className="vt-confirmed-counter-size-row"><small>COUNTER-CONTROLLED · UP / DOWN</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={standardValue} onValueChange={setStandardValue} size="standard" leftControls="counter" ariaLabel="Counter-controlled slider" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>14px MICRO</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider" /><StudioDoubleSplitSlider className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider secondary palette" /></div></div>
+          <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider" /><StudioDoubleSplitSlider className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" ariaLabel="Micro slider secondary palette" /></div></div>
         </div>
       </div>
     </Family>
@@ -297,7 +284,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
     <section className="vt-confirmed-family vt-confirmed-defaults-combined" aria-labelledby="vt-confirmed-global-defaults-title">
       <h3 id="vt-confirmed-global-defaults-title">Global Defaults · Current Source Contract</h3>
-      <p className="vt-confirmed-defaults-summary">44px standard · 28px compact · 14px micro · 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
+      <p className="vt-confirmed-defaults-summary">60px supreme · 44px standard · 28px compact · 20px mini · 12px micro · 3px / 2px / 1px borders · 6px / 4px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <p><a href="https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults, exception index, and certification rules ↗</a></p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show current defaults, effective CSS behavior, and exceptions</summary>
@@ -343,7 +330,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Single-line input typography remains 38px standard / 24px compact / 10px micro across all label variants.",
         "Floating labels raise to 80% of the input font size; fixed label boxes match StudioLegendMultiDropdown.",
-      ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx" css="src/styles/studio-control-system.css + src/styles/studio-text-input.css" tokens="One native input family with simple, floating-label, and fixed-label variants; standard 44px / 38px, compact 28px / 24px, micro 14px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/styles/studio-control-entry.css", "src/styles/studio-text-input.css"]} />}>
+      ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx" css="src/styles/studio-control-system.css + src/styles/studio-text-input.css" tokens="One native input family with simple, floating-label, and fixed-label variants; standard 44px / 38px, compact 28px / 24px, micro 12px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/styles/studio-control-entry.css", "src/styles/studio-text-input.css"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · simple input</span><StudioTextInput sizeVariant="standard" aria-label="Studio plain text input standard" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>28px compact · simple input</span><StudioTextInput sizeVariant="compact" aria-label="Studio plain text input compact" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>Floating label · 44px standard · A</span><StudioTextInput variant="floating-label" floatingLabelVariant="a" label="TITLE" aria-label="Studio floating-label input standard A" data-vt-library-component="StudioTextInput" /></div>
