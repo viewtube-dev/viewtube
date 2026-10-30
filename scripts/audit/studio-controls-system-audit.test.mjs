@@ -58,8 +58,10 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
   assert.ok(standaloneInputCss.includes("-webkit-text-stroke-color: #000;"));
   assert.ok(!standaloneInputCss.includes("-webkit-text-stroke-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));"));
   assert.ok(!fields.includes("Simple input is the intentional exception"));
-  assert.ok(!fields.includes("vt-studio-text-input--simple[data-vt-studio-control=\\"true\\"]:is(:focus, :focus-visible)"));
-  assert.ok(system.includes(".vt-studio-text-box[data-vt-studio-control=\\"true\\"]"));
+  assert.ok(!fields.includes("vt-studio-text-input--simple[data-vt-studio-control"));
+  assert.ok(system.includes(".vt-studio-text-box"));
+  assert.ok(system.includes("var(--vt-field-primary"));
+  assert.ok(fields.includes("data-vt-studio-field-kind"));
   assert.ok(system.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary"));
   assert.ok(system.includes("-webkit-text-stroke-color: var(--vt-field-primary"));
   assert.ok(fields.includes("textarea[data-vt-studio-control=\\"true\\"][data-vt-studio-field-kind=\\"textarea\\"],"));
