@@ -406,8 +406,8 @@
       ],
       "branchPrRefs": [
         "docs/conversation-handoff-reconciliation-2026-09-27",
-        "PR #1170",
-        "PR #1177"
+        "PR #1170 (merged)",
+        "PR #1177 (merged)"
       ],
       "evidenceRefs": [
         "Historical merge commit e5bbb56fee503c26a1251c6e3643307af12c4632 is present in target; PR-number attribution unresolved.",
@@ -451,7 +451,7 @@
         "work-log schema",
         "valuation/dedupe/disposition workflow"
       ],
-      "reviewNotes": "The initial global handoff system is present in current target history via e5bbb56; the old commit's PR #503 attribution is unresolved and must not be asserted. PR #1170 expanded the system and merged as 0fd1d412. PR #1177 completes the living-log front page and is open; its dedicated documentation checks pass, while unrelated repository gates remain red."
+      "reviewNotes": "Global handoff foundation and living-log update workflow are merged on target (PR #1170 and PR #1177). This branch completes the remaining domain-protocol migration in VT-CWI-DOCS-008. PR #1224 carries that migration; dedicated conversation-handoff contract and document-system tests pass, while audit:documents reports competing authority claims in six unrelated P1 workstream packages."
     },
     {
       "itemId": "VT-CWI-DOCS-008",
@@ -492,10 +492,12 @@
         ".codex/skills/viewtube-youtube-editor-system/SKILL.md"
       ],
       "branchPrRefs": [
-        "docs/complete-conversation-handoff-log-process-2026-10-30"
+        "docs/complete-conversation-handoff-log-process-2026-10-30",
+        "PR #1224"
       ],
       "evidenceRefs": [
-        "Domain-specific update/handoff boundaries aligned with docs/governance/CONVERSATION_HANDOFFS.md; global handoff remains authoritative."
+        "Domain-specific update/handoff boundaries aligned with docs/governance/CONVERSATION_HANDOFFS.md; global handoff remains authoritative.",
+        "PR #1224: conversation-handoff-contract and document-system tests passed; audit:documents blocked by unrelated competing-authority records in P1 workstreams."
       ],
       "dependencies": [
         "global handoff system merged (PR #1170 and PR #1177)"
