@@ -100,7 +100,7 @@ The Studio catalog and shared-control failures are a separate system-level quali
 
 ## Exact next action
 
-**Action:** Re-run the relevant release gates on current target SHA `db066b9e4c9d6edce85d915618493ebf1ad735da`, then isolate and repair the confirmed-catalog, typecheck and focused/full-suite failures before browser-verifying Brain feedback.
+**Action:** Re-run the relevant release gates on the latest target SHA (last inspected: `08980fe86dc0ffb73401f27d7a98bf19455b847f`), then isolate and repair the confirmed-catalog, typecheck and focused/full-suite failures before browser-verifying Brain feedback.
 **Reason:** PR #993 merged, but its merge-run release gates were red and are not current-target evidence.
 **Expected outcome:** A current, attributable pass/fail report and verified Brain feedback interactions.
 **Canonical task / mission:** No permanent Task ID allocated; route through existing Brain and Studio authorities and Task Authority after current-main reconciliation.
@@ -114,19 +114,27 @@ The Studio catalog and shared-control failures are a separate system-level quali
 - Worklog: `tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/worklog.json`
 - Review: `tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/review.md`
 
+## Reconciliation update — 2026-10-30
+
+- PR #1226 is merged; all four documentation paths are present on the target branch.
+- Latest target SHA inspected: `08980fe86dc0ffb73401f27d7a98bf19455b847f`.
+- Merge commit combined status and latest target combined status show Vercel build-rate-limit failures for three contexts. These checks are infrastructure-limited and do not establish whether application tests pass or fail.
+- PR #993 remains merged at `8fffa6f8adc05f9002953e999a448e787c611fd4`.
+- The Brain feature remains PARTIALLY_RECONCILED: current-target focused/typecheck/full-suite validation and browser/runtime acceptance remain open.
+
 ## Closure checklist
 
 - [x] Every distinct user instruction in this conversation is registered.
 - [x] Every unfinished item has a single-line checkbox and next action.
 - [x] All known created/changed artifacts are linked.
 - [x] PR #993 and target-branch presence are reconciled; opening SHA remains UNKNOWN.
-- [ ] PR #1226 documentation package delivery is pending review/merge.
+- [x] PR #1226 documentation package merged to target as `8c3818d0a1b0bef8f25066d1f73e98300a3f2ef3`.
 - [x] Integration gaps use Task Authority's nine maturity axes.
 - [x] Decisions, failures and blockers are preserved.
 - [x] Five improvement proposals are evaluated and routed as proposals, not approved work.
 - [ ] Current-target release gates are rerun and classified.
 - [ ] Brain feedback controls are browser/runtime verified.
 - [x] No competing Task Index, backlog or idea registry was created.
-- [ ] Review is fully reconciled; remaining verification blockers are explicit.
+- [x] Documentation PR/branch delivery reconciled; feature verification blockers remain explicit.
 
 **Full normative contract:** `docs/governance/CONVERSATION_HANDOFFS.md`.
