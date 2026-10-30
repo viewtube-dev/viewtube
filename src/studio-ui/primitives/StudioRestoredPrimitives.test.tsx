@@ -2,7 +2,7 @@ import React from "react";
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
-  StudioTextBox, StudioVerticalWordToggle, StudioSquareIconButton, StudioSquareIconButtonGroup,
+  StudioTextBox, StudioVerticalWordToggle, StudioSquareIconButton, StudioSquareIconButtonGroup, StudioCounter,
   StudioSplitAccordion, StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle,
   StudioBarToggle, StudioDoubleSplitWordCounter, StudioLeftWordCounter, openPanelWidth, iconPositions, easeTrain,
 } from "./StudioControls";
@@ -49,6 +49,13 @@ describe("restored Studio production primitives", () => {
     expect(double).toContain('data-vt-studio-value-toggle="double"');
     expect(bar).toContain('role="meter"');
     expect(counter).toContain('studio-double-split-word-counter');
+  });
+
+  it("uses the shared chevron-button contract for numeric counters", () => {
+    const html = renderToStaticMarkup(<StudioCounter value={5} onValueChange={() => {}} />);
+    expect((html.match(/vt-studio-stepper-button/g) ?? []).length).toBe(2);
+    expect(html).toContain("Decrease Value");
+    expect(html).toContain("Increase Value");
   });
 
   it("renders the four-state left word counter using the canonical left rail", () => {
