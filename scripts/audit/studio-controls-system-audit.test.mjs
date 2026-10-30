@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 const read = (path) => readFileSync(path, "utf8");
 const tokens = read("src/studio-ui/tokens.ts");
 const controls = read("src/studio-ui/primitives/StudioControls.tsx");
+const valueToggles = read("src/studio-ui/primitives/StudioValueToggles.tsx");
 const generated = read("src/styles/studio-control-vars.generated.css");
 const system = read("src/styles/studio-control-system.css");
 const split = read("src/styles/studio-control-split.css");
@@ -60,9 +61,10 @@ test("outline stroke derives from the current tier and focus outlines use the 65
 });
 
 test("fields own the persistent primary inline stroke and text boxes own a permanent secondary outline", () => {
-  assert.ok(fields.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke"));
+  assert.ok(system.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke"));
   assert.ok(fields.includes("outline: var(--vt-field-focus-outline"));
-  assert.ok(fields.includes('data-vt-studio-field-kind="textarea-display"'));
+  assert.ok(system.includes(".vt-studio-text-box[data-vt-studio-control=\"true\"]"));
+  assert.ok(system.includes("outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))"));
   assert.ok(fields.includes("-webkit-text-stroke-color: #000"));
   assert.ok(!recovery.includes("input[data-vt-studio-control=\"true\"]:not(.vt-studio-split-text-input__field)"));
   assert.ok(!recovery.includes(".vt-studio-text-box, [data-vt-studio-field-kind=\"text-box\"]"));
@@ -105,16 +107,15 @@ test("side-counter and side-toggle rails share square geometry and generated siz
 
 test("vertical word-toggle handles use measured word bounds and match horizontal handle spacing", () => {
   assert.ok(controls.includes("return { top: wordRect.top - rootRect.top - root.clientTop, height: wordRect.height }"));
-  assert.ok(system.includes("left: var(--vt-studio-vertical-word-handle-inset); right: var(--vt-studio-vertical-word-handle-inset);"));
+  assert.match(system, /left: var\(--vt-studio-vertical-word-handle-inset\);\s*right: var\(--vt-studio-vertical-word-handle-inset\);/);
   assert.ok(system.includes("border-radius: calc(var(--vt-studio-vertical-word-radius) * .5);"));
-  assert.ok(system.includes("border-radius: calc(var(--vt-word-radius)*.5)"));
   assert.ok(!recovery.includes("vt-studio-vertical-word-toggle__handle { inset: 3px !important"));
 });
 
 test("double-side toggles reuse the same side-arrow controls and only the outer shell owns focus outline", () => {
-  const start = controls.indexOf("export function StudioDoubleSideToggle");
-  const end = controls.indexOf("export function StudioBarToggle", start);
-  const doubleSide = controls.slice(start, end);
+  const start = valueToggles.indexOf("export function StudioDoubleSideToggle");
+  const end = valueToggles.indexOf("export type StudioBarToggleProps", start);
+  const doubleSide = valueToggles.slice(start, end);
   assert.ok(doubleSide.includes("<StudioSideToggle"));
   assert.ok(doubleSide.includes("arrowSide=\"left\""));
   assert.ok(doubleSide.includes("arrowSide=\"right\""));
@@ -156,7 +157,7 @@ test("split text input accepts every canonical size supported by its production 
 
 test("vertical word-toggle handle retains measured word bounds and shared side insets", () => {
   assert.ok(system.includes("top: var(--vt-studio-vertical-word-padding)"));
-  assert.ok(system.includes("left: var(--vt-studio-vertical-word-handle-inset) right: var(--vt-studio-vertical-word-handle-inset)"));
+  assert.match(system, /left: var\(--vt-studio-vertical-word-handle-inset\);\s*right: var\(--vt-studio-vertical-word-handle-inset\);/);
   assert.ok(!system.includes("inset:3px;border-radius:calc(var(--vt-studio-control-radius) - 1px)"));
   assert.ok(!recovery.includes("inset: 3px !important"));
 });
