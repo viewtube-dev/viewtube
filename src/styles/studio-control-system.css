@@ -1497,6 +1497,8 @@ button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studi
 button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] { height:100%; padding-inline:10px; color:#000; }
 button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="left"] [data-vt-studio-split-label] { padding-inline:8px; }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] > [data-vt-studio-button-face], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] > [data-vt-studio-button-face] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
+button[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
+button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-label], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-label] { background:var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); }
 button[data-vt-studio-button="true"][data-vt-studio-split="left"][data-selected="true"] [data-vt-studio-split-rail], button[data-vt-studio-button="true"][data-vt-studio-split="left"][aria-pressed="true"] [data-vt-studio-split-rail] { background:var(--vt-studio-control-accent,var(--pair-a,#36e0f6)); }
 
 /* Right and double split buttons deliberately mirror the split-left foundation:
@@ -1607,6 +1609,16 @@ button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-stu
 button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="right"] [data-vt-studio-split-label],
 button[data-vt-studio-button="true"][data-size="compact"][data-vt-studio-split="double"] [data-vt-studio-split-label] {
   padding-inline: 8px;
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"] [data-vt-studio-split-label] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][data-selected="true"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][data-selected="true"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-vt-studio-split="right"][aria-pressed="true"] [data-vt-studio-split-label],
+button[data-vt-studio-button="true"][data-vt-studio-split="double"][aria-pressed="true"] [data-vt-studio-split-label] {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 button[data-vt-studio-button="true"][data-vt-studio-split="right"][data-selected="true"] > [data-vt-studio-button-face],
 button[data-vt-studio-button="true"][data-vt-studio-split="double"][data-selected="true"] > [data-vt-studio-button-face],
