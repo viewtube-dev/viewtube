@@ -2780,27 +2780,17 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   ...labelProps
 }) => {
   const [dragging, setDragging] = React.useState(false);
-  const [clicking, setClicking] = React.useState(false);
   const [selectedName, setSelectedName] = React.useState("");
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
   const previewRef = React.useRef<string | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const pickerDelayRef = React.useRef<number | null>(null);
 
   React.useEffect(() => () => {
     if (previewRef.current) URL.revokeObjectURL(previewRef.current);
-    if (pickerDelayRef.current !== null) window.clearTimeout(pickerDelayRef.current);
   }, []);
 
   const beginPicker = React.useCallback(() => {
-    if (disabled) return;
-    if (pickerDelayRef.current !== null) window.clearTimeout(pickerDelayRef.current);
-    setClicking(true);
-    pickerDelayRef.current = window.setTimeout(() => {
-      setClicking(false);
-      pickerDelayRef.current = null;
-      inputRef.current?.click();
-    }, 1000);
+    if (!disabled) inputRef.current?.click();
   }, [disabled]);
 
   const selectFile = React.useCallback((file?: File) => {
@@ -2830,7 +2820,7 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   return (
     <label
       {...labelProps}
-      className={studioClasses("vt-studio-upload-frame", dragging && "is-drag", clicking && "is-clicking", previewUrl && "has-img", disabled && "is-disabled", className)}
+      className={studioClasses("vt-studio-upload-frame", dragging && "is-drag", previewUrl && "has-img", disabled && "is-disabled", className)}
       data-vt-studio-control="true"
       data-vt-studio-control-family="upload"
       data-vt-studio-upload-frame="true"
@@ -2881,8 +2871,8 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
           <Upload />
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
+        <span className="vt-studio-upload-frame__label" aria-live="polite">{selectedName || prompt}</span>
       </span>
-      <span className="vt-studio-upload-frame__label" aria-live="polite">{selectedName || prompt}</span>
     </label>
   );
 };
