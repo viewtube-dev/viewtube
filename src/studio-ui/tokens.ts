@@ -60,10 +60,11 @@ function halfCompact<T extends Record<string, number | string>>(compact: T): T {
 
 /** Canonical Studio size values are defined before derived contracts to avoid self-reference during initialization. */
 export const STUDIO_CONTROL_SIZE_BASE = {
-  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 0.86, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, /* Shared floating-label metrics (label height 28px + 4px; raised offset × 1.2). */ floatingLabelHeight: 32, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  supreme: { height: 60, stroke: 3, radius: 6, fontSize: 52, fontWeight: 1000, textStroke: 1, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 52, iconStroke: 1.9, floatingLabelHeight: 52, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, fontWeight: 1000, textStroke: 1, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 1.95, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 1.95, iconSize: 38, iconStroke: 1.9, floatingLabelHeight: 38, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
   compact: STUDIO_CONTROL_SIZE_BASE_COMPACT,
-  /** Micro derives from half the compact geometry, with a legibility floor for text/icon. */
-  micro: halfCompact(STUDIO_CONTROL_SIZE_BASE_COMPACT),
+  mini: { height: 20, stroke: 1.5, radius: 3, fontSize: 17.5, fontWeight: 1000, textStroke: 0.4, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.975, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.975, iconSize: 17.5, iconStroke: 1.6, floatingLabelHeight: 17.5, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
+  micro: { height: 12, stroke: 1, radius: 2, fontSize: 10, fontWeight: 1000, textStroke: 0.4, width: "row", textTransform: "uppercase", letterSpacing: -0.02, lineHeight: 1, defaultFillOpacity: 50, focusFillOpacity: 15, focusOutlineWidth: 0.65, focusOutlineOffset: 0, secondaryFocusOutlineWidth: 0.65, iconSize: 10, iconStroke: 1.5, floatingLabelHeight: 10, floatingLabelOffsetRatio: 1.2, ...STUDIO_CONTROL_FLAT_INTERACTION_DEFAULTS },
 } as const
 
 /** One canonical size ladder for Studio controls; documented exceptions live below. */
@@ -82,10 +83,10 @@ export const STUDIO_TOKENS = {
   // Deprecated compatibility alias only; compact is retired as a V35 level.
   compactSubtoolbox: { headerHeight: TOOLBOX_LEVEL_DNA.l1.height, stroke: TOOLBOX_LEVEL_DNA.l1.stroke, radius: TOOLBOX_LEVEL_DNA.l1.radius, shadowOffset: TOOLBOX_LEVEL_DNA.l1.shadowOffset, titleSize: TOOLBOX_LEVEL_DNA.l1.titleSize },
   component: {
-    height: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.height, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.height },
-    stroke: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke },
-    radius: { standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.radius, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.radius, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.radius },
-    shadowOffset: { standard: 0, compact: 0, micro: 0 },
+    height: { supreme: STUDIO_CONTROL_SIZE_CONTRACT.supreme.height, standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.height, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.height, mini: STUDIO_CONTROL_SIZE_CONTRACT.mini.height, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.height },
+    stroke: { supreme: STUDIO_CONTROL_SIZE_CONTRACT.supreme.stroke, standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.stroke, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.stroke, mini: STUDIO_CONTROL_SIZE_CONTRACT.mini.stroke, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.stroke },
+    radius: { supreme: STUDIO_CONTROL_SIZE_CONTRACT.supreme.radius, standard: STUDIO_CONTROL_SIZE_CONTRACT.standard.radius, compact: STUDIO_CONTROL_SIZE_CONTRACT.compact.radius, mini: STUDIO_CONTROL_SIZE_CONTRACT.mini.radius, micro: STUDIO_CONTROL_SIZE_CONTRACT.micro.radius },
+    shadowOffset: { supreme: 0, standard: 0, compact: 0, mini: 0, micro: 0 },
   },
   typography: {
     label: 24,
@@ -114,7 +115,7 @@ export const STUDIO_ICON_SIZE_COMPARISON = {
 } as const
 export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
 
-export type StudioControlSize = "standard" | "compact" | "micro"
+export type StudioControlSize = keyof typeof STUDIO_CONTROL_SIZE_BASE
 export type StudioHierarchyLevel = "toolbox" | "subtoolbox" | "compactSubtoolbox" | "component"
 
 
