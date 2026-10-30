@@ -1,0 +1,353 @@
+{
+  "schemaVersion": "viewtube.conversation-work-log.v1",
+  "conversationId": "VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES",
+  "created": "2026-10-30",
+  "lastEdited": "2026-10-30",
+  "sourceHost": "ChatGPT",
+  "conversationName": "Brain composer crash repair and release-gate stabilization",
+  "application": "ViewTube",
+  "sourceApplication": "ChatGPT",
+  "sourceConversationUrl": null,
+  "repository": "viewtube-dev/viewtube",
+  "targetBranch": "master/consolidated-feature-integration",
+  "reviewStatus": "PARTIALLY_RECONCILED",
+  "executiveSummary": [
+    "PR #1004 removed the undefined actionStyle reference in BrainComposerDock and merged at af9eb755fef82dd1f71bffd9a4973fb8d72f6b8c.",
+    "PRs #1002 and #1003 were closed as superseded.",
+    "Run #4766 passed production build, local smoke and Brain quality loop.",
+    "Run #4766 failed confirmed-catalog governance, typecheck, focused contracts and full suite.",
+    "Known issues include missing StudioControls exports, test fixture typing/variant mismatch and catalog-token parity drift.",
+    "Vercel preview checks were rate-limited; deployment success is not established.",
+    "Next phase: reproduce and repair canonical Studio owners, rerun release gates, and verify Brain on desktop/mobile.",
+    "This package records provenance, not canonical task lifecycle."
+  ],
+  "documents": [
+    {
+      "title": "Handoff",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES/handoff.md",
+      "kind": "DOCUMENT",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Worklog",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES/worklog.json",
+      "kind": "STRUCTURED_RECORD",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Review",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES/review.md",
+      "kind": "DOCUMENT",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Intake index",
+      "path": "tasks/conversation-intake/INDEX.md",
+      "kind": "INDEX",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "PR #1004",
+      "path": "pull/1004",
+      "url": "https://github.com/viewtube-dev/viewtube/pull/1004",
+      "kind": "PULL_REQUEST",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "VT-CWI-001"
+      ]
+    },
+    {
+      "title": "Release gate #4766",
+      "path": "actions/runs/40566028678",
+      "url": "https://github.com/viewtube-dev/viewtube/actions/runs/40566028678",
+      "kind": "VERIFICATION",
+      "status": "FAILED_WITH_PARTIAL_PASSES",
+      "relatedItemIds": [
+        "VT-CWI-002"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "itemId": "VT-CWI-001",
+      "title": "Fix undefined actionStyle in Brain composer",
+      "summary": "Remove stale helper reference while retaining canonical StudioButton and CSS.",
+      "kind": "BUG",
+      "conversationState": "VERIFIED_IN_CONVERSATION",
+      "domains": [
+        "AI Brain"
+      ],
+      "surfaces": [
+        "Brain composer"
+      ],
+      "changedPaths": [
+        "src/components/brain/BrainComposerDock.tsx"
+      ],
+      "branchPrRefs": [
+        "PR #1004"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1004",
+        "https://github.com/viewtube-dev/viewtube/commit/af9eb755fef82dd1f71bffd9a4973fb8d72f6b8c"
+      ],
+      "dependencies": [],
+      "blockers": [
+        "Desktop/mobile acceptance and deployment verification outstanding."
+      ],
+      "similarityKeys": [
+        "brain-composer",
+        "actionStyle"
+      ],
+      "relationship": "COMPLETED_ALREADY",
+      "reviewStatus": "RECONCILED",
+      "disposition": "ATTACH_RECEIPT_EVIDENCE",
+      "targetRefs": [
+        "PR #1004 merged",
+        "master/consolidated-feature-integration"
+      ],
+      "harvestedMaterial": [
+        "Removed undefined actionStyle prop",
+        "Kept existing canonical styling"
+      ],
+      "reviewNotes": "Merge and source presence verified; no full UX acceptance claim.",
+      "capabilityIds": [],
+      "suggestedDestination": null
+    },
+    {
+      "itemId": "VT-CWI-002",
+      "title": "Stabilize release gates",
+      "summary": "Reproduce and repair Studio catalog audit, typecheck, focused contracts and full-suite failures.",
+      "kind": "VERIFICATION",
+      "conversationState": "BLOCKED",
+      "domains": [
+        "Studio Controls",
+        "Verification"
+      ],
+      "surfaces": [
+        "Confirmed Primitive Library",
+        "StudioControls exports",
+        "StudioValueToggles tests"
+      ],
+      "sourceRefs": [
+        "GitHub Actions run #4766"
+      ],
+      "changedPaths": [
+        "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx",
+        "src/components/studio-hub/StudioControls.tsx",
+        "src/components/studio-hub/SimpleDropdown.tsx",
+        "src/components/studio-hub/StudioSplitStepper.tsx",
+        "src/components/studio-hub/StudioValueToggles.test.tsx"
+      ],
+      "branchPrRefs": [
+        "PR #1004"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/actions/runs/40566028678"
+      ],
+      "dependencies": [
+        "Reproduce on current target"
+      ],
+      "blockers": [
+        "source-governance failed",
+        "static-quality typecheck failed",
+        "focused-contracts failed",
+        "full-suite failed"
+      ],
+      "similarityKeys": [
+        "studio-typecheck",
+        "confirmed-catalog-audit",
+        "focused-contracts"
+      ],
+      "relationship": "BUG_IN_EXISTING",
+      "reviewStatus": "REVIEWING",
+      "disposition": "ALREADY_TRACKED",
+      "targetRefs": [
+        "Existing Studio Controls source-of-truth and verification workflows"
+      ],
+      "harvestedMaterial": [
+        "Missing StudioSimpleDropdownOption export mismatch",
+        "Missing StudioSplitStepper exports",
+        "ResizeObserverEntry fixture typing",
+        "v3 variant union mismatch",
+        "Catalog token parity failures"
+      ],
+      "reviewNotes": "Prior-run findings only; reproduce before edits.",
+      "capabilityIds": [],
+      "suggestedDestination": null
+    },
+    {
+      "itemId": "VT-CWI-003",
+      "title": "Complete conversation handoff package",
+      "summary": "Create handoff/worklog/review and register package in existing index.",
+      "kind": "DOCUMENTATION",
+      "conversationState": "STARTED",
+      "domains": [
+        "Documentation Governance",
+        "Conversation Handoffs"
+      ],
+      "surfaces": [
+        "tasks/conversation-intake"
+      ],
+      "changedPaths": [
+        "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES/handoff.md",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES/worklog.json",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES/review.md",
+        "tasks/conversation-intake/INDEX.md"
+      ],
+      "branchPrRefs": [
+        "docs/brain-composer-handoff-2026-10-30"
+      ],
+      "evidenceRefs": [],
+      "dependencies": [],
+      "blockers": [
+        "Merge and document-system validation outstanding."
+      ],
+      "similarityKeys": [
+        "conversation-handoff",
+        "living-work-log"
+      ],
+      "relationship": "CONTINUATION",
+      "reviewStatus": "REVIEWING",
+      "disposition": "UPDATE_EXISTING_PLAN",
+      "targetRefs": [
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "tasks/conversation-intake/INDEX.md"
+      ],
+      "harvestedMaterial": [
+        "Instruction register",
+        "PR reconciliation",
+        "Nine-axis gaps",
+        "Five proposals"
+      ],
+      "reviewNotes": "Use canonical global package; no duplicate domain log.",
+      "capabilityIds": [],
+      "suggestedDestination": null
+    }
+  ],
+  "instructions": [
+    {
+      "instructionId": "REQ-001",
+      "text": "Continue to the next phase after the Brain composer crash repair.",
+      "status": "IN_PROGRESS",
+      "relatedItemIds": [
+        "VT-CWI-001",
+        "VT-CWI-002"
+      ],
+      "branchPrRefs": [
+        "PR #1004"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "MERGED_WITH_FOLLOWUP_GAPS",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1004"
+      ]
+    },
+    {
+      "instructionId": "REQ-002",
+      "text": "Continue the stabilization work.",
+      "status": "IN_PROGRESS",
+      "relatedItemIds": [
+        "VT-CWI-002"
+      ],
+      "branchPrRefs": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "BLOCKED_PENDING_REPRO",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/actions/runs/40566028678"
+      ]
+    },
+    {
+      "instructionId": "REQ-003",
+      "text": "Complete the conversation handoff-log process in repository documentation.",
+      "status": "IN_PROGRESS",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ],
+      "branchPrRefs": [
+        "docs/brain-composer-handoff-2026-10-30"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": []
+    }
+  ],
+  "branchPrReconciliation": [
+    {
+      "branch": "fix/brain-composer-action-style",
+      "pr": 1004,
+      "openingSha": "06a328112d82e9bf0550491e124b6444e34bccfd",
+      "headSha": "06a328112d82e9bf0550491e124b6444e34bccfd",
+      "mergeSha": "af9eb755fef82dd1f71bffd9a4973fb8d72f6b8c",
+      "status": "MERGED",
+      "targetBranch": "master/consolidated-feature-integration",
+      "targetPresence": "VERIFIED",
+      "notes": "PR #1004 merged; source inspection confirms actionStyle() absent."
+    },
+    {
+      "branch": "UNKNOWN",
+      "pr": 1002,
+      "status": "CLOSED_UNMERGED",
+      "targetBranch": "master/consolidated-feature-integration",
+      "targetPresence": "SUPERSEDED",
+      "recoveryDestination": "PR #1004",
+      "notes": "Detailed branch lineage not independently audited."
+    },
+    {
+      "branch": "UNKNOWN",
+      "pr": 1003,
+      "status": "CLOSED_UNMERGED",
+      "targetBranch": "master/consolidated-feature-integration",
+      "targetPresence": "SUPERSEDED",
+      "recoveryDestination": "PR #1004",
+      "notes": "Detailed branch lineage not independently audited."
+    }
+  ],
+  "integrationGaps": [
+    {
+      "gapId": "VT-GAP-001",
+      "feature": "Brain composer crash fix",
+      "architecture": "IMPLEMENTED",
+      "backend": "NOT_APPLICABLE",
+      "frontend": "IMPLEMENTED",
+      "integration": "PARTIAL",
+      "tests": "PARTIAL",
+      "runtime": "PARTIAL",
+      "responsive": "NONE",
+      "documentation": "PARTIAL",
+      "release": "PARTIAL",
+      "summary": "Source fix merged; browser/device acceptance and deployment proof outstanding.",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1004"
+      ]
+    },
+    {
+      "gapId": "VT-GAP-002",
+      "feature": "Studio release-gate baseline",
+      "architecture": "PARTIAL",
+      "backend": "NOT_APPLICABLE",
+      "frontend": "PARTIAL",
+      "integration": "PARTIAL",
+      "tests": "PARTIAL",
+      "runtime": "NONE",
+      "responsive": "NONE",
+      "documentation": "PARTIAL",
+      "release": "BLOCKED",
+      "summary": "Catalog audit, typecheck, focused tests and full suite failed in run #4766; reproduce and repair.",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/actions/runs/40566028678"
+      ]
+    }
+  ]
+}
