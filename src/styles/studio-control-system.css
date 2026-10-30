@@ -6917,6 +6917,11 @@ details.vt-studio-two-line-module > :not(summary) {
 }
 
 /* Global dropdown menu contract — separated from its trigger, shared by every Studio single-select variant. */
+.vt-studio-dropdown {
+  --vt-studio-dropdown-menu-radius: var(--vt-dropdown-radius, var(--vt-studio-control-radius, 6px));
+  --vt-studio-dropdown-row-radius: var(--vt-dropdown-radius, var(--vt-studio-control-radius, 6px));
+  --vt-studio-dropdown-row-stroke: var(--vt-dropdown-stroke, var(--vt-studio-control-stroke, 3px));
+}
 .vt-studio-dropdown-menu {
   top: calc(100% + var(--vt-studio-dropdown-menu-gap, 8px)) !important;
   box-sizing: border-box !important;
@@ -6924,8 +6929,8 @@ details.vt-studio-two-line-module > :not(summary) {
   max-height: min(280px, 45vh);
   overflow-y: auto;
   padding: var(--vt-studio-dropdown-menu-padding, 4px) !important;
-  border: var(--vt-studio-dropdown-row-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
-  border-radius: var(--vt-studio-dropdown-menu-radius, var(--vt-studio-control-radius, 6px)) !important;
+  border: var(--vt-studio-dropdown-row-stroke, var(--vt-dropdown-stroke, var(--vt-studio-control-stroke, 3px))) solid #000 !important;
+  border-radius: var(--vt-studio-dropdown-menu-radius, var(--vt-dropdown-radius, var(--vt-studio-control-radius, 6px))) !important;
   background: var(--vt-studio-dropdown-menu-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
   scrollbar-width: thin;
 }
@@ -6942,7 +6947,7 @@ details.vt-studio-two-line-module > :not(summary) {
   margin: 0 0 var(--vt-studio-dropdown-menu-row-gap, 3px) !important;
   padding: 2px 8px !important;
   border: var(--vt-studio-dropdown-row-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
-  border-radius: var(--vt-studio-dropdown-row-radius, var(--vt-studio-control-radius, 6px)) !important;
+  border-radius: var(--vt-studio-dropdown-row-radius, var(--vt-dropdown-radius, var(--vt-studio-control-radius, 6px))) !important;
   background: var(--vt-studio-dropdown-row-fill, #fff) !important;
   color: #000 !important;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
