@@ -227,3 +227,18 @@
 - [ ] Prove creator approval for every external-write hop.
 - [ ] Confirm paused/stopped/failed/complete state derives from real inbox/workflow state.
 - [ ] Record focused lint, Vitest, and scoped type-check evidence per workflow.
+
+
+## WF-01 runtime audit — 2026-10-30
+
+- [x] Confirmed Comment Responder already derives read-only Audience Pulse signals from loaded comment records.
+- [x] Confirmed the existing proposal producer uses canonical `ViewTubeActionPacket`, stable operation identity, pending approval, and preserves source comment evidence IDs.
+- [ ] Add an explicit Brain review consumer for the audience-request packet.
+- [ ] Add a Projects receiver that opens a prefilled project draft and preserves packet/evidence lineage through canonical Project + ContentBuild initialization.
+- [ ] Require a separate creator confirmation before calling the existing `addProject` path.
+- [ ] Add regression tests for evidence-ID continuity, duplicate proposal idempotency, rejection/no-create, and confirmed-create behavior.
+- [ ] Run the relevant Vitest and scoped type/lint checks in a real checkout.
+
+**Current finding:** WF-01 is not end-to-end. The current proposal producer targets Brain/opportunity/tactics review, while `project-calendar` does not declare `evidence` as an accepted payload and the inspected Project creation dialog has no ActionPacket receiver. Do not mark WF-01 complete or silently widen the capability metadata: that would advertise a receiver that does not exist. The existing Project creation path initializes canonical Project/ContentBuild identity via `initializeProjectContentIdentity`; the receiver must reuse that path rather than create projects directly from packet payloads.
+
+**Verification constraint:** GitHub file APIs can inspect and commit source but cannot run the local Vitest, ESLint, or TypeScript commands. Runtime edits are held until a checkout can execute the regression suite.
