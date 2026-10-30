@@ -764,10 +764,10 @@ describe("Studio Calendar confirmed primitive representatives", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
     const toolbox = readFileSync(resolve(process.cwd(), "src/components/ToolboxUIReferenceLibrary.tsx"), "utf8")
     const publicApi = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8")
-    const publicStudioValues = [...publicApi.matchAll(/export\\s*\\{([\\s\\S]*?)\\}\\s*from/g)]
+    const publicStudioValues = [...publicApi.matchAll(/export\s*\{([\s\S]*?)\}\s*from/g)]
       .flatMap((match) => match[1].split(","))
-      .map((name) => name.trim().split(/\\s+as\\s+/)[0].trim())
-      .filter((name) => /^Studio[A-Z]\\w*$/.test(name))
+      .map((name) => name.trim().split(/\s+as\s+/)[0].trim())
+      .filter((name) => /^Studio[A-Z]\w*$/.test(name))
     for (const name of publicStudioValues) {
       expect(source, `public component ${name} has a confirmed catalog specimen`).toContain(`data-vt-library-component="${name}"`)
     }
