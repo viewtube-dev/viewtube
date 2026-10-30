@@ -240,6 +240,8 @@ test("counter families are independent modules and solid-fill word counter faces
   assert.match(catalog, /title="StudioDoubleSplitWordCounter[\s\S]*?defaultOpen/);
   assert.match(styles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\]\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s);
   assert.doesNotMatch(styles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\][^{]*\{[^}]*50%/s);
+  assert.match(styles, /\.vt-studio-word-counter__value\s*\{[^}]*color:\s*var\(--vt-studio-number-rest-color\)/s);
+  assert.match(styles, /\.vt-studio-counter__value,[\s\S]*?\.vt-studio-word-counter__value\s*\{/s);
 });
 
 test("value-toggle recovery defaults do not repaint arrow-toggle faces with half-primary fill", () => {
