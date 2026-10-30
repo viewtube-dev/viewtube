@@ -10,7 +10,7 @@ export type PublishTransactionStep =
  | "apply-metadata" | "apply-thumbnail" | "apply-captions" | "apply-routing"
  | "apply-schedule-privacy" | "verify-remote-state"
 export type PublishTransactionStatus = "awaiting-approval" | "approved" | "running" | "failed" | "completed"
-type StepState = { status: "pending" | "running" | "completed" | "failed"; completedAt?: string | null; receipt?: Record<string, unknown>; error?: string | null }
+type StepState = { status: "pending" | "running" | "ambiguous" | "completed" | "failed"; startedAt?: string | null; completedAt?: string | null; receipt?: Record<string, unknown>; error?: string | null }
 
 export interface PublishAssetLock {
  projectionRevision: number
@@ -81,7 +81,9 @@ export const getPublishTransaction=(id:string)=>{
  return transaction ? assertTransactionSnapshotIntegrity(transaction) : null
 }
 
-export const markPublishStepRunning=(input:{transactionId:string;step:PublishTransactionStep})=>{const transaction=getPublishTransaction(input.transactionId);if(!transaction)throw new Error("Unknown publish transaction: "+input.transactionId);const current=transaction.steps[input.step];if(current?.status==="completed"||current?.status==="running")return transaction;const timestamp=now();return save({...transaction,status:"running",steps:{...transaction.steps,[input.step]:{status:"running",startedAt:timestamp}},updatedAt:timestamp})};
+export const markPublishStepRunning=(input:{transactionId:string;step:PublishTransactionStep})=>{const transaction=getPublishTransaction(input.transactionId);if(!transaction)throw new Error("Unknown publish transaction: "+input.transactionId);const current=transaction.steps[input.step];if(current?.status==="completed"||current?.status==="running"||current?.status==="ambiguous")return transaction;const timestamp=now();return save({...transaction,status:"running",steps:{...transaction.steps,[input.step]:{status:"running",startedAt:timestamp}},updatedAt:timestamp})};
+
+export const markPublishStepAmbiguous=(input:{transactionId:string;step:PublishTransactionStep;error:unknown})=>{const transaction=getPublishTransaction(input.transactionId);if(!transaction)throw new Error("Unknown publish transaction: "+input.transactionId);const current=transaction.steps[input.step];if(current?.status==="completed")return transaction;if(current?.status!=="running"&&current?.status!=="ambiguous")throw new Error("Only a dispatched or already ambiguous publish step can require reconciliation.");const message=input.error instanceof Error?input.error.message:String(input.error),timestamp=now();const next=save({...transaction,status:"failed",steps:{...transaction.steps,[input.step]:{...current,status:"ambiguous",error:message}},updatedAt:timestamp});appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.step.ambiguous",entityType:"publish-transaction",entityId:next.id,actorType:"tool",toolId:"video-publisher",metadata:{step:input.step,error:message,reconciliationRequired:true}});return next};
 
 export const beginPublishTransaction=(projection:PublishingPackageProjection,toolId="video-publisher",identity:{workflowId?:string|null;operationId?:string|null;actionPacketId?:string|null;recommendationId?:string|null;experimentId?:string|null}={})=>{
  if(!canStore()) throw new Error("Publish transaction requires persistent browser storage; in-memory fallback is not safe for publishing.")
@@ -137,6 +139,25 @@ export const completePublishStep=(input:{transactionId:string;step:PublishTransa
   bindYouTubeVideo({contentBuildId:next.contentBuildId,videoId,channelId:build?.channelId||null,status:input.youtubeBinding?.status||build?.youtube?.status||"uploaded",uploadStartedAt:input.youtubeBinding?.uploadStartedAt||build?.youtube?.uploadStartedAt||null,uploadCompletedAt:input.youtubeBinding?.uploadCompletedAt||build?.youtube?.uploadCompletedAt||null,scheduledAt:input.youtubeBinding?.scheduledAt||next.assetLock.scheduledAt||build?.youtube?.scheduledAt||null,premiereAt:input.youtubeBinding?.premiereAt||build?.youtube?.premiereAt||null,publishedAt:input.youtubeBinding?.publishedAt||build?.youtube?.publishedAt||null,initialTitleAssetId:next.assetLock.titleAssetId,initialThumbnailAssetId:next.assetLock.thumbnailAssetId,finalRenderAssetId:next.assetLock.finalRenderAssetId,lastVerifiedAt:input.youtubeBinding?.lastVerifiedAt||build?.youtube?.lastVerifiedAt||null,toolId:input.toolId||"video-publisher"})
  }
  appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.step.completed",entityType:"publish-transaction",entityId:next.id,actorType:input.step==="bind-youtube"?"youtube":"tool",toolId:input.toolId||"video-publisher",metadata:{step:input.step,youtubeVideoId:videoId,receipt:input.receipt||null}})
+ return next
+}
+
+export const resolveAmbiguousPublishStepAsApplied=(input:{transactionId:string;step:PublishTransactionStep;checkedBy:string;evidence:string;receipt?:Record<string,unknown>;youtubeVideoId?:string|null})=>{
+ const transaction=getPublishTransaction(input.transactionId)
+ if(!transaction)throw new Error("Unknown publish transaction: "+input.transactionId)
+ if(!input.checkedBy.trim()||!input.evidence.trim())throw new Error("Manual recovery requires an operator and evidence.")
+ if(transaction.steps[input.step]?.status!=="ambiguous")throw new Error("Publish step is not awaiting ambiguity resolution.")
+ return completePublishStep({transactionId:input.transactionId,step:input.step,youtubeVideoId:input.youtubeVideoId,receipt:{...(input.receipt||{}),manualRecovery:true,checkedBy:input.checkedBy,evidence:input.evidence},toolId:"manual-publish-recovery"})
+}
+
+export const resolveAmbiguousPublishStepAsNotApplied=(input:{transactionId:string;step:PublishTransactionStep;checkedBy:string;evidence:string})=>{
+ const transaction=getPublishTransaction(input.transactionId)
+ if(!transaction)throw new Error("Unknown publish transaction: "+input.transactionId)
+ if(!input.checkedBy.trim()||!input.evidence.trim())throw new Error("Manual recovery requires an operator and evidence.")
+ if(transaction.steps[input.step]?.status!=="ambiguous")throw new Error("Publish step is not awaiting ambiguity resolution.")
+ const timestamp=now()
+ const next=save({...transaction,status:"approved",steps:{...transaction.steps,[input.step]:{status:"pending",error:null,receipt:{manualRecovery:true,confirmedNotApplied:true,checkedBy:input.checkedBy,evidence:input.evidence,checkedAt:timestamp}}},updatedAt:timestamp})
+ appendContentBuildEvent({contentBuildId:next.contentBuildId,eventType:"publish.transaction.step.reconciled-not-applied",entityType:"publish-transaction",entityId:next.id,actorType:"tool",toolId:"manual-publish-recovery",metadata:{step:input.step,checkedBy:input.checkedBy,evidence:input.evidence,checkedAt:timestamp,retryAuthorized:true}})
  return next
 }
 
