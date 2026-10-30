@@ -468,9 +468,10 @@ export const getAiClient = () => {
    const current = request || {}
    const modelId = String(current.model || "gemini-3.1-flash")
    const capability = getRequestCapability(current)
+   const modelResolution = resolveGeminiModel({ preference: modelId, capability })
    const profile = resolveGeminiGenerationProfile({
     capability,
-    modelId,
+    modelId: modelResolution.served,
     taskOverride: pickGeminiGenerationOverrides(current.config),
    })
    const settings = { ...profile.settings } as Record<string, unknown>
@@ -480,7 +481,7 @@ export const getAiClient = () => {
    if (thinkingLevel && !config.thinkingConfig) {
     config.thinkingConfig = { thinkingLevel: ThinkingLevel[thinkingLevel as keyof typeof ThinkingLevel] }
    }
-   return { ...current, config }
+   return { ...current, model: modelResolution.served, config }
   }
 
   const withCanonicalModel = async <T>(
@@ -515,7 +516,7 @@ export const getAiClient = () => {
   }
 
  baseClient.models.generateContent = (async (...args: any[]) => {
-  const modelId = toCanonicalModel(String(args?.[0]?.model || "gemini-3.1-flash"))
+  const modelId = String(applyGenerationProfile(args?.[0]).model || "gemini-3.1-flash")
   const promptText = JSON.stringify(args?.[0]?.contents || "")
   const entitlement = getCurrentEntitlement()
  const quote = estimateMeterQuote(
@@ -637,7 +638,7 @@ export const getAiClient = () => {
  }) as any
 
  baseClient.models.generateContentStream = (async (...args: any[]) => {
-  const modelId = toCanonicalModel(String(args?.[0]?.model || "gemini-3.1-flash"))
+  const modelId = String(applyGenerationProfile(args?.[0]).model || "gemini-3.1-flash")
   const promptText = JSON.stringify(args?.[0]?.contents || "")
   const entitlement = getCurrentEntitlement()
   const quote = estimateMeterQuote(
