@@ -42,6 +42,8 @@ export interface GenerationRequest {
  id: string
  /** Stable operation identity shared with receipts, traces and ContentBuild events. */
  operationId?: string
+ /** Stable retry identity for this prepared generation command. */
+ idempotencyKey?: string
  workflowId?: string
  contentBuildId: string
  projectId: string | null
@@ -74,6 +76,7 @@ export interface ToolReceipt {
  id: string
  requestId: string
  operationId?: string
+ idempotencyKey?: string
  workflowId?: string
  contentBuildId: string
  projectId: string | null
@@ -159,6 +162,7 @@ export const prepareGenerationRequest = (input: {
  variantGroupId?: string | null
  traceId?: string | null
  operationId?: string | null
+ idempotencyKey?: string | null
  workflowId?: string | null
 }): PreparedGenerationRequest => {
  const canonicalBuild = assertCanonicalScope(input)
@@ -205,10 +209,13 @@ export const prepareGenerationRequest = (input: {
  }
 
  const requestId = createId("generation_request")
+ const operationId = input.operationId || requestId
+ const idempotencyKey = input.idempotencyKey || `generation:v1:${canonicalBuild.id}:${input.toolId}:${operationId}`
  const request: GenerationRequest = {
   schemaVersion: GENERATION_WORKFLOW_SCHEMA_VERSION,
   id: requestId,
-  operationId: input.operationId || requestId,
+  operationId,
+  idempotencyKey,
   workflowId: input.workflowId || `workflow:${canonicalBuild.id}`,
   contentBuildId: canonicalBuild.id,
   projectId,
@@ -243,6 +250,7 @@ export const prepareGenerationRequest = (input: {
   metadata: {
    requestId: request.id,
    operationId: request.operationId || request.id,
+   idempotencyKey: request.idempotencyKey,
    workflowId: request.workflowId || `workflow:${request.contentBuildId}`,
    contextManifestId: request.contextManifestId,
    contextRevision: request.contextRevision,
@@ -307,6 +315,7 @@ export const recordToolReceipt = (input: {
   id: createId("tool_receipt"),
   requestId: input.request.id,
   operationId: input.request.operationId || input.request.id,
+  idempotencyKey: input.request.idempotencyKey || null,
   workflowId: input.request.workflowId || `workflow:${input.request.contentBuildId}`,
   contentBuildId: input.request.contentBuildId,
   projectId: input.request.projectId,
@@ -335,6 +344,7 @@ export const recordToolReceipt = (input: {
    receiptId: receipt.id,
    requestId: receipt.requestId,
    operationId: receipt.operationId || input.request.operationId || input.request.id,
+   idempotencyKey: receipt.idempotencyKey || input.request.idempotencyKey || null,
    workflowId: receipt.workflowId || input.request.workflowId || `workflow:${input.request.contentBuildId}`,
    contextManifestId: input.request.contextManifestId,
    contextRevision: input.request.contextRevision,
