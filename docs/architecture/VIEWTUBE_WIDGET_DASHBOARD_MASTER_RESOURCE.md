@@ -7,7 +7,7 @@
 **Current registered widget count:** 68  
 **Executable authority:** `src/views/dashboard/WidgetRegistryBase.ts`, `src/views/dashboard/WidgetRegistry.ts`, `src/views/dashboard/WidgetRenderer.tsx`, `src/views/dashboard/WidgetRendererBase.tsx`, `src/views/dashboard/WidgetShell.tsx`, `src/views/dashboard/DashboardCanvas.tsx`, `src/views/dashboard/storage.ts`, `src/views/dashboard/widgetCertification.ts`, `src/views/dashboard/WidgetPrimitives.tsx`, and widget-local modules under `src/views/dashboard/widgets/`.  
 **Design-system authority:** `.claude/skills/viewtube-widget-dashboard-system/`, `.claude/skills/viewtube-widget-dashboard/`, `docs/architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md`, and the canonical widget primitives.  
-**Purpose of this document:** one continuously editable place to organize widget architecture, settings-widget evolution, merge/consolidation decisions, implementation work, no-account/empty preview behavior, source files, QA, and cross-agent handoff.
+**Purpose of this document:** one continuously editable place to organize widget architecture, settings-widget evolution, merge/consolidation decisions, implementation work, no-account/empty preview behavior, source files, QA, and widget-domain decisions. Global conversation continuity, complete user-instruction capture and cross-domain work reconciliation belong to docs/governance/CONVERSATION_HANDOFFS.md and tasks/conversation-intake/. This master is a widget-domain projection, not a second conversation handoff or task ledger.
 
 ---
 
