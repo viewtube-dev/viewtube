@@ -1264,7 +1264,7 @@ button.vt-studio-44-switch.is-rect { border-radius: 7.333px; }
 
 button.vt-studio-44-choice {
   width: 44px;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 40%, white);
+  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent);
 }
 button.vt-studio-44-choice.is-round { border-radius: 50%; }
 button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
@@ -5978,7 +5978,7 @@ button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   padding-inline: 4px;
 }
 
-button[data-vt-studio-button="true"],
+button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button),
 button[data-vt-studio-action-button="true"] {
   overflow: hidden;
 }
