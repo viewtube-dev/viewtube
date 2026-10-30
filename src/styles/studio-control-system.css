@@ -543,7 +543,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { font-size: 24px; }
 .vt-studio-legend-trigger:hover, .vt-studio-legend-trigger:focus, .vt-studio-legend-trigger:focus-visible, .vt-studio-legend-trigger:active {  transform: none;  }
-.vt-studio-legend-trigger:focus-visible { outline: 2px solid var(--vt-legend-b); outline-offset: 0; }
+.vt-studio-legend-trigger:focus-visible { outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--vt-legend-b))); outline-offset: var(--vt-studio-focus-outline-offset, 0px); }
 .vt-studio-legend-trigger:disabled { cursor: not-allowed; opacity: .5; }
 .vt-studio-legend-trigger-text { display: block; min-width: 0; width: 0; max-width: 100%; flex: 1 1 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
 .vt-studio-legend-count {
