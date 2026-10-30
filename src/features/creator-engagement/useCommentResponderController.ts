@@ -198,7 +198,7 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
     channelContext: context.channelName || "Content Creation",
     availableVideos: candidateVideos.map((video) => ({ title: video.title, id: video.videoId })),
     existingReply: mode === "refine" ? replyText[currentId]?.trim() || "" : "",
-   }))
+   })
    const suggestedVideoId = resolveSuggestedVideoId(result.suggestedVideoId, candidateVideos, sourceVideoId)
    const reply = suggestedVideoId
     ? `${result.reply}\n\nCheck this out for more details: https://youtu.be/${suggestedVideoId}`
@@ -228,7 +228,7 @@ export const useCommentResponderController = (context: CreatorEngagementContext)
    const recommendation = await recommendVideoForComment({
     commentText: `${comment.textOriginal}\n\nSOURCE VIDEO: "${sourceTitle}". Recommend a DIFFERENT creator-owned video only if it meaningfully answers or extends what this viewer wants.`,
     availableVideos: candidateVideos.map((video) => ({ title: video.title, id: video.videoId })),
-   }))
+   })
    const suggestedVideoId = resolveSuggestedVideoId(
     recommendation.recommendedVideoId,
     candidateVideos,
