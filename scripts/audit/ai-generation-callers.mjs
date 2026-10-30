@@ -54,6 +54,35 @@ const importsForGemini = (content) => {
 
 const isTestFile = (relativePath) => TEST_PATH.test(relativePath);
 
+const collectLineMatches = (files, pattern, mapMatch) => files
+  .filter((file) => file.path.startsWith("src/") && !isTestFile(file.path))
+  .flatMap((file) => file.content.split(/\r?\n/).flatMap((line, index) => {
+    const match = line.match(pattern);
+    return match ? [mapMatch(file, line, index + 1, match)] : [];
+  }));
+
+const collectModelIds = (files) => {
+  const byId = new Map();
+  for (const file of files.filter((entry) => entry.path.startsWith("src/") && !isTestFile(entry.path))) {
+    for (const [index, line] of file.content.split(/\r?\n/).entries()) {
+      for (const match of line.matchAll(/\b(gemini-[a-z0-9][a-z0-9.-]*)\b/gi)) {
+        const id = match[1];
+        const current = byId.get(id) || { id, references: [] };
+        current.references.push({ path: file.path, line: index + 1 });
+        byId.set(id, current);
+      }
+    }
+  }
+  return [...byId.values()].sort((left, right) => left.id.localeCompare(right.id));
+};
+
+const collectProviderAllowlist = (files) => {
+  const guard = files.find((file) => file.path === "src/services/brain/__tests__/brainProviderArchitectureGuard.test.ts");
+  if (!guard) return [];
+  const block = guard.content.match(/ALLOWED_DIRECT_PROVIDER_CALLS\s*=\s*new Set\(\[([\s\S]*?)\]\)/);
+  return block ? [...block[1].matchAll(/["']([^"']+)["']/g)].map((match) => match[1]) : [];
+};
+
 export const buildGenerationCallerInventory = (rootDir = process.cwd()) => {
   const sourceRoot = path.join(rootDir, "src");
   const files = walkSourceFiles(rootDir, rootDir);
@@ -118,22 +147,63 @@ export const buildGenerationCallerInventory = (rootDir = process.cwd()) => {
     };
   });
 
+  const productionFiles = files.filter((file) => file.path.startsWith("src/") && !isTestFile(file.path));
+  const directProviderInvocations = collectLineMatches(
+    files,
+    /\b(?:new\s+GoogleGenAI\s*\(|[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*\.models\.(?:generateContent|generateContentStream|embedContent|generateImages|countTokens)\s*\()/,
+    (file, line, lineNumber) => ({ path: file.path, line: lineNumber, excerpt: line.trim() }),
+  );
+  const dynamicGeminiImports = collectLineMatches(
+    files,
+    /\bimport\s*\(\s*["'][^"']*gemini(?:\.[a-z0-9]+)?["']\s*\)/i,
+    (file, line, lineNumber) => ({ path: file.path, line: lineNumber, excerpt: line.trim() }),
+  );
+  const credentialAliasReferences = collectLineMatches(
+    files,
+    /\b(yt_api_key|vt_gemini_api_key|gemini_api_key|google_api_key)\b/,
+    (file, line, lineNumber, match) => ({ alias: match[1], path: file.path, line: lineNumber }),
+  );
+  const modelIdLiterals = collectModelIds(files);
+  const providerAllowlist = collectProviderAllowlist(files);
+  const pricingAndMeteringSources = productionFiles
+    .filter((file) => /src\/services\/(?:billingEntitlement|geminiModelGovernance|gemini)\.ts$/.test(file.path))
+    .map((file) => file.path);
+  const fallbackPolicySources = productionFiles
+    .filter((file) => /src\/services\/(?:gemini|geminiModelGovernance)\.ts$/.test(file.path) && /fallback|candidate/i.test(file.content))
+    .map((file) => file.path);
+
   return {
-    schemaVersion: "vt-ai-generation-caller-inventory-v1",
+    schemaVersion: "vt-ai-generation-caller-inventory-v2",
     source: "src/services/gemini.ts",
-    method: "static named/namespace import and identifier reference scan",
+    method: "static named/namespace import references plus direct SDK, dynamic import, model ID, credential alias and allowlist scans",
     limitations: [
       "Static source scan is a reachability lead, not proof of runtime execution.",
-      "Dynamic imports, re-exports, dependency injection, reflection, and generated code may require manual tracing.",
+      "Dynamic imports are reported only when their literal path names a Gemini module; variable paths require manual tracing.",
+      "Re-exports, dependency injection, reflection, generated code, and provider wrappers may require manual tracing.",
       "A referenced export may still be unreachable from a user-facing route.",
+      "Model ID literals may be comments, tests, examples or compatibility candidates; classify before changing the registry.",
       "Do not delete or migrate an export from this report alone.",
     ],
     summary: {
+      sourceFileCount: productionFiles.length,
       exportCount: inventory.length,
       productionReferenced: inventory.filter((entry) => entry.status === "production_import_and_reference").length,
       testOnlyReferenced: inventory.filter((entry) => entry.status === "test_only_reference").length,
       importedWithoutReference: inventory.filter((entry) => entry.status === "imported_without_reference").length,
       noStaticImportReference: inventory.filter((entry) => entry.status === "no_static_import_reference").length,
+      directProviderInvocationCount: directProviderInvocations.length,
+      dynamicGeminiImportCount: dynamicGeminiImports.length,
+      modelIdCount: modelIdLiterals.length,
+      credentialAliasReferenceCount: credentialAliasReferences.length,
+    },
+    surface: {
+      directProviderInvocations,
+      dynamicGeminiImports,
+      modelIdLiterals,
+      credentialAliasReferences,
+      providerAllowlist,
+      pricingAndMeteringSources,
+      fallbackPolicySources,
     },
     exports: inventory,
   };
