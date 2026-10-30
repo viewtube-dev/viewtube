@@ -1154,6 +1154,7 @@ Next steps:
 - Confirmed Double Split Word Counter keeps its solid primary face; removed the stale audit expectation for a 50%-white blend. The audit also rejects an arrow-toggle-specific 50% fill override.
 - Added static regression checks for measured vertical word-toggle handle bounds, shared horizontal/vertical handle radius and side inset, shared side-arrow implementation, and outer-only double-side focus outline.
 - Updated the three canonical Studio UI documents to remove stale Micro, counter, word-counter, split-input, and catalog-classifier requirements.
+- Audited the requested retired library entries against the current target branch: StudioSearchInput, StudioSelectStandard, StudioChatActionGroup, Chat Action Group, Select Standard, and Designs Compilations are absent from the Confirmed Library and public Studio barrel. No corresponding dedicated implementation files exist to delete. Added a guard test so these entries cannot silently return.
 
 ## Latest CI evidence observed
 
