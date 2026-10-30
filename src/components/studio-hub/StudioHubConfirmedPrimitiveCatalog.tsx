@@ -717,8 +717,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     >
       <SizeMatrix label="Username input size examples"
         standard={<StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label="Standard username" placeholder="USERNAME" />}
-        compact={[0,1].map(i => compact(<StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label={"Compact username "+(i+1)} placeholder="USERNAME" />, "compact-"+i))}
-        micro={[0,1,2,3].map(i => micro(<StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label={"Micro username "+(i+1)} placeholder="USER" />, "micro-"+i))} />
+        compact={[0,1].map(i => compact(<StudioUsernameInput icon={<Settings2 aria-hidden="true" />} sizeVariant="compact" aria-label={"Compact username "+(i+1)} placeholder="USERNAME" />, "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(<StudioUsernameInput icon={<Settings2 aria-hidden="true" />} sizeVariant="micro" aria-label={"Micro username "+(i+1)} placeholder="USER" />, "micro-"+i))} />
       <div className="vt-confirmed-variant is-full-row">
         <span>44px standard · editable username field</span>
         <StudioUsernameInput icon={<Settings2 aria-hidden="true" />} aria-label="Standard username" placeholder="USERNAME" autoComplete="username" data-vt-library-component="StudioUsernameInput" />
