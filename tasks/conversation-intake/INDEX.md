@@ -18,4 +18,7 @@ When packages are created, list:
 
 | VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY | Studio Confirmed Primitive Library organization and PR migration | [handoff](./VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/handoff.md) | [worklog](./VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/worklog.json) | [review](./VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/review.md) | PARTIALLY_RECONCILED | PR #1073; PR #1080; Studio Controls verification |
 
+
+| VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION | Studio Controls field-stroke and split-geometry regression recovery; PR #923 branch reconciliation | [handoff](./VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/handoff.md) | [worklog](./VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/worklog.json) | [review](./VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/review.md) | PARTIALLY_RECONCILED | Studio Controls; PR #923 recovery; Verification |
+
 Do not infer Task Index lifecycle from this index.
