@@ -29,7 +29,8 @@ test("restored production primitives are publicly exported and catalogued", () =
 
 test("the confirmed library has a distinct Representatives section and actual production specimens", () => {
   assert.match(catalog, /StudioPrimitiveRepresentatives/);
-  assert.match(catalog, /aria-labelledby="vt-confirmed-representatives-title"/);
+  assert.ok(catalog.includes('headingId = representative ? "vt-confirmed-representatives-title"'));
+  assert.ok(catalog.includes("aria-labelledby={headingId}"));
   assert.match(catalog, /StudioSquareIconButtonGroup sizeVariant="standard"/);
   assert.match(catalog, /StudioSplitLeftBadge icon=/);
 });
