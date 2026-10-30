@@ -732,6 +732,465 @@
         "docs/architecture/PRODUCT_ARCHITECTURE.md",
         "docs/programs/INTEGRATED_APPLICATION.md"
       ]
+    },
+    {
+      "id": "DOC-SPEC-P1-CROSS-SYSTEM-IDENTITY",
+      "path": "tasks/p1-canonical-system-integration/identity-map.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "existing typed identity and provenance crosswalk for six canonical systems",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/architecture/PRODUCT_ARCHITECTURE.md",
+        "docs/domains/BRAIN.md",
+        "docs/governance/VERIFICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-REF-P1-TASK-CROSSWALK",
+      "path": "tasks/p1-canonical-system-integration/task-crosswalk.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "crosswalk P1 workstreams to existing VT task identities",
+      "owner": "Task Authority / Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/CONVERSATION_OS.md",
+        "docs/architecture/capabilities.json"
+      ]
+    },
+    {
+      "id": "DOC-P1-SKILLS-AND-PLUGINS",
+      "path": "tasks/p1-canonical-system-integration/skills-and-plugins.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration program workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-BRAIN-CONTINUITY-README",
+      "path": "tasks/p1-canonical-system-integration/workstreams/brain-continuity/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration brain-continuity workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-BRAIN-CONTINUITY-AUDIT-CHECKLIST",
+      "path": "tasks/p1-canonical-system-integration/workstreams/brain-continuity/audit-checklist.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration brain-continuity workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-BRAIN-CONTINUITY-TEST-PLAN",
+      "path": "tasks/p1-canonical-system-integration/workstreams/brain-continuity/test-plan.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration brain-continuity workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-BRAIN-CONTINUITY-AGENT-BRIEF",
+      "path": "tasks/p1-canonical-system-integration/workstreams/brain-continuity/agent-brief.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration brain-continuity workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-GEMINI-GOVERNANCE-README",
+      "path": "tasks/p1-canonical-system-integration/workstreams/gemini-governance/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration gemini-governance workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-GEMINI-GOVERNANCE-AUDIT-CHECKLIST",
+      "path": "tasks/p1-canonical-system-integration/workstreams/gemini-governance/audit-checklist.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration gemini-governance workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-GEMINI-GOVERNANCE-TEST-PLAN",
+      "path": "tasks/p1-canonical-system-integration/workstreams/gemini-governance/test-plan.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration gemini-governance workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-GEMINI-GOVERNANCE-AGENT-BRIEF",
+      "path": "tasks/p1-canonical-system-integration/workstreams/gemini-governance/agent-brief.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration gemini-governance workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-UNIFIED-DIAGNOSTICS-README",
+      "path": "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration unified-diagnostics workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-UNIFIED-DIAGNOSTICS-AUDIT-CHECKLIST",
+      "path": "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/audit-checklist.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration unified-diagnostics workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-UNIFIED-DIAGNOSTICS-TEST-PLAN",
+      "path": "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/test-plan.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration unified-diagnostics workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-UNIFIED-DIAGNOSTICS-AGENT-BRIEF",
+      "path": "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/agent-brief.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration unified-diagnostics workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-PRIORITY-25-RUNTIME-README",
+      "path": "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration priority-25-runtime workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-PRIORITY-25-RUNTIME-AUDIT-CHECKLIST",
+      "path": "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/audit-checklist.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration priority-25-runtime workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-PRIORITY-25-RUNTIME-TEST-PLAN",
+      "path": "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/test-plan.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration priority-25-runtime workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-PRIORITY-25-RUNTIME-AGENT-BRIEF",
+      "path": "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/agent-brief.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration priority-25-runtime workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-PUBLIC-RESOLVER-README",
+      "path": "tasks/p1-canonical-system-integration/workstreams/public-resolver/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration public-resolver workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-PUBLIC-RESOLVER-AUDIT-CHECKLIST",
+      "path": "tasks/p1-canonical-system-integration/workstreams/public-resolver/audit-checklist.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration public-resolver workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-PUBLIC-RESOLVER-TEST-PLAN",
+      "path": "tasks/p1-canonical-system-integration/workstreams/public-resolver/test-plan.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration public-resolver workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-PUBLIC-RESOLVER-AGENT-BRIEF",
+      "path": "tasks/p1-canonical-system-integration/workstreams/public-resolver/agent-brief.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration public-resolver workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-STUDIO-CONTROLS-README",
+      "path": "tasks/p1-canonical-system-integration/workstreams/studio-controls/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration studio-controls workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-STUDIO-CONTROLS-AUDIT-CHECKLIST",
+      "path": "tasks/p1-canonical-system-integration/workstreams/studio-controls/audit-checklist.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration studio-controls workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-STUDIO-CONTROLS-TEST-PLAN",
+      "path": "tasks/p1-canonical-system-integration/workstreams/studio-controls/test-plan.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration studio-controls workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-P1-WORKSTREAMS-STUDIO-CONTROLS-AGENT-BRIEF",
+      "path": "tasks/p1-canonical-system-integration/workstreams/studio-controls/agent-brief.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "P1 canonical integration studio-controls workstream execution packet",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/VERIFICATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
     }
   ],
   "legacyGlobalSources": [

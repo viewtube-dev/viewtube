@@ -39,3 +39,10 @@ This is a discovery index only, not authoritative PR status. Always query GitHub
 - #992: 11 ahead / 1,339 behind; 10 changed paths.
 - Pairwise overlaps: #935/#988 = 6 files; #935/#992 = 4 files; #988/#992 = 6 files. Union = 29 paths.
 - All three are DIVERGED. Selective donor harvesting only; no wholesale merge.
+
+## Workstream branch execution policy
+- The documentation packet branch is separate from production implementation branches.
+- Create one short-lived branch per independently testable workstream slice, always from freshly fetched `master/consolidated-feature-integration`.
+- Do not branch from another stale donor branch; use donor PRs only for selective file-level harvesting.
+- Serialize changes to shared contracts/registries/Task Authority/Studio token-emitter files.
+- Every implementation PR must include focused test results and production-caller proof; UI changes also need visual/responsive receipts.

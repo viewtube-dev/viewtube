@@ -47,3 +47,8 @@ Each slice gets a focused branch/PR unless a tightly coupled contract requires a
 
 ## Global exit
 Each consequential path has one canonical owner, typed connections, preserved identity/provenance, focused regression tests, production-caller runtime proof, actionable diagnostics and explicit legacy disposition. Merged/build-green is not equivalent to DONE.
+
+## Phase 0 reconciliation outcome — 2026-10-30
+Phase 0 source reconciliation was completed and merged via PR #1205. The follow-up source maps and six workstream execution packets have been migrated to PR #1216. Current findings and corrected owners are in [phase-0 reconciliation audit](audits/phase-0-reconciliation-2026-10-30.md), [identity map](identity-map.md), and [task crosswalk](task-crosswalk.md). Do not repeat Phase 0 from scratch; refresh only when the target SHA changes.
+
+Remaining identity gate: Priority-25 still has no confirmed capability/task identity. VT-025 is an unrelated Analytics task. Task Index VNext structured storage/writer is also not present; Task Authority remains the lifecycle authority and the one-goal file remains a temporary projection.

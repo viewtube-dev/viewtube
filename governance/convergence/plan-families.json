@@ -1,6 +1,6 @@
 {
   "schemaVersion": "viewtube.plan-families.v1",
-  "lastEdited": "2026-10-29",
+  "lastEdited": "2026-10-30",
   "families": [
     {
       "id": "PLAN-FAMILY-BRAIN-AI",
@@ -184,7 +184,34 @@
         "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/plan.md",
         "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/plan.md",
         "tasks/p1-canonical-system-integration/workstreams/public-resolver/plan.md",
-        "tasks/p1-canonical-system-integration/workstreams/studio-controls/plan.md"
+        "tasks/p1-canonical-system-integration/workstreams/studio-controls/plan.md",
+        "tasks/p1-canonical-system-integration/identity-map.md",
+        "tasks/p1-canonical-system-integration/task-crosswalk.md",
+        "tasks/p1-canonical-system-integration/skills-and-plugins.md",
+        "tasks/p1-canonical-system-integration/workstreams/brain-continuity/README.md",
+        "tasks/p1-canonical-system-integration/workstreams/brain-continuity/audit-checklist.md",
+        "tasks/p1-canonical-system-integration/workstreams/brain-continuity/test-plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/brain-continuity/agent-brief.md",
+        "tasks/p1-canonical-system-integration/workstreams/gemini-governance/README.md",
+        "tasks/p1-canonical-system-integration/workstreams/gemini-governance/audit-checklist.md",
+        "tasks/p1-canonical-system-integration/workstreams/gemini-governance/test-plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/gemini-governance/agent-brief.md",
+        "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/README.md",
+        "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/audit-checklist.md",
+        "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/test-plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/agent-brief.md",
+        "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/README.md",
+        "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/audit-checklist.md",
+        "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/test-plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/agent-brief.md",
+        "tasks/p1-canonical-system-integration/workstreams/public-resolver/README.md",
+        "tasks/p1-canonical-system-integration/workstreams/public-resolver/audit-checklist.md",
+        "tasks/p1-canonical-system-integration/workstreams/public-resolver/test-plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/public-resolver/agent-brief.md",
+        "tasks/p1-canonical-system-integration/workstreams/studio-controls/README.md",
+        "tasks/p1-canonical-system-integration/workstreams/studio-controls/audit-checklist.md",
+        "tasks/p1-canonical-system-integration/workstreams/studio-controls/test-plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/studio-controls/agent-brief.md"
       ],
       "status": "ACTIVE"
     }
