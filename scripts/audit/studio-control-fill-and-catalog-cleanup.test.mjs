@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import test from "node:test"
 
 const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
@@ -72,6 +72,13 @@ test("retired certification, chat-action, select, search, and specimen-pair demo
   assert.doesNotMatch(confirmedCatalog, /StudioHubCertification|StudioChatActionGroup|StudioSelect|StudioSearchInput|StudioComponentGridSpecimen/)
   assert.doesNotMatch(publicApi, /StudioHubCertification|StudioChatActionGroup|StudioComponentGridSpecimen/)
   assert.doesNotMatch(controls, /export const StudioSelect|export const StudioSearchInput/)
+  for (const path of [
+    "src/studio-ui/StudioHubCertification.tsx",
+    "src/studio-ui/primitives/StudioComponentGridSpecimen.tsx",
+    "src/studio-ui/primitives/StudioChatActionGroup.tsx",
+    "src/studio-ui/primitives/StudioChatActionGroup.test.tsx",
+    "src/styles/studio-chat-action-group.css",
+  ]) assert.equal(existsSync(path), false, `${path} must be deleted`)
   assert.match(confirmedCatalog, /data-vt-library-component="StudioComponentGrid"/)
   assert.match(confirmedCatalog, /data-vt-library-component="StudioComponentGridCell"/)
 })
