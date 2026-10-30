@@ -58,6 +58,32 @@
   --vt-studio-control-text-stroke: 0.4px;
   --vt-studio-control-line-height: 1;
 }
+/* One canonical keyboard-focus perimeter and synchronized field-color fade. */
+[data-vt-studio-control="true"]:focus-visible {
+  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65))
+    solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline-offset: 0;
+  transition-duration: var(--vt-studio-focus-outline-fade-ms, 500ms);
+  --vt-field-text-color: #000;
+  --vt-field-fill-opacity: 15%;
+}
+[data-vt-studio-control="true"]:focus-visible :is(
+  [data-vt-studio-split-label], [data-vt-studio-control-label],
+  [data-vt-studio-button-face], [data-vt-studio-counter-value]
+) {
+  color: #000;
+  -webkit-text-stroke-color: #000;
+  transition: color var(--vt-studio-focus-outline-fade-ms, 500ms) ease,
+    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-vt-studio-control="true"] { transition-duration: 0ms; }
+  [data-vt-studio-control="true"]:focus-visible :is(
+    [data-vt-studio-split-label], [data-vt-studio-control-label],
+    [data-vt-studio-button-face], [data-vt-studio-counter-value]
+  ) { transition: none; }
+}
+
 [data-vt-studio-control="true"] {
   min-width: 0;
   width: 100%;
