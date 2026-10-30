@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getVaultKey, setVaultKey } from '../services/keyVault';
 import { reportDiagnostic } from '../services/diagnostics';
+import { classifyGeminiKeyValidationError } from './geminiKeyValidation';
 
 // Do NOT static-import @google/genai — it's a ~50 kB gzip module and this
 // provider mounts at App boot, which used to force every route (Dashboard,
@@ -111,8 +112,8 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       // prevent adding a key in signed-in or signed-out mode. Explicit invalid-key
       // responses still fail so we don't label a rejected credential as saved.
       const status = Number(error?.status ?? error?.code);
-      const message = String(error?.message ?? '');
-      if (status === 401 || /invalid api key|unauthorized|authentication failed/i.test(message)) {
+      const failureClass = classifyGeminiKeyValidationError(error);
+      if (failureClass === "credential_rejected") {
         setValidationError('Google rejected this API key. Check the key and try again.');
         setIsValidating(false);
         reportDiagnostic({
@@ -138,9 +139,15 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         return false;
       }
       setApiKey(trimmedKey);
-      const permissionDenied = status === 403 || /permission denied|forbidden/i.test(message);
+      const permissionDenied = failureClass === "permission_denied";
+      const rateLimited = failureClass === "rate_limited";
+      const providerUnavailable = failureClass === "provider_unavailable";
       if (permissionDenied) {
         setValidationError('Key saved locally, but Google denied verification. Check that Gemini API access is enabled and the project has permission.');
+      } else if (rateLimited) {
+        setValidationError('Key saved locally, but Google rate-limited verification. Retry later; generation quota is checked separately when an AI feature runs.');
+      } else if (providerUnavailable) {
+        setValidationError('Key saved locally, but Gemini is temporarily unavailable. Retry verification when the provider is reachable.');
       } else {
         setValidationError('Key saved locally. Google could not verify the connection right now; you can retry or test it when using an AI feature.');
       }
@@ -151,24 +158,32 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         level: "warn",
         whatHappened: permissionDenied
           ? "Gemini API key was saved locally, but Google denied verification."
-          : "Gemini API key was saved locally, but provider verification could not be completed.",
+          : rateLimited
+            ? "Gemini API key was saved locally, but provider verification was rate-limited."
+            : providerUnavailable
+              ? "Gemini API key was saved locally, but the provider was unavailable."
+              : "Gemini API key was saved locally, but provider verification could not be completed.",
         whatItMeans: "Key storage succeeded, but provider connectivity is not confirmed.",
         whatToCheck: permissionDenied
           ? ["Enable the Gemini API for the key's project.", "Check project permissions and API restrictions."]
-          : ["Retry provider verification later.", "Check network access and Gemini API availability."],
+          : rateLimited
+            ? ["Wait before retrying model discovery.", "Check provider quota and rate limits separately from key storage."]
+            : ["Retry provider verification later.", "Check network access and Gemini API availability."],
         details: {
           source: "gemini-key-settings",
           subsystem: "brain",
           kind: "api_key_validation",
           status: "degraded",
           expected: "Google verifies the credential through model discovery",
-          actual: permissionDenied ? "Provider denied verification" : "Provider verification unavailable",
+          actual: permissionDenied ? "Provider denied verification" : rateLimited ? "Provider rate-limited verification" : providerUnavailable ? "Provider unavailable" : "Provider verification unavailable",
           recommendedActions: permissionDenied
             ? ["Enable the Gemini API for the key's project.", "Check project permissions and API restrictions."]
-            : ["Retry provider verification later.", "Check network access and Gemini API availability."],
+            : rateLimited
+              ? ["Wait before retrying model discovery.", "Check provider quota and rate limits separately from key storage."]
+              : ["Retry provider verification later.", "Check network access and Gemini API availability."],
           confidence: "confirmed",
           privacy: "sanitized",
-          metadata: { providerStatus: status || undefined, failureClass: permissionDenied ? "permission_denied" : "verification_unavailable" },
+          metadata: { providerStatus: status || undefined, failureClass },
         },
       });
       return true;
