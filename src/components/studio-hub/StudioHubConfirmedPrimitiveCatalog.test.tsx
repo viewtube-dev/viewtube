@@ -252,3 +252,42 @@ it("keeps one square-icon family and exposes all four canonical toggle/choice sk
   expect(css).toContain(".vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle")
   expect(css).toContain(".vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle")
 });
+
+
+describe("restored confirmed primitive sections", () => {
+  it("renders the distinct production representatives section before the family modules", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain("Representatives · Production Primitives")
+    expect(html).toContain("READ-ONLY TEXT BOX")
+    expect(html).toContain("PRIMARY ACTION")
+    expect(html).toContain("TEXT ENTRY")
+  })
+
+  it("renders all restored production primitives and their expected size tiers", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    for (const marker of [
+      'data-vt-studio-vertical-word-toggle="true"',
+      'data-vt-studio-icon-button-group="true"',
+      'data-vt-studio-text-box="true"',
+      'data-vt-studio-split-accordion="true"',
+      'data-vt-studio-value-toggle="arrow"',
+      'data-vt-studio-value-toggle="side"',
+      'data-vt-studio-value-toggle="double"',
+      'data-vt-studio-value-toggle="bar"',
+      'data-vt-studio-control-kind="studio-double-split-word-counter"',
+      'data-vt-library-component="StudioLeftWordCounter"',
+    ]) expect(html).toContain(marker)
+    expect(html).toContain('data-size="standard"')
+    expect(html).toContain('data-size="compact"')
+    expect(html).toContain('data-size="micro"')
+  })
+
+  it("starts all five grouped square icon buttons in primary and marks selected squares independently", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain('aria-label="standard action group"')
+    expect(html).toContain('aria-label="Settings"')
+    expect(html).toContain('data-vt-studio-icon-button-group="true"')
+    expect(html).toContain('aria-pressed="false"')
+    expect(html).toContain('aria-pressed="true"')
+  })
+})
