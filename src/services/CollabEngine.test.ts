@@ -38,7 +38,7 @@ describe("collaboration research provider boundary", () => {
   generateJsonObject.mockResolvedValue({ peers: [] })
   await expect(generateCollabOpportunities("My Channel", "restoration", 50000))
    .rejects.toThrow("No collaboration candidates could be verified")
-  generateJsonObject.mockRejectedValue(new Error("provider unavailable"))
+  generateJsonObject.mockImplementationOnce(() => Promise.reject(new Error("provider unavailable")))
   await expect(generateCollabOpportunities("My Channel", "restoration", 50000))
    .rejects.toThrow("provider unavailable")
  })
