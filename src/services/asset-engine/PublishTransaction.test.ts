@@ -206,6 +206,7 @@ describe("PublishTransaction",()=>{
   const transaction=beginPublishTransaction(projection())
   markPublishStepRunning({transactionId:transaction.id,step:"upload-video"})
   markPublishStepAmbiguous({transactionId:transaction.id,step:"upload-video",error:"upload response was lost"})
+  expect(()=>resolveAmbiguousPublishStepAsApplied({transactionId:transaction.id,step:"upload-video",checkedBy:"creator",evidence:"Confirmed video but ID not recorded"})).toThrow(/must bind the confirmed YouTube video ID/i)
   const recovered=resolveAmbiguousPublishStepAsApplied({transactionId:transaction.id,step:"upload-video",youtubeVideoId:"youtube-recovered",checkedBy:"creator",evidence:"Matched the uploaded video in YouTube Studio"})
   expect(recovered.youtubeVideoId).toBe("youtube-recovered")
   expect(recovered.steps["upload-video"]?.status).toBe("completed")
