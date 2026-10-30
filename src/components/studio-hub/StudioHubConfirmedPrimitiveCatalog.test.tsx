@@ -760,4 +760,17 @@ describe("Studio Calendar confirmed primitive representatives", () => {
     expect(markup).toContain('data-event-status="in progress"');
     expect(markup).toContain("REMOVABLE EVENT");
   });
+  it("lists the grid primitives and calendar components in their composition families, and keeps split text input variants inside Text Fields", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
+    const toolbox = readFileSync(resolve(process.cwd(), "src/components/ToolboxUIReferenceLibrary.tsx"), "utf8")
+    expect(source).toContain('data-vt-library-component="StudioComponentGrid"')
+    expect(source).toContain('data-vt-library-component="StudioComponentGridCell"')
+    expect(source).toContain('data-vt-library-component="StudioCalendarEventChip"')
+    expect(source).toContain('data-vt-library-component="StudioCalendarMediaRail"')
+    expect(source).toContain('SPLIT TEXT INPUT · LEFT / RIGHT / DOUBLE')
+    expect(toolbox).not.toContain('<StudioHubConfirmedSplitTextInputCatalog />')
+    expect(source).not.toContain('StudioInlineStepper')
+    expect(source).not.toContain('StudioSplitStepper')
+  })
+
 });
