@@ -45,3 +45,8 @@ Use:
 - `.claude/skills/viewtube-conversation-handoff/SKILL.md`
 - `.claude/skills/viewtube-conversation-work-reconciliation/SKILL.md`
 - `docs/governance/CONVERSATION_HANDOFFS.md`
+
+
+## Required completion pass
+
+Before calling a package complete, follow the ten-step execution sequence and completion checklist in `docs/governance/CONVERSATION_HANDOFFS.md`. Update the existing package in place for follow-up work. Keep its status PARTIALLY_RECONCILED until every item has a disposition and the applicable document/verification gates have evidence.
