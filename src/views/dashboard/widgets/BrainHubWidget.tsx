@@ -321,7 +321,7 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
 
    const result = await runBrainTask({
     surface: "brain-hub-widget",
-    publicHandleContext: readSelectedPublicHandleContext(),
+    publicHandleContext: !authState.isAuthenticated && !channelConnection.isConnected ? readSelectedPublicHandleContext() : null,
     channelId,
     projectId: activeProject?.id || null,
     project: activeProject,
