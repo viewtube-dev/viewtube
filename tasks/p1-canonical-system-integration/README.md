@@ -48,3 +48,5 @@ Every consequential path has one verified owner, typed connections, preserved id
 
 ## Latest reconciliation
 See [Phase 0 reconciliation audit](audits/phase-0-reconciliation-2026-10-30.md) for live PR states, corrected code owners, landed Gemini plans/scanner, Studio source-of-truth, public cache behavior and Priority-25 identity findings. Audited target SHA: `0135fa33bf5cd59503c9feecce4977072ef60fec`.
+
+- [Cross-system identity and provenance map](identity-map.md) — current typed IDs, owner boundaries and diagnostics contract gaps.
