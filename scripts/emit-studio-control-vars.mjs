@@ -13,19 +13,19 @@ const numberContract = tokenSource.match(/export const STUDIO_COUNTER_NUMBER_TOK
 const tiers = ["supreme", "standard", "compact", "mini", "micro"];
 function tierSource(tier) {
   if (tier === "compact") return compactSizeLine;
-  const match = sizeBaseBlock.match(new RegExp(`(?:^|\n)\s*${tier}:\s*\\{([^\n]*)\\}`));
+  const match = sizeBaseBlock.match(new RegExp(`(?:^|\n)\\s*${tier}:\\s*\\{([^\n]*)\\}`));
   return match?.[1] ?? "";
 }
 function readNumber(source, property, label) {
-  const match = source.match(new RegExp(`(?:^|[,\s])${property}:\s*([\d.]+)`));
+  const match = source.match(new RegExp(`(?:^|[,\\s])${property}:\\s*([\\d.]+)`));
   if (!match) throw new Error(`Missing Studio token ${label}.${property}`);
   return Number(match[1]);
 }
 function readTierObject(source, property) {
-  const block = source.match(new RegExp(`${property}:\s*\\{([^}]+)\\}`))?.[1] ?? "";
+  const block = source.match(new RegExp(`${property}:\\s*\\{([^}]+)\\}`))?.[1] ?? "";
   const result = {};
   for (const tier of tiers) {
-    const match = block.match(new RegExp(`${tier}:\s*([\d.]+)`));
+    const match = block.match(new RegExp(`${tier}:\\s*([\\d.]+)`));
     if (!match) throw new Error(`Missing Studio dropdown token ${property}.${tier}`);
     result[tier] = Number(match[1]);
   }
