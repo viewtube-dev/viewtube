@@ -1,0 +1,71 @@
+/* One token-owned focus perimeter for every interactive Studio primitive.
+   Menu options keep their separate inset menu-item focus treatment. */
+:root {
+  --vt-studio-focus-outline-offset: 0px;
+  --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * .65);
+}
+
+html body :is(
+  [data-vt-studio-control="true"]:focus-visible,
+  button[data-vt-studio-button="true"]:focus-visible,
+  button[data-vt-studio-action-button="true"]:focus-visible,
+  button[data-vt-studio-icon-button="true"]:focus-visible,
+  .vt-studio-44-switch:focus-visible,
+  .vt-studio-44-choice:focus-visible,
+  .vt-studio-44-word-toggle:focus-within,
+  .vt-studio-legend-trigger:focus-visible,
+  .vt-studio-simple-dropdown select:focus-visible,
+  .vt-studio-spectrum-tag:focus-visible,
+  .vt-studio-closeable-badge__close:focus-visible,
+  .vt-studio-tag-editor__square-action:focus-visible,
+  .vt-studio-counter:focus-within,
+  .vt-studio-side-counter:focus-within,
+  .vt-studio-left-counter:focus-within,
+  .vt-studio-double-split-slider:focus-within,
+  .vt-studio-value-toggle:focus-within,
+  .vt-studio-username-input:focus-within,
+  .vt-studio-upload-frame:has(.vt-studio-upload-frame__input:focus-visible)
+) {
+  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65))
+    solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
+  transition:
+    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
+}
+
+/* A focused split control outlines once at its outer shell, not on each rail. */
+html body :is(
+  .vt-studio-counter,
+  .vt-studio-side-counter,
+  .vt-studio-left-counter,
+  .vt-studio-double-split-slider,
+  .vt-studio-value-toggle,
+  .vt-studio-username-input
+):focus-within > :is([data-vt-studio-split-rail], [data-vt-studio-split-label]) {
+  outline: none;
+}
+
+/* The slider's native range remains the input target; its shared shell owns focus. */
+html body .vt-studio-double-split-slider input[type="range"]:focus-visible {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body :is(
+    [data-vt-studio-control="true"],
+    button[data-vt-studio-button="true"],
+    button[data-vt-studio-action-button="true"],
+    button[data-vt-studio-icon-button="true"],
+    .vt-studio-counter,
+    .vt-studio-side-counter,
+    .vt-studio-left-counter,
+    .vt-studio-double-split-slider,
+    .vt-studio-value-toggle,
+    .vt-studio-username-input,
+    .vt-studio-upload-frame
+  ) {
+    transition-duration: 0ms;
+  }
+}
