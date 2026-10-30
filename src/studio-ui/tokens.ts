@@ -182,6 +182,16 @@ export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   outlineOffsetPx: 0,
 } as const
 
+// ─── Bar toggle family geometry and value colors ──────────────────────────────
+
+export const STUDIO_BAR_TOGGLE_TOKENS = {
+  heightToTextRatio: 1,
+  heightToWidthRatio: 2.5,
+  radius: 2,
+  emptyWhiteMixPercent: 50,
+  fullFillColor: "#000000",
+} as const
+
 export const STUDIO_STEPPER_BUTTON_TOKENS = {
   chevronSize: { supreme: 42, standard: 36, compact: 24, mini: 16, micro: 12 },
   chevronStroke: { supreme: 3.75, standard: 2.5, compact: 3, mini: 2.5, micro: 2.25 },
@@ -194,6 +204,7 @@ export const STUDIO_STEPPER_BUTTON_TOKENS = {
 } as const
 
 export const STUDIO_COUNTER_NUMBER_TOKENS = {
+  valueAreaAspectRatio: 2,
   defaultWhiteMixPercent: STUDIO_FOCUS_INTERACTION_TOKENS.restTextMixPercent,
   defaultStrokeColor: "same as default fill" as const,
   activeTextColor: STUDIO_FOCUS_INTERACTION_TOKENS.activeTextColor,
