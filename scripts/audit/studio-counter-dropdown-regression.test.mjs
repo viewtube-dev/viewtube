@@ -9,19 +9,12 @@ const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
 const emitter = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 
-test("counter primitives keep the canonical 2:1 number area without recovery-layer geometry overrides", () => {
-  const start = styles.indexOf("/* New independent StudioCounter")
-  const end = styles.indexOf("/* Side Toggle arrow", start)
-  const counters = styles.slice(start, end)
-  assert.ok(start >= 0 && end > start)
-  assert.match(counters, /\.vt-studio-counter,[\s\S]*?\.vt-studio-side-counter,[\s\S]*?\.vt-studio-left-counter\s*\{[^}]*width:\s*100%/)
-  assert.doesNotMatch(counters, /vt-studio-counter-width|2fr/)
-  assert.match(styles, /\.vt-studio-counter__value,\s*\[data-vt-studio-counter-value\]\{aspect-ratio:var\(--vt-studio-counter-value-area-aspect-ratio,2\/1\)/);
-  assert.doesNotMatch(recovery, /\.vt-studio-counter__value[^}]*aspect-ratio:\s*2\s*\/\s*1/)
-  const wordStart = styles.indexOf("/* Double-split word counter")
-  const wordStyles = styles.slice(wordStart)
-  assert.match(wordStyles, /\.vt-studio-word-counter[\s\S]*?width:\s*100%/)
-  assert.doesNotMatch(wordStyles, /176px|2fr/)
+test("counter shells size from a 2:1 value pane plus square action rails", () => {
+  assert.match(styles, /\.vt-studio-counter\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height,44px\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,2\)\s*\+\s*var\(--vt-studio-counter-double-rail-count,2\)\)\)/)
+  assert.match(styles, /\.vt-studio-side-counter,\s*\.vt-studio-left-counter\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height,44px\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,2\)\s*\+\s*var\(--vt-studio-counter-side-rail-count,1\)\)\)/)
+  assert.match(styles, /\.vt-studio-counter__value,\[data-vt-studio-counter-value\]\{aspect-ratio:var\(--vt-studio-counter-value-area-aspect-ratio,2\/1\)/)
+  assert.match(styles, /\.vt-studio-split-shell__rail,\[data-vt-studio-split-rail\][\s\S]*?flex:0 0 var\(--vt-studio-control-height\)/)
+  assert.doesNotMatch(recovery, /vt-studio-counter.*width|vt-studio-side-counter.*width/)
 })
 
 test("double-split word counter uses the primitive's solid primary face and black focus text", () => {
