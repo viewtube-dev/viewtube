@@ -61,8 +61,8 @@ export const uploadPublishTransactionVideo=async(input:{
   throw new Error("Upload step completed without a persisted YouTube video ID; manual recovery is required before retry.")
  }
  assertProviderDispatchAllowed(transaction)
+ markPublishStepRunning({transactionId:transaction.id,step:"upload-video"})
  try{
-  markPublishStepRunning({transactionId:transaction.id,step:"upload-video"})
   const uploaded=await uploadUnifiedVideo(input.file,input.metadata,input.onProgress)
   const videoId=extractVideoId(uploaded)
   if(!videoId)throw new Error("YouTube upload completed without returning a video ID.")
@@ -86,8 +86,8 @@ export const runPublishTransactionStep=async<T>(input:{
  if(transaction.steps[input.step]?.status==="completed")return transaction
  if(transaction.steps[input.step]?.status==="running"||transaction.steps[input.step]?.status==="ambiguous")throw new Error("Publish step has an ambiguous remote result; reconcile provider state before retry.")
  assertProviderDispatchAllowed(transaction)
+ markPublishStepRunning({transactionId:transaction.id,step:input.step})
  try{
-  markPublishStepRunning({transactionId:transaction.id,step:input.step})
   const result=await input.execute(transaction)
   return completePublishStep({transactionId:transaction.id,step:input.step,receipt:input.receipt?.(result),youtubeBinding:input.youtubeBinding?.(result,transaction),toolId:"video-publisher"})
  }catch(error){
