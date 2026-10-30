@@ -57,6 +57,7 @@ textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   color: #000;
   -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
   caret-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
   background-color: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent);
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-field-secondary, var(--pair-b, #ff7f6b));
@@ -132,6 +133,11 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="compact"] {
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
   -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, 0.35px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="mini"],
+html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="mini"] {
+  font-size: var(--vt-studio-textarea-mini-font-size, 17.5px);
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, 0.4px) var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="micro"],
 html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="textarea"][data-size="micro"] {
@@ -319,15 +325,7 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
 }
 
 
-/* Regression recovery: field glyph stroke is state-specific, not inherited accidentally. */
-/* Simple input is the intentional exception: its inline glyph stroke stays primary in both states. */
-html body input.vt-studio-text-input--simple[data-vt-studio-control="true"],
-html body input.vt-studio-text-input--simple[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
-  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  -webkit-text-fill-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
-}
+/* Simple inputs inherit the shared default/focus glyph-color contract above. */
 /* Labelled/editable inputs and all textareas use black glyph stroke while focused. */
 html body input.vt-studio-text-input:not(.vt-studio-text-input--simple)[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 html body input[data-vt-studio-field-kind="text-input"][data-vt-studio-control="true"]:is(:focus, :focus-visible):not(.vt-studio-text-input--simple),
@@ -343,4 +341,12 @@ html body [data-vt-studio-control="true"][data-vt-studio-field-kind="textbox"] {
   color: #000;
   -webkit-text-fill-color: #000;
   -webkit-text-stroke-color: #000 !important;
+}
+
+/* State color wins over every size-specific glyph-width declaration. */
+html body input[data-vt-studio-control="true"][data-size]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size]:is(:focus, :focus-visible) {
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
 }
