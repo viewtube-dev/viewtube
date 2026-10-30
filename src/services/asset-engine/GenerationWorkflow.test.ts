@@ -37,6 +37,7 @@ describe("GenerationWorkflow", () => {
   expect(prepared.request.channelId).toBe("channel-1")
   expect(prepared.request.contextManifestId).toBe(prepared.contextManifest.id)
   expect(prepared.request.operationId).toBe(prepared.request.id)
+  expect(prepared.request.idempotencyKey).toBe(`generation:v1:${build.id}:video-publisher:${prepared.request.operationId}`)
   expect(prepared.request.workflowId).toBe(`workflow:${build.id}`)
   expect(prepared.request.contextRevision).toBe(build.revision)
   expect(prepared.contextManifest.contentBuildRevision).toBe(build.revision)
@@ -64,6 +65,7 @@ describe("GenerationWorkflow", () => {
    operationRecord: expect.objectContaining({
     schemaVersion: 1,
     operationId: prepared.request.id,
+    idempotencyKey: prepared.request.idempotencyKey,
     workflowId: `workflow:${build.id}`,
     status: "running",
     kind: "generation",
@@ -348,9 +350,11 @@ describe("GenerationWorkflow", () => {
    .find(event => event.eventType === "tool.output.recorded")
 
   expect(receipt.promptReceipt).toEqual(promptReceipt)
+  expect(receipt.idempotencyKey).toBe(prepared.request.idempotencyKey)
   expect(outputEvent?.metadata).toMatchObject({
    promptReceipt,
    operationRecord: {
+    idempotencyKey: prepared.request.idempotencyKey,
     metadata: { promptReceipt },
     lineage: {
      traceId: "trace-prompt-receipt",
