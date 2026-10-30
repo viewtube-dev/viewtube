@@ -349,3 +349,8 @@ Both stepper variants are real canonical StudioControls implementations with ded
 ### Test and verification boundary
 
 The package script includes the dedicated InlineStepper behavior test, the InlineStepper catalog test, and StudioControls catalog assertions. Source inspection confirms the mismatch locations but does not establish which test fails first or the exact runtime output. No test, build, typecheck, browser, or computed-style run occurred.
+
+
+### Stepper API contract detail (source-confirmed)
+
+Both `StudioInlineStepperProps` and `StudioSplitStepperProps` explicitly constrain `size` to `"standard" | "compact"`; do not show supreme/mini/micro specimens for either. Both expose numeric `value`, `onValueChange`, optional `min` / `max` / `step`, `ariaLabel`, and `disabled`. InlineStepper has a double-split horizontal decrement/value/increment layout; SplitStepper has an editable value pane and vertical secondary action rail. Both use the same normalization helper and have bounds-aware increment/decrement buttons. Catalog coverage should show standard and compact for both, with enabled/disabled and boundary behavior verified through interaction tests rather than multiplying every combination into visual specimens.
