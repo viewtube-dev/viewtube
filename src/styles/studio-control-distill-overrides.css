@@ -238,6 +238,49 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
 }
 
 
+/* Bar toggle: keep the visualization strictly inside the flexible center face cell. */
+.vt-studio-value-toggle--bar {
+  position: relative;
+  isolation: isolate;
+}
+.vt-studio-value-toggle--bar .vt-studio-value-toggle__bars {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow: visible;
+  justify-content: center;
+}
+.vt-studio-value-toggle--bar [data-vt-studio-split-rail] {
+  position: relative;
+  z-index: 2;
+}
+.vt-studio-value-toggle--bar:focus-within {
+  outline: var(--vt-studio-control-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-control-secondary, var(--pair-b));
+  outline-offset: 0;
+}
+.vt-studio-value-toggle__bar {
+  position: relative;
+}
+.vt-studio-value-toggle__bar-tooltip {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  display: block;
+  min-height: 20px;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 3px;
+  background: var(--vt-studio-control-secondary, var(--pair-b));
+  color: #000;
+  font: 1000 11px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
 /* Choice controls share the same five-tier geometry as the rest of Studio Controls. */
 .vt-studio-44-switch[data-vt-studio-control="true"] {
   width: calc(var(--vt-studio-control-height, 44px) * 1.72);
