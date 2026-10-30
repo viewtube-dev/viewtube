@@ -1,3 +1,33 @@
+/* One chevron button owner shared by counters, arrow toggles, and bar controls. */
+.vt-studio-stepper-button {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: #000;
+  cursor: pointer;
+}
+.vt-studio-stepper-button svg {
+  display: block;
+  flex: 0 0 auto;
+  width: min(calc(var(--vt-studio-control-height, 44px) * .62), 100%);
+  height: min(calc(var(--vt-studio-control-height, 44px) * .62), 100%);
+  max-width: 100%;
+  max-height: 100%;
+  stroke-width: 2.5;
+}
+.vt-studio-stepper-button:disabled { opacity: .35; cursor: not-allowed; }
+.vt-studio-stepper-button:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-studio-focus-outline-color, var(--pair-b));
+  outline-offset: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-stepper-button svg { animation: none; transition: none; }
+}
+
 /* Shared value-toggle family. Geometry comes from StudioSplitShell and inherited size tokens. */
 .vt-studio-value-toggle {
   --vt-toggle-text: #000;
