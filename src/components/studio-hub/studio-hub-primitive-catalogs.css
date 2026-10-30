@@ -3415,3 +3415,48 @@
 .vt-confirmed-primitive-grid-cell>span{font-size:10px;line-height:1;font-weight:1000;letter-spacing:-.02em;text-transform:uppercase;color:#000}
 .vt-confirmed-primitive-grid-cell>:is(button,[role="button"],[data-vt-studio-control="true"],.vt-studio-dropdown){min-width:0;max-width:100%;width:100%}
 @media(max-width:520px){.vt-confirmed-primitive-grid-overview{padding:8px}.vt-confirmed-primitive-grid-overview>h2{font-size:16px}}
+
+
+/* Counter and slider family galleries: show every size/palette row inside its own module. */
+.vt-confirmed-counter-row {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-counter-size-rows {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-counter-size-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-counter-size-row > small {
+  display: block;
+  min-width: 0;
+  color: #000;
+  font: 1000 9px/1.1 Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.vt-confirmed-counter-pair,
+.vt-confirmed-slider-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-counter-pair > *,
+.vt-confirmed-slider-pair > * {
+  width: 100%;
+  min-width: 0;
+}
