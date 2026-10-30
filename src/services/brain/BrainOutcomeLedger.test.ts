@@ -107,4 +107,29 @@ describe("Brain outcome source-record replay identity", () => {
   expect(listBrainOutcomes("channel-1")).toHaveLength(1)
  })
 
+
+ it("preserves and enriches shared correlation and causation identity on replay", async () => {
+  const first = await recordBrainOutcome(input({ correlationId: null, causationId: null }))
+  const replay = await recordBrainOutcome(input({
+   correlationId: "correlation-7",
+   causationId: "event-parent-3",
+  }))
+
+  expect(replay.id).toBe(first.id)
+  expect(replay.correlationId).toBe("correlation-7")
+  expect(replay.causationId).toBe("event-parent-3")
+  expect(listBrainOutcomes("channel-1")[0]).toMatchObject({
+   correlationId: "correlation-7",
+   causationId: "event-parent-3",
+  })
+ })
+
+ it("rejects a retry that reuses a source record with conflicting correlation identity", async () => {
+  await recordBrainOutcome(input({ correlationId: "correlation-original" }))
+
+  await expect(recordBrainOutcome(input({ correlationId: "correlation-other" })))
+   .rejects.toThrow(/sourceRecordId action-packet-1 was reused with conflicting correlationId/i)
+  expect(listBrainOutcomes("channel-1")[0].correlationId).toBe("correlation-original")
+ })
+
 })
