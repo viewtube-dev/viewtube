@@ -99,3 +99,13 @@ Mode: Audit-first; no production edits before Gate 6 approval.
 - [ ] T2.x Expand the existing public-export matrix to include documented internal/module-only dispositions after lifecycle decisions; do not create a second registry.
 - [ ] T3.x Reconcile or retire the unregistered legacy `confirmed-catalog-coverage.mjs` assertions against the current token/style contract before treating it as a gate.
 - [ ] T5.x Execute the focused suite and browser certification only from a real target-branch checkout; current remote-only inspection has not run tests or visual checks.
+
+
+### Follow-up crosswalk correction — 2026-10-30
+- [x] Confirm StudioSimpleDropdown, StudioInlineStepper, and StudioSplitStepper implementations exist in canonical StudioControls.tsx; correct earlier broad absence wording.
+- [x] Confirm StudioInlineStepper.tsx is a deprecated compatibility re-export and its dedicated behavior test covers standard/compact variants.
+- [x] Confirm active catalog already treats simple dropdown as a compatibility/layout variant of StudioDropdown; do not create a duplicate family.
+- [x] Confirm active shell mounts nested Confirmed Primitive Catalog plus Confirmed Split Text Input Catalog, alongside separate hardcoded and migration tracks.
+- [ ] Add InlineStepper and SplitStepper as Controls-family specimens in the approved catalog reconciliation; determine public API exposure separately.
+- [ ] Reconcile tests that require SimpleDropdown as a distinct catalog/public API primitive with the canonical one-family dropdown contract.
+- [ ] Trace all compatibility-wrapper and root-level duplicate-catalog imports before deprecation/removal.
