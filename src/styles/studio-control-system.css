@@ -6316,20 +6316,39 @@ input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):
 .vt-studio-counter__value,[data-vt-studio-counter-value]{aspect-ratio:var(--vt-studio-counter-value-area-aspect-ratio,2/1);flex:1 1 auto;min-width:0}
 /* Intermodule host: zero horizontal padding so horizontal rules meet host vertical borders.
    Rails stay perfectly square (inner face height = face - 2*stroke). */
-[data-vt-studio-inter-host="true"] {
+[data-vt-studio-inter-host="true"],
+.vt-confirmed-intermodule-host,
+.vt-confirmed-variant [data-vt-studio-inter-host="true"] {
   padding-left: 0;
   padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
 }
 .vt-studio-inter-module {
   width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
   border-left: 0;
   border-right: 0;
 }
 .vt-studio-inter-module__rail {
+  box-sizing: border-box;
   width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
   min-width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
   max-width: var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+  flex: 0 0 var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
   aspect-ratio: 1 / 1;
+}
+.vt-studio-inter-module__head {
+  grid-template-columns:
+    var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)))
+    minmax(0, 1fr)
+    var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)));
 }
 
 /* Collapsed modules: single bottom border only (outer shell).
@@ -6356,37 +6375,6 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collap
    The collapsed state above removes this line so only the outer bottom border remains. */
 .vt-studio-collapsing-split-module[open] > .vt-studio-collapsing-split-module__head {
   border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
-}
-
-/* Intermodule: eliminate any residual host/body inset so rails flush to outer vertical borders. */
-[data-vt-studio-inter-host="true"],
-.vt-confirmed-intermodule-host,
-.vt-confirmed-variant [data-vt-studio-inter-host="true"] {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-.vt-studio-inter-module,
-.vt-studio-inter-module__head {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-/* Rails use full face height so they are square to the outer chrome and flush to host edges. */
-.vt-studio-inter-module__rail {
-  width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
-  min-width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
-  max-width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
-  aspect-ratio: 1 / 1;
-  height: 100%;
-}
-.vt-studio-inter-module__head {
-  grid-template-columns:
-    var(--vt-im-face, var(--vt-studio-control-height, 44px))
-    minmax(0, 1fr)
-    var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important;
 }
 
 /* Content-width exemptions: switches, radios, checkboxes, word toggles are content-sized, not row-fill. */
