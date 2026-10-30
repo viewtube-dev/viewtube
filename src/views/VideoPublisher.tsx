@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react"
 import { BarChart3, Check, Copy, FileText, RefreshCcw, Send, ShieldCheck, Sparkles, Type, Upload, Zap } from "lucide-react"
 import JSZip from "jszip"
 import { useBrain } from "../context/useBrain"
-import { generateSeoData, hasGeminiKey } from "../services/gemini"
+import { hasGeminiKey } from "../services/gemini"
+import { generateVideoPublisherSeoPackage } from "../services/brain/creatorAssets"
 import {
  addAssetVariant,
  createAssetVariantGroup,
@@ -577,7 +578,37 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           })
         : null
 
-      const data = await generateSeoData(concept || publishTitle || "", niche || "general audience", script || publishDescription, "", videoLength, channelHandle, resourceLinks, formatMode === "longform" ? "Longform" : "Shorts", undefined, brain)
+      const suppliedHandle = channelHandle.trim()
+      const publicHandleIdentity = suppliedHandle && !/yourchannel/i.test(suppliedHandle)
+        ? `public-channel:${suppliedHandle.toLowerCase()}`
+        : ""
+      const channelId = contentContext?.build.channelId || (authState as any)?.channelId || publicHandleIdentity
+      const generated = await generateVideoPublisherSeoPackage({
+        context: {
+          channelId,
+          channelName: channelHandle.trim() || undefined,
+          recentVideoTitles: [publishTitle].filter(Boolean),
+        },
+        instruction: "Generate the complete Video Publisher SEO package for the active video. Preserve all requested package sections and ground channel-specific claims in supplied evidence.",
+        inputs: {
+          concept: concept || publishTitle || "",
+          niche: niche || "general audience",
+          audience,
+          script: script || publishDescription,
+          videoLength,
+          channelHandle,
+          resourceLinks,
+          stats: durationStats,
+          videoFormat: formatMode === "longform" ? "Longform" : "Shorts",
+          videoTitle: publishTitle,
+        },
+        projectId: contentContext?.build.legacyProjectId || undefined,
+        contentBuildId: contentContext?.contentBuildId,
+        contextRevision: contentContext?.build.revision,
+        operationId: generationRequest?.request.operationId,
+        workflowId: generationRequest?.request.workflowId,
+      })
+      const data = generated.output
       if (targetField === "title" && data.titleSets[0]?.title) setPublishTitle(data.titleSets[0].title)
       if (targetField === "description" && data.description) setPublishDescription(data.description)
       if (targetField === "tags" && data.tags) setPublishTags(data.tags)
@@ -675,10 +706,12 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
           versionIds: versionIds,
           variantGroupId: titleGroup.id,
           relationshipIds: [],
-          traceId: null,
+          traceId: generated.record.traceId,
+          promptReceipt: generated.record.promptReceipt || null,
           summary: `Created ${titleAssets.length} title variants plus description and tags for the active ContentBuild.`,
           metadata: {
-            providerPath: "legacy-generateSeoData",
+            providerPath: "creator-asset-generator",
+            assetRecordId: generated.record.id,
             titleVariantGroupId: titleGroup.id,
           },
         })

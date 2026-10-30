@@ -1,7 +1,4 @@
-import {
- getContentBuild,
- listContentBuildEvents,
-} from "./ContentBuildRepository"
+import { getContentBuild } from "./ContentBuildRepository"
 import { assertContentBuildCapability } from "./ContentBuildCapabilities"
 import type { BrainPromptRunReceipt } from "../brain/BrainPromptGovernance"
 import {
@@ -310,24 +307,6 @@ export const recordToolReceipt = (input: {
   throw new Error(`Generation request project scope mismatch for ContentBuild ${build.id}.`)
  }
 
- // A retried completion may arrive after the original output was committed but
- // before the caller observed the response. Reuse the canonical receipt rather
- // than appending a second output event for the same scoped generation command.
- const idempotencyKey = input.request.idempotencyKey || null
- if (idempotencyKey) {
-  const priorEvent = listContentBuildEvents(build.id).find(event =>
-   event.eventType === "tool.output.recorded" &&
-   event.toolId === input.request.toolId &&
-   event.metadata?.idempotencyKey === idempotencyKey
-  )
-  const priorReceipt = priorEvent?.metadata?.toolReceipt
-  if (priorReceipt && typeof priorReceipt === "object" &&
-   "idempotencyKey" in priorReceipt &&
-   priorReceipt.idempotencyKey === idempotencyKey
-  ) {
-   return priorReceipt as ToolReceipt
-  }
- }
 
  const completedAt = new Date().toISOString()
  const receipt: ToolReceipt = {
@@ -352,13 +331,14 @@ export const recordToolReceipt = (input: {
   promptReceipt: input.promptReceipt || null,
  }
 
- recordContentBuildToolOutput({
+ const outputEvent = recordContentBuildToolOutput({
   contentBuildId: receipt.contentBuildId,
   toolId: receipt.toolId,
   assetIds: receipt.outputAssetIds,
   evidenceIds: receipt.evidenceIds,
   generationRecordId: receipt.generationRecordId,
   traceId: receipt.traceId,
+  idempotencyKey: receipt.idempotencyKey,
   summary: input.summary || "",
   metadata: {
    ...(input.metadata || {}),
@@ -384,6 +364,16 @@ export const recordToolReceipt = (input: {
    }),
   },
  })
+ const canonicalReceipt = (outputEvent.metadata as Record<string, unknown> | undefined)?.toolReceipt
+ if (canonicalReceipt && typeof canonicalReceipt === "object" &&
+  "idempotencyKey" in canonicalReceipt &&
+  canonicalReceipt.idempotencyKey === receipt.idempotencyKey
+ ) {
+  return canonicalReceipt as ToolReceipt
+ }
+ if (receipt.idempotencyKey) {
+  throw new Error("Generation receipt idempotency key is already owned by an incompatible ContentBuild event.")
+ }
 
  return receipt
 }

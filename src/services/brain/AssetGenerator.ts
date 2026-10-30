@@ -132,6 +132,7 @@ export interface AssetModelCall {
  userText: string
  schema: Schema
  mediaAttachments?: string[]
+ tools?: Array<Record<string, unknown>>
 }
 
 export interface AssetModelResponse<TOutput> {
@@ -149,6 +150,8 @@ export interface AssetGeneratorStrategy<TOutput> {
  promptVersion: string
  evidenceClasses: string[]
  schema: Schema
+ /** Provider tools explicitly approved for this specialist strategy. */
+ tools?: Array<Record<string, unknown>>
  buildTaskInstruction: (request: AssetRequest, evidence: AssetEvidence) => string
  /** Prose to grade for style and numeric grounding. */
  toGradeableText: (output: TOutput) => string
@@ -478,6 +481,7 @@ export const generateAsset = async <TOutput>(input: {
    systemInstruction,
    userText: request.instruction,
    schema: strategy.schema,
+   ...(strategy.tools?.length ? { tools: strategy.tools } : {}),
    ...(input.mediaAttachments?.length
     ? { mediaAttachments: input.mediaAttachments }
     : {}),

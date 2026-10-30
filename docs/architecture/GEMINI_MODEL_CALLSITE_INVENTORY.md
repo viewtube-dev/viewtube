@@ -1,6 +1,6 @@
 # Gemini Model and Call-Site Inventory
 
-**Status:** Reconciled source inventory; exact-commit automated caller report is now a release-gate artifact, awaiting CI execution and manual classification  
+**Status:** Reconciled source inventory; exact-commit v2 report generated; manual classification in progress  
 **Audit date:** 2026-10-30  
 **Baseline:** `master/consolidated-feature-integration` · **Implementation branch:** `feat/p1-gemini-governance-reconciliation-2026-10-29`
 
@@ -20,7 +20,7 @@ This file tracks duplicate Gemini policy sources before consolidation. Do not tr
 | Brain core consumer | `src/services/brain/Core.ts` | **Migrated on the current reconciliation branch** to `defaultBrainModelGateway.generateJsonObject`; Gemini is dynamically loaded by the gateway adapter. | Keep Brain Core provider-neutral; protect with `CoreGateway.contract.test.ts` |
 | Collaboration consumer | `src/services/CollabEngine.ts` | **Migrated on reconciliation branch** to `defaultBrainModelGateway.generateJsonObject`; Google Search grounding is passed through the gateway/provider adapter; invalid/empty peer results fail closed rather than returning mock creators. | Keep search grounding and schema validation covered by gateway tests |
 | Comment operator consumer | `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx` | **Migrated on reconciliation branch** to `generatePinnedCommentDraft` in the governed `creatorAssets` / `AssetGenerator` path. The strategy records prompt/model receipt, trace, operation/workflow identity, grounding and review findings. | Preserve creator review before posting; no generation call in the widget |
-| Video Publisher SEO | `src/views/VideoPublisher.tsx` | **Remaining legacy caller** invokes `generateSeoData` from `gemini.ts`, then records a ToolReceipt with `providerPath: "legacy-generateSeoData"` and no governed prompt/model receipt. | Migrate title/description/tag generation to existing AssetGenerator specialist strategies; preserve current ContentBuild stage/scope checks and output variants |
+| Video Publisher SEO | `src/views/VideoPublisher.tsx` | **Migrated on the reconciliation branch** to `generateVideoPublisherSeoPackage` through a dedicated `videoPublisherSeoStrategy` and the existing AssetGenerator / Gemini asset runner. Preserves the complete `SeoResult` shape, six title candidates, descriptions, tags, category, pinned comments, community posts, Shorts script, education moments and social copy. Prompt receipt and trace are passed into ToolReceipt. The strategy explicitly forwards Google Search grounding. Exact-head CI for the newest migration is pending. | Keep the strategy specialist-owned; add ingestion/retry parity coverage and migrate the other `generateSeoData` callers separately |
 | SDK dependency | `package.json` + `package-lock.json` | Declared range `^1.46.0`; lockfile resolves exactly `1.46.0` | Dependency policy + lockfile evidence |
 
 ## Drift to resolve
@@ -174,3 +174,18 @@ The release-gates workflow now runs `test:ai-generation-callers`, generates `aud
 ### Remaining evidence boundary
 
 No real Gemini API key was used. No live provider availability, quota, unsupported-model, outage, or successful generation result is claimed. Legacy provider compatibility candidates remain until live capability parity and zero-caller proof are recorded.
+
+## Exact-head automated caller inventory — run #5435
+
+The generated `gemini-caller-inventory` artifact reports:
+
+- 73 exported symbols in `src/services/gemini.ts`.
+- 43 exports with production import-and-reference matches; these include non-generation helpers such as configuration, key checks and model selection, so this count is not 43 independent model operations.
+- 29 exports with no static import reference; do not delete them without dynamic/re-export/reachability review.
+- 66 direct SDK invocation sites, concentrated in `src/services/gemini.ts` plus the explicit SDK model-list validation in `GeminiKeyContext`.
+- Four literal dynamic Gemini imports: two expected gateway adapter imports and two remaining UI imports (`AskMeWidget` / `TitleRewriterWidget`).
+- 20 model-ID literals and 18 credential-alias references requiring classification.
+
+Active production callers identified by the artifact include ActionableTactics, Channelytics, ResearchLab, Projects, VideoManager, MediaAnalyzer, AlgorithmArchitect, IntelligenceHub, DailyAdviceWidget, dashboard VideoManager/VideoUploader/AIJournal/CollabMatchmaker widgets, EndScreenTool, PreLaunchPriming, HookGenerator, creator-engagement comment response, script architect, project/studio storyboard flows, tag/thumbnail tools, VideoAutopsy and several provider-level Brain orchestration paths. The full per-export path/line list is retained in the workflow artifact rather than duplicated here.
+
+The artifact is from commit `9bd68ab8a657144f80abc71b6384e4ee7c60e1b7`, before the latest VideoPublisher migration. Regenerate it on the current PR head before using it as zero-caller evidence. The static scan remains a reachability lead, not a runtime proof.

@@ -5,6 +5,7 @@ import { Type, Sparkles, Copy, Check, RefreshCw } from "lucide-react"
 import { useBrain } from "../../../context/useBrain"
 import { canAffordAiTokensFromState } from "../../../services/billingEntitlement"
 import { getAiTokenCost } from "../../../services/aiTokenCosts"
+import { defaultBrainModelGateway } from "../../../services/brain/runtime/BrainModelGateway"
 import { CustomDropdown } from "./DataEditWidget"
 import { buildVideoAssetOptions } from "./videoAssetOptions"
 
@@ -53,8 +54,27 @@ export const TitleRewriterWidget = ({ widget, instance, editMode, onToggleCollap
   if (!canAffordRewrite) return
   setGenerating(true)
   try {
-   const { rewriteTitle } = await import("../../../services/gemini")
-   const results = await rewriteTitle(originalTitle, STYLE_PRESETS[style].label, brain)
+   const response = await defaultBrainModelGateway.generateJsonObject?.({
+    userText: "Original title: " + originalTitle + "\nTarget style: " + STYLE_PRESETS[style].label + "\nGenerate five distinct alternative titles. Return an array of objects with title and score fields.",
+    systemInstruction: "You are a YouTube title-rewriting specialist. Create five distinct, accurate, compelling alternatives in the requested style. Preserve the original topic and do not add unsupported claims. Score each title from 0 to 100 as a clearly subjective packaging estimate, not a measured CTR prediction.",
+    capability: "analysis",
+    responseSchema: {
+     type: "ARRAY",
+     items: {
+      type: "OBJECT",
+      properties: { title: { type: "STRING" }, score: { type: "NUMBER" } },
+      required: ["title", "score"],
+     },
+    },
+   })
+   const results = Array.isArray(response)
+    ? response.filter((item): item is { title: string; score: number } =>
+       Boolean(item) && typeof item === "object" &&
+       typeof (item as { title?: unknown }).title === "string" &&
+       typeof (item as { score?: unknown }).score === "number"
+      ).slice(0, 5)
+    : []
+   if (!results.length) throw new Error("The Brain gateway returned no valid title alternatives.")
    setAlternatives(results)
   } catch {
    // Fallback

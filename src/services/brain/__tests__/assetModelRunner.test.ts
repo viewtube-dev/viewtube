@@ -49,6 +49,7 @@ describe("geminiAssetModelRunner", () => {
    systemInstruction: "system",
    userText: "user",
    schema,
+   tools: [{ googleSearch: {} }],
   })
 
   expect(generateSchemaJsonObject).toHaveBeenCalledWith({
@@ -56,6 +57,7 @@ describe("geminiAssetModelRunner", () => {
    userText: "user",
    responseSchema: schema,
    capability: "text",
+   tools: [{ googleSearch: {} }],
   })
   expect(result.output).toEqual({ body: "Draft" })
   expect(result.model?.requested).toBe("gemini-3.1-pro-preview")

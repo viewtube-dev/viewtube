@@ -19,6 +19,8 @@ import {
 } from "./AssetGenerator"
 import { geminiAssetModelRunner } from "./assetModelRunner"
 import { pinnedCommentStrategy, type PinnedCommentDraft } from "./assetStrategies/commentReply"
+import { videoPublisherSeoStrategy } from "./assetStrategies/videoPublisherSeo"
+import type { SeoResult } from "../../types"
 import {
  communityPostStrategy,
  communitySinglePostStrategy,
@@ -214,4 +216,67 @@ export const generatePinnedCommentDraft = async (input: {
   throw new Error("ViewTube could not generate a pinned comment. Try again.")
  }
  return { body: result.record.output.body.trim(), record: result.record }
+}
+
+
+/** Generate the full Video Publisher SEO package through the shared asset governance path. */
+export const generateVideoPublisherSeoPackage = async (input: {
+ context: CreatorChannelContext
+ instruction: string
+ inputs: {
+  concept: string
+  niche: string
+  audience?: string
+  script: string
+  videoLength: string
+  channelHandle: string
+  resourceLinks?: string
+  stats?: string
+  videoFormat: "Longform" | "Shorts"
+  videoTitle?: string
+ }
+ projectId?: string
+ contentBuildId?: string
+ contextRevision?: number
+ operationId?: string
+ workflowId?: string
+}): Promise<{ output: SeoResult; record: AssetRecord<SeoResult> }> => {
+ if (!input.context.channelId.trim()) {
+  throw new Error("Connect a YouTube channel before generating governed publishing metadata.")
+ }
+ const evidence = buildChannelAssetEvidence({
+  ...input.context,
+  recentVideoTitles: input.inputs.videoTitle
+   ? [input.inputs.videoTitle, ...(input.context.recentVideoTitles || [])]
+   : input.context.recentVideoTitles,
+ }, videoPublisherSeoStrategy.evidenceClasses)
+ const result = await generateAsset<SeoResult>({
+  request: {
+   channelId: input.context.channelId,
+   assetType: "title",
+   instruction: input.instruction,
+   ...(input.projectId ? { projectId: input.projectId } : {}),
+   ...(input.contentBuildId ? { contentBuildId: input.contentBuildId } : {}),
+   ...(input.contextRevision !== undefined ? { contextRevision: input.contextRevision } : {}),
+   ...(input.operationId ? { operationId: input.operationId } : {}),
+   ...(input.workflowId ? { workflowId: input.workflowId } : {}),
+   inputs: input.inputs,
+  },
+  strategy: videoPublisherSeoStrategy,
+  evidence,
+  runner: geminiAssetModelRunner,
+ })
+ if (result.record.status === "failed" || !result.record.output) {
+  throw new Error("ViewTube could not generate a governed SEO package. Review the generation trace and try again.")
+ }
+ return {
+  output: {
+   ...result.record.output,
+   id: result.record.id,
+   timestamp: Date.parse(result.record.createdAt),
+   concept: input.inputs.concept,
+   niche: input.inputs.niche,
+  },
+  record: result.record,
+ }
 }
