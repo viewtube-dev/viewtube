@@ -1062,14 +1062,21 @@ const AIBrainCommandInterface: React.FC = () => {
   })
  }, [channelId, input, activePromptTitle, draftPromptOrigin])
  const [brainControls, setBrainControls] = useState(() => readBrainUserControls(channelId))
- const runtimeSnapshot = useMemo(
-  () => readBrainRuntimeSnapshot({
-   channelId,
-   activeProjectId: brain.activeProjectId,
-   projects: brain.projects,
-  }),
-  [channelId, brain.activeProjectId, brain.projects],
- )
+ const [runtimeSnapshot, setRuntimeSnapshot] = useState<ReturnType<typeof readBrainRuntimeSnapshot> | null>(null)
+
+ useEffect(() => {
+  let active = true
+  const refreshRuntimeSnapshot = () => {
+   const nextSnapshot = readBrainRuntimeSnapshot({
+    channelId,
+    activeProjectId: brain.activeProjectId,
+    projects: brain.projects,
+   })
+   if (active) setRuntimeSnapshot(nextSnapshot)
+  }
+  refreshRuntimeSnapshot()
+  return () => { active = false }
+ }, [channelId, brain.activeProjectId, brain.projects])
 
  const snapshot = useMemo(
   () =>
@@ -1931,7 +1938,7 @@ const AIBrainCommandInterface: React.FC = () => {
         onOpenTools={() => { setContextRailOpen(false); setLauncherMode("capabilities"); setPromptRailOpen(true) }}
        />
       <div data-vt-brain-workspace-part="runtime-context" className="vt-brain-studio-workspace__runtime shrink-0 bg-[#f3f4f6]">
-       <BrainRuntimePanel snapshot={runtimeSnapshot} embedded />
+       {runtimeSnapshot ? <BrainRuntimePanel snapshot={runtimeSnapshot} embedded /> : <div role="status" className="px-3 py-2 text-xs font-bold">Loading Brain status…</div>}
       </div>
       <div data-vt-brain-workspace-part="grid" className="vt-brain-studio-workspace__grid grid min-h-0 flex-1 gap-3 overflow-hidden bg-[#f3f4f6] max-xl:grid-rows-[minmax(0,1fr)] max-xl:px-0 max-xl:pb-0 max-xl:pt-1 xl:px-3 xl:pb-3 xl:pt-3 xl:grid-cols-[64px_minmax(0,1.45fr)_minmax(320px,1fr)] 2xl:grid-cols-[180px_minmax(0,1.45fr)_minmax(320px,1fr)]">
        <div data-vt-brain-workspace-part="navigation" className="vt-brain-studio-workspace__navigation hidden min-h-0 overflow-y-auto xl:block"><BrainWorkspaceNavigation /></div>
