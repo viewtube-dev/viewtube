@@ -853,6 +853,9 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
     ? (componentType.displayName || componentType.name || "")
     : ""
 
+  if (/Compatibility Field Exports/.test(title)) return "Text Fields"
+  if (/Compatibility Control Exports/.test(title)) return "Controls"
+
   // Choice primitives share one top-level family; check this before broad button rules.
   if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle|StudioChoice/.test(title)
     || componentName === "CanonicalControlFamilies"
