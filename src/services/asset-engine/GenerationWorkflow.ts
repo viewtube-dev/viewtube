@@ -1,5 +1,6 @@
 import {
  getContentBuild,
+ listContentBuildEvents,
 } from "./ContentBuildRepository"
 import { assertContentBuildCapability } from "./ContentBuildCapabilities"
 import type { BrainPromptRunReceipt } from "../brain/BrainPromptGovernance"
@@ -8,7 +9,6 @@ import {
  operationRecordFromToolReceipt,
 } from "../operations/OperationRecord"
 import {
- listContentBuildEvents,
  recordContentBuildToolInput,
  recordContentBuildToolOutput,
  resolveContentBuildToolContext,
