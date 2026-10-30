@@ -231,17 +231,17 @@ test("dropdown menus share separated primary-filled menu defaults across standar
 
 
 test("all counter primitives inherit full-row width without a 2:1 center ratio", () => {
-  const counterStyles = styles.slice(styles.indexOf("/* Counter primitives inherit"), styles.indexOf("/* Side Toggle arrow"));
+  const counterStyles = styles.slice(styles.indexOf("/* New independent StudioCounter"), styles.indexOf("/* Side Toggle arrow"));
   assert.match(counterStyles, /\.vt-studio-counter,[\s\S]*?width:\s*100%/);
   assert.match(counterStyles, /min-width:\s*0/);
   assert.doesNotMatch(counterStyles, /vt-studio-counter-width|grid-template-columns:\s*minmax\(0,\s*1fr\)\s+minmax\(0,\s*2fr\)/);
-  const wordStyles = styles.slice(styles.indexOf("/* New double-split word counter"));
+  const wordStyles = styles.slice(styles.indexOf("/* Double-split word counter"));
   assert.match(wordStyles, /\.vt-studio-word-counter[\s\S]*?width:\s*100%/);
   assert.doesNotMatch(wordStyles, /width:\s*176px|flex-basis:\s*176px|2fr/);
 });
 
 test("double split word counter uses the shared 50-percent resting treatment and black focus text", () => {
-  const wordStyles = styles.slice(styles.indexOf("/* New double-split word counter"));
+  const wordStyles = styles.slice(styles.indexOf("/* Double-split word counter"));
   assert.match(wordStyles, /background:\s*color-mix\(in srgb,\s*white 50%,\s*var\(--vt-studio-control-accent/);
   assert.match(wordStyles, /color:\s*var\(--vt-studio-control-accent/);
   assert.match(wordStyles, /:focus-within[\s\S]*?color:\s*#000/);
@@ -252,7 +252,7 @@ test("bar toggle tooltip is hidden at rest, visible only on focus, and the cente
   assert.match(barStyles, /\.vt-studio-value-toggle__bar-tooltip\s*\{[^}]*visibility:\s*hidden/);
   assert.match(barStyles, /:focus-within[\s\S]*?\.vt-studio-value-toggle__bar-tooltip[\s\S]*?visibility:\s*visible/);
   assert.match(barStyles, /\.vt-studio-value-toggle--bar:focus-within[\s\S]*?outline:/);
-  assert.match(barStyles, /\.vt-studio-value-toggle--bar\s*>\s*\[data-vt-studio-split-label\][\s\S]*?position:\s*relative[\s\S]*?z-index:\s*2/);
+  assert.match(barStyles, /\.vt-studio-value-toggle--bar\s*>\s*\[data-vt-studio-split-label\][\s\S]*?position:\s*relative[\s\S]*?z-index:\s*3/);
 });
 
 test("selected split buttons swap face and rail colors using the canonical pair variables", () => {
@@ -268,7 +268,7 @@ test("play pause selected state swaps primary/secondary face and rail pair color
 });
 
 test("dropdown colors and trigger alignment use active pair tokens and centered label space", () => {
-  const dropdown = styles.slice(styles.indexOf(".vt-studio-dropdown {"), styles.indexOf("/* Counter primitives inherit"));
+  const dropdown = styles.slice(styles.indexOf(".vt-studio-dropdown {"), styles.indexOf("/* New independent StudioCounter"));
   assert.match(dropdown, /background:\s*var\(--vt-studio-control-accent,\s*var\(--pair-a/);
   assert.match(dropdown, /background:\s*var\(--vt-studio-control-secondary,\s*var\(--pair-b/);
   assert.match(dropdown, /grid-template-columns:\s*var\(--vt-studio-dropdown-rail-size[^;]*minmax\(0,\s*1fr\)\s+var\(--vt-studio-dropdown-rail-size/);
