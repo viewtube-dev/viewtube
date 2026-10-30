@@ -376,7 +376,7 @@ UPDATE-ID → EXACT EASTERN TIMESTAMP → CONVERSATION TITLE → MAIN FOCUS → 
 
 Use a unique ID such as UPDATE-20261004-agent-001 in addition to the recovery LOG-ID.
 
-This report is part of the durable project memory and must be preserved in Recovery.md and, where structured state is appropriate, Recovery.yaml.
+This report is part of the project-wide recovery record and must be preserved in Recovery.md and, where structured state is appropriate, Recovery.yaml. This recovery ledger is used for explicit project recovery/activation campaigns; it is not a mandatory second conversation log for every ordinary thread. For normal long-thread continuity and all-conversation work capture, use docs/governance/CONVERSATION_HANDOFFS.md and tasks/conversation-intake/<conversation-id>/. When a recovery campaign is active, link its recovery update from the conversation package and keep the two scopes distinct.
 
 
 ## 17. Mandatory engineering and product intelligence capture
