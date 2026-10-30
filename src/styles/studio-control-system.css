@@ -6386,12 +6386,8 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collap
 .vt-studio-44-choice,
 .vt-studio-44-word-toggle,
 .vt-studio-vertical-word-toggle,
-[data-vt-studio-control="true"].vt-studio-44-switch,
-[data-vt-studio-control="true"].vt-studio-44-choice,
 [data-vt-studio-control="true"].vt-studio-44-word-toggle,
-[data-vt-studio-control="true"].vt-studio-vertical-word-toggle,
-button.vt-studio-44-switch,
-button.vt-studio-44-choice {
+[data-vt-studio-control="true"].vt-studio-vertical-word-toggle {
   width: max-content !important;
   max-width: 100%;
   flex: 0 0 auto !important;
