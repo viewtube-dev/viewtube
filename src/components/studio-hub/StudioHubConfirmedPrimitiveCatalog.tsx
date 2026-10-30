@@ -694,7 +694,7 @@ const ConfirmedStudioLeftWordSliderFamily: React.FC = () => {
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 /** Certified StudioButton examples arranged by the reusable PR #756 specimen grid. */
 const buttonVariantNumbers = [1, 2, 3, 4, 5, 6, 7] as const
-type StudioButtonGridTier = "supreme" | "standard" | "compact" | "micro"
+type StudioButtonGridTier = "supreme" | "standard" | "compact" | "mini" | "micro"
 
 const buttonCell = (tier: StudioButtonGridTier, id: string, variant: number, span: number) => ({
   id: `${tier}-${id}-v${variant}`,
@@ -714,6 +714,15 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
       buttonCell("standard", "row-5-sixth", 5, 24),
       buttonCell("standard", "row-5-eighth-a", 6, 18),
       buttonCell("standard", "row-5-eighth-b", 7, 18),
+    ] },
+    { id: "6-mini-variants", tier: "mini" as const, specimens: [
+      buttonCell("mini", "row-6-mini-v1", 1, 20),
+      buttonCell("mini", "row-6-mini-v2", 2, 20),
+      buttonCell("mini", "row-6-mini-v3", 3, 20),
+      buttonCell("mini", "row-6-mini-v4", 4, 20),
+      buttonCell("mini", "row-6-mini-v5", 5, 20),
+      buttonCell("mini", "row-6-mini-v6", 6, 20),
+      buttonCell("mini", "row-6-mini-v7", 7, 20),
     ] },
     { id: "6-compact-fractions", tier: "compact" as const, specimens: [
       buttonCell("compact", "row-6-third", 1, 48),
@@ -756,11 +765,11 @@ const ConfirmedStudioButtonFamily: React.FC = () => {
 
   return (
     <Family title="Button · V1–V7 · Proportional size grid" nonDefaultSettings={[
-      "Full-module width layout with the exact seven-row PR #756 composition: Supreme full and half rows; Standard full, half, and 1/3 + 1/4 + 1/6 + 2×1/8 row; Compact 1/3 + 1/4 + 2/9 + 1/9 + 1/12 row; then a split half-module Compact/Micro row.",
+      "Full-module width layout with the exact seven-row PR #756 composition: Supreme full and half rows; Standard full, half, and 1/3 + 1/4 + 1/6 + 2×1/8 row; Compact 1/3 + 1/4 + 2/9 + 1/9 + 1/12 row; Mini V1–V7 style matrix; then a split half-module Compact/Micro row.",
       "Row 7 keeps five compact specimens in the left half (3×1/8 + 2×1/16 of module width) and the Micro rows in the right half: 7A has 2×1/4; 7B has 2×1/8 + 4×1/16.",
       "V1 primary/black; V2 secondary/black; V3 independently toggles V1 and V2; V4 black/primary; V5 toggles V1/V2 with OFF/ON text; V6 toggles V1/black with NO/YES text; V7 primary/white.",
       "Each specimen is a real StudioButton. The grid controls arrangement only; production primitive owns size geometry, face styling, toggle state, accessibility, and clipped single-line text behavior (never ellipsis).",
-    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + ConfirmedSpecimenGrid.css" tokens="60px Supreme · 44px Standard · 28px Compact · 12px Micro · proportional 144-unit grid · 4px gap" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
+    ]} provenance={<Provenance primitive="StudioButton · V1–V7" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + ConfirmedSpecimenGrid.css" tokens="60px Supreme · 44px Standard · 28px Compact · 20px Mini · 12px Micro · proportional 144-unit grid · 4px gap" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/components/studio-hub/ConfirmedSpecimenGrid.tsx"]} />}>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-button-gallery">
         <ConfirmedSpecimenGrid
           familyName="Original StudioButton variants"
@@ -803,7 +812,7 @@ const ConfirmedStudioSplitButtonFamily: React.FC = () => {
         <StudioSplitRightButton sizeVariant={size} icon={<Settings2 aria-hidden="true" />} aria-label={`${size} split-right button`}>RIGHT</StudioSplitRightButton>
         <StudioDoubleSplitButton sizeVariant={size} leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label={`${size} double-split button`}>DOUBLE</StudioDoubleSplitButton>
         <StudioTwoLineButton sizeVariant={size} firstLine="TWO LINE" secondLine="BUTTON" aria-label={`${size} two-line button`} />
-        <StudioSplitTwoLineButton sizeVariant={size} icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label={`${size} two-line split button`} />
+        {(size === "standard" || size === "compact") && <StudioSplitTwoLineButton sizeVariant={size} icon={<Settings2 aria-hidden="true" />} firstLine="TWO LINE" secondLine="SPLIT BUTTON" aria-label={`${size} two-line split button`} />}
       </div>)}
     </Family>
   )
