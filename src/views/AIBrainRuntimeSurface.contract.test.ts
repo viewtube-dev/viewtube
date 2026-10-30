@@ -24,10 +24,14 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('window.removeEventListener(GEMINI_KEY_UPDATED_EVENT, refreshGeminiReadiness)')
  })
 
- it("does not rebuild the runtime snapshot for chat-history or learning-list changes", () => {
-  const runtimeMemo = source.slice(source.indexOf("const runtimeSnapshot = useMemo("), source.indexOf("const snapshot = useMemo(", source.indexOf("const runtimeSnapshot = useMemo("))
-  expect(runtimeMemo).not.toContain("recentTurns")
-  expect(runtimeMemo).not.toContain("learningEntries")
+ it("limits runtime snapshot refreshes to channel and project context changes", () => {
+  const runtimeEffect = source.slice(
+   source.indexOf("const [runtimeSnapshot, setRuntimeSnapshot]"),
+   source.indexOf("const snapshot = useMemo(", source.indexOf("const [runtimeSnapshot, setRuntimeSnapshot]")),
+  )
+  expect(runtimeEffect).toContain("[channelId, brain.activeProjectId, brain.projects]")
+  expect(runtimeEffect).not.toContain("recentTurns")
+  expect(runtimeEffect).not.toContain("learningEntries")
  })
 
  it("constructs the runtime snapshot after render instead of during render", () => {
