@@ -317,6 +317,7 @@ type ToolReceiptProjection = {
  id: string
  requestId: string
  operationId?: string
+ idempotencyKey?: string | null
  workflowId?: string
  contentBuildId: string
  projectId: string | null
@@ -351,7 +352,7 @@ export const operationRecordFromToolReceipt = (
  return createOperationRecord({
   operationId,
   workflowId,
-  idempotencyKey: null,
+  idempotencyKey: receipt.idempotencyKey || null,
   kind: "generation",
   status: "succeeded",
   mutationClass: "prepare",
