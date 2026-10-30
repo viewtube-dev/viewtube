@@ -1,93 +1,123 @@
-# Conversation Handoff
+# Unfinished Work — Living Conversation Log
 
-**Conversation ID:** VT-CONV-...
-**Handoff ID:** VT-HANDOFF-...
-**Produced:** YYYY-MM-DD
-**Last Edited:** YYYY-MM-DD
-**Source Host:** ChatGPT | Codex | Claude | Other
-**Reconciliation Status:** UNREVIEWED
+> **Update instruction:** Open this document and say **“Update the unfinished work log.”** Update this existing document and its matching `worklog.json` / `review.md` in place. Do not create a duplicate log. Preserve prior entries and link every new artifact.
 
-## Goal
+**Conversation date:** YYYY-MM-DD  
+**Conversation name:**  
+**Application / product:**  
+**Source application:** ChatGPT / Codex / Claude / Other  
+**Source conversation link:** [link or UNKNOWN]  
+**Repository:**  
+**Intended target branch:**  
+**Last updated:** YYYY-MM-DD  
+**Package status:** UNREVIEWED / PARTIALLY_RECONCILED / RECONCILED / CLOSED
 
-## Current repository state
-- Main SHA:
-- Branch:
-- PR:
-- Mission:
-- Task IDs:
-- Capabilities:
-- Domains:
+## Executive handoff — no more than 10 sentences
 
-## Read first
+Write no more than ten short, factual sentences. Include the goal, current repository state, verified completion, unmerged/local work, key user constraints, integration gaps, blockers, canonical authorities and exact next action.
 
-## Settled decisions
+1. 
+2. 
+3. 
+4. 
+5. 
+6. 
+7. 
+8. 
+9. 
+10. 
 
-## Work completed in this conversation
+## Unfinished work — single-line checklist
 
-## Work in progress
+Every meaningful unfinished action gets one concise line. Keep each checkbox on one line and include the work ID, truthful status, relevant PR/commit and next action.
 
-## Planned / unfinished work
-
-## Bugs / failures / blockers
-
-## Ideas / opportunities / risks
-
-## Documents / skills / workflows / prototypes
-
-## Important resources / donors
-
-## Changed paths / artifacts
-
-## Verification performed
-
-## Verification still needed
-
-## Do not redo
-
-## Exact next action
-
-## Work log
-`tasks/conversation-intake/<conversation-id>/worklog.json`
-
-## Review
-`tasks/conversation-intake/<conversation-id>/review.md`
-
+- [ ] `CWI-001` — [unfinished action] — [status] — [PR / commit / N/A] — Next: [specific action]
 
 ## Complete user instruction register
 
-| ID | User instruction / request / correction | Status | Related work item | PR(s) / commit(s) | Delivery state | Evidence |
-|---|---|---|---|---|---|---|
-| REQ-001 | | ☐ NOT_STARTED | | | | |
+Record every distinct user instruction, request, correction, constraint, preference and prohibition separately. Do not collapse materially different requests.
 
-Record every distinct instruction on its own line. Preserve corrections, constraints and prohibitions. Status must distinguish NOT_STARTED, IN_PROGRESS, PARTIAL, IMPLEMENTED_LOCALLY, COMMITTED, IN_PR, MERGED, VERIFIED_DELIVERED, BLOCKED, DEFERRED, REJECTED_WITH_REASON and SUPERSEDED_WITH_REFERENCE. List all contributing PRs; when no PR applies, record commit/artifact evidence or N/A.
+- [ ] `REQ-001` — [one distinct user instruction] — Status: NOT_STARTED — Work: [CWI-ID] — PR/commit: [reference or N/A] — Delivery: UNKNOWN — Evidence: [link or UNKNOWN]
+
+Use one single-line checkbox per distinct instruction. The checkbox is checked only when the requirement is VERIFIED_DELIVERED; the explicit status still records intermediate stages such as MERGED or IN_PR.
+
+Allowed statuses: NOT_STARTED, IN_PROGRESS, PARTIAL, IMPLEMENTED_LOCALLY, COMMITTED, IN_PR, MERGED, VERIFIED_DELIVERED, BLOCKED, DEFERRED, REJECTED_WITH_REASON, SUPERSEDED_WITH_REFERENCE.
+
+A merged PR is not proof of application integration or acceptance. Link all contributing PRs and commits; use UNKNOWN when evidence is unavailable.
+
+## Links to documents created or changed
+
+Link every document, code artifact, prototype, report, test, PR, commit and deployment artifact created or materially updated in this conversation. Do not invent URLs.
+
+| Artifact | Type | Repository path / URL | Status | Related work |
+|---|---|---|---|---|
+| | | | | |
 
 ## Work and delivery register
 
-| Work ID | Completed / unfinished work | Branch | Commit | PR(s) | Target presence | Integration | Verification |
-|---|---|---|---|---|---|---|---|
-
-Do not conflate conversation completion with canonical DONE or delivery.
+| Work ID | Work | Kind | Conversation state | Canonical destination | Priority | Next action |
+|---|---|---|---|---|---|---|
 
 ## Branch and PR reconciliation
 
-| Branch | Target | PR | PR-opening SHA | Current SHA | Post-PR changes | Merge SHA | Target presence | Disposition |
+Inspect branch history and PR history independently. Capture opening head SHA when recoverable, current head, post-opening commits/files, merge SHA, target presence and recovery disposition. Preserve unique post-PR work. Unknown lineage remains UNKNOWN.
+
+| Branch | Target | PR | Opened SHA | Current SHA | Post-PR work | Merge SHA | Target presence | Classification |
 |---|---|---|---|---|---|---|---|---|
 
-Explicitly list commits/files added after PR opening. Identify unmerged, partially merged, recovered, orphaned, duplicate, conflicted and unknown work. Unknown lineage must remain UNKNOWN.
+## Feature and application integration gaps
 
-## Feature integration gaps
+Use Task Authority's nine maturity axes and existing vocabulary: architecture, backend, frontend, integration, tests, runtime, responsive, documentation and release. Do not invent a completion percentage.
 
-| Feature | Architecture | Backend | Frontend | Integration | Tests | Runtime | Responsive | Documentation | Release | Missing connections / acceptance evidence |
+| Feature | Architecture | Backend | Frontend | Integration | Tests | Runtime | Responsive | Documentation | Release | Concrete gap / acceptance evidence |
 |---|---|---|---|---|---|---|---|---|---|---|
 
-Use Task Authority's maturity axes and vocabulary. Record missing UI, backend, application entry point, API/auth, data/persistence, workflow/feedback and runtime connections.
+Track components without application entry points, missing UI/frontend, disconnected backend/API, authorization, persistence, workflow feedback and runtime proof.
 
-## Artifacts, decisions and dependencies
+## Decisions, failures, blockers and risks
 
-## Five improvement proposals
+| ID | Decision / failure / blocker / risk | Reason or impact | Evidence | Next action |
+|---|---|---|---|---|
 
-Route through existing Ideas Registry / improvement recommendations. Proposals are not approved work.
+## Five best finishing and improvement ideas
 
-## Next-best action
+Provide exactly five useful proposals when evidence supports five; otherwise state why fewer are justified. Route proposals through the existing Ideas Registry / improvement recommendations. Do not create a parallel backlog or treat proposals as approved work.
 
-Derive from canonical task, mission/work-order, dependency, blocker and verification state. Do not create a parallel backlog.
+For each proposal, state what to do, why it matters, how it connects to existing work, and the first concrete implementation step. Keep proposals evidence-based and clearly separate from approved requirements.
+
+1. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
+2. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
+3. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
+4. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
+5. **Idea:** — **Benefit:** — **Existing owner:** — **Effort/risk:** — **First step:** — **Disposition:** PROPOSED
+
+## Exact next action
+
+**Action:**  
+**Reason:**  
+**Expected outcome:**  
+**Canonical task / mission:**  
+**Required branch:**  
+**Acceptance criteria:**  
+**Verification evidence:**  
+
+## Package links
+
+- Handoff: `tasks/conversation-intake/<conversation-id>/handoff.md`
+- Worklog: `tasks/conversation-intake/<conversation-id>/worklog.json`
+- Review: `tasks/conversation-intake/<conversation-id>/review.md`
+
+## Closure checklist
+
+- [ ] Every distinct user instruction is registered.
+- [ ] Every unfinished item has a single-line checkbox and next action.
+- [ ] All created/changed artifacts are linked.
+- [ ] Branches, PRs and post-PR work are reconciled.
+- [ ] Integration gaps use the existing maturity axes.
+- [ ] Decisions, corrections, failures and blockers are preserved.
+- [ ] Five improvement ideas are evaluated and routed through existing authorities.
+- [ ] Required tests and runtime evidence are recorded truthfully.
+- [ ] No competing Task Index, backlog or idea registry was created.
+- [ ] Review is reconciled or the remaining blockers are explicit.
+
+**Full normative contract:** `docs/governance/CONVERSATION_HANDOFFS.md`.

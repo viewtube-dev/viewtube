@@ -123,3 +123,8 @@ For each feature, reuse the nine Task Authority maturity axes: architecture, bac
 ## Idea and next-action routing
 
 Route the five strongest improvement proposals through existing Ideas Registry and improvement recommendations. Derive next-best action from canonical tasks, Crown missions/work orders, dependencies, blockers and verification receipts. These are proposals/recommendations, not a parallel backlog or canonical task mutation.
+
+
+## Living-log update invocation
+
+When the user supplies the existing handoff link and says **“Update the unfinished work log.”**, update that same package in place. Preserve its original conversation identity/date and append new instruction, work, document, branch/PR and integration evidence. Do not create a duplicate conversation package. Each instruction and unfinished action remains its own single-line checkbox in the human handoff; keep the executive summary to ten sentences maximum and link all artifacts.

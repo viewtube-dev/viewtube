@@ -211,3 +211,10 @@ The handoff-system merge commit `e5bbb56fee503c26a1251c6e3643307af12c4632` is pr
 The merge commit message says `Merge PR #503`, but the current GitHub PR metadata for #503 identifies an unrelated split-stepper change, closed without merging. The PR-number attribution is therefore **UNRESOLVED**; the commit itself remains valid delivery evidence. The original `docs/conversation-handoff-reconciliation-2026-09-27` branch is no longer returned by branch search. No replacement PR number is inferred.
 
 The current target branch is the source of truth for the present implementation. Historical PR linkage must remain marked unknown until an authoritative matching PR record is found.
+
+
+## PR #1170 — follow-up reconciliation
+
+PR #1170 (https://github.com/viewtube-dev/viewtube/pull/1170) merged on 2026-10-29 as `0fd1d412758f212d8d6cf34a3a31d22270ea33c4`. It extends this existing handoff system with per-instruction records, independent branch/PR reconciliation and nine-axis integration-gap tracking. Its source branch has zero commits ahead of the merge commit and is 22 commits behind; no unique post-PR work remains on that branch. The PR-opening SHA is UNKNOWN.
+
+The old handoff's prior statement that the handoff-system branch still needed PR verification/merge is superseded by PR #1170's merged delivery. The originating October 29 conversation now has its own continuation package at `tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/`, including its instruction register, artifact links and outstanding verification.

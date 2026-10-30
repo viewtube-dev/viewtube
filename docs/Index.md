@@ -58,7 +58,7 @@ Do not create a new document for an existing subject. Update or consolidate its 
 
 ## Conversation continuity and work reconciliation
 
-- [Conversation Handoffs](governance/CONVERSATION_HANDOFFS.md) — complete user-instruction register, branch/PR reconciliation, feature integration gaps and cross-agent continuity.
+- [Conversation Handoffs](governance/CONVERSATION_HANDOFFS.md) — living unfinished-work log, complete user-instruction register, branch/PR reconciliation, feature integration gaps and cross-agent continuity. Update an existing log by opening its link and saying **“Update the unfinished work log.”**
 
 ## Documentation operations
 

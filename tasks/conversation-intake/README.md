@@ -1,9 +1,9 @@
 # ViewTube Conversation Intake
 
 **Production Date:** 2026-09-27  
-**Last Edited:** 2026-09-27
+**Last Edited:** 2026-10-29
 
-This directory is the governed staging/provenance workspace for long-conversation handoffs and work reconciliation.
+This directory is the governed staging/provenance workspace for long-conversation handoffs and work reconciliation. Each handoff is also the human-readable living unfinished-work log. Open an existing handoff link and say **“Update the unfinished work log.”** to update its package in place; do not create a duplicate.
 
 It is **not** Task Index and does not own canonical work status.
 
@@ -17,7 +17,7 @@ tasks/conversation-intake/<conversation-id>/
 ```
 
 ### handoff.md
-Compact continuation package for the next conversation/agent.
+Human-readable living continuation log with conversation identity, at-most-ten-sentence summary, single-line instruction/unfinished-work checkboxes, artifact links and next action.
 
 ### worklog.json
 Comprehensive inventory of planned, started, partial, completed, blocked, abandoned and discovered work from the conversation.

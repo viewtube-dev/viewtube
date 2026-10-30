@@ -51,6 +51,22 @@ jobs:
       - run: npm run audit:ai-systems
       - run: npm run test:convergence-governance
 
+
+  conversation_handoff_contract:
+    name: conversation-handoff-contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:conversation-handoff-contract
+      - run: npm run test:document-system
+      - run: npm run audit:documents
+
+
   focused_contracts:
     name: focused-contracts
     runs-on: ubuntu-latest

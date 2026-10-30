@@ -360,3 +360,10 @@ Derive next-best action from canonical tasks, active Crown missions/work orders,
 A package is not fully reconciled until every distinct user instruction is registered and linked to its work/evidence; branch and PR histories have been reconciled including post-PR changes; feature integration gaps are explicit; completed work distinguishes implementation, delivery, integration and verification; and the next agent has an executable next action.
 
 The conversation intake workspace remains provenance and staging, not a second Task Index or feature maturity authority.
+
+
+## Unfinished-work living log contract
+
+The handoff is also the human-readable living document log for an oversized conversation. Its opening block must identify the conversation date and name, application/product, source application, source conversation link (or UNKNOWN), repository, intended target branch, last-updated date and package status. When a user supplies the log link and says **“Update the unfinished work log.”**, agents update that existing package in place; they do not create a duplicate log.
+
+The human-readable log contains: (1) no more than ten factual executive sentences; (2) a separate one-line checkbox for every distinct user instruction and every meaningful unfinished action; (3) links to all documents and artifacts created or materially changed; (4) independent branch/PR and post-PR reconciliation; (5) integration gaps using Task Authority's nine maturity axes; and (6) five evidence-based finishing/improvement proposals routed through existing Ideas Registry and improvement recommendations. Each checkbox records truthful achievement/delivery status and PR/commit evidence. Missing links or lineage remain UNKNOWN. The package remains provenance/handoff storage, not a second Task Index, task backlog or idea registry.

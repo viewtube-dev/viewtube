@@ -44,5 +44,13 @@
   ],
   "instructions": [],
   "branchPrReconciliation": [],
-  "integrationGaps": []
+  "integrationGaps": [],
+  "conversationName": "",
+  "application": "",
+  "sourceApplication": "ChatGPT",
+  "sourceConversationUrl": null,
+  "repository": null,
+  "targetBranch": null,
+  "executiveSummary": [],
+  "documents": []
 }
