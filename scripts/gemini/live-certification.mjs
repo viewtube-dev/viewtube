@@ -1,4 +1,5 @@
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 
 const API_BASE = "https://generativelanguage.googleapis.com/v1beta";
 
@@ -92,4 +93,4 @@ async function run() {
   }
 }
 
-if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) await run();
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) await run();
