@@ -290,7 +290,7 @@ test("confirmed Square Icon Button family catalogs every interaction effect at s
 test("confirmed square icon button variants 1–4 are grouped into one standard row and one compact row", () => {
   assert.match(catalog, /vt-confirmed-square-variant-row[^]*?44px standard · variants 1–4[^]*?variant="v1" sizeVariant="standard"[^]*?variant="v4" sizeVariant="standard"/);
   assert.match(catalog, /vt-confirmed-square-variant-row[^]*?28px compact · variants 1–4[^]*?variant="v1" sizeVariant="compact"[^]*?variant="v4" sizeVariant="compact"/);
-  assert.match(styles, /\.vt-confirmed-square-variant-grid\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, max-content\)\)/);
+  assert.match(styles, /\.vt-confirmed-square-variant-grid\s*\{[^}]*display:\s*flex[^}]*flex-flow:\s*row nowrap/);
 });
 
 test("square icon interaction effect specimens preserve two effect cards per row", () => {
@@ -300,7 +300,7 @@ test("square icon interaction effect specimens preserve two effect cards per row
 
 test("confirmed stepper standard and compact specimens share one comparison row", () => {
   assert.match(catalog, /vt-confirmed-stepper-row[^]*?44px standard · interactive[^]*?size="standard"[^]*?28px compact · interactive[^]*?size="compact"/);
-  assert.match(styles, /\.vt-confirmed-stepper-row-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /\.vt-confirmed-stepper-row-grid\s*\{[^}]*display:\s*flex[^}]*flex-flow:\s*row wrap/);
 });
 
 test("confirmed spectrum tag gallery shows 50 alphabetically sorted production specimens", () => {
@@ -384,4 +384,8 @@ test("50 spectrum samples cover all 26 alphabetic initials", () => {
 
 test("component descriptions above specimens stay on one compact line", () => {
   assert.match(styles, /\.vt-confirmed-family > p\s*\{[^}]*max-width:\s*40ch[^}]*text-overflow:\s*ellipsis[^}]*white-space:\s*nowrap/s);
+});
+
+test("generic primitive specimen lists remain full-row instead of defaulting to columns", () => {
+  assert.match(styles, /\.vt-confirmed-variants\s*\{\s*display:\s*grid;\s*grid-template-columns:\s*minmax\(0, 1fr\)/);
 });
