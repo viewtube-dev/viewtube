@@ -20,4 +20,6 @@ When packages are created, list:
 
 | VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY | Studio Confirmed Primitive Library organization and PR migration | [handoff](./VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/handoff.md) | [worklog](./VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/worklog.json) | [review](./VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/review.md) | PARTIALLY_RECONCILED | PR #1073; PR #1080; Studio Controls verification |
 
+| VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES | Brain composer crash repair and release-gate stabilization | [handoff](./VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES/handoff.md) | [worklog](./VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES/worklog.json) | [review](./VT-CONV-2026-10-30-BRAIN-COMPOSER-RELEASE-GATES/review.md) | PARTIALLY_RECONCILED | PR #1004; Studio Controls verification; Brain runtime acceptance |
+
 Do not infer Task Index lifecycle from this index.
