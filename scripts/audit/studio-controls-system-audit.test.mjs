@@ -60,6 +60,15 @@ test("outline stroke derives from the current tier and focus outlines use the 65
   assert.ok(!system.includes("--vt-studio-control-focus-outline-width: 1.95px"));
 });
 
+test("fields own the persistent primary inline stroke and text boxes own a permanent secondary outline", () => {
+  assert.ok(fields.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke"));
+  assert.ok(fields.includes("outline: var(--vt-field-focus-outline"));
+  assert.ok(fields.includes('data-vt-studio-field-kind="textarea-display"'));
+  assert.ok(fields.includes("-webkit-text-stroke-color: #000"));
+  assert.ok(!recovery.includes("input[data-vt-studio-control=\"true\"]:not(.vt-studio-split-text-input__field)"));
+  assert.ok(!recovery.includes(".vt-studio-text-box, [data-vt-studio-field-kind=\"text-box\"]"));
+});
+
 test("editable inputs and textareas switch text fill and glyph stroke together on focus", () => {
   const start = fields.indexOf("Focused entered text is black");
   const end = fields.indexOf("\n}\n", start);
