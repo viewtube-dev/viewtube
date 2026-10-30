@@ -29,9 +29,9 @@ describe("AI Brain runtime surface integration", () => {
    source.indexOf("const [runtimeSnapshot, setRuntimeSnapshot]"),
    source.indexOf("const snapshot = useMemo(", source.indexOf("const [runtimeSnapshot, setRuntimeSnapshot]")),
   )
-  expect(runtimeEffect).toContain("[channelId, brain.activeProjectId, brain.projects]")
-  expect(runtimeEffect).toContain("window.requestIdleCallback(refreshRuntimeSnapshot, { timeout: 1200 })")
-  expect(runtimeEffect).toContain("setTimeout(refreshRuntimeSnapshot, 0)")
+  expect(runtimeEffect).toContain("[channelId, brain.activeProjectId, brain.projects, initialBootstrapSnapshot?.manifestId]")
+  expect(runtimeEffect).toContain("window.requestIdleCallback(runScheduledRefresh, { timeout: 1200 })")
+  expect(runtimeEffect).toContain("setTimeout(runScheduledRefresh, 0)")
   expect(runtimeEffect).not.toContain("recentTurns")
   expect(runtimeEffect).not.toContain("learningEntries")
  })
