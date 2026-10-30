@@ -1,10 +1,10 @@
 /* One token-owned focus perimeter for every interactive Studio primitive.
    Menu options keep their separate inset menu-item focus treatment. */
-:root {
-  --vt-studio-focus-outline-offset: 0px;
-  --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * .65);
-}
+/* Controls without the normal size token expose their own stroke to the shared focus calculation. */
+html body .vt-studio-legend-trigger { --vt-studio-control-stroke: var(--vt-legend-stroke, 3px); }
+html body .vt-studio-spectrum-tag { --vt-studio-control-stroke: var(--vt-spectrum-tag-stroke, 2px); }
+html body .vt-studio-closeable-badge__close { --vt-studio-control-stroke: 1px; }
+html body .vt-studio-tag-editor__square-action { --vt-studio-control-stroke: 2px; }
 
 html body :is(
   [data-vt-studio-control="true"]:focus-visible,
@@ -27,9 +27,12 @@ html body :is(
   .vt-studio-username-input:focus-within,
   .vt-studio-upload-frame:has(.vt-studio-upload-frame__input:focus-visible)
 ) {
-  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65))
-    solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
-  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
+  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65));
+  --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-studio-focus-outline-offset: 0px;
+  outline: var(--vt-studio-focus-outline-width)
+    solid var(--vt-studio-focus-outline-color);
+  outline-offset: var(--vt-studio-focus-outline-offset);
   transition:
     outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
     outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
