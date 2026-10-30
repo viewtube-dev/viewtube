@@ -121,6 +121,22 @@ Seven of the eleven have direct specimens in the active catalog. Four have no di
 
 The public barrel coverage matrix is therefore necessary but insufficient: it ignores module-exported internal components and does not reconcile stale tests against the current API/catalog contract.
 
+### Category classifier refinement
+
+The current additional-family section contains 11 titled family modules. Three known families are assigned to Compositions only because the classifier's final fallback returns `"Compositions"`:
+
+- `StudioChatComposerDock · Message Composer Layout`
+- `Studio Hub Certification · Full Composition`
+- `Composition Helpers · Standard`
+
+These are legitimate composition-like entries today, but their category must be explicit. The fallback is unsafe for future unknown primitive families and conflicts with the source-of-truth rule that unclassified families must not be silently treated as Compositions. Add explicit rules for known composition families, then fail closed on unknown names. Preserve the separate full-width `ConfirmedDirectPrimitiveRows` ledger while determining whether its baseline specimens duplicate the canonical family representatives or are intentional baseline examples.
+
+### Git-history refresh
+
+- The root-level duplicate catalog's latest path commit is 2026-10-27 (`1153ece9`, import-path correction); the nested active catalog has continued receiving family/catalog updates through 2026-10-30 (`acb8be13`). This supports the stale-donor hypothesis but still does not prove zero callers.
+- Both split-text-input stylesheets received independent edits on 2026-10-29. The local primitive stylesheet was replaced with a single-perimeter layout at 23:35Z; the global stylesheet was separately repaired at 20:06Z. Their overlap therefore needs a deliberate ownership decision, not a blind delete.
+- The authoring guide's last path changes are from 2026-10-19, while the token/catalog implementation has moved materially since then.
+
 ## Audit dimensions
 
 1. **Repository and ownership:** target ref/commit, dirty state, instructions, app entry points, active catalog, style import graph, ownership of each file.
