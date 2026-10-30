@@ -317,6 +317,7 @@ type ToolReceiptProjection = {
  id: string
  requestId: string
  operationId?: string
+ idempotencyKey?: string | null
  workflowId?: string
  contentBuildId: string
  projectId: string | null
@@ -327,6 +328,7 @@ type ToolReceiptProjection = {
  generationRecordId: string | null
  traceId: string | null
  completedAt: string
+ promptReceipt?: unknown
 }
 
 export const operationRecordFromToolReceipt = (
@@ -350,7 +352,7 @@ export const operationRecordFromToolReceipt = (
  return createOperationRecord({
   operationId,
   workflowId,
-  idempotencyKey: null,
+  idempotencyKey: receipt.idempotencyKey || null,
   kind: "generation",
   status: "succeeded",
   mutationClass: "prepare",
@@ -391,7 +393,7 @@ export const operationRecordFromToolReceipt = (
   errorMessage: null,
   reversible: true,
   undoOperationId: null,
-  metadata: { source: "ToolReceipt", requestId: receipt.requestId },
+  metadata: { source: "ToolReceipt", requestId: receipt.requestId, promptReceipt: receipt.promptReceipt ?? null },
  })
 }
 
@@ -399,6 +401,7 @@ export const operationRecordFromToolReceipt = (
 type GenerationRequestProjection = {
  id: string
  operationId?: string
+ idempotencyKey?: string
  workflowId?: string
  contentBuildId: string
  projectId: string | null
@@ -434,7 +437,7 @@ export const operationRecordFromGenerationRequest = (
  return createOperationRecord({
   operationId: request.operationId || request.id,
   workflowId,
-  idempotencyKey: null,
+  idempotencyKey: request.idempotencyKey || null,
   kind,
   status: "running",
   mutationClass: "prepare",

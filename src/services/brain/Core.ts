@@ -7,13 +7,12 @@ import {
  shouldBrainLearnFromInteraction,
 } from "./BrainUserControls"
 import { buildToolChannelProfileContext } from "./ChannelProfileAdapter"
+import { defaultBrainModelGateway } from "./runtime/BrainModelGateway"
 
-// Statically importing "../gemini" here dragged @google/genai into the entry
-// chunk (~50 kB gzip) and forced every route to preload the Gemini SDK before
-// first paint. The Brain only reaches for it inside `reflectAndCompress`, so
-// the SDK is dynamic-imported there. `hasGeminiKey` runs synchronously in the
-// hot `emitSignal` path, so we duplicate its lightweight localStorage probe
-// here instead of hopping back into the gemini module.
+// Brain Core depends on the provider-neutral gateway. The gateway defers
+// loading the Gemini compatibility provider until a generation method is used.
+// `hasGeminiKey` runs synchronously in the hot `emitSignal` path, so this
+// module keeps its lightweight localStorage probe instead of loading a provider.
 const hasGeminiKey = (): boolean => {
  if (typeof window === "undefined") return false
  try {
@@ -183,23 +182,20 @@ const runReflection = async (): Promise<void> => {
  `
 
  try {
-  // Dynamic import defers the ~50 kB Gemini SDK plus the ~30 kB gemini module
-  // until an actual reflection is triggered. Users who never reflect (fresh
-  // session, no analytics activity, no key) never download it.
-  const { getAiClient, getActiveModel, executeWithRetry, cleanJsonString } = await import("../gemini")
-  const result = await executeWithRetry(async () => {
-   const ai = getAiClient()
-   const modelId = getActiveModel("analysis")
-   const res = await ai.models.generateContent({
-    model: modelId,
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    config: {
-     responseMimeType: "application/json",
-    }
-   })
-   const text = cleanJsonString(res.text || "")
-   return JSON.parse(text)
+  // The gateway keeps Brain orchestration provider-neutral while its
+  // compatibility provider dynamically loads Gemini only when generation runs.
+  const generateJsonObject = defaultBrainModelGateway.generateJsonObject
+  if (!generateJsonObject) {
+   throw new Error("The Brain model gateway does not support JSON generation")
+  }
+  const result = await generateJsonObject({
+   userText: prompt,
+   systemInstruction: "Follow the user message instructions and return only the requested JSON object.",
+   capability: "analysis",
   })
+  if (!result || typeof result !== "object" || Array.isArray(result)) {
+   throw new Error("The Brain reflection model returned an invalid JSON object")
+  }
 
   const newSchema = { 
    ...schema, 

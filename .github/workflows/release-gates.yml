@@ -29,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -82,6 +84,30 @@ jobs:
       - run: npm run test:focused
       - run: npm run test:unified-diagnostics
       - run: npm run account:test
+
+  gemini_governance:
+    name: gemini-governance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:ai-generation-callers
+      - name: Generate exact-commit Gemini caller inventory
+        run: npm run audit:ai-generation-callers > "$RUNNER_TEMP/ai-generation-callers.json"
+      - run: npx vitest run src/context/geminiKeyValidation.test.ts src/context/GeminiKeyContext.test.ts src/context/GeminiKeyContext.runtime.test.tsx src/services/__tests__/geminiModelGovernance.test.ts src/services/__tests__/geminiCustomKeyAccess.test.ts src/services/CollabEngine.test.ts src/services/brain/CoreGateway.contract.test.ts src/services/brain/__tests__/BrainModelGatewayBoundary.test.ts src/services/brain/assetStrategies/commentReply.test.ts src/services/brain/__tests__/pinnedCommentDraft.test.ts src/services/asset-engine/GenerationWorkflow.test.ts src/services/operations/OperationRecord.test.ts src/services/brain/__tests__/brainProviderArchitectureGuard.test.ts
+      - name: Upload Gemini caller inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-caller-inventory-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/ai-generation-callers.json
+          if-no-files-found: error
 
   full_suite:
     name: full-suite

@@ -15,7 +15,7 @@ import type {
  WidgetInstanceState,
 } from "../types"
 import { postSimpleTopLevelComment } from "../../../services/simpleYouTubeApi"
-import { getActiveModel, getAiClient, hasGeminiKey } from "../../../services/gemini"
+import { generatePinnedCommentDraft } from "../../../services/brain/creatorAssets"
 import { WidgetSelect } from "../WidgetPrimitives"
 
 type OwnedVideoOption = {
@@ -197,36 +197,37 @@ export const VideoCommentOperatorWidget = ({
    setCommentStatus("Choose a video first.")
    return
   }
-  if (!hasGeminiKey()) {
-   setCommentStatus("Gemini API key is missing in Settings.")
+  const channelId = data.channelIdentity?.channelId
+  if (!channelId) {
+   setCommentStatus("Connect your YouTube channel before generating a pinned comment.")
    return
   }
 
   setCommentLoading(true)
   setCommentStatus("Generating pinned comment recommendation...")
   try {
-   const response = await getAiClient().models.generateContent({
-    model: getActiveModel("text"),
-    contents: [
-     `Write one YouTube pinned comment draft for the creator's own video.`,
-     `Channel: ${data.channelIdentity?.name || data.authState?.channelName || "Connected Channel"}`,
-     `Video title: ${selectedVideo.title}`,
-     `Video ID: ${selectedVideo.videoId}`,
-     `Published at: ${selectedVideo.publishedAt || "unknown"}`,
-     `Requirements:`,
-     `- Return exactly one pinned comment draft.`,
-     `- Keep it under 280 characters.`,
-     `- Sound creator-authentic.`,
-     `- Drive comments, discussion, or a next step.`,
-     `- Avoid hashtags, numbering, quotation marks, and explanation.`,
-    ].join("\n"),
+   const result = await generatePinnedCommentDraft({
+    context: {
+     channelId,
+     channelName: data.channelIdentity?.name || data.authState?.channelName || undefined,
+     ...(typeof data.authState?.subscriberCount === "number"
+      ? { subscriberCount: data.authState.subscriberCount }
+      : {}),
+     recentVideoTitles: (data.videoAssets || []).slice(0, 8).map(video => video.title),
+    },
+    videoId: selectedVideo.videoId,
+    videoTitle: selectedVideo.title,
+    publishedAt: selectedVideo.publishedAt,
+    ...(typeof data.brain.activeProjectId === "string" && data.brain.activeProjectId
+     ? { projectId: data.brain.activeProjectId }
+     : {}),
    })
-   const draft = String(response.text || "").trim()
+   const draft = result.body
    setCommentDraft(draft)
    setCommentStatus(
-    draft
-     ? "Draft ready. Review it, edit if needed, then post it below."
-     : "Generator returned an empty response.",
+    result.record.status === "needs_review"
+     ? "Draft ready with review findings. Check it carefully before posting."
+     : "Draft ready. Review it, edit if needed, then post it below.",
    )
   } catch (error) {
    setCommentStatus(
@@ -237,7 +238,11 @@ export const VideoCommentOperatorWidget = ({
   }
  }, [
   data.authState?.channelName,
+  data.authState?.subscriberCount,
+  data.brain.activeProjectId,
+  data.channelIdentity?.channelId,
   data.channelIdentity?.name,
+  data.videoAssets,
   selectedVideo,
  ])
 

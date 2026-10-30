@@ -37,6 +37,7 @@ describe("GenerationWorkflow", () => {
   expect(prepared.request.channelId).toBe("channel-1")
   expect(prepared.request.contextManifestId).toBe(prepared.contextManifest.id)
   expect(prepared.request.operationId).toBe(prepared.request.id)
+  expect(prepared.request.idempotencyKey).toBe(`generation:v1:${build.id}:video-publisher:${prepared.request.operationId}`)
   expect(prepared.request.workflowId).toBe(`workflow:${build.id}`)
   expect(prepared.request.contextRevision).toBe(build.revision)
   expect(prepared.contextManifest.contentBuildRevision).toBe(build.revision)
@@ -64,6 +65,7 @@ describe("GenerationWorkflow", () => {
    operationRecord: expect.objectContaining({
     schemaVersion: 1,
     operationId: prepared.request.id,
+    idempotencyKey: prepared.request.idempotencyKey,
     workflowId: `workflow:${build.id}`,
     status: "running",
     kind: "generation",
@@ -294,4 +296,113 @@ describe("GenerationWorkflow", () => {
    }),
   })
  })
+ it("carries the exact prompt and served-model receipt into ContentBuild and operation lineage", () => {
+  const build = createContentBuild({
+   id: "cb-generation-workflow-prompt-receipt",
+   channelId: "channel-prompt-receipt",
+   legacyProjectId: "project-prompt-receipt",
+  })
+  const prepared = prepareGenerationRequest({
+   contentBuildId: build.id,
+   channelId: "channel-prompt-receipt",
+   projectId: "project-prompt-receipt",
+   toolId: "creator-canvas-os",
+   operation: "design-scenes",
+   targetSlot: "storyboard",
+   mode: "new-version",
+   creatorIntent: "Generate scenes from the approved concept.",
+  })
+  const promptReceipt = {
+   schemaVersion: "brain-prompt-run-receipt-v1",
+   traceId: "trace-prompt-receipt",
+   outputId: "asset-prompt-receipt",
+   channelId: "channel-prompt-receipt",
+   projectId: "project-prompt-receipt",
+   operationId: prepared.request.operationId,
+   workflowId: prepared.request.workflowId,
+   contentBuildId: build.id,
+   contextRevision: build.revision,
+   promptFamily: "content",
+   promptVersion: "scene-plan-v1",
+   constitutionVersion: "asset-constitution-v1",
+   contextResolverVersion: "asset-context-composition-v1",
+   outputSchemaVersion: "scene-plan-v1",
+   requestedModel: "gemini-3.1-flash-lite",
+   servedModel: "gemini-3.1-flash",
+   evidenceSnapshotIds: [],
+   evidenceRefs: ["evidence:concept-1"],
+   channelKnowledgeFingerprint: null,
+   projectRevision: null,
+   styleProfileVersion: null,
+   creatorConstraints: [],
+   repairCount: 1,
+   generatedAt: "2026-10-29T12:00:00.000Z",
+  } as any
+
+  const receipt = recordToolReceipt({
+   request: prepared.request,
+   outputAssetIds: ["asset-prompt-receipt"],
+   generationRecordId: "generation-prompt-receipt",
+   traceId: promptReceipt.traceId,
+   promptReceipt,
+   metadata: { promptReceipt: { forged: true } },
+  })
+  const outputEvent = listContentBuildEvents(build.id)
+   .find(event => event.eventType === "tool.output.recorded")
+
+  expect(receipt.promptReceipt).toEqual(promptReceipt)
+  expect(receipt.idempotencyKey).toBe(prepared.request.idempotencyKey)
+  expect(outputEvent?.metadata).toMatchObject({
+   promptReceipt,
+   operationRecord: {
+    idempotencyKey: prepared.request.idempotencyKey,
+    metadata: { promptReceipt },
+    lineage: {
+     traceId: "trace-prompt-receipt",
+     generationRecordId: "generation-prompt-receipt",
+    },
+   },
+  })
+ })
+
+ it("returns the original receipt when a completed generation is retried with the same idempotency key", () => {
+  const build = createContentBuild({
+   id: "cb-generation-workflow-idempotent-receipt",
+   channelId: "channel-idempotent",
+   legacyProjectId: "project-idempotent",
+  })
+  const prepared = prepareGenerationRequest({
+   contentBuildId: build.id,
+   channelId: "channel-idempotent",
+   projectId: "project-idempotent",
+   toolId: "video-publisher",
+   operation: "generate-package",
+   targetSlot: "title",
+   mode: "new-option",
+   creatorIntent: "Generate title options with retry-safe receipt identity.",
+   operationId: "video-publisher:metadata-run-1",
+   idempotencyKey: `generation:v1:${build.id}:video-publisher:metadata-run-1`,
+  })
+
+  const first = recordToolReceipt({
+   request: prepared.request,
+   outputAssetIds: ["asset-first-attempt"],
+   generationRecordId: "generation-first-attempt",
+   summary: "First successful completion.",
+  })
+  const retry = recordToolReceipt({
+   request: prepared.request,
+   outputAssetIds: ["asset-retry-attempt"],
+   generationRecordId: "generation-retry-attempt",
+   summary: "Duplicate completion delivery.",
+  })
+
+  expect(retry).toEqual(first)
+  expect(retry.outputAssetIds).toEqual(["asset-first-attempt"])
+  expect(listContentBuildEvents(build.id).filter(event =>
+   event.eventType === "tool.output.recorded" &&
+   event.metadata?.idempotencyKey === prepared.request.idempotencyKey
+  )).toHaveLength(1)
+ })
+
 })

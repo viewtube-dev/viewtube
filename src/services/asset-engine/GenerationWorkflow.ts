@@ -1,7 +1,9 @@
 import {
  getContentBuild,
+ listContentBuildEvents,
 } from "./ContentBuildRepository"
 import { assertContentBuildCapability } from "./ContentBuildCapabilities"
+import type { BrainPromptRunReceipt } from "../brain/BrainPromptGovernance"
 import {
  operationRecordFromGenerationRequest,
  operationRecordFromToolReceipt,
@@ -41,6 +43,8 @@ export interface GenerationRequest {
  id: string
  /** Stable operation identity shared with receipts, traces and ContentBuild events. */
  operationId?: string
+ /** Stable retry identity for this prepared generation command. */
+ idempotencyKey?: string
  workflowId?: string
  contentBuildId: string
  projectId: string | null
@@ -73,6 +77,7 @@ export interface ToolReceipt {
  id: string
  requestId: string
  operationId?: string
+ idempotencyKey?: string | null
  workflowId?: string
  contentBuildId: string
  projectId: string | null
@@ -86,6 +91,8 @@ export interface ToolReceipt {
  relationshipIds: string[]
  traceId: string | null
  completedAt: string
+ /** Exact prompt/model receipt from the governed asset runner, when available. */
+ promptReceipt?: BrainPromptRunReceipt | null
 }
 
 const createId = (prefix: string): string => {
@@ -156,6 +163,7 @@ export const prepareGenerationRequest = (input: {
  variantGroupId?: string | null
  traceId?: string | null
  operationId?: string | null
+ idempotencyKey?: string | null
  workflowId?: string | null
 }): PreparedGenerationRequest => {
  const canonicalBuild = assertCanonicalScope(input)
@@ -202,10 +210,13 @@ export const prepareGenerationRequest = (input: {
  }
 
  const requestId = createId("generation_request")
+ const operationId = input.operationId || requestId
+ const idempotencyKey = input.idempotencyKey || `generation:v1:${canonicalBuild.id}:${input.toolId}:${operationId}`
  const request: GenerationRequest = {
   schemaVersion: GENERATION_WORKFLOW_SCHEMA_VERSION,
   id: requestId,
-  operationId: input.operationId || requestId,
+  operationId,
+  idempotencyKey,
   workflowId: input.workflowId || `workflow:${canonicalBuild.id}`,
   contentBuildId: canonicalBuild.id,
   projectId,
@@ -240,6 +251,7 @@ export const prepareGenerationRequest = (input: {
   metadata: {
    requestId: request.id,
    operationId: request.operationId || request.id,
+   idempotencyKey: request.idempotencyKey,
    workflowId: request.workflowId || `workflow:${request.contentBuildId}`,
    contextManifestId: request.contextManifestId,
    contextRevision: request.contextRevision,
@@ -273,6 +285,7 @@ export const recordToolReceipt = (input: {
  variantGroupId?: string | null
  relationshipIds?: string[]
  traceId?: string | null
+ promptReceipt?: BrainPromptRunReceipt | null
  summary?: string
  metadata?: Record<string, unknown>
 }): ToolReceipt => {
@@ -297,12 +310,32 @@ export const recordToolReceipt = (input: {
   throw new Error(`Generation request project scope mismatch for ContentBuild ${build.id}.`)
  }
 
+ // A retried completion may arrive after the original output was committed but
+ // before the caller observed the response. Reuse the canonical receipt rather
+ // than appending a second output event for the same scoped generation command.
+ const idempotencyKey = input.request.idempotencyKey || null
+ if (idempotencyKey) {
+  const priorEvent = listContentBuildEvents(build.id).find(event =>
+   event.eventType === "tool.output.recorded" &&
+   event.toolId === input.request.toolId &&
+   event.metadata?.idempotencyKey === idempotencyKey
+  )
+  const priorReceipt = priorEvent?.metadata?.toolReceipt
+  if (priorReceipt && typeof priorReceipt === "object" &&
+   "idempotencyKey" in priorReceipt &&
+   priorReceipt.idempotencyKey === idempotencyKey
+  ) {
+   return priorReceipt as ToolReceipt
+  }
+ }
+
  const completedAt = new Date().toISOString()
  const receipt: ToolReceipt = {
   schemaVersion: GENERATION_WORKFLOW_SCHEMA_VERSION,
   id: createId("tool_receipt"),
   requestId: input.request.id,
   operationId: input.request.operationId || input.request.id,
+  idempotencyKey: input.request.idempotencyKey || null,
   workflowId: input.request.workflowId || `workflow:${input.request.contentBuildId}`,
   contentBuildId: input.request.contentBuildId,
   projectId: input.request.projectId,
@@ -316,6 +349,7 @@ export const recordToolReceipt = (input: {
   relationshipIds: unique(input.relationshipIds || []),
   traceId: input.traceId || input.request.traceId || null,
   completedAt,
+  promptReceipt: input.promptReceipt || null,
  }
 
  recordContentBuildToolOutput({
@@ -327,9 +361,11 @@ export const recordToolReceipt = (input: {
   traceId: receipt.traceId,
   summary: input.summary || "",
   metadata: {
+   ...(input.metadata || {}),
    receiptId: receipt.id,
    requestId: receipt.requestId,
    operationId: receipt.operationId || input.request.operationId || input.request.id,
+   idempotencyKey: receipt.idempotencyKey || input.request.idempotencyKey || null,
    workflowId: receipt.workflowId || input.request.workflowId || `workflow:${input.request.contentBuildId}`,
    contextManifestId: input.request.contextManifestId,
    contextRevision: input.request.contextRevision,
@@ -340,12 +376,12 @@ export const recordToolReceipt = (input: {
    variantGroupId: receipt.variantGroupId,
    relationshipIds: receipt.relationshipIds,
    toolReceipt: receipt,
+   promptReceipt: receipt.promptReceipt || null,
    operationRecord: operationRecordFromToolReceipt(receipt, {
     operationId: receipt.operationId || input.request.operationId || input.request.id,
     workflowId: receipt.workflowId || input.request.workflowId || `workflow:${input.request.contentBuildId}`,
     channelId: input.request.channelId,
    }),
-   ...(input.metadata || {}),
   },
  })
 

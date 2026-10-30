@@ -18,6 +18,7 @@ import {
  type AssetRecord,
 } from "./AssetGenerator"
 import { geminiAssetModelRunner } from "./assetModelRunner"
+import { pinnedCommentStrategy, type PinnedCommentDraft } from "./assetStrategies/commentReply"
 import {
  communityPostStrategy,
  communitySinglePostStrategy,
@@ -164,4 +165,53 @@ export const generateCommunityPostPlan = async (input: {
  })
 
  return result.record
+}
+
+
+/**
+ * Draft a pinned comment through the governed creator-asset pipeline.
+ * The selected video and operation identity travel with the trace and prompt receipt;
+ * the widget never talks to the Gemini SDK directly.
+ */
+export const generatePinnedCommentDraft = async (input: {
+ context: CreatorChannelContext
+ videoId: string
+ videoTitle: string
+ publishedAt?: string
+ projectId?: string
+}): Promise<{ body: string; record: AssetRecord<PinnedCommentDraft> }> => {
+ const videoId = input.videoId.trim()
+ const videoTitle = input.videoTitle.trim()
+ if (!input.context.channelId.trim() || !videoId || !videoTitle) {
+  throw new Error("A connected channel and selected video are required to draft a pinned comment.")
+ }
+ const operationId = typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+  ? `pinned-comment:${crypto.randomUUID()}`
+  : `pinned-comment:${Date.now()}:${Math.random().toString(36).slice(2)}`
+ const evidence = buildChannelAssetEvidence({
+  ...input.context,
+  recentVideoTitles: [videoTitle, ...(input.context.recentVideoTitles || [])],
+ }, pinnedCommentStrategy.evidenceClasses)
+ const result = await generateAsset<PinnedCommentDraft>({
+  request: {
+   channelId: input.context.channelId,
+   assetType: "comment_reply",
+   operationId,
+   workflowId: `workflow:pinned-comment:${input.context.channelId}:${videoId}`,
+   instruction: "Draft one concise pinned top-level comment for the selected video.",
+   ...(input.projectId ? { projectId: input.projectId } : {}),
+   inputs: {
+    videoId,
+    videoTitle,
+    publishedAt: input.publishedAt || "",
+   },
+  },
+  strategy: pinnedCommentStrategy,
+  evidence,
+  runner: geminiAssetModelRunner,
+ })
+ if (result.record.status === "failed" || !result.record.output?.body?.trim()) {
+  throw new Error("ViewTube could not generate a pinned comment. Try again.")
+ }
+ return { body: result.record.output.body.trim(), record: result.record }
 }

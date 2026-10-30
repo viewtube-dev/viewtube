@@ -18,10 +18,7 @@ const normalize = (absolute: string) => path.relative(process.cwd(), absolute).r
  */
 const ALLOWED_DIRECT_PROVIDER_CALLS = new Set([
  "src/context/GeminiKeyContext.tsx", // credential validation, not creator reasoning
- "src/services/CollabEngine.ts", // migrate after task contract is explicit
- "src/services/brain/Core.ts", // reflection/compression migration target
  "src/services/gemini.ts", // current provider service owner
- "src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx", // CreatorAssetEngine migration target
 ])
 
 const containsDirectProviderInvocation = (source: string) =>
@@ -39,13 +36,11 @@ describe("Brain provider architecture guard", () => {
   expect(violations).toEqual([])
  })
 
- it("keeps UI-level direct generation debt isolated to the known migration target", () => {
+ it("keeps all UI surfaces free of direct provider generation calls", () => {
   const uiViolations = collect(path.join(ROOT, "views"))
    .filter((absolute) => containsDirectProviderInvocation(fs.readFileSync(absolute, "utf8")))
    .map(normalize)
 
-  expect(uiViolations).toEqual([
-   "src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx",
-  ])
+  expect(uiViolations).toEqual([])
  })
 })

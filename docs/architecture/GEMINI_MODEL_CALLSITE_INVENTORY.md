@@ -1,8 +1,8 @@
 # Gemini Model and Call-Site Inventory
 
-**Status:** Reconciled source inventory; repository-wide scan remains incomplete because indexed search results can point to stale commits  
-**Audit date:** 2026-10-28  
-**Target branch:** `master/consolidated-feature-integration`
+**Status:** Reconciled source inventory; exact-commit automated caller report is now a release-gate artifact, awaiting CI execution and manual classification  
+**Audit date:** 2026-10-30  
+**Baseline:** `master/consolidated-feature-integration` · **Implementation branch:** `feat/p1-gemini-governance-reconciliation-2026-10-29`
 
 This file tracks duplicate Gemini policy sources before consolidation. Do not treat the list of hotspots as proof that no other provider call sites exist.
 
@@ -15,11 +15,12 @@ This file tracks duplicate Gemini policy sources before consolidation. Do not tr
 | Client/provider calls | `src/services/gemini.ts` | Owns SDK construction, key resolution, request/metering boundary, registry-based canonicalization and active-model resolution; legacy compatibility map/fallback sequence remains. | Canonical provider facade; fallback map needs capability-aware retirement |
 | Key validation | `src/context/GeminiKeyContext.tsx` | Dynamically imports the SDK, consumes `models.list()` and saves through the shared key vault. It does not require one guessed generation model to succeed; invalid-key errors are rejected while catalog/permission/transient failures are reported as saved-but-unverified. | Credential adapter; availability diagnostics remain separate from key persistence |
 | Metering | `src/services/billingEntitlement.ts` | Reads model rates from the canonical registry and treats models without a registered rate as unknown instead of applying a blanket Flash rate. Existing rates are legacy estimates and explicitly unverified. | Registry-linked pricing metadata; verified pricing still requires provider pricing review |
-| Provider architecture guard | `src/services/brain/__tests__/brainProviderArchitectureGuard.test.ts` | Scans direct provider calls with an exception allowlist | Guard all consumers to canonical facade, exceptions reviewed |
+| Provider architecture guard | `src/services/brain/__tests__/brainProviderArchitectureGuard.test.ts` | Explicit provider-owner/credential-validation allowlist only; Brain Core, CollabEngine and VideoCommentOperatorWidget no longer appear as direct-provider exceptions. UI guard expects zero direct provider calls. | Keep provider SDK construction in provider owner and credential validation only |
 | Custom-key tests | `src/services/__tests__/geminiCustomKeyAccess.test.ts` | Tests custom-key access using a mocked SDK | Keep and extend as facade integration coverage |
-| Brain core consumer | `src/services/brain/Core.ts` | Direct `models.generateContent` through shared client | Migrate to canonical facade |
-| Collaboration consumer | `src/services/CollabEngine.ts` | Direct `models.generateContent` through shared client | Migrate to canonical facade |
-| Comment operator consumer | `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx` | Direct `models.generateContent` through shared client | Migrate to canonical facade |
+| Brain core consumer | `src/services/brain/Core.ts` | **Migrated on the current reconciliation branch** to `defaultBrainModelGateway.generateJsonObject`; Gemini is dynamically loaded by the gateway adapter. | Keep Brain Core provider-neutral; protect with `CoreGateway.contract.test.ts` |
+| Collaboration consumer | `src/services/CollabEngine.ts` | **Migrated on reconciliation branch** to `defaultBrainModelGateway.generateJsonObject`; Google Search grounding is passed through the gateway/provider adapter; invalid/empty peer results fail closed rather than returning mock creators. | Keep search grounding and schema validation covered by gateway tests |
+| Comment operator consumer | `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx` | **Migrated on reconciliation branch** to `generatePinnedCommentDraft` in the governed `creatorAssets` / `AssetGenerator` path. The strategy records prompt/model receipt, trace, operation/workflow identity, grounding and review findings. | Preserve creator review before posting; no generation call in the widget |
+| Video Publisher SEO | `src/views/VideoPublisher.tsx` | **Remaining legacy caller** invokes `generateSeoData` from `gemini.ts`, then records a ToolReceipt with `providerPath: "legacy-generateSeoData"` and no governed prompt/model receipt. | Migrate title/description/tag generation to existing AssetGenerator specialist strategies; preserve current ContentBuild stage/scope checks and output variants |
 | SDK dependency | `package.json` + `package-lock.json` | Declared range `^1.46.0`; lockfile resolves exactly `1.46.0` | Dependency policy + lockfile evidence |
 
 ## Drift to resolve
@@ -130,3 +131,46 @@ The shared `getAiClient()` wrapper is now the point where request capability, ef
 - Fallback telemetry contains model IDs, operation, reason, attempt, and timestamp only. It does not include prompts, API keys, account identifiers, or raw provider errors.
 
 Phase 4 does not claim every caller explicitly annotates capability. Requests with nonstandard media payload structures remain a migration target for an explicit capability parameter. The legacy candidate map is retained until live compatibility and modality-preserving candidate evidence is available.
+
+
+## 2026-10-29 reconciliation update
+
+- PR #1131, #1134, #1168, #1174, #1176 and #1178 are merged and form the preserved baseline.
+- `src/services/brain/Core.ts` is migrated on `feat/p1-gemini-governance-reconciliation-2026-10-29` to the existing provider-neutral BrainModelGateway. This is one caller migration, not proof that all creator generation is governed.
+- Remaining explicit direct-call migration targets include `src/services/CollabEngine.ts` and `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx`. The widget must migrate through its approved Creator Operations boundary rather than bypassing specialist operation policy.
+- The exhaustive exact-head scan, operation/prompt provenance certification, live-key runtime matrix, and zero-caller proof remain open. No test, typecheck, build, or live-provider result is claimed by this source-edit pass.
+
+
+## Reconciliation — 2026-10-30
+
+### Caller migrations on the reconciliation branch
+
+- `src/services/brain/Core.ts`: reflection moved to the existing provider-neutral BrainModelGateway.
+- `src/services/CollabEngine.ts`: peer research moved to the BrainModelGateway; Google Search grounding is retained as a typed gateway input and forwarded by the Gemini adapter. Empty/invalid results fail rather than fabricating a mock creator.
+- `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx`: direct SDK use removed. Pinned comment drafting now calls `generatePinnedCommentDraft`, which uses the existing `creatorAssets` / `AssetGenerator` specialist path, an explicit `comment_reply` strategy, channel/video context, prompt version, trace and model receipt. Posting remains a separate user-triggered action.
+
+### Credential validation
+
+`src/context/geminiKeyValidation.ts` now classifies invalid credentials, permission denial, rate limiting, provider outage and generic verification failure separately. The key context preserves the existing rule: only explicit credential rejection prevents saving; degraded model discovery does not block BYOK entry. Diagnostics contain sanitized classifications, never the key or raw error text.
+- `src/context/GeminiKeyContext.runtime.test.tsx` exercises successful model discovery, explicit invalid-key rejection, and saved-but-unverified permission/rate-limit/provider-outage cases against a mocked SDK; this is application runtime coverage, not live Google API certification.
+
+### Provenance propagation
+
+- Governed AssetGenerator records include operation/workflow IDs, trace ID, prompt family/version, schema version, evidence refs, repair count and requested/served model.
+- `recordToolReceipt` accepts and carries the prompt receipt into ContentBuild output event metadata.
+- `operationRecordFromToolReceipt` retains the prompt receipt in its metadata projection.
+- ConceptSceneStudio now passes the generated asset's prompt receipt into its ToolReceipt.
+- Legacy VideoPublisher SEO generation is still an identified gap; its current `providerPath: "legacy-generateSeoData"` receipt does not include a governed prompt/model receipt.
+
+### CI evidence
+
+Run #5408 (before the latest nullable receipt typing correction) was not a Gemini certification run: the source-governance job stopped at the unrelated Studio split-text-input catalog assertion, and therefore did not produce the caller artifact. Repository-wide typecheck also reported multiple unrelated Brain/Studio/test typing failures plus one GenerationWorkflow nullable-idempotency error from this branch; the branch-specific error was corrected afterward. The focused-contracts job reported an unrelated `PublishTransaction.test.ts` undefined `getPublishTransaction` failure (309 passed, 1 failed). Brain quality loop and conversation handoff jobs passed; full suite was cancelled.
+
+A separate `gemini-governance` job now runs the exact PR head independently of those unrelated jobs. It runs the expanded static audit (named/namespace export references, direct SDK construction and generation/streaming/embedding calls, literal dynamic Gemini imports, model-ID literals, credential aliases, provider allowlist and pricing/metering/fallback source files), focused key/gateway/creator-asset/provenance/architecture tests, and uploads the JSON inventory. The latest run has not yet completed; do not treat the artifact or tests as passed until the job reports success.
+
+
+The release-gates workflow now runs `test:ai-generation-callers`, generates `audit:ai-generation-callers` from the checked-out commit, and uploads the JSON inventory as an artifact. This is an exact-commit static scan of exports from `src/services/gemini.ts`; it is not by itself proof of runtime reachability or a complete scan of every direct SDK invocation. Review the artifact and architecture guard together before declaring Phase 0 complete.
+
+### Remaining evidence boundary
+
+No real Gemini API key was used. No live provider availability, quota, unsupported-model, outage, or successful generation result is claimed. Legacy provider compatibility candidates remain until live capability parity and zero-caller proof are recorded.
