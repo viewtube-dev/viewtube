@@ -1,4 +1,14 @@
 # P1-06 Studio Controls Ownership Convergence
+
+**Production Date:** 2026-10-29  
+**Last Edited:** 2026-10-29  
+**Class:** PROGRAM  
+**Status:** ACTIVE — PLANNED / DISCOVERY REQUIRED  
+**Concern:** studio controls ownership convergence  
+**Owner:** Toolbox UI authority + Studio Controls token/primitive owners  
+**Registry ID:** DOC-PLAN-P1-STUDIOCONTROLS  
+**Last Audited Main SHA:** 61cfb726db9b32de53b9c89a5a339db696782a11  
+**Capabilities:** CAP-WIDGET-SURFACES, CAP-VERIFICATION
 **Status:** PLANNED / DISCOVERY REQUIRED | **Owner:** Toolbox UI authority + Studio Controls token/primitive owners
 **Capabilities:** CAP-WIDGET-SURFACES, CAP-VERIFICATION
 
