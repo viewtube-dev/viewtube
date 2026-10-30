@@ -1,4 +1,14 @@
 # P1-02 Gemini Provider, Key and Generation Governance
+
+**Production Date:** 2026-10-29  
+**Last Edited:** 2026-10-29  
+**Class:** PROGRAM  
+**Status:** ACTIVE — PLANNED / DISCOVERY REQUIRED  
+**Concern:** gemini provider, key and generation governance  
+**Owner:** BrainModelGateway + provider layer + Creator Operations  
+**Registry ID:** DOC-PLAN-P1-GEMINIGOVERNANCE  
+**Last Audited Main SHA:** 61cfb726db9b32de53b9c89a5a339db696782a11  
+**Capabilities:** CAP-BRAIN-EXPERIENCE, CAP-CREATOR-OPERATIONS
 **Status:** PLANNED / DISCOVERY REQUIRED | **Owner:** BrainModelGateway + provider layer + Creator Operations
 **Capabilities:** CAP-BRAIN-EXPERIENCE, CAP-CREATOR-OPERATIONS
 
