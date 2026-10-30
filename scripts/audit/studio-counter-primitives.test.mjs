@@ -175,7 +175,7 @@ test("bar toggle exposes a rounded percentage tooltip and preserves visible bars
   assert.match(valueToggles, /vt-studio-value-toggle__bar-tooltip/);
   assert.match(valueToggles, /Math\.round\(Math\.max\(0, Math\.min\(100, value\)\)\)\}%/);
   assert.match(distill, /\.vt-studio-value-toggle__bar-tooltip\s*\{[^}]*background:\s*var\(--vt-studio-control-secondary[^}]*color:\s*#000/s);
-  assert.match(distill, /\.vt-studio-value-toggle--bar:focus-within/);
+  assert.match(distill, /\.vt-studio-value-toggle:focus-within/);
   assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar > \.vt-studio-value-toggle__bars\s*\{[^}]*flex:\s*1 1 0[^}]*width:\s*auto/s);
   assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{\s*overflow:\s*visible/s);
 });
