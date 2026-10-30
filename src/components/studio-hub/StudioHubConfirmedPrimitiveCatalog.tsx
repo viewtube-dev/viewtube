@@ -221,6 +221,7 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
       standard={<StudioDoubleSplitSlider value={values[0]} onValueChange={update(0)} size="standard" ariaLabel="Standard slider" />}
       compact={[0,1].map(i => compact(<StudioDoubleSplitSlider value={values[1+i]} onValueChange={update(1+i)} size="compact" ariaLabel={`Compact slider ${i+1}`} />, `compact-${i}`))}
       micro={[0,1,2,3].map(i => micro(<StudioDoubleSplitSlider value={values[3+i]} onValueChange={update(3+i)} size="micro" ariaLabel={`Micro slider ${i+1}`} />, `micro-${i}`))} />
+    <div className="vt-confirmed-variant is-full-row"><span>COUNTER-CONTROLLED · UP / DOWN</span><StudioDoubleSplitSlider value={values[0]} onValueChange={update(0)} size="standard" leftControls="counter" ariaLabel="Counter-controlled slider" /></div>
   </Family>
 }
 
