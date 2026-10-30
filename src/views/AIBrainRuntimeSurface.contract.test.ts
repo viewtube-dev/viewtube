@@ -30,6 +30,13 @@ describe("AI Brain runtime surface integration", () => {
   expect(runtimeMemo).not.toContain("learningEntries")
  })
 
+ it("constructs the runtime snapshot after render instead of during render", () => {
+  expect(source).toContain("const [runtimeSnapshot, setRuntimeSnapshot] = useState")
+  expect(source).toContain("useEffect(() => {")
+  expect(source).toContain("readBrainRuntimeSnapshot({")
+  expect(source).not.toContain("const runtimeSnapshot = useMemo(")
+ })
+
  it("mounts the canonical backend runtime snapshot above the conversation workspace", () => {
   expect(source).toContain('from "../services/brain/BrainRuntimeSnapshot"')
   expect(source).toContain('from "../components/brain/BrainRuntimePanel"')
