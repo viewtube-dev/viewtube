@@ -165,3 +165,6 @@ The package is committed to the documentation branch and indexed there. It remai
 - Run #5702 was pending at the latest inspection; no pass/fail conclusion is claimed.
 - PR metadata reports the PR open and mergeable at the latest inspection.
 - GitHub compare from opening head `f08758b5be25396ed62147a9d12bf2620b330862` to current head `a7433eef3e01d1e18dd46d96097f6ae0b4ddf547` reports three post-open commits, zero behind, changing the three package files. This post-PR work is documented, not orphaned.
+
+
+The latest observed PR head at this review point is `b919a455fecb548ab1e68e777abbea1dfa024606`; PR metadata remains authoritative for subsequent receipt-only updates.
