@@ -10,7 +10,7 @@
 
 ## Executive finding
 
-The original Brain feedback-control repair is merged and present on the intended target. The merge-run production build, local smoke and Brain quality-loop jobs passed, but the overall release-gates workflow failed. The handoff is therefore not a claim of full feature verification: browser/runtime interaction proof and a fresh current-target CI result remain outstanding.
+The original Brain feedback-control repair is merged and present on the intended target. The merge-run production build, local smoke and Brain quality-loop jobs passed, but the overall release-gates workflow failed. The handoff is therefore not a claim of full feature verification: browser/runtime interaction proof and a fresh current-target CI result remain outstanding. The documentation package is open as [PR #1226](https://github.com/viewtube-dev/viewtube/pull/1226).
 
 ## Sources reviewed
 
@@ -142,3 +142,15 @@ These are proposals, not approved tasks. No parallel idea registry or backlog wa
 ## Final disposition
 
 This package remains PARTIALLY_RECONCILED. The work and evidence are routed to existing canonical owners, but closure is blocked by current-target verification and browser/runtime acceptance. Do not mark the Brain capability DONE from this package.
+
+
+## Documentation package delivery — PR #1226
+
+- PR: https://github.com/viewtube-dev/viewtube/pull/1226
+- Branch: `docs/conversation-handoff-brain-feedback-2026-10-30`
+- PR opening/current head: `f08758b5be25396ed62147a9d12bf2620b330862`
+- Changed files: three intake package files plus `tasks/conversation-intake/INDEX.md`.
+- Status: OPEN; mergeability reported false at creation. Inspect current PR metadata and CI before any merge attempt.
+- Target delivery: not yet established.
+
+The package is committed to the documentation branch and indexed there. It remains undelivered to target until PR #1226 merges.
