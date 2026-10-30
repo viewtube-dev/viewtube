@@ -98,6 +98,29 @@ The active `ToolboxUIReferenceLibrary.tsx` import points to the nested `studio-h
 
 Both split-text-input stylesheets target the same `.vt-studio-split-text-input` shell and nested input selectors. They are not identical copies: the primitive-local stylesheet has additional rail/grid positioning, focus, placeholder, and pseudo-element suppression declarations; the global stylesheet has different sizing/outline/stroke declarations. The component imports the primitive-local file while the barrel's shared entry imports the global file. Both therefore enter the application CSS graph through the public Studio barrel. The final computed winner is not knowable from source order alone without the real bundler/browser graph and must be verified before consolidating either file.
 
+### Public/internal symbol and test/catalog crosswalk
+
+A source scan of `StudioControls.tsx` found 56 exported Studio component symbols. Forty-five of those symbols are re-exported as value components from the public barrel; eleven remain module-only:
+
+- `StudioNumberInput`, `StudioSearchInput`, `StudioSelect`
+- `StudioVerticalWordToggle`
+- `StudioSplitShell`
+- `StudioSimpleDropdown`, `StudioSplitLeftDropdown`
+- `StudioDoubleSplitSlider`
+- `StudioBrainStatusIndicator`
+- `StudioInlineStepper`, `StudioSplitStepper`
+
+Seven of the eleven have direct specimens in the active catalog. Four have no direct catalog JSX representative: `StudioSplitShell` (likely internal anatomy/helper), `StudioSimpleDropdown` (consolidation candidate), `StudioInlineStepper`, and `StudioSplitStepper`. Their lifecycle must be classified before changing the barrel or catalog.
+
+**AUD-017 — Existing test/catalog/public-API contract disagreement (P1 candidate):**
+
+- `StudioHubConfirmedInlineStepperCatalog.test.tsx` expects a rendered `StudioInlineStepper` specimen in the active catalog, but the current catalog source contains no `StudioInlineStepper` marker/tag.
+- `StudioControls.test.tsx` expects `StudioSplitStepper` and `StudioSimpleDropdown` in both the Confirmed catalog and public `src/studio-ui/index.ts`; the current catalog and barrel contain neither.
+- Both test files are included by the repository's `test:studio-controls` script. This is a deterministic source-contract mismatch and is likely to fail the focused suite, but no test process was executed in this remote-only audit.
+- Do not blindly restore `StudioSimpleDropdown`: prior product direction was to consolidate the simple dropdown into `StudioDropdown`. Reconcile/update obsolete assertions if that consolidation is still the active decision. Independently decide whether Inline/Split Stepper are current user-facing controls, internal-only helpers, or retired; if current, add correct Controls specimens and public/internal provenance.
+
+The public barrel coverage matrix is therefore necessary but insufficient: it ignores module-exported internal components and does not reconcile stale tests against the current API/catalog contract.
+
 ## Audit dimensions
 
 1. **Repository and ownership:** target ref/commit, dirty state, instructions, app entry points, active catalog, style import graph, ownership of each file.
