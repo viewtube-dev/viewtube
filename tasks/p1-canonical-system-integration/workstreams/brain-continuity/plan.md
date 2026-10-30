@@ -174,3 +174,9 @@ Source confirms a canonical analytics snapshot, typed evidence records, exact ch
 6. Reconstruct the success/retry/failure chains using the existing lineage diagnostics. Only then consider bridge removal with caller inventory, parity and rollback proof.
 
 **Execution boundary:** Phase 1's field/relationship map is complete as a source-level artifact. Phase 2 is a static review, not a runtime certification. Phases 3–6 remain open. No behavioral code change is claimed, no test is claimed as run, and no data has been changed.
+
+
+## Existing task and plan alignment (2026-10-30)
+- Existing Task Authority leads: VT-003 (Project/ContentBuild context), VT-004 (Opportunity evidence), VT-019 (control scope), VT-020/#021 (Hook Generator and Script Architect canonical runtime migration), VT-022 (AI regression/evaluation corpus), VT-035 (creator-loop correlation IDs). These remain governed by the existing Task Authority/ledger projection; this plan does not allocate replacements.
+- Existing prior art: `tasks/system-convergence/todo.md`, `docs/domains/BRAIN.md`, Brain capability homes and `docs/plans/VIEWTUBE_BRAIN_MODEL_GATEWAY_CONVERGENCE_PLAN_2026-10-29.md`.
+- The runtime/gateway provider seam is already implemented; this workstream focuses on continuity of IDs and evidence/outcomes across existing owners, not rebuilding BrainRuntime or gateway.

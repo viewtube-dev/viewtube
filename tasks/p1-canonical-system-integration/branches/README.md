@@ -25,3 +25,17 @@ This is a discovery index only, not authoritative PR status. Always query GitHub
 - Harvest unique useful commits/files selectively; record donor SHA and destination.
 - Do not merge stale branches wholesale or create parallel implementations.
 - Create separate implementation branches after scope and task identity are accepted.
+
+
+## Live status refresh — 2026-10-30
+- #1109, #1168, #1169, #1174, #1178 and #1203 are merged.
+- #935, #988 and #992 remain open and non-mergeable. Their file sets overlap across tokens, emitter, generated CSS, field CSS, catalog and tests; harvest only after current-target comparison.
+- Current audited target SHA: `0135fa33bf5cd59503c9feecce4977072ef60fec`.
+- Phase 0 evidence: `../audits/phase-0-reconciliation-2026-10-30.md`.
+
+### Studio donor divergence (measured against target SHA `0135fa33bf5cd59503c9feecce4977072ef60fec`)
+- #935: 53 commits ahead / 1,643 behind; 16 changed paths.
+- #988: 36 ahead / 1,361 behind; 16 changed paths.
+- #992: 11 ahead / 1,339 behind; 10 changed paths.
+- Pairwise overlaps: #935/#988 = 6 files; #935/#992 = 4 files; #988/#992 = 6 files. Union = 29 paths.
+- All three are DIVERGED. Selective donor harvesting only; no wholesale merge.

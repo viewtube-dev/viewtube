@@ -23,3 +23,7 @@ Audits are point-in-time evidence, not architecture authorities or task ledgers.
 6. Studio: token source, emitter, generated output, CSS cascade ownership, primitive exports, catalog references, consumer imports and visual certification.
 
 Do not remove code or close donor work during audit. Produce a no-loss disposition and a separate implementation proposal.
+
+
+## Latest completed audit
+- [Phase 0 live repository reconciliation — 2026-10-30](phase-0-reconciliation-2026-10-30.md): merged donor PRs, current code owners, Priority-25 identity search, public resolver cache, Studio source-of-truth and remaining discovery gates.

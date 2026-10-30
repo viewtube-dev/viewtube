@@ -29,3 +29,7 @@ Search Task Index, task history, capability registry, plan families, branch/PR m
 
 ## Acceptance
 Identity established with provenance; real production caller reaches capability; user action returns truthful result/actionable failure; permissions/context/provider readiness enforced; tests cover reachable and blocked states; runtime receipt includes build SHA, route, user state, capability, operation/correlation IDs and outcome. File/route/registry existence is not completion.
+
+
+## Identity search result — 2026-10-30
+The repository currently exposes 13 canonical capability records and 13 capability homes; none is named or keyed Priority-25. The temporary `tasks/viewtube-one-goal-status.md` projection contains VT-025, but that is an unrelated Analytics task ("Retire legacy selectors/cache consumers", P1, IN_PROGRESS), not a runtime capability. Do not map the user's Priority-25 reference to VT-025 without provenance. The origin work packet, PR, Task Authority history or conversation handoff is still required before this plan can enter implementation.
