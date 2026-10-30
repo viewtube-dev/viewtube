@@ -1,6 +1,6 @@
 {
   "schemaVersion": "viewtube.plan-families.v1",
-  "lastEdited": "2026-10-29",
+  "lastEdited": "2026-10-30",
   "families": [
     {
       "id": "PLAN-FAMILY-BRAIN-AI",
@@ -184,7 +184,14 @@
         "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/plan.md",
         "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/plan.md",
         "tasks/p1-canonical-system-integration/workstreams/public-resolver/plan.md",
-        "tasks/p1-canonical-system-integration/workstreams/studio-controls/plan.md"
+        "tasks/p1-canonical-system-integration/workstreams/studio-controls/plan.md",
+        "tasks/p1-canonical-system-integration/identity-map.md",
+        "tasks/p1-canonical-system-integration/audits/phase-0-reconciliation-2026-10-30.md",
+        "tasks/p1-canonical-system-integration/verification.md",
+        "tasks/p1-canonical-system-integration/agents/README.md",
+        "tasks/p1-canonical-system-integration/tests/README.md",
+        "tasks/p1-canonical-system-integration/audits/README.md",
+        "tasks/p1-canonical-system-integration/branches/README.md"
       ],
       "status": "ACTIVE"
     }
