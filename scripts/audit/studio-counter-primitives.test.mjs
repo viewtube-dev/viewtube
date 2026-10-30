@@ -209,3 +209,23 @@ test("StudioDoubleSplitWordCounter is exported as a double-rail word primitive w
   assert.match(valueToggles, /vt-studio-word-counter__value/);
   assert.match(styles, /\.vt-studio-word-counter:focus-within[\s\S]*?--vt-studio-control-secondary/);
 });
+
+
+test("dropdown menus share separated primary-filled menu defaults across standard, simple, and split-left variants", () => {
+  assert.match(tokens, /export const STUDIO_DROPDOWN_MENU_TOKENS\s*=\s*\{/);
+  assert.match(tokens, /menuGap:\s*8/);
+  assert.match(tokens, /menuPadding:\s*4/);
+  assert.match(tokens, /rowGap:\s*3/);
+  assert.match(tokens, /menuFill:\s*"primary"/);
+  assert.match(tokens, /unselectedRowFill:\s*"white"/);
+  assert.match(tokens, /selectedRowFill:\s*"secondary"/);
+  assert.match(tokenEmitter, /STUDIO_DROPDOWN_MENU_TOKENS/);
+  assert.match(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*top:\s*calc\(100% \+ var\(--vt-studio-dropdown-menu-gap/s);
+  assert.match(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*border-radius:\s*var\(--vt-studio-dropdown-menu-radius/s);
+  assert.match(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*background:\s*var\(--vt-studio-dropdown-menu-fill/s);
+  assert.match(styles, /\.vt-studio-dropdown-option\s*\{[^}]*background:\s*var\(--vt-studio-dropdown-row-fill/s);
+  assert.match(styles, /\.vt-studio-dropdown-option\[data-selected="true"\]\s*\{[^}]*background:\s*var\(--vt-studio-dropdown-selected-fill/s);
+  assert.match(styles, /\.vt-studio-dropdown\.is-simple \.vt-studio-dropdown-menu/);
+  assert.match(styles, /\.vt-studio-dropdown\.is-split-left \.vt-studio-dropdown-menu/);
+  assert.doesNotMatch(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*border-top-width:\s*0/s);
+});
