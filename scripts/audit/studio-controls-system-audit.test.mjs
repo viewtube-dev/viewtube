@@ -116,7 +116,7 @@ test("vertical word-toggle handle retains measured word bounds and shared side i
 });
 
 test("counter values and bar toggles preserve their canonical ratios and value colors", () => {
-  assert.match(system, /aspect-ratio:\\s*2\\s*\\/\\s*1/);
+  assert.match(system, /aspect-ratio:\s*2\s*\/\s*1/);
   assert.ok(system.includes(".vt-studio-side-counter__value"));
   assert.ok(recovery.includes("aspect-ratio: 1 / 2.5"));
   assert.ok(recovery.includes("height: calc(var(--vt-studio-control-font-size) * 1)"));
