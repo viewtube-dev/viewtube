@@ -184,9 +184,9 @@ test("bar toggle exposes a rounded percentage tooltip and preserves visible bars
 
 
 test("bar percentage tooltip escapes the component border and has a downward secondary-color pointer", () => {
-  assert.match(distill, /\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
-  assert.match(distill, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
-  assert.match(distill, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top:\s*6px solid var\(--vt-studio-control-secondary/s);
+  assert.match(styles, /\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
+  assert.match(styles, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
+  assert.match(styles, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top:\s*6px solid var\(--vt-studio-control-secondary/s);
 });
 
 test("all counter chevrons use one token-backed button class and shared click/hold animation", () => {
@@ -195,9 +195,9 @@ test("all counter chevrons use one token-backed button class and shared click/ho
   assert.match(component, /className=\{\`vt-studio-stepper-button vt-studio-counter__button/);
   assert.match(valueToggles, /className="vt-studio-stepper-button vt-studio-value-toggle__arrow"/);
   assert.match(valueToggles, /className="vt-studio-stepper-button vt-studio-word-counter__button"/);
-  assert.match(distill, /\.vt-studio-stepper-button:active:not\(:disabled\) svg[\s\S]*?vt-studio-counter-pop/);
-  assert.match(distill, /\.vt-studio-stepper-button\.is-holding svg[\s\S]*?vt-studio-counter-hold-pulse/);
-  assert.match(distill, /\.vt-studio-stepper-button:focus-visible[\s\S]*?--vt-studio-focus-outline-width-ratio[\s\S]*?--vt-studio-control-secondary/);
+  assert.match(styles, /\.vt-studio-stepper-button:active:not\(:disabled\) svg[\s\S]*?vt-studio-counter-pop/);
+  assert.match(styles, /\.vt-studio-stepper-button\.is-holding svg[\s\S]*?vt-studio-counter-hold-pulse/);
+  assert.match(styles, /\.vt-studio-stepper-button:focus-visible[\s\S]*?--vt-studio-focus-outline-width-ratio[\s\S]*?--vt-studio-control-secondary/);
 });
 
 test("StudioDoubleSplitWordCounter is exported as a double-rail word primitive with the shared chevron buttons", () => {
@@ -207,5 +207,5 @@ test("StudioDoubleSplitWordCounter is exported as a double-rail word primitive w
   assert.match(valueToggles, /data-vt-studio-control-kind": "studio-double-split-word-counter"/);
   assert.match(valueToggles, /STUDIO_LEFT_WORD_OPTIONS/);
   assert.match(valueToggles, /vt-studio-word-counter__value/);
-  assert.match(distill, /\.vt-studio-word-counter:focus-within[\s\S]*?--vt-studio-control-secondary/);
+  assert.match(styles, /\.vt-studio-word-counter:focus-within[\s\S]*?--vt-studio-control-secondary/);
 });
