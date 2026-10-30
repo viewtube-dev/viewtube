@@ -3,7 +3,7 @@
 **Status:** Normative architecture and reconciliation contract  
 **Scope:** ViewTube Studio UI, including Studio Controls, Studio Hub/Component Library, Brain surfaces that consume Studio primitives, and their shared styling layers.  
 **Target branch:** `master/consolidated-feature-integration`  
-**Last reviewed:** 2026-10-25
+**Last reviewed:** 2026-10-30
 
 This document defines **where decisions belong, which source wins, how exceptions are registered, and how changes are verified**. It does not claim that every existing implementation already conforms. Existing drift is a defect to reconcile, not an alternative source of truth.
 
@@ -52,7 +52,7 @@ When levels disagree, follow the higher level and repair the lower-level impleme
 - Existing Studio contract index: `docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md`
 - Existing Component Library ownership reference: `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md`
 
-**Repository reconciliation (2026-10-27):** TypeScript tokens are the size authority; generated CSS is emitted from them; `studio-control-system.css` owns the shared tier selectors. Core and recovery stylesheets no longer redeclare the global five-tier geometry. Mini and Micro use `-0.02em`; Micro inherits Mini's stroke/radius/outline system while retaining its 12px height and 10px type/icon size.
+**Repository reconciliation (2026-10-27):** TypeScript tokens are the size authority; generated CSS is emitted from them; `studio-control-system.css` owns the shared tier selectors. Core and recovery stylesheets no longer redeclare the global five-tier geometry. Mini and Micro use `-0.02em`; Micro uses its explicit 1px stroke / 2px radius / 0.65px focus outline while retaining its 12px height and 10px type/icon size.
 
 ## 3. Definitions
 
@@ -113,13 +113,13 @@ The Studio tier names and intended heights are:
 
 | Tier | Height | Intended stroke | Intended radius | Intended type/icon size |
 |---|---:|---:|---:|---:|
-| Supreme | 60px | Standard stroke system: 3px | Standard radius: 6px | 51.82px |
+| Supreme | 60px | 3px | 6px | 52px |
 | Standard | 44px | 3px | 6px | 38px |
 | Compact | 28px | 2px | 4px | 24px |
 | Mini | 20px | Mini stroke system: 1.5px | 3px | 17.5px |
-| Micro | 12px | Mini stroke system: 1.5px | 3px | 10px |
+| Micro | 12px | 1px | 2px | 10px |
 
-The tier is a complete bundle, not a height alone: record height, border/stroke, radius, typography size/weight/stroke, icon size/stroke, focus outline, fill behavior, line-height, case, and letter spacing together. **Supreme and Micro intentionally reuse the named stroke/radius systems above; do not revive older proportional or 1px Micro interpretations.**
+The tier is a complete bundle, not a height alone: record height, border/stroke, radius, typography size/weight/stroke, icon size/stroke, focus outline, fill behavior, line-height, case, and letter spacing together. **Supreme uses Standard's 3px / 6px geometry; Micro has its own explicit 1px / 2px geometry. Do not revive the obsolete 1.5px / 3px Micro interpretation.**
 
 Support is family-aware. A family may expose only the tiers its real inner geometry can support. Do not advertise a size in a catalog unless the production API and implementation actually support it.
 
@@ -298,3 +298,29 @@ A catalog row is evidence of registration and wiring, not by itself evidence of 
 ### Verification boundary
 
 Source inspection and source/test updates covered the three target documents, tokens, generated CSS, system/core/recovery stylesheets, split-input stylesheet ownership, and parity tests. Automated tests, typecheck, build, computed-style capture, assistive-technology run, and desktop/mobile browser screenshots remain outstanding because this pass used remote repository editing without a runnable checkout.
+
+
+## 14. Studio Controls family and alignment contracts — 2026-10-30
+
+- **Split text centering:** split-left, split-right, and double-split badges center label text against the complete outer shell. Rail count and rail placement do not shift the center axis. Editable split text input remains left-aligned and is explicitly excluded from badge centering.
+- **Counter anatomy:** StudioCounter and StudioSideCounter use a 2:1 number-value region; their action rails remain 1:1 squares. This is a family geometry exception, not a second global size ladder.
+- **Bar toggles:** empty segments are a 50%-white / 50%-primary blend; filled segments are black. Bars match the selected tier's text height, retain a 2.5:1 height-to-width ratio, and use a slight radius.
+- **Double-side toggles:** both sides reuse the shared side-toggle arrow controls and metrics. The central divider is a structural black seam only; the outer shell alone owns the secondary focus outline.
+- **Inter-modules:** full width by default, zero horizontal container inset, square split sections, and no inherited external 4px gap at their edges.
+- **Focus transition:** text fill and glyph stroke change together and use the same duration/easing. The secondary outline fades on blur; no abrupt reset.
+- **Confirmed Library:** top representatives are one-column/full-width, use actual production exports, and include a specimen for every primitive in the representative inventory. Family modules group related primitives; Counter and Side Counter are separate modules.
+
+## 15. Automated Studio Controls acceptance gate — 2026-10-30
+
+The permanent source regression suite is `scripts/audit/studio-controls-system-audit.test.mjs`. It is part of `npm run test:studio-controls` and the release-gates workflow. It must verify:
+
+1. Five-tier token/generated-CSS parity and actual component consumption.
+2. Default/focus field colors, matching glyph stroke, persistent primary inset, caret, secondary outline, and synchronized transitions.
+3. TextBox black text/glyph with primary inset and secondary outline.
+4. Outer-edge split badge centering, square rails, flush seams, and split-input editability.
+5. Counter 2:1 number areas and 1:1 rails; synchronized arrow-button metrics; outer-only double-side focus outline.
+6. Bar-toggle empty/full colors, 2.5:1 ratio, tier-matched height, radius, tooltip visibility.
+7. Vertical word-toggle measured handle bounds and horizontal-handle parity.
+8. Full-width inter-modules and representative/family-module coverage in the Confirmed Library.
+
+Browser certification remains mandatory for computed geometry, typing/focus behavior, focus fade, tooltip display, and all supported size tiers. A passing static source test is not a visual sign-off.
