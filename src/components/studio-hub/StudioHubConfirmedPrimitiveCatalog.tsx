@@ -98,7 +98,9 @@ const CanonicalControlFamilies: React.FC = () => {
       </div>
     </Family>
     <Family title="Word Toggle · Standard + Compact" nonDefaultSettings={[
-        "Standard examples use one full-width toggle per row; compact examples use two per row.",
+        "Standard examples use one full-width toggle per row; compact examples use auto-width specimens.",
+        "V1–V4 skins change the active fill and indicator colors only; the two-state boolean contract stays unchanged.",
+        "Alternate indicator skins include COLOR SWAP, WHITE, and BLACK."
       ]} provenance={<Provenance primitive="StudioWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · V1–V4 palette contract shared with choice controls." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
       <div className="vt-confirmed-control-family vt-confirmed-word-toggle-family">
         <div className="vt-confirmed-control-row">
@@ -462,6 +464,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
     <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Single-line input typography remains 38px standard / 24px compact / 10px micro across all label variants.",
         "Floating labels raise to 80% of the input font size; fixed label boxes match StudioLegendMultiDropdown.",
+        "Raised labels shrink to 80%; compact B reverses the paired colors.",
       ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx" css="src/styles/studio-control-system.css + src/styles/studio-text-input.css" tokens="One native input family with simple, floating-label, and fixed-label variants; standard 44px / 38px, compact 28px / 24px, micro 12px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/styles/studio-control-entry.css", "src/styles/studio-text-input.css"]} />}>
       <SizeMatrix label="Text input size examples"
         standard={<StudioTextInput sizeVariant="standard" aria-label="Standard text input" placeholder="TYPE HERE" />}
@@ -518,7 +521,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
 
     <Family title="Square Icon Button · 44px + 28px" nonDefaultSettings={[
         "V1–V4 skins change fill and icon color only.",
+        "Default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact.",
         "All icon presets and interaction effects live in this single family; success styling must follow a real successful operation.",
+        "Notification needs a real count/status and success must follow actual operation success."
       ]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; all icon presets and opt-in interaction effects; no default shell shadow or motion." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
       <SizeMatrix label="Square icon button size examples"
         standard={<StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Standard square icon button" variant="v1" sizeVariant="standard" />}
