@@ -2006,6 +2006,16 @@ const useStudioCounterHold = (
 };
 
 /** Independent button-only counter primitives. These deliberately do not compose either legacy stepper. */
+export interface StudioLeftCounterProps extends StudioCounterProps {
+  displayValue?: React.ReactNode;
+}
+export type StudioLeftWordCounterProps = Omit<StudioCounterProps, "min" | "max" | "step">;
+export type StudioLeftWord = typeof STUDIO_LEFT_WORD_OPTIONS[number];
+export const normalizeStudioLeftWordIndex = (value: number): number => {
+  if (!Number.isFinite(value)) return 1;
+  return ((Math.round(value) - 1 + STUDIO_LEFT_WORD_OPTIONS.length) % STUDIO_LEFT_WORD_OPTIONS.length + STUDIO_LEFT_WORD_OPTIONS.length) % STUDIO_LEFT_WORD_OPTIONS.length + 1;
+};
+
 export interface StudioCounterProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onChange"> {
   value: number;
   onValueChange: (value: number) => void;
@@ -2091,8 +2101,8 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
 };
 StudioSideCounter.displayName = "StudioSideCounter";
 
-export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
-  value, onValueChange, min = 0, max = 100, step = 1,
+export const StudioLeftCounter: React.FC<StudioLeftCounterProps> = ({
+  value, onValueChange, min = 0, max = 100, step = 1, displayValue,
   size = "standard", disabled = false, ariaLabel = "Value",
   className, ...props
 }) => {
@@ -2127,6 +2137,30 @@ export const StudioLeftCounter: React.FC<StudioCounterProps> = ({
   );
 };
 StudioLeftCounter.displayName = "StudioLeftCounter";
+/** Four-state word cycle built on the canonical left-counter interaction and split geometry. */
+export const StudioLeftWordCounter: React.FC<StudioLeftWordCounterProps> = ({
+  value, onValueChange, size = "standard", className, disabled = false, ariaLabel = "Word", ...props
+}) => {
+  const wordIndex = normalizeStudioLeftWordIndex(value);
+  const handleValueChange = React.useCallback((nextValue: number) => onValueChange(normalizeStudioLeftWordIndex(nextValue)), [onValueChange]);
+  return <StudioLeftCounter
+    {...props}
+    value={wordIndex}
+    onValueChange={handleValueChange}
+    min={1}
+    max={STUDIO_LEFT_WORD_OPTIONS.length}
+    step={1}
+    size={size}
+    disabled={disabled}
+    ariaLabel={ariaLabel}
+    displayValue={STUDIO_LEFT_WORD_OPTIONS[wordIndex - 1]}
+    className={studioClasses("vt-studio-left-word-counter", className)}
+    data-vt-studio-word-index={String(wordIndex)}
+    data-vt-library-component="StudioLeftWordCounter"
+  />;
+};
+StudioLeftWordCounter.displayName = "StudioLeftWordCounter";
+
 
 
 /** Closeable metadata badge using the global Studio size and palette contract. */
