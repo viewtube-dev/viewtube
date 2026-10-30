@@ -76,3 +76,19 @@ test("restored motion does not add shell movement or shadow effects", () => {
   assert.doesNotMatch(css, /box-shadow\s*:/)
   assert.doesNotMatch(css, /translate\s*:/)
 })
+
+
+test("focus mode fades out using the token-owned 500ms outline duration", () => {
+  const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
+  const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
+  assert.match(tokens, /focusTransitionMs:\s*500/)
+  assert.match(tokens, /outlineFadeMs:\s*500/)
+  assert.match(generated, /--vt-studio-focus-outline-fade-ms:\s*500ms/)
+  assert.match(system, /outline-color\s+var\(--vt-studio-focus-outline-fade-ms\)\s+ease-out/)
+  assert.match(system, /outline-width\s+var\(--vt-studio-focus-outline-fade-ms\)\s+ease-out/)
+});
+
+test("bar percentage tooltip is exposed on hover and keyboard focus", () => {
+  const distill = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8")
+  assert.match(distill, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar:is\(:hover,\s*:focus-within\)\s+\.vt-studio-value-toggle__bar-tooltip/)
+});
