@@ -217,3 +217,16 @@ Phase 4 remains partial: standalone SeoGenerator and VideoUploader create govern
 - The 42 production-referenced exports include non-generation helpers. Remaining production caller families include analytics/research, planning, tags, thumbnails, scripts, storyboards, comments, end-screen, journal/community and media analysis.
 - The audit and artifact upload passed on the exact head. The focused Gemini suite failed three retry-idempotency tests due to reusing the input event key for the output event; a separate `generation-output:v1:` event key namespace has been committed and awaits run #5470.
 - Do not retire provider compatibility paths until all remaining callers are classified/migrated and live capability parity is proven.
+
+
+## Tag-generation caller migration — 2026-10-30
+
+The new follow-up branch `feat/p1-gemini-tag-governance-2026-10-30` moves the known production callers of legacy `generateTagSuggestions` and `analyzeExistingTags` to `generateGovernedTagSuggestions`:
+
+- `src/views/VideoManager.tsx`: tag generation and analysis.
+- `src/views/dashboard/widgets/TagGeneratorWidget.tsx`: governed tag generation; fabricated hard-coded fallback suggestions removed.
+- `src/views/dashboard/widgets/VideoUploaderWidget.tsx`: governed tag generation.
+
+The shared `tagSuggestionsStrategy` validates the structured output and labels market volume, competition and potential rank as estimates, not live YouTube measurements. A zero potential-rank value means unknown. The dedicated Gemini CI job includes its strategy contract test.
+
+This is a source migration awaiting exact-head CI and a refreshed caller-inventory artifact. The older run #5442 inventory is not evidence for the new branch head. Standalone tag generation persists an AssetGenerator record and prompt receipt; ContentBuild/OperationRecord ingestion is not claimed when the caller supplies no canonical ContentBuild identity. Other active production caller families remain.
