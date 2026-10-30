@@ -215,6 +215,8 @@ export { StudioTextArea }
 export type { StudioTextAreaProps } from "./StudioTextArea"
 
 
+export const STUDIO_LEFT_WORD_OPTIONS = ["ONE", "TWO", "THREE", "FOUR"] as const
+
 const studioClasses = (...values: Array<string | false | null | undefined>) => values.filter(Boolean).join(" ")
 /** Canonical Studio 44px / 28px switch, choice, and word-toggle primitives. */
 export type StudioControlSkin = "solid" | "color-swap" | "black-indicator" | "white-indicator";
@@ -1020,7 +1022,7 @@ interface StudioSplitShellProps {
   rightRailContent?: React.ReactNode
   shellProps?: React.HTMLAttributes<HTMLSpanElement> & StudioDataAttributeProps
 }
-const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
+export const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   layout, sizeVariant = "standard", iconLeft, iconRight, children,
   faceOnly = false, fieldSlot = false, className, labelClassName, railClassName, railProps,
   leftRailClassName, rightRailClassName, leftRailProps, rightRailProps,
@@ -2247,3 +2249,7 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
 };
 StudioDoubleSplitSlider.displayName = "StudioDoubleSplitSlider";
 
+
+
+export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, StudioDoubleSplitWordCounter, STUDIO_VALUE_TOGGLE_VARIANTS } from "./StudioValueToggles";
+export type { StudioToggleAppearance, StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioBarToggleProps, StudioDoubleSplitWordCounterProps } from "./StudioValueToggles";
