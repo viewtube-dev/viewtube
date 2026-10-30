@@ -323,3 +323,12 @@ The token source in `src/studio-ui/tokens.ts` is authoritative. The emitter must
 
 These are production primitive/family rules, not catalog overrides. The bar track overflow exception is scoped to the bar-toggle shell so the floating percentage label can remain visible; the flexible center track is still constrained between the fixed rails.
 
+## Global dropdown open-menu defaults — 2026-10-30
+
+All canonical Studio single-select dropdown variants (standard, simple, and split-left) inherit one open-menu contract from `STUDIO_DROPDOWN_MENU_TOKENS` in `src/studio-ui/tokens.ts`. The generated CSS variables are emitted by `scripts/emit-studio-control-vars.mjs`; `src/styles/studio-control-system.css` is the sole rendering owner.
+
+- The menu is detached from its trigger by an 8px gap. The trigger retains its full corner radius while open.
+- The menu uses a 4px inset, a full control-stroke black border, all four corners at the control radius, and the primary control fill.
+- Every option row uses the same stroke width and corner radius as the control, with the matching control-height typography and a 3px inter-row gap.
+- Unselected rows are white. Selected rows are secondary fill with black text. Hover/focus does not replace the selected/unselected palette contract.
+- These defaults are shared by standard, simple, and split-left variants. Do not add variant-specific menu color, spacing, or radius overrides; exceptions require a token-owned, documented reason.
