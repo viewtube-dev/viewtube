@@ -248,7 +248,7 @@ export const prepareGenerationRequest = (input: {
   metadata: {
    requestId: request.id,
    operationId: request.operationId || request.id,
-   idempotencyKey: request.idempotencyKey,
+   generationIdempotencyKey: request.idempotencyKey,
    workflowId: request.workflowId || `workflow:${request.contentBuildId}`,
    contextManifestId: request.contextManifestId,
    contextRevision: request.contextRevision,
