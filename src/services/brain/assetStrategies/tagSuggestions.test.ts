@@ -28,7 +28,7 @@ describe("tag suggestions specialist strategy", () => {
    { tag: "DUPLICATE", score: 50, searchVolume: 10, competition: 10, rank: 2, tripleKeyword: false },
   ], { channelId: "channel-1", assetType: "tags", instruction: "Generate tags" })
   expect(findings?.map(item => item.rule)).toEqual(expect.arrayContaining([
-   "tag_required", "tag_score_range", "tag_estimate_nonnegative", "tag_rank_positive", "tag_unique",
+   "tag_required", "tag_score_range", "tag_estimate_nonnegative", "tag_rank_nonnegative", "tag_unique",
   ]))
  })
 })
