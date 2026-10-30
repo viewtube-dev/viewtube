@@ -780,6 +780,24 @@
         "GitHub compare: merge commit is an ancestor of master/consolidated-feature-integration at e2e09fd5767cb5782f3bf1d133a0b01462c74bfc"
       ],
       "notes": "The merge commit is present in the current target history. Its message says 'Merge PR #503', but current GitHub metadata for PR #503 identifies an unrelated split-stepper PR that is closed and unmerged. Therefore delivery is proven by commit ancestry, while the PR-number attribution is unresolved and intentionally left null. The original branch no longer appears in branch search."
+    },
+    {
+      "branch": "docs/conversation-handoff-complete-register-2026-10-29",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1170,
+      "openedHeadSha": null,
+      "currentHeadSha": "49918598057dcecf46373e778e8a5a205b5919b2",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": "0fd1d412758f212d8d6cf34a3a31d22270ea33c4",
+      "targetContainsChanges": "YES",
+      "classification": "MERGED_AND_CURRENT",
+      "recoveryDestination": null,
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170",
+        "https://github.com/viewtube-dev/viewtube/commit/0fd1d412758f212d8d6cf34a3a31d22270ea33c4"
+      ],
+      "notes": "PR #1170 merged and is present on the target. Compare confirms the original source branch has zero commits ahead of the merge commit and is 22 commits behind. The PR-opening SHA is unavailable; no unique post-PR work needs recovery. The originating October 29 handoff package is tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/."
     }
   ]
 }
