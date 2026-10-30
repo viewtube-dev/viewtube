@@ -52,6 +52,7 @@ afterEach(async () => {
  root = null
  container?.remove()
  container = null
+ vi.unstubAllGlobals()
 })
 
 describe("Gemini key validation runtime", () => {
