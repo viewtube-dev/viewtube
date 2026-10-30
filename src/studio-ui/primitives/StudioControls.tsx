@@ -13,7 +13,7 @@ export const StudioNumberInput = React.forwardRef<
 StudioNumberInput.displayName = "StudioNumberInput";
 
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Heart, Image as ImageIcon, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
@@ -266,7 +266,7 @@ const studioSkinClass = (skin: StudioControlSkin) => ({
   "white-indicator": "is-white-indicator",
 }[skin]);
 export const Studioswitch: React.FC<StudioControlButtonProps> = ({ skin = "solid", checked, className, shape = "round", sizeVariant = "standard", type = "button", ...props }) => (
-  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-size={sizeVariant} className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
+  <button type={type} role="switch" aria-checked={checked} data-vt-studio-control="true" data-vt-studio-width="content" data-size={sizeVariant} className={studioClasses("vt-studio-44-switch", `is-${shape}`, studioSkinClass(skin), checked && "is-on", className)} {...props}><span className="vt-studio-44-handle" aria-hidden="true" /></button>
 );
 export type StudioChoiceKind = "radio" | "checkbox";
 export interface StudioChoiceProps extends StudioControlButtonProps { kind: StudioChoiceKind; mark?: "check" | "xwide" }
@@ -450,7 +450,7 @@ export const StudioChoice: React.FC<StudioChoiceProps> = ({
       type={type}
       role={kind}
       aria-checked={isChecked}
-      data-vt-studio-control="true" 
+      data-vt-studio-control="true" data-vt-studio-width="content"
       data-size={sizeVariant}
       data-radio-motion={kind === "radio" ? radioMotion : undefined}
       data-radio-direction={kind === "radio" ? motionDirection : undefined}
@@ -2191,8 +2191,8 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
             iconLeft={splitIcon}
             iconRight={
               <ChevronDown
-                size={STUDIO_DROPDOWN_TOKENS.chevronSize[sizeVariant]}
-                strokeWidth={STUDIO_DROPDOWN_TOKENS.chevronStroke[sizeVariant]}
+                size={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronSize.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
+                strokeWidth={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
               />
             }
             faceOnly
@@ -2208,8 +2208,8 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
             <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
             <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true">
               <ChevronDown
-                size={STUDIO_DROPDOWN_TOKENS.chevronSize[sizeVariant]}
-                strokeWidth={STUDIO_DROPDOWN_TOKENS.chevronStroke[sizeVariant]}
+                size={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronSize.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
+                strokeWidth={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
               />
             </span>
           </>
@@ -2308,7 +2308,6 @@ function useStudioInteractionFocus(holdMs = STUDIO_FOCUS_INTERACTION_TOKENS.hold
 const useStudioCounterHold = (
   direction: -1 | 1, current: number, min: number, max: number, step: number,
   adjust: (direction: -1 | 1) => void, disabled: boolean,
-  interactionFocus?: ReturnType<typeof useStudioInteractionFocus>,
 ) => {
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentRef = React.useRef(current);
@@ -2320,17 +2319,15 @@ const useStudioCounterHold = (
   const suppressClick = React.useRef(false);
   const [isHolding, setIsHolding] = React.useState(false);
   const stop = React.useCallback(() => {
-    interactionFocus?.end();
     if (timer.current) clearTimeout(timer.current);
     timer.current = null;
     if (held.current) suppressClick.current = true;
     held.current = false;
     setIsHolding(false);
-  }, [interactionFocus]);
+  }, []);
   React.useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   const onPointerDown = React.useCallback((event: React.PointerEvent<HTMLButtonElement>) => {
     if (disabled || (event.pointerType === "mouse" && event.button !== 0)) return;
-    interactionFocus?.start();
     if (timer.current) clearTimeout(timer.current);
     try { event.currentTarget.setPointerCapture(event.pointerId); } catch { /* Embedded webviews may not support pointer capture. */ }
     held.current = false;
@@ -2769,9 +2766,8 @@ export interface StudioUploadFrameProps extends Omit<React.LabelHTMLAttributes<H
 /** Canonical pair-colored upload canvas with responsive breathing layers and an optional image preview. */
 export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   accept = "image/*,video/*",
-  prompt = "Drop or choose file",
+  prompt = "Drag or drop\nImage / video here · or click to upload",
   disabled = false,
-  sizeVariant = "standard",
   multiple = false,
   onFileChange,
   onFilesChange,
@@ -2780,17 +2776,27 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   ...labelProps
 }) => {
   const [dragging, setDragging] = React.useState(false);
+  const [clicking, setClicking] = React.useState(false);
   const [selectedName, setSelectedName] = React.useState("");
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
   const previewRef = React.useRef<string | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const pickerDelayRef = React.useRef<number | null>(null);
 
   React.useEffect(() => () => {
     if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+    if (pickerDelayRef.current !== null) window.clearTimeout(pickerDelayRef.current);
   }, []);
 
   const beginPicker = React.useCallback(() => {
-    if (!disabled) inputRef.current?.click();
+    if (disabled) return;
+    if (pickerDelayRef.current !== null) window.clearTimeout(pickerDelayRef.current);
+    setClicking(true);
+    pickerDelayRef.current = window.setTimeout(() => {
+      setClicking(false);
+      pickerDelayRef.current = null;
+      inputRef.current?.click();
+    }, 1000);
   }, [disabled]);
 
   const selectFile = React.useCallback((file?: File) => {
@@ -2820,12 +2826,12 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
   return (
     <label
       {...labelProps}
-      className={studioClasses("vt-studio-upload-frame", dragging && "is-drag", previewUrl && "has-img", disabled && "is-disabled", className)}
+      className={studioClasses("vt-studio-upload-frame", dragging && "is-drag", clicking && "is-clicking", previewUrl && "has-img", disabled && "is-disabled", className)}
       data-vt-studio-control="true"
       data-vt-studio-control-family="upload"
       data-vt-studio-upload-frame="true"
       data-vt-library-component="StudioUploadFrame"
-      data-size={sizeVariant}
+      data-size="standard"
       aria-disabled={disabled ? "true" : undefined}
       role="button"
       tabIndex={disabled ? -1 : 0}
@@ -2871,7 +2877,11 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
           <Upload />
           {previewUrl && <img src={previewUrl} alt="" />}
         </span>
-        <span className="vt-studio-upload-frame__label" aria-live="polite">{selectedName || prompt}</span>
+      </span>
+      <span className="vt-studio-upload-frame__file-bar" data-has-file={selectedName ? "true" : "false"} aria-live="polite">
+        <span className="vt-studio-upload-frame__file-action" aria-hidden="true"><Upload /></span>
+        <span className="vt-studio-upload-frame__file-name">{selectedName || prompt}</span>
+        <span className="vt-studio-upload-frame__file-kind" aria-hidden="true"><ImageIcon /></span>
       </span>
     </label>
   );
@@ -2975,8 +2985,8 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
     const next = Number((base + direction * safeStep).toFixed(precision));
     onValueChange(Math.min(max, Math.max(min, next)));
   }, [max, min, onValueChange, safeStep]);
-  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current <= min, interactionFocus);
-  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current >= max, interactionFocus);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current <= min);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjustCounter, disabled || !validBounds || current >= max);
   const progress = validBounds ? ((current - min) / (max - min)) * 100 : 0;
   const rangeStyle = { "--vt-studio-slider-progress": `${progress}%` } as React.CSSProperties;
   const changeValue = (raw: string) => {
