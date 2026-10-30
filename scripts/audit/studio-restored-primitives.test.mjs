@@ -50,8 +50,9 @@ test("counter and slider catalogs expose only the canonical primary-fill design"
   const sliderStart = catalog.indexOf('title="StudioDoubleSplitSlider · Standard / Compact / Micro"');
   const sideStart = catalog.indexOf('title="StudioSideCounter · Standard / Compact / Micro"');
   assert.ok(counterStart >= 0 && sliderStart > counterStart && sideStart > sliderStart);
-  const families = catalog.slice(counterStart, catalog.indexOf("const ConfirmedStudioSideCounterFamily", counterStart)) +
-    catalog.slice(sideStart);
+  const sliderEnd = catalog.indexOf("const ConfirmedStudioSideCounterFamily", sliderStart);
+  const sideEnd = catalog.indexOf("/** Certified production examples only.", sideStart);
+  const families = catalog.slice(counterStart, sliderEnd) + catalog.slice(sideStart, sideEnd);
   assert.match(families, /inverse-color variants are intentionally excluded/);
   assert.doesNotMatch(families, /is-reversed|is-inverse|inverse-fill|reverse-colors/);
 });
