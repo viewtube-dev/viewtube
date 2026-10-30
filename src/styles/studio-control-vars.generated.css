@@ -41,15 +41,15 @@
   --vt-studio-mini-focus-outline-width: 0.975px;
   --vt-studio-mini-secondary-outline-width: 0.975px;
   --vt-studio-micro-height: 12px;
-  --vt-studio-micro-stroke: 1.5px;
-  --vt-studio-micro-radius: 3px;
+  --vt-studio-micro-stroke: 1px;
+  --vt-studio-micro-radius: 2px;
   --vt-studio-micro-font-size: 10px;
   --vt-studio-micro-icon-size: 10px;
   --vt-studio-micro-font-weight: 1000;
   --vt-studio-micro-text-stroke: 0.4px;
-  --vt-studio-micro-icon-stroke: 1.6;
-  --vt-studio-micro-focus-outline-width: 0.975px;
-  --vt-studio-micro-secondary-outline-width: 0.975px;
+  --vt-studio-micro-icon-stroke: 1.5;
+  --vt-studio-micro-focus-outline-width: 0.65px;
+  --vt-studio-micro-secondary-outline-width: 0.65px;
   /* Textarea-specific typography is a named family exception, sourced from tokens.ts multiline. */
   --vt-studio-textarea-supreme-font-size: 24.55px;
   --vt-studio-textarea-standard-font-size: 18px;
