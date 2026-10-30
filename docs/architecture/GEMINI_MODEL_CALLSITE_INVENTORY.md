@@ -283,3 +283,14 @@ This inventory is a snapshot, not zero-caller proof. Analytics, planning, thumbn
 `generateScript` remains a production-referenced export because Script Architect owns a domain-specific prompt and normalization contract. Its only production caller supplies the existing `runBrainJsonTask` callback through BrainRuntime. The optional direct `getAiClient().models.generateContent` fallback has now been removed; the callback is required and failures propagate through the governed path. A focused gateway-boundary test was added to the Gemini governance CI job.
 
 The current exact-head inventory counts above predate this change. A new artifact is required to refresh the direct SDK invocation count and confirm the caller audit on the new head. Do not interpret the prior count as current after this commit.
+
+
+## Latest exact-head inventory — 2026-10-30
+
+Run #5518 at `51d8f3957ab804b9d085ce7fd15c8afdf11ab455` regenerated and uploaded the exact-commit inventory. It reports 73 exports, 36 production-referenced exports, 36 exports without static import references, 65 direct SDK invocation sites, two dynamic Gemini imports, 19 model-ID literals and 18 credential-alias references.
+
+The production caller references for legacy tag generation/analysis, comment reply generation/recommendation and educational timestamp questions are absent. Script Architect still imports the `generateScript` prompt/normalization function, but its direct provider fallback has been removed; the function now requires the BrainRuntime task callback. The direct SDK invocation count decreased from 66 to 65.
+
+The exact-head Gemini governance job and production build passed, as did local smoke, Brain quality loop and conversation handoff. Repository-wide typecheck and Studio source/catalog gates still fail on separate pre-existing issues; the full suite was still running at documentation time.
+
+The remaining production references are not automatically provider bypasses: some are provider-owner exports, compatibility utilities, domain prompt builders, tests or functions still awaiting caller-owner classification. Keep the compatibility map until every active caller is classified, migrated or proven unreachable and live parity is certified.
