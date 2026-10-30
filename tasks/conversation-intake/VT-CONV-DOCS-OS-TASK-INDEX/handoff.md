@@ -1,10 +1,16 @@
 # ViewTube Documents Structure Handoff
 
+> **Living-log update:** Open this document and say **“Update the unfinished work log.”** Update this existing package in place; preserve history and update the paired worklog/review rather than creating a duplicate.
+
 **Conversation ID:** VT-CONV-DOCS-OS-TASK-INDEX  
 **Handoff ID:** VT-HANDOFF-DOCUMENTS-STRUCTURE  
 **Produced:** 2026-09-27  
-**Last Edited:** 2026-09-27  
+**Last Edited:** 2026-10-29  
 **Source Host:** ChatGPT  
+**Application / product:** ViewTube  
+**Source application:** ChatGPT  
+**Source conversation link:** UNKNOWN  
+**Update phrase:** “Update the unfinished work log.” — update this existing package in place  
 **Reconciliation Status:** PARTIALLY_RECONCILED  
 **Current Main at branch cut:** `57df0f760a3360a6b65d5b8e101dee633870848c`  
 **Current handoff branch:** `docs/documents-structure-handoff-2026-09-27`
@@ -73,9 +79,8 @@ New parallel systems/plans/tools/workflows are the final option, not the default
   Brain / Prompt authority consolidation.  
   Merge commit: `4f10cca0928985ea7a5b2ca9a09f26d7500331a4`.
 
-- **PR #503 — merged**  
-  Conversation Handoff + Work Reconciliation system.  
-  Merge commit: `e5bbb56fee503c26a1251c6e3643307af12c4632`.
+- **Historical handoff-system merge — PR attribution unresolved**  
+  The merge commit `e5bbb56fee503c26a1251c6e3643307af12c4632` is present in the current target history. Its commit message references PR #503, but current GitHub metadata identifies PR #503 as an unrelated split-stepper change closed without merging. Do not attribute the handoff-system delivery to PR #503 without authoritative matching evidence.
 
 - **PR #500 — closed / DONOR**  
   Became stale/unmergeable. Do not reopen or force merge.
@@ -1302,3 +1307,18 @@ The documentation/governance system is now substantially established and merged.
 The most important missing piece is **Task Index VNext**.
 
 Once Phase E is complete, the next major operation is **global reconciliation**: convert fragmented historical plans, audits, handoffs, bugs, branches, prototypes and conversation work into one deduped task/capability/plan-family model while preserving every useful idea and source.
+
+
+## PR #1170 — complete requirements and delivery reconciliation
+
+- PR: https://github.com/viewtube-dev/viewtube/pull/1170
+- Source branch: `docs/conversation-handoff-complete-register-2026-10-29`
+- Target: `master/consolidated-feature-integration`
+- PR head: `49918598057dcecf46373e778e8a5a205b5919b2`
+- Merge commit: `0fd1d412758f212d8d6cf34a3a31d22270ea33c4`
+- Merge state: MERGED; 13 files changed; 19 commits; 587 additions / 45 deletions.
+- Current-target ancestry: confirmed. The source branch is 22 commits behind the merge commit and has zero commits ahead; no unique post-PR branch work requires recovery.
+- PR-opening SHA: UNKNOWN; the exact opening snapshot was not recoverable.
+- CI: production-build, local-smoke and brain-quality-loop passed; source-governance, full-suite, focused-contracts and static-quality failed. Vercel deployments were rate-limited. The document-specific commands `npm run test:document-system` and `npm run audit:documents` were not run by this PR.
+
+The PR extends this existing handoff package; its complete originating-conversation record is at `tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/`. The follow-up living-log template, metadata, one-phrase update procedure and dedicated CI checks are tracked in that package.
