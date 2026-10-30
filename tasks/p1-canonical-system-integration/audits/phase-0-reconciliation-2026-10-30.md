@@ -105,3 +105,11 @@ Overlapping changed paths:
 - #988 ∩ #992: both Studio contract docs, `src/studio-ui/tokens.ts`, `studio-control-core.css`, `studio-control-system.css`, `studio-control-vars.generated.css`.
 
 The union of their changed-file sets is 29 paths. These numbers confirm that merging any donor wholesale would reintroduce substantial stale history and conflicting ownership. Use file-level diffs against current main and focused tests to recover only behavior not already present.
+
+### Public resolver production-caller confirmation — follow-up source trace
+A deeper current-main source trace confirms this is not merely a settings-only helper:
+- `src/services/brain/runtime/BrainRuntime.ts` imports `fetchPublicChannelSnapshot`, requires an explicit `publicHandleContext`, validates selected handle/channel identity, constructs public-only evidence videos with null performance metrics, and passes provenance/limitations into Brain context and continuity.
+- `src/services/brain/runtime/BrainRuntimeContracts.ts` defines `BrainRuntimePublicHandleContext` separately from `channelId`, specifically to avoid inferring public mode from an authenticated channel identity.
+- `src/components/SidebarChatbot.tsx`, `src/views/AIBrainCommandInterface.tsx` (two call paths), and `src/views/dashboard/widgets/BrainHubWidget.tsx` pass `readSelectedPublicHandleContext()` only when `!authState.isAuthenticated && !channelConnection.isConnected`.
+- `src/views/Settings.tsx` persists the explicit public selection and displays source/limitations.
+Therefore the public resolver has production source wiring across the three main Brain surfaces. Remaining gate is runtime verification of logged-out public handle success, invalid/unknown handle, cache hit/stale state, resolver outage and strict public-only data; source wiring alone is not runtime certification.
