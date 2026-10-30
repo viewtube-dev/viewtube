@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { readBrainRuntimeSnapshot, resolveBrainOperationIdentity } from "./BrainRuntimeSnapshot"
+import { collectDescendantAlgorithmEvents, readBrainRuntimeSnapshot, resolveBrainOperationIdentity } from "./BrainRuntimeSnapshot"
 
 const build = {
  schemaVersion: 1 as const,
@@ -647,4 +647,33 @@ it("keeps missing provenance links explicit instead of inferring from project sc
   expect.arrayContaining(["trace", "generation_record", "outcome_attribution_key"]),
  )
 })
+})
+
+
+describe("collectDescendantAlgorithmEvents", () => {
+ it("collects every descendant once even when parent events appear after their children", () => {
+  const events = [
+   { id: "leaf", parentEventIds: ["middle"], createdAt: 3 },
+   { id: "unrelated", parentEventIds: [], createdAt: 0 },
+   { id: "middle", parentEventIds: ["root"], createdAt: 2 },
+   { id: "root", parentEventIds: [], createdAt: 1 },
+   { id: "cycle-a", parentEventIds: ["cycle-b"], createdAt: 4 },
+   { id: "cycle-b", parentEventIds: ["cycle-a"], createdAt: 5 },
+  ] as any
+
+  expect(collectDescendantAlgorithmEvents(events, new Set(["root"])).map(event => event.id))
+   .toEqual(["root", "middle", "leaf"])
+ })
+
+ it("keeps multiple branches and deduplicates shared descendants", () => {
+  const events = [
+   { id: "shared", parentEventIds: ["left", "right"], createdAt: 4 },
+   { id: "right", parentEventIds: ["root"], createdAt: 3 },
+   { id: "left", parentEventIds: ["root"], createdAt: 2 },
+   { id: "root", parentEventIds: [], createdAt: 1 },
+  ] as any
+
+  expect(collectDescendantAlgorithmEvents(events, new Set(["root"])).map(event => event.id))
+   .toEqual(["root", "left", "right", "shared"])
+ })
 })
