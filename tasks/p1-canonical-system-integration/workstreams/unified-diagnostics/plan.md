@@ -31,3 +31,11 @@ correlationId, requestId, operationId, eventId, parentEventIds, channelId, proje
 
 ## Acceptance
 One action is traceable across relevant producers, gateway/resolver, operation receipt and outcome. Correlation ID is stable across retries; child event IDs are distinct; missing ancestry is explicit. Backward compatibility is preserved or versioned. No second event store/diagnostics DB/task ledger. Tests: test:unified-diagnostics, lineage, schema, producer and idempotency tests. Runtime: safe intentional failures and success in each applicable path.
+
+
+## Existing task alignment (2026-10-30)
+Extend the already-tracked reliability work rather than opening a competing envelope or ledger:
+- VT-005: typed OperationEnvelope and deterministic scoped idempotency-key contract (existing foundation; confirm current implementation/CI).
+- VT-035: correlation IDs across the creator loop.
+- VT-036: structured error/failure-state taxonomy.
+Current producers/owners include Brain traces, GenerationRecord/ToolReceipt, ContentBuild event stream, Algorithm Intelligence event ledger, AnalyticsErrorReporter and existing diagnostics services. No universal event store or diagnostics DB.
