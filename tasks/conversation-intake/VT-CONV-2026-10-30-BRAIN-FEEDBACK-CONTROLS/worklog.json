@@ -1,0 +1,439 @@
+{
+  "schemaVersion": "viewtube.conversation-work-log.v1",
+  "conversationId": "VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS",
+  "created": "2026-10-30",
+  "lastEdited": "2026-10-30",
+  "sourceHost": "ChatGPT",
+  "conversationName": "Continue Brain feedback-control runtime repair and record the CI result",
+  "application": "ViewTube",
+  "sourceApplication": "ChatGPT",
+  "sourceConversationUrl": null,
+  "repository": "viewtube-dev/viewtube",
+  "targetBranch": "master/consolidated-feature-integration",
+  "reviewStatus": "PARTIALLY_RECONCILED",
+  "executiveSummary": [
+    "The conversation continued the AI Brain repair for the undefined StudioSquareIconButtonGroup symbol.",
+    "PR #993 merged as 8fffa6f8adc05f9002953e999a448e787c611fd4.",
+    "The merged change imports canonical square icon-button primitives and restores the typed five-option feedback registry.",
+    "The inspected target SHA is db066b9e4c9d6edce85d915618493ebf1ad735da and contains the merge commit.",
+    "Release-gates run 40545884025 failed overall; production-build, local-smoke and brain-quality-loop passed.",
+    "Confirmed-catalog, focused-contracts, static-quality and full-suite jobs failed in the merge-run snapshot.",
+    "The CI snapshot predates the inspected current target and must be rerun before assigning current failures.",
+    "No browser/runtime verification of the Brain feedback controls was performed.",
+    "Brain and Studio authorities remain the canonical owners; no new task or parallel backlog was created.",
+    "Next: rerun current-target gates, route failures to their owners, and browser-verify all five feedback actions."
+  ],
+  "items": [
+    {
+      "itemId": "VT-CWI-001",
+      "title": "Repair undefined Brain feedback controls",
+      "summary": "Import canonical StudioSquareIconButton and StudioSquareIconButtonGroup and restore the typed FEEDBACK_OPTIONS registry.",
+      "details": "The source change is merged by PR #993. Target comparison confirms merge ancestry. CI production build, local smoke and Brain quality loop passed in the PR merge run; overall gates failed and browser/runtime interaction was not tested.",
+      "kind": "BUG",
+      "conversationState": "COMPLETED_IN_CONVERSATION",
+      "domains": [
+        "Brain",
+        "Studio UI"
+      ],
+      "surfaces": [
+        "AI Brain"
+      ],
+      "sourceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/993"
+      ],
+      "changedPaths": [
+        "src/views/AIBrainCommandInterface.tsx"
+      ],
+      "branchPrRefs": [
+        "fix/brain-feedback-controls-undefined-symbols",
+        "PR #993"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/commit/8fffa6f8adc05f9002953e999a448e787c611fd4",
+        "https://github.com/viewtube-dev/viewtube/actions/runs/40545884025"
+      ],
+      "dependencies": [],
+      "blockers": [
+        "Browser/runtime interaction proof remains outstanding"
+      ],
+      "similarityKeys": [
+        "Brain feedback",
+        "undefined Studio icon button symbols"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "MEDIUM",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "SMALL",
+        "implementationRisk": "LOW",
+        "rationale": "A user-visible Brain page runtime failure was fixed using canonical primitives."
+      },
+      "relationship": "BUG_IN_EXISTING",
+      "suggestedDestination": "docs/domains/BRAIN.md; PR #993",
+      "reviewStatus": "RECONCILED",
+      "disposition": "ATTACH_RECEIPT_EVIDENCE",
+      "targetRefs": [
+        "PR #993",
+        "8fffa6f8adc05f9002953e999a448e787c611fd4",
+        "master/consolidated-feature-integration"
+      ],
+      "harvestedMaterial": [
+        "Five feedback signal keys and icon/tone mapping restored from known prior implementation.",
+        "No duplicate primitive or local CSS implementation introduced."
+      ],
+      "reviewNotes": "Delivered and present on target. Do not mark runtime verified; merged CI run is mixed."
+    },
+    {
+      "itemId": "VT-CWI-002",
+      "title": "Reconcile failed release gates from PR #993 merge run",
+      "summary": "Investigate confirmed-catalog, focused-contract, typecheck and full-suite failures from run 40545884025.",
+      "details": "The merge-run catalog audit failed on the split text input second inset border and seven-family grouping assertion. Typecheck reported StudioControls missing exports/types and unrelated test typing. Focused-contract and full-suite jobs failed. The target branch advanced after the merge run, so current status is unknown until rerun.",
+      "kind": "VERIFICATION",
+      "conversationState": "DISCOVERED",
+      "domains": [
+        "Studio UI",
+        "Brain",
+        "Verification"
+      ],
+      "surfaces": [
+        "Confirmed Primitive Library",
+        "Studio Controls",
+        "AI Brain"
+      ],
+      "sourceRefs": [
+        "https://github.com/viewtube-dev/viewtube/actions/runs/40545884025"
+      ],
+      "changedPaths": [],
+      "branchPrRefs": [
+        "PR #993"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/actions/runs/40545884025"
+      ],
+      "dependencies": [
+        "Current-target gate rerun"
+      ],
+      "blockers": [
+        "No current-target rerun in this conversation"
+      ],
+      "similarityKeys": [
+        "confirmed catalog audit",
+        "StudioControls typecheck",
+        "focused contracts",
+        "full suite"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "HIGH",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "UNKNOWN",
+        "implementationRisk": "MEDIUM",
+        "rationale": "The failed gates cover shared Studio component contracts and broad repository quality; they may be inherited or changed by later target commits."
+      },
+      "relationship": "CONTINUATION",
+      "suggestedDestination": "docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md; docs/ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md; docs/programs/INTEGRATED_APPLICATION.md",
+      "reviewStatus": "RECONCILED",
+      "disposition": "ALREADY_TRACKED",
+      "targetRefs": [
+        "Studio Component Library source of truth",
+        "Studio Controls hierarchy",
+        "Integrated Application Program"
+      ],
+      "harvestedMaterial": [
+        "Catalog audit observed second split-text-input inset border contract failure.",
+        "Catalog audit observed a seven-family assertion mismatch against the six-category taxonomy recorded in the current Studio library authority.",
+        "Typecheck exposed missing StudioControls exports/types and other typing failures; re-run before attributing."
+      ],
+      "reviewNotes": "Do not create a new backlog/task solely from this snapshot. Reproduce on current target and reconcile with active Studio work."
+    },
+    {
+      "itemId": "VT-CWI-003",
+      "title": "Browser-verify Brain feedback controls",
+      "summary": "Verify the feedback group renders and all five signal actions work in the running app.",
+      "details": "No browser/runtime verification was performed in this conversation.",
+      "kind": "VERIFICATION",
+      "conversationState": "PLANNED",
+      "domains": [
+        "Brain"
+      ],
+      "surfaces": [
+        "AI Brain feedback controls"
+      ],
+      "sourceRefs": [
+        "PR #993"
+      ],
+      "changedPaths": [],
+      "branchPrRefs": [
+        "PR #993"
+      ],
+      "evidenceRefs": [],
+      "dependencies": [
+        "Current target build and runtime"
+      ],
+      "blockers": [
+        "No browser session evidence"
+      ],
+      "similarityKeys": [
+        "Brain feedback interaction",
+        "Brain page runtime"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "MEDIUM",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "SMALL",
+        "implementationRisk": "LOW",
+        "rationale": "The original defect was a runtime symbol error; build success alone cannot prove interactive correctness."
+      },
+      "relationship": "VERIFICATION_ONLY",
+      "suggestedDestination": "docs/domains/BRAIN.md; docs/governance/VERIFICATION.md",
+      "reviewStatus": "RECONCILED",
+      "disposition": "ATTACH_RECEIPT_EVIDENCE",
+      "targetRefs": [
+        "Brain domain authority",
+        "Verification authority"
+      ],
+      "harvestedMaterial": [
+        "Acceptance should cover all five feedback actions: helpful, not useful, inaccurate, save insight and ask follow-up."
+      ],
+      "reviewNotes": "Open until runtime evidence is recorded."
+    },
+    {
+      "itemId": "VT-CWI-004",
+      "title": "Create this conversation handoff package",
+      "summary": "Record continuation state, individual user instructions, PR history, integration gaps and exact next action.",
+      "details": "Created the three-file intake package and linked it from the intake index on a documentation branch.",
+      "kind": "DOCUMENTATION",
+      "conversationState": "COMPLETED_IN_CONVERSATION",
+      "domains": [
+        "Conversation OS",
+        "Documentation Governance"
+      ],
+      "surfaces": [
+        "Conversation intake"
+      ],
+      "sourceRefs": [
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        ".claude/skills/viewtube-conversation-handoff/SKILL.md"
+      ],
+      "changedPaths": [
+        "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/handoff.md",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/worklog.json",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/review.md",
+        "tasks/conversation-intake/INDEX.md"
+      ],
+      "branchPrRefs": [
+        "docs/conversation-handoff-brain-feedback-2026-10-30"
+      ],
+      "evidenceRefs": [],
+      "dependencies": [],
+      "blockers": [
+        "Documentation branch has not yet been merged"
+      ],
+      "similarityKeys": [
+        "conversation handoff",
+        "living unfinished work log"
+      ],
+      "value": {
+        "creatorImpact": "MEDIUM",
+        "systemLeverage": "HIGH",
+        "urgency": "MEDIUM",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "SMALL",
+        "implementationRisk": "LOW",
+        "rationale": "The repository's governed handoff workflow requires durable continuation records and prohibits parallel logs."
+      },
+      "relationship": "CONTINUATION",
+      "suggestedDestination": "docs/governance/CONVERSATION_HANDOFFS.md; tasks/conversation-intake/INDEX.md",
+      "reviewStatus": "RECONCILED",
+      "disposition": "NO_ACTION_REQUIRED",
+      "targetRefs": [
+        "Conversation Handoffs specification",
+        "Conversation OS"
+      ],
+      "harvestedMaterial": [
+        "Individual instruction register",
+        "Branch/PR lineage and target-presence evidence",
+        "Nine-axis integration maturity and current verification gaps"
+      ],
+      "reviewNotes": "Package is complete as a branch artifact; delivery to target awaits PR merge."
+    }
+  ],
+  "instructions": [
+    {
+      "instructionId": "REQ-001",
+      "text": "Continue the previously submitted Brain feedback-control repair by checking its delivery and validation state.",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "VT-CWI-001",
+        "VT-CWI-002",
+        "VT-CWI-003"
+      ],
+      "branchRefs": [
+        "fix/brain-feedback-controls-undefined-symbols"
+      ],
+      "pullRequests": [
+        993
+      ],
+      "commits": [
+        "8fffa6f8adc05f9002953e999a448e787c611fd4"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "PRESENT_ON_TARGET",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/compare/8fffa6f8adc05f9002953e999a448e787c611fd4...db066b9e4c9d6edce85d915618493ebf1ad735da"
+      ]
+    },
+    {
+      "instructionId": "REQ-002",
+      "text": "Complete the conversation handoff log process in the repository documentation.",
+      "status": "IN_PROGRESS",
+      "relatedItemIds": [
+        "VT-CWI-004"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-brain-feedback-2026-10-30"
+      ],
+      "pullRequests": [],
+      "commits": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": [
+        "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/"
+      ]
+    }
+  ],
+  "branchPrReconciliation": [
+    {
+      "branch": "fix/brain-feedback-controls-undefined-symbols",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 993,
+      "openedHeadSha": null,
+      "currentHeadSha": "578babfe6c2c837de3512929813ce6d86c8f7c13",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": "8fffa6f8adc05f9002953e999a448e787c611fd4",
+      "targetContainsChanges": "YES",
+      "classification": "MERGED_AND_CURRENT",
+      "recoveryDestination": null,
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/993",
+        "https://github.com/viewtube-dev/viewtube/compare/8fffa6f8adc05f9002953e999a448e787c611fd4...db066b9e4c9d6edce85d915618493ebf1ad735da"
+      ],
+      "notes": "Opening SHA not independently recoverable. PR changed one path. Current branch ref equals recorded PR head; target compare confirms merge ancestry."
+    }
+  ],
+  "integrationGaps": [
+    {
+      "featureId": "CAP-BRAIN-EXPERIENCE",
+      "title": "Brain feedback controls",
+      "maturity": {
+        "architecture": "IMPLEMENTED",
+        "backend": "NOT_APPLICABLE",
+        "frontend": "IMPLEMENTED",
+        "integration": "PARTIAL",
+        "tests": "PARTIAL",
+        "runtime": "PLANNED",
+        "responsive": "UNKNOWN",
+        "documentation": "PARTIAL",
+        "release": "PARTIAL"
+      },
+      "gaps": [
+        {
+          "category": "TESTS_WITHOUT_RUNTIME_PROOF",
+          "description": "Merge-run build and smoke passed, but no browser evidence verifies the five feedback actions; overall release gates were red.",
+          "userImpact": "Feedback controls may compile but still fail to render or dispatch expected interactions.",
+          "dependency": "Current target release-gate rerun and browser test.",
+          "acceptanceEvidence": [
+            "All five feedback actions render and dispatch correctly in a browser test.",
+            "Current-target required CI gates have an explicit result."
+          ]
+        }
+      ],
+      "sourceRefs": [
+        "PR #993",
+        "docs/domains/BRAIN.md"
+      ]
+    },
+    {
+      "featureId": "CAP-STUDIO-COMPONENT-LIBRARY",
+      "title": "Studio confirmed catalog and control contracts observed in PR #993 CI",
+      "maturity": {
+        "architecture": "IMPLEMENTED",
+        "backend": "NOT_APPLICABLE",
+        "frontend": "PARTIAL",
+        "integration": "PARTIAL",
+        "tests": "PARTIAL",
+        "runtime": "UNKNOWN",
+        "responsive": "UNKNOWN",
+        "documentation": "PARTIAL",
+        "release": "PARTIAL"
+      },
+      "gaps": [
+        {
+          "category": "UNKNOWN",
+          "description": "The merge-run audit reported a split-text-input inset-border failure and a family-group count assertion mismatch. The current Studio library authority documents six parent categories; the audit's seven-family assertion must be reconciled before changing either source.",
+          "userImpact": "Catalog certification may reject the current primitive presentation or test an obsolete taxonomy.",
+          "dependency": "Re-run confirmed-catalog audit on current target and compare catalog source, audit script and canonical taxonomy.",
+          "acceptanceEvidence": [
+            "Current-target audit passes against the authoritative category contract.",
+            "Split text input has one perimeter and no duplicate inset border in resting/focus states."
+          ]
+        }
+      ],
+      "sourceRefs": [
+        "docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md",
+        "docs/ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md",
+        "CI run 40545884025"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "title": "PR #993",
+      "path": "https://github.com/viewtube-dev/viewtube/pull/993",
+      "url": "https://github.com/viewtube-dev/viewtube/pull/993",
+      "kind": "PULL_REQUEST",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "VT-CWI-001",
+        "VT-CWI-002",
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Conversation handoff",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/handoff.md",
+      "kind": "DOCUMENT",
+      "status": "NEW",
+      "relatedItemIds": [
+        "VT-CWI-004"
+      ]
+    },
+    {
+      "title": "Conversation worklog",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/worklog.json",
+      "kind": "ARTIFACT",
+      "status": "NEW",
+      "relatedItemIds": [
+        "VT-CWI-004"
+      ]
+    },
+    {
+      "title": "Conversation review",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-BRAIN-FEEDBACK-CONTROLS/review.md",
+      "kind": "DOCUMENT",
+      "status": "NEW",
+      "relatedItemIds": [
+        "VT-CWI-004"
+      ]
+    }
+  ]
+}
