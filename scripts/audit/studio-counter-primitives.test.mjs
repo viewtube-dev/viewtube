@@ -11,6 +11,7 @@ const wordCounter = readFileSync("src/styles/studio-control-word-counter.css", "
 const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
 const tokenEmitter = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
+const catalogStyles = readFileSync("src/components/studio-hub/studio-hub-primitive-catalogs.css", "utf8")
 
 test("StudioCounter is a new button-only double-split primitive across all three sizes", () => {
   const start = component.indexOf("export const StudioCounter:")
@@ -68,6 +69,8 @@ test("counter palette variants use centered per-size pairs, tokenized numeral ti
   assert.match(styles, /\.vt-studio-counter__value,[\s\S]*?color:\s*color-mix\(in srgb, #fff var\(--vt-studio-number-default-white-mix, 50%\), var\(--vt-studio-number-background, var\(--pair-a\)\)\)/);
   assert.match(styles, /\.vt-studio-counter\.is-reversed[\s\S]*?--vt-studio-number-background:\s*var\(--pair-b\)/);
   assert.match(styles, /background:\s*color-mix\(in srgb, var\(--pair-a\) 50%, transparent\)/);
+  assert.match(catalogStyles, /\.vt-confirmed-counter-size-rows\s*\{[^}]*display:\s*grid/s);
+  assert.match(catalogStyles, /\.vt-confirmed-counter-pair,[\s\S]*?\.vt-confirmed-slider-pair\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/s);
 });
 
 test("Studio counter hold behavior is wired to pointer events for touch and mouse", () => {
