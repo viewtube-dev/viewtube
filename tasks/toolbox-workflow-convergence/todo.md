@@ -227,3 +227,77 @@
 - [ ] Prove creator approval for every external-write hop.
 - [ ] Confirm paused/stopped/failed/complete state derives from real inbox/workflow state.
 - [ ] Record focused lint, Vitest, and scoped type-check evidence per workflow.
+
+
+### WF-01 — Live receiver audit (2026-10-30)
+
+**Status: BLOCKED AT RECEIVER / CREATOR-APPROVAL BOUNDARY — do not mark complete.**
+
+Verified against the current integration branch:
+
+- [x] Comment Responder/Audience Pulse producer emits the canonical ViewTubeActionPacket and carries source evidence IDs.
+- [x] Brain handoff inbox persists packet identity, evidence, provenance, workflow and operation identity.
+- [x] Brain live integration validates packet compatibility against the registered destination.
+- [x] ProjectCreationDialog uses initializeProjectContentIdentity before addProject/setActiveProject.
+- [ ] `project-calendar` receiver consumes the incoming packet and presents a prefilled Project draft.
+- [ ] Prefill maps only explicitly supported fields and preserves packet/evidence/provenance references.
+- [ ] Draft review is distinct from accepting the handoff.
+- [ ] Explicit creator confirmation is required before the existing Project creation path runs.
+- [ ] Rejection/dismissal creates no Project and does not complete the handoff.
+- [ ] Confirmed creation is idempotent and links the resulting Project/ContentBuild to the originating packet.
+- [ ] Regression tests cover evidence continuity, duplicate delivery, rejection/no-create, and confirmed create.
+
+**Safety findings:**
+
+1. `BrainLiveToolInbox` currently labels its action "Load into tool" but calls `acceptToolIntegration` immediately after prefill. This collapses review and acceptance.
+2. At least one consumer (`useCommunityPostController`) reads pending integrations and calls open + accept while applying a draft in an effect. That behavior must not be copied into Project creation.
+3. `project-calendar` currently does not declare `evidence` in its accepted payload kinds. Do not advertise it as a compatible evidence receiver until the actual receiver exists and is tested.
+4. `ViewTubeHandoffReceiver` is a URL packet loader/display component; it does not itself provide the durable inbox-state/creator-approval semantics WF-01 requires.
+5. The Project receiver should reuse `ProjectCreationDialog` and `initializeProjectContentIdentity`; do not add a second Project store, create directly from packet payloads, or auto-call `addProject`.
+
+**Verification limitation:** GitHub file APIs permit source inspection and commits but do not provide a local checkout/test runner. No runtime code was changed and no Vitest/lint/typecheck result is claimed. Before implementation, run the repository's actual focused tests in a checkout; add the new contract tests first (RED), then implement the smallest receiver path (GREEN).
+
+
+### WF-01 — Receiver integration design decision (2026-10-30)
+
+**Canonical UI entry point:** `src/components/projects/ProjectBuilderModule.tsx`, not a new route or project store. It already owns the shared `ProjectCreationDialog` and workspace scope. The `project-calendar` capability route resolves to `/projects`.
+
+**Draft handoff path:**
+
+1. Mount `BrainLiveToolInbox destinationToolId="project-calendar"` in Project Builder.
+2. Extend the inbox prefill callback with an optional handoff context (handoff ID + packet ID + source/evidence/provenance identity); preserve existing one-argument consumers.
+3. For the Project receiver only, opening/loading a packet must leave it in `opened`; do not call `acceptToolIntegration` merely because prefill was applied.
+4. Add a typed, allow-listed Project draft mapper. Do not spread arbitrary packet payload properties into a `Project`. Keep the originating packet ID, source tool, evidence IDs, and provenance available to the confirmation flow.
+5. Pass the draft into the existing `ProjectCreationDialog` as initial values. Keep fields editable. Dialog close/reject must not call `addProject` or mark the handoff complete.
+6. On explicit Initialize Project action, validate the draft, initialize canonical Project/ContentBuild identity with `initializeProjectContentIdentity`, then persist through `addProject` / `setActiveProject`. Only after successful creation should the handoff transition to accepted/completed and record its resulting Project identity.
+7. Make confirmation idempotent. A retry after successful creation must resolve the already-created Project from a canonical packet-to-project association, not create another Project. This association must extend the existing handoff/Project identity owner; do not create a second localStorage registry.
+
+**Required regression tests (write first):**
+
+- A compatible comment/evidence packet appears in Project Builder and remains `opened` after prefill (not accepted/completed).
+- Only explicitly allow-listed fields populate the Project draft; unknown payload keys are ignored.
+- Evidence IDs, packet ID, source tool, provenance, channel and existing Project/ContentBuild context remain available after prefill.
+- Closing/rejecting the draft creates no Project and leaves a dismissible handoff.
+- Explicit confirmation calls the canonical identity initializer and creates exactly one Project/ContentBuild.
+- Repeated confirmation/re-delivery resolves the same Project and does not duplicate it.
+- A failed identity initialization leaves the handoff uncompleted and permits a safe retry.
+- Existing inbox consumers retain their current callback compatibility; review/acceptance semantics are not silently changed for unrelated destinations.
+
+**Known contract mismatch:** current `project-calendar.accepts` omits `comment` and `evidence`. Do not add either until the receiver and tests above exist. The producer should target the Project capability only with a payload kind that the typed mapper actually supports, or the shared capability contract must be deliberately extended alongside the receiver.
+
+**Current limitation:** source inspection is complete enough to specify the integration boundary, but this environment cannot resolve GitHub for a local checkout and GitHub file APIs cannot execute Vitest. No runtime implementation or test result is claimed.
+
+
+### WF-01 — Producer routing correction (2026-10-30)
+
+The source-level producer audit narrows the earlier statement:
+
+- Audience Pulse classifies request/desire signals and suggests only `ai-brain` and `opportunity-radar`; complaint/praise suggest `ai-brain` and `tactics-engine`; confusion suggests `ai-brain` and `content-analysis`.
+- `buildAudiencePulseProposalPacket` filters suggested targets to registered capabilities that explicitly accept `evidence`.
+- `project-calendar` does not accept `evidence`, so the current Audience Pulse proposal does **not** route directly to Projects. This is intentional fail-closed behavior, not a missing UI card alone.
+- The current end-to-end gap is therefore two hops: Brain must review/interpret the evidence packet and explicitly produce a Project-compatible proposal; Projects must then stage and confirm that proposal. The original comment evidence IDs must survive both packet hops.
+- Do not add `project-calendar` to Audience Pulse suggested targets or widen its accepted payload kinds as a shortcut. A direct evidence packet must not be misrepresented as a project brief.
+
+**Revised WF-01 chain:** Comment source records → Audience Pulse evidence packet → Brain review/interpretation → Brain-authored typed Project proposal → Project Builder draft → creator confirmation → canonical Project/ContentBuild creation → handoff completion/outcome receipt.
+
+The Brain-authored Project proposal needs a typed payload contract that explicitly maps title, concept, format/date/priority only when supported, and carries source packet ID + evidence IDs + provenance. Unknown/unmapped fields remain review-only text, never auto-applied Project properties.
