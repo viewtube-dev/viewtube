@@ -113,12 +113,6 @@
 
 .vt-studio-split-accordion__trigger:disabled { opacity: .45; cursor: not-allowed; }
 
-.vt-studio-split-accordion__trigger:focus-visible {
-  outline: calc(var(--vt-sa-stroke) * var(--vt-studio-focus-outline-width-ratio, .65))
-    solid var(--vt-sa-s);
-  outline-offset: calc(var(--vt-sa-stroke) * -1); z-index: 2;
-}
-
 .vt-studio-split-accordion__face {
   display: grid; place-items: center; flex: 0 0 var(--vt-sa-icon);
   width: var(--vt-sa-icon); height: var(--vt-sa-icon); pointer-events: none;
@@ -164,6 +158,8 @@
   outline: calc(var(--vt-sa-stroke) * var(--vt-studio-focus-outline-width-ratio, .65))
     solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
+  transition: outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
+    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
 }
 
 /* ---------- Variants (data-variant). "saturated" is the default above. ---------- */
