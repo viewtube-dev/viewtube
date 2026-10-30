@@ -7,6 +7,12 @@
 **Related overview:** docs/Vault.md  
 **Recovery evidence:** docs/recovery/handoffs/VIEWTUBE_VAULT_PROJECTS_CONVERSATION_RECOVERY_2026-10-04.md
 
+## Conversation continuity and domain update ownership
+
+The global [Conversation Handoffs specification](../governance/CONVERSATION_HANDOFFS.md) owns long-thread continuity, the complete user-instruction register, all-domain work capture, branch/PR reconciliation and work disposition. Use one package at `tasks/conversation-intake/<conversation-id>/` containing `handoff.md`, `worklog.json` and `review.md` whenever its triggers apply. Update an existing package in place when the user says **“Update the unfinished work log.”**; do not create a second Vault conversation log.
+
+This Vault master and its phase/audit documents remain authoritative for Vault-specific architecture, implementation checkpoints, operation/asset lineage, technical evidence and acceptance gaps. Their domain-specific status tables are projections, not substitutes for the global conversation worklog or Task Authority. For material Vault changes, update the relevant Vault authority/audit and append its domain change record where provided; capture all distinct user instructions and cross-domain unfinished work in the global package. Preserve historical recovery documents as provenance, not as competing current handoffs.
+
 ## Current implementation checkpoint — October 15, 2026 (phases 0–10 continuation)
 
 The active continuation is tracked in [Phases 0–2 implementation audit](VAULT_PHASES_0_1_2_IMPLEMENTATION_AUDIT.md), [Phases 3–6 implementation audit](VAULT_PHASES_3_4_5_6_IMPLEMENTATION_AUDIT.md), and [Phases 7–10 implementation audit](VAULT_PHASES_7_8_9_10_IMPLEMENTATION_AUDIT.md), on PR [#336](https://github.com/viewtube-dev/viewtube/pull/336) targeting `master/consolidated-feature-integration`.
