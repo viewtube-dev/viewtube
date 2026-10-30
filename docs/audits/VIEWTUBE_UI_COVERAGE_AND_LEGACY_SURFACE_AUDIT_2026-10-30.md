@@ -406,3 +406,58 @@ Required remediation:
 - Confirmed super-tool route metadata is consumed by the User Guide, SuperToolRail, and Brain surface context.
 - No application source code was changed. No route was removed or promoted.
 - No tests, typecheck, production build, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
+
+
+## Fifth-pass addendum — Studio Hub inventory and Component Library authority
+
+**Audit pass date:** 2026-10-30  
+**Source branch:** `master/consolidated-feature-integration`  
+**Scope:** Studio Hub's live component imports, Toolbox Reference Library tracks, canonical confirmed catalog, legacy comparison catalog, and Studio audit documentation.
+
+### F-014 — Studio Hub's scoped audit plan is missing four currently mounted modules
+
+**Severity:** P2 — stale audit coverage / incomplete front-end inventory  
+**Confidence:** Confirmed by direct source-to-document comparison
+
+Evidence:
+- Current `src/views/StudioHub.tsx` mounts 16 top-level modules/sections: Toolbox UI Reference Library, Video Manager, Concept Scene Studio, Video Director, Studio Publishing Cockpit, Video Publisher, Metadata Master, Media Analyzer, Thumbnail Studio, Community Posts, Comment Responder, End-Screen Architect, Pre-Launch Priming, Hook Generator, Actionable Tactics, and Script Architect.
+- `docs/architecture/STUDIO_HUB_UNIFORM_PRIMITIVE_AUDIT_PLAN_2026-09-16.md` says its current top-level inventory contains 12 systems and lists the Reference Library, Video Manager, Video Publisher, Media Analyzer, Thumbnail Studio, Community Posts, Comment Responder, End-Screen Architect, Pre-Launch Priming, Hook Generator, Actionable Tactics, and Script Architect.
+- The plan omits four live StudioHub imports/sections: `ConceptSceneStudio`, `VideoDirector`, `StudioPublishingCockpit`, and `MetadataMaster`.
+
+Impact:
+- The scoped primitive audit plan can be read as a complete Studio Hub inventory while excluding four live user-facing modules.
+- Those omitted modules can escape shell, state, mobile, and primitive coverage if the plan is followed literally.
+
+Required remediation:
+- Refresh the plan's inventory from the actual `StudioHub.tsx` import/render graph.
+- Distinguish top-level modules from nested submodules and reference/certification surfaces; do not inflate the count with controls or child components.
+- Keep the existing StudioHub source as runtime authority and the scoped audit plan as a generated/reconciled work plan.
+
+### F-015 — Component Library index still names the legacy comparison catalog as the production registry
+
+**Severity:** P2 — stale source-of-truth pointer / misleading catalog documentation  
+**Confidence:** Confirmed by current code and canonical documentation
+
+Evidence:
+- `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md` states that `StudioHubConfirmedPrimitiveCatalog.tsx` is the active audited catalog for production-imported primitive representatives and that `StudioHubCompletePrimitiveCatalog.tsx` is retained as a comparison/migration surface, not the current production-family authority.
+- `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx` explicitly describes itself as the legacy comparison catalog and exports the 76-entry `STUDIO_HUB_COMPONENT_FAMILIES` list.
+- `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_COMPONENT_INDEX.md` still labels itself a generated production-registry reference and points its source/count at that legacy Complete catalog (76 families).
+- `src/components/ToolboxUIReferenceLibrary.tsx` currently renders three distinct tracks: Hardcoded comparison, Primitive migration, and Confirmed primitives. The old track is intentionally retained and visibly labeled as a frozen comparison baseline; its presence is not itself a defect.
+
+Impact:
+- The component index can lead an auditor or agent to treat the legacy comparison family list as the active production registry.
+- This conflicts with the newer source-of-truth contract and risks edits or feature claims being made against the wrong catalog.
+
+Required remediation:
+- Regenerate or rewrite the component index from the Confirmed catalog's actual family/provenance source.
+- Label the Complete catalog and its 76-entry list explicitly as legacy comparison inventory.
+- Preserve the three UI tracks until their documented consumers and migration dependencies are verified; do not delete the comparison baseline as part of this documentation correction.
+
+### Fifth-pass status
+
+- Compared the current StudioHub render tree against the September scoped audit plan; found four omitted live modules.
+- Confirmed the Complete catalog contains 76 comparison families and is explicitly described as legacy.
+- Confirmed the active Component Library source-of-truth document assigns production representative authority to the Confirmed catalog, while the generated component index still points at Complete.
+- Confirmed the Reference Library intentionally renders Hardcoded, Primitive, and Confirmed tracks; this is a comparison/certification surface, not three independent production implementations.
+- No application source code was changed. No catalog track was deleted or promoted.
+- No tests, typecheck, production build, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
