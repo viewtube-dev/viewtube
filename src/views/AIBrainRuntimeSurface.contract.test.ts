@@ -47,6 +47,17 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain("result.status === \"error\"")
  })
 
+ it("invalidates the runtime snapshot when canonical evidence and generation stores change", () => {
+  expect(source).toContain("ALGORITHM_INTELLIGENCE_EVENT_CHANGED")
+  expect(source).toContain("BRAIN_TRACE_EVENT")
+  expect(source).toContain("BRAIN_OUTCOME_EVENT")
+  expect(source).toContain("CONTENT_BUILD_REPOSITORY_CHANGED")
+  expect(source).toContain("GENERATION_RECORDS_CHANGED")
+  expect(source).toContain('window.addEventListener("storage", scheduleRefresh)')
+  expect(source).toContain("if (!active || scheduled) return")
+  expect(source).toContain("invalidationEvents.forEach(eventName => window.removeEventListener(eventName, scheduleRefresh))")
+ })
+
  it("constructs the runtime snapshot after render instead of during render", () => {
   expect(source).toContain("const [runtimeSnapshot, setRuntimeSnapshot] = useState")
   expect(source).toContain("useEffect(() => {")
