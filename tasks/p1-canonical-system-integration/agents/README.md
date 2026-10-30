@@ -27,3 +27,14 @@ GitHub integration: source/branch/PR/task inspection and review. Browser Use: ap
 
 ## Prohibited
 No duplicate BrainRuntime, gateway, provider/prompt registry, profile/evidence/outcome store, event ledger, diagnostics database, task ledger, public resolver, Studio token/catalog system. No direct provider calls from UI. No private data in public mode. No fabricated runtime proof. No broad mixed-purpose code PR. No destructive cleanup before caller inventory, parity and rollback proof.
+
+## Workstream-specific agent briefs
+Every workstream has a self-contained agent brief, audit checklist and test/runtime plan. Start from the relevant folder rather than copying generic role prompts:
+- `workstreams/brain-continuity/agent-brief.md`
+- `workstreams/gemini-governance/agent-brief.md`
+- `workstreams/unified-diagnostics/agent-brief.md`
+- `workstreams/priority-25-runtime/agent-brief.md`
+- `workstreams/public-resolver/agent-brief.md`
+- `workstreams/studio-controls/agent-brief.md`
+
+See [skills and plugin routing](../skills-and-plugins.md) for exact installed skill routes and plugin boundaries. Keep shared-file edits serialized; the six agents must not concurrently mutate global registries, Task Authority, diagnostics contracts or Studio token/emitter ownership.
