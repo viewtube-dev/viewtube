@@ -192,7 +192,7 @@ test("double-side controls focus only the outside shell, never the center divide
 });
 
 test("inter-module rails use the inner square size, not the full outer face", () => {
-  assert.ok(system.includes("var(--vt-im-rail, calc(var(--vt-im-face) - var(--vt-im-stroke) - var(--vt-im-stroke)))"));
+  assert.ok(system.includes("var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))))"));
   assert.ok(system.includes("aspect-ratio: 1 / 1"));
   assert.ok(!system.includes("width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important"));
   assert.ok(!recovery.includes(".vt-studio-inter-module__rail { width: var(--vt-im-face"));
