@@ -18,22 +18,28 @@ Desktop and mobile must be able to open the same project without translation los
 
 This file is intentionally editable Markdown. It is the editor program's shared source of truth between conversations, coding agents, implementation branches, audits, and future planning passes.
 
-## 2. Mandatory update contract for every editor conversation or agent
+## 2. Domain update contract and global conversation handoff
 
-Any conversation, agent, PR, branch, audit, prototype, or implementation pass that touches the editor system MUST update this document before the work is considered handed off.
+This document is the canonical Editor domain authority. Its append-only Update Log, Current Work table, registries and parity notes are **domain projections**: they record editor-specific decisions, architecture, implementation state and verification. They are not a second conversation handoff, complete user-instruction register, cross-domain worklog or task ledger.
 
-Every pass must:
+For every material Editor change:
 
-1. Read this document before planning or changing editor behavior.
-2. Identify the current project/state/render/AI owner instead of creating a parallel subsystem.
-3. Update the Current Work table when work is planned, started, blocked, partially completed, completed, or superseded.
-4. Append one row to the Update Log. The log is append-only; never rewrite history to make work appear finished.
-5. Add every newly created or materially used editor plan, reference, skill, standalone HTML file, branch donor, script, test, API contract, or external source to the appropriate registry below.
-6. Record exact branch/PR/commit and verification evidence when available.
-7. Mark anything inferred from a conversation or old plan as unverified until checked against current main.
-8. If the architecture changes, update this resource before or in the same change as implementation.
-9. If mobile and desktop behavior changes, update the parity notes and verify both surfaces.
-10. If AI can mutate editor state, document the tool, permission, side effects, reversibility, approval behavior, and undo behavior.
+1. Read this authority and inspect current target-branch code before making claims.
+2. Identify the current project/state/render/AI owner; do not create a parallel subsystem.
+3. Update the Editor Current Work table when editor-specific work is planned, started, blocked, partial, completed with evidence or superseded.
+4. Append one concise row to the Editor Update Log for a material Editor-system change. Preserve history.
+5. Register newly created or materially used editor-specific plans, references, skills, standalone HTML, branch donors, scripts, tests, API contracts and external sources in the appropriate Editor section.
+6. Record exact branch/PR/commit and verification evidence when available. Distinguish local implementation, commit, PR, merge, target presence, application integration and acceptance verification.
+7. Mark conversation-derived or old-plan claims unverified until checked against current target.
+8. If architecture changes, update this resource before or with implementation.
+9. If desktop/mobile behavior changes, update parity notes and verify both surfaces.
+10. If AI can mutate editor state, document tool, permission, side effects, reversibility, approval and undo behavior.
+
+### Global conversation capture
+
+Use the single global process in [Conversation Handoffs](../governance/CONVERSATION_HANDOFFS.md) whenever a handoff trigger applies or the user requests a handoff. The global package at `tasks/conversation-intake/<conversation-id>/` owns the complete conversation-level instruction register, all-domain worklog, resumable handoff and reconciliation review. Do not create an Editor-only conversation log or ask the Editor Update Log to carry unrelated work.
+
+When the user provides an existing package link and says **“Update the unfinished work log.”**, update that package's `handoff.md`, `worklog.json` and `review.md` in place. Preserve its identity and history. The Editor Update Log receives only the relevant Editor-specific projection.
 
 ### Status vocabulary
 
