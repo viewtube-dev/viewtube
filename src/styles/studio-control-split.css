@@ -11,13 +11,13 @@
   border: var(--vt-studio-control-stroke, 3px) solid #000;
 }
 [data-vt-studio-control="true"][data-vt-studio-split="left"] {
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: var(--vt-studio-split-rail-size) minmax(0, 1fr);
 }
 [data-vt-studio-control="true"][data-vt-studio-split="right"] {
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-split-rail-size);
 }
 [data-vt-studio-control="true"][data-vt-studio-split="double"] {
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: var(--vt-studio-split-rail-size) minmax(0, 1fr) var(--vt-studio-split-rail-size);
 }
 [data-vt-studio-control="true"] [data-vt-studio-split-rail] {
   position: relative;
@@ -27,8 +27,8 @@
   align-items: center;
   justify-content: center;
   align-self: stretch;
-  min-width: var(--vt-studio-control-height, 44px);
-  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-split-rail-size);
+  width: var(--vt-studio-split-rail-size);
   height: 100%;
   min-height: 0;
   margin: 0;
@@ -116,8 +116,8 @@
   position: relative;
   z-index: 1;
   box-sizing: border-box;
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-split-rail-size);
+  min-width: var(--vt-studio-split-rail-size);
   height: 100%;
   border-radius: 0;
 }
@@ -132,7 +132,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 }
 button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] {
   display: grid;
-  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
+  grid-template-columns: var(--vt-studio-split-rail-size) minmax(0, 1fr);
   align-items: stretch;
   padding: 0;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
@@ -151,8 +151,8 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   display: grid;
   place-items: center;
   align-self: stretch;
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-split-rail-size);
+  min-width: var(--vt-studio-split-rail-size);
   height: 100%;
   margin: 0;
   padding: 0;
