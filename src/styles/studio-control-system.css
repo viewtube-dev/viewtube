@@ -4058,7 +4058,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border-radius: 8px;
 }
 .vt-studio-upload-frame.is-drag { --vt-studio-upload-speed: 2.5; }
-.vt-studio-upload-frame.is-clicking { --vt-studio-upload-speed: 1; }
 .vt-studio-upload-frame:focus-visible {
   outline: var(--vt-studio-control-stroke, 3px) solid #000;
   outline-offset: 4px;
@@ -4186,68 +4185,35 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   white-space: nowrap;
 }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__layer--core { animation: none; scale: 1; }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__center {
-  inset: 0;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  gap: 1.1cqw;
-}
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 48cqw;
-  max-width: none;
-  overflow: visible;
-  translate: -50% -50%;
-}
+/* Keep the icon shell geometrically identical before and after upload.
+   The preview image is circular itself, so it does not require shell clipping. */
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > svg { display: none; }
 .vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon > img {
   position: absolute;
   z-index: 1;
-  inset: var(--vt-studio-upload-frame-stroke);
+  inset: 3px;
   display: block;
-  width: calc(100% - 2 * var(--vt-studio-upload-frame-stroke));
-  height: calc(100% - 2 * var(--vt-studio-upload-frame-stroke));
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
   animation: vt-studio-upload-pop .5s cubic-bezier(.3, 1.5, .5, 1);
 }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon::before { inset: calc(0px - var(--vt-upload-circle-border)); }
-.vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon::after { inset: calc(0px - var(--vt-upload-circle-border) - var(--vt-upload-primary-stroke)); }
-.vt-studio-upload-frame.is-clicking .vt-studio-upload-frame__layer {
-  animation: vt-studio-upload-click-breathe 1s ease-in-out both;
-  border-width: calc(var(--vt-studio-upload-frame-stroke) * .75);
+.vt-studio-upload-frame.has-img .vt-studio-upload-frame__label {
+  position: absolute;
+  top: calc(100% + (var(--vt-studio-upload-center-inset) - 28px) / 2);
+  left: 50%;
+  width: max-content;
+  max-width: min(320px, 80cqw);
+  translate: -50% 0;
 }
 @keyframes vt-studio-upload-spin { to { --vt-studio-upload-angle: 360deg; } }
 @keyframes vt-studio-upload-breathe { 0%, 100% { opacity: .06; scale: 1; } 45% { opacity: .38; scale: 1.012; } }
 @keyframes vt-studio-upload-core { 0%, 100% { scale: 1; } 45% { scale: .975; } }
 @keyframes vt-studio-upload-nudge { 0%, 100% { translate: 0 0.2cqw; } 50% { translate: 0 -0.4cqw; } }
 @keyframes vt-studio-upload-pop { from { scale: .6; opacity: 0; } to { scale: 1; opacity: 1; } }
-@keyframes vt-studio-upload-click-breathe {
-  0%, 100% {
-    inset: calc(var(--layer) * var(--vt-studio-upload-layer-step));
-    border-width: calc(var(--vt-studio-upload-frame-stroke) * .25);
-    opacity: .07;
-  }
-  24% {
-    inset: calc(var(--layer) * var(--vt-studio-upload-layer-step) + 0.5cqw);
-    border-width: calc(var(--vt-studio-upload-frame-stroke) * .75);
-    opacity: .42;
-  }
-  52% {
-    inset: calc(var(--layer) * var(--vt-studio-upload-layer-step) + 1cqw);
-    border-width: calc(var(--vt-studio-upload-frame-stroke) * .75);
-    opacity: .5;
-  }
-  78% {
-    inset: calc(var(--layer) * var(--vt-studio-upload-layer-step) + 0.5cqw);
-    border-width: calc(var(--vt-studio-upload-frame-stroke) * .75);
-    opacity: .3;
-  }
-}
+
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-upload-frame,
   .vt-studio-upload-frame *,
@@ -4259,7 +4225,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   }
   .vt-studio-upload-frame:hover,
   .vt-studio-upload-frame.is-drag,
-  .vt-studio-upload-frame.is-clicking { filter: none; }
 }
 
 /* Studio control refinement pass: keep side-counter actions truly equal-height. */
