@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createContentBuild, getContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests, updateContentBuild } from "./ContentBuildRepository"
-import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, markPublishStepRunning, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
+import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, getPublishTransaction, markPublishStepRunning, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
 import { listAlgorithmIntelligenceEvents } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
