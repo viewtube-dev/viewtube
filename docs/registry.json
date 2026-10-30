@@ -749,6 +749,23 @@
         "docs/domains/BRAIN.md",
         "docs/governance/VERIFICATION.md"
       ]
+    },
+    {
+      "id": "DOC-REF-P1-TASK-CROSSWALK",
+      "path": "tasks/p1-canonical-system-integration/task-crosswalk.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "crosswalk P1 workstreams to existing VT task identities",
+      "owner": "Task Authority / Integrated Application Program",
+      "productionDate": "2026-10-30",
+      "lastEdited": "2026-10-30",
+      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/governance/CONVERSATION_OS.md",
+        "docs/architecture/capabilities.json"
+      ]
     }
   ],
   "legacyGlobalSources": [
