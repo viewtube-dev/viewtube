@@ -3549,7 +3549,7 @@ export const generateStoryboard = async (
 export const generateScript = async (
  project: ScriptProject,
  budget: ScriptBudget,
- brain?: unknown,
+ brain: unknown,
  brainJsonTask: (input: {
   userText: string
   systemInstruction: string
