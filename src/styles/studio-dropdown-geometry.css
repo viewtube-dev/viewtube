@@ -1,10 +1,5 @@
 /* Custom dropdown authority. Native select popups are browser-owned. */
 .vt-studio-dropdown {
-  --vt-studio-dropdown-menu-gap: 8px;
-  --vt-studio-dropdown-menu-padding: 4px;
-  --vt-studio-dropdown-row-gap: 3px;
-  --vt-studio-dropdown-menu-duration: 140ms;
-  --vt-studio-dropdown-menu-distance: 4px;
 }
 .vt-studio-dropdown[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); }
 .vt-studio-dropdown[data-size="standard"] { --vt-studio-control-height: var(--vt-studio-standard-height, 44px); --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px); }
