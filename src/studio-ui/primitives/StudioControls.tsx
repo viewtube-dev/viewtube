@@ -1488,7 +1488,7 @@ export const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   )
   if (faceOnly) return <span data-vt-studio-split-face="true" data-vt-studio-split={layout} data-size={sizeVariant} className="vt-studio-split-face">{content}</span>
   return (
-    <span {...shellProps} data-vt-studio-control="true" data-vt-studio-split={layout}
+    <span {...shellProps} data-vt-studio-control="true" data-vt-studio-split-shell="true" data-vt-studio-split={layout}
       data-size={sizeVariant} className={studioClasses("vt-studio-split-shell", className)}>
       {content}
     </span>
