@@ -34,7 +34,7 @@ import {
   SubToolboxTextArea,
 } from "../components/subtoolbox/SubToolboxPrimitives"
 import { useBrain } from "../context/useBrain"
-import { generateSeoData } from "../services/gemini"
+import { generateVideoPublisherSeoPackage } from "../services/brain/creatorAssets"
 import { resolveWorkspaceContentBuildToolContext } from "../services/asset-engine/ToolContext"
 import {
   applyMetadataSetVariant,
@@ -240,19 +240,21 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
         historicalEvidenceBrief,
       ].filter(Boolean).join("\n\n")
 
-      const result = await generateSeoData(
-        concept,
-        niche,
-        script,
-        audience,
-        videoLength,
-        channelHandle || "current channel",
-        resourceLinks,
-        "Longform",
-        undefined,
-        brain,
-        operationStrategyBrief,
-      )
+      const generationOperationId = "metadata-generation-" + Date.now()
+      const suppliedHandle = channelHandle.trim()
+      const channelId = workspaceContext?.build.channelId || brain.channelId || (suppliedHandle ? "public-channel:" + suppliedHandle.toLowerCase() : "")
+      if (!channelId) throw new Error("Connect a channel or enter its public handle before generating governed metadata.")
+      const generatedAsset = await generateVideoPublisherSeoPackage({
+        context: { channelId, channelName: suppliedHandle || undefined },
+        instruction: "Generate the complete metadata package. Apply this strategy brief while preserving factual grounding:\\n" + operationStrategyBrief,
+        inputs: { concept, niche, audience, script, videoLength, channelHandle, resourceLinks, videoFormat: "Longform" },
+        projectId: workspaceContext?.build.legacyProjectId || undefined,
+        contentBuildId: workspaceContext?.contentBuildId || undefined,
+        contextRevision: workspaceContext?.build.revision,
+        operationId: generationOperationId,
+        workflowId: "workflow:metadata-master:" + generationOperationId,
+      })
+      const result = generated.output
 
       const generated = packageFromSeoResult(result, {
         goal,
@@ -272,13 +274,12 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           version: index + 1,
           lockedSlots,
           appliedSlots,
-          provenance: ["Content context", "ViewTube Brain", "generateSeoData", "Metadata Master", `Style: ${candidateStyle}`, `Goal: ${goal}`],
+          provenance: ["Content context", "ViewTube Brain", "creator-asset-generator", "Metadata Master", `Style: ${candidateStyle}`, `Goal: ${goal}`],
         })
         const strategy = metadataStrategyForStyle(candidateStyle)
         return createMetadataMasterSet(candidate, `PACKAGE ${String.fromCharCode(65 + index)}`, strategy, candidateStyle)
       })
 
-      const generationOperationId = `metadata-generation-${Date.now()}`
       if (workspaceContext?.contentBuildId) {
         recordMetadataOperationProvenance({
           contentBuildId: workspaceContext.contentBuildId,
@@ -293,8 +294,8 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
           recipeVersion: "1",
           outputPackageIds: candidates.map(candidate => candidate.package.id),
           evidenceIds: [...workspaceContext.evidenceIds, ...(historicalContext?.evidenceIds || [])],
-          provider: "gemini-service",
-          model: null,
+          provider: "creator-asset-generator",
+          model: generatedAsset.record.promptReceipt?.servedModel || null,
           actorType: "brain",
           inputFingerprintSource: {
             concept, niche, audience, script, videoLength, channelHandle, resourceLinks,
