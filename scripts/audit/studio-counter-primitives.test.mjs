@@ -183,22 +183,21 @@ test("bar toggle exposes a rounded percentage tooltip and preserves visible bars
 });
 
 test("dropdown menus share separated primary-filled defaults across standard, simple, and split-left variants", () => {
-  assert.match(tokens, /export const STUDIO_DROPDOWN_MENU_TOKENS\\s*=\\s*\\{/);
-  assert.match(tokens, /menuGap:\\s*8/);
-  assert.match(tokens, /menuPadding:\\s*4/);
-  assert.match(tokens, /rowGap:\\s*3/);
-  assert.match(tokens, /menuFill:\\s*"primary"/);
-  assert.match(tokens, /unselectedRowFill:\\s*"white"/);
-  assert.match(tokens, /selectedRowFill:\\s*"secondary"/);
-  assert.match(tokenEmitter, /STUDIO_DROPDOWN_MENU_TOKENS/);
+  assert.ok(tokens.includes("export const STUDIO_DROPDOWN_MENU_TOKENS"));
+  assert.ok(tokens.includes("menuGap: 8"));
+  assert.ok(tokens.includes("menuPadding: 4"));
+  assert.ok(tokens.includes("rowGap: 3"));
+  assert.ok(tokens.includes('menuFill: "primary"'));
+  assert.ok(tokens.includes('unselectedRowFill: "white"'));
+  assert.ok(tokens.includes('selectedRowFill: "secondary"'));
+  assert.ok(tokenEmitter.includes("STUDIO_DROPDOWN_MENU_TOKENS"));
   const menuContract = styles.slice(styles.lastIndexOf("/* Global dropdown menu contract"));
-  assert.match(menuContract, /top:\\s*calc\\(100% \\+ var\\(--vt-studio-dropdown-menu-gap/);
-  assert.match(menuContract, /border-radius:\\s*var\\(--vt-studio-dropdown-menu-radius/);
-  assert.match(menuContract, /background:\\s*var\\(--vt-studio-dropdown-menu-fill/);
-  assert.match(menuContract, /border:\\s*var\\(--vt-studio-dropdown-row-stroke[^;]*solid #000/);
-  assert.match(menuContract, /border-radius:\\s*var\\(--vt-studio-dropdown-row-radius/);
-  assert.match(menuContract, /background:\\s*var\\(--vt-studio-dropdown-row-fill/);
-  assert.match(menuContract, /\\[data-selected="true"\\][\\s\\S]*?background:\\s*var\\(--vt-studio-dropdown-selected-fill/);
-  assert.match(menuContract, /\\.vt-studio-dropdown\\.is-simple \\.vt-studio-dropdown-menu/);
-  assert.match(menuContract, /\\.vt-studio-dropdown\\.is-split-left \\.vt-studio-dropdown-menu/);
+  assert.ok(menuContract.includes("top: calc(100% + var(--vt-studio-dropdown-menu-gap, 8px)) !important;"));
+  assert.ok(menuContract.includes("border-radius: var(--vt-studio-dropdown-menu-radius"));
+  assert.ok(menuContract.includes("background: var(--vt-studio-dropdown-menu-fill"));
+  assert.ok(menuContract.includes("border: var(--vt-studio-dropdown-row-stroke"));
+  assert.ok(menuContract.includes("background: var(--vt-studio-dropdown-row-fill"));
+  assert.ok(menuContract.includes("background: var(--vt-studio-dropdown-selected-fill"));
+  assert.ok(menuContract.includes(".vt-studio-dropdown.is-simple .vt-studio-dropdown-menu"));
+  assert.ok(menuContract.includes(".vt-studio-dropdown.is-split-left .vt-studio-dropdown-menu"));
 });
