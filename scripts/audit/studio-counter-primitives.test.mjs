@@ -164,11 +164,11 @@ test("StudioLeftWordCounter inherits the shared 50-percent primary numeral and b
 });
 
 test("selected split buttons swap both the label face and rail between primary and secondary", () => {
-  assert.match(styles, /data-vt-studio-split="left" \[data-vt-studio-split-label\] \{ background:var\(--vt-studio-control-accent/);
-  assert.match(styles, /data-vt-studio-split="left"\[data-selected="true"\] \[data-vt-studio-split-label\][\s\S]*?background:var\(--vt-studio-control-secondary/);
-  assert.match(styles, /data-vt-studio-split="left"\[data-selected="true"\] \[data-vt-studio-split-rail\][\s\S]*?background:var\(--vt-studio-control-accent/);
-  assert.match(styles, /data-vt-studio-split="right"\[data-selected="true"\] \[data-vt-studio-split-label\][\s\S]*?background: var\(--vt-studio-control-secondary/);
-  assert.match(styles, /data-vt-studio-split="double"\[data-selected="true"\] \[data-vt-studio-split-label\][\s\S]*?background: var\(--vt-studio-control-secondary/);
+  assert.match(styles, /data-vt-studio-split="left"\] \[data-vt-studio-split-label\] \{ background:var\(--vt-studio-control-accent/);
+  assert.match(styles, /data-vt-studio-split="left"\]\[data-selected="true"\] \[data-vt-studio-split-label\][\s\S]*?background:var\(--vt-studio-control-secondary/);
+  assert.match(styles, /data-vt-studio-split="left"\]\[data-selected="true"\] \[data-vt-studio-split-rail\][\s\S]*?background:var\(--vt-studio-control-accent/);
+  assert.match(styles, /data-vt-studio-split="right"\]\[data-selected="true"\] \[data-vt-studio-split-label\][\s\S]*?background: var\(--vt-studio-control-secondary/);
+  assert.match(styles, /data-vt-studio-split="double"\]\[data-selected="true"\] \[data-vt-studio-split-label\][\s\S]*?background: var\(--vt-studio-control-secondary/);
 });
 
 test("bar toggle exposes a rounded percentage tooltip and preserves visible bars between square rails", () => {
