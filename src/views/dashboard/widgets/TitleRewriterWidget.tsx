@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { WidgetShell } from "../WidgetShell"
 import { useEntitlement } from "../../../context/entitlementContext"
 import { Type, Sparkles, Copy, Check, RefreshCw } from "lucide-react"
-import { useBrain } from "../../../context/useBrain"
 import { canAffordAiTokensFromState } from "../../../services/billingEntitlement"
 import { getAiTokenCost } from "../../../services/aiTokenCosts"
 import { defaultBrainModelGateway } from "../../../services/brain/runtime/BrainModelGateway"
@@ -17,7 +16,6 @@ const STYLE_PRESETS = [
 ]
 
 export const TitleRewriterWidget = ({ widget, instance, editMode, onToggleCollapse, onCycleSize, onDecSize, onCycleHeight, onDecHeight, onRemove, data }: any) => {
- const { brain } = useBrain()
  const common = {
   widget,
   instance,
