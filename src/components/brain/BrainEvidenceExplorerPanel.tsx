@@ -219,7 +219,7 @@ export const BrainEvidenceExplorerPanel: React.FC<{ channelId: string | null }> 
         <div className="grid gap-1">
          <h3 className="text-[10px] font-black uppercase">Datasets · {datasets.length}</h3>
          {datasets.length ? datasets.map((dataset) => (
-          <button key={dataset.id} type="button" aria-pressed={selectedDatasetId === dataset.id} onClick={() => setSelectedDatasetId((current) => current === dataset.id ? null : dataset.id)} className={`grid min-w-0 gap-1 rounded-[6px] border-[2px] border-black p-2 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${selectedDatasetId === dataset.datasetId ? "bg-[#36E0F6]/25" : "bg-white hover:bg-[#36E0F6]/10"}`}>
+          <button key={dataset.id} type="button" aria-pressed={selectedDatasetId === dataset.id} onClick={() => setSelectedDatasetId((current) => current === dataset.id ? null : dataset.id)} className={`grid min-w-0 gap-1 rounded-[6px] border-[2px] border-black p-2 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${selectedDatasetId === dataset.id ? "bg-[#36E0F6]/25" : "bg-white hover:bg-[#36E0F6]/10"}`}>
            <span className="flex min-w-0 flex-wrap items-center justify-between gap-1"><span className="break-words text-[10px] font-black uppercase">{dataset.label}</span><EvidenceStatusBadge status={dataset.status} /></span>
            <span className="break-all text-[9px] text-black/55">{dataset.id} · {dataset.rowCount} rows · {dataset.evidenceRefs.length} refs</span>
            {dataset.missingMetrics.length ? <span className="break-words text-[9px] font-bold text-black/65">Missing: {dataset.missingMetrics.join(", ")}</span> : null}
