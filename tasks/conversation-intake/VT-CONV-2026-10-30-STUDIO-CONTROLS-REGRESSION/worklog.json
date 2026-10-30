@@ -611,23 +611,6 @@
         "https://github.com/viewtube-dev/viewtube/compare/master/consolidated-feature-integration...codex/studio-controls-regression-recovery"
       ],
       "notes": "Compare reports 8 commits ahead and 1,903 behind; PR-opening SHA and post-open lineage unknown. Compare lists 21 changed paths; do not treat empty post-PR arrays as proof of none."
-    },
-    {
-      "branch": "docs/studio-controls-regression-handoff-2026-10-30",
-      "targetBranch": "master/consolidated-feature-integration",
-      "pullRequest": null,
-      "openedHeadSha": null,
-      "currentHeadSha": "ebe995f4d76e796f702c78fb29887af549c8a4c9",
-      "commitsAfterPrOpen": [],
-      "postPrChangedPaths": [],
-      "mergeCommitSha": null,
-      "targetContainsChanges": "NO",
-      "classification": "UNMERGED_BRANCH",
-      "recoveryDestination": null,
-      "evidenceRefs": [
-        "https://github.com/viewtube-dev/viewtube/commit/ebe995f4d76e796f702c78fb29887af549c8a4c9"
-      ],
-      "notes": "Documentation package branch created from target; no PR opened yet."
     }
   ],
   "integrationGaps": [
