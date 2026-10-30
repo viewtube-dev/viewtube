@@ -346,3 +346,63 @@ Required remediation:
 - Confirmed current route governance tests do not exercise capability lazy-module resolution.
 - No application source code was changed. No feature was promoted. No legacy code was deleted.
 - No tests, typecheck, production build, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
+
+
+## Fourth-pass addendum — navigation registry and super-tool route metadata
+
+**Audit pass date:** 2026-10-30  
+**Source branch:** `master/consolidated-feature-integration`  
+**Scope:** Primary navigation, application menu, page registry consumers, route-prefetch map, super-tool route metadata, Brain surface matching, and related governance tests.
+
+### F-012 — Page lifecycle/visibility registry is not the runtime source for primary navigation
+
+**Severity:** P2 — duplicated navigation authority and drift risk  
+**Confidence:** Confirmed by source search and consumer inspection
+
+Evidence:
+- `src/app/pageRegistry.ts` describes `PAGE_REGISTRY` as the single source of truth for route, section, navigation visibility, and lifecycle.
+- It exports `pagesForNavigation()`, but repository search finds its only callsites in `src/app/__tests__/pageRegistry.test.ts`; the runtime primary navigation does not consume it.
+- `src/components/navigation/navigationContract.ts` independently hard-codes the 10 primary navigation destinations in `PRIMARY_NAV_ITEMS`.
+- `src/components/navigation/applicationMenuContract.ts` independently hard-codes 16 application-menu destinations, labels, descriptions, paths, keywords, and groups.
+- `AdaptiveNavigationShell.tsx` renders the primary navigation from `PRIMARY_NAV_ITEMS`; `ApplicationAccountMenu.tsx` renders the application menu from `APPLICATION_MENU_DESTINATIONS`.
+- Existing route governance tests prove these hard-coded visible paths occur in `AppRoutes.tsx`, and page-registry tests prove route paths are classified. They do not prove that the runtime navigation is generated from or consistent with the lifecycle/visibility metadata in `PAGE_REGISTRY`.
+
+Impact:
+- The page registry is useful route/lifecycle metadata and is consumed by other surfaces such as recent destinations and the quick switcher, but it is not yet the single runtime authority for the primary nav or application menu.
+- A destination can be marked hidden/lab/legacy in `PAGE_REGISTRY` while remaining independently listed in a navigation contract unless separate code and tests are updated.
+- This is a real duplicated-source-of-truth risk, not evidence that the current 10 primary links or 16 menu entries are individually broken.
+
+Required remediation:
+- Decide whether the canonical registry should drive navigation or remain descriptive metadata. Do not claim it is the runtime navigation source until the consumers actually use it.
+- If adopting it, migrate incrementally and preserve menu-specific metadata/actions (such as the Gemini settings action) as a thin extension, not a second route registry.
+- Add a governance test comparing every visible navigation destination with the matching page-registry entry's visibility and lifecycle; explicitly account for query strings, action-only entries, and aliases.
+
+### F-013 — Super-tool route metadata contains direct paths not served by the router
+
+**Severity:** P2 — stale user-facing route labels and incorrect Brain surface matching  
+**Confidence:** Confirmed by source and consumer inspection
+
+Evidence:
+- `src/app/AppRoutes.tsx` serves internal tools through `/tools` and `/tools/:toolId`; the mounted view registry constructs the canonical tool URL with `superToolRoute(id)`, which returns `/tools/${id}`.
+- `src/services/superToolRegistry.ts` still advertises direct paths that are not declared in `AppRoutes.tsx`, including `/shorts-extraction`, `/brain-command-center`, `/retention-autopsy`, and `/workflow-chain-builder`.
+- The route arrays are not dead metadata: `src/components/SuperToolRail.tsx` displays them, `src/views/UserGuide.tsx` uses the first route as a tool link destination, and `src/services/brain/BrainSurfaceContext.ts` matches active paths against them to populate `superToolIds`.
+- `src/app/__tests__/superToolViewRegistry.test.ts` validates the runtime plan's `currentRouteReality` for mounted tools, but it does not validate the separate `SUPER_TOOLS[].routes` array against actual routes or the canonical `/tools/:toolId` resolver.
+
+Impact:
+- Some guide/tool surfaces can advertise direct URLs that fall through to the catch-all redirect instead of opening the tool.
+- Brain surface context can fail to associate the canonical `/tools/:toolId` route with its super-tool when the registry only lists legacy/direct paths.
+- This is separate from the already-correct `currentRouteReality` contract; the audit must reconcile both fields without changing editor-bound VT_E1 boundaries or embedded routes.
+
+Required remediation:
+- Preserve `SUPER_TOOLS` as the canonical tool-concept registry, but distinguish canonical mount route from legitimate host/embedded surfaces.
+- For mounted tools, ensure the canonical `/tools/:toolId` path is represented wherever route matching or direct linking requires it.
+- Remove or redirect stale direct paths only after checking bookmarks, persisted Brain command actions, guide links, and embedded host routes.
+- Add tests for every route exposed by user-facing tool links and for `buildBrainSurfaceContext({ pathname: superToolRoute(id) })`.
+
+### Fourth-pass status
+
+- Confirmed primary navigation and application menu remain independent hard-coded contracts; the page registry's visibility helper is not used by runtime navigation.
+- Confirmed four stale direct super-tool paths are advertised while the router's canonical mounted-tool route is `/tools/:toolId`.
+- Confirmed super-tool route metadata is consumed by the User Guide, SuperToolRail, and Brain surface context.
+- No application source code was changed. No route was removed or promoted.
+- No tests, typecheck, production build, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
