@@ -8,6 +8,7 @@ import {
  operationRecordFromToolReceipt,
 } from "../operations/OperationRecord"
 import {
+ listContentBuildEvents,
  recordContentBuildToolInput,
  recordContentBuildToolOutput,
  resolveContentBuildToolContext,
@@ -307,6 +308,25 @@ export const recordToolReceipt = (input: {
  }
  if (input.request.projectId && build.legacyProjectId && input.request.projectId !== build.legacyProjectId) {
   throw new Error(`Generation request project scope mismatch for ContentBuild ${build.id}.`)
+ }
+
+ // A retried completion may arrive after the original output was committed but
+ // before the caller observed the response. Reuse the canonical receipt rather
+ // than appending a second output event for the same scoped generation command.
+ const idempotencyKey = input.request.idempotencyKey || null
+ if (idempotencyKey) {
+  const priorEvent = listContentBuildEvents(build.id).find(event =>
+   event.eventType === "tool.output.recorded" &&
+   event.toolId === input.request.toolId &&
+   event.metadata?.idempotencyKey === idempotencyKey
+  )
+  const priorReceipt = priorEvent?.metadata?.toolReceipt
+  if (priorReceipt && typeof priorReceipt === "object" &&
+   "idempotencyKey" in priorReceipt &&
+   priorReceipt.idempotencyKey === idempotencyKey
+  ) {
+   return priorReceipt as ToolReceipt
+  }
  }
 
  const completedAt = new Date().toISOString()
