@@ -11,7 +11,6 @@ import { classifyGeminiKeyValidationError } from './geminiKeyValidation';
 
 interface GeminiKeyContextType {
   apiKey: string | null;
-  setApiKey: (key: string) => void;
   clearApiKey: () => void;
   isValidating: boolean;
   validateAndSaveKey: (key: string) => Promise<boolean>;
@@ -193,7 +192,6 @@ export const GeminiKeyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   return (
     <GeminiKeyContext.Provider value={{
       apiKey,
-      setApiKey,
       clearApiKey,
       isValidating,
       validateAndSaveKey,
