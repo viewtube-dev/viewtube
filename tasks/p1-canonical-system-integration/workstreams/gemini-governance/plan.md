@@ -159,3 +159,14 @@ Branch: `feat/p1-gemini-governance-reconciliation-2026-10-29`
 - Added the strategy contract test and included it in the dedicated Gemini governance CI command.
 - Branch: `feat/p1-gemini-tag-governance-2026-10-30`. Exact-head CI is pending; no test/build pass is claimed for this slice yet.
 - Phase 4 remains partial for these standalone tag tools: AssetGenerator stores the generation record and prompt receipt, but this migration does not fabricate a ContentBuild identity or claim a ToolReceipt/OperationRecord ingestion when no canonical build is supplied.
+
+
+## Comment engagement migration — 2026-10-30
+
+- Added `src/services/brain/commentEngagement.ts` for structured reply drafting and video recommendation through the existing `BrainModelGateway.generateJsonObject` operation.
+- Migrated `src/features/creator-engagement/useCommentResponderController.ts` away from direct `generatePerfectReply` and `recommendVideoForComment` imports in `gemini.ts`.
+- Reply drafts are returned for creator review only; posting remains a separate explicit action.
+- Video recommendations are accepted only when the returned ID exists in the supplied creator-owned video list. Invalid/unknown IDs resolve to no recommendation.
+- Added gateway contract tests and included them in the dedicated Gemini governance CI command.
+- Exact-head CI for this comment migration is pending. The earlier run #5485 predates this change and found one failing tag-strategy test expectation; the test was corrected to exercise negative-rank rejection. Do not claim this new head passed until the next run completes.
+- Phase 3 remains open: this adds another approved Brain gateway migration but does not retire remaining legacy analytics, planning, thumbnail, script, storyboard, end-screen or provider-specific media paths.
