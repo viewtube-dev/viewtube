@@ -89,3 +89,19 @@ No tests were executed as part of this source/PR reconciliation. Passing command
 
 ## Existing Work Checked
 docs/governance/TASK_AUTHORITY.md; docs/governance/VERIFICATION.md; docs/domains/BRAIN.md; docs/architecture/PRODUCT_ARCHITECTURE.md; docs/architecture/capabilities.json; governance/convergence/capability-homes.json; tasks/viewtube-one-goal-status.md; tasks/system-convergence/todo.md; docs/analytics/VIEWTUBE_ANALYTICS_VT_SYNC_MASTER_RESOURCE.md; docs/specifications/PROMPTS.md; docs/specifications/prompt-registry.json; three Gemini/provider plans from PR #1169; source code and tests listed above; PRs #935/#988/#992/#1109/#1168/#1169/#1174/#1178/#1203.
+
+## 6. Studio donor branch divergence and overlap
+Compared each Studio donor head to audited target SHA `0135fa33bf5cd59503c9feecce4977072ef60fec`:
+
+| PR | Donor head | Ahead | Behind | Changed files | Compare |
+|---|---|---:|---:|---:|---|
+| #935 | `399c806eff225ec91d85ab03df3fc7f43c5667f2` | 53 | 1,643 | 16 | DIVERGED |
+| #988 | `45afa86dacbbc4617fd2b0b58982beb30669d2bc` | 36 | 1,361 | 16 | DIVERGED |
+| #992 | `a19309ab0cfd3846c43f0ba2e3103928d0c67f8` | 11 | 1,339 | 10 | DIVERGED |
+
+Overlapping changed paths:
+- #935 ∩ #988: `StudioHubConfirmedPrimitiveCatalog.tsx`, `src/studio-ui/tokens.ts`, `studio-control-fields.css`, `studio-control-system.css`, `studio-control-vars.generated.css`, `studio-inter-module.css`.
+- #935 ∩ #992: `scripts/emit-studio-control-vars.mjs`, `src/studio-ui/tokens.ts`, `studio-control-system.css`, `studio-control-vars.generated.css`.
+- #988 ∩ #992: both Studio contract docs, `src/studio-ui/tokens.ts`, `studio-control-core.css`, `studio-control-system.css`, `studio-control-vars.generated.css`.
+
+The union of their changed-file sets is 29 paths. These numbers confirm that merging any donor wholesale would reintroduce substantial stale history and conflicting ownership. Use file-level diffs against current main and focused tests to recover only behavior not already present.
