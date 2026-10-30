@@ -44,3 +44,10 @@ test("split text input stylesheet is complete and closes the nested field rule",
     "nested field declarations must be complete and the rule must close",
   );
 });
+
+test("split input reserves fixed square rail tracks for left, right, and double layouts", () => {
+  assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="left"\] > \[data-vt-studio-control="true"\]\s*\{[^}]*grid-template-columns:\s*var\(--vt-studio-split-rail-size,[^)]*\) minmax\(0, 1fr\)/s);
+  assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="right"\] > \[data-vt-studio-control="true"\]\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) var\(--vt-studio-split-rail-size,/s);
+  assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="double"\] > \[data-vt-studio-control="true"\]\s*\{[^}]*grid-template-columns:\s*var\(--vt-studio-split-rail-size,[^)]*\) minmax\(0, 1fr\) var\(--vt-studio-split-rail-size,/s);
+  assert.match(splitCss, /\[data-vt-studio-split-rail\]\s*\{[^}]*display:\s*grid[^}]*place-items:\s*center/s);
+});
