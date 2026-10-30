@@ -151,6 +151,7 @@ Phase 4 does not claim every caller explicitly annotates capability. Requests wi
 ### Credential validation
 
 `src/context/geminiKeyValidation.ts` now classifies invalid credentials, permission denial, rate limiting, provider outage and generic verification failure separately. The key context preserves the existing rule: only explicit credential rejection prevents saving; degraded model discovery does not block BYOK entry. Diagnostics contain sanitized classifications, never the key or raw error text.
+- `src/context/GeminiKeyContext.runtime.test.tsx` exercises successful model discovery, explicit invalid-key rejection, and saved-but-unverified permission/rate-limit/provider-outage cases against a mocked SDK; this is application runtime coverage, not live Google API certification.
 
 ### Provenance propagation
 
