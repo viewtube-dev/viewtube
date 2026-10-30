@@ -365,4 +365,44 @@ describe("GenerationWorkflow", () => {
   })
  })
 
+ it("returns the original receipt when a completed generation is retried with the same idempotency key", () => {
+  const build = createContentBuild({
+   id: "cb-generation-workflow-idempotent-receipt",
+   channelId: "channel-idempotent",
+   legacyProjectId: "project-idempotent",
+  })
+  const prepared = prepareGenerationRequest({
+   contentBuildId: build.id,
+   channelId: "channel-idempotent",
+   projectId: "project-idempotent",
+   toolId: "video-publisher",
+   operation: "generate-package",
+   targetSlot: "title",
+   mode: "new-option",
+   creatorIntent: "Generate title options with retry-safe receipt identity.",
+   operationId: "video-publisher:metadata-run-1",
+   idempotencyKey: `generation:v1:${build.id}:video-publisher:metadata-run-1`,
+  })
+
+  const first = recordToolReceipt({
+   request: prepared.request,
+   outputAssetIds: ["asset-first-attempt"],
+   generationRecordId: "generation-first-attempt",
+   summary: "First successful completion.",
+  })
+  const retry = recordToolReceipt({
+   request: prepared.request,
+   outputAssetIds: ["asset-retry-attempt"],
+   generationRecordId: "generation-retry-attempt",
+   summary: "Duplicate completion delivery.",
+  })
+
+  expect(retry).toEqual(first)
+  expect(retry.outputAssetIds).toEqual(["asset-first-attempt"])
+  expect(listContentBuildEvents(build.id).filter(event =>
+   event.eventType === "tool.output.recorded" &&
+   event.metadata?.idempotencyKey === prepared.request.idempotencyKey
+  )).toHaveLength(1)
+ })
+
 })
