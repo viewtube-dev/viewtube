@@ -1,4 +1,14 @@
 # P1-03 Unified Diagnostics
+
+**Production Date:** 2026-10-29  
+**Last Edited:** 2026-10-29  
+**Class:** PROGRAM  
+**Status:** ACTIVE — PLANNED / DISCOVERY REQUIRED  
+**Concern:** unified diagnostics  
+**Owner:** Existing diagnostics services + domain event/receipt owners  
+**Registry ID:** DOC-PLAN-P1-UNIFIEDDIAGNOSTICS  
+**Last Audited Main SHA:** 61cfb726db9b32de53b9c89a5a339db696782a11  
+**Capabilities:** CAP-VERIFICATION, CAP-CREATOR-OPERATIONS, CAP-BRAIN-EXPERIENCE, CAP-EVIDENCE-INTELLIGENCE
 **Status:** PLANNED / DISCOVERY REQUIRED | **Owner:** existing diagnostics services + domain event/receipt owners
 **Capabilities:** CAP-VERIFICATION, CAP-CREATOR-OPERATIONS, CAP-BRAIN-EXPERIENCE, CAP-EVIDENCE-INTELLIGENCE
 
