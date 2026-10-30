@@ -367,3 +367,34 @@ The conversation intake workspace remains provenance and staging, not a second T
 The handoff is also the human-readable living document log for an oversized conversation. Its opening block must identify the conversation date and name, application/product, source application, source conversation link (or UNKNOWN), repository, intended target branch, last-updated date and package status. When a user supplies the log link and says **“Update the unfinished work log.”**, agents update that existing package in place; they do not create a duplicate log.
 
 The human-readable log contains: (1) no more than ten factual executive sentences; (2) a separate one-line checkbox for every distinct user instruction and every meaningful unfinished action; (3) links to all documents and artifacts created or materially changed; (4) independent branch/PR and post-PR reconciliation; (5) integration gaps using Task Authority's nine maturity axes; and (6) five evidence-based finishing/improvement proposals routed through existing Ideas Registry and improvement recommendations. Each checkbox records truthful achievement/delivery status and PR/commit evidence. Missing links or lineage remain UNKNOWN. The package remains provenance/handoff storage, not a second Task Index, task backlog or idea registry.
+
+
+## Standard execution sequence
+
+Every substantial handoff follows this single sequence; do not create a second process or tracker:
+
+1. **Resolve identity:** use the current conversation's descriptive ID, source date/host, repository and intended target. Record a source link only when supplied or verified; otherwise use `UNKNOWN`.
+2. **Find the survivor:** inspect `tasks/conversation-intake/INDEX.md` and existing packages. If this is a continuation or the user supplies an existing handoff link, update that package in place. Create a new package only for a genuinely distinct source conversation.
+3. **Capture the full conversation:** record every distinct user instruction as a stable `REQ-###`; record every meaningful completed, partial, blocked, planned or discovered work item as `VT-CWI-###`. Keep one-line checkboxes in the handoff and structured records in `worklog.json`.
+4. **Reconcile delivery:** inspect PR metadata and branch history independently. Record opening/current heads when recoverable, post-open commits/paths, merge commit, target presence, recovery destination and unknown lineage. Distinguish local, committed, in-PR, merged, present, integrated and verified.
+5. **Reconcile work:** compare each item with current code, Task Authority, Integrated Application, Product Architecture, Domain Authorities, plans, intake packages and active PRs. Give each item one disposition and explicit target or no-action rationale.
+6. **Assess integration:** use only Task Authority's nine axes and maturity vocabulary. Record concrete missing seams and acceptance evidence; use `NOT_APPLICABLE` where a surface does not exist.
+7. **Write the package:** maintain `handoff.md`, `worklog.json` and `review.md`; the handoff has at most ten executive sentences, all instruction checkboxes, unfinished actions, artifact links, branch/PR history, integration gaps, five proposals and an executable next action.
+8. **Route proposals:** route five evidence-based improvement proposals through the existing Ideas Registry and improvement recommendations. They remain proposals until accepted; never create a parallel idea/task registry.
+9. **Validate and deliver:** check JSON/schema compatibility, internal IDs/links, exact PR/commit evidence and index entry. Run the existing document-system tests/audits. Put the package and governance changes on a reviewable PR against the current target; do not claim merged or verified before GitHub/CI confirms it.
+10. **Close correctly:** leave the package `PARTIALLY_RECONCILED` while any item lacks disposition or verification remains outstanding. Mark `RECONCILED` only when every item has a destination and evidence; retain the package as provenance.
+
+### Required handoff completion checklist
+
+- [ ] Conversation metadata complete; unavailable source link explicitly `UNKNOWN`.
+- [ ] Ten-sentence maximum executive handoff.
+- [ ] Every distinct user instruction has an individual REQ entry and delivery evidence.
+- [ ] Every meaningful work item has a CWI record, value, relationship, disposition and target.
+- [ ] Every created/changed artifact is linked.
+- [ ] Branch and PR history reconciled independently, including post-PR work and unknowns.
+- [ ] Nine-axis integration-gap matrix uses Task Authority vocabulary.
+- [ ] Exactly five proposals are routed through existing idea authorities, or a documented reason fewer are justified.
+- [ ] Exact next action and acceptance/verification criteria are executable.
+- [ ] Package index, schema/document checks and PR delivery state are current.
+
+The conversation package remains provenance/staging; it never mutates Task Index lifecycle and never replaces canonical task, idea, capability or program ownership.
