@@ -2960,7 +2960,7 @@
 }
 .vt-confirmed-size-matrix__micro .vt-studio-split-accordion { min-width: 0; }
 .vt-confirmed-representatives > .vt-confirmed-variants { gap: 8px; }
-.vt-confirmed-representatives .vt-confirmed-variant > span {
+.vt-confirmed-representatives .vt-confirmed-variant > span:not([data-vt-studio-control="true"]) {
   display: block;
   margin-bottom: 4px;
 }
