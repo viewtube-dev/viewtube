@@ -23,7 +23,7 @@ describe("tag suggestions specialist strategy", () => {
  })
  it("rejects empty, duplicate and out-of-range tag suggestions", () => {
   const findings = tagSuggestionsStrategy.rubric?.([
-   { tag: "", score: 120, searchVolume: -2, competition: 0, rank: 0, tripleKeyword: false },
+   { tag: "", score: 120, searchVolume: -2, competition: 0, rank: -1, tripleKeyword: false },
    { tag: "duplicate", score: 50, searchVolume: 10, competition: 10, rank: 2, tripleKeyword: false },
    { tag: "DUPLICATE", score: 50, searchVolume: 10, competition: 10, rank: 2, tripleKeyword: false },
   ], { channelId: "channel-1", assetType: "tags", instruction: "Generate tags" })
