@@ -34,10 +34,10 @@ For any work touching the desktop or mobile video editor, timeline, preview, edi
 2. Read docs/editor/VIEWTUBE_YOUTUBE_EDITOR_SYSTEM_MASTER_RESOURCE.md before planning or implementation.
 3. Preserve one shared desktop/mobile project model and stable capability IDs.
 4. Route creator AI through BrainRuntime, media-generation jobs through Video Director, generated assets through Asset Engine/Vault, and deterministic final output through Remotion.
-5. Before ending the turn, update Current Work and append the Update Log in the master resource, including branch/PR/commit, paths, verification, references and next action.
+5. For material Editor changes, update Current Work and append the Update Log as an Editor-domain projection, including branch/PR/commit, paths, verification, references and next action.
 6. Register new editor plans, skills, standalone HTML/prototypes, branch donors and important external sources in the master resource.
 
-If the master resource was not updated, editor work is not fully handed off.
+If the master resource was not updated after a material Editor change, the Editor-domain record is incomplete. This is separate from the global conversation handoff package.
 
 ## Repository workflow
 
