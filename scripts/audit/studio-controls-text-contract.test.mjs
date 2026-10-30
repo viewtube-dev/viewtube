@@ -33,9 +33,10 @@ test("Studio button labels use the shared clipped-text default, never ellipsis",
 })
 
 test("StudioTextBox uses black glyphs, a primary inset stroke, and a secondary outline", () => {
-  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*-webkit-text-stroke-color:\s*#000\s*!important;[^}]*\}/s)
-  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke\) var\(--vt-field-inline-stroke\) !important;/s)
-  assert.match(recoveryCss, /\.vt-studio-text-box[^{}]*\{[^}]*outline:\s*var\(--vt-field-focus-outline\) !important;/s)
+  const textBox = blockFor(systemCss, '.vt-studio-text-box[data-vt-studio-control="true"]')
+  assert.match(textBox, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) #000/)
+  assert.match(textBox, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-field-primary/)
+  assert.match(textBox, /outline:\s*calc\(var\(--vt-studio-control-stroke, 3px\) \* var\(--vt-studio-focus-outline-width-ratio, \.65\)\) solid var\(--vt-field-secondary/)
 })
 
 test("focused textarea keeps a secondary outline without a primary focus text stroke", () => {
