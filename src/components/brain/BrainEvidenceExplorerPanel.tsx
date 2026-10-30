@@ -13,9 +13,9 @@ import { readBrainUserControls } from "../../services/brain/BrainUserControls"
 
 type DatasetStatusFilter = "all" | CanonicalIntelligenceDatasetStatus
 
-const DEFAULT_WINDOW: AnalyticsWindow = CANONICAL_ANALYTICS_WINDOWS.includes("28d")
+const DEFAULT_WINDOW = (CANONICAL_ANALYTICS_WINDOWS.includes("28d")
  ? "28d"
- : CANONICAL_ANALYTICS_WINDOWS[0]
+ : CANONICAL_ANALYTICS_WINDOWS[0] || "28d") as AnalyticsWindow
 
 export const filterEvidenceExplorerDatasets = (
  datasets: CanonicalIntelligenceDatasetManifest[],
@@ -68,7 +68,7 @@ type EvidenceReadState =
  | { status: "ready"; envelope: EvidenceIntelligenceEnvelope }
  | { status: "unavailable" | "restricted" | "unscoped" | "error" }
 
-const readEvidence = (channelId: string | null, window: AnalyticsWindow, refreshRevision: number): EvidenceReadState => {
+const readEvidence = (channelId: string | null, window: AnalyticsWindow): EvidenceReadState => {
  if (!channelId) return { status: "unscoped" }
  const controls = readBrainUserControls(channelId)
  if (!controls.enabled || !controls.allowAnalytics || !controls.showEvidence) return { status: "restricted" }
@@ -136,19 +136,12 @@ export const BrainEvidenceExplorerPanel: React.FC<{ channelId: string | null }> 
  const [selectedDatasetId, setSelectedDatasetId] = useState<string | null>(null)
  const [refreshRevision, setRefreshRevision] = useState(0)
  const readState = useMemo(
-  () => readEvidence(channelId, window, refreshRevision),
+  () => readEvidence(channelId, window),
   [channelId, window, refreshRevision],
  )
  const envelope = readState.status === "ready" ? readState.envelope : null
  const datasets = useMemo(
-  () => envelope ? filterEvidenceExplorerDatasets(envelope.evidenceQuality.datasets.map((dataset) => ({
-   ...dataset,
-   description: envelope.canonicalEvidence.datasets.find((candidate) => candidate.id === dataset.datasetId)?.description || "",
-   categoryIds: envelope.canonicalEvidence.datasets.find((candidate) => candidate.id === dataset.datasetId)?.categoryIds || [],
-   columns: envelope.canonicalEvidence.datasets.find((candidate) => candidate.id === dataset.datasetId)?.columns || [],
-   metrics: envelope.canonicalEvidence.datasets.find((candidate) => candidate.id === dataset.datasetId)?.metrics || {},
-   sampleRows: envelope.canonicalEvidence.datasets.find((candidate) => candidate.id === dataset.datasetId)?.sampleRows || [],
-  })), query, status) : [],
+  () => envelope ? filterEvidenceExplorerDatasets(envelope.canonicalEvidence.datasets, query, status) : [],
   [envelope, query, status],
  )
  const records = useMemo(
@@ -226,9 +219,9 @@ export const BrainEvidenceExplorerPanel: React.FC<{ channelId: string | null }> 
         <div className="grid gap-1">
          <h3 className="text-[10px] font-black uppercase">Datasets · {datasets.length}</h3>
          {datasets.length ? datasets.map((dataset) => (
-          <button key={dataset.id} type="button" aria-pressed={selectedDatasetId === dataset.datasetId} onClick={() => setSelectedDatasetId((current) => current === dataset.datasetId ? null : dataset.datasetId)} className={`grid min-w-0 gap-1 rounded-[6px] border-[2px] border-black p-2 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${selectedDatasetId === dataset.datasetId ? "bg-[#36E0F6]/25" : "bg-white hover:bg-[#36E0F6]/10"}`}>
+          <button key={dataset.id} type="button" aria-pressed={selectedDatasetId === dataset.id} onClick={() => setSelectedDatasetId((current) => current === dataset.id ? null : dataset.id)} className={`grid min-w-0 gap-1 rounded-[6px] border-[2px] border-black p-2 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${selectedDatasetId === dataset.datasetId ? "bg-[#36E0F6]/25" : "bg-white hover:bg-[#36E0F6]/10"}`}>
            <span className="flex min-w-0 flex-wrap items-center justify-between gap-1"><span className="break-words text-[10px] font-black uppercase">{dataset.label}</span><EvidenceStatusBadge status={dataset.status} /></span>
-           <span className="break-all text-[9px] text-black/55">{dataset.datasetId} · {dataset.rowCount} rows · {dataset.evidenceRefs.length} refs</span>
+           <span className="break-all text-[9px] text-black/55">{dataset.id} · {dataset.rowCount} rows · {dataset.evidenceRefs.length} refs</span>
            {dataset.missingMetrics.length ? <span className="break-words text-[9px] font-bold text-black/65">Missing: {dataset.missingMetrics.join(", ")}</span> : null}
            {dataset.updatedAt ? <span className="text-[9px] text-black/55">Updated {dataset.updatedAt}</span> : null}
           </button>
