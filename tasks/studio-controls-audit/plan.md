@@ -1,0 +1,180 @@
+# Studio Controls System Audit & Representative Library Completion
+
+**Date:** 2026-10-30  
+**Target branch:** `master/consolidated-feature-integration`  
+**Mode:** Read-only audit and planning first; implementation is a separately gated follow-on.  
+**Scope:** The complete Studio Controls system and all related source under `src/studio-ui/`, `src/styles/`, and `src/components/`, with supporting scripts, tests, docs, imports, and generated artifacts.
+
+## Objective
+
+Establish an evidence-backed inventory of every production Studio primitive, family, composition, public/internal export, supported setting, size tier, variant, and meaningful state. Reconcile the production implementation with the canonical token/style hierarchy and ensure the active **Confirmed Primitive Library** has one canonical representative for every eligible primitive and explicit specimens for every supported design variant/state that users need to compare.
+
+The library must remain a showcase of real production exports—not a parallel implementation or a second registry. The work must identify both directions of drift: implemented capabilities missing from the library, and catalog entries that are stale, duplicate, misleading, unsupported, or disconnected from production.
+
+## Existing authority and constraints
+
+- Target branch is `master/consolidated-feature-integration`; preserve landed work and inspect its current HEAD and working tree before any edits.
+- The repository is the source of truth. Read the current versions of:
+  - `docs/ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md`
+  - `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md`
+  - `docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md`
+  - `docs/ui/STUDIO_HUB_COMPONENT_IMPORT_INVENTORY_AUDIT.md`
+  - the current Studio Controls authoring guide, palette/theme source, relevant architecture docs, tests, and generated-artifact instructions.
+- The current documented active catalog is `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`. `src/components/ToolboxUIReferenceLibrary.tsx` owns the shell and route/track selector, not a competing primitive registry. Confirm these facts on the checked-out target branch before relying on them.
+- The canonical six parent categories, in order, are **Text Fields**, **Buttons & Badges**, **Dropdowns**, **Controls**, **Modules & Frames**, and **Compositions**. Dropdown menus/options belong under Dropdowns; counters/sliders/toggles belong under Controls; compositions are assembled experiences, not a fallback bucket.
+- Every confirmed representative must identify source module, production token/stylesheet authority, importers where known, public API status, supported tiers/states/variants, and only non-default settings that actually differ from canonical defaults.
+- Keep one canonical parent representative per primitive. Nested anatomy/state examples are allowed but must be labelled as variants/states of that primitive, not separate implementations.
+- Preserve the established palette, token hierarchy, five size tiers, flat-shell defaults, field/split contracts, and narrow registered exceptions. Do not promote implementation drift into a new design contract.
+- Generated CSS is regenerated from its canonical emitter. Never hand-edit generated output.
+- No Codespaces. Do not edit production code during the audit-only phases. Do not remove legacy tracks until routes, consumers, and migration dependencies are traced and tested.
+
+## Audit dimensions
+
+1. **Repository and ownership:** target ref/commit, dirty state, instructions, app entry points, active catalog, style import graph, ownership of each file.
+2. **Implementation discovery:** enumerate components, primitive exports, local exports, family modules, compositions, helpers, CSS modules/stylesheets, tokens, theme variables, scripts, tests, stories/fixtures, and generated artifacts.
+3. **Reachability and status:** distinguish production-used, public-exported, internal-only, deprecated, compatibility-only, dead/unreferenced, test-only, and unknown. An export or file alone is not proof of a shipped primitive.
+4. **Contract coverage:** for each family, record anatomy, API/settings, default and non-default behavior, supported size tiers, variants, visual states, interaction states, accessibility semantics, responsive constraints, and registered exceptions.
+5. **Style ownership and cascade:** trace token → emitter/generated output → shared CSS → family CSS → primitive → consumer → specimen. Detect duplicated declarations, hard-coded values, unexplained `!important`, selector leakage, obsolete recovery rules, local geometry, conflicting import order, missing theme mappings, and orphan styles.
+6. **Catalog completeness and truthfulness:** verify each representative imports the real production implementation; catalog CSS controls arrangement only; every eligible production primitive has one canonical representative; every supported variant/state is accurately represented; unsupported settings/tiers are not advertised; category taxonomy and ordering are correct.
+7. **Runtime and visual quality:** verify actual rendered behavior, computed styles, responsive layouts, focus/keyboard/touch behavior, reduced motion, overflow, and theme switching. Source inspection and unit tests alone do not count as visual certification.
+8. **Bidirectional UI coverage:** code-to-library (missing specimens) and library-to-code (stale, duplicate, misleading, or broken specimens).
+
+## Deliverables
+
+- A source-backed inventory of all relevant files and their ownership.
+- A primitive/family registry matrix with canonical implementation, export status, consumers, category, settings, size support, variants, states, tests, and catalog representative.
+- A token/style/cascade contradiction matrix with authority and recommended owner for each discrepancy.
+- A code-to-library and library-to-code coverage report with statuses: `MISSING_UI`, `PARTIAL_UI`, `STALE_UI`, `BROKEN_WIRING`, `MISLEADING_UI`, `DUPLICATE_UI`, `COVERED`, or `UNVERIFIED`.
+- A prioritized findings report (P0–P3), including evidence, impact, exact locations, and verification gaps.
+- An implementation backlog split into small, dependency-ordered slices.
+- After approved implementation: synchronized source-of-truth docs, exception index, import inventory, tests, generated CSS, and Confirmed Primitive Library specimens.
+
+## Phases and tasks
+
+### Phase 0 — Establish target and preserve work
+
+- [ ] Confirm repository identity, target branch/HEAD, working tree state, repository instructions, build/test commands, and available browser/screenshot tooling.
+- [ ] Confirm the active catalog and all routed legacy/comparison tracks; identify their consumers before proposing cleanup.
+- [ ] Read the current canonical Studio docs, authoring guide, palette/theme source, token emitter, test conventions, and prior import-inventory output.
+
+**Gate 0:** Audit uses one explicit target ref; no user changes are overwritten; no source-of-truth path is assumed without checking.
+
+### Phase 1 — Build the complete file and dependency inventory
+
+- [ ] Enumerate all relevant files under `src/studio-ui/`, `src/styles/`, and `src/components/`; include nested directories and extension variants.
+- [ ] Trace Studio imports/exports from app entry points, catalog shell, active confirmed catalog, family components, consumer pages, and test fixtures.
+- [ ] Inventory CSS imports and cascade order, including global styles, family styles, catalog styles, conditional imports, compatibility/recovery files, and generated CSS.
+- [ ] Inventory token definitions, theme/palette mappings, emitters, generated outputs, and all scripts that mutate or validate Studio styles.
+- [ ] Classify each file by owner and lifecycle: canonical production, consumer/composition, catalog-only, generated, test/fixture, compatibility, deprecated, or unknown.
+
+**Gate 1:** Every in-scope file is accounted for or explicitly listed as an unresolved discovery gap; the import/style dependency graph is reproducible.
+
+### Phase 2 — Build the production primitive and variant registry
+
+- [ ] Extract all named React components and exported symbols from Studio UI and related components; reconcile named exports, barrel exports, default exports, aliases, and compatibility exports.
+- [ ] Trace each candidate to real production call sites and determine public API status and lifecycle.
+- [ ] Group components into the six canonical categories and identify genuine compositions separately from primitives and structural modules.
+- [ ] For every family, record supported size tiers, settings, visual variants, interaction states, anatomy, responsive limits, accessibility semantics, and exceptions.
+- [ ] Identify duplicate implementations, wrappers that fork behavior, aliases that obscure one implementation, and exports with no live consumers.
+
+**Gate 2:** The registry distinguishes real production capabilities from dead code, fixtures, aliases, and merely exported symbols.
+
+### Phase 3 — Audit design tokens, CSS ownership, and runtime contracts
+
+- [ ] Compare the actual token source and theme mappings against the hierarchy and global defaults/exception index.
+- [ ] Trace generated variables from emitter to output and consuming selectors; verify reproducibility without manual generated-file patches.
+- [ ] Audit shared styles and each family stylesheet for conflicting geometry, color, typography, focus, motion, width, split seams, selector leakage, and import-order dependence.
+- [ ] Verify the five-tier contract family by family; do not assume every family supports every tier.
+- [ ] Verify fields (input, textarea, TextBox), buttons/badges, dropdowns/menus, controls, modules/frames, and compositions against their specific default/state contracts.
+- [ ] Audit every exception for owner, scope, rationale, supported variants/tiers, test coverage, verification status, and exit condition when temporary.
+- [ ] Mark source-confirmed behavior separately from computed-style and browser-verified behavior.
+
+**Gate 3:** Every contradiction has evidence, authority level, narrowest correct owner, severity, and proposed resolution; ambiguous same-level conflicts remain open for a product decision.
+
+### Phase 4 — Audit Confirmed Primitive Library completeness
+
+- [ ] Enumerate all canonical representatives in `StudioHubConfirmedPrimitiveCatalog.tsx` and map each to the production registry.
+- [ ] Verify representatives import real production exports; flag lookalike markup, local CSS reimplementations, wrappers that bypass the canonical primitive, and specimens with incorrect provenance.
+- [ ] Compare registry against catalog in both directions; produce exact missing/stale/duplicate/misleading lists.
+- [ ] Verify category grouping and order: Text Fields → Buttons & Badges → Dropdowns → Controls → Modules & Frames → Compositions.
+- [ ] Ensure all dropdown triggers, option/menu rows, and menu states are represented under Dropdowns; all counters, word counters, sliders, word sliders, and toggle families under Controls.
+- [ ] Ensure compositions such as Tag Editor, Publishing Card, Primitive Grid, Spectrum Tags, chat/composer experiences, and layout helpers remain in Compositions.
+- [ ] For each canonical primitive, show one default representative plus only the additional supported variant/state specimens needed to expose real API differences; avoid duplicate independent representatives.
+- [ ] Verify all non-default settings are actually non-default and all displayed size/variant choices are supported by production APIs.
+- [ ] Check specimen labels, provenance, source module, stylesheet/token owner, importers, API status, size/state coverage, and catalog-only styling boundaries.
+
+**Gate 4:** A complete crosswalk exists: every eligible production primitive maps to exactly one canonical representative; every additional specimen maps to a supported variant/state; every catalog entry maps back to live production code or is explicitly classified as legacy/unsupported.
+
+### Phase 5 — Accessibility, responsive, performance, and visual audit
+
+- [ ] Run the technical UI audit on the active library and representative production consumer surfaces.
+- [ ] Check semantic roles/names, keyboard access, tab order, focus visibility, disabled/selected/expanded states, form labels/errors, touch targets, and reduced-motion behavior.
+- [ ] Inspect desktop, tablet/narrow, mobile portrait, and mobile landscape; check clipping, horizontal overflow, rail shrinkage, label centering, menu viewport fit, and text scaling.
+- [ ] Capture representative default/variant/state/theme screenshots and inspect computed styles for high-risk families.
+- [ ] Check unnecessary CSS duplication, broad selectors, expensive motion/effects, import cost, and avoidable component/render overhead.
+- [ ] Record visual certification only for combinations actually rendered and inspected.
+
+**Gate 5:** Findings are evidence-backed, severity-ranked, and distinguish deterministic failures from visual judgment and unverified cases.
+
+### Phase 6 — Findings, decisions, and implementation backlog
+
+- [ ] Produce the file inventory, registry matrix, style contradiction matrix, catalog crosswalk, and prioritized findings.
+- [ ] Separate safe mechanical fixes from contract decisions requiring approval.
+- [ ] Create small implementation slices (generally 1–5 files each), ordered by token/source authority → primitive/API → production styles → catalog → docs/tests.
+- [ ] Identify tasks that can be parallelized only after shared contracts and ownership are fixed.
+- [ ] Present the audit and backlog for approval before modifying production code.
+
+**Gate 6:** User reviews the evidence and approves the implementation scope; audit-only work remains read-only.
+
+### Phase 7 — Approved implementation and library reconciliation (follow-on)
+
+- [ ] Repair each approved issue at its canonical owner; remove obsolete declarations only after proving no live consumers and adding regression coverage.
+- [ ] Regenerate generated CSS from canonical token sources.
+- [ ] Add or repair canonical representatives and supported variant/state specimens in the active Confirmed catalog.
+- [ ] Correct family classification and merge duplicate category/registry paths without breaking routed legacy tracks.
+- [ ] Update hierarchy, component-library source-of-truth, global defaults/exception index, import inventory, and authoring guide as applicable.
+- [ ] Add/adjust tests for exports, catalog registration, API support, token invariants, CSS contracts, interactions, and regression behavior.
+- [ ] Run focused tests, inventory audit, typecheck/lint, production build, and the relevant browser/screenshot matrix.
+
+**Gate 7:** No implementation is called complete until tests/build and actual visual checks pass; unresolved items are explicitly listed.
+
+## Verification strategy
+
+Use the repository's actual scripts discovered in Phase 0; do not invent command names. At minimum, identify and run where available:
+
+- Studio import/component inventory audit.
+- Focused primitive API and behavior tests.
+- Token/emitter consistency check and generated-output diff check.
+- CSS contract/computed-style tests for fields, split families, and size tiers.
+- Catalog registry/category/provenance/completeness tests.
+- Typecheck and lint for changed files.
+- Production build.
+- Browser screenshots and keyboard/interaction checks at desktop and mobile sizes.
+
+Compare failures with the target-branch baseline and report pre-existing failures separately. No claim of visual certification without browser evidence.
+
+## Risks and mitigations
+
+| Risk | Impact | Mitigation |
+|---|---|---|
+| Large source surface hides duplicate or orphaned styles | High | Build complete file/import/cascade inventories before proposing edits |
+| Catalog looks complete but omits exported or live primitives | High | Crosswalk implementation registry and catalog in both directions |
+| Catalog entries overstate public API or supported tiers | High | Trace exports, call sites, props/types, and runtime behavior |
+| Old catalog tracks remain routed | High | Preserve until route and migration dependencies are tested |
+| Conflicting docs encode historical decisions | High | Apply current hierarchy; label superseded notes; surface same-level conflicts |
+| Generated CSS is patched manually | Medium | Verify emitter and regenerate from canonical token source |
+| Visual coverage is inferred from source | High | Separate source/API, computed-style, and browser visual certification |
+| Scope expands into unrelated product UI | Medium | Keep audit boundary to Studio controls and directly related consumers/styles |
+
+## Definition of done
+
+- Every in-scope file is inventoried and classified.
+- Every real production primitive/family/composition has a lifecycle and ownership record.
+- Every supported setting, tier, variant, and important state is documented accurately.
+- All CSS/token/generated-output ownership paths are traced.
+- Every eligible primitive has exactly one canonical representative in the active Confirmed Primitive Library.
+- All extra specimens correspond to supported variants/states and are not presented as separate implementations.
+- Catalog categories/order match the canonical six-category taxonomy.
+- Stale, duplicate, misleading, broken, missing, and unverified entries are explicitly classified.
+- Audit findings include severity, impact, evidence, and a narrow remediation owner.
+- Approved fixes have regression tests, synchronized docs, regenerated artifacts, passing build/tests, and observed browser verification.
