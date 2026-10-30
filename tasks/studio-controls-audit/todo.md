@@ -27,9 +27,9 @@ Mode: Audit-first; no production edits before Gate 6 approval.
 
 ## Phase 2 — Primitive registry
 - [ ] T2.1 (in progress) Static pass found 70 `Studio*` value exports with 70 direct catalog matches (396 JSX occurrences); classify each export as primitive, composition, layout, utility, compatibility, or internal.
-- [ ] T2.2 Trace production consumers and determine public/internal/deprecated/dead status.
+- [ ] T2.2 Trace production consumers and determine public/internal/deprecated/dead status; reconcile the 11 module-only StudioControls exports and the duplicate root catalog.
 - [ ] T2.3 Classify all live families into the six canonical categories.
-- [ ] T2.4 Record each family's API, supported tiers, variants, states, anatomy, responsive/accessibility constraints, and exceptions.
+- [ ] T2.4 Record each family's API, supported tiers, variants, states, anatomy, responsive/accessibility constraints, and exceptions; explicitly resolve InlineStepper/SplitStepper coverage and the SimpleDropdown consolidation contract.
 
 ### Checkpoint 2
 - [ ] Registry distinguishes production capabilities from exports, aliases, fixtures, and dead code.
@@ -55,7 +55,7 @@ Mode: Audit-first; no production edits before Gate 6 approval.
 - [ ] Every eligible primitive has exactly one canonical representative; all extra specimens map to supported variants/states.
 
 ## Phase 5 — Technical and visual audit
-- [ ] T5.1 Run technical accessibility, responsive, performance, theming, and implementation-integrity audit.
+- [ ] T5.1 Run technical accessibility, responsive, performance, theming, and implementation-integrity audit, including the current `test:studio-controls` source/test mismatch candidates.
 - [ ] T5.2 Test keyboard, focus, disabled/selected/expanded states, labels/errors, touch targets, and reduced motion.
 - [ ] T5.3 Inspect desktop/tablet/mobile portrait/mobile landscape and key overflow/split/menu cases.
 - [ ] T5.4 Capture and inspect representative computed-style and browser screenshots; record exact verified combinations.
