@@ -113,7 +113,7 @@ The following figures belong to the September 2026 governance branch and must no
 ## Current-target reconciliation — 2026-10-29
 
 - Target ref inspected: `master/consolidated-feature-integration`.
-- Current exact branch HEAD SHA was not independently returned by the available branch lookup; refresh and record it in Phase 0 before certifying registry freshness.
+- PR #1190 creation reported the target base SHA as `45d21d09d0e69b280d6f28f11a64bed6577f3097`; refresh if the branch advances and compare it with registry audited-main values before certification.
 - Confirmed reusable runtime projection: `src/services/brain/BrainRuntimeSnapshot.ts` and `src/services/brain/BrainRuntimeSnapshot.test.ts`. It already joins Project/ContentBuild, GenerationRequest, ContextManifest, ToolReceipt, BrainTrace, BrainOutcome and explicit AlgorithmIntelligenceEvent ancestry, including evaluation and learning lifecycle event IDs.
 - Confirmed current canonical prompt authority: `docs/specifications/PROMPTS.md` and `docs/specifications/prompt-registry.json`.
 - Do not build a second projector until Phase 6 inventories the precise gaps (Vault resolution, durable evaluation/learning record resolution, registry joins, freshness/main SHA and management UI adoption).
