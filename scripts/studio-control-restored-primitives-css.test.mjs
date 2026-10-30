@@ -10,12 +10,12 @@ test("restored Studio primitive declarations use real CSS line breaks", async ()
 
   assert.doesNotMatch(
     css,
-    /\\\\n\\s*--vt-studio-control-font-size/,
+    /\\n\s*--vt-studio-control-font-size/,
     "the vertical word toggle declarations must not contain a literal escaped newline",
   );
   assert.match(
     css,
-    /--vt-vwt-face:[^;]+;\\s*\\n\\s*--vt-studio-control-font-size:/,
+    /--vt-vwt-face:[^;]+;\s*\n\s*--vt-studio-control-font-size:/,
     "the font-size custom property must be a separate declaration",
   );
 });
