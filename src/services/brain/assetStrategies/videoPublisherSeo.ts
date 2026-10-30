@@ -53,6 +53,7 @@ export const videoPublisherSeoStrategy: AssetGeneratorStrategy<SeoResult> = {
  outputSchemaVersion: "video-publisher-seo-package-v1",
  evidenceClasses: ["channel_profile", "top_videos"],
  schema,
+ tools: [{ googleSearch: {} }],
  buildTaskInstruction: (request, evidence) => [
   "Create a complete YouTube publishing SEO package while preserving every requested output field.",
   "Return six distinct title candidates. Each candidate must include a specific thumbnail image prompt, a 2–3 word overlay, a coherent description, candidate-specific comma-separated tags, and a YouTube category.",
