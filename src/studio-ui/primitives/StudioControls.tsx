@@ -2132,7 +2132,7 @@ export const StudioLeftCounter: React.FC<StudioLeftCounterProps> = ({
       </span>}
       shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-left-counter", "data-vt-library-component": "StudioLeftCounter" }}
     >
-      <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
+      <span className="vt-studio-side-counter__value" data-vt-studio-counter-value aria-live="polite">{displayValue ?? String(current)}</span>
     </StudioSplitShell>
   );
 };
