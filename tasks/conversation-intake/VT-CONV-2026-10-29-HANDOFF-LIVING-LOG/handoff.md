@@ -1,7 +1,7 @@
 # Unfinished Work — Living Document Log
 
 **Conversation date:** 2026-10-29  
-**Conversation name:** Unfinished Work Living Document Log — PR #1170 implementation and reconciliation  
+**Conversation name:** UNKNOWN — descriptive package label: Unfinished Work Living Document Log / PR #1170  
 **Application / product:** ViewTube  
 **Source application:** ChatGPT  
 **Source conversation link:** UNKNOWN — no authoritative conversation URL was available  
@@ -53,6 +53,15 @@
 | Original intake handoff | Historical package | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/handoff.md |
 | Original intake worklog | Historical package | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/worklog.json |
 | Original intake review | Historical package | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/review.md |
+| PR #1177 | Open follow-up pull request | https://github.com/viewtube-dev/viewtube/pull/1177 |
+| Living-log contract test | Test | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/scripts/audit/conversation-handoff-contract.test.mjs |
+| Release-gates workflow | CI workflow | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.github/workflows/release-gates.yml |
+| Package scripts | Test registration | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/package.json |
+| Intake index | Navigation | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/INDEX.md |
+| Intake README | Operating instructions | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/README.md |
+| This handoff | Living handoff | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/handoff.md |
+| This worklog | Structured instruction and evidence register | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/worklog.json |
+| This review | Reconciliation and CI evidence | https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/review.md |
 
 ## Complete user instruction register
 
