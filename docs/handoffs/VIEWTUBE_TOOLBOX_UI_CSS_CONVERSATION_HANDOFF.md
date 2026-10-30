@@ -1177,3 +1177,14 @@ Next steps:
 4. Verify bar tooltip focus visibility, empty/full bar colors, 2.5:1 geometry, and outer-only double-side focus outline.
 5. Complete the public-export-to-family-module coverage check and dependency audit before deleting any retired primitive implementations.
 6. Do not mark this PR merge-ready while release-gates checks remain pending/failing.
+
+## 2026-10-30 follow-up — target-branch reconciliation and audit repair
+
+- Rebased the active work onto a fresh branch created directly from `master/consolidated-feature-integration` as `studio-controls-system-consolidation-v3`. This avoids carrying the earlier branch's three-commit target drift.
+- Repaired the Studio system audit module's duplicate `recovery` binding and malformed textarea selector string, both of which prevented the audit module from parsing.
+- Updated split-input regression expectations to assert the inner-square rail token rather than the obsolete full control-height grid track.
+- Reconciled field-style assertions with actual ownership: persistent primary inset and read-only TextBox perimeter are asserted against the canonical system stylesheet, while duplicate editable-field and TextBox recovery overrides were removed from the recovery stylesheet.
+- Replaced repeated hard-coded floating-field focus widths with the generated Standard and Compact focus-outline tokens.
+- Added an explicit no-outline/no-shadow rule for the Double Side Toggle center divider; the outer shell remains the sole focus-outline owner.
+- Ran the two edited static audit modules against 20 fetched repository fixtures using a local assertion harness: 26 checks passed, 0 failed. This is a targeted source-contract check, not a substitute for the repository's Node/Vitest test commands or CI.
+- Full `npm run test:studio-controls`, build/typecheck, browser/mobile measurements, and GitHub CI are still required before merge readiness.
