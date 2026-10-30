@@ -208,64 +208,17 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
 }
 
 const ConfirmedStudioSideCounterFamily: React.FC = () => {
-  const [standardValue, setStandardValue] = React.useState(5)
-  const [compactValue, setCompactValue] = React.useState(3)
-  const [microValue, setMicroValue] = React.useState(8)
-  return (
-    <Family
-      title="StudioSideCounter · Standard + Compact + Micro"
-      nonDefaultSettings={[
-        "Independent button-only counter with 2:1 display and two-cell right action rail.",
-        "Each size is a centered row with primary and secondary palette variants paired side-by-side.",
-        "Catalog range is 0–100 for all counter sizes.",
-      ]}
-      provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px / 28px / 14px · right-side action rail geometry · 0–100 specimen range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
-    >
-      <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row">
-        <div className="vt-confirmed-counter-size-rows">
-          <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard side counter" /><StudioLeftCounter className="is-reversed" value={standardValue} onValueChange={setStandardValue} size="standard" min={0} max={100} ariaLabel="Standard left counter secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact side counter" /><StudioLeftCounter className="is-reversed" value={compactValue} onValueChange={setCompactValue} size="compact" min={0} max={100} ariaLabel="Compact left counter secondary palette" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>14px MICRO</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro side counter" /><StudioLeftCounter className="is-reversed" value={microValue} onValueChange={setMicroValue} size="micro" min={0} max={100} ariaLabel="Micro left counter secondary palette" /></div></div>
-        </div>
-      </div>
-    </Family>
-  )
+  const [values, setValues] = React.useState({ supreme: 5, standard: 5, compact: 3, mini: 2, micro: 8 })
+  const update = (size: keyof typeof values) => (value: number) => setValues(current => ({ ...current, [size]: value }))
+  return <Family title="StudioSideCounter · Five Size Tiers" nonDefaultSettings={[
+    "Dedicated right-side action rail with one canonical primary-fill specimen per size.",
+    "No inverse-color or duplicate left-counter variants are shown in this family.",
+  ]} provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px supreme / 44px standard / 28px compact / 20px mini / 12px micro." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row"><div className="vt-confirmed-counter-size-rows">
+      {(["supreme","standard","compact","mini","micro"] as const).map(size => <div className="vt-confirmed-counter-size-row" key={size}><small>{size.toUpperCase()} · {({supreme:60,standard:44,compact:28,mini:20,micro:12})[size]}PX</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={values[size]} onValueChange={update(size)} size={size} min={0} max={100} ariaLabel={`${size} side counter`} /></div></div>)}
+    </div></div>
+  </Family>
 }
-
-
-const RestoredPrimitiveShowcase: React.FC = () => {
-  const [vertical, setVertical] = React.useState(false);
-  const [arrow, setArrow] = React.useState("TWO");
-  const [side, setSide] = React.useState("MID");
-  const [doubleLeft, setDoubleLeft] = React.useState("LOW");
-  const [doubleRight, setDoubleRight] = React.useState("HIGH");
-  const [level, setLevel] = React.useState(55);
-  const [wordCount, setWordCount] = React.useState(2);
-  const [selectedSquare, setSelectedSquare] = React.useState(0);
-  return <>
-    <Family title="Representatives · Canonical Production Primitives" nonDefaultSettings={[
-      "This curated overview is separate from the detailed family modules below; every specimen is a real exported production primitive.",
-      "No mock replicas, inverse-color counter/slider examples, or column-based catalog layout.",
-    ]}>
-      <div className="vt-confirmed-variant is-full-row"><span>Standard · Split arrow toggle</span><StudioArrowToggle value={arrow} options={["ONE","TWO","THREE","FOUR"]} onValueChange={setArrow} size="standard" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Standard · Double split word counter</span><StudioDoubleSplitWordCounter value={wordCount} onValueChange={setWordCount} size="standard" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Standard · Split accordion</span><StudioSplitAccordion sizeVariant="standard" items={[{accessibleLabel:"Overview",icon:<Check/>,content:<span>OVERVIEW CONTENT</span>},{accessibleLabel:"Settings",icon:<Settings2/>,content:<span>SETTINGS CONTENT</span>},{accessibleLabel:"Details",icon:<Sparkles/>,content:<span>DETAILS CONTENT</span>}]} /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Standard · Five-square action group</span><StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Representative five action buttons">{[0,1,2,3,4].map(index => <StudioSquareIconButton key={index} icon={<Settings2 aria-hidden="true"/>} label={`Select action ${index+1}`} selected={selectedSquare===index} onSelectedChange={selected=>setSelectedSquare(selected?index:-1)} sizeVariant="standard" data-vt-studio-icon-button="true"/>)}</StudioSquareIconButtonGroup></div>
-    </Family>
-    <Family title="Restored Value Toggle Family · Shared Split Foundation" nonDefaultSettings={[
-      "Arrow, side, double-side, bar, and double-split word counter all use StudioSplitShell and the shared five-tier size tokens.",
-      "Default family fill is primary; the selected double-side appearance remains explicit and documented.",
-    ]}>
-      <div className="vt-confirmed-variant is-full-row"><span>Arrow Toggle · Standard</span><StudioArrowToggle value={arrow} options={["ONE","TWO","THREE","FOUR"]} onValueChange={setArrow} size="standard" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Side Toggle · Standard</span><StudioSideToggle value={side} options={["LOW","MID","HIGH"]} onValueChange={setSide} arrowSide="left" size="standard" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Double Side Toggle · Standard</span><StudioDoubleSideToggle left={{value:doubleLeft,options:["LOW","HIGH"],onValueChange:setDoubleLeft}} right={{value:doubleRight,options:["LOW","HIGH"],onValueChange:setDoubleRight}} size="standard"/></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Bar Toggle · Standard</span><StudioBarToggle value={level} onValueChange={setLevel} size="standard" ariaLabel="Intensity" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Double Split Word Counter · Standard</span><StudioDoubleSplitWordCounter value={wordCount} onValueChange={setWordCount} size="standard"/></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Vertical Word Toggle · Standard</span><StudioVerticalWordToggle value={vertical} onValueChange={setVertical} sizeVariant="standard" words={["WRITE","CREATE"]}/></div>
-      <div className="vt-confirmed-variant is-full-row"><span>Read-only Text Box</span><StudioTextBox>READ ONLY DISPLAY TEXT</StudioTextBox></div>
-    </Family>
-  </>;
-};
 
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
 export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
