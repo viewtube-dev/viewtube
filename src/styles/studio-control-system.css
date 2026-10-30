@@ -7193,3 +7193,38 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
 button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-split-rail] {
   background: var(--vt-studio-control-accent, var(--pair-a));
 }
+
+/* Split badge labels center against the complete outer shell, not the remaining grid cell.
+   This keeps left, right, and double-split labels on the same vertical center axis.
+   Editable split-text inputs are deliberately excluded and keep their start-aligned cursor. */
+.vt-studio-split-left-badge,
+.vt-studio-split-right-badge,
+.vt-studio-double-split-badge {
+  position: relative;
+}
+.vt-studio-split-left-badge:not(.vt-studio-split-text-input .vt-studio-split-left-badge) > .vt-studio-split-left-badge__label,
+.vt-studio-split-right-badge:not(.vt-studio-split-text-input .vt-studio-split-right-badge) > .vt-studio-split-right-badge__label,
+.vt-studio-double-split-badge:not(.vt-studio-split-text-input .vt-studio-double-split-badge) > .vt-studio-double-split-badge__label {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  pointer-events: none;
+}
+.vt-studio-split-left-badge > .vt-studio-split-left-badge__rail,
+.vt-studio-split-right-badge > .vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge > .vt-studio-double-split-badge__rail {
+  position: relative;
+  z-index: 2;
+}
+.vt-studio-split-left-badge > .vt-studio-split-left-badge__rail { grid-column: 1; grid-row: 1; }
+.vt-studio-split-right-badge > .vt-studio-split-right-badge__rail { grid-column: 2; grid-row: 1; }
+.vt-studio-double-split-badge > .vt-studio-double-split-badge__rail:first-child { grid-column: 1; grid-row: 1; }
+.vt-studio-double-split-badge > .vt-studio-double-split-badge__rail:last-child { grid-column: 3; grid-row: 1; }
