@@ -338,3 +338,20 @@ export const fetchPublicChannelSnapshot = async (handleInput: string): Promise<P
 
   return snapshotFromFixture(handleInput)
 }
+
+
+/**
+ * Reads the user's explicit Settings selection for callers that build Brain
+ * requests. The generic BrainRuntime never reads browser storage itself.
+ */
+export const readSelectedPublicHandleContext = (): { handle: string; channelId: string | null } | null => {
+  try {
+    if (typeof localStorage === "undefined" || localStorage.getItem("vt_ingest_mode") !== "public_handle") return null
+    const handle = localStorage.getItem("vt_public_channel_handle") || localStorage.getItem("vt_public_channel_input") || ""
+    if (!extractHandleLike(handle)) return null
+    const channelId = localStorage.getItem("vt_public_channel_id")
+    return { handle, channelId: isRealChannelId(channelId) ? channelId : null }
+  } catch {
+    return null
+  }
+}
