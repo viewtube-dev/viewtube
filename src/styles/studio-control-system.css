@@ -6235,7 +6235,7 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
    Keep character fill and glyph stroke sourced from the same state token. */
 [data-vt-studio-control] {
   --vt-field-text-stroke: var(--vt-field-text);
-  --vt-field-text-stroke-focus: var(--vt-field-primary);
+  --vt-field-text-stroke-focus: #000;
   --vt-studio-control-text-transition: var(--vt-studio-focus-outline-fade-ms, 500ms);
 }
 [data-vt-studio-control]:is(input, textarea, select) {
