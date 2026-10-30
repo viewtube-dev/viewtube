@@ -23,6 +23,8 @@ logBuildInfo()
 // and calls window.close() before React can boot any auth side-effects.
 import './services/auth/authSession'
 import App from './App.tsx'
+// Load the shared Studio focus owner after App's component styles so no primitive-local rule can replace it.
+import './styles/studio-control-focus.css'
 
 // If this window was opened as an OAuth popup, the authSession module-level
 // hash listener already handled the token and sent postMessage. Don't mount
