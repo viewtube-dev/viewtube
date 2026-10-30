@@ -4,75 +4,83 @@ import { dirname, resolve } from "node:path";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const tokenSource = await readFile(resolve(root, "src/studio-ui/tokens.ts"), "utf8");
+const sizeBaseBlock = tokenSource.match(/export const STUDIO_CONTROL_SIZE_BASE = \{([\s\S]*?)\n\} as const/)?.[1] ?? "";
+const compactSizeLine = tokenSource.match(/const STUDIO_CONTROL_SIZE_BASE_COMPACT = \{([^\n]*)\} as const/)?.[1] ?? "";
 const dropdownContract = tokenSource.match(/export const STUDIO_DROPDOWN_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 const focusContract = tokenSource.match(/export const STUDIO_FOCUS_INTERACTION_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
 const numberContract = tokenSource.match(/export const STUDIO_COUNTER_NUMBER_TOKENS = \{([\s\S]*?)\} as const/)?.[1] ?? "";
-const sizeBaseBlock = tokenSource.match(/export const STUDIO_CONTROL_SIZE_BASE = \{([\s\S]*?)\n\} as const/)?.[1] ?? "";
-const compactSizeLine = tokenSource.match(/const STUDIO_CONTROL_SIZE_BASE_COMPACT = \{([^\n]*)\} as const/)?.[1] ?? "";
 
-function readPair(contract, property) {
-  const match = contract.match(new RegExp(`${property}:\\s*\\{\\s*standard:\\s*([\\d.]+),\\s*compact:\\s*([\\d.]+)`));
-  if (!match) throw new Error(`Missing Studio token pair: ${property}`);
-  return { standard: Number(match[1]), compact: Number(match[2]) };
+const tiers = ["supreme", "standard", "compact", "mini", "micro"];
+function tierSource(tier) {
+  if (tier === "compact") return compactSizeLine;
+  const match = sizeBaseBlock.match(new RegExp(`(?:^|\\n)\\s*${tier}:\\s*\\{([^\\n]*)\\}`));
+  return match?.[1] ?? "";
 }
-
-const dropdownRail = readPair(dropdownContract, "railSize");
-const dropdownChevron = readPair(dropdownContract, "chevronSize");
-const dropdownChevronStroke = readPair(dropdownContract, "chevronStroke");
-
-/** Shared floating-label metrics come from the canonical size ladder (standard/compact tiers). */
-function readFloatingLabelMetric(source, property, { required = true } = {}) {
-  const match = source.match(new RegExp(`${property}:\\s*([\\d.]+)`));
-  if (!match) {
-    if (required) throw new Error(`Missing Studio floating-label token: ${property}`);
-    return null;
-  }
+function readNumber(source, property, label) {
+  const match = source.match(new RegExp(`(?:^|[,\\s])${property}:\\s*([\\d.]+)`));
+  if (!match) throw new Error(`Missing Studio token ${label}.${property}`);
   return Number(match[1]);
 }
-const floatingLabelStandardHeight = readFloatingLabelMetric(sizeBaseBlock, "floatingLabelHeight");
-const floatingLabelCompactHeight = readFloatingLabelMetric(compactSizeLine, "floatingLabelHeight");
-const floatingLabelOffsetRatio = readFloatingLabelMetric(sizeBaseBlock, "floatingLabelOffsetRatio");
-const focusHoldMs = Number(focusContract.match(/holdMs:\s*(\d+)/)?.[1]);
-const focusFadeMs = Number(focusContract.match(/outlineFadeMs:\s*(\d+)/)?.[1]);
-const focusOutlineWidthRatio = Number(focusContract.match(/outlineWidthRatio:\s*([\d.]+)/)?.[1]);
-const focusOutlineOffsetPx = Number(focusContract.match(/outlineOffsetPx:\s*([\d.]+)/)?.[1]);
-const numberMix = Number(focusContract.match(/restTextMixPercent:\s*(\d+)/)?.[1]);
-const activeTextColor = focusContract.match(/activeTextColor:\s*"([^"]+)"/)?.[1];
-const activeStrokeColor = numberContract.match(/activeStrokeColor:\s*"([^"]+)"/)?.[1] ?? activeTextColor;
-if (!Number.isFinite(focusHoldMs) || !Number.isFinite(focusFadeMs) || !Number.isFinite(focusOutlineWidthRatio) || !Number.isFinite(focusOutlineOffsetPx) || !Number.isFinite(numberMix) || !activeTextColor || !activeStrokeColor) {
+function readTierObject(source, property) {
+  const block = source.match(new RegExp(`${property}:\\s*\\{([^}]+)\\}`))?.[1] ?? "";
+  const result = {};
+  for (const tier of tiers) {
+    const match = block.match(new RegExp(`${tier}:\\s*([\\d.]+)`));
+    if (!match) throw new Error(`Missing Studio dropdown token ${property}.${tier}`);
+    result[tier] = Number(match[1]);
+  }
+  return result;
+}
+const sizes = Object.fromEntries(tiers.map(tier => {
+  const source = tierSource(tier);
+  if (!source) throw new Error(`Missing Studio size tier: ${tier}`);
+  return [tier, Object.fromEntries(["height", "stroke", "radius", "fontSize", "iconSize", "floatingLabelHeight"].map(property => [property, readNumber(source, property, tier)]))];
+}));
+const dropdown = {
+  rail: readTierObject(dropdownContract, "railSize"),
+  chevron: readTierObject(dropdownContract, "chevronSize"),
+  chevronStroke: readTierObject(dropdownContract, "chevronStroke"),
+};
+const focusHoldMs = Number(focusContract.match(/holdMs:\\s*(\\d+)/)?.[1]);
+const focusFadeMs = Number(focusContract.match(/outlineFadeMs:\\s*(\\d+)/)?.[1]);
+const focusOutlineWidthRatio = Number(focusContract.match(/outlineWidthRatio:\\s*([\\d.]+)/)?.[1]);
+const focusOutlineOffsetPx = Number(focusContract.match(/outlineOffsetPx:\\s*([\\d.]+)/)?.[1]);
+const numberMix = Number(focusContract.match(/restTextMixPercent:\\s*(\\d+)/)?.[1]);
+const activeTextColor = focusContract.match(/activeTextColor:\\s*"([^"]+)"/)?.[1];
+const activeStrokeColor = numberContract.match(/activeStrokeColor:\\s*"([^"]+)"/)?.[1] ?? activeTextColor;
+if (![focusHoldMs, focusFadeMs, focusOutlineWidthRatio, focusOutlineOffsetPx, numberMix].every(Number.isFinite) || !activeTextColor || !activeStrokeColor) {
   throw new Error("Incomplete Studio focus interaction / counter number-state tokens");
 }
 
+const sizeCss = tiers.map(tier => {
+  const value = sizes[tier];
+  return `  --vt-studio-${tier}-height: ${value.height}px;
+  --vt-studio-${tier}-stroke: ${value.stroke}px;
+  --vt-studio-${tier}-radius: ${value.radius}px;
+  --vt-studio-${tier}-font-size: ${value.fontSize}px;
+  --vt-studio-${tier}-icon-size: ${value.iconSize}px;`;
+}).join("\\n");
+const dropdownCss = tiers.map(tier => `  --vt-studio-dropdown-${tier}-rail-size: ${dropdown.rail[tier]}px;
+  --vt-studio-dropdown-${tier}-chevron-size: ${dropdown.chevron[tier]}px;
+  --vt-studio-dropdown-${tier}-chevron-stroke: ${dropdown.chevronStroke[tier]};`).join("\\n");
 const css = `/* Generated by scripts/emit-studio-control-vars.mjs. Do not edit by hand. */
 :root {
-  --vt-studio-standard-height: 44px;
-  --vt-studio-standard-stroke: 3px;
-  --vt-studio-standard-radius: 6px;
-  --vt-studio-standard-font-size: 38px;
-  --vt-studio-standard-icon-size: 38px;
-  --vt-studio-compact-height: 28px;
-  --vt-studio-compact-stroke: 2px;
-  --vt-studio-compact-radius: 4px;
-  --vt-studio-compact-font-size: 24px;
-  --vt-studio-compact-icon-size: 24px;
-  --vt-studio-micro-height: 14px;
-  --vt-studio-micro-stroke: 1px;
-  --vt-studio-micro-radius: 2px;
-  --vt-studio-micro-font-size: 10px;
-  --vt-studio-micro-icon-size: 10px;
-  --vt-studio-secondary-focus-opacity: 65%;\n  --vt-studio-focus-hold-ms: ${focusHoldMs}ms;\n  --vt-studio-focus-outline-fade-ms: ${focusFadeMs}ms;\n  --vt-studio-number-rest-mix: ${numberMix}%;\n  --vt-studio-number-rest-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-number-rest-mix, 50%), white);\n  --vt-studio-number-active-color: ${activeTextColor};\n  --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));\n  --vt-studio-focus-outline-width-ratio: ${focusOutlineWidthRatio};\n  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65));\n  --vt-studio-focus-outline-offset: ${focusOutlineOffsetPx}px;
-  --vt-studio-dropdown-standard-rail-size: ${dropdownRail.standard}px;
-  --vt-studio-dropdown-compact-rail-size: ${dropdownRail.compact}px;
-  --vt-studio-dropdown-standard-chevron-size: ${dropdownChevron.standard}px;
-  --vt-studio-dropdown-compact-chevron-size: ${dropdownChevron.compact}px;
-  --vt-studio-dropdown-standard-chevron-stroke: ${dropdownChevronStroke.standard};
-  --vt-studio-dropdown-compact-chevron-stroke: ${dropdownChevronStroke.compact};
-  --vt-studio-number-default-white-mix: ${numberMix}%;
+${sizeCss}
+  --vt-studio-secondary-focus-opacity: 65%;
+  --vt-studio-focus-hold-ms: ${focusHoldMs}ms;
+  --vt-studio-focus-outline-fade-ms: ${focusFadeMs}ms;
+  --vt-studio-number-rest-mix: ${numberMix}%;
+  --vt-studio-number-rest-color: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-number-rest-mix, 50%), white);
   --vt-studio-number-active-color: ${activeTextColor};
+  --vt-studio-focus-outline-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-studio-focus-outline-width-ratio: ${focusOutlineWidthRatio};
+  --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65));
+  --vt-studio-focus-outline-offset: ${focusOutlineOffsetPx}px;
+${dropdownCss}
+  --vt-studio-number-default-white-mix: ${numberMix}%;
   --vt-studio-number-active-stroke: ${activeStrokeColor};
-  --vt-studio-floating-label-standard-height: ${floatingLabelStandardHeight}px;
-  --vt-studio-floating-label-compact-height: ${floatingLabelCompactHeight}px;
-  --vt-studio-floating-label-offset-ratio: ${floatingLabelOffsetRatio};
+${tiers.map(tier => `  --vt-studio-floating-label-${tier}-height: ${sizes[tier].floatingLabelHeight}px;`).join("\\n")}
+  --vt-studio-floating-label-offset-ratio: 1.2;
 }
 `;
 await writeFile(resolve(root, "src/styles/studio-control-vars.generated.css"), css);
