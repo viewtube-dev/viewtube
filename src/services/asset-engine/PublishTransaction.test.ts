@@ -210,6 +210,7 @@ describe("PublishTransaction",()=>{
   const recovered=resolveAmbiguousPublishStepAsApplied({transactionId:transaction.id,step:"upload-video",youtubeVideoId:"youtube-recovered",checkedBy:"creator",evidence:"Matched the uploaded video in YouTube Studio"})
   expect(recovered.youtubeVideoId).toBe("youtube-recovered")
   expect(recovered.steps["upload-video"]?.status).toBe("completed")
+  expect(recovered.steps["bind-youtube"]?.status).toBe("completed")
   expect(getContentBuild("cb-publish")?.youtube?.videoId).toBe("youtube-recovered")
  })
 
