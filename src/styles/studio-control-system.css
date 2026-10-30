@@ -753,8 +753,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice {
 }
 button[data-vt-studio-control="true"].vt-studio-44-switch:focus-visible,
 button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
-  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  outline-offset: 3px;
+  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
 }
 /* Word toggles keep their intentional 3px/2px frame, but size to their own
    labels and stay inside the module instead of inheriting action-button layout. */
@@ -1246,8 +1246,8 @@ button.vt-studio-44-choice.is-rect { border-radius: 7.333px; }
 .vt-studio-44-choice.is-checkbox.is-white-indicator svg { stroke: #fff !important; }
 .vt-studio-44-switch:focus-visible,
 .vt-studio-44-choice:focus-visible {
-  outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  outline-offset: 3px;
+  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
 }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-44-switch,
@@ -1305,7 +1305,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [da
 }
 
 
-button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: 3px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 3px; }
+button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:focus-visible { outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))); outline-offset: var(--vt-studio-focus-outline-offset, 0px); }
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disabled { cursor: not-allowed; opacity: .5; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
