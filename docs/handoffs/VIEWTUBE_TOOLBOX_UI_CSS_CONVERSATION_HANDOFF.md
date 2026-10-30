@@ -1188,3 +1188,15 @@ Next steps:
 - Updated vertical word-toggle audit assertions to match the actual multiline CSS declarations while retaining measured-handle and radius checks.
 - Targeted static audit harness: 26 assertions passed across 20 fetched repository fixtures. This is not the repository Node/Vitest runner, a production build, typecheck, or browser verification.
 - Required before merge: `npm run test:studio-controls`, `npm run typecheck`, `npm run build`, and browser/mobile verification.
+
+## 2026-10-30 follow-up — latest-target field and focus cleanup
+
+- Replayed the remaining work on `studio-controls-system-consolidation-v5`, created directly from the latest `master/consolidated-feature-integration` head after the target's primitive-restoration and catalog updates. Those target changes are preserved.
+- Repaired the malformed textarea selector assertion and aligned audit coverage with the actual TextBox field owner and `StudioValueToggles.tsx` implementation.
+- Updated the split-input geometry assertion to check the actual inner-rail width token rather than requiring a grid track that the current implementation no longer uses.
+- Removed duplicate editable-field and TextBox declarations from the recovery stylesheet so the recovery layer no longer competes with canonical field styling.
+- Replaced hard-coded Standard and Compact floating-field focus widths with generated tier tokens.
+- Made the Double Side Toggle center divider explicitly outline-free and shadow-free; the outer shell remains the focus owner.
+- Updated vertical word-toggle audit assertions to match the actual multiline CSS declarations while retaining measured-handle and radius checks.
+- Targeted static audit harness: 26 assertions passed across 20 fetched source fixtures. This is not the repository Node/Vitest runner, a production build, typecheck, or browser verification.
+- Required before merge: `npm run test:studio-controls`, `npm run typecheck`, `npm run build`, and browser/mobile verification.
