@@ -924,7 +924,7 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
   const controls = grouped.get("Controls") ?? []
   if (switchToggleFamilies.length > 0) {
     controls.unshift(
-      <ConfirmedFamilyModule key="switch-toggle-choice-family" title="Switches / Toggles / Radio / Checkbox" className="vt-confirmed-family-group vt-confirmed-switch-toggle-family">
+      <ConfirmedFamilyModule key="switch-toggle-choice-family" title="Switches / Toggles / Radio / Checkbox" className="vt-confirmed-family-group vt-confirmed-switch-toggle-family" defaultOpen>
         {switchToggleFamilies}
       </ConfirmedFamilyModule>,
     )
@@ -936,7 +936,7 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
         {CONFIRMED_CATALOG_FAMILIES
           .filter((family) => (grouped.get(family)?.length ?? 0) > 0)
           .map((family) => (
-            <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group">
+            <ConfirmedFamilyModule key={family} title={family} className="vt-confirmed-family-group" defaultOpen={family === "Controls"}>
               {grouped.get(family)}
             </ConfirmedFamilyModule>
           ))}
