@@ -523,7 +523,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => (
         "V1–V4 skins change fill and icon color only.",
         "Default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact.",
         "All icon presets and interaction effects live in this single family; success styling must follow a real successful operation.",
-        "Notification needs a real count/status and success must follow actual operation success."
+        "notification needs a real count/status and success must follow actual operation success."
       ]} provenance={<Provenance primitive="StudioSquareIconButton · v1/v2/v3/v4 + seven effects" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44×44px standard / 28×28px compact; V1–V4 skins; all icon presets and opt-in interaction effects; no default shell shadow or motion." imports={["src/studio-ui/index.ts", "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"]} />}>
       <SizeMatrix label="Square icon button size examples"
         standard={<StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Standard square icon button" variant="v1" sizeVariant="standard" />}
