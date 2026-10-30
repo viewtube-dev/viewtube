@@ -2873,3 +2873,88 @@
 .vt-confirmed-counter-size-row .vt-confirmed-slider-pair {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
+
+
+/* 2026-10-30 confirmed primitive layout contract: no multi-column specimen galleries.
+   Each family is a vertical sequence of full-row specimens; intentional size matrices
+   use the exact 1 / 2 / 4 distribution requested for standard / compact / micro. */
+.vt-confirmed-family > .vt-confirmed-variants {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  align-items: start;
+}
+.vt-confirmed-family > .vt-confirmed-variants > .vt-confirmed-variant,
+.vt-confirmed-family > .vt-confirmed-variants > .vt-confirmed-paired-compact-row,
+.vt-confirmed-family > .vt-confirmed-variants > .vt-confirmed-control-family {
+  grid-column: 1 / -1 !important;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-paired-compact-row {
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: start;
+  gap: 8px;
+}
+.vt-confirmed-paired-compact-row > .vt-confirmed-variant {
+  flex: 1 1 calc(50% - 4px);
+  width: auto;
+  min-width: min(100%, 240px);
+}
+.vt-confirmed-control-family .vt-confirmed-control-variants,
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants,
+.vt-confirmed-square-variant-grid {
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+.vt-confirmed-control-family .vt-confirmed-control-variants > *,
+.vt-confirmed-word-toggle-family .vt-confirmed-control-variants > *,
+.vt-confirmed-square-variant-grid > * {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+}
+.vt-confirmed-size-matrix {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-size-matrix__standard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-size-matrix__compact {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-size-matrix__micro {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-size-matrix__item { display: flex; align-items: center; min-width: 0; width: 100%; }
+.vt-confirmed-size-matrix__item > * { min-width: 0; width: 100%; }
+.vt-confirmed-size-matrix__micro .vt-studio-split-accordion { min-width: 0; }
+.vt-confirmed-representatives > .vt-confirmed-variants { gap: 8px; }
+.vt-confirmed-representatives .vt-confirmed-variant > span {
+  display: block;
+  margin-bottom: 4px;
+}
+@media (max-width: 560px) {
+  .vt-confirmed-size-matrix__compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vt-confirmed-size-matrix__micro { grid-template-columns: repeat(4, minmax(0, 1fr)); overflow-x: auto; }
+  .vt-confirmed-paired-compact-row > .vt-confirmed-variant { min-width: 0; }
+}
