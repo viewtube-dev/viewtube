@@ -348,6 +348,8 @@ export const BRAIN_PROMPT_VERSION = "brain-orchestrator-v2"
 export const BRAIN_OUTPUT_SCHEMA_VERSION = "structured-brain-output-v1"
 
 export interface RunBrainTurnInput {
+ /** Stable identity supplied by the initiating creator action, when available. */
+ operationId?: string | null
  channelId?: string | null
  userText: string
  retryTurnId?: string
@@ -670,7 +672,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   channelContext: savedChannelContext,
   creatorAnswerEvidenceRecords,
  })
- const questionTrace = beginBrainTrace({ kind: "question", channelId: input.channelId || null })
+ const operationId = input.operationId || pending.id
+ const questionTrace = beginBrainTrace({ kind: "question", channelId: input.channelId || null, operationId })
  questionTrace.setIntent({ intent: taskProfile.id, taskProfileId: taskProfile.id })
  questionTrace.recordCapabilities(capabilityIds)
  questionTrace.recordModelIdentity({
@@ -803,6 +806,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     history: modelHistory || (input.history || []).slice(-8),
     userText: input.userText,
     systemInstruction: modelSystemInstruction || context.systemInstruction,
+    operationId,
    }), BRAIN_MODEL_TIMEOUT_MS)
    if (output.modelIdentity) {
     requestedModel = output.modelIdentity.requestedModel
