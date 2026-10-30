@@ -189,3 +189,81 @@ These should be connected and verified, not replaced with a competing registry o
 
 ---
 **Completion status:** First-pass static audit documented. No code changes, no feature promotions, no legacy deletions, and no runtime claims have been made. The next pass must complete evidence-backed reachability checks before remediation.
+
+
+## Second-pass addendum — capability loader and navigation wiring
+
+**Audit pass date:** 2026-10-30  
+**Source branch:** `master/consolidated-feature-integration`  
+**Scope:** Target-branch source inspection of the capability route loader, two representative capability pages and their API adapters, the actual navigation consumers, and existing route governance tests.
+
+### F-006 — Capability page loader expects filenames that do not match the actual page modules
+
+**Severity:** P1 — lazy route runtime failure  
+**Confidence:** Confirmed by source and directory listings
+
+Evidence:
+- `src/app/capabilitiesRoutes.tsx` builds the lazy import key as `../features/capabilities/${slug}/${slug}Page.tsx`.
+- The route's Vite glob is `../features/capabilities/**/*Page.tsx`, so it only registers actual files matching the glob.
+- The `channel-intelligence-engine` directory contains `ChannelIntelligenceEnginePage.tsx`, not `channel-intelligence-enginePage.tsx`.
+- The `evidence-connected-brain` directory contains `EvidenceConnectedBrainPage.tsx`, not `evidence-connected-brainPage.tsx`.
+- The loader throws `Capability page module not found` when its computed key is absent.
+
+Impact:
+- These two registered routes cannot resolve their page modules through the current slug-derived loader. The failure is deferred until the lazy route is rendered, so route registration and page-registry tests can pass while navigation to the page fails.
+- This is a confirmed defect for the two inspected pages. The remaining 23 page directories still require filename-by-filename verification; do not extrapolate a complete failure count without that inspection.
+
+Required remediation:
+- Make the capability registry carry an explicit page-module key/path, or use a canonical slug-to-loader mapping generated from the existing page files.
+- Add a test that resolves every `CAPABILITIES` entry against the exact Vite glob key and asserts every loader exists.
+- Do not rename files wholesale without checking imports, history, and ownership; explicit mapping may be the lower-churn correction.
+
+### F-007 — Evidence-connected Brain page is still a review-preview, not an evidence-connected user capability
+
+**Severity:** P1 — feature claim / implementation gap  
+**Confidence:** Confirmed from page source
+
+Evidence:
+- `EvidenceConnectedBrainPage.tsx` defines `REVIEW_PREVIEW_CONTROLS` locally with all controls enabled instead of reading canonical Brain user controls.
+- The page creates `suppliedPack` as a memoized empty array: `useMemo(() => [], [])`.
+- The answer builder receives that empty pack for every turn, so the page cannot display the exact evidence pack supplied to the Brain turn.
+- The page itself labels the controls as review-preview values and comments that the canonical evidence loader is not wired.
+- `EvidenceConnectedBrainApi.ts` can call the shared `runBrainTurn` adapter or configured endpoint, but that alone does not connect the returned turn's evidence pack to the page's `suppliedPack`.
+
+Impact:
+- The page can submit a Brain question, but its central advertised evidence-linking behavior is not integrated. Its UI deliberately falls back to “no evidence pack supplied” rather than displaying evidence.
+- Keep this capability classified as lab/unverified until it consumes the exact canonical evidence pack and canonical user controls for the same turn.
+
+Required remediation:
+- Return or retain the exact evidence pack identity and refs from the canonical Brain turn result; do not reconstruct a second evidence store.
+- Read controls through the canonical Brain user-controls reader.
+- Add tests proving that evidence shown in the UI is the exact evidence supplied to that turn, and that disabled analytics/personalization controls are respected.
+
+### F-008 — Existing page-registry navigation projection is not the source consumed by the inspected navigation renderers
+
+**Severity:** P1 — registry synchronization / discoverability risk  
+**Confidence:** Confirmed for the inspected renderers
+
+Evidence:
+- `AdaptiveNavigationShell.tsx` imports and consumes `PRIMARY_NAV_ITEMS` from `navigationContract.ts`.
+- `ApplicationAccountMenu.tsx` imports and consumes `APPLICATION_MENU_DESTINATIONS` and `APPLICATION_MENU_GROUPS` from `applicationMenuContract.ts`.
+- `pageRegistry.ts` separately exposes `pagesForNavigation()` and describes itself as the single source for path/title/section/visibility/lifecycle, while its own header says navigation contracts have not yet adopted it.
+- `pageRegistry.test.ts` validates registry shape and route classification, but does not prove that the visible renderers derive their destinations from the page registry.
+- `routeRegistryGovernance.test.ts` verifies that hard-coded primary-nav and application-menu paths exist in the statically parsed AppRoutes source. It does not verify page-registry visibility/lifecycle parity or lazy capability module resolution.
+
+Impact:
+- The page registry is currently a classification inventory, not the effective source of truth for the visible navigation destinations. Updating a page's registry visibility/lifecycle does not, by itself, update the inspected nav/menu contracts.
+- Existing route governance protects only part of the relationship; it misses the lazy-loader defect in F-006.
+
+Required remediation:
+- Decide and document whether PAGE_REGISTRY is intended to govern navigation now or is only a future projection.
+- If it is canonical, derive eligible route destinations from it while retaining typed menu-only actions and intentional menu metadata in their appropriate contracts.
+- Extend tests to assert lifecycle/visibility parity, route alias behavior, menu-only actions, and all dynamic capability loader keys.
+
+## Second-pass status
+
+- Confirmed two capability page filename mismatches; remaining capability directories not exhaustively enumerated in this pass.
+- Confirmed the evidence-connected Brain page is explicitly preview-wired with an empty evidence pack and hard-coded preview controls.
+- Confirmed the inspected primary navigation and application menu consume separate contracts rather than the page-registry projection.
+- No application source code was changed. No capability was promoted. No legacy code was deleted.
+- No test suite, typecheck, production build, or browser runtime test was executed in this pass. Findings are source-evidence findings, not a claim of runtime certification.
