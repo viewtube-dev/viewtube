@@ -1150,6 +1150,8 @@ Next steps:
 
 - Reconciled Micro to the canonical 12px / 1px stroke / 2px radius / 10px type-icon / 0.65px focus-outline bundle. Updated the conflicting parity test and size documentation; Mini remains 20px / 1.5px / 3px / 17.5px.
 - Split-left, split-right, and double-split badge labels now center against the complete outer shell. Rails are explicitly placed in their square grid columns and paint above the full-width label. Split text input is excluded and remains left-aligned/editable.
+- Promoted counter value-area ratio and bar geometry into family tokens: STUDIO_COUNTER_NUMBER_TOKENS.valueAreaAspectRatio and STUDIO_BAR_TOGGLE_TOKENS (height/text 1:1, height/width 2.5:1, 2px radius, 50% white/primary empty fill, black full fill). The emitter generates the variables; system CSS owns the rules.
+- Removed duplicate bar, arrow-stack, and double-side divider/focus geometry from the recovery stylesheet. The canonical system layer now owns those declarations.
 - Confirmed Counter and Side Counter number-value regions use the existing 2:1 aspect-ratio rule in the canonical system layer; their rails remain square. Updated the regression audit so it checks that ratio in the system owner and forbids a duplicate recovery-layer rule.
 - Confirmed Double Split Word Counter keeps its solid primary face; removed the stale audit expectation for a 50%-white blend. The audit also rejects an arrow-toggle-specific 50% fill override.
 - Added static regression checks for measured vertical word-toggle handle bounds, shared horizontal/vertical handle radius and side inset, shared side-arrow implementation, and outer-only double-side focus outline.
