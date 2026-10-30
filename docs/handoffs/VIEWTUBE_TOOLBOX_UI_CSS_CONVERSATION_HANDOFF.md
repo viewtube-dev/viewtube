@@ -1122,6 +1122,10 @@ Working branch: `studio-controls-system-consolidation-v2`
 - Aligned Micro token values and generated CSS with the 1px / 2px contract; removed a duplicate legacy Micro declaration and corrected remaining fallbacks.
 - Removed competing vertical word-toggle handle inset overrides.
 - Updated representative-module title matching so the full-width layout applies to the Representatives section.
+- Consolidated split text input styling into one canonical stylesheet at `src/styles/studio-split-text-input.css`; the primitive imports it directly, the global entry no longer imports a duplicate, and the duplicate primitive-local stylesheet was deleted.
+- Updated the catalog audit to verify the actual badge-shell + square-rail + primary-inset editable-field contract instead of the stale contradictory primary-border expectation.
+- Corrected the disclosure audit so it tests the actual default state and explicit counter-family expansions rather than mistaking `open={defaultOpen || undefined}` for an always-open panel.
+- Changed catalog family classification to fail closed: unknown items are surfaced in an explicit Unclassified family warning instead of silently falling into Compositions.
 
 Pull request: `https://github.com/viewtube-dev/viewtube/pull/1232` (draft; replaces closed draft PR #1231). The release-gates workflow now runs `npm run test:studio-controls` in the focused-contracts job.
 
