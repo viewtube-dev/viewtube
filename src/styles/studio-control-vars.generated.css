@@ -88,11 +88,12 @@
   --vt-studio-dropdown-menu-gap: 8px;
   --vt-studio-dropdown-menu-padding: 4px;
   --vt-studio-dropdown-menu-row-gap: 3px;
+  --vt-studio-dropdown-chevron-inset: 6px;
   --vt-studio-dropdown-menu-radius: var(--vt-studio-control-radius, 6px);
   --vt-studio-dropdown-row-radius: var(--vt-studio-control-radius, 6px);
-  --vt-studio-dropdown-menu-fill: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-studio-dropdown-menu-fill: var(--vt-studio-control-accent, var(--pair-a));
   --vt-studio-dropdown-row-fill: white;
-  --vt-studio-dropdown-selected-fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-studio-dropdown-selected-fill: var(--vt-studio-control-secondary, var(--pair-b));
   --vt-studio-dropdown-row-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-studio-dropdown-supreme-rail-size: 60px;
   --vt-studio-dropdown-supreme-chevron-size: 38.18181818181818px;

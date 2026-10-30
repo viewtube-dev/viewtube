@@ -169,6 +169,7 @@ export const STUDIO_DROPDOWN_MENU_TOKENS = {
   unselectedRowFill: "white" as const,
   selectedRowFill: "secondary" as const,
   rowStroke: "control" as const,
+  chevronInset: 6,
 } as const
 
 export const STUDIO_FOCUS_INTERACTION_TOKENS = {

@@ -81,6 +81,11 @@ jobs:
       - run: npm ci
       - run: npm run test:public-page-resolver
       - run: npm run test:vault-operation-store
+      - name: Verify Studio counter and dropdown regression contracts
+        run: |
+          npm run studio:tokens
+          git diff --exit-code -- src/styles/studio-control-vars.generated.css
+          node --test scripts/audit/studio-counter-primitives.test.mjs
       - run: npm run test:focused
       - run: npm run test:unified-diagnostics
       - run: npm run account:test

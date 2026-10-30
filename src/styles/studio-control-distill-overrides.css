@@ -266,6 +266,8 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   left: 50%;
   bottom: calc(100% + 4px);
   display: block;
+  visibility: hidden;
+  opacity: 0;
   min-height: 20px;
   padding: 3px 6px;
   border: 0;
@@ -514,4 +516,46 @@ html body .vt-studio-inter-module__rail {
   max-height: var(--vt-im-rail-square);
   flex: 0 0 var(--vt-im-rail-square);
   aspect-ratio: 1 / 1;
+}
+
+/* Bar percentage appears only while the control is focused; center content and tooltip
+   paint above the side rails and outside the shell's clipping context. */
+.vt-studio-split-shell.vt-studio-value-toggle--bar {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  overflow: visible;
+  clip-path: none;
+  outline: none;
+}
+.vt-studio-split-shell.vt-studio-value-toggle--bar:focus-within {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
+    solid var(--vt-studio-control-secondary, var(--pair-b));
+  outline-offset: 0;
+}
+.vt-studio-split-shell.vt-studio-value-toggle--bar > [data-vt-studio-split-label] {
+  position: relative;
+  z-index: 3;
+  min-width: 0;
+  overflow: visible;
+}
+.vt-studio-value-toggle--bar .vt-studio-value-toggle__bars {
+  position: relative;
+  z-index: 3;
+  min-width: 0;
+  overflow: visible;
+}
+.vt-studio-value-toggle--bar .vt-studio-value-toggle__bar { overflow: visible; }
+.vt-studio-value-toggle--bar .vt-studio-value-toggle__bar-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  z-index: 8;
+}
+.vt-studio-split-shell.vt-studio-value-toggle--bar:focus-within .vt-studio-value-toggle__bar-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+.vt-studio-value-toggle--bar [data-vt-studio-split-rail] {
+  position: relative;
+  z-index: 1;
 }

@@ -577,3 +577,12 @@ The confirmed production counter family uses directional chevrons for the double
 
 Selectable split-left, split-right, and double-split buttons swap their label and rail fills together when selected: resting label primary / rail secondary; selected label secondary / rail primary. `StudioBarToggle` keeps its bars in the flexible center cell, uses the shared secondary focus outline, and shows the rounded percentage above the rightmost filled bar using a secondary-fill, black-text, borderless compact tooltip. Production primitive markup and production family CSS remain authoritative; catalog specimens only demonstrate these states.
 
+
+
+## Counter width and state defaults — 2026-10-30
+
+- Every counter primitive inherits the same global full-row width default as other Studio primitives. Remove fixed counter widths and 2:1 value-pane ratios; square action rails remain tied to the selected size tier and the value pane flexes into the remaining space.
+- The double-split word counter uses the shared 50%-white / 50%-primary value-pane fill and primary numeral color/stroke at rest. During interaction focus, its numeral fill and stroke turn black.
+- Bar-toggle rails must not cover the center visualization. The center cell and bars paint above the rails, the outer shell retains its zero-offset secondary focus outline, and the percentage tooltip is hidden at rest and shown only while focus is within the control.
+- Selected split buttons swap as one state: text pane to secondary and rails to primary. Play/Pause follows the same swap; it does not use a 50%-primary intermediate fill.
+- Dropdown menus use the active Toolbox primary/secondary pair tokens. Keep unselected rows white and selected rows secondary; center trigger labels independently of the chevron and use the token-owned horizontal chevron inset.
