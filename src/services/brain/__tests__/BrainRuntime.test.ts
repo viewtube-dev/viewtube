@@ -107,6 +107,130 @@ describe("BrainRuntime", () => {
   })
  })
 
+
+ it("refreshes an explicitly selected public handle and replaces private evidence with public-only evidence", async () => {
+  runBrainTurn.mockResolvedValue({ turn: { id: "turn-public" } })
+  fetchPublicChannelSnapshot.mockResolvedValue({
+   mode: "public_handle",
+   source: "public_page",
+   fetchedAt: "2026-10-30T00:00:00.000Z",
+   channelId: "UC1234567890123456789012",
+   handle: "@publiccreator",
+   title: "Public Creator",
+   subscriberCount: null,
+   videoCount: null,
+   viewCount: null,
+   topVideos: [{
+    videoId: "video-public-1",
+    title: "Public video title",
+    publishedAt: "2026-10-29T00:00:00.000Z",
+    viewCount: null,
+    likeCount: null,
+    commentCount: null,
+   }],
+   provenance: {
+    schemaVersion: 1,
+    outcome: "resolved",
+    cacheStatus: "cached",
+    identity: { handle: "@publiccreator", channelId: "UC1234567890123456789012" },
+    fetchedAt: "2026-10-30T00:00:00.000Z",
+    expiresAt: "2026-10-30T03:00:00.000Z",
+    sourceRefs: ["https://www.youtube.com/channel/UC1234567890123456789012"],
+    limitations: ["Public metadata only."],
+   },
+  })
+
+  await runBrainTask({
+   channelId: null,
+   publicHandleContext: { handle: "@publiccreator", channelId: "UC1234567890123456789012" },
+   userText: "Summarize this public channel",
+   snapshot: {
+    channel: { connected: false, label: "Old private context", handle: null, subscribers: 500, totalViews: 9000 },
+    evidencePack: {
+     promptVersion: "brain-chat-v2",
+     requestSpec: {},
+     intent: "channel_overview",
+     channelId: "private-channel",
+     channelName: "Private",
+     channelDescription: "private",
+     capturedAt: "2026-10-29T00:00:00.000Z",
+     dataStatus: "ready",
+     topVideos: [{ evidenceId: "private-video", title: "Private title" }],
+     recentVideos: [{ evidenceId: "private-video", title: "Private title" }],
+     searchTerms: [{ evidenceId: "private-search" }],
+     trafficSources: [{ evidenceId: "private-traffic" }],
+     items: [],
+     availableMetrics: ["views"],
+     missingInputs: [],
+     evidenceIds: ["private-video"],
+     transcriptRouteRequired: false,
+    },
+   } as any,
+   systemPrompt: "system",
+   growthContext: {} as any,
+  })
+
+  expect(fetchPublicChannelSnapshot).toHaveBeenCalledWith("@publiccreator")
+  const [turnInput] = runBrainTurn.mock.calls[0]
+  expect(turnInput.channelId).toBe("UC1234567890123456789012")
+  expect(turnInput.snapshot.evidencePack.topVideos).toHaveLength(1)
+  expect(turnInput.snapshot.evidencePack.topVideos[0]).toMatchObject({
+   evidenceId: "public-video:video-public-1",
+   metrics: { views: null, watchTime: null, subscribers: null, revenue: null, ctr: null, averagePercentageViewed: null, likes: null, comments: null },
+  })
+  expect(turnInput.snapshot.evidencePack.searchTerms).toEqual([])
+  expect(turnInput.snapshot.evidencePack.trafficSources).toEqual([])
+  expect(turnInput.snapshot.evidencePack.evidenceIds).toEqual(["public-video:video-public-1"])
+  expect(turnInput.snapshot.channel).toMatchObject({ connected: false, subscribers: null, totalViews: null })
+  expect(turnInput.systemPrompt).toContain("PUBLIC CHANNEL EVIDENCE")
+  expect(turnInput.systemPrompt).toContain("Public video title")
+  expect(turnInput.visibleContext.publicHandleEvidence).toMatchObject({
+   mode: "public_handle",
+   identity: { handle: "@publiccreator", channelId: "UC1234567890123456789012" },
+   cacheStatus: "cached",
+  })
+ })
+
+ it("does not infer public mode from channelId or mix a conflicting private channel", async () => {
+  runBrainTurn.mockResolvedValue({ turn: { id: "turn-private" } })
+  await runBrainTask({
+   channelId: "private-connected-channel",
+   publicHandleContext: { handle: "@publiccreator", channelId: "UC1234567890123456789012" },
+   userText: "test",
+   snapshot: {} as any,
+   systemPrompt: "system",
+   growthContext: {} as any,
+  })
+  expect(fetchPublicChannelSnapshot).not.toHaveBeenCalled()
+  const [turnInput] = runBrainTurn.mock.calls[0]
+  expect(turnInput.systemPrompt).not.toContain("PUBLIC CHANNEL EVIDENCE")
+ })
+
+ it("rejects a public snapshot whose identity differs from the explicit selection", async () => {
+  runBrainTurn.mockResolvedValue({ turn: { id: "turn-mismatch" } })
+  fetchPublicChannelSnapshot.mockResolvedValue({
+   mode: "public_handle",
+   source: "public_page",
+   fetchedAt: "2026-10-30T00:00:00.000Z",
+   channelId: "UC9999999999999999999999",
+   handle: "@differentcreator",
+   title: "Different Creator",
+   subscriberCount: null,
+   videoCount: null,
+   viewCount: null,
+   topVideos: [],
+  })
+  await runBrainTask({
+   publicHandleContext: { handle: "@publiccreator", channelId: "UC1234567890123456789012" },
+   userText: "test",
+   snapshot: {} as any,
+   systemPrompt: "system",
+   growthContext: {} as any,
+  })
+  const [turnInput] = runBrainTurn.mock.calls[0]
+  expect(turnInput.systemPrompt).not.toContain("PUBLIC CHANNEL EVIDENCE")
+ })
+
  it("preserves an explicitly injected model generator for tests and specialized callers", async () => {
   const explicitGenerator = vi.fn()
   runBrainTurn.mockResolvedValue({ turn: { id: "turn-1" } })
