@@ -27,7 +27,7 @@
     {
       "title": "CONVERSATION_HANDOFFS.md",
       "path": "docs/governance/CONVERSATION_HANDOFFS.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/CONVERSATION_HANDOFFS.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/governance/CONVERSATION_HANDOFFS.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -38,7 +38,7 @@
     {
       "title": "CONVERSATION_OS.md",
       "path": "docs/governance/CONVERSATION_OS.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/CONVERSATION_OS.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/governance/CONVERSATION_OS.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -49,7 +49,7 @@
     {
       "title": "conversation-work-log.schema.json",
       "path": "docs/governance/conversation-work-log.schema.json",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/conversation-work-log.schema.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/governance/conversation-work-log.schema.json",
       "kind": "REPOSITORY_ARTIFACT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -60,7 +60,7 @@
     {
       "title": "SKILL.md",
       "path": ".claude/skills/viewtube-conversation-handoff/SKILL.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/SKILL.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.claude/skills/viewtube-conversation-handoff/SKILL.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -71,7 +71,7 @@
     {
       "title": "handoff-template.md",
       "path": ".claude/skills/viewtube-conversation-handoff/templates/handoff-template.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/templates/handoff-template.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.claude/skills/viewtube-conversation-handoff/templates/handoff-template.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -82,7 +82,7 @@
     {
       "title": "worklog-template.json",
       "path": ".claude/skills/viewtube-conversation-handoff/templates/worklog-template.json",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/templates/worklog-template.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.claude/skills/viewtube-conversation-handoff/templates/worklog-template.json",
       "kind": "REPOSITORY_ARTIFACT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -93,7 +93,7 @@
     {
       "title": "SKILL.md",
       "path": ".claude/skills/viewtube-conversation-work-reconciliation/SKILL.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-work-reconciliation/SKILL.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.claude/skills/viewtube-conversation-work-reconciliation/SKILL.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -104,7 +104,7 @@
     {
       "title": "conversation-handoff-workflow.md",
       "path": "agent/contracts/conversation-handoff-workflow.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/agent/contracts/conversation-handoff-workflow.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/agent/contracts/conversation-handoff-workflow.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -115,7 +115,7 @@
     {
       "title": "Index.md",
       "path": "docs/Index.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/Index.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/Index.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -126,7 +126,7 @@
     {
       "title": "registry.json",
       "path": "docs/registry.json",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/registry.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/registry.json",
       "kind": "REPOSITORY_ARTIFACT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -137,7 +137,7 @@
     {
       "title": "History.md",
       "path": "docs/recovery/History.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/recovery/History.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/recovery/History.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -148,7 +148,7 @@
     {
       "title": "handoff.md",
       "path": "tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/handoff.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/handoff.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/handoff.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -159,7 +159,7 @@
     {
       "title": "worklog.json",
       "path": "tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/worklog.json",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/worklog.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/worklog.json",
       "kind": "REPOSITORY_ARTIFACT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -170,7 +170,7 @@
     {
       "title": "review.md",
       "path": "tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/review.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/review.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/review.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -181,7 +181,7 @@
     {
       "title": "DOCUMENTATION.md",
       "path": "docs/governance/DOCUMENTATION.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/DOCUMENTATION.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/docs/governance/DOCUMENTATION.md",
       "kind": "DOCUMENT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -192,7 +192,7 @@
     {
       "title": "conversation-handoff-contract.test.mjs",
       "path": "scripts/audit/conversation-handoff-contract.test.mjs",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/scripts/audit/conversation-handoff-contract.test.mjs",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/scripts/audit/conversation-handoff-contract.test.mjs",
       "kind": "REPOSITORY_ARTIFACT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -203,7 +203,7 @@
     {
       "title": "package.json",
       "path": "package.json",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/package.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/package.json",
       "kind": "REPOSITORY_ARTIFACT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -214,7 +214,7 @@
     {
       "title": "release-gates.yml",
       "path": ".github/workflows/release-gates.yml",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.github/workflows/release-gates.yml",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/.github/workflows/release-gates.yml",
       "kind": "REPOSITORY_ARTIFACT",
       "status": "MERGED_OR_CURRENT",
       "relatedItemIds": [
@@ -235,7 +235,7 @@
     {
       "title": "Conversation Intake Index",
       "path": "tasks/conversation-intake/INDEX.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/INDEX.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/INDEX.md",
       "kind": "NAVIGATION",
       "status": "IN_PR",
       "relatedItemIds": [
@@ -246,7 +246,7 @@
     {
       "title": "Conversation Intake README",
       "path": "tasks/conversation-intake/README.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/README.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/README.md",
       "kind": "DOCUMENT",
       "status": "IN_PR",
       "relatedItemIds": [
@@ -257,7 +257,7 @@
     {
       "title": "This living handoff",
       "path": "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/handoff.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/handoff.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/handoff.md",
       "kind": "DOCUMENT",
       "status": "IN_PR",
       "relatedItemIds": [
@@ -268,7 +268,7 @@
     {
       "title": "This structured worklog",
       "path": "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/worklog.json",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/worklog.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/worklog.json",
       "kind": "STRUCTURED_RECORD",
       "status": "IN_PR",
       "relatedItemIds": [
@@ -279,7 +279,7 @@
     {
       "title": "This reconciliation review",
       "path": "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/review.md",
-      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/review.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/5218ca267e9e549af1325c471c06fbcdb9cae741/tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/review.md",
       "kind": "DOCUMENT",
       "status": "IN_PR",
       "relatedItemIds": [
