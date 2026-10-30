@@ -4656,6 +4656,9 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 .vt-studio-side-counter,
 .vt-studio-left-counter,
 .vt-studio-double-split-slider,
+.vt-studio-word-counter,
+.vt-studio-value-toggle,
+[data-vt-studio-value-toggle],
 [data-vt-studio-control-family="counter"],
 [data-vt-studio-slider] {
   outline: 0 solid transparent;
