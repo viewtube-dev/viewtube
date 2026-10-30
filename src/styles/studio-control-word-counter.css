@@ -1,8 +1,15 @@
-/* Default word counter: every word uses the global primary-fill / black-text contract. */
+/* Default word counter inherits the global field/counter 50% primary treatment. */
 .vt-studio-left-word-counter {
   --vt-studio-number-background: var(--pair-a);
 }
 .vt-studio-left-word-counter .vt-studio-side-counter__value {
+  background: var(--pair-a);
+  color: var(--vt-studio-number-rest-color);
+  -webkit-text-fill-color: var(--vt-studio-number-rest-color);
+  -webkit-text-stroke-color: var(--vt-studio-number-rest-color);
+}
+.vt-studio-left-word-counter[data-vt-interaction-focus="true"] .vt-studio-side-counter__value,
+.vt-studio-left-word-counter:focus-within .vt-studio-side-counter__value {
   background: var(--pair-a);
   color: #000;
   -webkit-text-fill-color: #000;

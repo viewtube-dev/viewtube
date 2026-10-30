@@ -91,6 +91,30 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-siz
 [data-vt-studio-icon-button="true"], .vt-studio-square-icon-button { display: grid !important; place-items: center !important; width: var(--vt-studio-control-height); height: var(--vt-studio-control-height); padding: 0 !important; }
 [data-vt-studio-icon-button="true"] svg, .vt-studio-square-icon-button svg { display: block; width: var(--vt-studio-control-icon-size); height: var(--vt-studio-control-icon-size); margin: 0; }
 
+/* Bar toggle's center track owns the flexible middle cell; overflow is visible only for its value tooltip. */
+.vt-studio-split-shell.vt-studio-value-toggle--bar {
+  overflow: visible;
+}
+.vt-studio-split-shell.vt-studio-value-toggle--bar > [data-vt-studio-split-label] {
+  box-sizing: border-box;
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: visible;
+  position: relative;
+  z-index: 3;
+}
+.vt-studio-split-shell.vt-studio-value-toggle--bar .vt-studio-value-toggle__bars {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: visible;
+}
+.vt-studio-split-shell.vt-studio-value-toggle--bar > [data-vt-studio-split-rail] {
+  position: relative;
+  z-index: 2;
+}
 /* Bar / word / side toggle geometry. */
 .vt-studio-value-toggle__bar { width: calc(var(--vt-studio-control-font-size) * .4); height: calc(var(--vt-studio-control-font-size) * 1); aspect-ratio: 1 / 2.5; border-radius: 2px; border: 0; background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, #fff); }
 .vt-studio-value-toggle__bar[data-active="true"] { background: #000; }

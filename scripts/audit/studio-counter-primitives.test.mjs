@@ -3,7 +3,11 @@ import { readFileSync } from "node:fs"
 import test from "node:test"
 
 const component = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
+const valueToggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8")
 const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
+const distill = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8")
+const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8")
+const wordCounter = readFileSync("src/styles/studio-control-word-counter.css", "utf8")
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
 
 test("StudioCounter is a new button-only double-split primitive across all three sizes", () => {
@@ -140,4 +144,38 @@ test("StudioLeftCounter places the two-button action rail on the left and is ava
   assert.match(styles, /\.vt-studio-left-counter__rail\[data-rail="start"\]\s*\{[^}]*border-right:/s);
   assert.match(catalog, /StudioLeftCounter className="is-reversed"/);
   assert.doesNotMatch(catalog, /StudioSideCounter className="is-reversed"/);
+});
+
+
+test("StudioCounter uses the same directional chevrons as StudioBarToggle instead of plus/minus glyphs", () => {
+  const start = component.indexOf("export const StudioCounter:");
+  const end = component.indexOf("StudioCounter.displayName", start);
+  const source = component.slice(start, end);
+  assert.match(source, /<ChevronLeft/);
+  assert.match(source, /<ChevronRight/);
+  assert.doesNotMatch(source, /<Minus|<Plus/);
+});
+
+test("StudioLeftWordCounter inherits the shared 50-percent primary numeral and black interaction-focus treatment", () => {
+  assert.match(wordCounter, /\.vt-studio-left-word-counter \.vt-studio-side-counter__value\s*\{[^}]*background:\s*var\(--pair-a\)[^}]*color:\s*var\(--vt-studio-number-rest-color\)[^}]*-webkit-text-stroke-color:\s*var\(--vt-studio-number-rest-color\)/s);
+  assert.match(wordCounter, /data-vt-interaction-focus="true"[\s\S]*?color:\s*#000/);
+  assert.match(wordCounter, /:focus-within[\s\S]*?color:\s*#000/);
+  assert.match(styles, /--vt-studio-number-rest-color:\s*color-mix\(in srgb,[^;]*var\(--vt-studio-number-rest-mix\)/);
+});
+
+test("selected split buttons swap both the label face and rail between primary and secondary", () => {
+  assert.match(styles, /data-vt-studio-split="left"\] \[data-vt-studio-split-label\] \{ background:var\(--vt-studio-control-accent/);
+  assert.match(styles, /data-vt-studio-split="left"\]\[data-selected="true"\] \[data-vt-studio-split-label\][\s\S]*?background:var\(--vt-studio-control-secondary/);
+  assert.match(styles, /data-vt-studio-split="left"\]\[data-selected="true"\] \[data-vt-studio-split-rail\][\s\S]*?background:var\(--vt-studio-control-accent/);
+  assert.match(styles, /data-vt-studio-split="right"\]\[data-selected="true"\] \[data-vt-studio-split-label\][\s\S]*?background: var\(--vt-studio-control-secondary/);
+  assert.match(styles, /data-vt-studio-split="double"\]\[data-selected="true"\] \[data-vt-studio-split-label\][\s\S]*?background: var\(--vt-studio-control-secondary/);
+});
+
+test("bar toggle exposes a rounded percentage tooltip and preserves visible bars between square rails", () => {
+  assert.match(valueToggles, /vt-studio-value-toggle__bar-tooltip/);
+  assert.match(valueToggles, /Math\.round\(Math\.max\(0, Math\.min\(100, value\)\)\)\}%/);
+  assert.match(distill, /\.vt-studio-value-toggle__bar-tooltip\s*\{[^}]*background:\s*var\(--vt-studio-control-secondary[^}]*color:\s*#000/s);
+  assert.match(distill, /\.vt-studio-value-toggle:focus-within/);
+  assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar > \[data-vt-studio-split-label\]\s*\{[^}]*flex:\s*1 1 0[^}]*width:\s*auto/s);
+  assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{\s*overflow:\s*visible/s);
 });

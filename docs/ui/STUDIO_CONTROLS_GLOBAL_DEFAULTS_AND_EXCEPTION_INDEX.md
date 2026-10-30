@@ -313,3 +313,13 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 ## Simplification ownership rule — 2026-10-27
 
 The token source in `src/studio-ui/tokens.ts` is authoritative. The emitter must derive tier values from that source; generated CSS is never hand-edited. Shared tier aliases and global shell defaults must have one CSS owner, while field appearance, split anatomy, and accordion motion remain in their family sheets. Do not remove recovery/parity styles until their required selectors have been migrated and covered by ownership tests. Preserve Mini's 17.5px type/icons and Micro's Mini-matched stroke/radius/outline (1.5px / 3px / 0.975px). Global letter-spacing remains `-0.02em`; field defaults retain the black outer border, primary inset stroke, primary caret, and black focused text/glyph stroke with secondary zero-offset outline.
+
+## Studio counter, split-selection, and bar-toggle refinements — 2026-10-29
+
+- **StudioCounter controls:** the standard double-split counter uses the same left/right chevron glyphs as StudioBarToggle. Hold-repeat, min/max bounds, keyboard activation, and the existing split-shell rails remain unchanged.
+- **StudioLeftWordCounter default:** the value pane retains the primary background; its resting numeral fill and glyph stroke use the shared 50%-white / 50%-primary counter token (`--vt-studio-number-rest-color`). Interaction focus switches the numeral fill/stroke to black. The opt-in color-cycle variant remains an explicit exception.
+- **Selectable split buttons:** the label/text pane and rail exchange semantic pair fills on selection. Resting label = primary and rail = secondary; selected label = secondary and rail = primary. This applies consistently to split-left, split-right, and double-split buttons without changing their shared geometry or dividers.
+- **StudioBarToggle:** the bar track occupies only the flexible center cell between the square rails. Its focus outline uses the shared zero-offset secondary outline at 65% of the control stroke. The rightmost filled bar carries a compact, no-stroke secondary-fill / black-text percentage tooltip; the displayed value is rounded to the nearest whole percent.
+
+These are production primitive/family rules, not catalog overrides. The bar track overflow exception is scoped to the bar-toggle shell so the floating percentage label can remain visible; the flexible center track is still constrained between the fixed rails.
+
