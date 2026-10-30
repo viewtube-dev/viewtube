@@ -76,3 +76,8 @@ The shared process also requires:
 - improvement proposals and next-best actions routed through existing Ideas Registry, improvement recommendations, Task Authority and Crown records.
 
 The intake package remains a provenance/handoff record, not a parallel task backlog or task lifecycle authority. Unknown branch/PR lineage remains explicitly UNKNOWN.
+
+
+## Living log update shortcut
+
+The handoff's opening block provides a one-link/one-phrase update path: when the user supplies the existing document link and says **“Update the unfinished work log.”**, update that package in place. Preserve the original conversation date/name/application, append or revise one-line requirement and unfinished-work checkboxes, link all created/changed documents, keep the executive summary to ten sentences maximum, and record five evidence-based improvement proposals through existing governance. Do not create a duplicate log.
