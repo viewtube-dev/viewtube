@@ -110,7 +110,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(classifier).toContain('"Dropdowns"')
     expect(classifier).toContain('"Controls"')
     expect(classifier).not.toContain('"Counters & Sliders"')
-    expect(classifier).toMatch(/StudioCounter[\\s\\S]*return "Controls"/)
+    expect(classifier).toMatch(/StudioCounter[\s\S]*return "Controls"/)
     expect(classifier).toContain('"Modules & Frames"')
     expect(classifier).toContain('"Compositions"')
     expect(classifier).toMatch(/StudioCounter\|StudioSideCounter\|StudioLeftCounter\|StudioLeftWordCounter/)
