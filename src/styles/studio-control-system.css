@@ -7224,7 +7224,5 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
   position: relative;
   z-index: 2;
 }
-.vt-studio-split-left-badge > .vt-studio-split-left-badge__rail { grid-column: 1; grid-row: 1; }
-.vt-studio-split-right-badge > .vt-studio-split-right-badge__rail { grid-column: 2; grid-row: 1; }
-.vt-studio-double-split-badge > .vt-studio-double-split-badge__rail:first-child { grid-column: 1; grid-row: 1; }
-.vt-studio-double-split-badge > .vt-studio-double-split-badge__rail:last-child { grid-column: 3; grid-row: 1; }
+.vt-studio-split-right-badge > .vt-studio-split-right-badge__rail,
+.vt-studio-double-split-badge > .vt-studio-double-split-badge__rail:last-child { margin-left: auto; }
