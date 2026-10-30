@@ -3,7 +3,7 @@
 **Production Date:** 2026-10-29  
 **Last Edited:** 2026-10-30  
 **Class:** PROGRAM  
-**Status:** ACTIVE — PHASE 0 COMPLETE / PHASE 1 IN PROGRESS  
+**Status:** ACTIVE — PHASE 0 COMPLETE / PHASE 1 PARTIALLY IMPLEMENTED; VERIFICATION BLOCKED  
 **Concern:** public resolver production integration  
 **Owner:** Existing Public Channel Resolver + BrainRuntime caller + public-handle mode/cache  
 **Registry ID:** DOC-PLAN-P1-PUBLICRESOLVER  
@@ -55,7 +55,7 @@ Logged-out identity is the Settings channel handle. Use YouTube-first public met
 ## Phases
 
 0. Inspect resolver/API/cache/normalization/production Brain caller/tests/PRs. **Complete.**
-1. Define typed result/provenance and negative/error taxonomy. **In progress.**
+1. Define typed result/provenance and negative/error taxonomy. **Partially implemented:** positive-result provenance and bounded browser cache added; typed negative/error taxonomy, stale fallback and identity-mismatch hardening remain.
 2. Connect resolver through the canonical async Brain task boundary without another context broker or changing the synchronous snapshot-builder contract.
 3. Enforce public-only policy at access boundaries, including logged-out identity and isolation from connected/private channel data.
 4. Test freshness, invalidation, negative cache and handle isolation.
@@ -73,6 +73,7 @@ Logged-out identity is the Settings channel handle. Use YouTube-first public met
 - A channel ID and handle returned together must be identity-consistent before caching or using the snapshot.
 - All public video metrics remain null. Public metadata cannot be treated as authenticated ownership or private analytics.
 - Browser storage must be bounded and resilient to malformed/old entries; no cache entry may leak across handles.
+- Current implementation caches only successful public snapshots for a 3-hour combined metadata/video TTL. It does not cache negative results or transient failures. Per-field TTLs and stale-while-revalidate are intentionally not implemented yet.
 
 ## Acceptance
 
@@ -82,4 +83,6 @@ Production Brain task path invokes the existing resolver when a public handle is
 
 - Phase 0 source inspection and PR reconciliation performed against `master/consolidated-feature-integration` at base SHA `cfafde00519ce29a4507dcc7ec7d2cad96798303`.
 - Source and existing test files were inspected through GitHub.
-- No repository checkout or executable test environment was available during discovery; no tests are claimed as run by this phase.
+- Phase 1 added a versioned, bounded (20-entry) browser cache, normalized request-identity keys, positive-result provenance, source references, limitations, original fetchedAt preservation, and null metric enforcement. Tests were added for cache reuse, handle isolation, malformed storage, and metric redaction.
+- Tests are **not verified**: the runtime container has no network access and a local clone could not be obtained. GitHub reports no check runs for the implementation head; no test/typecheck/build pass is claimed.
+- Phase 1 remains incomplete: typed negative/error taxonomy, expiry/stale behavior tests, robust handle-vs-channel identity checks, and runtime integration are still outstanding.
