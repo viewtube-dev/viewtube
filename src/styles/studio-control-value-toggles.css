@@ -66,3 +66,37 @@
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-value-toggle__arrow svg { animation: none !important; transition: none !important; }
 }
+
+/* Shared focus contract: one secondary perimeter, black focused text, primary 15% fill,
+   and synchronized character-color fade. Nested split rails never draw competing outlines. */
+.vt-studio-value-toggle .vt-studio-value-toggle__face,
+.vt-studio-value-toggle .vt-studio-value-toggle__arrow,
+.vt-studio-value-toggle .vt-studio-value-toggle__divider {
+  transition: color var(--vt-studio-focus-outline-fade-ms, 500ms) ease,
+    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease,
+    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease;
+}
+.vt-studio-value-toggle:focus-within {
+  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65))
+    solid var(--vt-studio-focus-outline-color, var(--pair-b));
+  outline-offset: 0;
+}
+.vt-studio-value-toggle:focus-within .vt-studio-value-toggle__face {
+  color: #000;
+  -webkit-text-stroke-color: #000;
+}
+.vt-studio-value-toggle:focus-within:not(.vt-studio-value-toggle--double) {
+  background: color-mix(in srgb, var(--vt-toggle-fill, var(--pair-a)) 15%, transparent);
+}
+.vt-studio-value-toggle--double:focus-within .vt-studio-value-toggle__divider { outline: none; }
+.vt-studio-value-toggle--double .vt-studio-split-shell:focus-within {
+  outline: none;
+}
+.vt-studio-value-toggle--double:focus-within .vt-studio-split-shell .vt-studio-value-toggle__face {
+  color: #000;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-value-toggle .vt-studio-value-toggle__face,
+  .vt-studio-value-toggle .vt-studio-value-toggle__arrow,
+  .vt-studio-value-toggle .vt-studio-value-toggle__divider { transition: none; }
+}
