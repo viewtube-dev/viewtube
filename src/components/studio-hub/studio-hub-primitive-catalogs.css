@@ -2891,15 +2891,18 @@
   min-width: 0;
 }
 .vt-confirmed-paired-compact-row {
-  display: flex !important;
-  flex-flow: row wrap !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
   align-items: start;
   gap: 8px;
+  width: 100%;
+  min-width: 0;
 }
 .vt-confirmed-paired-compact-row > .vt-confirmed-variant {
-  flex: 1 1 calc(50% - 4px);
-  width: auto;
-  min-width: min(100%, 240px);
+  grid-column: 1 / -1 !important;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
 }
 .vt-confirmed-control-family .vt-confirmed-control-variants,
 .vt-confirmed-word-toggle-family .vt-confirmed-control-variants,
