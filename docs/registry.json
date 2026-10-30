@@ -514,7 +514,7 @@
     {
       "id": "DOC-PLAN-P1-CANONICAL-INTEGRATION",
       "path": "tasks/p1-canonical-system-integration/plan.md",
-      "class": "PROGRAM_PLAN",
+      "class": "PROGRAM",
       "status": "ACTIVE",
       "concern": "p1-integration-execution-plan",
       "owner": "Integrated Application Program",
@@ -616,7 +616,7 @@
     {
       "id": "DOC-PLAN-P1-BRAIN-CONTINUITY",
       "path": "tasks/p1-canonical-system-integration/workstreams/brain-continuity/plan.md",
-      "class": "PROGRAM_PLAN",
+      "class": "PROGRAM",
       "status": "ACTIVE",
       "concern": "p1-brain-continuity",
       "owner": "BrainRuntime",
@@ -633,7 +633,7 @@
     {
       "id": "DOC-PLAN-P1-GEMINI-GOVERNANCE",
       "path": "tasks/p1-canonical-system-integration/workstreams/gemini-governance/plan.md",
-      "class": "PROGRAM_PLAN",
+      "class": "PROGRAM",
       "status": "ACTIVE",
       "concern": "p1-gemini-governance",
       "owner": "BrainModelGateway + Creator Operations",
@@ -650,7 +650,7 @@
     {
       "id": "DOC-PLAN-P1-UNIFIED-DIAGNOSTICS",
       "path": "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/plan.md",
-      "class": "PROGRAM_PLAN",
+      "class": "PROGRAM",
       "status": "ACTIVE",
       "concern": "p1-unified-diagnostics",
       "owner": "Diagnostics + Verification",
@@ -667,8 +667,8 @@
     {
       "id": "DOC-PLAN-P1-PRIORITY25-RUNTIME",
       "path": "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/plan.md",
-      "class": "PROGRAM_PLAN",
-      "status": "BLOCKED",
+      "class": "PROGRAM",
+      "status": "ACTIVE",
       "concern": "p1-priority25-runtime",
       "owner": "Owning capability + Verification",
       "productionDate": "2026-10-29",
@@ -684,7 +684,7 @@
     {
       "id": "DOC-PLAN-P1-PUBLIC-RESOLVER",
       "path": "tasks/p1-canonical-system-integration/workstreams/public-resolver/plan.md",
-      "class": "PROGRAM_PLAN",
+      "class": "PROGRAM",
       "status": "ACTIVE",
       "concern": "p1-public-resolver",
       "owner": "Public Channel Resolver",
@@ -701,7 +701,7 @@
     {
       "id": "DOC-PLAN-P1-STUDIO-CONTROLS",
       "path": "tasks/p1-canonical-system-integration/workstreams/studio-controls/plan.md",
-      "class": "PROGRAM_PLAN",
+      "class": "PROGRAM",
       "status": "ACTIVE",
       "concern": "p1-studio-controls",
       "owner": "Toolbox UI + Studio Controls",
