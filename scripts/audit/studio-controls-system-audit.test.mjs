@@ -20,7 +20,7 @@ const tiers = {
   standard: { height: 44, stroke: 3, radius: 6, fontSize: 38, iconSize: 38 },
   compact: { height: 28, stroke: 2, radius: 4, fontSize: 24, iconSize: 24 },
   mini: { height: 20, stroke: 1.5, radius: 3, fontSize: 17.5, iconSize: 17.5 },
-  micro: { height: 12, stroke: 1.5, radius: 3, fontSize: 10, iconSize: 10 },
+  micro: { height: 12, stroke: 1, radius: 2, fontSize: 10, iconSize: 10 },
 };
 
 test("all five size tiers are canonical, generated, and consumed by the system", () => {
@@ -57,6 +57,12 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
   assert.ok(system.includes("--vt-field-text-stroke-focus: #000;"));
   assert.ok(standaloneInputCss.includes("-webkit-text-stroke-color: #000;"));
   assert.ok(!standaloneInputCss.includes("-webkit-text-stroke-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));"));
+  assert.ok(!fields.includes("Simple input is the intentional exception"));
+  assert.ok(!fields.includes("vt-studio-text-input--simple[data-vt-studio-control=\\"true\\"]:is(:focus, :focus-visible)"));
+  assert.ok(system.includes(".vt-studio-text-box[data-vt-studio-control=\\"true\\"]"));
+  assert.ok(system.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary"));
+  assert.ok(system.includes("-webkit-text-stroke-color: var(--vt-field-primary"));
+  assert.ok(fields.includes("textarea[data-vt-studio-control=\\"true\\"][data-vt-studio-field-kind=\\"textarea\\"],"));
 });
 
 test("split text input accepts every canonical size supported by its production badge foundation", () => {
@@ -81,6 +87,9 @@ test("counter values and bar toggles preserve their canonical ratios and value c
   assert.ok(recovery.includes("aspect-ratio: 1 / 2.5"));
   assert.ok(recovery.includes("height: calc(var(--vt-studio-control-font-size) * 1)"));
   assert.ok(recovery.includes("color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a)) 50%, #fff)"));
+  assert.ok(tokens.includes("micro: { height: 12, stroke: 1, radius: 2"));
+  assert.ok(generated.includes("--vt-studio-micro-stroke: 1px;"));
+  assert.ok(generated.includes("--vt-studio-micro-radius: 2px;"));
   assert.ok(recovery.includes(".vt-studio-value-toggle__bar[data-active=\"true\"] { background: #000; }"));
 });
 
