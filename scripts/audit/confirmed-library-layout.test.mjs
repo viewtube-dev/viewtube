@@ -15,12 +15,9 @@ const controlStyles = [
 ].map((path) => readFileSync(join("src/styles", path), "utf8")).join("\n");
 const completeCatalog = readFileSync("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx", "utf8");
 
-test("confirmed library uses the requested four skin names without changing skin values", () => {
-  for (const label of ['label: "SOLID"', 'label: "COLOR SWAP"', 'label: "BLACK"', 'label: "WHITE"']) assert.ok(catalog.includes(label), label);
-  assert.ok(catalog.includes('skin: "black-indicator"'));
-  assert.ok(catalog.includes('skin: "white-indicator"'));
-  assert.ok(!catalog.includes('label: "4 · BLACK INDICATOR"'));
-  assert.ok(!catalog.includes('label: "5 · WHITE INDICATOR"'));
+test("confirmed library uses the canonical four skin identifiers and names", () => {
+  for (const label of ['label: "V1 · PRIMARY / SECONDARY"', 'label: "V2 · PRIMARY ↔ SECONDARY"', 'label: "V3 · WHITE INDICATOR"', 'label: "V4 · BLACK INDICATOR"']) assert.ok(catalog.includes(label), label);
+  for (const skin of ['skin: "solid"', 'skin: "color-swap"', 'skin: "white-indicator"', 'skin: "black-indicator"']) assert.ok(catalog.includes(skin), skin);
 });
 
 test("confirmed catalog CSS owns layout, not production control faces", () => {
@@ -38,7 +35,7 @@ test("confirmed catalog CSS owns layout, not production control faces", () => {
 test("switch and choice skin families use auto-width examples instead of catalog columns", () => {
   assert.ok(styles.includes(".vt-confirmed-control-family .vt-confirmed-control-variants"));
   assert.ok(styles.includes("display: flex !important"));
-  assert.ok(!styles.includes("grid-template-columns: repeat(4, minmax(0, 1fr)) !important"));
+  assert.match(styles, /\.vt-confirmed-control-family \.vt-confirmed-control-variants[\s\S]*?display:\s*flex !important[\s\S]*?flex-flow:\s*row wrap !important/);
 });
 
 test("confirmed button specimens use full rows or natural auto width", () => {
