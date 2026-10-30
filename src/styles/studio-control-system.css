@@ -4603,3 +4603,54 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   color: var(--vt-studio-number-active-color, #000000);
   -webkit-text-stroke-color: var(--vt-studio-number-active-color, #000000);
 }
+
+/* Five-tier sizing for the shared switch / radio / checkbox production primitives. */
+.vt-studio-44-switch[data-size="supreme"], .vt-studio-44-choice[data-size="supreme"] {
+  --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
+  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px);
+}
+.vt-studio-44-switch[data-size="standard"], .vt-studio-44-choice[data-size="standard"] {
+  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
+  --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
+}
+.vt-studio-44-switch[data-size="compact"], .vt-studio-44-choice[data-size="compact"] {
+  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px);
+}
+.vt-studio-44-switch[data-size="mini"], .vt-studio-44-choice[data-size="mini"] {
+  --vt-studio-control-height: var(--vt-studio-mini-height, 20px);
+  --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
+}
+.vt-studio-44-switch[data-size="micro"], .vt-studio-44-choice[data-size="micro"] {
+  --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
+}
+.vt-studio-44-switch { width: calc(var(--vt-studio-control-height, 44px) * 1.72); height: var(--vt-studio-control-height, 44px); }
+.vt-studio-44-switch.is-round { border-radius: 999px; }
+.vt-studio-44-switch.is-rect { border-radius: var(--vt-studio-control-radius, 6px); }
+.vt-studio-44-handle {
+  top: var(--vt-studio-control-stroke, 3px); left: var(--vt-studio-control-stroke, 3px);
+  width: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+}
+.vt-studio-44-switch.is-rect .vt-studio-44-handle { border-radius: calc(var(--vt-studio-control-radius, 6px) * .5); }
+.vt-studio-44-switch.is-on .vt-studio-44-handle { transform: translateX(calc(var(--vt-studio-control-height, 44px) * .72)); }
+.vt-studio-44-choice { width: var(--vt-studio-control-height, 44px); height: var(--vt-studio-control-height, 44px); min-height: var(--vt-studio-control-height, 44px); }
+.vt-studio-44-choice.is-rect { border-radius: var(--vt-studio-control-radius, 6px); }
+.vt-studio-44-choice .vt-studio-44-dot { width: 75%; height: 75%; }
+.vt-studio-44-choice.is-radio.is-rect .vt-studio-44-dot { border-radius: calc(var(--vt-studio-control-radius, 6px) * .5); }
+.vt-studio-44-choice svg { width: 100%; height: 100%; max-width: 100%; max-height: 100%; }
+.vt-studio-44-switch:focus-visible, .vt-studio-44-choice:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b)));
+  outline-offset: 0;
+}
