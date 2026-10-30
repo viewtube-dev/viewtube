@@ -119,7 +119,7 @@ test("double-side toggles reuse the same side-arrow controls and only the outer 
   assert.ok(doubleSide.includes("<StudioSideToggle"));
   assert.ok(doubleSide.includes("arrowSide=\"left\""));
   assert.ok(doubleSide.includes("arrowSide=\"right\""));
-  assert.ok(system.includes(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider{outline:none!important;box-shadow:none!important}"));
+  assert.match(system, /\.vt-studio-value-toggle--double \.vt-studio-value-toggle__divider\s*\{[^}]*outline:\s*none;[^}]*box-shadow:\s*none;/);
   assert.ok(system.includes(".vt-studio-value-toggle--double:focus-within"));
   assert.ok(!recovery.includes(".vt-studio-value-toggle--double:focus-within"));
   assert.ok(!recovery.includes(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider"));
