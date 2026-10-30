@@ -1068,7 +1068,7 @@ const AIBrainCommandInterface: React.FC = () => {
    activeProjectId: brain.activeProjectId,
    projects: brain.projects,
   }),
-  [channelId, brain.activeProjectId, brain.projects, recentTurns, learningEntries],
+  [channelId, brain.activeProjectId, brain.projects],
  )
 
  const snapshot = useMemo(
