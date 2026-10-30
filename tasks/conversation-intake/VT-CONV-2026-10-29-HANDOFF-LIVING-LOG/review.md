@@ -114,3 +114,8 @@ The handoff/document contract is VERIFIED by its dedicated CI job. The overall P
 ## Post-PR branch snapshot
 
 The PR-opening head was `da40c647ea637a43a0a97cf6408b360f375223c6`. GitHub compare to `f9da934076797693e7bb4c2b1a115e96cfaf7e0e` reports 11 commits ahead, 0 behind, across seven changed paths. The exact commit and path inventory is recorded in `worklog.json` → `branchPrReconciliation` for PR #1177. These are documented follow-up edits to the PR branch, not orphaned work. The current PR metadata is authoritative for the live branch tip after this worklog receipt update.
+
+
+### Latest post-open snapshot
+
+A subsequent compare from opening head `da40c647ea637a43a0a97cf6408b360f375223c6` to reconciliation snapshot `bd3d7562d20b123d4bd9f97cacb3f34a7d49a47a` reports 14 commits ahead and 0 behind across the same seven paths. The updated worklog enumerates all 14 post-open commits. Later worklog receipt commits are themselves part of the open PR; use PR #1177 metadata for the live head.
