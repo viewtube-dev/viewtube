@@ -678,3 +678,82 @@ Required remediation:
 - Confirmed neither the Settings page nor GeminiKeyContext subscribes to that event; both initialize their local state only once.
 - Confirmed the two visible key-management surfaces share keyVault storage but can display inconsistent state after a change made in the other surface.
 - No application source code or credentials were changed. No tests, typecheck, production build, or browser certification were run.
+
+## Tenth-pass addendum — Brain capability execution and trace verification
+
+**Audit pass date:** 2026-10-30  
+**Source branch:** `master/consolidated-feature-integration`  
+**Scope:** Brain capability registry, selection, orchestration, context broker, trace recording, governance projection, and capability tests.
+
+### F-022 — Brain capability records are selected and reported as invoked without per-capability runtime enforcement
+
+**Severity:** P1 — capability truth / runtime-verification gap  
+**Classification:** `PARTIAL_IMPLEMENTATION`  
+**Confidence:** Confirmed for the inspected canonical Brain question-turn path
+
+Evidence:
+- `src/services/brain/BrainCapabilityRegistry.ts` defines 14 capability records, each with descriptive intent metadata and `maximumInvocationsPerTurn: 1`.
+- `selectBrainCapabilities()` selects records using inferred task intent, creator controls, current-research keyword checks, and whether the supplied snapshot has videos. It returns selected registry entries; it does not resolve a handler or prove that the described operation can execute.
+- `src/services/brain/BrainOrchestrator.ts` selects those records and immediately derives `capabilityIds`. In the canonical question-turn path, the only capability-ID-specific branches found in the orchestrator are:
+  - `statistics-intelligence`: enables the deterministic evidence-intelligence resolution path.
+  - `algorithm-intelligence`: enables algorithm-intelligence access, subject to engine controls.
+  - `niche-knowledge`: invokes the niche-knowledge resolver.
+- The other 11 capability IDs have no capability-specific dispatch branch in the inspected orchestrator or context broker. Their presence can influence selection/metadata, but the creator-facing response is still produced by the shared structured Brain model call. This does not prove those concepts are never supported by shared context or prompt behavior; it does mean the registry does not establish dedicated executable handlers for them.
+- The `maximumInvocationsPerTurn` property is declared on each record, but the inspected orchestrator does not dispatch capability handlers or enforce that per-capability limit.
+- `BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS` contains a requirement list for every registry entry. Its current test checks only that all registered IDs have a non-empty list and that section names belong to a hard-coded known set. The inspected runtime orchestration/context-broker path does not consume this map to resolve each capability's required sections or block execution when they are absent.
+- `BrainCapabilityRegistry.test.ts` therefore verifies metadata completeness, not executable coverage, evidence fulfillment, permission behavior, or capability outcomes.
+- Existing channel-policy tests verify that selected analytics capability IDs are omitted when `allowAnalytics` is false and that the context broker communicates disabled analytics access. This is useful permission coverage for the analytics path and should be preserved.
+
+Impact:
+- The registry's label/description can be mistaken for proof that a distinct capability is implemented and available.
+- A selected capability can be included in the reported capability list even when no dedicated handler for that capability ran.
+- The repository cannot currently demonstrate, from this registry and its tests alone, that all 14 capability descriptions are backed by runtime handlers, required evidence, permission checks, and outcomes.
+- This finding does not assert that the underlying shared Brain model cannot answer those user requests. It distinguishes generic model behavior and shared context from a separately governed, testable capability implementation.
+
+Required remediation:
+- Preserve the existing Brain registry and orchestration; do not add a parallel capability registry or second runtime.
+- Define an explicit execution contract in the existing architecture: either a capability-specific handler/operation reference, or an explicit classification that the entry is a prompt/context behavior rather than a separately executable handler.
+- Enforce each capability's evidence requirements against the actual context/evidence supplied for the turn. Missing required evidence must be recorded and must not be represented as fulfilled.
+- Enforce `maximumInvocationsPerTurn` where handlers are dispatched, or remove/rename the field if the system does not implement invocation semantics.
+- Add table-driven tests proving, for each capability, selection eligibility, permission gating, handler/operation invocation (or declared prompt-only classification), required evidence present/missing behavior, and resulting trace/outcome.
+- Keep the 25-item product capability roadmap distinct from these 14 Brain orchestration capabilities; neither count establishes the runtime status of the other.
+
+### F-023 — Brain question traces record selected capability IDs as invoked and hard-code an empty missing-evidence list
+
+**Severity:** P2 — diagnostics can overstate execution/evidence completeness  
+**Classification:** `MISLEADING_DIAGNOSTICS`  
+**Confidence:** Confirmed for the canonical question-turn trace path
+
+Evidence:
+- `BrainOrchestrator.ts` calls `questionTrace.recordCapabilities(capabilityIds)` immediately after selection and before niche resolution, context assembly, or model generation.
+- `BrainTrace.ts` names the trace field `capabilitiesInvoked`, and `recordCapabilities()` appends IDs without distinguishing selected, attempted, started, completed, skipped, or failed states.
+- After context assembly, the orchestrator calls `questionTrace.recordEvidence()` with the evidence records actually rendered, but always supplies `missing: []`. It does not compare rendered records/sections with `BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS`.
+- `BrainRuntimeSnapshot.ts` exposes the trace capability count and evidence returned/missing counts as runtime diagnostics. Consequently the summary can faithfully expose the trace fields while those fields still overstate what they mean.
+
+Impact:
+- Diagnostics may show a capability as invoked when it was only selected, or when its specific operation was not dispatched.
+- A zero missing-evidence count can mean only that the trace writer supplied an empty array, not that every selected capability's evidence requirements were fulfilled.
+- This weakens debugging, capability verification, and any future prioritization based on runtime capability counts.
+
+Required remediation:
+- Keep one shared operation/trace identity, but separate selected, started, completed, skipped, and failed capability states (or rename the current field to `capabilitiesSelected` until actual dispatch exists).
+- Derive missing evidence from declared requirements and actual rendered/resolved context; preserve requested, returned, and missing separately.
+- Add trace tests for a fully satisfied capability, a missing-evidence capability, a permission-blocked capability, a skipped capability, and a failed handler.
+- Do not infer success from a selected ID or from a zero missing count unless the evidence resolver explicitly calculated that result.
+
+### Tenth-pass positive evidence and boundaries
+
+- The canonical BrainRuntime continues to delegate creator-facing turns to the existing BrainOrchestrator and provider-neutral BrainModelGateway; no competing runtime is warranted.
+- The orchestrator does build typed evidence records, checks which records were actually rendered into the prompt, records context-budget omissions, validates generated answers, and persists turn/learning metadata. These are valuable shared foundations.
+- Analytics controls are enforced in capability selection and again in the context broker; the channel-scope tests cover the disabled-analytics path. Preserve those gates while tightening public-only source boundaries and capability evidence contracts.
+- `BrainTrace` already has requested/returned/missing evidence fields and a stable output reference. The defect is in how the current question-turn caller populates and labels those fields, not a need for another trace store.
+
+### Tenth-pass status
+
+- Inspected all 14 Brain capability definitions and their evidence-requirement declarations.
+- Traced capability selection through the canonical question-turn orchestrator and context broker.
+- Confirmed only statistics intelligence, algorithm intelligence, and niche knowledge have explicit capability-ID-specific orchestration branches in the inspected question-turn path; remaining IDs are not dispatched through dedicated handlers there.
+- Confirmed the evidence-requirements test is metadata validation rather than runtime fulfillment coverage.
+- Confirmed question traces record selected IDs under `capabilitiesInvoked` before execution and currently write an unconditional empty `missing` list.
+- No application source code, capability policy, provider, user preference, or runtime behavior was changed.
+- No tests, typecheck, production build, provider request, or browser certification were run. This is source-level verification only.
