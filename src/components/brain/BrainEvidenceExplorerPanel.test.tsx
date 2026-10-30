@@ -1,5 +1,7 @@
+import React from "react"
+import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import {
+import { BrainEvidenceExplorerPanel,
  filterEvidenceExplorerDatasets,
  filterEvidenceExplorerRecords,
  formatEvidenceExplorerValue,
@@ -65,6 +67,16 @@ describe("Brain Evidence Explorer filters", () => {
 
  it("renders missing values as unknown rather than numeric zero", () => {
   expect(formatEvidenceExplorerValue(record({ value: null, epistemicState: "MISSING" }))).toBe("Unknown")
+  expect(formatEvidenceExplorerValue(record({ value: 0, epistemicState: "MISSING" }))).toBe("Unknown")
   expect(formatEvidenceExplorerValue(record({ value: 0 }))).toBe("0")
+ })
+})
+
+
+describe("BrainEvidenceExplorerPanel", () => {
+ it("requires a verified channel id before reading canonical evidence", () => {
+  const html = renderToStaticMarkup(React.createElement(BrainEvidenceExplorerPanel, { channelId: null }))
+  expect(html).toContain("Connect a channel to inspect evidence")
+  expect(html).toContain("A verified channel ID is required")
  })
 })
