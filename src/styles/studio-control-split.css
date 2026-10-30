@@ -467,3 +467,24 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   min-width: var(--vt-studio-split-rail-size);
   max-width: var(--vt-studio-split-rail-size);
 }
+
+/* Counter family width is a geometry exception: 2h value pane plus square rails. */
+.vt-studio-counter {
+  --vt-studio-counter-root-width: calc((var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) * (var(--vt-studio-counter-value-area-aspect-ratio, 2) + var(--vt-studio-counter-double-rail-count, 2)) + 2 * var(--vt-studio-control-stroke, 3px));
+  flex: 0 0 auto;
+  width: var(--vt-studio-counter-root-width);
+}
+.vt-studio-side-counter,
+.vt-studio-left-counter {
+  --vt-studio-counter-root-width: calc((var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) * (var(--vt-studio-counter-value-area-aspect-ratio, 2) + var(--vt-studio-counter-side-rail-count, 1)) + 2 * var(--vt-studio-control-stroke, 3px));
+  flex: 0 0 auto;
+  width: var(--vt-studio-counter-root-width);
+}
+.vt-studio-counter > [data-vt-studio-split-label],
+.vt-studio-side-counter > [data-vt-studio-split-label],
+.vt-studio-left-counter > [data-vt-studio-split-label] {
+  flex: 0 0 calc((var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) * var(--vt-studio-counter-value-area-aspect-ratio, 2));
+  width: calc(var(--vt-studio-control-height, 44px) * var(--vt-studio-counter-value-area-aspect-ratio, 2));
+  min-width: calc(var(--vt-studio-control-height, 44px) * var(--vt-studio-counter-value-area-aspect-ratio, 2));
+  max-width: calc(var(--vt-studio-control-height, 44px) * var(--vt-studio-counter-value-area-aspect-ratio, 2));
+}
