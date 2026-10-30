@@ -185,7 +185,8 @@
         "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/plan.md",
         "tasks/p1-canonical-system-integration/workstreams/public-resolver/plan.md",
         "tasks/p1-canonical-system-integration/workstreams/studio-controls/plan.md",
-        "tasks/p1-canonical-system-integration/identity-map.md"
+        "tasks/p1-canonical-system-integration/identity-map.md",
+        "tasks/p1-canonical-system-integration/task-crosswalk.md"
       ],
       "status": "ACTIVE"
     }
