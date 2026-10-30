@@ -76,7 +76,6 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-siz
 /* Intermodules span the host; closed modules keep one bottom edge only. */
 [data-vt-studio-inter-host="true"] { padding-left: 0 !important; padding-right: 0 !important; width: 100% !important; }
 .vt-studio-inter-module { width: 100% !important; max-width: 100% !important; border-left: 0 !important; border-right: 0 !important; }
-.vt-studio-inter-module__rail { width: var(--vt-im-face, var(--vt-studio-control-height)) !important; min-width: var(--vt-im-face, var(--vt-studio-control-height)) !important; max-width: var(--vt-im-face, var(--vt-studio-control-height)) !important; }
 .vt-studio-inter-host--bleed { width: calc(100% + 16px); max-width: none; margin-inline: -8px; }
 .vt-studio-top-split-module[data-size="compact"] > .vt-studio-top-split-module__body > .vt-studio-inter-host--bleed { width: calc(100% + 12px); margin-inline: -6px; }
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__body,
