@@ -22,12 +22,9 @@ import { listMetadataHistory, recordPublishedMetadataChange, recordPublishedMeta
 import { ViewTubeHandoffReceiver } from "../components/ViewTubeHandoffReceiver"
 import type { ViewTubeActionPacket } from "../services/viewTubeToolChains"
 import type { LongformOptimizationHandoffPayload } from "../services/longformOptimization"
-import {
- generateTagSuggestions,
- analyzeExistingTags,
- hasGeminiKey,
-} from "../services/gemini"
-import type { TagSuggestion } from "../services/gemini"
+import { hasGeminiKey } from "../services/gemini"
+import { generateGovernedTagSuggestions } from "../services/brain/creatorAssets"
+import type { TagSuggestion } from "../services/brain/assetStrategies/tagSuggestions"
 import { CanonicalMetadataSections, YOUTUBE_CATEGORY_OPTIONS } from "../components/metadata/CanonicalMetadataSections"
 import MetadataMaster from "./MetadataMaster"
 import { validateEducationTimestampLines } from "../components/metadata/EducationTimestampNotes"
@@ -339,8 +336,17 @@ const VideoManager: React.FC<VideoManagerProps> = ({
   try {
    const tags = editTags.split(",").map((t) => t.trim()).filter(Boolean)
    if (tags.length === 0) return
+   const channelId = auth.session.channel?.id || ""
    const analysis = hasGeminiKey()
-    ? await analyzeExistingTags(editTitle, editDescription, tags)
+    ? (await generateGovernedTagSuggestions({
+       context: { channelId },
+       title: editTitle,
+       description: editDescription,
+       tags,
+       mode: "analyze",
+       operationId: `video-manager-tag-analysis:${selectedVideoId || Date.now()}`,
+       workflowId: `workflow:video-manager-tags:${selectedVideoId || "draft"}`,
+      })).suggestions
     : buildLocalTagAnalysis(editTitle, editDescription, tags)
    setExistingTagAnalysis(analysis)
    setShowRankDetails(true)
@@ -355,7 +361,15 @@ const VideoManager: React.FC<VideoManagerProps> = ({
   if (!hasGeminiKey()) return
   setIsGeneratingTags(true)
   try {
-   const suggestions = await generateTagSuggestions(editTitle, editDescription)
+   const channelId = auth.session.channel?.id || ""
+   if (!channelId) throw new Error("Connect a YouTube channel before generating governed tag suggestions.")
+   const { suggestions } = await generateGovernedTagSuggestions({
+    context: { channelId },
+    title: editTitle,
+    description: editDescription,
+    operationId: `video-manager-tag-suggestions:${selectedVideoId || Date.now()}`,
+    workflowId: `workflow:video-manager-tags:${selectedVideoId || "draft"}`,
+   })
    setSuggestedTags([...suggestions].sort((a, b) => b.score - a.score).slice(0, 10))
   } catch (err) {
    console.error(err)
