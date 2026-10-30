@@ -286,3 +286,18 @@ Verified against the current integration branch:
 **Known contract mismatch:** current `project-calendar.accepts` omits `comment` and `evidence`. Do not add either until the receiver and tests above exist. The producer should target the Project capability only with a payload kind that the typed mapper actually supports, or the shared capability contract must be deliberately extended alongside the receiver.
 
 **Current limitation:** source inspection is complete enough to specify the integration boundary, but this environment cannot resolve GitHub for a local checkout and GitHub file APIs cannot execute Vitest. No runtime implementation or test result is claimed.
+
+
+### WF-01 — Producer routing correction (2026-10-30)
+
+The source-level producer audit narrows the earlier statement:
+
+- Audience Pulse classifies request/desire signals and suggests only `ai-brain` and `opportunity-radar`; complaint/praise suggest `ai-brain` and `tactics-engine`; confusion suggests `ai-brain` and `content-analysis`.
+- `buildAudiencePulseProposalPacket` filters suggested targets to registered capabilities that explicitly accept `evidence`.
+- `project-calendar` does not accept `evidence`, so the current Audience Pulse proposal does **not** route directly to Projects. This is intentional fail-closed behavior, not a missing UI card alone.
+- The current end-to-end gap is therefore two hops: Brain must review/interpret the evidence packet and explicitly produce a Project-compatible proposal; Projects must then stage and confirm that proposal. The original comment evidence IDs must survive both packet hops.
+- Do not add `project-calendar` to Audience Pulse suggested targets or widen its accepted payload kinds as a shortcut. A direct evidence packet must not be misrepresented as a project brief.
+
+**Revised WF-01 chain:** Comment source records → Audience Pulse evidence packet → Brain review/interpretation → Brain-authored typed Project proposal → Project Builder draft → creator confirmation → canonical Project/ContentBuild creation → handoff completion/outcome receipt.
+
+The Brain-authored Project proposal needs a typed payload contract that explicitly maps title, concept, format/date/priority only when supported, and carries source packet ID + evidence IDs + provenance. Unknown/unmapped fields remain review-only text, never auto-applied Project properties.
