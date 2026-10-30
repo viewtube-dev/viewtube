@@ -630,27 +630,21 @@ describe("responsive Studio upload frame", () => {
 
 
 describe("confirmed primitive family section boundaries", () => {
-  it("groups root, individual, and additional primitive sections independently", () => {
+  it("collects root and compatibility families into one canonical category grouping pass", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
-    const additionalStart = source.indexOf("const ConfirmedAdditionalPrimitiveSections")
+    const additionalStart = source.indexOf("const useConfirmedAdditionalPrimitiveSections")
     const rootStart = source.indexOf("export const StudioHubConfirmedPrimitiveCatalog")
-    const individualStart = source.indexOf("const ConfirmedIndividualPrimitiveSections")
-    const toggleStart = source.indexOf("const ConfirmedStudioValueToggleFamily")
     expect(additionalStart).toBeGreaterThanOrEqual(0)
     expect(rootStart).toBeGreaterThan(additionalStart)
-    expect(individualStart).toBeGreaterThan(rootStart)
-    expect(toggleStart).toBeGreaterThan(individualStart)
 
     const additional = source.slice(additionalStart, rootStart)
-    const root = source.slice(rootStart, individualStart)
-    const individual = source.slice(individualStart, toggleStart)
-    expect(additional).toContain("return (")
-    expect(additional).toContain("<ConfirmedCatalogFamilyGroups>")
-    expect(individual).toContain("return <ConfirmedCatalogFamilyGroups>")
-    expect(individual).not.toContain("<ConfirmedAdditionalPrimitiveSections />")
-    expect(root).toContain("<ConfirmedIndividualPrimitiveSections />")
-    expect(root).toContain("<ConfirmedAdditionalPrimitiveSections />")
-    expect(root).toContain("</ConfirmedCatalogFamilyGroups>")
+    const root = source.slice(rootStart)
+    expect(additional).toContain("React.Children.toArray")
+    expect(additional).not.toContain("<ConfirmedCatalogFamilyGroups>")
+    expect(root).toContain("const additionalPrimitiveSections = useConfirmedAdditionalPrimitiveSections()")
+    expect(root).toContain("{additionalPrimitiveSections}")
+    expect((source.match(/<ConfirmedCatalogFamilyGroups>/g) ?? []).length).toBe(1)
+    expect((source.match(/<ConfirmedCatalogFamilyGroups>/g) ?? []).length).toBe((source.match(/<\\/ConfirmedCatalogFamilyGroups>/g) ?? []).length)
   })
 })
 
