@@ -28,9 +28,10 @@ describe("project planning gateway boundary", () => {
   expect(generateJsonObject).toHaveBeenCalledWith(expect.objectContaining({
    capability: "thinking",
    responseSchema: expect.objectContaining({ type: "ARRAY" }),
-   userText: expect.stringContaining("Radio restoration"),
-   userText: expect.stringContaining("DIY repairers"),
   }))
+  const input = generateJsonObject.mock.calls[0][0]
+  expect(input.userText).toContain("Radio restoration")
+  expect(input.userText).toContain("DIY repairers")
  })
  it("returns no suggestions for an invalid structured payload", async () => {
   generateJsonObject.mockResolvedValue({ tasks: [] })
