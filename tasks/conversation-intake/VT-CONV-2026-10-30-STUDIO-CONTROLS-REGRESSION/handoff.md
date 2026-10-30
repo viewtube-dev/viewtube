@@ -70,11 +70,11 @@
 
 | Branch | Target | PR | Opening head | Current head | Merge SHA | Target presence | Classification |
 |---|---|---:|---|---|---|---|---|
-| codex/studio-controls-regression-recovery | master/consolidated-feature-integration | #923 | UNKNOWN | 9bb5424896765e1a348f0a8e37846c426c0f31d8 | NONE | NO for eight commits reported unique | CLOSED_UNMERGED / POST-PR LINEAGE UNKNOWN |
+| codex/studio-controls-regression-recovery | master/consolidated-feature-integration | #923 | UNKNOWN | 9bb5424896765e1a348f0a8e37846c426c0f31d8 | NONE | NO for eight commits reported unique | CLOSED_UNMERGED / POST-PR LINEAGE UNKNOWN |\n| docs/studio-controls-regression-handoff-2026-10-30 | master/consolidated-feature-integration | #1229 | 97651224b3d05fe02a5e907258763157bc467e14 | 97651224b3d05fe02a5e907258763157bc467e14 (opening snapshot) | NONE | NO — PR open | OPEN_PR |
 
 GitHub compare reports eight commits ahead, 1,903 behind, status diverged, and 21 changed paths. The PR-opening head is unavailable, so post-opening commits cannot be distinguished. The PR has no merge SHA. Treat the eight commits as unrecovered until every change is checked against the current target; do not assume every listed path or hunk is still missing.
 
-The documentation package is being added on docs/studio-controls-regression-handoff-2026-10-30 from the intended target. No PR has been opened for this docs branch yet.
+The documentation package is on docs/studio-controls-regression-handoff-2026-10-30, based on the intended target, and is proposed in open PR #1229. GitHub currently reports mergeable=false; this has not been resolved or explained yet.
 
 ## Integration maturity
 
