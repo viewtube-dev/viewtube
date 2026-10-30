@@ -78,6 +78,11 @@ ${sizeCss}
   --vt-studio-focus-outline-width-ratio: ${focusOutlineWidthRatio};
   --vt-studio-focus-outline-width: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65));
   --vt-studio-focus-outline-offset: ${focusOutlineOffsetPx}px;
+  --vt-studio-dropdown-menu-gap: ${dropdownMenu.menuGap}px;
+  --vt-studio-dropdown-menu-padding: ${dropdownMenu.menuPadding}px;
+  --vt-studio-dropdown-row-gap: ${dropdownMenu.rowGap}px;
+  --vt-studio-dropdown-menu-duration: ${dropdownMenu.animationDurationMs}ms;
+  --vt-studio-dropdown-menu-distance: ${dropdownMenu.animationDistancePx}px;
 ${dropdownCss}
   --vt-studio-number-default-white-mix: ${numberMix}%;
   --vt-studio-number-active-stroke: ${activeStrokeColor};
