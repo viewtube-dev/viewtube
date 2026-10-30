@@ -763,6 +763,14 @@ describe("Studio Calendar confirmed primitive representatives", () => {
   it("lists the grid primitives and calendar components in their composition families, and keeps split text input variants inside Text Fields", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
     const toolbox = readFileSync(resolve(process.cwd(), "src/components/ToolboxUIReferenceLibrary.tsx"), "utf8")
+    const publicApi = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8")
+    const publicStudioValues = [...publicApi.matchAll(/export\\s*\\{([\\s\\S]*?)\\}\\s*from/g)]
+      .flatMap((match) => match[1].split(","))
+      .map((name) => name.trim().split(/\\s+as\\s+/)[0].trim())
+      .filter((name) => /^Studio[A-Z]\\w*$/.test(name))
+    for (const name of publicStudioValues) {
+      expect(source, `public component ${name} has a confirmed catalog specimen`).toContain(`data-vt-library-component="${name}"`)
+    }
     expect(source).toContain('data-vt-library-component="StudioComponentGrid"')
     expect(source).toContain('data-vt-library-component="StudioComponentGridCell"')
     expect(source).toContain('data-vt-library-component="StudioCalendarEventChip"')
