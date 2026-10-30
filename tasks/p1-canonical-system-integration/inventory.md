@@ -59,3 +59,10 @@ Audited target SHA: `0135fa33bf5cd59503c9feecce4977072ef60fec`. The initial lead
 - **Public resolver:** current `src/services/publicHandleMode.ts` uses a schema-v1 localStorage cache, max 20 entries, 3h TTL, positive resolved entries, handle/channel-ID matching and provenance. It nulls unavailable public metrics and cites channel page/RSS sources. Earlier 6h/3h/30m TTL values are not current code. Route candidates are `/public-channel/resolve` and `/api/public-channel`; route deployment and Brain caller still require runtime proof.
 - **Studio:** current canonical token source is `src/studio-ui/tokens.ts`; `scripts/emit-studio-control-vars.mjs` reads that source and emits `src/styles/studio-control-vars.generated.css`. The earlier `src/components/subtoolbox/tokens.ts` lead is not the current emitter input. Current tier values: Supreme 60/3/6/52; Standard 44/3/6/38; Compact 28/2/4/24; Mini 20/1.5/3/17.5; Micro 12/1.5/3/10. Current token source has explicit focus widths; PR #992's derived-ratio proposal is not merged. PR #1203 emitter fix is merged. PRs #935/#988/#992 remain open and non-mergeable with overlapping donor files.
 - **PR reconciliation:** #1109/#1168/#1169/#1174/#1178/#1203 merged. #935/#988/#992 open, non-mergeable. Never wholesale-merge these donor branches.
+
+
+### Public resolver: additional current-main paths
+- Server: `api/public-channel.mjs`; tests: `api/public-channel.node.test.mjs`, `api/public-channel.test.ts`.
+- Client service: `src/services/publicHandleMode.ts`; tests: `src/services/publicHandleMode.test.ts`, `publicHandleMode.pending-ingestion.test.ts`, fixtures tests.
+- Brain: `src/services/brain/runtime/BrainRuntime.ts` and `BrainRuntimeContracts.ts`; Settings, SidebarChatbot, AIBrainCommandInterface and BrainHubWidget provide explicit public context for logged-out/disconnected sessions.
+- Stale scaffold: `src/features/capabilities/public-channel-resolution/` still contains a scaffold API URI and throwing write stub. Search found no production imports of its page/hook/API. Do not treat as canonical; separate no-loss cleanup required.
