@@ -634,21 +634,26 @@ const ConfirmedStudioLeftWordCounterFamily: React.FC = () => {
 
 
 const ConfirmedStudioDoubleSplitWordCounterFamily: React.FC = () => {
-  const [values, setValues] = React.useState([1, 2, 3, 4, 1])
+  const [values, setValues] = React.useState([1, 1, 2, 2, 3, 3, 4, 4, 1, 1])
   const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const updateAt = (index: number, value: number) => setValues(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))
   return (
     <Family
       title="StudioDoubleSplitWordCounter · Two Chevron Rails + Four-State Word Cycle"
       nonDefaultSettings={[
         "Both square rails step the same four-state word sequence; the left rail moves backward and the right rail moves forward.",
-        "Both rails use the same token-backed chevron button styling, click animation, and secondary focus outline as StudioCounter and StudioBarToggle.",
+        "Each size shows primary and reversed-palette specimens with independent word state.",
+        "Both rails use the shared token-backed chevron button styling and focus behavior; no legacy stepper component is used.",
         "Available in Supreme, Standard, Compact, Mini, and Micro sizes.",
       ]}
-      provenance={<Provenance primitive="StudioDoubleSplitWordCounter" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="Shared Studio stepper button tokens · double-split 1:2:1 geometry · four-state word cycle." imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/studio-ui/tokens.ts"]} />}
+      provenance={<Provenance primitive="StudioDoubleSplitWordCounter" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="Shared Studio chevron button tokens · double-split 1:2:1 geometry · four-state word cycle · five sizes × two palette faces." imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/studio-ui/tokens.ts"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioDoubleSplitWordCounter">
         <div className="vt-confirmed-counter-size-rows">
-          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]}</small><div className="vt-confirmed-counter-pair"><StudioDoubleSplitWordCounter size={size} value={values[index]} onValueChange={value => setValues(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))} ariaLabel={`${size} double-split word counter`} /></div></div>)}
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]} · PRIMARY / REVERSED</small><div className="vt-confirmed-counter-pair">
+            <StudioDoubleSplitWordCounter size={size} value={values[index * 2]} onValueChange={value => updateAt(index * 2, value)} ariaLabel={`${size} double-split word counter`} />
+            <StudioDoubleSplitWordCounter className="is-reversed" size={size} value={values[index * 2 + 1]} onValueChange={value => updateAt(index * 2 + 1, value)} ariaLabel={`${size} double-split word counter reversed palette`} />
+          </div></div>)}
         </div>
       </div>
     </Family>
@@ -656,21 +661,26 @@ const ConfirmedStudioDoubleSplitWordCounterFamily: React.FC = () => {
 }
 
 const ConfirmedStudioLeftWordSliderFamily: React.FC = () => {
-  const [values, setValues] = React.useState([1, 2, 3, 4, 1])
+  const [values, setValues] = React.useState([1, 1, 2, 2, 3, 3, 4, 4, 1, 1])
   const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const updateAt = (index: number, value: number) => setValues(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))
   return (
     <Family
       title="StudioLeftWordSlider · Slider + Numeric Right Rail"
       nonDefaultSettings={[
         "Slider and counter share one integer value in the 1–4 range; counter buttons use the shared accelerated hold behavior.",
         "The slider position and right-hand numeric readout always represent the same value.",
+        "Each size shows primary and reversed-palette variants with independent state.",
         "Available in Supreme, Standard, Compact, Mini, and Micro; shared flat, focus, disabled, and reduced-motion rules remain unchanged.",
       ]}
-      provenance={<Provenance primitive="StudioLeftWordSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-word-counter.css" tokens="60px / 44px / 28px / 20px / 12px · integer range 1–4 · numeric output on right rail" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-word-counter.css"]} />}
+      provenance={<Provenance primitive="StudioLeftWordSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-word-counter.css" tokens="60px / 44px / 28px / 20px / 12px · integer range 1–4 · numeric output on right rail · two palette faces" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-word-counter.css"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioLeftWordSlider">
         <div className="vt-confirmed-counter-size-rows">
-          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]}</small><div className="vt-confirmed-slider-pair"><StudioLeftWordSlider size={size} value={values[index]} onValueChange={value => setValues(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))} ariaLabel={`${size} word slider specimen`} /></div></div>)}
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]} · PRIMARY / REVERSED</small><div className="vt-confirmed-slider-pair">
+            <StudioLeftWordSlider size={size} value={values[index * 2]} onValueChange={value => updateAt(index * 2, value)} ariaLabel={`${size} word slider specimen`} />
+            <StudioLeftWordSlider className="is-reversed" size={size} value={values[index * 2 + 1]} onValueChange={value => updateAt(index * 2 + 1, value)} ariaLabel={`${size} word slider reversed palette specimen`} />
+          </div></div>)}
         </div>
       </div>
     </Family>
