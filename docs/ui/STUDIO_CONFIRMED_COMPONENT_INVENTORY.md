@@ -52,13 +52,19 @@ Counters, sliders, switches, radios, checkboxes, word toggles, and value toggles
 ## Compositions
 
 - Tags and metadata: `StudioSpectrumTag`, `StudioCloseableBadge`, `StudioTagEditor`
-- Component-grid layout: `StudioComponentGrid`, `StudioComponentGridCell`, `StudioComponentGridRow`, `StudioComponentGridSpecimen`, `StudioComponentGridSpecimenPair`
+- Component-grid layout: `StudioComponentGrid`, `StudioComponentGridCell`, `StudioComponentGridRow`
 - Publishing: `StudioPublishingCard`
-- Chat composition: `StudioChatActionGroup`, `StudioResponseMetaRow`, `StudioChatResponseShell`, `StudioChatComposerDock`
+- Chat composition: `StudioResponseMetaRow`, `StudioChatResponseShell`, `StudioChatComposerDock`
 - Calendar composition primitives: `StudioCalendarEventChip`, `StudioCalendarMediaRail`
-- Full-surface composition: `StudioHubCertification`
 
 A component used inside another composition remains listed in its owning category. For example, a dropdown rendered inside the Publishing Card remains a Dropdown primitive; the card itself remains a Composition.
+
+## Retired library-only surfaces
+
+- `StudioChatActionGroup` — removed; the response shell already lays out its actions slot.
+- `StudioSelect` and `StudioSearchInput` — removed; use the canonical dropdown and text-input primitives.
+- `StudioComponentGridSpecimen` and `StudioComponentGridSpecimenPair` — removed; keep the production grid, cell, and row primitives.
+- `StudioHubCertification` — removed as a full-surface design compilation, not a reusable primitive.
 
 ## Explicit exclusions
 
