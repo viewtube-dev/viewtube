@@ -476,6 +476,244 @@
         "docs/specifications/PROMPTS.md",
         "docs/governance/VERIFICATION.md"
       ]
+    },
+    {
+      "id": "DOC-PROGRAM-P1-CANONICAL-INTEGRATION",
+      "path": "tasks/p1-canonical-system-integration/README.md",
+      "class": "PROGRAM",
+      "status": "ACTIVE",
+      "concern": "p1-canonical-system-integration",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-AUDIT-P1-INTEGRATION-INVENTORY",
+      "path": "tasks/p1-canonical-system-integration/inventory.md",
+      "class": "AUDIT",
+      "status": "ACTIVE",
+      "concern": "p1-integration-inventory",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-PLAN-P1-CANONICAL-INTEGRATION",
+      "path": "tasks/p1-canonical-system-integration/plan.md",
+      "class": "PROGRAM_PLAN",
+      "status": "ACTIVE",
+      "concern": "p1-integration-execution-plan",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-SPEC-P1-INTEGRATION-VERIFICATION",
+      "path": "tasks/p1-canonical-system-integration/verification.md",
+      "class": "SPECIFICATION",
+      "status": "ACTIVE",
+      "concern": "p1-integration-verification",
+      "owner": "Verification",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-REF-P1-INTEGRATION-AGENTS",
+      "path": "tasks/p1-canonical-system-integration/agents/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "p1-agent-routing",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-REF-P1-INTEGRATION-TESTS",
+      "path": "tasks/p1-canonical-system-integration/tests/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "p1-test-index",
+      "owner": "Verification",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-REF-P1-INTEGRATION-AUDITS",
+      "path": "tasks/p1-canonical-system-integration/audits/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "p1-audit-templates",
+      "owner": "Verification",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-REF-P1-INTEGRATION-BRANCHES",
+      "path": "tasks/p1-canonical-system-integration/branches/README.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "p1-branch-donor-index",
+      "owner": "Integrated Application Program",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-PLAN-P1-BRAIN-CONTINUITY",
+      "path": "tasks/p1-canonical-system-integration/workstreams/brain-continuity/plan.md",
+      "class": "PROGRAM_PLAN",
+      "status": "ACTIVE",
+      "concern": "p1-brain-continuity",
+      "owner": "BrainRuntime",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-PLAN-P1-GEMINI-GOVERNANCE",
+      "path": "tasks/p1-canonical-system-integration/workstreams/gemini-governance/plan.md",
+      "class": "PROGRAM_PLAN",
+      "status": "ACTIVE",
+      "concern": "p1-gemini-governance",
+      "owner": "BrainModelGateway + Creator Operations",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-PLAN-P1-UNIFIED-DIAGNOSTICS",
+      "path": "tasks/p1-canonical-system-integration/workstreams/unified-diagnostics/plan.md",
+      "class": "PROGRAM_PLAN",
+      "status": "ACTIVE",
+      "concern": "p1-unified-diagnostics",
+      "owner": "Diagnostics + Verification",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-PLAN-P1-PRIORITY25-RUNTIME",
+      "path": "tasks/p1-canonical-system-integration/workstreams/priority-25-runtime/plan.md",
+      "class": "PROGRAM_PLAN",
+      "status": "BLOCKED",
+      "concern": "p1-priority25-runtime",
+      "owner": "Owning capability + Verification",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-PLAN-P1-PUBLIC-RESOLVER",
+      "path": "tasks/p1-canonical-system-integration/workstreams/public-resolver/plan.md",
+      "class": "PROGRAM_PLAN",
+      "status": "ACTIVE",
+      "concern": "p1-public-resolver",
+      "owner": "Public Channel Resolver",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-PLAN-P1-STUDIO-CONTROLS",
+      "path": "tasks/p1-canonical-system-integration/workstreams/studio-controls/plan.md",
+      "class": "PROGRAM_PLAN",
+      "status": "ACTIVE",
+      "concern": "p1-studio-controls",
+      "owner": "Toolbox UI + Studio Controls",
+      "productionDate": "2026-10-29",
+      "lastEdited": "2026-10-29",
+      "lastAuditedMainSha": "e2e09fd5767cb5782f3bf1d133a0b01462c74bfc",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/governance/DOCUMENTATION.md",
+        "docs/governance/CONVERGENCE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
     }
   ],
   "legacyGlobalSources": [
