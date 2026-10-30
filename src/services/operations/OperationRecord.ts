@@ -400,6 +400,7 @@ export const operationRecordFromToolReceipt = (
 type GenerationRequestProjection = {
  id: string
  operationId?: string
+ idempotencyKey?: string
  workflowId?: string
  contentBuildId: string
  projectId: string | null
@@ -435,7 +436,7 @@ export const operationRecordFromGenerationRequest = (
  return createOperationRecord({
   operationId: request.operationId || request.id,
   workflowId,
-  idempotencyKey: null,
+  idempotencyKey: request.idempotencyKey || null,
   kind,
   status: "running",
   mutationClass: "prepare",
