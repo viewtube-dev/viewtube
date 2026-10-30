@@ -132,6 +132,9 @@ test("counter and bar family geometry comes from canonical family tokens and the
   assert.ok(system.includes("var(--vt-studio-counter-value-area-aspect-ratio"));
   assert.ok(system.includes("var(--vt-studio-counter-double-rail-count"));
   assert.ok(system.includes("var(--vt-studio-counter-side-rail-count"));
+  assert.ok(system.includes("width: var(--vt-studio-counter-root-width)"));
+  assert.ok(catalogCss.includes(":not(.vt-studio-counter):not(.vt-studio-side-counter):not(.vt-studio-left-counter)"));
+  assert.ok(catalogCss.includes("justify-self: center;"));
   assert.ok(system.includes("var(--vt-studio-bar-height-to-text-ratio"));
   assert.ok(system.includes("var(--vt-studio-bar-height-to-width-ratio"));
   assert.ok(system.includes("var(--vt-studio-bar-radius"));
