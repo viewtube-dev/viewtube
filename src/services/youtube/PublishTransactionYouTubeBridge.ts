@@ -6,6 +6,7 @@ import {
  beginPublishTransaction,
  completePublishStep,
  markPublishStepRunning,
+ markPublishStepAmbiguous,
  failPublishTransaction,
  getPublishTransaction,
  type ContentBuildPublishTransaction,
