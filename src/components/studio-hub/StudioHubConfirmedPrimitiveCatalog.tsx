@@ -197,8 +197,8 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
       </details>
     )}
   </section>
-)
-
+  )
+}
 
 // The size matrix is deliberately label-free: one standard specimen, two compact,
 // and four micro specimens remain visually adjacent as a single primitive family.
