@@ -79,3 +79,8 @@ For substantial new plans, features, tools, systems, workflows, pages, stores or
 Use `.claude/skills/viewtube-convergence-governance/SKILL.md`.
 
 Do not create parallel systems merely because a new conversation uses a new name.
+
+
+## Global conversation handoff authority
+
+For long-thread continuity, complete user-instruction capture, all-domain work logging and reconciliation, use `docs/governance/CONVERSATION_HANDOFFS.md` and one `tasks/conversation-intake/<conversation-id>/` package (`handoff.md`, `worklog.json`, `review.md`). Trigger it for context pressure, owner/phase changes, substantial unfinished work or explicit user request. Update an existing package in place when the user says “Update the unfinished work log.” Do not create domain-specific conversation logs. Domain masters may retain append-only technical change histories and certification evidence as narrow projections; they do not replace the global package.
