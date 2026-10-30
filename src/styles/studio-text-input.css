@@ -26,9 +26,9 @@ input.vt-studio-text-input {
 
 input.vt-studio-text-input[data-size="supreme"] {
   height: var(--vt-studio-supreme-height, 60px);
-  border-width: var(--vt-studio-supreme-stroke, 4.09px);
-  border-radius: var(--vt-studio-supreme-radius, 8.18px);
-  font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  border-width: var(--vt-studio-supreme-stroke, 3px);
+  border-radius: var(--vt-studio-supreme-radius, 6px);
+  font-size: var(--vt-studio-supreme-font-size, 52px);
 }
 
 input.vt-studio-text-input,
@@ -53,8 +53,8 @@ input.vt-studio-text-input[data-size="mini"] {
 
 input.vt-studio-text-input[data-size="micro"] {
   height: var(--vt-studio-micro-height, 12px);
-  border-width: var(--vt-studio-micro-stroke, 1px);
-  border-radius: var(--vt-studio-micro-radius, 2px);
+  border-width: var(--vt-studio-micro-stroke, 1.5px);
+  border-radius: var(--vt-studio-micro-radius, 3px);
   font-size: var(--vt-studio-micro-font-size, 10px);
 }
 
@@ -70,6 +70,6 @@ input.vt-studio-text-input:focus-visible {
   color: #000;
   -webkit-text-fill-color: #000;
   caret-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  -webkit-text-stroke-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  -webkit-text-stroke-color: #000;
 }
 
