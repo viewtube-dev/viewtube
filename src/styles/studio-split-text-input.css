@@ -33,16 +33,16 @@ html body .vt-studio-split-text-input > [data-vt-studio-control="true"] {
 }
 
 html body .vt-studio-split-text-input[data-split="left"] > [data-vt-studio-control="true"] {
-  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
+  grid-template-columns: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px))) minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
 }
 html body .vt-studio-split-text-input[data-split="right"] > [data-vt-studio-control="true"] {
-  grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, 44px);
+  grid-template-columns: minmax(0, 1fr) var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
   grid-template-rows: minmax(0, 1fr);
 }
 html body .vt-studio-split-text-input[data-split="double"] > [data-vt-studio-control="true"] {
   grid-template-columns:
-    var(--vt-studio-control-height, 44px)
+    var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)))
     minmax(0, 1fr)
     var(--vt-studio-control-height, 44px);
   grid-template-rows: minmax(0, 1fr);
