@@ -1,0 +1,195 @@
+/* Studio Split Accordion: secondary icon rails, primary text panels.
+ * Icons travel as a compounding train (see planTrain in StudioSplitAccordion.tsx); the space that opens between
+ * travelling icons is the border colour, and the divider between two adjacent icons grows from one stroke to
+ * two strokes and then splits into two borders with the coloured panel between them.
+ */
+
+.vt-studio-split-accordion {
+  --vt-sa-height: var(--vt-studio-control-height, 44px);
+  --vt-sa-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-sa-radius: var(--vt-studio-control-radius, 6px);
+  --vt-sa-font: var(--vt-studio-control-font-size, 38px);
+  --vt-sa-text-stroke: var(--vt-studio-control-text-stroke, 1px);
+  --vt-sa-icon: var(--vt-studio-control-icon-size, 38px);
+  --vt-sa-face: calc(var(--vt-sa-height) - var(--vt-sa-stroke) - var(--vt-sa-stroke));
+  /* Border, divider, gap and rail colour. Set by data-border. */
+  --vt-sa-border: var(--vt-studio-control-border, #000);
+  /* Extra rail above and below the buttons so outlines and glows are not clipped. Used by the glow variant. */
+  --vt-sa-pad: 0px;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: calc(var(--vt-sa-height) + var(--vt-sa-pad) + var(--vt-sa-pad));
+  border: var(--vt-sa-stroke) solid var(--vt-sa-border);
+  border-radius: var(--vt-sa-radius);
+  overflow: hidden;
+  background: transparent;
+  color: #000;
+}
+
+.vt-studio-split-accordion[data-size="supreme"] {
+  --vt-sa-height: 60px; --vt-sa-stroke: 4.09px; --vt-sa-radius: 8.18px;
+  --vt-sa-font: 51.82px; --vt-sa-text-stroke: 1.36px; --vt-sa-icon: 51.82px; --vt-sa-face: 51.82px;
+}
+
+.vt-studio-split-accordion[data-size="standard"] {
+  --vt-sa-height: 44px; --vt-sa-stroke: 3px; --vt-sa-radius: 6px;
+  --vt-sa-font: 38px; --vt-sa-text-stroke: 1px; --vt-sa-icon: 38px; --vt-sa-face: 38px;
+}
+
+.vt-studio-split-accordion[data-size="compact"] {
+  --vt-sa-height: 28px; --vt-sa-stroke: 2px; --vt-sa-radius: 4px;
+  --vt-sa-font: 24px; --vt-sa-text-stroke: .5px; --vt-sa-icon: 24px; --vt-sa-face: 24px;
+}
+
+.vt-studio-split-accordion[data-size="mini"] {
+  --vt-sa-height: 20px; --vt-sa-stroke: 1.5px; --vt-sa-radius: 3px;
+  --vt-sa-font: 17.5px; --vt-sa-text-stroke: .375px; --vt-sa-icon: 17px; --vt-sa-face: 17px;
+}
+
+.vt-studio-split-accordion[data-size="micro"] {
+  --vt-sa-height: 12px; --vt-sa-stroke: 1px; --vt-sa-radius: 2px;
+  --vt-sa-font: 10px; --vt-sa-text-stroke: .25px; --vt-sa-icon: 10px; --vt-sa-face: 10px;
+}
+
+.vt-studio-split-accordion[data-border="white"] { --vt-sa-border: #fff; }
+.vt-studio-split-accordion[data-border="transparent"] { --vt-sa-border: transparent; }
+
+.vt-studio-split-accordion__viewport {
+  box-sizing: border-box; width: 100%; height: 100%; padding-block: var(--vt-sa-pad);
+  overflow-x: auto; overflow-y: hidden; touch-action: pan-y; scrollbar-width: none;
+  background: var(--vt-sa-border);
+}
+
+.vt-studio-split-accordion__viewport::-webkit-scrollbar { display: none; }
+
+.vt-studio-split-accordion__track {
+  display: flex; flex-flow: row nowrap; align-items: stretch; gap: var(--vt-sa-stroke); background: var(--vt-sa-border);
+  height: 100%; min-width: 100%; width: max-content; will-change: width;
+}
+
+.vt-studio-split-accordion__item {
+  /* Pair colours: primary fills the text panel, secondary fills the icon section. */
+  --vt-sa-p: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-sa-s: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  box-sizing: border-box; position: relative; display: flex; flex: 0 0 auto; flex-direction: row; align-items: stretch;
+  height: 100%; min-width: 0; overflow: hidden; border: 0;
+}
+
+.vt-studio-split-accordion__trigger {
+  box-sizing: border-box; display: grid; place-items: center;
+  flex: 0 0 var(--vt-sa-face); width: var(--vt-sa-face); min-width: var(--vt-sa-face);
+  max-width: var(--vt-sa-face); height: 100%; margin: 0; padding: 0;
+  border: 0; border-radius: 0;
+  background: var(--vt-sa-s);
+  color: #000; cursor: pointer; overflow: hidden;
+}
+
+.vt-studio-split-accordion__trigger:disabled { opacity: .45; cursor: not-allowed; }
+
+.vt-studio-split-accordion__trigger:focus-visible {
+  outline: calc(var(--vt-sa-stroke) * var(--vt-studio-focus-outline-width-ratio, .65))
+    solid var(--vt-sa-s);
+  outline-offset: calc(var(--vt-sa-stroke) * -1); z-index: 2;
+}
+
+.vt-studio-split-accordion__face {
+  display: grid; place-items: center; flex: 0 0 var(--vt-sa-icon);
+  width: var(--vt-sa-icon); height: var(--vt-sa-icon); pointer-events: none;
+  color: inherit; font-size: var(--vt-sa-icon); line-height: 1;
+}
+
+.vt-studio-split-accordion__face > * { max-width: 100%; max-height: 100%; }
+.vt-studio-split-accordion__face svg { display: block; width: 100%; height: 100%; color: currentColor; stroke: currentColor; }
+.vt-studio-split-accordion__face svg * { stroke: currentColor; }
+
+/* The content region is the border colour. The coloured panel sits inside it after one stroke, so while the region
+ * is narrower than a stroke you only see the divider growing, then the panel opens between two borders.
+ * Text keeps its full size and is clipped at the panel edges while the panel is narrow. */
+.vt-studio-split-accordion__content {
+  box-sizing: border-box; display: flex; align-items: stretch; flex: 1 1 auto;
+  min-width: 0; height: 100%; overflow: hidden;
+  background: var(--vt-sa-border); color: #000;
+}
+
+.vt-studio-split-accordion__panel {
+  box-sizing: border-box; display: flex; flex: none; align-items: center; justify-content: center;
+  height: 100%; margin-left: var(--vt-sa-stroke);
+  width: max(0px, calc(100% - var(--vt-sa-stroke)));
+  overflow: hidden; background: var(--vt-sa-p); color: #000;
+}
+
+/* Transit bands keep their own panel colour; only the label is hidden until its panel is selected/opening. */
+.vt-studio-split-accordion__content:not([data-label-visible="true"]) .vt-studio-split-accordion__content-inner { visibility: hidden; }
+
+.vt-studio-split-accordion__content-inner {
+  /* Keep the label at full intrinsic size; the parent panel clips it symmetrically while narrow. */
+  box-sizing: border-box; display: flex; flex: 0 0 auto; align-items: center; justify-content: center;
+  width: max-content; min-width: max-content; max-width: none;
+  height: 100%; padding: 0 4px; overflow: hidden; white-space: nowrap; text-overflow: clip;
+  font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: var(--vt-sa-font); font-weight: 1000; line-height: 1; letter-spacing: -.02em;
+  text-align: center; text-transform: uppercase; -webkit-text-stroke: var(--vt-sa-text-stroke) currentColor;
+}
+
+.vt-studio-split-accordion__trailing { flex: 0 0 auto; padding-inline: 4px; }
+
+.vt-studio-split-accordion:focus-within {
+  outline: calc(var(--vt-sa-stroke) * var(--vt-studio-focus-outline-width-ratio, .65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+
+/* ---------- Variants (data-variant). "saturated" is the default above. ---------- */
+
+/* Inset line: 50% panel with a 100% inset stroke. */
+.vt-studio-split-accordion[data-variant="inset"] .vt-studio-split-accordion__panel,
+.vt-studio-split-accordion[data-variant="soft"] .vt-studio-split-accordion__panel {
+  background: color-mix(in srgb, var(--vt-sa-p) 50%, transparent);
+  box-shadow: inset 0 0 0 var(--vt-sa-stroke) var(--vt-sa-p);
+}
+
+/* Soft fill: icon and panel both 50% with inset lines; the open one fills solid. */
+.vt-studio-split-accordion[data-variant="soft"] .vt-studio-split-accordion__trigger {
+  background: color-mix(in srgb, var(--vt-sa-s) 50%, transparent);
+  box-shadow: inset 0 0 0 var(--vt-sa-stroke) var(--vt-sa-s);
+}
+.vt-studio-split-accordion[data-variant="soft"] .vt-studio-split-accordion__item[data-active="true"] .vt-studio-split-accordion__trigger { background: var(--vt-sa-s); }
+.vt-studio-split-accordion[data-variant="soft"] .vt-studio-split-accordion__item[data-active="true"] .vt-studio-split-accordion__panel { background: var(--vt-sa-p); }
+
+/* Black and color: black sections with coloured icons and text; the open icon fills with the secondary colour. */
+.vt-studio-split-accordion[data-variant="black"] .vt-studio-split-accordion__trigger,
+.vt-studio-split-accordion[data-variant="blackInset"] .vt-studio-split-accordion__trigger { background: #000; color: var(--vt-sa-s); }
+.vt-studio-split-accordion[data-variant="black"] .vt-studio-split-accordion__item[data-active="true"] .vt-studio-split-accordion__trigger { background: var(--vt-sa-s); color: #000; }
+.vt-studio-split-accordion[data-variant="black"] .vt-studio-split-accordion__panel,
+.vt-studio-split-accordion[data-variant="blackInset"] .vt-studio-split-accordion__panel {
+  background: #000; color: var(--vt-sa-p); box-shadow: inset 0 0 0 var(--vt-sa-stroke) var(--vt-sa-p);
+}
+
+/* Black with inset: open icon and panel get inset lines in the pair colours. */
+.vt-studio-split-accordion[data-variant="blackInset"] .vt-studio-split-accordion__trigger { color: var(--vt-sa-p); }
+.vt-studio-split-accordion[data-variant="blackInset"] .vt-studio-split-accordion__item[data-active="true"] .vt-studio-split-accordion__trigger { box-shadow: inset 0 0 0 var(--vt-sa-stroke) var(--vt-sa-s); }
+.vt-studio-split-accordion[data-variant="blackInset"] .vt-studio-split-accordion__panel { color: var(--vt-sa-s); box-shadow: inset 0 0 0 var(--vt-sa-stroke) var(--vt-sa-s); }
+
+/* Reversed pair: primary on the icon, secondary on the panel. */
+.vt-studio-split-accordion[data-variant="reversed"] .vt-studio-split-accordion__trigger { background: var(--vt-sa-p); }
+.vt-studio-split-accordion[data-variant="reversed"] .vt-studio-split-accordion__panel { background: var(--vt-sa-s); }
+
+/* Tinted: closed icons fade to a 50% white tone. */
+.vt-studio-split-accordion[data-variant="tinted"] .vt-studio-split-accordion__item[data-active="false"] .vt-studio-split-accordion__trigger {
+  color: color-mix(in srgb, var(--vt-sa-s) 50%, #fff);
+}
+
+/* Outline and glow: the open section gets a secondary outline and glow; extra rail keeps it from clipping. */
+.vt-studio-split-accordion[data-variant="glow"] { --vt-sa-pad: calc(var(--vt-sa-height) * .3); }
+.vt-studio-split-accordion[data-variant="glow"] .vt-studio-split-accordion__item[data-active="true"] {
+  z-index: 1; border-radius: var(--vt-sa-radius);
+  outline: calc(var(--vt-sa-stroke) * .7) solid var(--vt-sa-s);
+  outline-offset: calc(var(--vt-sa-stroke) * .7);
+  box-shadow: 0 0 calc(var(--vt-sa-height) * .32) calc(var(--vt-sa-stroke) * .4) var(--vt-sa-s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-split-accordion__track { will-change: auto; }
+}
