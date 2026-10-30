@@ -1048,6 +1048,19 @@ const useConfirmedAdditionalPrimitiveSections = (): React.ReactNode[] => {
       <Family title="Composition Helpers · Standard" nonDefaultSettings={[
         "Composition helpers arrange existing controls; they do not add control faces, token tiers, or a separate style contract.",
       ]} provenance={<Provenance primitive="StudioComponentGridRow · StudioComponentGridSpecimen · StudioComponentGridSpecimenPair" tsx="src/studio-ui/primitives/StudioComponentGrid.tsx + src/studio-ui/primitives/StudioComponentGridSpecimen.tsx" css="src/styles/studio-component-grid.css" tokens="Composition-only layout helpers; embedded controls retain their owning family contracts." imports={["src/studio-ui/primitives/StudioComponentGrid.tsx", "src/studio-ui/primitives/StudioComponentGridSpecimen.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGrid">
+          <span>STUDIO COMPONENT GRID · COMPOSITION LAYOUT</span>
+          <StudioComponentGrid cols={2} rows={1} size="standard" aria-label="Component grid composition specimen">
+            <StudioComponentGridCell><StudioButton sizeVariant="standard">GRID CELL A</StudioButton></StudioComponentGridCell>
+            <StudioComponentGridCell><StudioButton sizeVariant="standard">GRID CELL B</StudioButton></StudioComponentGridCell>
+          </StudioComponentGrid>
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGridCell">
+          <span>STUDIO COMPONENT GRID CELL · COMPOSITION HELPER</span>
+          <StudioComponentGrid cols={1} rows={1} size="standard" aria-label="Component grid cell specimen">
+            <StudioComponentGridCell><StudioButton sizeVariant="standard">STANDARD GRID CELL</StudioButton></StudioComponentGridCell>
+          </StudioComponentGrid>
+        </div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioComponentGridRow">
           <span>STUDIO COMPONENT GRID ROW · COMPOSITION HELPER</span>
           <StudioComponentGrid cols={2} rows={1} size="standard" aria-label="Component grid row helper specimen">
@@ -1142,7 +1155,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
     <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Typography is intentionally 38px Standard, 24px Compact, and 10px Micro; label variants do not change those sizes.",
         "Floating labels use 80% of the input font size; fixed-label mode reserves a separate label box matching the multi-select dropdown.",
-      ]} provenance={<Provenance primitive="StudioTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx" css="src/styles/studio-control-system.css + src/styles/studio-text-input.css" tokens="One native input family with simple, floating-label, and fixed-label variants; standard 44px / 38px, compact 28px / 24px, micro 12px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/styles/studio-control-entry.css", "src/styles/studio-text-input.css"]} />}>
+      ]} provenance={<Provenance primitive="StudioTextInput · StudioSplitTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx + src/studio-ui/primitives/StudioSplitTextInput.tsx" css="src/styles/studio-control-system.css + src/styles/studio-text-input.css + src/studio-ui/primitives/studio-split-text-input.css" tokens="One native input family with simple, floating-label, and fixed-label variants; standard 44px / 38px, compact 28px / 24px, micro 12px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/studio-ui/primitives/StudioSplitTextInput.tsx", "src/styles/studio-control-entry.css", "src/styles/studio-text-input.css", "src/studio-ui/primitives/studio-split-text-input.css"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>60px supreme · simple input</span><StudioTextInput sizeVariant="supreme" aria-label="Studio plain text input supreme" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · simple input</span><StudioTextInput sizeVariant="standard" aria-label="Studio plain text input standard" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>20px Mini · simple input</span><StudioTextInput sizeVariant="mini" aria-label="Studio plain text input Mini" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
@@ -1157,6 +1170,12 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
       <div className="vt-confirmed-paired-compact-row">
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · A</span><StudioTextInput variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact A" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextInput className="is-reverse-colors" variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact B reverse colors" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
+      </div>
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTextInput">
+        <span>SPLIT TEXT INPUT · LEFT / RIGHT / DOUBLE</span>
+        <StudioSplitTextInput split="left" sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} aria-label="Standard split-left text input" placeholder="TYPE HERE" />
+        <StudioSplitTextInput split="right" sizeVariant="standard" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Standard split-right text input" placeholder="TYPE HERE" />
+        <StudioSplitTextInput split="double" sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Standard double-split text input" placeholder="TYPE HERE" />
       </div>
     </Family>
     <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
@@ -1779,7 +1798,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
         "Media rails cover both 16:9 landscape and 9:16 portrait ratios across left, right, and double rail arrangements.",
         "Calendar state and publish dates remain owned by Projects; these are presentation primitives only.",
       ]} provenance={<Provenance primitive="StudioCalendarEventChip · StudioCalendarMediaRail" tsx="src/studio-ui/primitives/StudioCalendarPrimitives.tsx" css="src/studio-ui/primitives/studio-calendar-primitives.css" tokens="Semantic primary/secondary colors · global Studio stroke/radius/spacing · ratio-based media geometry" imports={["src/studio-ui/primitives/StudioCalendarPrimitives.tsx", "src/studio-ui/primitives/studio-calendar-primitives.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row">
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarEventChip">
           <span>EVENT CHIPS · ALL SEMANTIC KINDS + REAL STATUS STATES</span>
           <div className="flex flex-wrap items-center gap-2">
             <StudioCalendarEventChip label="PUBLISH EPISODE" kind="publish" status="scheduled" selected onClick={() => undefined} />
@@ -1790,7 +1809,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
             <StudioCalendarEventChip label="REMOVABLE EVENT" kind="reminder" onRemove={() => undefined} />
           </div>
         </div>
-        <div className="vt-confirmed-variant is-full-row">
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarMediaRail">
           <span>MEDIA RAILS · 16:9 LANDSCAPE · LEFT / RIGHT / DOUBLE</span>
           <div className="grid grid-cols-1 gap-2">
             <StudioCalendarMediaRail aspectRatio="16:9" split="left" label="Landscape thumbnail with leading event rail" leftLabel="VIDEO" />
