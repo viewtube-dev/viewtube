@@ -63,7 +63,7 @@ function ArrowButton({ direction, disabled, onClick, label }: {
   label: string;
 }) {
   const Icon = direction === "left" ? ChevronLeft : direction === "right" ? ChevronRight : direction === "up" ? ChevronUp : ChevronDown;
-  return <button type="button" className="vt-studio-value-toggle__arrow" aria-label={label} disabled={disabled} onClick={onClick}>
+  return <button type="button" className="vt-studio-stepper-button vt-studio-value-toggle__arrow" aria-label={label} disabled={disabled} onClick={onClick}>
     <Icon aria-hidden="true" />
   </button>;
 }
