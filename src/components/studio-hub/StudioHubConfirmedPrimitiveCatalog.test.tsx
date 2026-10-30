@@ -825,11 +825,15 @@ describe("confirmed individual module variant completeness", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
     const dropdown = source.slice(source.indexOf('const ConfirmedStudioDropdownFamily'), source.indexOf('type ConfirmedCatalogFamilyName'));
     const splitButtons = source.slice(source.indexOf('const ConfirmedStudioSplitButtonFamily'), source.indexOf('const ConfirmedStudioDropdownFamily'));
+    const button = source.slice(source.indexOf('const ConfirmedStudioButtonFamily'), source.indexOf('const ConfirmedStudioSplitButtonFamily'));
     const tiers = ['"supreme"', '"standard"', '"compact"', '"mini"', '"micro"'];
     for (const tier of tiers) {
       expect(dropdown, `dropdown family includes ${tier}`).toContain(tier);
       expect(splitButtons, `split button family includes ${tier}`).toContain(tier);
     }
+    expect(button).toContain('tier: "mini" as const');
+    expect(button).toContain('buttonCell("mini", "row-6-mini-v7", 7, 20)');
+    expect(splitButtons).toContain('size === "standard" || size === "compact"');
   });
 
   it("keeps the full palette and behavior variants represented in their owning module galleries", () => {
