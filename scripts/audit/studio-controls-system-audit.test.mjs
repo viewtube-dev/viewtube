@@ -14,6 +14,7 @@ const standaloneInputCss = read("src/styles/studio-text-input.css");
 const splitInput = read("src/studio-ui/primitives/StudioSplitTextInput.tsx");
 const splitInputCss = read("src/styles/studio-split-text-input.css");
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+const publicIndex = read("src/studio-ui/index.ts");
 const catalogCss = read("src/components/studio-hub/studio-hub-primitive-catalogs.css");
 
 const tiers = {
@@ -137,6 +138,13 @@ test("inter-modules are full-width and the representative section is a single fu
   assert.ok(recovery.includes(".vt-studio-inter-module { width: 100% !important; max-width: 100% !important;"));
   assert.ok(catalogCss.includes('[data-vt-primitive-title*="Representatives"]'));
   assert.ok(catalogCss.includes("grid-template-columns: minmax(0, 1fr)"));
+});
+
+test("retired search/select/chat-action/design-compilation items stay out of the Confirmed Library and public barrel", () => {
+  for (const retired of ["StudioSearchInput", "StudioSelectStandard", "StudioChatActionGroup", "Chat Action Group", "Select Standard", "Designs Compilations"]) {
+    assert.ok(!catalog.includes(retired), retired + " must not return to the Confirmed Library");
+    assert.ok(!publicIndex.includes(retired), retired + " must not return to the public Studio barrel");
+  }
 });
 
 test("every primitive named by the full-width representatives has a real catalog specimen", () => {
