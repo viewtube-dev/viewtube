@@ -128,6 +128,11 @@ test("counter and bar family geometry comes from canonical family tokens and the
   assert.ok(system.includes("var(--vt-studio-bar-height-to-width-ratio"));
   assert.ok(system.includes("var(--vt-studio-bar-radius"));
   assert.ok(system.includes("var(--vt-studio-bar-empty-white-mix"));
+  assert.ok(system.includes("color-mix(in srgb,#fff var(--vt-studio-bar-empty-white-mix,50%),var(--vt-studio-control-accent"));
+  assert.ok(system.includes('.vt-studio-value-toggle__bar[data-active="true"]{background:var(--vt-studio-bar-full-fill,#000)'));
+  assert.ok(system.includes("flex:0 0 var(--vt-studio-control-height)"));
+  assert.ok(system.includes("width:var(--vt-studio-control-height)"));
+  assert.ok(system.includes("height:100%"));
   assert.ok(system.includes(".vt-studio-side-counter__value"));
   assert.ok(!recovery.includes(".vt-studio-value-toggle__bar {"));
   assert.ok(tokens.includes("micro: { height: 12, stroke: 1, radius: 2"));
