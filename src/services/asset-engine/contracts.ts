@@ -260,6 +260,8 @@ export type ContentBuildEventType =
  | "youtube.state.changed"
  | "publish.transaction.started"
  | "publish.transaction.step.completed"
+ | "publish.transaction.step.ambiguous"
+ | "publish.transaction.step.reconciled-not-applied"
  | "publish.transaction.failed"
  | "publish.transaction.completed"
  | "analytics.checkpoint"
