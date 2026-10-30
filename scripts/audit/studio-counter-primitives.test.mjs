@@ -54,24 +54,19 @@ test("counter affordances have hold-repeat, enlarged icons, activation motion, a
   assert.match(styles, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter > button\.is-holding svg/);
 });
 
-test("counter palette variants are paired by size and centered, with max 100", () => {
-  assert.match(catalog, /vt-confirmed-counter-row-grid--paired/);
-  assert.match(catalog, /vt-confirmed-counter-pair/);
-  assert.doesNotMatch(catalog, /Studio(?:Right)?Counter[^>]+max=\{99\}/);
-  assert.match(styles, /justify-content:\s*center;[\s\S]*align-items:\s*flex-start;/);
-  assert.match(styles, /color-mix\(in srgb, #fff 50%, var\(--pair-a\) 50%\)/);
-  assert.match(styles, /-webkit-text-stroke:\s*1px var\(--pair-a\)/);
-  assert.match(styles, /background:\s*color-mix\(in srgb, var\(--pair-a\) 50%, transparent\)/);
-});
-
-test("counter catalog groups primary and secondary palettes in centered per-size rows and uses 0–100", () => {
-  assert.match(catalog, /vt-confirmed-counter-size-rows/);
-  assert.match(catalog, /vt-confirmed-counter-size-row/);
-  assert.doesNotMatch(catalog, /vt-confirmed-counter-row-grid--paired/);
+test("counter and slider catalogs expose only the canonical primary-fill specimens", () => {
+  const counterStart = catalog.indexOf('title="StudioCounter · Standard / Compact / Micro"');
+  const sliderStart = catalog.indexOf('title="StudioDoubleSplitSlider · Standard / Compact / Micro"');
+  const sideStart = catalog.indexOf('title="StudioSideCounter · Standard / Compact / Micro"');
+  assert.ok(counterStart >= 0 && sliderStart > counterStart && sideStart > sliderStart);
+  const counterFamily = catalog.slice(counterStart, sliderStart);
+  const sliderFamily = catalog.slice(sliderStart, sideStart);
+  const sideFamily = catalog.slice(sideStart, catalog.indexOf("/** Certified production examples only.", sideStart));
+  for (const family of [counterFamily, sliderFamily, sideFamily]) {
+    assert.match(family, /one canonical primary-fill/i);
+    assert.doesNotMatch(family, /is-reversed|is-inverse|inverse-fill|reverse-colors/);
+  }
   assert.equal((catalog.match(/max={100}/g) || []).length >= 12, true);
-  assert.match(styles, /justify-content:\s*center;[\s\S]*align-items:\s*center/);
-  assert.match(styles, /color-mix\(in srgb, #fff 50%, var\(--pair-a\) 50%\)/);
-  assert.match(styles, /-webkit-text-stroke:\s*1px var\(--vt-studio-control-accent, var\(--pair-a\)\)/);
 });
 
 test("Studio counter hold behavior is wired to pointer events for touch and mouse", () => {
@@ -128,6 +123,7 @@ test("StudioLeftCounter places the two-button action rail on the left and is ava
   assert.match(styles, /\.vt-studio-left-counter\[data-size="compact"\]\s*\{\s*--vt-studio-counter-width:\s*84px;/);
   assert.match(styles, /\.vt-studio-left-counter\[data-size="micro"\]\s*\{\s*--vt-studio-counter-width:\s*42px;/);
   assert.match(styles, /\.vt-studio-left-counter__rail\[data-rail="start"\]\s*\{[^}]*border-right:/s);
-  assert.match(catalog, /StudioLeftCounter className="is-reversed"/);
+  assert.match(catalog, /StudioLeftWordCounter/);
+  assert.doesNotMatch(catalog, /StudioLeftCounter className="is-reversed"/);
   assert.doesNotMatch(catalog, /StudioSideCounter className="is-reversed"/);
 });
