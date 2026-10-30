@@ -515,7 +515,7 @@ Required remediation:
 - Preserve the canonical `keyVault.ts` API and key-updated event while changing the backing store; do not create a second vault abstraction.
 - Add tests for storage behavior, migration/alias cleanup, and the user-facing disclosure.
 
-### F-018 — Gemini API-key save state confirms persistence, but the Settings flow has no provider-validation state
+### F-018 — Main Settings key-save flow lacks validation feedback; global navigation has a separate validator
 
 **Severity:** P2 — incomplete credential setup feedback  
 **Classification:** `PARTIAL_UI`  
@@ -526,6 +526,7 @@ Evidence:
 - `src/views/settings/SettingsAiPanel.tsx` exposes a key input and Save action, but no Validate/Test action or validation status.
 - `src/services/gemini.ts` checks only that a key exists before constructing `GoogleGenAI`; provider rejection is surfaced later when a generation operation runs.
 - The save confirmation is accurate as a persistence confirmation; it does not establish that the key is valid, enabled for the requested API, or authorized for the selected model.
+- This is not a platform-wide absence of key validation: `src/context/GeminiKeyContext.tsx` exposes `validateAndSaveKey`, and `src/components/navigation/AdaptiveNavigationShell.tsx` opens `GeminiKeySettings` from the account menu. That alternate UI validates through `ai.models.list()` and saves through the same canonical `keyVault.ts` API. The main Settings panel does not expose or invoke that validation state.
 
 Impact:
 - Users can complete the visible setup flow with a malformed, revoked, or unauthorized key and only discover the failure on a later generation attempt.
@@ -549,8 +550,131 @@ Required remediation:
 ### Sixth-pass status
 
 - Confirmed the mismatch between “secure vault” UI copy and browser localStorage credential persistence.
-- Confirmed the Settings save action persists a key but does not validate it with the provider.
+- Confirmed the main Settings panel's save action persists a key without provider-validation feedback; a separate global-navigation Gemini key dialog does validate through model discovery and shares the same keyVault storage API.
 - Confirmed the model selector projects from the canonical Gemini governance registry and the generation client consumes the canonical resolver/profile/fallback layer.
 - Confirmed public-page ingestion strips analytics counts rather than fabricating them; end-to-end public-only Brain enforcement remains unverified.
 - No application source code was changed. No key, model, or Brain policy was modified.
 - No tests, typecheck, production build, provider request, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
+
+
+## Seventh-pass addendum — Public-only Brain analytics boundary and runtime provider governance
+
+**Audit pass date:** 2026-10-30  
+**Source branch:** `master/consolidated-feature-integration`  
+**Scope:** Logged-out public-handle callsites, BrainRuntime public evidence injection, canonical analytics resolver, model gateway, provider key validation, and generation-operation wrapping.
+
+### F-019 — Public-handle Brain turns do not explicitly disable the canonical private-analytics resolver
+
+**Severity:** P1 — public-only privacy boundary can be bypassed by a same-channel local analytics snapshot  
+**Classification:** `BROKEN_WIRING`  
+**Confidence:** High for the unguarded call path; conditional for actual exposure because it depends on the current local VT-SYNC snapshot
+
+Evidence:
+- The logged-out AI Brain workspace, Sidebar chatbot, and Brain Hub widget pass `readSelectedPublicHandleContext()` into the canonical `runBrainTask` entry point only when the user is unauthenticated and the YouTube connection is not connected.
+- `src/services/brain/runtime/BrainRuntime.ts` correctly fetches the explicitly selected public page, verifies the requested handle/channel identity, rejects fixture data, strips all performance metrics, labels the prompt block as public-channel evidence, and replaces the turn's channel/evidence snapshot with public titles and publish dates only.
+- The runtime then sets `runtimeChannelId` to the resolved public channel ID and delegates to `runBrainTurn`. It does not pass a public-only analytics prohibition or otherwise suppress analytics capability selection.
+- `src/services/brain/BrainOrchestrator.ts` still selects analytics capabilities from the request intent and creator controls. For analytics/strategy requests it calls `resolveEvidenceIntelligence({ channelId: input.channelId, ... })`.
+- The resolver's default dependency is `getCurrentCanonicalIntelligenceEvidence`. `src/services/analytics-canon/currentEvidence.ts` obtains the current global VT-SYNC snapshot with `getVtSyncSnapshot()`; it does not receive a public-only mode or an alternate public evidence source.
+- `src/services/brain/EvidenceIntelligenceResolver.ts` fails closed when the canonical evidence scope does not exactly match the expected channel ID. However, when the locally retained VT-SYNC snapshot belongs to the same channel ID as the selected public handle, that scope check can succeed and analytics records can be projected.
+- `BrainContextBroker` gates those records using `BrainUserControls.allowAnalytics`, whose default is true; it does not distinguish a logged-out public-handle turn from an authenticated connected-channel turn.
+- The public prompt block says not to infer private analytics, but prompt instructions are not a substitute for enforcing the boundary before private records are loaded and supplied.
+
+Impact:
+- A user who previously connected/synced a channel, then signs out and selects that same channel through public-handle mode, may still have a same-channel VT-SYNC snapshot in local storage.
+- On a Brain request that selects analytics intelligence, the canonical resolver can see that global snapshot and accept it as exact-channel evidence even though the current request was explicitly public-only.
+- This is a conditional code-path exposure, not a claim that every logged-out request currently leaks analytics. A different channel ID or empty snapshot fails the resolver's scope check and yields no analytics records.
+
+Required remediation:
+- Carry an explicit public-only evidence mode through the canonical BrainRuntime → BrainOrchestrator boundary.
+- In public-only mode, do not invoke private/cached analytics resolution at all. Use only the already-resolved public metadata evidence records and keep all performance metrics unavailable.
+- Do not implement this by overwriting the creator's persistent `allowAnalytics` preference; public-only is a request/source boundary, not a change to the user's saved preference.
+- Add a regression test with a matching-channel VT-SYNC snapshot containing private metric records, a logged-out public-handle request, and an analytics-intent prompt. Assert that no private metric record reaches the context pack, evidence IDs, answer evaluation, or turn metadata.
+- Add a contrasting connected-channel test proving the existing canonical analytics path remains available when authenticated and authorized.
+
+### Seventh-pass positive evidence — public resolver and Gemini provider foundations
+
+- Public metadata is explicitly injected through `BrainRuntime`, not by teaching the generic runtime to read browser storage. This preserves the canonical runtime boundary.
+- The three primary chat surfaces inspected pass the selected public handle into `runBrainTask`; the runtime checks resolved identity before injecting public evidence.
+- Public video records have null views, watch time, subscribers, revenue, CTR, likes, and comments. The runtime marks the source and limitations in the system prompt and evidence metadata.
+- `BrainModelGateway` is the provider-neutral Brain seam; its default implementation dynamically delegates to the existing Gemini service. Preserve this gateway rather than adding a second provider runtime.
+- `gemini.ts` wraps both `models.generateContent` and `models.generateContentStream` with canonical model resolution, capability profiles, bounded fallback, and usage/entitlement handling. The shared `getAiClient()` returns this governed client, including for existing service callsites.
+- `brainProviderArchitectureGuard.test.ts` scans source for direct provider generation/SDK construction and limits exceptions to `GeminiKeyContext.tsx` (credential validation) and `gemini.ts` (provider owner). This is a useful guard to preserve.
+- The global navigation account menu opens `GeminiKeySettings`; `GeminiKeyContext.validateAndSaveKey` performs model-list validation and writes through the same `keyVault.ts` API. The newer Settings AI panel's save-only flow is therefore a partial UI inconsistency, not a second credential store or a complete absence of validation.
+
+### Seventh-pass status
+
+- Traced public-handle selection from Settings through the three primary logged-out chat surfaces into BrainRuntime.
+- Confirmed the public metadata path is identity-checked and strips analytics metrics.
+- Identified the unguarded canonical analytics lookup that can accept same-channel local VT-SYNC evidence during a public-only request.
+- Confirmed the provider-neutral BrainModelGateway, canonical Gemini model resolver/profile/fallback wrapper, and provider architecture guard are present.
+- Clarified that key validation exists in the global navigation dialog, while the main Settings panel does not surface it.
+- No application source code, key, model, permission, or runtime policy was changed.
+- No tests, typecheck, production build, provider request, or browser runtime tests were executed. This remains source-level verification; F-019 requires a targeted regression test and runtime confirmation.
+
+### F-020 — Gemini generation governance is incomplete for video and misclassifies image/TTS requests
+
+**Severity:** P1 — generation-operation governance and model/modality mismatch  
+**Classification:** BROKEN_WIRING  
+**Confidence:** Confirmed from the canonical client wrapper, model registry, and provider callsites
+
+Evidence:
+- src/services/gemini.ts:getAiClient() wraps models.generateContent and models.generateContentStream with withCanonicalModel, which applies model resolution, generation profiles, bounded fallback, entitlement/usage quoting, and metering.
+- The wrapper's getRequestCapability recognizes thinkingConfig and searches serialized contents for video/audio/image MIME markers. It does not inspect config.imageConfig, config.responseModalities, or config.speechConfig.
+- generateImage() sends a text-only prompt with config.imageConfig but hardcodes gemini-3.1-pro. The model registry declares that model for text/thinking/analysis, not image. Because the request classifier does not inspect imageConfig, the canonical wrapper treats this as text and the resolver can retain the incompatible Pro model instead of selecting the image-capable model.
+- generateVisualImage() does select getActiveModel("image"), but its text-only prompt plus imageConfig is still classified as text, so it receives the text generation profile rather than the image profile.
+- generateSpeech() selects getActiveModel("tts") and sets responseModalities: ["AUDIO"] plus speechConfig. The request classifier does not inspect those fields, and the current model registry's capability policy has no tts modality requirement/default. The operation therefore lacks an explicit, verified TTS model route/profile.
+- generateVideo() and generateVisualVideo() call ai.models.generateVideos() directly. They choose a model through getActiveModel("video"), so the model ID does use the canonical preference resolver, but these calls do not pass through withCanonicalModel, bounded fallback, generation-profile validation, or the content/stream usage-metering wrapper. generateVisualVideo() also bypasses the task queue used by generateVideo().
+- The provider architecture guard scans for models.generateContent and new GoogleGenAI(, but does not assert that generateVideos operations are routed through an operation-governance contract. Both video callsites live inside the allowed provider-owner file, so the current guard cannot detect this gap.
+
+Impact:
+- Image requests can be routed/profiled as text even when the caller explicitly requested image generation.
+- TTS requests have no explicit capability-compatible model policy and are classified as text by the wrapper.
+- Video generation has canonical model preference resolution but bypasses the shared fallback/profile/metering wrapper. This makes its governance weaker than text and streaming generation and can leave operation cost/usage attribution inconsistent.
+- This finding does not assert that all image, audio, or video operations fail at the provider. It identifies missing or misapplied governance before dispatch.
+
+Required remediation:
+- Make modality classification operation-aware: inspect image configuration/output, audio response modalities and speech configuration, audio/video input parts, and the SDK operation being invoked rather than relying only on serialized prompt contents.
+- Add an explicit TTS capability/model policy only after verifying provider-supported model IDs and account availability; do not invent or assume model support.
+- Change generateImage() to resolve the image capability through the canonical registry rather than hardcoding a text-only Pro model.
+- Route video generation through a dedicated canonical operation-governance path that handles capability validation, safe pre-acceptance fallback, queueing, idempotency/operation IDs, usage attribution, and diagnostics. Do not blindly retry an accepted asynchronous video job.
+- Extend the provider architecture guard and add focused tests for text, image, TTS, video, and streaming operations. Verify both requested and actually served model identities and that each billable operation produces exactly one usage receipt.
+
+### Eighth-pass status
+
+- Confirmed the generateContent and streaming wrapper applies canonical model resolution, generation profiles, bounded fallback, and metering.
+- Confirmed image/TTS modality fields are omitted from request-capability classification.
+- Confirmed image generation includes a hardcoded text-only model ID in generateImage(); visual image generation uses the canonical image selection but still receives text classification.
+- Confirmed video generation uses canonical model preference resolution but bypasses the shared content/stream governance wrapper.
+- No application source code was changed and no provider generation was attempted. No tests, typecheck, production build, or browser certification were run.
+
+
+### F-021 — Gemini key storage emits a change event, but both key UIs load state only once
+
+**Severity:** P2 — stale Settings/key-management state across two supported entry points  
+**Classification:** STALE_UI / BROKEN_WIRING  
+**Confidence:** Confirmed by the vault event producer and both UI state consumers
+
+Evidence:
+- src/services/keyVault.ts defines GEMINI_KEY_UPDATED_EVENT as vt:gemini-key-updated and dispatches it after every Gemini key set or clear.
+- src/context/GeminiKeyContext.tsx initializes apiKey from getVaultKey("gemini") in a mount-only useEffect with an empty dependency array. It does not subscribe to GEMINI_KEY_UPDATED_EVENT.
+- src/views/Settings.tsx initializes geminiKey from getVaultSnapshot().gemini in a separate mount-only useEffect. It does not subscribe to GEMINI_KEY_UPDATED_EVENT.
+- The main Settings save handler calls setVaultSnapshot({ gemini: geminiKey }), which writes through setVaultKey and emits the event, but does not update GeminiKeyContext.apiKey.
+- The global navigation GeminiKeySettings dialog renders its saved/unsaved state from useGeminiKey().apiKey and updates that state only when the dialog's own context actions call setApiKey/clearApiKey.
+
+Impact:
+- Saving or clearing a key in the main Settings panel can leave the global navigation dialog showing stale key state.
+- Saving or clearing a key in the global navigation dialog can leave the Settings page's local input/state stale until that page is remounted or otherwise refreshed.
+- The underlying keyVault remains the storage authority, and generation code reads the key from that store. This finding concerns inconsistent UI state and feedback, not proof that generation uses an old key.
+
+Required remediation:
+- Subscribe both state consumers to the existing GEMINI_KEY_UPDATED_EVENT and refresh from keyVault, or centralize the displayed key state in the existing GeminiKeyContext.
+- Do not add another key store or a second synchronization event.
+- Add tests for bidirectional updates: Settings save/clear updates the global dialog state, and global dialog save/clear updates the Settings panel state.
+- Ensure event payloads never contain key material; the current event is intentionally payload-free and should remain so.
+
+### Ninth-pass status
+
+- Confirmed keyVault emits a payload-free change event after Gemini key writes and clears.
+- Confirmed neither the Settings page nor GeminiKeyContext subscribes to that event; both initialize their local state only once.
+- Confirmed the two visible key-management surfaces share keyVault storage but can display inconsistent state after a change made in the other surface.
+- No application source code or credentials were changed. No tests, typecheck, production build, or browser certification were run.
