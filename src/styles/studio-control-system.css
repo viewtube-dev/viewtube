@@ -7040,7 +7040,7 @@ details.vt-studio-two-line-module > :not(summary) {
   height: 100%;
   padding: 0 2px;
   overflow: hidden;
-  background: color-mix(in srgb, white 50%, var(--vt-studio-control-accent, var(--pair-a)) 50%);
+  background: var(--vt-studio-control-accent, var(--pair-a));
 }
 .vt-studio-word-counter__value {
   display: block;
