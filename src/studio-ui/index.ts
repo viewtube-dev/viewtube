@@ -58,6 +58,7 @@ export {
   StudioDoubleSideToggle,
   StudioBarToggle,
   StudioDoubleSplitWordCounter,
+  StudioLeftWordCounter,
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
@@ -104,6 +105,8 @@ export type {
   StudioDoubleSideToggleProps,
   StudioBarToggleProps,
   StudioDoubleSplitWordCounterProps,
+  StudioLeftWordCounterProps,
+  StudioLeftWord,
 } from "./primitives/StudioControls"
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
