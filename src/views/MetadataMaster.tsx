@@ -246,7 +246,7 @@ const MetadataMaster: React.FC<MetadataMasterProps> = ({
       if (!channelId) throw new Error("Connect a channel or enter its public handle before generating governed metadata.")
       const generatedAsset = await generateVideoPublisherSeoPackage({
         context: { channelId, channelName: suppliedHandle || undefined },
-        instruction: "Generate the complete metadata package. Apply this strategy brief while preserving factual grounding:\\n" + operationStrategyBrief,
+        instruction: "Generate the complete metadata package. Apply this strategy brief while preserving factual grounding:\n" + operationStrategyBrief,
         inputs: { concept, niche, audience, script, videoLength, channelHandle, resourceLinks, videoFormat: "Longform" },
         projectId: workspaceContext?.build.legacyProjectId || undefined,
         contentBuildId: workspaceContext?.contentBuildId || undefined,
