@@ -227,5 +227,7 @@ test("dropdown menus share separated primary-filled menu defaults across standar
   assert.match(styles, /\.vt-studio-dropdown-option\[data-selected="true"\]\s*\{[^}]*background:\s*var\(--vt-studio-dropdown-selected-fill/s);
   assert.match(styles, /\.vt-studio-dropdown\.is-simple \.vt-studio-dropdown-menu/);
   assert.match(styles, /\.vt-studio-dropdown\.is-split-left \.vt-studio-dropdown-menu/);
-  assert.doesNotMatch(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*border-top-width:\s*0/s);
+  const menuContract = styles.slice(styles.lastIndexOf("/* Global dropdown menu contract"));
+  assert.match(menuContract, /border:\s*var\(--vt-studio-dropdown-row-stroke[^;]*solid #000/);
+  assert.match(menuContract, /border-radius:\s*var\(--vt-studio-dropdown-menu-radius[^;]*!important/);
 });
