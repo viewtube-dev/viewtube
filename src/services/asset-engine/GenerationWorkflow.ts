@@ -76,7 +76,7 @@ export interface ToolReceipt {
  id: string
  requestId: string
  operationId?: string
- idempotencyKey?: string
+ idempotencyKey?: string | null
  workflowId?: string
  contentBuildId: string
  projectId: string | null
