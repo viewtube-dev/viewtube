@@ -151,8 +151,8 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   display: grid;
   place-items: center;
   align-self: stretch;
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-split-rail-size);
+  min-width: var(--vt-studio-split-rail-size);
   height: 100%;
   margin: 0;
   padding: 0;
