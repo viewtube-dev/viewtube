@@ -22,40 +22,45 @@ const tiers = {
 
 test("all five size tiers are canonical, generated, and consumed by the system", () => {
   for (const [tier, values] of Object.entries(tiers)) {
-    const tokenBlock = tokens.match(new RegExp(`\\b${tier}:\\s*\\{([^}]*)\\}`))?.[1];
-    assert.ok(tokenBlock, `missing ${tier} token object`);
+    const tokenBlock = tokens.match(new RegExp("\\b" + tier + ":\\s*\\{([^}]*)\\}"))?.[1];
+    assert.ok(tokenBlock, "missing " + tier + " token object");
     for (const [key, value] of Object.entries(values)) {
-      assert.match(tokenBlock, new RegExp(`\\b${key}:\\s*${String(value).replace(".", "\\.")}(?:,|\\s)`), `${tier}.${key} token`);
-      assert.match(generated, new RegExp(`--vt-studio-${tier}-${key.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase())}:\\s*${value}(?:px)?;`), `${tier}.${key} generated variable`);
+      const numeric = String(value).replace(".", "\\.");
+      assert.match(tokenBlock, new RegExp("\\b" + key + ":\\s*" + numeric + "(?:,|\\s)"), tier + "." + key + " token");
+      const cssKey = key.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase());
+      assert.ok(generated.includes("--vt-studio-" + tier + "-" + cssKey + ": " + value + "px;"), tier + "." + key + " generated variable");
     }
-    assert.ok(system.includes(`data-size="${tier}"`), `${tier} is consumed by the system stylesheet`);
+    assert.ok(system.includes('data-size="' + tier + '"'), tier + " is consumed by the system stylesheet");
   }
 });
 
-test("the component-level size documentation agrees with the authoritative 52px Supreme and 17.5px Mini typography", () => {
-  assert.match(controls, /supreme 60px\\s*\\/\\s*3px border\\s*\\/\\s*6px radius\\s*\\/\\s*52px type and icon/i);
-  assert.match(controls, /mini 20px\\s*\\/\\s*1\\.5px border\\s*\\/\\s*3px radius\\s*\\/\\s*17\\.5px type and icon/i);
+test("component-level size documentation agrees with canonical Supreme and Mini typography", () => {
+  assert.ok(controls.includes("supreme 60px / 3px border / 6px radius / 52px type and icon"));
+  assert.ok(controls.includes("mini 20px / 1.5px border / 3px radius / 17.5px type and icon"));
 });
 
 test("editable inputs and textareas switch text fill and glyph stroke together on focus", () => {
-  const focusRule = fields.match(/Focused entered text is black[\\s\\S]*?\\n}\\n/)?.[0] ?? "";
-  assert.ok(focusRule, "shared editable-field focus rule must exist");
-  assert.match(focusRule, /color:\\s*#000/);
-  assert.match(focusRule, /-webkit-text-fill-color:\\s*#000/);
-  assert.match(focusRule, /-webkit-text-stroke-color:\\s*#000/);
-  assert.match(fields, /-webkit-text-stroke-color var\\(--vt-studio-focus-outline-fade-ms, 500ms\\) ease-out/);
-  assert.match(fields, /color var\\(--vt-studio-focus-outline-fade-ms, 500ms\\) ease-out/);
+  const start = fields.indexOf("Focused entered text is black");
+  const end = fields.indexOf("\\n}\\n", start);
+  assert.ok(start >= 0 && end > start, "shared editable-field focus rule must exist");
+  const focusRule = fields.slice(start, end);
+  assert.ok(focusRule.includes("color: #000;"));
+  assert.ok(focusRule.includes("-webkit-text-fill-color: #000;"));
+  assert.ok(focusRule.includes("-webkit-text-stroke-color: #000;"));
+  assert.ok(fields.includes("-webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out"));
+  assert.ok(fields.includes("color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out"));
+  assert.ok(system.includes("--vt-field-text-stroke-focus: #000;"));
 });
 
 test("split text input accepts every canonical size supported by its production badge foundation", () => {
-  assert.match(splitInput, /import type \\{ StudioControlSize \\} from "\\.\\.\\/tokens"/);
-  assert.match(splitInput, /sizeVariant\\?: StudioControlSize/);
-  assert.doesNotMatch(splitInput, /sizeVariant\\?: "standard" \\| "compact"/);
-  assert.match(splitInputCss, /height: var\(--vt-studio-control-height, 44px\)/);
-  assert.match(splitInputCss, /grid-template-columns:[\s\S]*?var\(--vt-studio-control-height, 44px\)/);
+  assert.ok(splitInput.includes('import type { StudioControlSize } from "../tokens"'));
+  assert.ok(splitInput.includes("sizeVariant?: StudioControlSize"));
+  assert.ok(!splitInput.includes('sizeVariant?: "standard" | "compact"'));
+  assert.ok(splitInputCss.includes("height: var(--vt-studio-control-height, 44px)"));
+  assert.ok(splitInputCss.includes("grid-template-columns: var(--vt-studio-control-height, 44px)"));
 });
 
 test("Confirmed Library keeps the split text input in the canonical Text Fields family", () => {
-  assert.match(catalog, /StudioSplitTextInput/);
-  assert.match(catalog, /Text Fields/);
+  assert.ok(catalog.includes("StudioSplitTextInput"));
+  assert.ok(catalog.includes("Text Fields"));
 });
