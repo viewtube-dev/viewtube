@@ -210,3 +210,22 @@ Phase 0 now has a reviewed exact-head artifact for the current migration slice, 
 - Added the test to the dedicated Gemini governance CI job.
 - This reduces the remaining direct-generation compatibility surface while preserving Script Architect's domain prompt and normalization logic. It does not claim that all other direct SDK calls are UI bypasses; provider ownership and credential validation remain valid SDK boundaries.
 - Exact-head CI for this script-boundary change is pending. The previous run #5506 passed Gemini governance and production build but did not include this follow-up.
+
+
+## Latest expanded caller verification — 2026-10-30
+
+Run #5518 at code head `51d8f3957ab804b9d085ce7fd15c8afdf11ab455`:
+
+- **Gemini governance: PASS.** Exact-head caller audit, JSON inventory generation/upload, and focused Gemini/key/gateway/AssetGenerator/operation tests all passed, including tag, educational timestamp, comment engagement and Script Architect gateway-boundary tests.
+- **Production build: PASS.**
+- **Local smoke: PASS.**
+- **Brain quality loop: PASS.**
+- **Conversation handoff contract: PASS.**
+- **Source governance: FAIL**, still at the existing Studio confirmed-catalog audit assertion.
+- **Focused contracts: FAIL**, now proceeds past the previously missing PublishTransaction test import but fails numerous Studio component/catalog assertions. The PublishTransaction missing import is corrected.
+- **Static quality: FAIL** on repository-wide pre-existing Brain/Studio/test typing issues. No new errors from the tag/timestamp/comment/Script Architect changes are reported. The MetadataMaster generated-asset reference error is gone.
+- **Full suite: still running** at the time of this plan update; no result is claimed.
+
+The exact-head inventory remains at 73 exports, 36 production-referenced exports, 36 exports without static import references, 65 direct SDK invocation sites, two dynamic Gemini imports, 19 model-ID literals and 18 credential-alias references. The reduction from 66 to 65 direct SDK invocations reflects removal of Script Architect's optional direct provider fallback. `generateScript` remains a production-referenced domain prompt/normalizer but now requires the existing BrainRuntime task callback.
+
+**Phase disposition:** Phase 0 has an exact-head machine inventory and a partial manual classification, not a complete zero-caller review. Phases 1–2 retain their implemented static/mocked foundations but are not live-certified. Phase 3 has five additional caller functions migrated (tag generate/analyze, comment reply, comment video recommendation, educational timestamp questions) plus Script Architect's direct fallback removed; many other production caller families remain. Phase 4 has receipt/provenance support for governed asset flows but not universal ingestion/idempotency/usage parity. Phase 5 cannot be certified without authorized live Gemini credentials. Phase 6 remains blocked until every remaining active production caller is governed and live capability parity is proven.
