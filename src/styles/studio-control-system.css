@@ -3542,7 +3542,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__value,
 .vt-studio-left-counter[data-size="micro"] .vt-studio-side-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
 .vt-studio-counter button:focus-visible,
-.vt-studio-side-counter button:focus-visible { outline: 2px solid var(--pair-a); outline-offset: -4px; }
+.vt-studio-side-counter button:focus-visible { outline: none; }
 /* Secondary palette variants reverse the canonical A/B color roles without changing geometry. */
 .vt-studio-counter.is-reversed [data-vt-studio-split-rail],
 .vt-studio-side-counter.is-reversed [data-vt-studio-split-rail] { background: var(--pair-a); }
@@ -3836,10 +3836,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border-radius: calc(var(--vt-studio-slider-radius) * .5);
   background: #fff;
 }
-.vt-studio-double-split-slider input[type="range"]:focus-visible {
-  outline: var(--vt-studio-slider-stroke) solid var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
-  outline-offset: 2px;
-}
+.vt-studio-double-split-slider input[type="range"]:focus-visible { outline: none; }
 .vt-studio-double-split-slider input[type="range"]:disabled {
   cursor: not-allowed;
   opacity: .55;
@@ -3932,8 +3929,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-studio-upload-frame.is-drag { --vt-studio-upload-speed: 2.5; }
 .vt-studio-upload-frame:has(.vt-studio-upload-frame__input:focus-visible) {
-  outline: var(--vt-studio-control-stroke, 3px) solid #000;
-  outline-offset: 4px;
+  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
 }
 .vt-studio-upload-frame.is-disabled { cursor: not-allowed; opacity: .55; }
 .vt-studio-upload-frame__input {
