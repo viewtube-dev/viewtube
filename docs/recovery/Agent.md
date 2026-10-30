@@ -204,7 +204,7 @@ Required format:
 
 **UPDATE-ID → EXACT EASTERN TIMESTAMP → CONVERSATION TITLE → MAIN FOCUS → FILES ADDED → FILES EDITED → COMMITS → DISCOVERIES → CODE DISCOVERIES → OPTIMIZATIONS → RECOMMENDED IMPROVEMENTS → VERIFICATION → BLOCKERS → NEXT ACTIONS**
 
-Use an UPDATE-ID such as UPDATE-20261004-agent-001 in addition to the recovery LOG-ID.
+Use an UPDATE-ID such as UPDATE-20261004-agent-001 in addition to the recovery LOG-ID. For ordinary conversation handoffs, create/update the single global intake package first; append to this recovery ledger only when the work is part of an explicit recovery campaign or changes shared recovery state. Do not use Recovery.md as a competing per-conversation worklog.
 
 
 ## Mandatory engineering, product, workflow, and AI discovery review
