@@ -405,16 +405,23 @@
         ".claude/skills/viewtube-conversation-work-reconciliation/"
       ],
       "branchPrRefs": [
-        "docs/conversation-handoff-reconciliation-2026-09-27"
+        "docs/conversation-handoff-reconciliation-2026-09-27",
+        "PR #1170",
+        "PR #1177"
       ],
       "evidenceRefs": [
-        "branch changes; PR pending"
+        "Historical merge commit e5bbb56fee503c26a1251c6e3643307af12c4632 is present in target; PR-number attribution unresolved.",
+        "https://github.com/viewtube-dev/viewtube/pull/1170",
+        "https://github.com/viewtube-dev/viewtube/commit/0fd1d412758f212d8d6cf34a3a31d22270ea33c4",
+        "https://github.com/viewtube-dev/viewtube/pull/1177"
       ],
       "dependencies": [
         "branch verification",
         "PR review"
       ],
-      "blockers": [],
+      "blockers": [
+        "The final living-log template/update workflow is in PR #1177 and not yet merged."
+      ],
       "similarityKeys": [
         "conversation handoff",
         "work log",
@@ -444,7 +451,7 @@
         "work-log schema",
         "valuation/dedupe/disposition workflow"
       ],
-      "reviewNotes": "This intake package is the first live proof of the new system."
+      "reviewNotes": "The initial global handoff system is present in current target history via e5bbb56; the old commit's PR #503 attribution is unresolved and must not be asserted. PR #1170 expanded the system and merged as 0fd1d412. PR #1177 completes the living-log front page and is open; its dedicated documentation checks pass, while unrelated repository gates remain red."
     },
     {
       "itemId": "VT-CWI-DOCS-008",
