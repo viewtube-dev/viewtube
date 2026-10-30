@@ -3425,8 +3425,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 
 
-/* Counter primitives inherit the global full-row width rule.
-   Split rails remain square at the selected size; the value cell takes the remaining width. */
+/* New independent StudioCounter / StudioSideCounter primitives.
+   Geometry comes from the global 60/44/28/12 size lattice; no legacy stepper rules. */
 .vt-studio-counter,
 .vt-studio-side-counter,
 .vt-studio-left-counter {
@@ -3441,10 +3441,13 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   overflow: hidden;
-  background: var(--vt-studio-control-accent, var(--pair-a));
+  background: var(--pair-a);
   color: #000;
-  --vt-studio-number-background: color-mix(in srgb, white 50%, var(--vt-studio-control-accent, var(--pair-a)) 50%);
+  --vt-studio-number-background: var(--pair-a);
 }
+.vt-studio-counter,
+.vt-studio-side-counter,
+.vt-studio-left-counter { --vt-studio-number-background: var(--pair-a); }
 .vt-studio-counter[data-size="compact"],
 .vt-studio-side-counter[data-size="compact"],
 .vt-studio-left-counter[data-size="compact"] {
@@ -3456,8 +3459,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter[data-size="micro"],
 .vt-studio-left-counter[data-size="micro"] {
   --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px);
 }
 .vt-studio-counter [data-vt-studio-split-rail],
 .vt-studio-side-counter [data-vt-studio-split-rail],
@@ -3466,7 +3469,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   min-height: 0;
   height: 100%;
   box-sizing: border-box;
-  background: var(--vt-studio-control-secondary, var(--pair-b));
+  background: var(--pair-b);
   border: 0;
 }
 .vt-studio-counter__rail {
@@ -3474,10 +3477,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   align-items: stretch;
   justify-content: stretch;
 }
-.vt-studio-counter__rail[data-rail="start"],
+.vt-studio-counter__rail[data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
+.vt-studio-counter__rail[data-rail="end"] { border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-left-counter__rail[data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-counter__rail[data-rail="end"],
-.vt-studio-side-counter__rail[data-rail="end"] { border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-counter__button,
 .vt-studio-side-counter__actions button {
   display: flex;
@@ -3490,7 +3492,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   justify-content: center;
   border: 0;
   border-radius: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b));
+  background: var(--pair-b);
   color: #000;
   cursor: pointer;
   font: inherit;
@@ -3508,16 +3510,12 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter__value {
   display: flex;
   min-width: 0;
-  width: 100%;
-  height: 100%;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   padding: 0 2px;
-  background: var(--vt-studio-number-background, color-mix(in srgb, white 50%, var(--vt-studio-control-accent, var(--pair-a)) 50%));
-  color: var(--vt-studio-control-accent, var(--pair-a));
-  -webkit-text-fill-color: var(--vt-studio-control-accent, var(--pair-a));
-  -webkit-text-stroke: 1px var(--vt-studio-control-accent, var(--pair-a));
+  background: var(--pair-a);
+  color: #000;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
@@ -3528,7 +3526,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   white-space: nowrap;
   user-select: none;
 }
-.vt-studio-counter [data-vt-studio-split-label],
+ .vt-studio-counter [data-vt-studio-split-label],
 .vt-studio-side-counter [data-vt-studio-split-label],
 .vt-studio-left-counter [data-vt-studio-split-label] {
   min-width: 0;
@@ -3540,6 +3538,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border: 0;
   background: transparent;
 }
+.vt-studio-counter__value,
+.vt-studio-side-counter__value { width: 100%; height: 100%; }
+.vt-studio-side-counter__rail[data-rail="end"] { border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
+.vt-studio-left-counter__rail[data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-side-counter__actions {
   position: relative;
   display: grid;
@@ -3549,6 +3551,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   min-height: 0;
   grid-template-rows: repeat(2, minmax(0, 1fr));
 }
+/* Anchor the divider to the full two-row rail, not the first (upper) button.
+   The stroke's center lands on the exact 50% row boundary. */
 .vt-studio-side-counter__actions::after {
   content: "";
   position: absolute;
