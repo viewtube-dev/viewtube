@@ -416,6 +416,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  // Non-model turns (including allowModel=false fallbacks) must not read browser-only provider settings.
  let requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
  let servedModel: string | null = null
+ let modelProvider: string | null = null
  let modelIdentityStatus: "served_known" | "requested_known_served_not_exposed" | "generator_identity_unavailable" | "model_disabled" = input.allowModel === false ? "model_disabled" : requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
  const generationInputSnapshot: BrainGenerationInputSnapshot<AIBrainContextSnapshot> = {
   snapshot: input.snapshot,
@@ -677,6 +678,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  questionTrace.setIntent({ intent: taskProfile.id, taskProfileId: taskProfile.id })
  questionTrace.recordCapabilities(capabilityIds)
  questionTrace.recordModelIdentity({
+  provider: modelProvider,
   requested: requestedModel,
   served: null,
   status: modelIdentityStatus,
@@ -809,10 +811,11 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     operationId,
    }), BRAIN_MODEL_TIMEOUT_MS)
    if (output.modelIdentity) {
+    modelProvider = output.modelIdentity.provider
     requestedModel = output.modelIdentity.requestedModel
     servedModel = output.modelIdentity.servedModel
     modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
-    questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
+    questionTrace.recordModelIdentity({ provider: modelProvider, requested: requestedModel, served: servedModel, status: modelIdentityStatus })
    }
    response = fromStructuredOutput(output, input.snapshot, [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords])
    response = { ...response, modules: formatCreatorGrowthModules(response, input.growthContext, input.userText) }
@@ -846,6 +849,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
      operationId,
     }), BRAIN_REPAIR_TIMEOUT_MS)
     if (repairedOutput.modelIdentity) {
+     modelProvider = repairedOutput.modelIdentity.provider
      requestedModel = repairedOutput.modelIdentity.requestedModel
      servedModel = repairedOutput.modelIdentity.servedModel
      modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
