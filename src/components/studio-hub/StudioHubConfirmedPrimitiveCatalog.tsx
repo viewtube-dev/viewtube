@@ -938,7 +938,7 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
 }
 
 const useConfirmedAdditionalPrimitiveSections = (): React.ReactNode[] => {
-  const [choiceChecked, setChoiceChecked] = React.useState(false)
+  const [choiceChecks, setChoiceChecks] = React.useState<boolean[]>(Array(5).fill(false))
   const [leftCounterValue, setLeftCounterValue] = React.useState(6)
   const [username, setUsername] = React.useState("CREATOR")
   const [compactUsername, setCompactUsername] = React.useState("CREATOR")
@@ -990,12 +990,12 @@ const useConfirmedAdditionalPrimitiveSections = (): React.ReactNode[] => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftInput"><span>STANDARD · ASSET SEARCH</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split left input dedicated specimen" value={search} onChange={(event) => setSearch(event.currentTarget.value)} placeholder="SEARCH ASSETS" /></div>
         {(["supreme", "compact", "mini", "micro"] as const).map(size => <div className="vt-confirmed-variant is-full-row" key={size}><span>{size.toUpperCase()} · ASSET SEARCH</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant={size} aria-label={size + " split-left input"} defaultValue="SEARCH ASSETS" placeholder="SEARCH ASSETS" /></div>)}
       </Family>
-      <Family title="StudioIconButton · Standard" nonDefaultSettings={["Standalone icon-button face is not the joined square-icon rail or the circular icon-button shape."]} provenance={<Provenance primitive="StudioIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Standard 44px icon button with canonical stroke/radius and no lift." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton"><span>STANDARD · SETTINGS</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" sizeVariant="standard" /></div>
+      <Family title="StudioIconButton · All Five Sizes" nonDefaultSettings={["Standalone icon-button face is not the joined square-icon rail or the circular icon-button shape.", "All five canonical size tiers inherit StudioButton geometry and interaction defaults."]} provenance={<Provenance primitive="StudioIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Supreme / Standard / Compact / Mini / Micro · canonical stroke/radius · no lift." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        {(["supreme", "standard", "compact", "mini", "micro"] as const).map(size => <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton" key={size}><span>{size.toUpperCase()} · SETTINGS</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label={size + " settings"} sizeVariant={size} /></div>)}
       </Family>
       
-      <Family title="StudioChoice · Standard" nonDefaultSettings={["Shared choice engine underlies radio, checkbox, and X-checkbox wrappers; each wrapper supplies its own native input semantics."]} provenance={<Provenance primitive="StudioChoice" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-distill-overrides.css" tokens="Five-tier choice geometry; secondary focus outline at 65% of the active border." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChoice"><span>STANDARD · SHARED RADIO CHOICE</span><StudioChoice kind="radio" skin="solid" checked={choiceChecked} onClick={() => setChoiceChecked((value) => !value)} sizeVariant="standard" aria-label="Shared choice dedicated specimen" /></div>
+      <Family title="StudioChoice · All Five Sizes" nonDefaultSettings={["Shared choice engine underlies radio, checkbox, and X-checkbox wrappers; each wrapper supplies its own native input semantics.", "All five size tiers are shown using the canonical radio choice face."]} provenance={<Provenance primitive="StudioChoice" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-distill-overrides.css" tokens="Supreme / Standard / Compact / Mini / Micro · secondary focus outline at 65% of the active border." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        {(["supreme", "standard", "compact", "mini", "micro"] as const).map((size, index) => <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChoice" key={size}><span>{size.toUpperCase()} · SHARED RADIO CHOICE</span><StudioChoice kind="radio" skin="solid" checked={choiceChecks[index]} onClick={() => setChoiceChecks(current => current.map((value, itemIndex) => itemIndex === index ? !value : value))} sizeVariant={size} aria-label={size + " shared choice specimen"} /></div>)}
       </Family>
       <Family title="Studio Hub Certification · Full Composition" nonDefaultSettings={[
         "This export is a complete certification surface, not a control primitive; it is catalogued separately from the primitive representatives.",
@@ -1258,6 +1258,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
           <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Compact square icon button V4" variant="v4" sizeVariant="compact" data-vt-library-component="StudioSquareIconButton" />
         </div>
       </div>
+      {(["supreme", "mini", "micro"] as const).map(size => <div className="vt-confirmed-variant is-full-row vt-confirmed-square-variant-row" key={size}><span>{size.toUpperCase()} · VARIANTS 1–4</span><div className="vt-confirmed-square-variant-grid">{(["v1", "v2", "v3", "v4"] as const).map(variant => <StudioSquareIconButton key={variant} icon={<Settings2 aria-hidden="true" />} label={size + " square icon " + variant} variant={variant} sizeVariant={size} data-vt-library-component="StudioSquareIconButton" />)}</div></div>)}
       <div className="vt-confirmed-variant"><span>44px standard · disabled</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Disabled square icon button" variant="v1" sizeVariant="standard" disabled data-vt-library-component="StudioSquareIconButton" /></div>
       <div className="vt-confirmed-variant is-full-row vt-confirmed-square-effects-wrap">
         <span>INTERACTION EFFECT EXAMPLES · STANDARD + COMPACT</span>
@@ -1460,6 +1461,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
           <StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Compact circle icon button V4" variant="v4" sizeVariant="compact" data-vt-library-component="StudioCircleIconButton" />
         </div>
       </div>
+      {(["supreme", "mini", "micro"] as const).map(size => <div className="vt-confirmed-variant is-full-row vt-confirmed-square-variant-row" key={size}><span>{size.toUpperCase()} · VARIANTS 1–4</span><div className="vt-confirmed-square-variant-grid">{(["v1", "v2", "v3", "v4"] as const).map(variant => <StudioCircleIconButton key={variant} icon={<Settings2 aria-hidden="true" />} label={size + " circle icon " + variant} variant={variant} sizeVariant={size} data-vt-library-component="StudioCircleIconButton" />)}</div></div>)}
       <div className="vt-confirmed-variant"><span>44px standard · disabled</span><StudioCircleIconButton icon={<Settings2 aria-hidden="true" />} label="Disabled circle icon button" variant="v1" sizeVariant="standard" disabled data-vt-library-component="StudioCircleIconButton" /></div>
     </Family>
 
