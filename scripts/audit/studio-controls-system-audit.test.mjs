@@ -12,6 +12,7 @@ const standaloneInputCss = read("src/styles/studio-text-input.css");
 const splitInput = read("src/studio-ui/primitives/StudioSplitTextInput.tsx");
 const splitInputCss = read("src/styles/studio-split-text-input.css");
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
+const catalogCss = read("src/components/studio-hub/studio-hub-primitive-catalogs.css");
 
 const tiers = {
   supreme: { height: 60, stroke: 3, radius: 6, fontSize: 52, iconSize: 52 },
@@ -68,4 +69,8 @@ test("split text input accepts every canonical size supported by its production 
 test("Confirmed Library keeps the split text input in the canonical Text Fields family", () => {
   assert.ok(catalog.includes("StudioSplitTextInput"));
   assert.ok(catalog.includes("Text Fields"));
+  assert.ok(catalogCss.includes('[data-vt-primitive-title*="Representatives"]'));
+  assert.ok(catalogCss.includes("grid-template-columns: minmax(0, 1fr)"));
+  assert.ok(catalog.includes("<ConfirmedStudioCounterFamily />"));
+  assert.ok(catalog.includes("<ConfirmedStudioSideCounterFamily />"));
 });
