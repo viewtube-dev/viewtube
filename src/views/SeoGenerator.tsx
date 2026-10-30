@@ -14,7 +14,8 @@ import {
  Loader2,
  Upload,
 } from "lucide-react"
-import { generateSeoData, hasGeminiKey } from "../services/gemini"
+import { hasGeminiKey } from "../services/gemini"
+import { generateVideoPublisherSeoPackage } from "../services/brain/creatorAssets"
 import type { SeoResult } from "../types"
 import Markdown from "react-markdown"
 import JSZip from "jszip"
