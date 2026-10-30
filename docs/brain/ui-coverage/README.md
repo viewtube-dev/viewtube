@@ -24,7 +24,7 @@ Nine independently actionable feature plans and standalone coding prompts, each 
 | 9 | Research Source & Provenance View | P3 | [09-research-provenance.md](./09-research-provenance.md) |
 
 ## Recommended sequence
-1. Evidence Explorer.
+1. Evidence Explorer — implementation in progress; validation pending.
 2. Trace Inspector.
 3. Channel Knowledge Map.
 4. Communication Evidence Review (after backend pipeline verification).
@@ -60,3 +60,9 @@ This change adds plans and prompts only. It does not implement pages, add routes
 - Use existing production Studio primitives, semantic tokens and responsive conventions. Do not create page-local control styles.
 - Define loading, populated, empty, partial/stale, unavailable/permission-blocked and error states. Support keyboard/screen readers, visible focus, reduced motion, zoom, long content, narrow mobile and desktop.
 - Add regression tests before behavior changes. Run focused tests, typecheck/lint/build as applicable, and actual rendered mobile/desktop checks. Report verification honestly; a passing build is not visual certification.
+
+
+## Implementation tracking
+
+- **Wave 1 / Evidence Explorer:** in progress on `feat/brain-evidence-explorer-2026-10-30`; mounted as the EVIDENCE destination in the existing `/ai-brain` workspace. See [the implementation checkpoint](./01-evidence-explorer.md#implementation-checkpoint--2026-10-30).
+- Remaining Wave 1 features stay planned and unstarted until this page is verified and reviewed.
