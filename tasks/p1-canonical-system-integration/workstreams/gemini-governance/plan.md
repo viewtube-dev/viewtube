@@ -51,6 +51,17 @@ The plan is no longer discovery-only. The following merged work is part of the c
 | 5 — runtime certification | **NOT CERTIFIED** | CI is being used for static/unit/build verification. No live Gemini key was available or used for this work. Valid/invalid-key, unsupported-model, permission, quota, outage, reasoning and generation success/failure matrix remains an external runtime gate. |
 | 6 — remove direct paths | **BLOCKED — DO NOT RETIRE YET** | The UI direct-provider guard is now zero-tolerance. Keep `gemini.ts` as the provider owner and `GeminiKeyContext` as credential validation. Do not remove compatibility candidates or remaining legacy paths until exact-head inventory, approved-boundary migration, runtime parity and zero-caller evidence are all complete. |
 
+### CI findings and scope boundaries
+
+The first observed release-gates run (#5408, before the latest receipt typing fix) exposed existing repository-wide blockers before the Gemini caller audit could run:
+
+- `audit:confirmed-catalog` fails the Studio split text input shell/rails assertion. This is outside P1-02 and is not changed by this branch.
+- Repository-wide `typecheck` reports unrelated existing BrainRetryContinuity / OpportunityEvidenceAdapter test types, Studio export/token/accordion types, AIBrainCommandInterface test exports, and a missing `@testing-library/react` type/module. It also caught one nullable idempotency typing issue introduced here; that specific issue was corrected in the subsequent branch commit.
+- `test:focused` reports an unrelated `PublishTransaction.test.ts` failure (`getPublishTransaction is not defined`; 309 passed, 1 failed).
+- `brain-quality-loop` and `conversation-handoff-contract` passed in that run. Local smoke completed successfully before the run was cancelled by a newer PR synchronization. Full-suite status was cancelled, not passed.
+
+To avoid the Studio gate masking Gemini evidence, a dedicated `gemini-governance` CI job now checks out the exact PR head, runs the caller audit and focused Gemini/key/provenance/architecture tests, and uploads the inventory artifact. Its latest exact-head result is still pending; no pass is claimed yet.
+
 ### Current branch implementation slice
 
 Branch: `feat/p1-gemini-governance-reconciliation-2026-10-29`
