@@ -1095,7 +1095,7 @@ That ordering is intentional.
 
 Target branch: `master/consolidated-feature-integration`
 
-Working branch: `studio-controls-system-consolidation`
+Working branch: `studio-controls-system-consolidation-v2`
 
 ## Confirmed source contracts
 
@@ -1122,6 +1122,8 @@ Working branch: `studio-controls-system-consolidation`
 - Aligned Micro token values and generated CSS with the 1px / 2px contract; removed a duplicate legacy Micro declaration and corrected remaining fallbacks.
 - Removed competing vertical word-toggle handle inset overrides.
 - Updated representative-module title matching so the full-width layout applies to the Representatives section.
+
+Pull request: `https://github.com/viewtube-dev/viewtube/pull/1232` (draft; replaces closed draft PR #1231). The release-gates workflow now runs `npm run test:studio-controls` in the focused-contracts job.
 
 ## Required verification still outstanding
 
