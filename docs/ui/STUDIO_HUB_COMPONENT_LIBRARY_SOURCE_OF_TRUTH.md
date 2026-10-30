@@ -570,3 +570,10 @@ The matrix test now requires every public Studio value export to have direct JSX
 - Global Defaults + Exceptions stays a dedicated source-contract section; it is not a primitive specimen family.
 - Compatibility aliases and composition helpers are documented as such and do not create parallel primitive implementations.
 - Keep one canonical owner for each CSS behavior. In particular, empty Bar Toggle segments must preserve the 50% white + 50% primary blend so they remain visible against the background; active segments remain black.
+
+## Counter and value-toggle production corrections — 2026-10-29
+
+The confirmed production counter family uses directional chevrons for the double-split `StudioCounter` action rails, matching the existing `StudioBarToggle` icon language. `StudioLeftWordCounter` uses the shared counter numeral rest token (50% white/50% primary) and black numeral treatment during interaction focus; its opt-in color-cycle appearance remains separate.
+
+Selectable split-left, split-right, and double-split buttons swap their label and rail fills together when selected: resting label primary / rail secondary; selected label secondary / rail primary. `StudioBarToggle` keeps its bars in the flexible center cell, uses the shared secondary focus outline, and shows the rounded percentage above the rightmost filled bar using a secondary-fill, black-text, borderless compact tooltip. Production primitive markup and production family CSS remain authoritative; catalog specimens only demonstrate these states.
+
