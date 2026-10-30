@@ -314,6 +314,51 @@
       "items": {
         "$ref": "#/$defs/integrationGap"
       }
+    },
+    "conversationName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "application": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceApplication": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceConversationUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "repository": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "targetBranch": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "executiveSummary": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "At most ten concise sentences containing the facts required to resume the conversation."
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/document"
+      }
     }
   },
   "additionalProperties": true,
@@ -671,6 +716,42 @@
           }
         },
         "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "document": {
+      "type": "object",
+      "required": [
+        "title",
+        "path"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "relatedItemIds": {
           "type": "array",
           "items": {
             "type": "string"
