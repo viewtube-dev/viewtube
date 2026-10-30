@@ -204,6 +204,7 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
     <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row"><div className="vt-confirmed-counter-size-rows">
       {(["supreme","standard","compact","mini","micro"] as const).map(size => <div className="vt-confirmed-counter-size-row" key={size}><small>{size.toUpperCase()} · {({supreme:60,standard:44,compact:28,mini:20,micro:12})[size]}PX</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={values[size]} onValueChange={update(size)} size={size} ariaLabel={`${size} slider`} /></div></div>)}
     </div></div>
+    <div className="vt-confirmed-variant is-full-row"><span>COUNTER-CONTROLLED · UP / DOWN</span><StudioDoubleSplitSlider value={values.standard} onValueChange={update("standard")} size="standard" leftControls="counter" ariaLabel="Counter-controlled slider" /></div>
   </Family>
 }
 
