@@ -128,7 +128,7 @@ const readPublicCache = (): PublicCacheEnvelope => {
 }
 
 const cacheEntryMatches = (entry: PublicCacheEntry, candidate: string): boolean => {
-  if (!entry || !entry.snapshot || !isRealChannelId(entry.identity?.channelId) || entry.snapshot.channelId !== entry.identity.channelId) return false
+  if (!entry || !entry.snapshot || entry.snapshot.mode !== "public_handle" || !Array.isArray(entry.snapshot.topVideos) || !isRealChannelId(entry.identity?.channelId) || entry.snapshot.channelId !== entry.identity.channelId) return false
   if (candidate.startsWith("UC")) return candidate === entry.identity.channelId
   const expected = candidate.replace(/^@/, "").toLowerCase()
   const actual = String(entry.identity.handle || entry.snapshot.handle || "").replace(/^@/, "").toLowerCase()
@@ -191,10 +191,12 @@ const writePublicCache = (candidate: string, snapshot: PublicChannelSnapshot, li
   try {
     if (typeof localStorage !== "undefined") {
       const envelope = readPublicCache()
-      const entries = { ...envelope.entries, [normalizedCacheKey(identity.handle || candidate)]: {
+      const entries = { ...envelope.entries, [normalizedCacheKey(candidate)]: {
         identity, fetchedAt, expiresAt, sourceRefs, limitations: [...limitations], snapshot: normalizedSnapshot,
       } }
-      const boundedEntries = Object.fromEntries(Object.entries(entries).slice(-PUBLIC_CACHE_MAX_ENTRIES))
+      const boundedEntries = Object.fromEntries(Object.entries(entries)
+        .sort(([, left], [, right]) => Date.parse(right.fetchedAt) - Date.parse(left.fetchedAt))
+        .slice(0, PUBLIC_CACHE_MAX_ENTRIES))
       localStorage.setItem(PUBLIC_CACHE_KEY, JSON.stringify({ schemaVersion: 1, entries: boundedEntries }))
     }
   } catch {
