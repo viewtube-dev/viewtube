@@ -155,4 +155,105 @@ describe("public channel mode public ingestion and fixtures", () => {
     expect(resolved.resolvedChannelId).toBeNull()
     expect(resolved.reason).toContain("Public channel ingestion is unavailable")
   })
+
+  it("caches public snapshots by normalized handle and preserves source provenance", async () => {
+    const fetchedAt = new Date().toISOString()
+    const snapshot = {
+      mode: "public_handle",
+      source: "public_page",
+      fetchedAt,
+      channelId: "UC1234567890123456789012",
+      handle: "@public_creator",
+      title: "Public Creator",
+      subscriberCount: 123,
+      videoCount: 45,
+      viewCount: 6789,
+      topVideos: [{ videoId: "abc123", title: "Latest upload", publishedAt: fetchedAt, viewCount: 999, likeCount: 10, commentCount: 2 }],
+    }
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse({
+      resolution: { resolvedChannelId: snapshot.channelId, resolvedHandle: snapshot.handle, channelTitle: snapshot.title, reason: null },
+      snapshot,
+      limitations: ["Public metadata only."],
+    }))
+    vi.stubGlobal("fetch", fetchMock)
+
+    const first = await fetchPublicChannelSnapshot("@public_creator")
+    const second = await fetchPublicChannelSnapshot("https://www.youtube.com/@public_creator")
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(first?.provenance).toMatchObject({
+      schemaVersion: 1,
+      outcome: "resolved",
+      cacheStatus: "fresh",
+      identity: { handle: "@public_creator", channelId: snapshot.channelId },
+      limitations: ["Public metadata only."],
+    })
+    expect(second?.provenance).toMatchObject({
+      schemaVersion: 1,
+      outcome: "resolved",
+      cacheStatus: "cached",
+      identity: { handle: "@public_creator", channelId: snapshot.channelId },
+    })
+    expect(second?.fetchedAt).toBe(fetchedAt)
+    expect(second?.subscriberCount).toBeNull()
+    expect(second?.topVideos[0]).toMatchObject({ viewCount: null, likeCount: null, commentCount: null })
+  })
+
+  it("never reuses a cached public snapshot for a different handle", async () => {
+    const makePayload = (handle: string, channelId: string) => ({
+      resolution: { resolvedChannelId: channelId, resolvedHandle: handle, channelTitle: handle, reason: null },
+      snapshot: {
+        mode: "public_handle",
+        source: "public_page",
+        fetchedAt: new Date().toISOString(),
+        channelId,
+        handle,
+        title: handle,
+        subscriberCount: null,
+        videoCount: null,
+        viewCount: null,
+        topVideos: [],
+      },
+    })
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(jsonResponse(makePayload("@creator_a", "UC1234567890123456789012")))
+      .mockResolvedValueOnce(jsonResponse(makePayload("@creator_b", "UC9876543210987654321098")))
+    vi.stubGlobal("fetch", fetchMock)
+
+    const first = await fetchPublicChannelSnapshot("@creator_a")
+    const second = await fetchPublicChannelSnapshot("@creator_b")
+
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(first?.channelId).toBe("UC1234567890123456789012")
+    expect(second?.channelId).toBe("UC9876543210987654321098")
+    expect(second?.provenance?.identity.handle).toBe("@creator_b")
+  })
+
+  it("ignores malformed public cache storage and resolves from the canonical endpoint", async () => {
+    storage.set("vt_public_channel_cache_v1", "{not-json")
+    const payload = {
+      resolution: { resolvedChannelId: "UC1234567890123456789012", resolvedHandle: "@public_creator", channelTitle: "Public Creator", reason: null },
+      snapshot: {
+        mode: "public_handle",
+        source: "public_page",
+        fetchedAt: new Date().toISOString(),
+        channelId: "UC1234567890123456789012",
+        handle: "@public_creator",
+        title: "Public Creator",
+        subscriberCount: null,
+        videoCount: null,
+        viewCount: null,
+        topVideos: [],
+      },
+    }
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(payload))
+    vi.stubGlobal("fetch", fetchMock)
+
+    const snapshot = await fetchPublicChannelSnapshot("@public_creator")
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(snapshot?.channelId).toBe(payload.snapshot.channelId)
+    expect(snapshot?.provenance?.schemaVersion).toBe(1)
+  })
+
 })

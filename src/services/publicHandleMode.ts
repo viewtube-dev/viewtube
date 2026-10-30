@@ -8,8 +8,20 @@ export interface PublicChannelResolution {
   reason: string | null
 }
 
+export interface PublicChannelProvenance {
+  schemaVersion: 1
+  outcome: "resolved"
+  cacheStatus: "fresh" | "cached"
+  identity: { handle: string | null; channelId: string }
+  fetchedAt: string
+  expiresAt: string
+  sourceRefs: string[]
+  limitations: string[]
+}
+
 export interface PublicChannelSnapshot {
   mode: "public_handle"
+  provenance?: PublicChannelProvenance
   fetchedAt: string
   channelId: string
   handle: string | null
@@ -84,6 +96,115 @@ type PublicPageIngestionPayload = {
   limitations?: string[]
 }
 
+const PUBLIC_CACHE_KEY = "vt_public_channel_cache_v1"
+const PUBLIC_CACHE_SCHEMA_VERSION = 1
+const PUBLIC_CACHE_TTL_MS = 3 * 60 * 60 * 1000
+const PUBLIC_CACHE_MAX_ENTRIES = 20
+
+type PublicCacheEntry = {
+  identity: { handle: string | null; channelId: string }
+  fetchedAt: string
+  expiresAt: string
+  sourceRefs: string[]
+  limitations: string[]
+  snapshot: PublicChannelSnapshot
+}
+type PublicCacheEnvelope = { schemaVersion: 1; entries: Record<string, PublicCacheEntry> }
+
+const normalizedCacheKey = (candidate: string): string =>
+  /^UC[\w-]{20,}$/.test(candidate) ? candidate : candidate.toLowerCase()
+
+const readPublicCache = (): PublicCacheEnvelope => {
+  try {
+    if (typeof localStorage === "undefined") return { schemaVersion: 1, entries: {} }
+    const parsed = JSON.parse(localStorage.getItem(PUBLIC_CACHE_KEY) || "null") as Partial<PublicCacheEnvelope> | null
+    if (!parsed || parsed.schemaVersion !== PUBLIC_CACHE_SCHEMA_VERSION || !parsed.entries || typeof parsed.entries !== "object") {
+      return { schemaVersion: 1, entries: {} }
+    }
+    return { schemaVersion: 1, entries: parsed.entries as Record<string, PublicCacheEntry> }
+  } catch {
+    return { schemaVersion: 1, entries: {} }
+  }
+}
+
+const cacheEntryMatches = (entry: PublicCacheEntry, candidate: string): boolean => {
+  if (!entry || !entry.snapshot || entry.snapshot.mode !== "public_handle" || !Array.isArray(entry.snapshot.topVideos) || !isRealChannelId(entry.identity?.channelId) || entry.snapshot.channelId !== entry.identity.channelId) return false
+  if (candidate.startsWith("UC")) return candidate === entry.identity.channelId
+  const expected = candidate.replace(/^@/, "").toLowerCase()
+  const actual = String(entry.identity.handle || entry.snapshot.handle || "").replace(/^@/, "").toLowerCase()
+  return Boolean(actual && expected === actual)
+}
+
+const readCachedPublicSnapshot = (candidate: string): PublicChannelSnapshot | null => {
+  const entry = readPublicCache().entries[normalizedCacheKey(candidate)]
+  if (!entry || !cacheEntryMatches(entry, candidate)) return null
+  const expiresAt = Date.parse(entry.expiresAt)
+  const fetchedAt = Date.parse(entry.fetchedAt)
+  if (!Number.isFinite(expiresAt) || !Number.isFinite(fetchedAt) || expiresAt <= Date.now()) return null
+  return {
+    ...entry.snapshot,
+    fetchedAt: entry.fetchedAt,
+    subscriberCount: null,
+    videoCount: null,
+    viewCount: null,
+    topVideos: entry.snapshot.topVideos.map((video) => ({ ...video, viewCount: null, likeCount: null, commentCount: null })),
+    provenance: {
+      schemaVersion: 1,
+      outcome: "resolved",
+      cacheStatus: "cached",
+      identity: entry.identity,
+      fetchedAt: entry.fetchedAt,
+      expiresAt: entry.expiresAt,
+      sourceRefs: [...entry.sourceRefs],
+      limitations: [...entry.limitations],
+    },
+  }
+}
+
+const writePublicCache = (candidate: string, snapshot: PublicChannelSnapshot, limitations: string[]): PublicChannelSnapshot => {
+  const fetchedAt = Number.isFinite(Date.parse(snapshot.fetchedAt)) ? snapshot.fetchedAt : new Date().toISOString()
+  const expiresAt = new Date(Date.parse(fetchedAt) + PUBLIC_CACHE_TTL_MS).toISOString()
+  const identity = { handle: withHandlePrefix(snapshot.handle), channelId: snapshot.channelId }
+  const sourceRefs = [
+    `https://www.youtube.com/channel/${snapshot.channelId}`,
+    `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(snapshot.channelId)}`,
+  ]
+  const normalizedSnapshot: PublicChannelSnapshot = {
+    ...snapshot,
+    fetchedAt,
+    handle: identity.handle,
+    subscriberCount: null,
+    videoCount: null,
+    viewCount: null,
+    topVideos: snapshot.topVideos.map((video) => ({ ...video, viewCount: null, likeCount: null, commentCount: null })),
+    provenance: {
+      schemaVersion: 1,
+      outcome: "resolved",
+      cacheStatus: "fresh",
+      identity,
+      fetchedAt,
+      expiresAt,
+      sourceRefs,
+      limitations: [...limitations],
+    },
+  }
+  try {
+    if (typeof localStorage !== "undefined") {
+      const envelope = readPublicCache()
+      const entries = { ...envelope.entries, [normalizedCacheKey(candidate)]: {
+        identity, fetchedAt, expiresAt, sourceRefs, limitations: [...limitations], snapshot: normalizedSnapshot,
+      } }
+      const boundedEntries = Object.fromEntries(Object.entries(entries)
+        .sort(([, left], [, right]) => Date.parse(right.fetchedAt) - Date.parse(left.fetchedAt))
+        .slice(0, PUBLIC_CACHE_MAX_ENTRIES))
+      localStorage.setItem(PUBLIC_CACHE_KEY, JSON.stringify({ schemaVersion: 1, entries: boundedEntries }))
+    }
+  } catch {
+    // Storage is an optimization; a successful public response remains usable without it.
+  }
+  return normalizedSnapshot
+}
+
 const isRealChannelId = (value: unknown): value is string =>
   typeof value === "string" && /^UC[\w-]{20,}$/.test(value) && !value.startsWith("UC_FIXTURE_")
 
@@ -134,6 +255,16 @@ const unresolvedReason = (candidate: string): string => fixturesEnabled()
 
 export const resolvePublicChannel = async (handleInput: string): Promise<PublicChannelResolution> => {
   const candidate = extractHandleLike(handleInput)
+  if (candidate) {
+    const cached = readCachedPublicSnapshot(candidate)
+    if (cached) return {
+      input: handleInput,
+      resolvedChannelId: cached.channelId,
+      resolvedHandle: cached.handle,
+      channelTitle: cached.title,
+      reason: null,
+    }
+  }
   if (!candidate) {
     return {
       input: handleInput,
@@ -175,12 +306,14 @@ export const resolvePublicChannel = async (handleInput: string): Promise<PublicC
 export const fetchPublicChannelSnapshot = async (handleInput: string): Promise<PublicChannelSnapshot | null> => {
   const candidate = extractHandleLike(handleInput)
   if (!candidate) return null
+  const cached = readCachedPublicSnapshot(candidate)
+  if (cached) return cached
 
   try {
     const payload = await fetchPublicPageIngestion(handleInput)
     const snapshot = payload?.snapshot
     if (snapshot && isRealChannelId(snapshot.channelId)) {
-      return {
+      const normalized: PublicChannelSnapshot = {
         ...snapshot,
         source: "public_page",
         handle: withHandlePrefix(snapshot.handle || payload?.resolution?.resolvedHandle || (candidate.startsWith("UC") ? null : candidate)),
@@ -197,6 +330,7 @@ export const fetchPublicChannelSnapshot = async (handleInput: string): Promise<P
           commentCount: null,
         })) : [],
       }
+      return writePublicCache(candidate, normalized, Array.isArray(payload?.limitations) ? payload.limitations.map(String) : [])
     }
   } catch {
     // Try explicit local fixtures after a public resolver outage.
