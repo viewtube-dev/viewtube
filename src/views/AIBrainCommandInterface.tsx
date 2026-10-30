@@ -1066,7 +1066,10 @@ const AIBrainCommandInterface: React.FC = () => {
 
  useEffect(() => {
   let active = true
+  let idleHandle: number | null = null
+  let timeoutHandle: ReturnType<typeof setTimeout> | null = null
   const refreshRuntimeSnapshot = () => {
+   if (!active) return
    const nextSnapshot = readBrainRuntimeSnapshot({
     channelId,
     activeProjectId: brain.activeProjectId,
@@ -1074,8 +1077,21 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    if (active) setRuntimeSnapshot(nextSnapshot)
   }
-  refreshRuntimeSnapshot()
-  return () => { active = false }
+
+  // Let the first interactive frame paint before reading and joining local ledgers.
+  if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+   idleHandle = window.requestIdleCallback(refreshRuntimeSnapshot, { timeout: 1200 })
+  } else {
+   timeoutHandle = setTimeout(refreshRuntimeSnapshot, 0)
+  }
+
+  return () => {
+   active = false
+   if (idleHandle !== null && typeof window !== "undefined" && typeof window.cancelIdleCallback === "function") {
+    window.cancelIdleCallback(idleHandle)
+   }
+   if (timeoutHandle !== null) clearTimeout(timeoutHandle)
+  }
  }, [channelId, brain.activeProjectId, brain.projects])
 
  const snapshot = useMemo(
