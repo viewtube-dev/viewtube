@@ -303,8 +303,8 @@ Source inspection and source/test updates covered the three target documents, to
 ## 14. Studio Controls family and alignment contracts — 2026-10-30
 
 - **Split text centering:** split-left, split-right, and double-split badges center label text against the complete outer shell. Rail count and rail placement do not shift the center axis. Editable split text input remains left-aligned and is explicitly excluded from badge centering.
-- **Counter anatomy:** StudioCounter and StudioSideCounter use a 2:1 number-value region; their action rails remain 1:1 squares. This is a family geometry exception, not a second global size ladder.
-- **Bar toggles:** empty segments are a 50%-white / 50%-primary blend; filled segments are black. Bars match the selected tier's text height, retain a 2.5:1 height-to-width ratio, and use a slight radius.
+- **Counter anatomy:** StudioCounter and StudioSideCounter use a 2:1 number-value region; their action rails remain 1:1 squares. This is a family geometry exception, not a second global size ladder. The ratio is sourced from STUDIO_COUNTER_NUMBER_TOKENS.valueAreaAspectRatio and emitted to CSS.
+- **Bar toggles:** empty segments are a 50%-white / 50%-primary blend; filled segments are black. Bars match the selected tier's text height, retain a 2.5:1 height-to-width ratio, and use a slight radius. STUDIO_BAR_TOGGLE_TOKENS is the family authority for height/text ratio, height/width ratio, radius, empty fill mix, and full fill color.
 - **Double-side toggles:** both sides reuse the shared side-toggle arrow controls and metrics. The central divider is a structural black seam only; the outer shell alone owns the secondary focus outline.
 - **Inter-modules:** full width by default, zero horizontal container inset, square split sections, and no inherited external 4px gap at their edges.
 - **Focus transition:** text fill and glyph stroke change together and use the same duration/easing. The secondary outline fades on blur; no abrupt reset.
