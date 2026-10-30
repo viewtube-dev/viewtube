@@ -293,8 +293,8 @@ const RestoredPrimitiveShowcase: React.FC = () => {
       data-vt-library-component="StudioSquareIconButton"
     />
   ))
-  const squareButtons = (sizeVariant: "compact" | "micro") => (
-    <StudioSquareIconButtonGroup sizeVariant={sizeVariant} aria-label={sizeVariant + " action group"}>
+  const squareButtons = (sizeVariant: "compact" | "micro", index: number) => (
+    <StudioSquareIconButtonGroup sizeVariant={sizeVariant} aria-label={sizeVariant + " action group " + (index + 1)}>
       {squareButtonItems(sizeVariant)}
     </StudioSquareIconButtonGroup>
   )
@@ -312,9 +312,10 @@ const RestoredPrimitiveShowcase: React.FC = () => {
       "All five squares begin with primary fill. Selecting a square changes only that square to the secondary fill; each selection is independent.",
       "The group is a single auto-width toolbar and inherits the selected Studio size tier.",
     ]} provenance={<Provenance primitive="StudioSquareIconButtonGroup / StudioSquareIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-restored-primitives.css" tokens="Five 1:1 squares; primary resting fill; secondary selected fill; black shared dividers." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><span>STANDARD · FIVE SQUARES</span><StudioSquareIconButtonGroup sizeVariant="standard" aria-label="standard action group">{squareButtonItems("standard")}</StudioSquareIconButtonGroup></div>
-      <div className="vt-confirmed-variant is-full-row"><span>COMPACT · FIVE SQUARES</span>{squareButtons("compact")}</div>
-      <div className="vt-confirmed-variant is-full-row"><span>MICRO · FIVE SQUARES</span>{squareButtons("micro")}</div>
+      <SizeMatrix label="Square icon button group size examples"
+        standard={<StudioSquareIconButtonGroup sizeVariant="standard" aria-label="standard action group">{squareButtonItems("standard")}</StudioSquareIconButtonGroup>}
+        compact={[0,1].map(i => compact(squareButtons("compact", i), "compact-"+i))}
+        micro={[0,1,2,3].map(i => micro(squareButtons("micro", i), "micro-"+i))} />
     </Family>
     <Family title="Text Box · Read-only Display Surface" nonDefaultSettings={[
       "Read-only text display uses black text, persistent primary inset stroke, and the secondary outer focus-style outline at rest.",
