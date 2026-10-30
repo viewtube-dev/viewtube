@@ -622,9 +622,17 @@
       "targetBranch": "master/consolidated-feature-integration",
       "pullRequest": 1229,
       "openedHeadSha": "97651224b3d05fe02a5e907258763157bc467e14",
-      "currentHeadSha": "97651224b3d05fe02a5e907258763157bc467e14",
-      "commitsAfterPrOpen": [],
-      "postPrChangedPaths": [],
+      "currentHeadSha": "251fe13f50fb8a827185dec7ee1edff6ac79129d",
+      "commitsAfterPrOpen": [
+        "89f2bb0a34759aedfe19632552385f799fe18f4e",
+        "472362f7565572c14e057fcfd1640b4d7da993e3",
+        "251fe13f50fb8a827185dec7ee1edff6ac79129d"
+      ],
+      "postPrChangedPaths": [
+        "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/handoff.md",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/review.md",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/worklog.json"
+      ],
       "mergeCommitSha": null,
       "targetContainsChanges": "NO",
       "classification": "OPEN_PR",
@@ -632,7 +640,7 @@
       "evidenceRefs": [
         "https://github.com/viewtube-dev/viewtube/pull/1229"
       ],
-      "notes": "Opening snapshot recorded. Package was subsequently updated in this same branch after PR creation; refresh current head and post-PR path evidence after final update."
+      "notes": "The opening head was 97651224b3d05fe02a5e907258763157bc467e14. Three subsequent commits updated the handoff, review and worklog. currentHeadSha records the last independently inspected head before this final reconciliation write; refresh on next update."
     }
   ],
   "integrationGaps": [
