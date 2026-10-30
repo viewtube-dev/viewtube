@@ -94,3 +94,7 @@ Production Brain task path invokes the existing resolver when a public handle is
 
 ## Current implementation baseline (2026-10-30)
 `src/services/publicHandleMode.ts` currently implements normalized YouTube handle/channel input; localStorage cache schema v1; maximum 20 cache entries; a 3-hour TTL; positive resolved entries; handle/channel-ID identity checks; and fetchedAt/expiresAt/sourceRefs/limitations provenance. The client uses `/public-channel/resolve` and `/api/public-channel` route candidates. It nulls subscriber/video/view and top-video engagement counts rather than inventing them. Current client cache does not implement the previously proposed 6h metadata / 3h videos / 30m negative-cache schedule; do not claim those values are deployed. Verify server route availability, public-only enforcement and Brain production caller at runtime.
+
+
+## Production caller trace — confirmed in source (2026-10-30)
+`BrainRuntime.ts` consumes `publicHandleContext` explicitly and fetches through `fetchPublicChannelSnapshot`; `BrainRuntimeContracts.ts` keeps public identity distinct from authenticated `channelId`. SidebarChatbot, AIBrainCommandInterface (both task entry paths), and BrainHubWidget pass the Settings-selected public context only for logged-out, disconnected sessions. Settings persists the selection. This satisfies source-wiring discovery, not runtime verification. Next: exercise all logged-out public states and verify no connected/private Analytics or OAuth source enters the prompt/evidence path.
