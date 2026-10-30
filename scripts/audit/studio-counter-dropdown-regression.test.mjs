@@ -10,8 +10,8 @@ const emitter = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 
 test("counter shells size from a 2:1 value pane plus square action rails", () => {
-  assert.match(styles, /\.vt-studio-counter\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height,44px\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,2\)\s*\+\s*var\(--vt-studio-counter-double-rail-count,2\)\)\)/)
-  assert.match(styles, /\.vt-studio-side-counter,\s*\.vt-studio-left-counter\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height,44px\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,2\)\s*\+\s*var\(--vt-studio-counter-side-rail-count,1\)\)\)/)
+  assert.match(styles, /--vt-studio-counter-root-width:\s*calc\(var\(--vt-studio-control-height,\s*44px\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,\s*2\)\s*\+\s*var\(--vt-studio-counter-double-rail-count,\s*2\)\)\)/)
+  assert.match(styles, /--vt-studio-counter-root-width:\s*calc\(var\(--vt-studio-control-height,\s*44px\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,\s*2\)\s*\+\s*var\(--vt-studio-counter-side-rail-count,\s*1\)\)\)/)
   assert.match(styles, /\.vt-studio-counter__value,\[data-vt-studio-counter-value\]\{aspect-ratio:var\(--vt-studio-counter-value-area-aspect-ratio,2\/1\)/)
   assert.match(styles, /\.vt-studio-split-shell__rail,\[data-vt-studio-split-rail\][\s\S]*?flex:0 0 var\(--vt-studio-control-height\)/)
   assert.doesNotMatch(recovery, /vt-studio-counter.*width|vt-studio-side-counter.*width/)
