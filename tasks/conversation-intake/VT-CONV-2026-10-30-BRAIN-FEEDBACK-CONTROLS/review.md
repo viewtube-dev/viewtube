@@ -132,16 +132,22 @@ Acceptance still needed: rerun current-target audit, reconcile six-vs-seven cate
 
 These are proposals, not approved tasks. No parallel idea registry or backlog was created.
 
+## Reconciliation update — 2026-10-30
+
+- PR #1226 merged at `8c3818d0a1b0bef8f25066d1f73e98300a3f2ef3`; all four package/index files are present on `master/consolidated-feature-integration`.
+- PR #993 remains merged at `8fffa6f8adc05f9002953e999a448e787c611fd4`.
+- Latest target SHA inspected: `08980fe86dc0ffb73401f27d7a98bf19455b847f`.
+- Combined status for the merge commit and latest target reports three Vercel failures linking to `upgradeToPro=build-rate-limit`. Classify these as infrastructure/capacity-blocked checks, not code-level test failures. The PR-only workflow-run lookup returned no workflow runs for the merge commit.
+
 ## Remaining blockers
 
-1. Current-target CI was not rerun on `db066b9e4c9d6edce85d915618493ebf1ad735da`.
-2. Browser/runtime behavior of Brain feedback controls was not verified.
-3. Exact failing focused-contract and full-suite tests need current-target reproduction.
-4. PR #993's opening SHA remains UNKNOWN.
+1. Re-run release gates once Vercel build capacity/rate limits permit; reproduce and classify focused-contract, typecheck and full-suite outcomes on the latest target.
+2. Browser/runtime behavior of Brain feedback controls remains unverified.
+3. PR #993 opening SHA remains UNKNOWN; merge and target ancestry are established.
 
 ## Final disposition
 
-This package remains PARTIALLY_RECONCILED. The work and evidence are routed to existing canonical owners, but closure is blocked by current-target verification and browser/runtime acceptance. Do not mark the Brain capability DONE from this package.
+The documentation delivery is COMPLETE and target-verified. The Brain feature remains PARTIALLY_RECONCILED. The work and evidence are routed to existing canonical owners, but closure is blocked by current-target verification and browser/runtime acceptance. Do not mark the Brain capability DONE from this package.
 
 
 ## Documentation package delivery — PR #1226
@@ -168,3 +174,8 @@ The package is committed to the documentation branch and indexed there. It remai
 
 
 The latest observed PR head at this review point is `b919a455fecb548ab1e68e777abbea1dfa024606`; PR metadata remains authoritative for subsequent receipt-only updates.
+
+
+## Delivery disposition
+
+PR #1226 is merged; no documentation branch recovery is needed. The only open work is feature verification and repair of independently reproduced application/test failures. Do not treat the Vercel build-rate-limit status as proof of code failure or code success.
