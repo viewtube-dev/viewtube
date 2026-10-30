@@ -115,6 +115,7 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
  } 
  
 
+
 /* Value toggles use the secondary focus outline without changing geometry. */
 .vt-studio-value-toggle:focus-within,
 .vt-studio-split-shell.vt-studio-value-toggle:focus-within,

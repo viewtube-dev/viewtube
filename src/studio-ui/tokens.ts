@@ -157,6 +157,20 @@ export const STUDIO_DROPDOWN_TOKENS = {
   chevronPlacement: "trailing" as const,
 } as const
 
+
+/** Global open-menu defaults shared by standard, simple, and split-left dropdowns. */
+export const STUDIO_DROPDOWN_MENU_TOKENS = {
+  menuGap: 8,
+  menuPadding: 4,
+  rowGap: 3,
+  menuRadius: "control" as const,
+  rowRadius: "control" as const,
+  menuFill: "primary" as const,
+  unselectedRowFill: "white" as const,
+  selectedRowFill: "secondary" as const,
+  rowStroke: "control" as const,
+} as const
+
 export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   holdMs: 1500,
   outlineFadeMs: 0,
@@ -165,6 +179,17 @@ export const STUDIO_FOCUS_INTERACTION_TOKENS = {
   outlineColorRole: "secondary" as const,
   outlineWidthRatio: 0.65,
   outlineOffsetPx: 0,
+} as const
+
+export const STUDIO_STEPPER_BUTTON_TOKENS = {
+  chevronSize: { supreme: 42, standard: 36, compact: 24, mini: 16, micro: 12 },
+  chevronStroke: { supreme: 3.75, standard: 2.5, compact: 3, mini: 2.5, micro: 2.25 },
+  clickAnimation: "vt-studio-counter-pop" as const,
+  clickDurationMs: 180,
+  holdAnimation: "vt-studio-counter-hold-pulse" as const,
+  focusOutlineColor: "secondary" as const,
+  focusOutlineWidthRatio: STUDIO_FOCUS_INTERACTION_TOKENS.outlineWidthRatio,
+  focusOutlineOffsetPx: STUDIO_FOCUS_INTERACTION_TOKENS.outlineOffsetPx,
 } as const
 
 export const STUDIO_COUNTER_NUMBER_TOKENS = {

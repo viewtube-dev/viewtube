@@ -8,6 +8,8 @@ const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
 const distill = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8")
 const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8")
 const wordCounter = readFileSync("src/styles/studio-control-word-counter.css", "utf8")
+const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
+const tokenEmitter = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
 
 test("StudioCounter is a new button-only double-split primitive across all three sizes", () => {
@@ -178,4 +180,54 @@ test("bar toggle exposes a rounded percentage tooltip and preserves visible bars
   assert.match(distill, /\.vt-studio-value-toggle:focus-within/);
   assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar > \[data-vt-studio-split-label\]\s*\{[^}]*flex:\s*1 1 0[^}]*width:\s*auto/s);
   assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{\s*overflow:\s*visible/s);
+});
+
+
+test("bar percentage tooltip escapes the component border and has a downward secondary-color pointer", () => {
+  assert.match(styles, /\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
+  assert.match(styles, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
+  assert.match(styles, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top:\s*6px solid var\(--vt-studio-control-secondary/s);
+});
+
+test("all counter chevrons use one token-backed button class and shared click/hold animation", () => {
+  assert.match(tokens, /export const STUDIO_STEPPER_BUTTON_TOKENS\s*=\s*\{/);
+  assert.match(tokenEmitter, /STUDIO_STEPPER_BUTTON_TOKENS/);
+  assert.match(component, /className=\{\`vt-studio-stepper-button vt-studio-counter__button/);
+  assert.match(valueToggles, /className="vt-studio-stepper-button vt-studio-value-toggle__arrow"/);
+  assert.match(valueToggles, /className="vt-studio-stepper-button vt-studio-word-counter__button"/);
+  assert.match(styles, /\.vt-studio-stepper-button:active:not\(:disabled\) svg[\s\S]*?vt-studio-counter-pop/);
+  assert.match(styles, /\.vt-studio-stepper-button\.is-holding svg[\s\S]*?vt-studio-counter-hold-pulse/);
+  assert.match(styles, /\.vt-studio-stepper-button:focus-visible[\s\S]*?--vt-studio-focus-outline-width-ratio[\s\S]*?--vt-studio-control-secondary/);
+});
+
+test("StudioDoubleSplitWordCounter is exported as a double-rail word primitive with the shared chevron buttons", () => {
+  assert.match(valueToggles, /export type StudioDoubleSplitWordCounterProps/);
+  assert.match(valueToggles, /export function StudioDoubleSplitWordCounter/);
+  assert.match(valueToggles, /layout="double"/);
+  assert.match(valueToggles, /data-vt-studio-control-kind": "studio-double-split-word-counter"/);
+  assert.match(valueToggles, /STUDIO_LEFT_WORD_OPTIONS/);
+  assert.match(valueToggles, /vt-studio-word-counter__value/);
+  assert.match(styles, /\.vt-studio-word-counter:focus-within[\s\S]*?--vt-studio-control-secondary/);
+});
+
+
+test("dropdown menus share separated primary-filled menu defaults across standard, simple, and split-left variants", () => {
+  assert.match(tokens, /export const STUDIO_DROPDOWN_MENU_TOKENS\s*=\s*\{/);
+  assert.match(tokens, /menuGap:\s*8/);
+  assert.match(tokens, /menuPadding:\s*4/);
+  assert.match(tokens, /rowGap:\s*3/);
+  assert.match(tokens, /menuFill:\s*"primary"/);
+  assert.match(tokens, /unselectedRowFill:\s*"white"/);
+  assert.match(tokens, /selectedRowFill:\s*"secondary"/);
+  assert.match(tokenEmitter, /STUDIO_DROPDOWN_MENU_TOKENS/);
+  assert.match(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*top:\s*calc\(100% \+ var\(--vt-studio-dropdown-menu-gap/s);
+  assert.match(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*border-radius:\s*var\(--vt-studio-dropdown-menu-radius/s);
+  assert.match(styles, /\.vt-studio-dropdown-menu\s*\{[^}]*background:\s*var\(--vt-studio-dropdown-menu-fill/s);
+  assert.match(styles, /\.vt-studio-dropdown-option\s*\{[^}]*background:\s*var\(--vt-studio-dropdown-row-fill/s);
+  assert.match(styles, /\.vt-studio-dropdown-option\[data-selected="true"\]\s*\{[^}]*background:\s*var\(--vt-studio-dropdown-selected-fill/s);
+  assert.match(styles, /\.vt-studio-dropdown\.is-simple \.vt-studio-dropdown-menu/);
+  assert.match(styles, /\.vt-studio-dropdown\.is-split-left \.vt-studio-dropdown-menu/);
+  const menuContract = styles.slice(styles.lastIndexOf("/* Global dropdown menu contract"));
+  assert.match(menuContract, /border:\s*var\(--vt-studio-dropdown-row-stroke[^;]*solid #000/);
+  assert.match(menuContract, /border-radius:\s*var\(--vt-studio-dropdown-menu-radius[^;]*!important/);
 });

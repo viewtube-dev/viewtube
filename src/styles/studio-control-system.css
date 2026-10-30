@@ -6915,3 +6915,229 @@ details.vt-studio-two-line-module > :not(summary) {
   /* Body never changes header metrics */
   flex: 1 1 auto;
 }
+
+/* Canonical shared stepper family: one token source for counter, bar, and word-counter rails. */
+.vt-studio-stepper-button {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.vt-studio-stepper-button svg {
+  display: block;
+  flex: 0 0 auto;
+  width: min(var(--vt-stepper-chevron-size, var(--vt-studio-stepper-standard-chevron-size, 36px)), 100%);
+  height: min(var(--vt-stepper-chevron-size, var(--vt-studio-stepper-standard-chevron-size, 36px)), 100%);
+  max-width: 100%;
+  max-height: 100%;
+  stroke-width: var(--vt-stepper-chevron-stroke, var(--vt-studio-stepper-standard-chevron-stroke, 2.5));
+  color: currentColor;
+  stroke: currentColor;
+  transform-origin: center;
+}
+.vt-studio-stepper-button:active:not(:disabled) svg {
+  animation: vt-studio-counter-pop 180ms cubic-bezier(.2,.8,.2,1);
+}
+.vt-studio-stepper-button.is-holding svg,
+.vt-studio-stepper-button[data-press-holding="true"] svg {
+  animation: vt-studio-counter-hold-pulse 1.15s ease-in-out infinite;
+}
+.vt-studio-stepper-button:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+  z-index: 5;
+}
+.vt-studio-stepper-button:disabled { opacity: .4; cursor: not-allowed; }
+.vt-studio-counter[data-size="supreme"] .vt-studio-stepper-button,
+.vt-studio-value-toggle[data-size="supreme"] .vt-studio-stepper-button,
+.vt-studio-word-counter[data-size="supreme"] .vt-studio-stepper-button { --vt-stepper-chevron-size: var(--vt-studio-stepper-supreme-chevron-size); --vt-stepper-chevron-stroke: var(--vt-studio-stepper-supreme-chevron-stroke); }
+.vt-studio-counter[data-size="standard"] .vt-studio-stepper-button,
+.vt-studio-value-toggle[data-size="standard"] .vt-studio-stepper-button,
+.vt-studio-word-counter[data-size="standard"] .vt-studio-stepper-button { --vt-stepper-chevron-size: var(--vt-studio-stepper-standard-chevron-size); --vt-stepper-chevron-stroke: var(--vt-studio-stepper-standard-chevron-stroke); }
+.vt-studio-counter[data-size="compact"] .vt-studio-stepper-button,
+.vt-studio-value-toggle[data-size="compact"] .vt-studio-stepper-button,
+.vt-studio-word-counter[data-size="compact"] .vt-studio-stepper-button { --vt-stepper-chevron-size: var(--vt-studio-stepper-compact-chevron-size); --vt-stepper-chevron-stroke: var(--vt-studio-stepper-compact-chevron-stroke); }
+.vt-studio-counter[data-size="mini"] .vt-studio-stepper-button,
+.vt-studio-value-toggle[data-size="mini"] .vt-studio-stepper-button,
+.vt-studio-word-counter[data-size="mini"] .vt-studio-stepper-button { --vt-stepper-chevron-size: var(--vt-studio-stepper-mini-chevron-size); --vt-stepper-chevron-stroke: var(--vt-studio-stepper-mini-chevron-stroke); }
+.vt-studio-counter[data-size="micro"] .vt-studio-stepper-button,
+.vt-studio-value-toggle[data-size="micro"] .vt-studio-stepper-button,
+.vt-studio-word-counter[data-size="micro"] .vt-studio-stepper-button { --vt-stepper-chevron-size: var(--vt-studio-stepper-micro-chevron-size); --vt-stepper-chevron-stroke: var(--vt-studio-stepper-micro-chevron-stroke); }
+.vt-studio-counter:focus-within,
+.vt-studio-counter[data-vt-interaction-focus="true"],
+.vt-studio-word-counter:focus-within,
+.vt-studio-value-toggle--bar:focus-within {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-studio-stepper-button:active:not(:disabled) svg,
+  .vt-studio-stepper-button.is-holding svg,
+  .vt-studio-stepper-button[data-press-holding="true"] svg { animation: none; }
+}
+
+/* The bar shell and its center cell must allow the tooltip to escape the border box. */
+.vt-studio-split-shell.vt-studio-value-toggle--bar {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  clip-path: none;
+}
+.vt-studio-split-shell.vt-studio-value-toggle--bar > [data-vt-studio-split-label],
+.vt-studio-split-shell.vt-studio-value-toggle--bar .vt-studio-value-toggle__bars {
+  overflow: visible;
+}
+.vt-studio-value-toggle__bar-tooltip::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  transform: translateX(-50%);
+}
+
+/* New double-split word counter reuses the same three-cell counter shell geometry. */
+.vt-studio-word-counter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  width: 176px;
+  min-width: 176px;
+  max-width: 176px;
+  flex: 0 0 176px;
+  height: var(--vt-studio-control-height, 44px);
+  box-sizing: border-box;
+  border: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  overflow: hidden;
+  background: var(--pair-a);
+  color: #000;
+}
+.vt-studio-word-counter[data-size="supreme"] { width: 240px; min-width: 240px; max-width: 240px; flex-basis: 240px; }
+.vt-studio-word-counter[data-size="compact"] { width: 112px; min-width: 112px; max-width: 112px; flex-basis: 112px; --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); }
+.vt-studio-word-counter[data-size="micro"] { width: 48px; min-width: 48px; max-width: 48px; flex-basis: 48px; --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1.5px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 3px); }
+.vt-studio-word-counter > [data-vt-studio-split-rail] {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  height: 100%;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+}
+.vt-studio-word-counter > [data-vt-studio-split-rail][data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
+.vt-studio-word-counter > [data-vt-studio-split-rail][data-rail="end"] { border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
+.vt-studio-word-counter > [data-vt-studio-split-label] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 2px;
+  overflow: hidden;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+.vt-studio-word-counter__value {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  color: #000;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: -.02em;
+  text-align: center;
+  text-overflow: clip;
+  text-transform: uppercase;
+  white-space: nowrap;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+.vt-studio-word-counter[data-size="compact"] .vt-studio-word-counter__value { font-size: var(--vt-studio-compact-font-size, 24px); }
+.vt-studio-word-counter[data-size="micro"] .vt-studio-word-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
+/* Ensure the bar rails consume the exact same button defaults as both counter primitives. */
+.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-stepper-button {
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+}
+.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-stepper-button svg {
+  width: min(var(--vt-stepper-chevron-size, var(--vt-studio-stepper-standard-chevron-size, 36px)), 100%);
+  height: min(var(--vt-stepper-chevron-size, var(--vt-studio-stepper-standard-chevron-size, 36px)), 100%);
+  stroke-width: var(--vt-stepper-chevron-stroke, var(--vt-studio-stepper-standard-chevron-stroke, 2.5));
+}
+
+/* Global dropdown menu contract — deliberately separated from its trigger.
+   Standard, simple, and split-left variants all inherit this one menu treatment. */
+.vt-studio-dropdown-menu {
+  top: calc(100% + var(--vt-studio-dropdown-menu-gap, 8px)) !important;
+  box-sizing: border-box !important;
+  width: 100%;
+  max-height: min(280px, 45vh);
+  overflow-y: auto;
+  padding: var(--vt-studio-dropdown-menu-padding, 4px) !important;
+  border: var(--vt-studio-dropdown-row-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+  border-radius: var(--vt-studio-dropdown-menu-radius, var(--vt-studio-control-radius, 6px)) !important;
+  background: var(--vt-studio-dropdown-menu-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  scrollbar-width: thin;
+}
+.vt-studio-dropdown[data-open="true"] button[data-dropdown-trigger="true"] {
+  border-radius: var(--vt-dropdown-radius, var(--vt-studio-control-radius, 6px)) !important;
+}
+.vt-studio-dropdown-option {
+  box-sizing: border-box !important;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--vt-dropdown-height, var(--vt-studio-control-height, 44px)) !important;
+  height: auto;
+  margin: 0 0 var(--vt-studio-dropdown-menu-row-gap, 3px) !important;
+  padding: 2px 8px !important;
+  border: var(--vt-studio-dropdown-row-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+  border-radius: var(--vt-studio-dropdown-row-radius, var(--vt-studio-control-radius, 6px)) !important;
+  background: var(--vt-studio-dropdown-row-fill, #fff) !important;
+  color: #000 !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: var(--vt-dropdown-font-size, var(--vt-studio-control-font-size, 38px)) !important;
+  font-weight: var(--vt-studio-control-font-weight, 1000) !important;
+  line-height: 1 !important;
+  letter-spacing: -.02em !important;
+  text-align: left;
+  text-transform: uppercase !important;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+}
+.vt-studio-dropdown-option:last-child { margin-bottom: 0 !important; }
+.vt-studio-dropdown-option[data-selected="true"],
+.vt-studio-dropdown-option[aria-selected="true"] {
+  background: var(--vt-studio-dropdown-selected-fill, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))) !important;
+  color: #000 !important;
+}
+.vt-studio-dropdown-option:hover:not(:disabled):not([data-selected="true"]):not([aria-selected="true"]),
+.vt-studio-dropdown-option:focus-visible:not([data-selected="true"]):not([aria-selected="true"]) {
+  background: var(--vt-studio-dropdown-row-fill, #fff) !important;
+}
+.vt-studio-dropdown-option:focus-visible {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
+  outline-offset: -4px !important;
+}
+.vt-studio-dropdown-option:disabled { cursor: not-allowed; opacity: .45; }
+.vt-studio-dropdown.is-simple .vt-studio-dropdown-menu,
+.vt-studio-dropdown.is-split-left .vt-studio-dropdown-menu {
+  background: var(--vt-studio-dropdown-menu-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+}

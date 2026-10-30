@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
-import { StudioSplitShell } from "./StudioControls";
+import { StudioSplitShell, STUDIO_LEFT_WORD_OPTIONS } from "./StudioControls";
 import type { StudioControlSize } from "../tokens";
 
 export type StudioToggleAppearance = {
@@ -211,12 +211,12 @@ export function StudioBarToggle({
     event.currentTarget.setPointerCapture?.(event.pointerId);
     startRepeat(direction);
   };
-  const decrease = <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Decrease level" disabled={disabled || value <= 0}
+  const decrease = <button type="button" className="vt-studio-stepper-button vt-studio-value-toggle__arrow" aria-label="Decrease level" disabled={disabled || value <= 0}
     onPointerDown={onPointerDown(-1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onLostPointerCapture={stopRepeat}
     onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(-1); } }}>
     <ChevronLeft aria-hidden="true" />
   </button>;
-  const increase = <button type="button" className="vt-studio-value-toggle__arrow" aria-label="Increase level" disabled={disabled || value >= 100}
+  const increase = <button type="button" className="vt-studio-stepper-button vt-studio-value-toggle__arrow" aria-label="Increase level" disabled={disabled || value >= 100}
     onPointerDown={onPointerDown(1)} onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat} onLostPointerCapture={stopRepeat}
     onClick={() => {}} onKeyDown={event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); step(1); } }}>
     <ChevronRight aria-hidden="true" />
@@ -235,6 +235,51 @@ export function StudioBarToggle({
         </span>
       ))}
     </div>
+  </StudioSplitShell>;
+}
+
+
+export type StudioDoubleSplitWordCounterProps = {
+  value: number;
+  onValueChange: (value: number) => void;
+  options?: readonly string[];
+  size?: StudioControlSize;
+  disabled?: boolean;
+  ariaLabel?: string;
+  className?: string;
+};
+
+/** Three-cell word counter with matching square chevron rails and cyclic word steps. */
+export function StudioDoubleSplitWordCounter({
+  value, onValueChange, options = STUDIO_LEFT_WORD_OPTIONS, size = "standard",
+  disabled = false, ariaLabel = "Word", className,
+}: StudioDoubleSplitWordCounterProps) {
+  const safeOptions = options.length ? options : STUDIO_LEFT_WORD_OPTIONS;
+  const currentIndex = Math.max(0, Math.min(safeOptions.length - 1, Math.round(value) - 1));
+  const current = safeOptions[currentIndex] ?? safeOptions[0] ?? "ONE";
+  const step = (direction: -1 | 1) => {
+    if (disabled) return;
+    onValueChange((currentIndex + direction + safeOptions.length) % safeOptions.length + 1);
+  };
+  const leftButton = <button type="button" className="vt-studio-stepper-button vt-studio-word-counter__button"
+    aria-label={`Previous ${ariaLabel}`} disabled={disabled} onClick={() => step(-1)}>
+    <ChevronLeft aria-hidden="true" focusable="false" />
+  </button>;
+  const rightButton = <button type="button" className="vt-studio-stepper-button vt-studio-word-counter__button"
+    aria-label={`Next ${ariaLabel}`} disabled={disabled} onClick={() => step(1)}>
+    <ChevronRight aria-hidden="true" focusable="false" />
+  </button>;
+  return <StudioSplitShell layout="double" sizeVariant={size}
+    className={[\"vt-studio-word-counter\", className].filter(Boolean).join(" ")}
+    shellProps={{
+      role: "group", "aria-label": ariaLabel, "aria-disabled": disabled || undefined,
+      "data-vt-studio-control-family": "counter",
+      "data-vt-studio-control-kind": "studio-double-split-word-counter",
+      "data-vt-library-component": "StudioDoubleSplitWordCounter",
+      "data-word-count": safeOptions.length, "data-size": size,
+    }}
+    leftRailContent={leftButton} rightRailContent={rightButton}>
+    <span className="vt-studio-word-counter__value" aria-live="polite" aria-atomic="true">{current}</span>
   </StudioSplitShell>;
 }
 
