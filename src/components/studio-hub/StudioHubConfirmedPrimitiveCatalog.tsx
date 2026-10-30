@@ -177,8 +177,8 @@ const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens
   </div>
 )
 
-const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[] }> = ({ title, children, provenance, nonDefaultSettings = [] }) => (
-  <section className={`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`}>
+const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[]; className?: string }> = ({ title, children, provenance, nonDefaultSettings = [], className }) => (
+  <section className={[`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`, className].filter(Boolean).join(" ")}>
     <h3 title={title}>{title}</h3>
     <div className="vt-confirmed-variants">{children}</div>
     {(nonDefaultSettings.length > 0 || provenance) && (
@@ -221,6 +221,7 @@ const SizeMatrix: React.FC<{
 const StudioPrimitiveRepresentatives: React.FC = () => (
   <Family
     title="Representatives · Production Primitives"
+    className="vt-confirmed-representatives"
     nonDefaultSettings={[
       "Curated overview of real exported production components; detailed family behavior and size specimens remain in their own modules below.",
       "All examples use the canonical primitive exports, not mock replicas or inverse-color counter/slider variants.",
