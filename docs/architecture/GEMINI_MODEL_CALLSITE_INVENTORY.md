@@ -15,9 +15,9 @@ This file tracks duplicate Gemini policy sources before consolidation. Do not tr
 | Client/provider calls | `src/services/gemini.ts` | Owns SDK construction, key resolution, request/metering boundary, registry-based canonicalization and active-model resolution; legacy compatibility map/fallback sequence remains. | Canonical provider facade; fallback map needs capability-aware retirement |
 | Key validation | `src/context/GeminiKeyContext.tsx` | Dynamically imports the SDK, consumes `models.list()` and saves through the shared key vault. It does not require one guessed generation model to succeed; invalid-key errors are rejected while catalog/permission/transient failures are reported as saved-but-unverified. | Credential adapter; availability diagnostics remain separate from key persistence |
 | Metering | `src/services/billingEntitlement.ts` | Reads model rates from the canonical registry and treats models without a registered rate as unknown instead of applying a blanket Flash rate. Existing rates are legacy estimates and explicitly unverified. | Registry-linked pricing metadata; verified pricing still requires provider pricing review |
-| Provider architecture guard | `src/services/brain/__tests__/brainProviderArchitectureGuard.test.ts` | Scans direct provider calls with an exception allowlist | Guard all consumers to canonical facade, exceptions reviewed |
+| Provider architecture guard | `src/services/brain/__tests__/brainProviderArchitectureGuard.test.ts` | Scans direct provider calls with an explicit migration allowlist; Core.ts has been removed from the allowlist on the reconciliation branch. | Keep the allowlist shrinking; remove remaining entries only after approved-boundary migration |
 | Custom-key tests | `src/services/__tests__/geminiCustomKeyAccess.test.ts` | Tests custom-key access using a mocked SDK | Keep and extend as facade integration coverage |
-| Brain core consumer | `src/services/brain/Core.ts` | Direct `models.generateContent` through shared client | Migrate to canonical facade |
+| Brain core consumer | `src/services/brain/Core.ts` | **Migrated on the current reconciliation branch** to `defaultBrainModelGateway.generateJsonObject`; Gemini is dynamically loaded by the gateway adapter. | Keep Brain Core provider-neutral; protect with `CoreGateway.contract.test.ts` |
 | Collaboration consumer | `src/services/CollabEngine.ts` | Direct `models.generateContent` through shared client | Migrate to canonical facade |
 | Comment operator consumer | `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx` | Direct `models.generateContent` through shared client | Migrate to canonical facade |
 | SDK dependency | `package.json` + `package-lock.json` | Declared range `^1.46.0`; lockfile resolves exactly `1.46.0` | Dependency policy + lockfile evidence |
@@ -130,3 +130,11 @@ The shared `getAiClient()` wrapper is now the point where request capability, ef
 - Fallback telemetry contains model IDs, operation, reason, attempt, and timestamp only. It does not include prompts, API keys, account identifiers, or raw provider errors.
 
 Phase 4 does not claim every caller explicitly annotates capability. Requests with nonstandard media payload structures remain a migration target for an explicit capability parameter. The legacy candidate map is retained until live compatibility and modality-preserving candidate evidence is available.
+
+
+## 2026-10-29 reconciliation update
+
+- PR #1131, #1134, #1168, #1174, #1176 and #1178 are merged and form the preserved baseline.
+- `src/services/brain/Core.ts` is migrated on `feat/p1-gemini-governance-reconciliation-2026-10-29` to the existing provider-neutral BrainModelGateway. This is one caller migration, not proof that all creator generation is governed.
+- Remaining explicit direct-call migration targets include `src/services/CollabEngine.ts` and `src/views/dashboard/widgets/VideoCommentOperatorWidget.tsx`. The widget must migrate through its approved Creator Operations boundary rather than bypassing specialist operation policy.
+- The exhaustive exact-head scan, operation/prompt provenance certification, live-key runtime matrix, and zero-caller proof remain open. No test, typecheck, build, or live-provider result is claimed by this source-edit pass.
