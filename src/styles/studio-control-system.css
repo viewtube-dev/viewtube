@@ -4489,6 +4489,10 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
     outline-width var(--vt-studio-focus-outline-fade-ms) ease-out;
 }
 
+.vt-studio-counter:focus-within,
+.vt-studio-side-counter:focus-within,
+.vt-studio-left-counter:focus-within,
+.vt-studio-double-split-slider:focus-within,
 .vt-studio-counter.is-interaction-focus,
 .vt-studio-side-counter.is-interaction-focus,
 .vt-studio-left-counter.is-interaction-focus,
@@ -4499,6 +4503,10 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   outline-offset: var(--vt-studio-focus-outline-offset);
 }
 
+.vt-studio-counter:focus-within .vt-studio-counter__value,
+.vt-studio-side-counter:focus-within .vt-studio-side-counter__value,
+.vt-studio-left-counter:focus-within .vt-studio-side-counter__value,
+.vt-studio-double-split-slider:focus-within .vt-studio-double-split-slider__value,
 .vt-studio-counter.is-interaction-focus .vt-studio-counter__value,
 .vt-studio-side-counter.is-interaction-focus .vt-studio-side-counter__value,
 .vt-studio-left-counter.is-interaction-focus .vt-studio-side-counter__value,
@@ -4558,6 +4566,10 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
     -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
 }
 
+.vt-studio-counter:focus-within,
+.vt-studio-side-counter:focus-within,
+.vt-studio-left-counter:focus-within,
+.vt-studio-double-split-slider:focus-within,
 .vt-studio-counter.is-interaction-focus,
 .vt-studio-side-counter.is-interaction-focus,
 .vt-studio-left-counter.is-interaction-focus,
@@ -4568,6 +4580,10 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   outline-offset: var(--vt-studio-focus-outline-offset, 0px);
 }
 
+.vt-studio-counter:focus-within .vt-studio-counter__value,
+.vt-studio-side-counter:focus-within .vt-studio-side-counter__value,
+.vt-studio-left-counter:focus-within .vt-studio-side-counter__value,
+.vt-studio-double-split-slider:focus-within .vt-studio-double-split-slider__value,
 .vt-studio-counter.is-interaction-focus .vt-studio-counter__value,
 .vt-studio-side-counter.is-interaction-focus .vt-studio-side-counter__value,
 .vt-studio-left-counter.is-interaction-focus .vt-studio-side-counter__value,
