@@ -345,6 +345,7 @@ describe("GenerationWorkflow", () => {
    generationRecordId: "generation-prompt-receipt",
    traceId: promptReceipt.traceId,
    promptReceipt,
+   metadata: { promptReceipt: { forged: true } },
   })
   const outputEvent = listContentBuildEvents(build.id)
    .find(event => event.eventType === "tool.output.recorded")
