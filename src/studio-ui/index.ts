@@ -121,8 +121,6 @@ export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarT
 export type { StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioDoubleSplitWordCounterProps, StudioToggleAppearance } from "./primitives/StudioValueToggles";
 export { StudioComponentGrid, StudioComponentGridCell, StudioComponentGridRow } from "./primitives/StudioComponentGrid";
 export type { StudioComponentGridProps, StudioComponentGridCellProps, StudioGridSize, StudioGridCorners } from "./primitives/StudioComponentGrid";
-export { StudioComponentGridSpecimen, StudioComponentGridSpecimenPair } from "./primitives/StudioComponentGridSpecimen";
-export type { StudioComponentGridSpecimenProps } from "./primitives/StudioComponentGridSpecimen";
 
 export { StudioDropdown } from "./primitives/StudioDropdown"
 export type { StudioDropdownOption, StudioDropdownProps } from "./primitives/StudioDropdown"
@@ -155,7 +153,6 @@ export type {
   StudioRecipeId,
   VideoSelectorRecipeProps,
 } from "./recipes"
-export { StudioHubCertification } from "./StudioHubCertification"
 
 export { StudioSplitAccordion } from "./primitives/StudioSplitAccordion"
 export type { StudioSplitAccordionItem, StudioSplitAccordionProps, StudioSplitAccordionLayout, StudioSplitAccordionSize } from "./primitives/StudioSplitAccordion"
@@ -168,8 +165,6 @@ export type { ConfirmedModuleProps } from "../components/studio-hub/ConfirmedCat
 
 
 export { StudioInterModule } from "./primitives/StudioInterModule"
-export { StudioChatActionGroup } from "./primitives/StudioChatActionGroup"
-export type { StudioChatActionGroupProps, StudioChatActionGroupSize } from "./primitives/StudioChatActionGroup"
 export { StudioResponseMetaRow } from "./primitives/StudioResponseMetaRow"
 export type { StudioResponseMetaRowProps, StudioResponseMetaRowSize } from "./primitives/StudioResponseMetaRow"
 export type { StudioInterModuleProps, StudioInterModuleSize } from "./primitives/StudioInterModule"
