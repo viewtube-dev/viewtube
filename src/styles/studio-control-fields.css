@@ -325,15 +325,7 @@ html body [data-vt-studio-control="true"] textarea[data-vt-studio-field-kind="te
 }
 
 
-/* Regression recovery: field glyph stroke is state-specific, not inherited accidentally. */
-/* Simple input is the intentional exception: its inline glyph stroke stays primary in both states. */
-html body input.vt-studio-text-input--simple[data-vt-studio-control="true"],
-html body input.vt-studio-text-input--simple[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
-  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  -webkit-text-fill-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
-}
+/* Simple inputs inherit the shared default/focus glyph-color contract above. */
 /* Labelled/editable inputs and all textareas use black glyph stroke while focused. */
 html body input.vt-studio-text-input:not(.vt-studio-text-input--simple)[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 html body input[data-vt-studio-field-kind="text-input"][data-vt-studio-control="true"]:is(:focus, :focus-visible):not(.vt-studio-text-input--simple),
