@@ -327,6 +327,7 @@ type ToolReceiptProjection = {
  generationRecordId: string | null
  traceId: string | null
  completedAt: string
+ promptReceipt?: unknown
 }
 
 export const operationRecordFromToolReceipt = (
@@ -391,7 +392,7 @@ export const operationRecordFromToolReceipt = (
   errorMessage: null,
   reversible: true,
   undoOperationId: null,
-  metadata: { source: "ToolReceipt", requestId: receipt.requestId },
+  metadata: { source: "ToolReceipt", requestId: receipt.requestId, promptReceipt: receipt.promptReceipt ?? null },
  })
 }
 
