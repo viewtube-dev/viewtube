@@ -18,6 +18,7 @@ const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatal
 const publicIndex = read("src/studio-ui/index.ts");
 const catalogCss = read("src/components/studio-hub/studio-hub-primitive-catalogs.css");
 const componentGridCss = read("src/styles/studio-component-grid.css");
+const sideRailCss = read("src/styles/studio-side-rail-unify.css");
 
 const tiers = {
   supreme: { height: 60, stroke: 3, radius: 6, fontSize: 52, iconSize: 52 },
@@ -73,6 +74,16 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
   assert.ok(system.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary"));
   assert.ok(system.includes("-webkit-text-stroke-color: var(--vt-field-primary"));
   assert.ok(fields.includes("textarea[data-vt-studio-control=\\"true\\"][data-vt-studio-field-kind=\\"textarea\\"],"));
+});
+
+test("side-counter and side-toggle rails share square geometry and generated size/icon tokens", () => {
+  assert.ok(!sideRailCss.includes(":root {"));
+  assert.ok(sideRailCss.includes("width: var(--vt-studio-split-rail-size"));
+  assert.ok(sideRailCss.includes("min-width: var(--vt-studio-split-rail-size"));
+  assert.ok(sideRailCss.includes("stroke-width: var(--vt-studio-control-icon-stroke"));
+  assert.ok(!sideRailCss.includes("--vt-studio-micro-stroke: 1.5px"));
+  assert.ok(!sideRailCss.includes("stroke-width: 3;"));
+  assert.ok(!sideRailCss.includes("height: 1.5px;"));
 });
 
 test("vertical word-toggle handles use measured word bounds and match horizontal handle spacing", () => {
