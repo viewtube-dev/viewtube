@@ -1336,7 +1336,7 @@ button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="
 
 
 
-button[data-vt-studio-button="true"]:focus-visible { outline:3px solid var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b)); outline-offset:3px; }
+button[data-vt-studio-button="true"]:focus-visible { outline:var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-focus-outline-color,var(--vt-studio-control-secondary,var(--pair-b,#ff7f6b))); outline-offset:var(--vt-studio-focus-outline-offset,0px); }
 button[data-vt-studio-button="true"]:disabled { cursor:not-allowed; opacity:.5; transform:none; }
 /* Selected faces switch to the secondary pair without changing geometry. */
 
@@ -2147,7 +2147,7 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em); text-transform: uppercase;
 }
 .vt-studio-simple-dropdown__icon { position: absolute; right: 8px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); pointer-events: none; color: var(--pair-a, #000); }
-.vt-studio-simple-dropdown select:focus-visible { outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b, #fff)); outline-offset: 0; }
+.vt-studio-simple-dropdown select:focus-visible { outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))); outline-offset: var(--vt-studio-focus-outline-offset, 0px); }
 .vt-studio-simple-dropdown[data-size="compact"] select { height: 28px; padding-left: 5px; padding-right: 24px; font-size: 18px; border-width: 2px; }
 .vt-studio-simple-dropdown[data-size="compact"] .vt-studio-simple-dropdown__icon { width: 14px; height: 14px; right: 5px; }
 
