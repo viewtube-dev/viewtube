@@ -843,7 +843,9 @@ describe("confirmed individual module variant completeness", () => {
     const dropdownFamily = source.slice(source.indexOf('const ConfirmedStudioDropdownFamily'), source.indexOf('type ConfirmedCatalogFamilyName'));
     expect(choiceFamily).toContain("CANONICAL_SKINS.map");
     expect(choiceFamily).toContain("CHOICE_SKINS.map");
+    expect(choiceFamily).toContain('["supreme", "standard", "compact", "mini", "micro"]');
     expect(wordFamily).toContain("WORD_TOGGLE_SKINS.map");
+    expect(wordFamily).toContain('["60", "44", "28", "20", "12"]');
     expect(dropdownFamily).toContain("StudioLegendMultiDropdown");
     expect(dropdownFamily).toContain("StudioSplitLeftDropdown");
   });
