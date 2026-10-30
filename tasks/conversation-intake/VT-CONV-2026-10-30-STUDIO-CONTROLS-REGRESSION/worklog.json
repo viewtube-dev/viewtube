@@ -1,0 +1,703 @@
+{
+  "schemaVersion": "viewtube.conversation-work-log.v1",
+  "conversationId": "VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION",
+  "created": "2026-10-30",
+  "lastEdited": "2026-10-30",
+  "sourceHost": "ChatGPT",
+  "conversationName": "Studio Controls regression recovery and handoff",
+  "application": "ViewTube",
+  "sourceApplication": "ChatGPT",
+  "sourceConversationUrl": null,
+  "repository": "viewtube-dev/viewtube",
+  "targetBranch": "master/consolidated-feature-integration",
+  "reviewStatus": "PARTIALLY_RECONCILED",
+  "executiveSummary": [
+    "This conversation concerns recovery of Studio Controls field-stroke and split-family geometry regressions.",
+    "The final field contract is a primary-colored inline glyph stroke on every text field in every state, including TextBox; TextBox retains black text and a black outer border.",
+    "The simple input must retain its primary inline glyph stroke at rest and focus.",
+    "Split-family rails and icon sections must be square, top-split sizing must account for both outer strokes, and intermodules must fill the available row.",
+    "Regression assertions were added or revised, but no focused tests, build, or browser visual verification were run in this conversation.",
+    "PR #923 is closed and unmerged; GitHub reports eight commits unique to its source branch relative to the target and 1,903 target commits beyond the branch.",
+    "The observed source head is 9bb5424896765e1a348f0a8e37846c426c0f31d8; PR-opening head and post-opening lineage are unknown.",
+    "The branch is not safe to merge wholesale; recover only changes proven missing and still correct on the current target.",
+    "This package records evidence and open acceptance work without treating conversation-local implementation as canonical completion.",
+    "Next: reconcile the eight unique commits, selectively recover on a fresh target-based branch, then run focused tests/build and desktop/mobile visual checks."
+  ],
+  "documents": [
+    {
+      "title": "CONVERSATION_HANDOFFS.md",
+      "path": "docs/governance/CONVERSATION_HANDOFFS.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/CONVERSATION_HANDOFFS.md",
+      "kind": "AUTHORITY",
+      "status": "CURRENT",
+      "relatedItemIds": [
+        "VT-CWI-006"
+      ]
+    },
+    {
+      "title": "Conversation handoff skill",
+      "path": ".claude/skills/viewtube-conversation-handoff/SKILL.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/SKILL.md",
+      "kind": "SKILL",
+      "status": "CURRENT",
+      "relatedItemIds": [
+        "VT-CWI-006"
+      ]
+    },
+    {
+      "title": "Conversation work reconciliation skill",
+      "path": ".claude/skills/viewtube-conversation-work-reconciliation/SKILL.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-work-reconciliation/SKILL.md",
+      "kind": "SKILL",
+      "status": "CURRENT",
+      "relatedItemIds": [
+        "VT-CWI-006"
+      ]
+    },
+    {
+      "title": "Handoff",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/handoff.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/docs/studio-controls-regression-handoff-2026-10-30/tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/handoff.md",
+      "kind": "HANDOFF",
+      "status": "IN_PROGRESS",
+      "relatedItemIds": [
+        "VT-CWI-001",
+        "VT-CWI-002",
+        "VT-CWI-003",
+        "VT-CWI-004",
+        "VT-CWI-005",
+        "VT-CWI-006"
+      ]
+    },
+    {
+      "title": "Worklog",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/worklog.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/docs/studio-controls-regression-handoff-2026-10-30/tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/worklog.json",
+      "kind": "WORKLOG",
+      "status": "IN_PROGRESS",
+      "relatedItemIds": [
+        "VT-CWI-001",
+        "VT-CWI-002",
+        "VT-CWI-003",
+        "VT-CWI-004",
+        "VT-CWI-005",
+        "VT-CWI-006"
+      ]
+    },
+    {
+      "title": "Review",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/review.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/docs/studio-controls-regression-handoff-2026-10-30/tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/review.md",
+      "kind": "REVIEW",
+      "status": "PARTIALLY_RECONCILED",
+      "relatedItemIds": [
+        "VT-CWI-001",
+        "VT-CWI-006"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "itemId": "VT-CWI-001",
+      "title": "Reconcile and selectively recover Studio Controls changes from PR #923",
+      "summary": "Compare eight unique commits and changed paths against current target; do not merge the stale branch wholesale.",
+      "kind": "MIGRATION",
+      "conversationState": "PARTIAL",
+      "domains": [
+        "Studio Controls",
+        "Git/PR recovery"
+      ],
+      "capabilityIds": [
+        "CAP-STUDIO-CONTROLS"
+      ],
+      "surfaces": [
+        "Fields",
+        "split controls",
+        "intermodules"
+      ],
+      "sourceRefs": [
+        "PR #923",
+        "codex/studio-controls-regression-recovery"
+      ],
+      "changedPaths": [
+        "src/studio-ui/primitives/StudioTextInput.tsx",
+        "src/studio-ui/primitives/StudioControls.test.tsx",
+        "src/studio-ui/primitives/StudioValueToggles.tsx",
+        "src/studio-ui/primitives/StudioValueToggles.test.tsx",
+        "src/studio-ui/primitives/studio-split-text-input.css",
+        "src/styles/studio-control-distill-overrides.css",
+        "src/styles/studio-control-system.css",
+        "src/styles/studio-control-vars.generated.css",
+        "src/styles/studio-inter-module.css",
+        "src/styles/studio-text-box-strokes.test.ts",
+        "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx",
+        "src/studio-ui/tokens.ts",
+        "src/styles/studio-control-split.css"
+      ],
+      "branchPrRefs": [
+        "codex/studio-controls-regression-recovery",
+        "PR #923"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/923",
+        "https://github.com/viewtube-dev/viewtube/compare/master/consolidated-feature-integration...codex/studio-controls-regression-recovery",
+        "https://github.com/viewtube-dev/viewtube/commit/9bb5424896765e1a348f0a8e37846c426c0f31d8"
+      ],
+      "dependencies": [
+        "Inspect current target files before recovery"
+      ],
+      "blockers": [
+        "PR-opening SHA unknown",
+        "Branch is 1,903 commits behind target",
+        "Post-PR commit lineage unknown"
+      ],
+      "similarityKeys": [
+        "studio-controls-regression",
+        "pr923-recovery"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "HIGH",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "MEDIUM",
+        "implementationRisk": "HIGH",
+        "rationale": "Eight unique commits may contain useful fixes, but stale branch history makes wholesale merge unsafe."
+      },
+      "relationship": "CONTINUATION",
+      "suggestedDestination": "Current Studio Controls source and fresh recovery PR",
+      "reviewStatus": "REVIEWING",
+      "disposition": null,
+      "targetRefs": [],
+      "harvestedMaterial": [
+        "Field stroke contract",
+        "Square split rails",
+        "Full-width intermodules",
+        "Regression assertions"
+      ],
+      "reviewNotes": "Compare listed 21 paths and each unique commit with current target; no assumption that all changes remain absent."
+    },
+    {
+      "itemId": "VT-CWI-002",
+      "title": "Restore all-state primary inline glyph stroke for text fields",
+      "summary": "All text inputs, textareas and TextBox use primary inline glyph stroke in every state; TextBox text and outer border remain black.",
+      "kind": "BUG",
+      "conversationState": "PARTIAL",
+      "domains": [
+        "Studio Controls"
+      ],
+      "capabilityIds": [
+        "CAP-STUDIO-CONTROLS"
+      ],
+      "surfaces": [
+        "Simple input",
+        "labelled input",
+        "textarea",
+        "TextBox"
+      ],
+      "sourceRefs": [
+        "ChatGPT conversation 2026-10-30",
+        "PR #923"
+      ],
+      "changedPaths": [
+        "src/studio-ui/primitives/StudioTextInput.tsx",
+        "src/studio-ui/primitives/StudioControls.test.tsx",
+        "src/styles/studio-control-distill-overrides.css",
+        "src/styles/studio-control-system.css"
+      ],
+      "branchPrRefs": [
+        "PR #923",
+        "codex/studio-controls-regression-recovery"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/923",
+        "https://github.com/viewtube-dev/viewtube/commit/9bb5424896765e1a348f0a8e37846c426c0f31d8"
+      ],
+      "dependencies": [
+        "Recover applicable branch changes"
+      ],
+      "blockers": [
+        "Focused tests and browser inspection not run"
+      ],
+      "similarityKeys": [
+        "studio-field-stroke",
+        "textbox-glyph-stroke"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "HIGH",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "SMALL",
+        "implementationRisk": "MEDIUM",
+        "rationale": "A shared field contract affects multiple controls and states."
+      },
+      "relationship": "BUG_IN_EXISTING",
+      "suggestedDestination": "Studio Controls field styles and primitive implementation",
+      "reviewStatus": "REVIEWING",
+      "disposition": null,
+      "targetRefs": [],
+      "harvestedMaterial": [
+        "Primary inline glyph stroke at rest and focus",
+        "Black TextBox text and border",
+        "Separate secondary focus outline"
+      ],
+      "reviewNotes": "Latest user correction supersedes earlier black-focused-stroke interpretation."
+    },
+    {
+      "itemId": "VT-CWI-003",
+      "title": "Restore square split-family geometry and full-width intermodules",
+      "summary": "Make split rails square and intermodules occupy the available row.",
+      "kind": "BUG",
+      "conversationState": "PARTIAL",
+      "domains": [
+        "Studio Controls"
+      ],
+      "capabilityIds": [
+        "CAP-STUDIO-CONTROLS"
+      ],
+      "surfaces": [
+        "Split badges",
+        "split-left/double-split buttons",
+        "top-split modules",
+        "counters",
+        "toggles",
+        "intermodules"
+      ],
+      "sourceRefs": [
+        "ChatGPT conversation 2026-10-30",
+        "PR #923"
+      ],
+      "changedPaths": [
+        "src/styles/studio-control-split.css",
+        "src/styles/studio-inter-module.css",
+        "src/styles/studio-control-distill-overrides.css",
+        "src/studio-ui/primitives/StudioControls.test.tsx"
+      ],
+      "branchPrRefs": [
+        "PR #923"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/compare/master/consolidated-feature-integration...codex/studio-controls-regression-recovery"
+      ],
+      "dependencies": [
+        "Inspect actual JSX selectors and CSS cascade"
+      ],
+      "blockers": [
+        "Desktop/mobile visual verification not run"
+      ],
+      "similarityKeys": [
+        "studio-split-rail-square",
+        "studio-intermodule-width"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "HIGH",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "MEDIUM",
+        "estimatedEffort": "MEDIUM",
+        "implementationRisk": "HIGH",
+        "rationale": "Shared geometry defects affect many primitive families and need visual evidence."
+      },
+      "relationship": "BUG_IN_EXISTING",
+      "suggestedDestination": "Studio Controls split-family primitives and shared layout styles",
+      "reviewStatus": "REVIEWING",
+      "disposition": null,
+      "targetRefs": [],
+      "harvestedMaterial": [
+        "Square inner rail sizing",
+        "Top-split width accounting for both outer strokes",
+        "Full-row intermodule sizing"
+      ],
+      "reviewNotes": "Verify selectors and effective cascade against current target."
+    },
+    {
+      "itemId": "VT-CWI-004",
+      "title": "Run focused Studio verification and build",
+      "summary": "Run focused tests, relevant CSS/audit tests and repository build after recovery.",
+      "kind": "VERIFICATION",
+      "conversationState": "PLANNED",
+      "domains": [
+        "Studio Controls",
+        "Verification"
+      ],
+      "capabilityIds": [
+        "CAP-STUDIO-CONTROLS"
+      ],
+      "surfaces": [
+        "Studio fields and split controls"
+      ],
+      "sourceRefs": [
+        "PR #923"
+      ],
+      "branchPrRefs": [
+        "PR #923"
+      ],
+      "evidenceRefs": [],
+      "dependencies": [
+        "VT-CWI-001"
+      ],
+      "blockers": [
+        "Not run in this conversation"
+      ],
+      "similarityKeys": [
+        "studio-controls-focused-verification"
+      ],
+      "relationship": "VERIFICATION_ONLY",
+      "suggestedDestination": "Existing Studio Controls verification workflow",
+      "reviewStatus": "REVIEWING",
+      "disposition": null,
+      "targetRefs": [
+        "docs/governance/VERIFICATION.md"
+      ],
+      "harvestedMaterial": [
+        "Focused test suite",
+        "Build gate"
+      ],
+      "reviewNotes": "No passing test/build claim."
+    },
+    {
+      "itemId": "VT-CWI-005",
+      "title": "Complete desktop/mobile visual verification",
+      "summary": "Capture and analyze representative desktop/mobile field and split-family screenshots.",
+      "kind": "VERIFICATION",
+      "conversationState": "PLANNED",
+      "domains": [
+        "Studio Controls",
+        "Verification"
+      ],
+      "capabilityIds": [
+        "CAP-STUDIO-CONTROLS"
+      ],
+      "surfaces": [
+        "Desktop Studio",
+        "Mobile Studio"
+      ],
+      "sourceRefs": [
+        "PR #923"
+      ],
+      "branchPrRefs": [
+        "PR #923"
+      ],
+      "evidenceRefs": [],
+      "dependencies": [
+        "VT-CWI-001"
+      ],
+      "blockers": [
+        "No browser screenshots verified"
+      ],
+      "similarityKeys": [
+        "studio-controls-visual-regression"
+      ],
+      "relationship": "VERIFICATION_ONLY",
+      "suggestedDestination": "Existing Studio visual verification workflow",
+      "reviewStatus": "REVIEWING",
+      "disposition": null,
+      "targetRefs": [
+        "docs/governance/VERIFICATION.md"
+      ],
+      "harvestedMaterial": [
+        "Desktop/mobile representative matrix"
+      ],
+      "reviewNotes": "Screenshot capture alone is insufficient; analyze, correct and reverify."
+    },
+    {
+      "itemId": "VT-CWI-006",
+      "title": "Complete conversation handoff package and index",
+      "summary": "Create three-file package and register it in intake index.",
+      "kind": "DOCUMENTATION",
+      "conversationState": "STARTED",
+      "domains": [
+        "Documentation Governance",
+        "Conversation Handoffs"
+      ],
+      "surfaces": [
+        "tasks/conversation-intake"
+      ],
+      "sourceRefs": [
+        "ChatGPT conversation 2026-10-30",
+        "docs/governance/CONVERSATION_HANDOFFS.md"
+      ],
+      "changedPaths": [
+        "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/handoff.md",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/worklog.json",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-CONTROLS-REGRESSION/review.md",
+        "tasks/conversation-intake/INDEX.md"
+      ],
+      "branchPrRefs": [
+        "docs/studio-controls-regression-handoff-2026-10-30"
+      ],
+      "evidenceRefs": [],
+      "dependencies": [],
+      "blockers": [
+        "Source conversation URL unavailable",
+        "Docs PR not opened"
+      ],
+      "similarityKeys": [
+        "conversation-handoff",
+        "studio-controls-regression"
+      ],
+      "relationship": "CONTINUATION",
+      "suggestedDestination": "Existing Conversation Handoffs authority and intake index",
+      "reviewStatus": "REVIEWING",
+      "disposition": null,
+      "targetRefs": [
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "tasks/conversation-intake/INDEX.md"
+      ],
+      "harvestedMaterial": [
+        "Ten-sentence handoff",
+        "Instruction register",
+        "Branch/PR reconciliation",
+        "Nine-axis maturity",
+        "Five improvement proposals"
+      ],
+      "reviewNotes": "Instantiate the existing canonical process; do not create a competing authority."
+    }
+  ],
+  "instructions": [
+    {
+      "instructionId": "REQ-001",
+      "text": "Restore simple input primary inline glyph stroke in resting and focused states.",
+      "status": "PARTIAL",
+      "relatedItemIds": [
+        "VT-CWI-001",
+        "VT-CWI-002"
+      ],
+      "branchRefs": [
+        "codex/studio-controls-regression-recovery"
+      ],
+      "pullRequests": [
+        923
+      ],
+      "commits": [
+        "9bb5424896765e1a348f0a8e37846c426c0f31d8"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "UNKNOWN",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/923",
+        "https://github.com/viewtube-dev/viewtube/commit/9bb5424896765e1a348f0a8e37846c426c0f31d8"
+      ]
+    },
+    {
+      "instructionId": "REQ-002",
+      "text": "All text inputs, textareas and TextBox retain primary-colored inline glyph stroke at all times, including focus.",
+      "status": "PARTIAL",
+      "relatedItemIds": [
+        "VT-CWI-002"
+      ],
+      "branchRefs": [
+        "codex/studio-controls-regression-recovery"
+      ],
+      "pullRequests": [
+        923
+      ],
+      "commits": [
+        "9bb5424896765e1a348f0a8e37846c426c0f31d8"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "UNKNOWN",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/923"
+      ]
+    },
+    {
+      "instructionId": "REQ-003",
+      "text": "TextBox keeps black text and black outer border with primary inline glyph stroke.",
+      "status": "PARTIAL",
+      "relatedItemIds": [
+        "VT-CWI-002"
+      ],
+      "branchRefs": [
+        "codex/studio-controls-regression-recovery"
+      ],
+      "pullRequests": [
+        923
+      ],
+      "commits": [
+        "9bb5424896765e1a348f0a8e37846c426c0f31d8"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "UNKNOWN",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/923"
+      ]
+    },
+    {
+      "instructionId": "REQ-004",
+      "text": "Make split-family icon/rail sections square across badges, buttons, modules, counters and toggles.",
+      "status": "PARTIAL",
+      "relatedItemIds": [
+        "VT-CWI-001",
+        "VT-CWI-003"
+      ],
+      "branchRefs": [
+        "codex/studio-controls-regression-recovery"
+      ],
+      "pullRequests": [
+        923
+      ],
+      "commits": [
+        "9bb5424896765e1a348f0a8e37846c426c0f31d8"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "UNKNOWN",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/compare/master/consolidated-feature-integration...codex/studio-controls-regression-recovery"
+      ]
+    },
+    {
+      "instructionId": "REQ-005",
+      "text": "Make intermodules full width and keep split sections square.",
+      "status": "PARTIAL",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ],
+      "branchRefs": [
+        "codex/studio-controls-regression-recovery"
+      ],
+      "pullRequests": [
+        923
+      ],
+      "commits": [
+        "9bb5424896765e1a348f0a8e37846c426c0f31d8"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "UNKNOWN",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/compare/master/consolidated-feature-integration...codex/studio-controls-regression-recovery"
+      ]
+    },
+    {
+      "instructionId": "REQ-006",
+      "text": "Complete the conversation handoff log process in repository documentation.",
+      "status": "IN_PROGRESS",
+      "relatedItemIds": [
+        "VT-CWI-006"
+      ],
+      "branchRefs": [
+        "docs/studio-controls-regression-handoff-2026-10-30"
+      ],
+      "pullRequests": [],
+      "commits": [
+        "ebe995f4d76e796f702c78fb29887af549c8a4c9"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "COMMITTED",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/commit/ebe995f4d76e796f702c78fb29887af549c8a4c9"
+      ]
+    }
+  ],
+  "branchPrReconciliation": [
+    {
+      "branch": "codex/studio-controls-regression-recovery",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 923,
+      "openedHeadSha": null,
+      "currentHeadSha": "9bb5424896765e1a348f0a8e37846c426c0f31d8",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": null,
+      "targetContainsChanges": "NO",
+      "classification": "CLOSED_UNMERGED",
+      "recoveryDestination": null,
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/923",
+        "https://github.com/viewtube-dev/viewtube/compare/master/consolidated-feature-integration...codex/studio-controls-regression-recovery"
+      ],
+      "notes": "Compare reports 8 commits ahead and 1,903 behind; PR-opening SHA and post-open lineage unknown. Compare lists 21 changed paths; do not treat empty post-PR arrays as proof of none."
+    },
+    {
+      "branch": "docs/studio-controls-regression-handoff-2026-10-30",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": null,
+      "openedHeadSha": null,
+      "currentHeadSha": "ebe995f4d76e796f702c78fb29887af549c8a4c9",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": null,
+      "targetContainsChanges": "NO",
+      "classification": "UNMERGED_BRANCH",
+      "recoveryDestination": null,
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/commit/ebe995f4d76e796f702c78fb29887af549c8a4c9"
+      ],
+      "notes": "Documentation package branch created from target; no PR opened yet."
+    }
+  ],
+  "integrationGaps": [
+    {
+      "featureId": "CAP-STUDIO-CONTROLS",
+      "title": "Studio Controls field stroke and split geometry recovery",
+      "maturity": {
+        "architecture": "PARTIAL",
+        "backend": "NOT_APPLICABLE",
+        "frontend": "PARTIAL",
+        "integration": "PARTIAL",
+        "tests": "PARTIAL",
+        "runtime": "NONE",
+        "responsive": "PARTIAL",
+        "documentation": "PARTIAL",
+        "release": "NONE"
+      },
+      "gaps": [
+        {
+          "category": "TESTS_WITHOUT_RUNTIME_PROOF",
+          "description": "Regression assertions were edited but no focused test/build result is available.",
+          "userImpact": "Field and split regressions may remain despite source edits.",
+          "dependency": "Recover changes on current target, then run focused tests and build.",
+          "acceptanceEvidence": [
+            "https://github.com/viewtube-dev/viewtube/pull/923",
+            "https://github.com/viewtube-dev/viewtube/commit/9bb5424896765e1a348f0a8e37846c426c0f31d8"
+          ]
+        },
+        {
+          "category": "IMPLEMENTED_BUT_UNCONNECTED",
+          "description": "CSS/JSX presence does not prove effective cascade or desktop/mobile rendering.",
+          "userImpact": "Visible controls may still have incorrect strokes, rails or widths.",
+          "dependency": "Browser screenshot capture, analysis, correction and reverification.",
+          "acceptanceEvidence": []
+        }
+      ],
+      "sourceRefs": [
+        "PR #923",
+        "codex/studio-controls-regression-recovery"
+      ]
+    },
+    {
+      "featureId": "DOC-GOV-CONVERSATION-HANDOFFS",
+      "title": "Conversation handoff workflow",
+      "maturity": {
+        "architecture": "VERIFIED",
+        "backend": "NOT_APPLICABLE",
+        "frontend": "NOT_APPLICABLE",
+        "integration": "PARTIAL",
+        "tests": "PARTIAL",
+        "runtime": "NOT_APPLICABLE",
+        "responsive": "NOT_APPLICABLE",
+        "documentation": "PARTIAL",
+        "release": "PARTIAL"
+      },
+      "gaps": [
+        {
+          "category": "DOCUMENTATION_WITHOUT_IMPLEMENTATION",
+          "description": "The package is committed to a docs branch and is not yet present on target.",
+          "userImpact": "The target-branch intake index cannot discover this handoff until the docs PR is merged.",
+          "dependency": "Open and merge a documentation PR after validating all three package files and index entry.",
+          "acceptanceEvidence": [
+            "https://github.com/viewtube-dev/viewtube/commit/ebe995f4d76e796f702c78fb29887af549c8a4c9"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "tasks/conversation-intake/INDEX.md"
+      ]
+    }
+  ]
+}
