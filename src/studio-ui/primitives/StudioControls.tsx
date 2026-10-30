@@ -94,6 +94,15 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     shadowPolicy: "none",
     rationale: "The upload frame is a ratio-based media canvas, not a fixed-height control.",
   },
+  verticalWordToggle: {
+    owner: "StudioVerticalWordToggle",
+    globalRuleException: true,
+    height: "content-driven two-word stack; intentionally not a single-tier fixed-height control",
+    width: "row",
+    typography: "inherits selected supreme / standard / compact / mini / micro Studio typography tokens",
+    motion: "measured handle movement and synchronized word-color fade; reduced-motion settles immediately",
+    rationale: "Two stacked word faces need a content-driven vertical surface while retaining global row width and five-tier typography.",
+  },
   textareaTypography: {
     globalRuleException: true,
     standardFontSize: 18,
