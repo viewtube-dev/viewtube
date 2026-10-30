@@ -3,13 +3,13 @@
 **Production Date:** 2026-10-29  
 **Last Edited:** 2026-10-29  
 **Class:** PROGRAM  
-**Status:** ACTIVE — PLANNED / DISCOVERY REQUIRED  
+**Status:** ACTIVE — IMPLEMENTATION IN PROGRESS  
 **Concern:** gemini provider, key and generation governance  
 **Owner:** BrainModelGateway + provider layer + Creator Operations  
 **Registry ID:** DOC-PLAN-P1-GEMINIGOVERNANCE  
 **Last Audited Main SHA:** 61cfb726db9b32de53b9c89a5a339db696782a11  
 **Capabilities:** CAP-BRAIN-EXPERIENCE, CAP-CREATOR-OPERATIONS
-**Status:** PLANNED / DISCOVERY REQUIRED | **Owner:** BrainModelGateway + provider layer + Creator Operations
+**Status:** IMPLEMENTATION IN PROGRESS | **Owner:** BrainModelGateway + provider layer + Creator Operations
 **Capabilities:** CAP-BRAIN-EXPERIENCE, CAP-CREATOR-OPERATIONS
 
 ## Ownership
@@ -41,15 +41,15 @@ The plan is no longer discovery-only. The following merged work is part of the c
 
 ### Current phase status
 
-| Phase | Status | Evidence / remaining gate |
+| Phase | Status | Verified implementation / remaining gate |
 | --- | --- | --- |
-| 0 — exhaustive inventory | **PARTIAL** | Known callers and governance hotspots are mapped. A fresh exact-head repository-wide scan of SDK construction, all generation/streaming/embedding/media calls, model IDs, key aliases, pricing and provider allowlists is still required. |
-| 1 — provider/model governance | **IMPLEMENTED, NOT LIVE-CERTIFIED** | Registry and resolver are canonical. Static metadata does not prove current availability for every key/project/API version; legacy compatibility candidates and unverified prices remain. |
-| 2 — key validation | **PARTIAL** | Key entry uses the shared vault and model-list discovery; valid keys can be saved while verification is degraded, and invalid credentials are rejected. Add focused taxonomy/cleanup coverage and verify no secret reaches diagnostics. |
-| 3 — gateway/operation migration | **IN PROGRESS** | This branch moves Brain reflection in `src/services/brain/Core.ts` through the existing `BrainModelGateway`. `CollabEngine.ts` and `VideoCommentOperatorWidget.tsx` remain explicit migration targets; the latter needs its approved Creator Operations boundary, not a generic Brain gateway shortcut. |
-| 4 — operation provenance | **OPEN** | Served-model attribution exists at the provider boundary. End-to-end operationId, prompt/version, provenance, retry/idempotency, status, usage/cost and result/asset references are not yet certified across retries and ingestion. |
-| 5 — runtime certification | **NOT RUN** | No controlled valid/invalid-key, unsupported-model, quota/outage, reasoning, or successful generation runtime matrix is claimed. |
-| 6 — remove direct paths | **BLOCKED** | Do not remove compatibility paths or shrink allowlists further until exact zero-caller proof and runtime parity are recorded. |
+| 0 — exhaustive inventory | **PARTIAL — AUTOMATED AUDIT WIRED** | Added the exact-commit `audit:ai-generation-callers` report and `test:ai-generation-callers` to release-gates CI, with a downloadable artifact. The latest run has not completed yet; manually classify its exact-head output before claiming exhaustive coverage. |
+| 1 — provider/model governance | **IMPLEMENTED — LIVE UNVERIFIED** | Canonical registry, aliases, capability resolver, generation profiles, served-model tracking and bounded fallback are preserved from merged work. Live availability by key/project/API version, lifecycle review of compatibility candidates and verified pricing remain open. |
+| 2 — key validation | **IMPLEMENTED — RUNTIME PENDING** | Model-list validation remains separate from generation. Failure classification now distinguishes rejected credentials, permission denial, rate limiting, provider outage and generic verification failure. Invalid credentials are rejected; degraded discovery saves the key with an actionable message. Unit coverage is authored; real-key checks remain pending. |
+| 3 — gateway/operation migration | **IN PROGRESS — THREE CALLERS MIGRATED** | Brain reflection uses `BrainModelGateway`; collaboration research uses the same gateway with Google Search grounding forwarded through the provider adapter; the dashboard pinned-comment widget now uses the governed `creatorAssets` / `AssetGenerator` path. Direct-provider UI guard now expects zero UI violations. Exact-head caller audit may identify additional legacy generation exports and callers. |
+| 4 — operation provenance | **PARTIAL — RECEIPT PROPAGATION ADDED** | Governed asset records already capture trace, prompt family/version, schema version, requested/served model, evidence and repair count. `recordToolReceipt` now carries the prompt receipt into ContentBuild output events and the OperationRecord metadata projection; ConceptSceneStudio supplies it. Legacy `VideoPublisher` generation still records a legacy provider path without a governed prompt receipt; retry/idempotency and downstream asset-ingestion parity need further closure. |
+| 5 — runtime certification | **NOT CERTIFIED** | CI is being used for static/unit/build verification. No live Gemini key was available or used for this work. Valid/invalid-key, unsupported-model, permission, quota, outage, reasoning and generation success/failure matrix remains an external runtime gate. |
+| 6 — remove direct paths | **BLOCKED — DO NOT RETIRE YET** | The UI direct-provider guard is now zero-tolerance. Keep `gemini.ts` as the provider owner and `GeminiKeyContext` as credential validation. Do not remove compatibility candidates or remaining legacy paths until exact-head inventory, approved-boundary migration, runtime parity and zero-caller evidence are all complete. |
 
 ### Current branch implementation slice
 
@@ -62,8 +62,9 @@ Branch: `feat/p1-gemini-governance-reconciliation-2026-10-29`
 
 ### Next required work
 
-1. Complete the exact-head Phase 0 inventory and reconcile the `npm run audit:ai-generation-callers` / `npm run test:ai-generation-callers` evidence from PR #1168.
-2. Migrate the remaining Brain/creator callers one at a time through the correct existing gateway or approved specialist operation, with parity tests.
-3. Close the Phase 4 provenance contract across operation receipts, retries, and asset ingestion.
-4. Run the controlled runtime matrix for key states, model mismatch, quota, outage, reasoning and generation success/failure.
-5. Remove legacy direct-provider paths only after architecture guard zero-caller evidence.
+1. Download and inspect the exact-head `gemini-caller-inventory` artifact; classify every referenced export and every direct SDK call as provider owner, credential validation, governed adapter, active legacy caller, test, or unreachable code.
+2. Migrate any additional active creator-facing legacy callers through the existing Brain gateway or the appropriate Creator Operations / AssetGenerator specialist boundary. Do not route specialist creator assets through generic Brain JSON calls.
+3. Migrate the legacy Video Publisher SEO-generation flow to governed title/description/tag strategies and pass its prompt receipt through ToolReceipt; preserve existing ContentBuild scope and stage guards.
+4. Complete Phase 4 parity for retry attempts, idempotency, generation records, output assets, ContentBuild events and downstream ingestion; never fabricate missing model/prompt metadata.
+5. Run the controlled live-provider matrix with an authorized test key and supported models; record provider/API version, model requested/served, operation ID, status, usage where returned and sanitized error class.
+6. Retire the compatibility fallback map and direct provider paths only after exact zero-caller proof, capability parity and live certification.
