@@ -5,7 +5,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import test from "node:test";
 
 const tempRoot = await mkdtemp(path.join(os.tmpdir(), "viewtube-video-director-jobs-"));
-process.env.NODE_ENV = "test";
+process.env.NODE_ENV = "production";
 delete process.env.DATABASE_URL;
 process.env.VIDEO_DIRECTOR_JOB_STORE_FILE = path.join(tempRoot, "jobs.json");
 
