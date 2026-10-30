@@ -351,3 +351,13 @@ All canonical Studio single-select dropdown variants (standard, simple, and spli
 - The Confirmed Library begins with one full-width Standard production specimen for each representative primitive, grouped by like primitive. Every primitive must also have a real family module with production provenance; no catalog-only lookalikes.
 - Split text input owns one canonical stylesheet at `src/styles/studio-split-text-input.css`, imported by the primitive. Do not maintain a second primitive-local duplicate or a competing global import.
 - The permanent audit is `scripts/audit/studio-controls-system-audit.test.mjs`, wired into `npm run test:studio-controls` and the release-gates workflow. Source tests are necessary but do not replace browser geometry/interaction certification at all supported sizes.
+
+
+## 2026-10-30 — Restored primitive ownership
+
+- Choice/switch controls are not content-width exceptions. Their track/face widths remain owned by the choice family rules; do not add `data-vt-studio-width="content"` or a `width:max-content` override to them.
+- Square icon buttons are the overflow exception to the shared button-shell clipping rule. The outer square button and its face allow badge, tooltip, and animation overflow. Catalog layout is grouped by standard/compact rows and reserves scrollport padding for the overflow.
+- Dropdown chevron rail size, icon size, and stroke are read from the five-tier `STUDIO_DROPDOWN_TOKENS` contract. The split-left and simple/standard variants use trailing placement; the multi-select legend dropdown consumes the same tier values.
+- Double-split slider track, rails, readout, and focus lifecycle follow the Codex interaction-focus reference. Keep five-tier size values token-owned; do not restore the reference's obsolete micro fallback.
+- Upload frame visual ownership follows the reference canvas design in the canonical control system stylesheet. Keep the 16:9 frame, centered prompt/filename label, preview URL cleanup, image/video defaults, multiple-file callback, and keyboard interaction in the production primitive.
+- Split text input keeps one stylesheet at `src/styles/studio-split-text-input.css`; the shell owns the black perimeter and split rails, while the nested field owns its persistent primary inline stroke and primary-tinted rest/focus fills. No duplicate primitive-local stylesheet.
