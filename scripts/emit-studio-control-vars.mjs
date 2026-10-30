@@ -42,6 +42,7 @@ const dropdown = {
   chevron: readTierObject(dropdownContract, "chevronSize"),
   chevronStroke: readTierObject(dropdownContract, "chevronStroke"),
 };
+const dropdownMenu = Object.fromEntries(["menuGap", "menuPadding", "rowGap", "animationDurationMs", "animationDistancePx"].map(property => [property, readNumber(dropdownMenuContract, property, "dropdownMenu")]));
 const focusHoldMs = Number(focusContract.match(/holdMs:\s*(\d+)/)?.[1]);
 const focusFadeMs = Number(focusContract.match(/outlineFadeMs:\s*(\d+)/)?.[1]);
 const focusOutlineWidthRatio = Number(focusContract.match(/outlineWidthRatio:\s*([\d.]+)/)?.[1]);
