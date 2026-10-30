@@ -27,7 +27,6 @@
 .vt-studio-vertical-word-toggle.is-black-fill { background: #000; color: var(--pair-a); }
 .vt-studio-vertical-word-toggle.is-white-fill { background: #fff; }
 .vt-studio-vertical-word-toggle.is-primary-white-handle .vt-studio-vertical-word-toggle__handle { background: #fff; }
-.vt-studio-vertical-word-toggle:focus-visible { outline: calc(var(--vt-studio-control-stroke, 2px) * .65) solid var(--vt-studio-control-secondary, var(--pair-b)); outline-offset: 0; }
 .vt-studio-square-icon-button-group {
   display: inline-flex; flex-flow: row nowrap; align-items: stretch; width: max-content; max-width: 100%;
   height: var(--vt-studio-control-height, 28px); min-height: var(--vt-studio-control-height, 28px);
