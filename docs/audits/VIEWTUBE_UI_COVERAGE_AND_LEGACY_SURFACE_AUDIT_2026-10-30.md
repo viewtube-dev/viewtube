@@ -406,3 +406,151 @@ Required remediation:
 - Confirmed super-tool route metadata is consumed by the User Guide, SuperToolRail, and Brain surface context.
 - No application source code was changed. No route was removed or promoted.
 - No tests, typecheck, production build, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
+
+
+## Fifth-pass addendum — Studio Hub inventory and Component Library authority
+
+**Audit pass date:** 2026-10-30  
+**Source branch:** `master/consolidated-feature-integration`  
+**Scope:** Studio Hub's live component imports, Toolbox Reference Library tracks, canonical confirmed catalog, legacy comparison catalog, and Studio audit documentation.
+
+### F-014 — Studio Hub's scoped audit plan is missing four currently mounted modules
+
+**Severity:** P2 — stale audit coverage / incomplete front-end inventory  
+**Confidence:** Confirmed by direct source-to-document comparison
+
+Evidence:
+- Current `src/views/StudioHub.tsx` mounts 16 top-level modules/sections: Toolbox UI Reference Library, Video Manager, Concept Scene Studio, Video Director, Studio Publishing Cockpit, Video Publisher, Metadata Master, Media Analyzer, Thumbnail Studio, Community Posts, Comment Responder, End-Screen Architect, Pre-Launch Priming, Hook Generator, Actionable Tactics, and Script Architect.
+- `docs/architecture/STUDIO_HUB_UNIFORM_PRIMITIVE_AUDIT_PLAN_2026-09-16.md` says its current top-level inventory contains 12 systems and lists the Reference Library, Video Manager, Video Publisher, Media Analyzer, Thumbnail Studio, Community Posts, Comment Responder, End-Screen Architect, Pre-Launch Priming, Hook Generator, Actionable Tactics, and Script Architect.
+- The plan omits four live StudioHub imports/sections: `ConceptSceneStudio`, `VideoDirector`, `StudioPublishingCockpit`, and `MetadataMaster`.
+
+Impact:
+- The scoped primitive audit plan can be read as a complete Studio Hub inventory while excluding four live user-facing modules.
+- Those omitted modules can escape shell, state, mobile, and primitive coverage if the plan is followed literally.
+
+Required remediation:
+- Refresh the plan's inventory from the actual `StudioHub.tsx` import/render graph.
+- Distinguish top-level modules from nested submodules and reference/certification surfaces; do not inflate the count with controls or child components.
+- Keep the existing StudioHub source as runtime authority and the scoped audit plan as a generated/reconciled work plan.
+
+### F-015 — Component Library index still names the legacy comparison catalog as the production registry
+
+**Severity:** P2 — stale source-of-truth pointer / misleading catalog documentation  
+**Confidence:** Confirmed by current code and canonical documentation
+
+Evidence:
+- `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md` states that `StudioHubConfirmedPrimitiveCatalog.tsx` is the active audited catalog for production-imported primitive representatives and that `StudioHubCompletePrimitiveCatalog.tsx` is retained as a comparison/migration surface, not the current production-family authority.
+- `src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx` explicitly describes itself as the legacy comparison catalog and exports the 76-entry `STUDIO_HUB_COMPONENT_FAMILIES` list.
+- `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_COMPONENT_INDEX.md` still labels itself a generated production-registry reference and points its source/count at that legacy Complete catalog (76 families).
+- `src/components/ToolboxUIReferenceLibrary.tsx` currently renders three distinct tracks: Hardcoded comparison, Primitive migration, and Confirmed primitives. The old track is intentionally retained and visibly labeled as a frozen comparison baseline; its presence is not itself a defect.
+
+Impact:
+- The component index can lead an auditor or agent to treat the legacy comparison family list as the active production registry.
+- This conflicts with the newer source-of-truth contract and risks edits or feature claims being made against the wrong catalog.
+
+Required remediation:
+- Regenerate or rewrite the component index from the Confirmed catalog's actual family/provenance source.
+- Label the Complete catalog and its 76-entry list explicitly as legacy comparison inventory.
+- Preserve the three UI tracks until their documented consumers and migration dependencies are verified; do not delete the comparison baseline as part of this documentation correction.
+
+### Fifth-pass status
+
+- Compared the current StudioHub render tree against the September scoped audit plan; found four omitted live modules.
+- Confirmed the Complete catalog contains 76 comparison families and is explicitly described as legacy.
+- Confirmed the active Component Library source-of-truth document assigns production representative authority to the Confirmed catalog, while the generated component index still points at Complete.
+- Confirmed the Reference Library intentionally renders Hardcoded, Primitive, and Confirmed tracks; this is a comparison/certification surface, not three independent production implementations.
+- No application source code was changed. No catalog track was deleted or promoted.
+- No tests, typecheck, production build, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
+
+
+### F-016 — User Guide search index omits several live Studio Hub modules
+
+**Severity:** P2 — incomplete feature discovery/documentation  
+**Confidence:** Confirmed by current StudioHub imports and User Guide search-index construction
+
+Evidence:
+- `src/views/StudioHub.tsx` mounts Concept + Scene Studio, Video Director, Studio Publishing Cockpit, Metadata Master, Community Posts, Comment Responder, End-Screen Architect, Pre-Launch Priming, and Actionable Tactics as live Studio modules.
+- `src/views/UserGuide.tsx` builds its searchable destination index from `GUIDE_FEATURES`, `GUIDE_TOOLS`, datasets, metrics, and widgets.
+- `src/content/guide-v2/featureRegistry.ts` has a generic Studio Hub feature entry and individual entries for some Studio tools (for example Video Manager, Media Analyzer, Video Publisher, Hook Generator, Script Architect, Packaging Lab Pro, Thumbnail Studio, Algorithm Architect, and Storyboard Studio), but no individual feature entries for the nine modules listed above.
+- `src/content/guide-v2/toolRegistry.ts` derives its tool entries from `SUPER_TOOLS`; the current 16 super-tool definitions are a separate concept inventory and do not provide named entries for those nine StudioHub modules.
+
+Impact:
+- Those modules are accessible within Studio Hub, so this is not a missing-runtime-UI finding.
+- However, users searching the User Guide for these exact tools/functions will not find a dedicated result explaining what the module does or how to reach it.
+- The generic Studio Hub entry does not expose the full module-level feature inventory or their ownership/handoff distinctions.
+
+Required remediation:
+- Reconcile the Guide feature registry against the actual StudioHub module inventory and canonical Studio Hub ownership document.
+- Add module-level guide entries only where a distinct user-facing capability needs its own explanation; use the parent Studio Hub route plus a stable section anchor where available rather than inventing new standalone routes.
+- Preserve the distinction between a module, a subtool, a capability, and a super-tool so the Guide does not create a parallel product taxonomy.
+
+
+
+## Sixth-pass addendum — Settings, Brain controls, and Gemini provider surfaces
+
+**Audit pass date:** 2026-10-30  
+**Source branch:** `master/consolidated-feature-integration`  
+**Scope:** Settings AI panel, model selector, key-vault persistence, Gemini model governance, Brain user-control storage, and public-handle selection boundaries.
+
+### F-017 — Settings describes the Gemini key store as a secure vault, but the implementation is browser localStorage
+
+**Severity:** P1 — credential-storage disclosure and security-expectation mismatch  
+**Classification:** `MISLEADING_UI`  
+**Confidence:** Confirmed by Settings copy and key-vault implementation
+
+Evidence:
+- `src/views/settings/SettingsAiPanel.tsx` tells users: “The existing secure vault remains the storage authority.”
+- `src/services/keyVault.ts` implements `getBrowserStorage()` by returning browser `localStorage`; Gemini key aliases are read from and written to `yt_api_key`, `vt_gemini_api_key`, `gemini_api_key`, and `google_api_key`.
+- `setVaultKey("gemini", value)` writes the trimmed API key to each of those localStorage entries. There is no encryption or server-side secret-vault operation in this implementation.
+- `src/services/gemini.ts` retrieves the key through `getVaultKey` and constructs the provider client in the browser.
+
+Impact:
+- “Secure vault” can reasonably lead users to expect protected secret storage, while the current implementation is same-origin JavaScript-accessible browser storage.
+- This is a security disclosure/UI-copy mismatch, not evidence that the key is transmitted to an unintended third party.
+- Existing key aliases may preserve backward compatibility; do not remove them without a migration and consumer audit.
+
+Required remediation:
+- Either migrate BYOK credentials to an appropriately protected server-side secret store with an explicit threat model, or accurately disclose browser-local storage and its limitations in Settings.
+- Do not call localStorage-backed storage encrypted or secure.
+- Preserve the canonical `keyVault.ts` API and key-updated event while changing the backing store; do not create a second vault abstraction.
+- Add tests for storage behavior, migration/alias cleanup, and the user-facing disclosure.
+
+### F-018 — Gemini API-key save state confirms persistence, but the Settings flow has no provider-validation state
+
+**Severity:** P2 — incomplete credential setup feedback  
+**Classification:** `PARTIAL_UI`  
+**Confidence:** Confirmed by Settings event path and provider-client construction
+
+Evidence:
+- `src/views/Settings.tsx` initializes the key field from `getVaultSnapshot().gemini`; its save handler calls `setVaultSnapshot({ gemini: geminiKey })` and reports “API key saved.”
+- `src/views/settings/SettingsAiPanel.tsx` exposes a key input and Save action, but no Validate/Test action or validation status.
+- `src/services/gemini.ts` checks only that a key exists before constructing `GoogleGenAI`; provider rejection is surfaced later when a generation operation runs.
+- The save confirmation is accurate as a persistence confirmation; it does not establish that the key is valid, enabled for the requested API, or authorized for the selected model.
+
+Impact:
+- Users can complete the visible setup flow with a malformed, revoked, or unauthorized key and only discover the failure on a later generation attempt.
+- Do not change the save message to imply validation. A separate, explicit validation state would make the setup contract clearer.
+
+Required remediation:
+- Keep Save and provider validation as distinct states/actions.
+- If a safe validation operation is added, use a minimal provider-supported request, avoid logging or echoing key material, and report valid / invalid / unavailable distinctly.
+- Retain the current persistence path and do not add an alternate key registry.
+
+### Sixth-pass positive evidence and boundaries
+
+- `src/config/aiConfig.ts` derives the model selector's options directly from `GEMINI_MODEL_REGISTRY`; it is a projection, not a competing model list.
+- `AIModelSelector` persists the user preference through the existing Brain context and calls `resolveGeminiModel` to display the effective text model when substitution occurs.
+- `src/services/gemini.ts` applies canonical model resolution, capability-specific generation profiles, bounded fallback, and emits model-fallback telemetry through the existing governance layer. This is a meaningful canonical foundation; do not replace it with a parallel provider registry.
+- The model governance registry explicitly marks retained pricing as `legacy-app-estimate` and `verified: false`. Preserve that uncertainty; do not present those figures as verified current provider pricing.
+- `src/services/brain/BrainUserControls.ts` provides a channel-scoped control record with a global fallback and explicit controls for analytics, projects, comments, Vault, Publisher, interaction learning, and external-action approval. Existing Brain services consume these controls; this audit did not establish a missing controls surface or bypass.
+- `src/services/publicHandleMode.ts` reads the user's explicit `vt_ingest_mode === "public_handle"` selection. Public-page snapshots deliberately null subscriber/video/view counts and per-video engagement counts rather than inventing private analytics. The generic Brain runtime is documented not to read browser storage directly; callers supply selected public-handle context.
+- The public-handle evidence inspected here is not a complete end-to-end proof that every Brain entry point enforces public-only boundaries. Continue tracing each caller and context-pack builder before certifying that boundary.
+
+### Sixth-pass status
+
+- Confirmed the mismatch between “secure vault” UI copy and browser localStorage credential persistence.
+- Confirmed the Settings save action persists a key but does not validate it with the provider.
+- Confirmed the model selector projects from the canonical Gemini governance registry and the generation client consumes the canonical resolver/profile/fallback layer.
+- Confirmed public-page ingestion strips analytics counts rather than fabricating them; end-to-end public-only Brain enforcement remains unverified.
+- No application source code was changed. No key, model, or Brain policy was modified.
+- No tests, typecheck, production build, provider request, or browser runtime tests were executed. This remains source-level verification, not runtime certification.
