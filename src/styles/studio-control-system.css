@@ -36,11 +36,12 @@
   --vt-studio-control-line-height: 1;
   --vt-studio-textarea-line-height: .85;
   
+  --vt-studio-control-outline-stroke: calc(var(--vt-studio-control-stroke, 3px) * 0.5);
   --vt-studio-control-default-fill-opacity: 50%;
   --vt-studio-control-focus-fill-opacity: 15%;
-  --vt-studio-control-focus-outline-width: 1.95px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-standard-focus-outline-width, 1.95px);
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: 1.95px;
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-standard-secondary-outline-width, 1.95px);
   --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
   --vt-studio-control-icon-stroke: var(--vt-studio-standard-icon-stroke, 1.9);
   --vt-studio-control-accent: var(--pair-a, #36e0f6);
@@ -79,10 +80,9 @@
   --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px);
   --vt-studio-control-font-weight: var(--vt-studio-compact-font-weight, 1000);
   
-  --vt-studio-control-outline-stroke: 1px;
-  --vt-studio-control-focus-outline-width: 1.3px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-compact-focus-outline-width, 1.3px);
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: 1.3px;
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-compact-secondary-outline-width, 1.3px);
   --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px);
   --vt-studio-control-icon-stroke: var(--vt-studio-compact-icon-stroke, 2.0);
 }
@@ -94,10 +94,9 @@
   --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
   --vt-studio-control-font-weight: var(--vt-studio-standard-font-weight, 1000);
   
-  --vt-studio-control-outline-stroke: 1.5px;
-  --vt-studio-control-focus-outline-width: 1.95px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-standard-focus-outline-width, 1.95px);
   --vt-studio-control-focus-outline-offset: 0px;
-  --vt-studio-control-secondary-outline-width: 1.95px;
+  --vt-studio-control-secondary-outline-width: var(--vt-studio-standard-secondary-outline-width, 1.95px);
   --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
   --vt-studio-control-icon-stroke: var(--vt-studio-standard-icon-stroke, 1.9);
 }
@@ -109,7 +108,6 @@
   --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
   --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
   --vt-studio-control-font-weight: var(--vt-studio-mini-font-weight, 1000);
-  --vt-studio-control-outline-stroke: .75px;
   --vt-studio-control-focus-outline-width: var(--vt-studio-mini-focus-outline-width, 0.975px);
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: var(--vt-studio-mini-secondary-outline-width, 0.975px);
