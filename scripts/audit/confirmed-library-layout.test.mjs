@@ -36,15 +36,15 @@ test("confirmed catalog CSS owns layout, not production control faces", () => {
 });
 
 test("switch and choice skin families use auto-width examples instead of catalog columns", () => {
-  assert.match(styles, /vt-confirmed-control-family \\.vt-confirmed-control-variants/);
-  assert.match(styles, /display:\\s*flex/);
-  assert.doesNotMatch(styles, /grid-template-columns:\\s*repeat\\(4/);
+  assert.ok(styles.includes(".vt-confirmed-control-family .vt-confirmed-control-variants"));
+  assert.ok(styles.includes("display: flex !important"));
+  assert.ok(!styles.includes("grid-template-columns: repeat(4, minmax(0, 1fr)) !important"));
 });
 
 test("confirmed button specimens use full rows or natural auto width", () => {
-  assert.match(styles, /vt-confirmed-family > \\.vt-confirmed-variants/);
-  assert.match(styles, /grid-template-columns:\\s*minmax\\(0, 1fr\) !important/);
-  assert.match(styles, /vt-confirmed-paired-compact-row/);
+  assert.ok(styles.includes(".vt-confirmed-family > .vt-confirmed-variants"));
+  assert.ok(styles.includes("grid-template-columns: minmax(0, 1fr) !important"));
+  assert.ok(styles.includes(".vt-confirmed-paired-compact-row"));
 });
 
 test("StudioTextInput catalog includes simple, floating-label, and fixed-label variants", () => {
@@ -387,4 +387,30 @@ test("component descriptions above specimens stay on one compact line", () => {
 
 test("generic primitive specimen lists remain full-row instead of defaulting to columns", () => {
   assert.match(styles, /\.vt-confirmed-variants\s*\{\s*display:\s*grid;\s*grid-template-columns:\s*minmax\(0, 1fr\)/);
+});
+
+
+test("restored primitive showcase is defined and rendered in the confirmed catalog", () => {
+  for (const name of ["StudioVerticalWordToggle", "StudioSquareIconButtonGroup", "StudioTextBox", "StudioSplitAccordion", "StudioArrowToggle", "StudioSideToggle", "StudioDoubleSideToggle", "StudioBarToggle", "StudioDoubleSplitWordCounter", "StudioLeftWordCounter"]) {
+    assert.ok(catalog.includes(name), name);
+    assert.ok(controls.includes(name), name + " production implementation");
+  }
+  assert.ok(catalog.includes("const StudioPrimitiveRepresentatives"));
+  assert.ok(catalog.includes("const RestoredPrimitiveShowcase"));
+});
+
+test("size matrix uses one standard, two compact, and four micro examples", () => {
+  assert.ok(catalog.includes("vt-confirmed-size-matrix__standard"));
+  assert.ok(catalog.includes("vt-confirmed-size-matrix__compact"));
+  assert.ok(catalog.includes("vt-confirmed-size-matrix__micro"));
+  assert.match(styles, /\.vt-confirmed-size-matrix__standard\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/);
+  assert.match(styles, /\.vt-confirmed-size-matrix__compact\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /\.vt-confirmed-size-matrix__micro\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\)/);
+});
+
+test("value toggle chevrons use the shared split shell and canonical stepper button class", () => {
+  const toggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8");
+  assert.ok(toggles.includes("StudioSplitShell"));
+  assert.ok(toggles.includes("vt-studio-stepper-button"));
+  assert.ok(controls.includes("vt-studio-stepper-button"));
 });
