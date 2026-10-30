@@ -30,7 +30,7 @@ import {
   uploadPublishTransactionVideo,
   verifyPublishTransactionRemoteState,
 } from "../services/youtube/PublishTransactionYouTubeBridge"
-import { completePublishTransaction, listPublishTransactions } from "../services/asset-engine/PublishTransaction"
+import { completePublishTransaction, listPublishTransactions, resolveAmbiguousPublishStepAsApplied, resolveAmbiguousPublishStepAsNotApplied, type PublishTransactionStep } from "../services/asset-engine/PublishTransaction"
 import { recordPostPublishIdentity } from "../services/asset-engine/PostPublishAnalyticsBridge"
 import { recordContentBuildMetadataChange } from "../services/asset-engine/ContentBuildRepository"
 import { sheetsService } from "../services/sheetsService"
@@ -154,6 +154,9 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
   const [publishHandoffIdentity, setPublishHandoffIdentity] = useState<Pick<ViewTubeActionPacket, "operationId" | "workflowId" | "id" | "recommendationId" | "experimentId"> | null>(null)
   const [publishBusy, setPublishBusy] = useState(false)
   const [publishError, setPublishError] = useState<string | null>(null)
+  const [manualRecoveryVideoId, setManualRecoveryVideoId] = useState("")
+  const [manualRecoveryOperator, setManualRecoveryOperator] = useState("")
+  const [manualRecoveryEvidence, setManualRecoveryEvidence] = useState("")
   const [videoFile, setVideoFile] = useState<File | null>(null)
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
   const [publisherThumbnailAsset, setPublisherThumbnailAsset] = useState<{ id: string; name: string; url?: string | null; previewUrl?: string | null; mimeType?: string | null } | null>(null)
@@ -412,6 +415,35 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
       setPublishBusy(false)
     }
   }
+
+  const ambiguousPublishStep = publishState.transaction
+    ? Object.entries(publishState.transaction.steps).find(([, step]) => step?.status === "ambiguous")?.[0] as PublishTransactionStep | undefined
+    : undefined
+
+  const resolveAmbiguousPublishAsApplied = () => runPublishAction(async () => {
+    const transaction = requireTransaction()
+    if (!ambiguousPublishStep) throw new Error("No ambiguous publishing step is awaiting recovery.")
+    resolveAmbiguousPublishStepAsApplied({
+      transactionId: transaction.id,
+      step: ambiguousPublishStep,
+      checkedBy: manualRecoveryOperator,
+      evidence: manualRecoveryEvidence,
+      youtubeVideoId: manualRecoveryVideoId.trim() || undefined,
+    })
+    setManualRecoveryEvidence("")
+  })
+
+  const resolveAmbiguousPublishAsNotApplied = () => runPublishAction(async () => {
+    const transaction = requireTransaction()
+    if (!ambiguousPublishStep) throw new Error("No ambiguous publishing step is awaiting recovery.")
+    resolveAmbiguousPublishStepAsNotApplied({
+      transactionId: transaction.id,
+      step: ambiguousPublishStep,
+      checkedBy: manualRecoveryOperator,
+      evidence: manualRecoveryEvidence,
+    })
+    setManualRecoveryEvidence("")
+  })
 
   const uploadVideo = () => runPublishAction(async () => {
     const transaction = requireTransaction()
@@ -962,6 +994,18 @@ const VideoPublisher: React.FC<VideoPublisherProps> = ({ embedded = false, colla
                 </SubToolboxOutputCard>
               </SubToolboxGrid>
 
+              {ambiguousPublishStep ? (
+                <SubToolbox title="Manual Publish Recovery" icon={<ShieldCheck size={18} />} collapsible isOpenInitial>
+                  <SubToolboxStatePanel state="error" message={`The ${ambiguousPublishStep.replaceAll("-", " ")} step has an ambiguous provider result. Check YouTube/provider state before resolving; do not blindly retry.`} />
+                  <SubToolboxInput aria-label="Recovery operator" value={manualRecoveryOperator} onChange={(event) => setManualRecoveryOperator(event.target.value)} placeholder="Operator / creator identity" />
+                  <SubToolboxInput aria-label="Recovered YouTube video ID" value={manualRecoveryVideoId} onChange={(event) => setManualRecoveryVideoId(event.target.value)} placeholder="YouTube video ID (required for upload recovery)" />
+                  <SubToolboxTextArea aria-label="Recovery evidence" value={manualRecoveryEvidence} onChange={(event) => setManualRecoveryEvidence(event.target.value)} placeholder="Describe the remote check and evidence used to establish the outcome" height="standard" />
+                  <SubToolboxActions columns={2}>
+                    <SubToolboxButton tone="success" disabled={publishBusy || !manualRecoveryOperator.trim() || !manualRecoveryEvidence.trim() || (ambiguousPublishStep === "upload-video" && !manualRecoveryVideoId.trim())} onClick={() => void resolveAmbiguousPublishAsApplied()}>CONFIRM APPLIED</SubToolboxButton>
+                    <SubToolboxButton tone="warning" disabled={publishBusy || !manualRecoveryOperator.trim() || !manualRecoveryEvidence.trim()} onClick={() => void resolveAmbiguousPublishAsNotApplied()}>CONFIRM NOT APPLIED</SubToolboxButton>
+                  </SubToolboxActions>
+                </SubToolbox>
+              ) : null}
               {publishError ? <SubToolboxStatePanel state="error" message={publishError} /> : null}
               {uploadProgress > 0 && uploadProgress < 100 ? <SubToolboxStatePanel state="loading" message={"VIDEO UPLOAD " + Math.round(uploadProgress) + "%"} /> : null}
 
