@@ -73,7 +73,6 @@ html body .vt-studio-split-text-input [data-vt-studio-split-label] {
   overflow: hidden;
   background: transparent;
   box-shadow: none;
-  /* Badge labels default to centered text; fields must be start-aligned */
   justify-content: stretch;
   text-align: left;
 }
@@ -88,14 +87,12 @@ html body .vt-studio-split-text-input[data-split="double"] [data-vt-studio-split
   border-radius: 0;
 }
 
-/* Rails: full square cell; secondary fill; divider toward field only */
+/* Rails: fill grid cell; secondary; divider toward field only */
 html body .vt-studio-split-text-input [data-vt-studio-split-rail] {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  max-width: none;
   height: 100%;
-  aspect-ratio: auto;
   display: grid;
   place-items: center;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
@@ -111,43 +108,75 @@ html body .vt-studio-split-text-input [data-vt-studio-split-rail] svg {
 }
 
 /**
- * Nested input: one primary inset, with text clear of the split rails.
- * The shell owns the black perimeter and divider strokes.
+ * Nested input: no real border; one primary inset; text starts clear of rails.
+ * pad = stroke + 8px so glyphs clear the inset ring and the rail divider.
  */
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
   --vt-split-field-primary: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  --vt-split-field-secondary: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   --vt-split-field-pad: max(10px, calc(var(--vt-studio-control-stroke, 3px) + 8px));
-  box-sizing: border-box;
   display: block;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 0;
+  grid-column: 1;
+  grid-row: 1;
   width: 100%;
-  min-width: 0;
   max-width: 100%;
+  min-width: 0;
   height: 100%;
   min-height: 0;
+  max-height: 100%;
   margin: 0;
-  padding-inline: var(--vt-split-field-pad);
-  border: 0;
-  border-radius: 0;
-  outline: 0;
-  background-color: color-mix(in srgb, var(--vt-split-field-primary) 50%, transparent);
+  padding: 0 var(--vt-split-field-pad);
+  pointer-events: auto;
+  border: 0 !important;
+  border-radius: inherit;
+  outline: none;
   box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary);
+  background: color-mix(in srgb, var(--vt-split-field-primary) 50%, transparent);
+  background-clip: padding-box;
   color: var(--vt-split-field-primary);
   -webkit-text-fill-color: var(--vt-split-field-primary);
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-split-field-primary);
+  -webkit-text-stroke-color: var(--vt-split-field-primary);
   caret-color: var(--vt-split-field-primary);
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-weight: var(--vt-studio-control-font-weight, 1000);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   text-align: left;
+  text-overflow: clip;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"]:focus-visible {
-  background-color: color-mix(in srgb, var(--vt-split-field-primary) 15%, transparent);
+html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size]:is(:focus, :focus-visible) {
+  border: 0 !important;
+  outline: none;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary);
+  background: color-mix(in srgb, var(--vt-split-field-primary) 15%, transparent);
   color: #000;
   -webkit-text-fill-color: #000;
   -webkit-text-stroke-color: #000;
+  caret-color: var(--vt-split-field-primary);
 }
 
-html body .vt-studio-split-text-input:focus-within {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-split-field-secondary);
+html body .vt-studio-split-text-input input.vt-studio-text-input::placeholder {
+  color: var(--vt-split-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-fill-color: var(--vt-split-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  opacity: 1;
+}
+
+html body .vt-studio-split-text-input:focus-within > [data-vt-studio-control="true"] {
+  outline: calc(var(--vt-studio-control-stroke, 3px) * 0.65) solid
+    var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
+}
+
+html body .vt-studio-split-text-input [data-vt-studio-split-label]::after,
+html body .vt-studio-split-text-input [data-vt-studio-split-field]::after {
+  content: none !important;
+  display: none !important;
 }
