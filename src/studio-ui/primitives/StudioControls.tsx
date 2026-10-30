@@ -13,7 +13,7 @@ export const StudioNumberInput = React.forwardRef<
 StudioNumberInput.displayName = "StudioNumberInput";
 
 import { getAlphabeticalSpectrumColor } from "../../styles/toolboxPalette"
-import { Bell, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Heart, Image as ImageIcon, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
+import { Bell, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Heart, Minus, Plus, RefreshCw, Settings2, ThumbsUp, Upload } from "lucide-react"
 
 export type StudioControlTone = "accent" | "neutral" | "danger" | "warning" | "success"
 
