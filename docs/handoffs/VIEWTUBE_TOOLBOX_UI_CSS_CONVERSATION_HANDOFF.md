@@ -1140,3 +1140,36 @@ Next steps:
 4. Verify split input typing/focus, field default/focus glyph colors, focus fade timing, counter ratios, toggle handle bounds, bar tooltip visibility, and outer-only double-side focus outline.
 5. Finish the family-module/catalog coverage audit before deleting any obsolete primitive implementation.
 6. Update this handoff with actual test and browser evidence before requesting merge.
+
+
+---
+
+# 35. Studio Controls contract reconciliation and CI follow-up — 2026-10-30
+
+## Additional implementation and contract changes
+
+- Reconciled Micro to the canonical 12px / 1px stroke / 2px radius / 10px type-icon / 0.65px focus-outline bundle. Updated the conflicting parity test and size documentation; Mini remains 20px / 1.5px / 3px / 17.5px.
+- Split-left, split-right, and double-split badge labels now center against the complete outer shell. Rails are explicitly placed in their square grid columns and paint above the full-width label. Split text input is excluded and remains left-aligned/editable.
+- Confirmed Counter and Side Counter number-value regions use the existing 2:1 aspect-ratio rule in the canonical system layer; their rails remain square. Updated the regression audit so it checks that ratio in the system owner and forbids a duplicate recovery-layer rule.
+- Confirmed Double Split Word Counter keeps its solid primary face; removed the stale audit expectation for a 50%-white blend. The audit also rejects an arrow-toggle-specific 50% fill override.
+- Added static regression checks for measured vertical word-toggle handle bounds, shared horizontal/vertical handle radius and side inset, shared side-arrow implementation, and outer-only double-side focus outline.
+- Updated the three canonical Studio UI documents to remove stale Micro, counter, word-counter, split-input, and catalog-classifier requirements.
+
+## Latest CI evidence observed
+
+- test:studio-component-grid-css passed.
+- audit:confirmed-catalog passed after the split-input stylesheet and catalog fail-closed repairs.
+- check:src-governance passed in the same run.
+- A production build completed successfully in an earlier run on this branch.
+- The existing focused regression step for counter/dropdown contracts passed after its stale word-counter fill expectation was corrected.
+- test:studio-controls previously exposed a stale Micro parity expectation; the parity audit was updated to 1px / 2px / 0.65px. The latest full release-gates run is required to confirm the complete suite after that change and the additional outer-centering tests.
+- audit:documents remains blocked by pre-existing competing ACTIVE document records for the P1 workstreams (four documents claiming the same execution-packet concern for each of several workstreams). These are outside the Studio Controls change set and need separate document-registry reconciliation.
+
+## Remaining release requirements
+
+1. Confirm the latest test:studio-controls, test:confirmed-library-layout, typecheck, production build, and full suite results.
+2. Run browser measurements at all five sizes for badge label center coordinates, square rails, Counter/Side Counter 2:1 value regions, vertical word-toggle handle bounds, and InterModule full-bleed geometry.
+3. Exercise split text input typing, cursor placement, focus/blur, and text/stroke transitions.
+4. Verify bar tooltip focus visibility, empty/full bar colors, 2.5:1 geometry, and outer-only double-side focus outline.
+5. Complete the public-export-to-family-module coverage check and dependency audit before deleting any retired primitive implementations.
+6. Do not mark this PR merge-ready while release-gates checks remain pending/failing.
