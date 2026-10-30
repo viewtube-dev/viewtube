@@ -83,6 +83,21 @@ The following are evidence-backed source findings, not yet runtime-certified def
 - Standalone family modules correctly own some dedicated CSS (`StudioSplitAccordion`, `StudioInterModule`, `StudioResponseMetaRow`, `StudioChatResponseShell`, `StudioPublishingCard`, and calendar primitives). The authoring guide must reflect this actual pattern rather than imposing a single giant stylesheet as the only allowed owner.
 - The 70/70 export presence result is a source-level match. It does not certify runtime rendering, correct category, supported variants, default settings, accessibility, or visual correctness.
 
+### Refined duplicate-catalog evidence
+
+A direct comparison of both files confirms they are not mere path aliases:
+
+| File | Lines | Bytes | Family blocks | Provenance blocks | Settings blocks |
+|---|---:|---:|---:|---:|---:|
+| `src/components/StudioHubConfirmedPrimitiveCatalog.tsx` | 1,616 | 165,587 | 57 | 57 | 57 |
+| `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` | 1,874 | 184,389 | 48 | 48 | 48 |
+
+The active `ToolboxUIReferenceLibrary.tsx` import points to the nested `studio-hub/` catalog. The root-level file contains a different, older family set and omits some newer nested catalog groups (including the composer, certification, compatibility exports, composition helpers, and calendar specimens). This strongly suggests a stale donor/duplicate, but it is **not yet classified as dead** because every repository call site has not been enumerated. Preserve both until zero-caller and no-loss evidence exists.
+
+### Refined split-field style evidence
+
+Both split-text-input stylesheets target the same `.vt-studio-split-text-input` shell and nested input selectors. They are not identical copies: the primitive-local stylesheet has additional rail/grid positioning, focus, placeholder, and pseudo-element suppression declarations; the global stylesheet has different sizing/outline/stroke declarations. The component imports the primitive-local file while the barrel's shared entry imports the global file. Both therefore enter the application CSS graph through the public Studio barrel. The final computed winner is not knowable from source order alone without the real bundler/browser graph and must be verified before consolidating either file.
+
 ## Audit dimensions
 
 1. **Repository and ownership:** target ref/commit, dirty state, instructions, app entry points, active catalog, style import graph, ownership of each file.
