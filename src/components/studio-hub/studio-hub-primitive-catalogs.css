@@ -3400,9 +3400,15 @@
   width: 100%;
   min-width: 0;
 }
-.vt-confirmed-direct-primitive-rows > .vt-confirmed-variant > :is(button, input, textarea, select, [data-vt-studio-control]) {
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-variant > :is(button, input, textarea, select, [data-vt-studio-control]):not(.vt-studio-counter):not(.vt-studio-side-counter):not(.vt-studio-left-counter) {
   width: 100%;
   min-width: 0;
+}
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-variant > :is(.vt-studio-counter, .vt-studio-side-counter, .vt-studio-left-counter) {
+  justify-self: center;
+}
+.vt-confirmed-counter-size-row > :is(.vt-studio-counter, .vt-studio-side-counter, .vt-studio-left-counter) {
+  justify-self: center;
 }
 
 
