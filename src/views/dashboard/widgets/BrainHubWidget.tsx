@@ -44,6 +44,7 @@ import {
  subscribeBrainConversationChanges,
 } from "../../../services/brain/BrainConversationController"
 import { runBrainTask } from "../../../services/brain/runtime/BrainRuntime"
+import { readSelectedPublicHandleContext } from "../../../services/publicHandleMode"
 import { recordCreatorCommunicationEvidence } from "../../../services/brain/BrainCommunicationIngestion"
 import {
  clearBrainUserControlOverride,
@@ -320,6 +321,7 @@ export const BrainHubWidget: React.FC<BrainHubWidgetProps> = ({ data: _data, ...
 
    const result = await runBrainTask({
     surface: "brain-hub-widget",
+    publicHandleContext: !authState.isAuthenticated && !channelConnection.isConnected ? readSelectedPublicHandleContext() : null,
     channelId,
     projectId: activeProject?.id || null,
     project: activeProject,

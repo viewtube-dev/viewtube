@@ -79,6 +79,7 @@ import {
  dismissAIBrainLearning,
 } from "../services/aiBrainSelfImprovement"
 import { runBrainTask } from "../services/brain/runtime/BrainRuntime"
+import { readSelectedPublicHandleContext } from "../services/publicHandleMode"
 import { recordCreatorCommunicationEvidence } from "../services/brain/BrainCommunicationIngestion"
 import { readBrainUserControls } from "../services/brain/BrainUserControls"
 import { buildBrainConversationHistory } from "../services/brain/BrainConversationController"
@@ -1405,6 +1406,7 @@ const AIBrainCommandInterface: React.FC = () => {
    }
    const result = await runBrainTask({
     surface: "ai-brain",
+    publicHandleContext: !authState.isAuthenticated && !channelConnection.isConnected ? readSelectedPublicHandleContext() : null,
     channelId,
     projectId: activeProject?.id || null,
     project: activeProject,
@@ -1541,6 +1543,7 @@ const AIBrainCommandInterface: React.FC = () => {
 
     const result = await runBrainTask({
      surface: "ai-brain",
+    publicHandleContext: !authState.isAuthenticated && !channelConnection.isConnected ? readSelectedPublicHandleContext() : null,
      channelId,
      retryTurnId: message.id,
      projectId: activeProject?.id || null,
