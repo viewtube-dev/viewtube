@@ -646,3 +646,35 @@ Required remediation:
 - Confirmed image generation includes a hardcoded text-only model ID in generateImage(); visual image generation uses the canonical image selection but still receives text classification.
 - Confirmed video generation uses canonical model preference resolution but bypasses the shared content/stream governance wrapper.
 - No application source code was changed and no provider generation was attempted. No tests, typecheck, production build, or browser certification were run.
+
+
+### F-021 — Gemini key storage emits a change event, but both key UIs load state only once
+
+**Severity:** P2 — stale Settings/key-management state across two supported entry points  
+**Classification:** STALE_UI / BROKEN_WIRING  
+**Confidence:** Confirmed by the vault event producer and both UI state consumers
+
+Evidence:
+- src/services/keyVault.ts defines GEMINI_KEY_UPDATED_EVENT as vt:gemini-key-updated and dispatches it after every Gemini key set or clear.
+- src/context/GeminiKeyContext.tsx initializes apiKey from getVaultKey("gemini") in a mount-only useEffect with an empty dependency array. It does not subscribe to GEMINI_KEY_UPDATED_EVENT.
+- src/views/Settings.tsx initializes geminiKey from getVaultSnapshot().gemini in a separate mount-only useEffect. It does not subscribe to GEMINI_KEY_UPDATED_EVENT.
+- The main Settings save handler calls setVaultSnapshot({ gemini: geminiKey }), which writes through setVaultKey and emits the event, but does not update GeminiKeyContext.apiKey.
+- The global navigation GeminiKeySettings dialog renders its saved/unsaved state from useGeminiKey().apiKey and updates that state only when the dialog's own context actions call setApiKey/clearApiKey.
+
+Impact:
+- Saving or clearing a key in the main Settings panel can leave the global navigation dialog showing stale key state.
+- Saving or clearing a key in the global navigation dialog can leave the Settings page's local input/state stale until that page is remounted or otherwise refreshed.
+- The underlying keyVault remains the storage authority, and generation code reads the key from that store. This finding concerns inconsistent UI state and feedback, not proof that generation uses an old key.
+
+Required remediation:
+- Subscribe both state consumers to the existing GEMINI_KEY_UPDATED_EVENT and refresh from keyVault, or centralize the displayed key state in the existing GeminiKeyContext.
+- Do not add another key store or a second synchronization event.
+- Add tests for bidirectional updates: Settings save/clear updates the global dialog state, and global dialog save/clear updates the Settings panel state.
+- Ensure event payloads never contain key material; the current event is intentionally payload-free and should remain so.
+
+### Ninth-pass status
+
+- Confirmed keyVault emits a payload-free change event after Gemini key writes and clears.
+- Confirmed neither the Settings page nor GeminiKeyContext subscribes to that event; both initialize their local state only once.
+- Confirmed the two visible key-management surfaces share keyVault storage but can display inconsistent state after a change made in the other surface.
+- No application source code or credentials were changed. No tests, typecheck, production build, or browser certification were run.
