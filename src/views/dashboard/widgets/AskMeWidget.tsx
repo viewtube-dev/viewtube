@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import { canAffordAiTokensFromState } from "../../../services/billingEntitlement"
 import { getAiTokenCost } from "../../../services/aiTokenCosts"
+import { defaultBrainModelGateway } from "../../../services/brain/runtime/BrainModelGateway"
 
 interface Message {
  role: "user" | "ai"
@@ -196,8 +197,18 @@ export const AskMeWidget = ({ widget, instance, editMode, onToggleCollapse, onCy
 
   try {
    const context = buildContext()
-   const { askChannelQuestion } = await import("../../../services/gemini")
-   const answer = await askChannelQuestion(q, context, data.brain)
+   const response = await defaultBrainModelGateway.generateJsonObject?.({
+    userText: q,
+    systemInstruction: "Answer the creator using only the supplied YouTube channel context. Be concise and practical. State when information is missing; never invent metrics or video details.\n\nCHANNEL CONTEXT:\n" + context,
+    capability: "analysis",
+    responseSchema: {
+     type: "OBJECT",
+     properties: { answer: { type: "STRING" } },
+     required: ["answer"],
+    },
+   }) as { answer?: string } | undefined
+   const answer = typeof response?.answer === "string" ? response.answer.trim() : ""
+   if (!answer) throw new Error("The Brain gateway returned an empty Ask Me response.")
    setMessages(prev => [...prev, { role: "ai", text: answer, timestamp: Date.now() }])
   } catch (err) {
    // Fallback local response
