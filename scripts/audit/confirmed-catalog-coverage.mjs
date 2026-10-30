@@ -50,7 +50,9 @@ const checks = [
     "Text Fields", "Buttons & Badges", "Dropdowns", "Controls",
     "Modules & Frames", "Compositions",
   ].every((family) => catalog.includes(`"${family}"`)) && !catalog.includes('"Counters & Sliders"') && catalog.includes("CONFIRMED_CATALOG_FAMILIES")],
-  ["global defaults render before the seven family groups", catalog.indexOf("{defaults}") >= 0 && catalog.indexOf("{defaults}") < catalog.indexOf("vt-confirmed-family-grid")],
+  ["global defaults render before the six family groups", catalog.indexOf("{defaults}") >= 0 && catalog.indexOf("{defaults}") < catalog.indexOf("vt-confirmed-family-grid")],
+  ["unknown catalog families fail closed instead of falling back to Compositions", catalog.includes("Unclassified family") && catalog.includes("Add an explicit category rule")],
+  ["dropdown menus and value controls are classified by their owning family", /Dropdown/.test(catalog) && /StudioCounter[\s\S]*return "Controls"/.test(catalog) && /StudioDoubleSplitSlider[\s\S]*return "Controls"/.test(catalog)],
 
   ["retired CLEAN COMPOSITION specimen is absent from confirmed catalog", !/CLEAN COMPOSITION|Confirmed Specimen Grid\s*[·-]\s*Layout Contract/i.test(catalog)],
   ["specimen grid supports the complete five-tier global size vocabulary", specimenGrid.includes('export type SpecimenTier = "supreme" | "standard" | "compact" | "mini" | "micro"') && specimenGrid.includes('const SPECIMEN_TIERS = ["supreme", "standard", "compact", "mini", "micro"] as const')],
