@@ -1,0 +1,607 @@
+{
+  "schemaVersion": "viewtube.conversation-work-log.v1",
+  "conversationId": "VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY",
+  "created": "2026-10-30",
+  "lastEdited": "2026-10-30",
+  "sourceHost": "ChatGPT",
+  "conversationName": "Studio Confirmed Primitive Library organization and PR migration",
+  "application": "ViewTube",
+  "sourceApplication": "ChatGPT",
+  "sourceConversationUrl": null,
+  "repository": "viewtube-dev/viewtube",
+  "targetBranch": "master/consolidated-feature-integration",
+  "reviewStatus": "PARTIALLY_RECONCILED",
+  "executiveSummary": [
+    "PR #1073 migrated and merged the Confirmed Primitive Library structural grouping repair.",
+    "PR #1080 migrated and merged the remaining mobile regression and family CSS work.",
+    "PRs #1057, #1059 and #1067 were closed unmerged after unique work was reconciled into #1073/#1080.",
+    "PR #1073 merge commit: 873fd4c5a3ebb38ae353788de27fca07335dac49.",
+    "PR #1080 merge commit: d5ace77cb716670c785411a69e7584f9b2f4ec0a.",
+    "Focused tests, production build and browser verification were not run in this conversation.",
+    "Vercel failures were deployment rate-limit responses, not confirmed source build failures.",
+    "The handoff package captures instructions, work, artifacts, PR lineage, integration gaps and proposals.",
+    "The source conversation URL remains UNKNOWN; no competing task or idea registry was created.",
+    "Next: merge this documentation package and run focused Studio verification and desktop/mobile review."
+  ],
+  "documents": [
+    {
+      "title": "Conversation Handoff",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/handoff.md",
+      "kind": "DOCUMENT",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Conversation worklog",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/worklog.json",
+      "kind": "STRUCTURED_RECORD",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Reconciliation review",
+      "path": "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/review.md",
+      "kind": "DOCUMENT",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Conversation Handoffs specification",
+      "path": "docs/governance/CONVERSATION_HANDOFFS.md",
+      "kind": "SPECIFICATION",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Conversation OS",
+      "path": "docs/governance/CONVERSATION_OS.md",
+      "kind": "CONSTITUTION",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Conversation Intake Index",
+      "path": "tasks/conversation-intake/INDEX.md",
+      "kind": "INDEX",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "Conversation Intake README",
+      "path": "tasks/conversation-intake/README.md",
+      "kind": "DOCUMENT",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "VT-CWI-003"
+      ]
+    },
+    {
+      "title": "PR #1073",
+      "path": "pull/1073",
+      "url": "https://github.com/viewtube-dev/viewtube/pull/1073",
+      "kind": "PULL_REQUEST",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "VT-CWI-001"
+      ]
+    },
+    {
+      "title": "PR #1080",
+      "path": "pull/1080",
+      "url": "https://github.com/viewtube-dev/viewtube/pull/1080",
+      "kind": "PULL_REQUEST",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "VT-CWI-002"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "itemId": "VT-CWI-001",
+      "title": "Reconcile Confirmed Primitive Library grouping",
+      "summary": "Recover independent family grouping, sibling sections and empty-family filtering.",
+      "kind": "REFACTOR",
+      "conversationState": "COMPLETED_IN_CONVERSATION",
+      "domains": [
+        "Studio Controls"
+      ],
+      "surfaces": [
+        "Confirmed Primitive Library"
+      ],
+      "sourceRefs": [
+        "PR #1059",
+        "PR #1073"
+      ],
+      "changedPaths": [
+        "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx",
+        "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.test.tsx"
+      ],
+      "branchPrRefs": [
+        "fix/confirmed-library-family-grouping-recovery",
+        "PR #1073"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1073",
+        "https://github.com/viewtube-dev/viewtube/commit/873fd4c5a3ebb38ae353788de27fca07335dac49"
+      ],
+      "dependencies": [],
+      "blockers": [
+        "Focused tests/build and browser verification not run."
+      ],
+      "similarityKeys": [
+        "confirmed-primitive-library",
+        "family-grouping"
+      ],
+      "relationship": "CONTINUATION",
+      "reviewStatus": "RECONCILED",
+      "disposition": "ATTACH_RECEIPT_EVIDENCE",
+      "targetRefs": [
+        "PR #1073 merged",
+        "master/consolidated-feature-integration"
+      ],
+      "harvestedMaterial": [
+        "Independent grouping boundaries",
+        "Root sibling composition",
+        "Empty-family filtering"
+      ],
+      "reviewNotes": "Merge verified by GitHub metadata; visual acceptance remains open.",
+      "capabilityIds": [],
+      "suggestedDestination": null
+    },
+    {
+      "itemId": "VT-CWI-002",
+      "title": "Reconcile remaining work from PRs #1057 and #1067",
+      "summary": "Recover non-duplicated mobile regression and family stylesheet changes.",
+      "kind": "MIGRATION",
+      "conversationState": "COMPLETED_IN_CONVERSATION",
+      "domains": [
+        "Studio Controls"
+      ],
+      "surfaces": [
+        "Mobile library",
+        "Primitive migration catalog"
+      ],
+      "sourceRefs": [
+        "PR #1057",
+        "PR #1067"
+      ],
+      "changedPaths": [
+        "src/components/studio-hub/__tests__/StudioHubComponentLibraryMobileRegression.test.ts",
+        "src/components/studio-hub/studio-hub-primitive-migration-catalog.css"
+      ],
+      "branchPrRefs": [
+        "chore/reconcile-studio-family-catalog-prs-1057-1067-v2",
+        "PR #1080"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1080",
+        "https://github.com/viewtube-dev/viewtube/commit/d5ace77cb716670c785411a69e7584f9b2f4ec0a"
+      ],
+      "dependencies": [
+        "PR #1073"
+      ],
+      "blockers": [
+        "Focused tests/build not run; Vercel checks rate-limited."
+      ],
+      "similarityKeys": [
+        "mobile-library-regression",
+        "primitive-family-css"
+      ],
+      "relationship": "CONTINUATION",
+      "reviewStatus": "RECONCILED",
+      "disposition": "ATTACH_RECEIPT_EVIDENCE",
+      "targetRefs": [
+        "PR #1080 merged",
+        "master/consolidated-feature-integration"
+      ],
+      "harvestedMaterial": [
+        "Canonical StudioDropdown mobile test",
+        "Family layout CSS",
+        "Selector deduplication",
+        "-.02em typography"
+      ],
+      "reviewNotes": "PR #1080 merged; two changed files.",
+      "capabilityIds": [],
+      "suggestedDestination": null
+    },
+    {
+      "itemId": "VT-CWI-003",
+      "title": "Complete this conversation handoff package and documentation",
+      "summary": "Create linked handoff, structured worklog and review; register package and clarify execution sequence.",
+      "kind": "DOCUMENTATION",
+      "conversationState": "STARTED",
+      "domains": [
+        "Documentation Governance",
+        "Conversation Handoffs"
+      ],
+      "surfaces": [
+        "tasks/conversation-intake"
+      ],
+      "sourceRefs": [
+        "ChatGPT conversation 2026-10-30",
+        "CONVERSATION_HANDOFFS.md"
+      ],
+      "changedPaths": [
+        "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/handoff.md",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/worklog.json",
+        "tasks/conversation-intake/VT-CONV-2026-10-30-STUDIO-PRIMITIVE-LIBRARY/review.md",
+        "tasks/conversation-intake/INDEX.md",
+        "tasks/conversation-intake/README.md",
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "docs/governance/CONVERSATION_OS.md",
+        "docs/registry.json"
+      ],
+      "branchPrRefs": [
+        "docs/studio-library-conversation-handoff-2026-10-30"
+      ],
+      "evidenceRefs": [],
+      "dependencies": [],
+      "blockers": [
+        "Source conversation URL unavailable."
+      ],
+      "similarityKeys": [
+        "conversation-handoff",
+        "living-work-log"
+      ],
+      "relationship": "CONTINUATION",
+      "reviewStatus": "REVIEWING",
+      "disposition": null,
+      "targetRefs": [],
+      "harvestedMaterial": [
+        "Instruction register",
+        "Branch/PR reconciliation",
+        "Nine-axis gaps",
+        "Five proposals"
+      ],
+      "reviewNotes": "Leave partially reconciled until docs PR and validation pass.",
+      "capabilityIds": [],
+      "suggestedDestination": null
+    },
+    {
+      "itemId": "VT-CWI-004",
+      "title": "Run Studio focused verification and browser audit",
+      "summary": "Run focused tests/audits/build and inspect desktop/mobile family organization.",
+      "kind": "VERIFICATION",
+      "conversationState": "PLANNED",
+      "domains": [
+        "Studio Controls",
+        "Verification"
+      ],
+      "surfaces": [
+        "Confirmed Primitive Library"
+      ],
+      "sourceRefs": [
+        "PR #1073",
+        "PR #1080"
+      ],
+      "branchPrRefs": [
+        "PR #1073",
+        "PR #1080"
+      ],
+      "evidenceRefs": [],
+      "dependencies": [
+        "PR #1073 merged",
+        "PR #1080 merged"
+      ],
+      "blockers": [
+        "Not run in this conversation."
+      ],
+      "similarityKeys": [
+        "studio-catalog-verification"
+      ],
+      "relationship": "VERIFICATION_ONLY",
+      "reviewStatus": "RECONCILED",
+      "disposition": "ALREADY_TRACKED",
+      "targetRefs": [
+        "Existing Studio Controls verification workflow",
+        "docs/governance/VERIFICATION.md"
+      ],
+      "harvestedMaterial": [
+        "Focused test/build gate",
+        "Desktop/mobile visual audit"
+      ],
+      "reviewNotes": "Action remains open; no verification pass claimed.",
+      "capabilityIds": [],
+      "changedPaths": [],
+      "suggestedDestination": null
+    },
+    {
+      "itemId": "VT-CWI-005",
+      "title": "Deterministic handoff package validator",
+      "summary": "Validate schema and evidence completeness.",
+      "kind": "IDEA",
+      "conversationState": "DISCOVERED",
+      "domains": [
+        "Conversation Handoffs"
+      ],
+      "surfaces": [
+        "conversation-intake"
+      ],
+      "sourceRefs": [
+        "docs/governance/conversation-work-log.schema.json"
+      ],
+      "branchPrRefs": [],
+      "evidenceRefs": [],
+      "dependencies": [],
+      "blockers": [],
+      "similarityKeys": [
+        "handoff-validator"
+      ],
+      "relationship": "EXPANDS",
+      "suggestedDestination": "Existing Ideas Registry / improvement recommendations",
+      "reviewStatus": "RECONCILED",
+      "disposition": "CREATE_OPPORTUNITY",
+      "targetRefs": [
+        "ideas/registry.json",
+        "governance/convergence/improvements.json"
+      ],
+      "harvestedMaterial": [
+        "Validate schema and evidence completeness."
+      ],
+      "reviewNotes": "Proposal only; not accepted or registered in this change.",
+      "capabilityIds": [],
+      "changedPaths": []
+    },
+    {
+      "itemId": "VT-CWI-006",
+      "title": "Derived unresolved-handoff report",
+      "summary": "Read-only projection of open handoffs.",
+      "kind": "IDEA",
+      "conversationState": "DISCOVERED",
+      "domains": [
+        "Conversation Handoffs"
+      ],
+      "surfaces": [
+        "conversation-intake"
+      ],
+      "sourceRefs": [
+        "docs/governance/conversation-work-log.schema.json"
+      ],
+      "branchPrRefs": [],
+      "evidenceRefs": [],
+      "dependencies": [],
+      "blockers": [],
+      "similarityKeys": [
+        "unreconciled-handoff-report"
+      ],
+      "relationship": "EXPANDS",
+      "suggestedDestination": "Existing Ideas Registry / improvement recommendations",
+      "reviewStatus": "RECONCILED",
+      "disposition": "CREATE_OPPORTUNITY",
+      "targetRefs": [
+        "ideas/registry.json",
+        "governance/convergence/improvements.json"
+      ],
+      "harvestedMaterial": [
+        "Read-only projection of open handoffs."
+      ],
+      "reviewNotes": "Proposal only; not accepted or registered in this change.",
+      "capabilityIds": [],
+      "changedPaths": []
+    },
+    {
+      "itemId": "VT-CWI-007",
+      "title": "Branch/PR lineage evidence collector",
+      "summary": "Capture opening and post-PR lineage.",
+      "kind": "IDEA",
+      "conversationState": "DISCOVERED",
+      "domains": [
+        "Conversation Handoffs"
+      ],
+      "surfaces": [
+        "conversation-intake"
+      ],
+      "sourceRefs": [
+        "docs/governance/conversation-work-log.schema.json"
+      ],
+      "branchPrRefs": [],
+      "evidenceRefs": [],
+      "dependencies": [],
+      "blockers": [],
+      "similarityKeys": [
+        "branch-pr-lineage"
+      ],
+      "relationship": "EXPANDS",
+      "suggestedDestination": "Existing Ideas Registry / improvement recommendations",
+      "reviewStatus": "RECONCILED",
+      "disposition": "CREATE_OPPORTUNITY",
+      "targetRefs": [
+        "ideas/registry.json",
+        "governance/convergence/improvements.json"
+      ],
+      "harvestedMaterial": [
+        "Capture opening and post-PR lineage."
+      ],
+      "reviewNotes": "Proposal only; not accepted or registered in this change.",
+      "capabilityIds": [],
+      "changedPaths": []
+    }
+  ],
+  "instructions": [
+    {
+      "instructionId": "REQ-001",
+      "text": "Migrate the Confirmed Primitive Library organization work from the non-mergeable PR into a new PR based on the current target branch.",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "VT-CWI-001",
+        "VT-CWI-002"
+      ],
+      "branchRefs": [
+        "fix/confirmed-library-family-grouping-recovery",
+        "chore/reconcile-studio-family-catalog-prs-1057-1067-v2"
+      ],
+      "pullRequests": [
+        1057,
+        1059,
+        1067,
+        1073,
+        1080
+      ],
+      "commits": [
+        "873fd4c5a3ebb38ae353788de27fca07335dac49",
+        "d5ace77cb716670c785411a69e7584f9b2f4ec0a"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "PRESENT_ON_TARGET",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1073",
+        "https://github.com/viewtube-dev/viewtube/pull/1080"
+      ]
+    },
+    {
+      "instructionId": "REQ-002",
+      "text": "Complete the conversation handoff and unfinished-work-log process in the repository documentation.",
+      "status": "IN_PROGRESS",
+      "relatedItemIds": [
+        "VT-CWI-003",
+        "VT-CWI-004",
+        "VT-CWI-005",
+        "VT-CWI-006",
+        "VT-CWI-007"
+      ],
+      "branchRefs": [
+        "docs/studio-library-conversation-handoff-2026-10-30"
+      ],
+      "pullRequests": [],
+      "commits": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": []
+    }
+  ],
+  "branchPrReconciliation": [
+    {
+      "branch": "refactor/confirmed-primitive-library-family-order",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1059,
+      "openedHeadSha": null,
+      "currentHeadSha": "c2897e181ce5efed11c901c2ecd95bac05c90c63",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [
+        "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx",
+        "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.test.tsx"
+      ],
+      "mergeCommitSha": null,
+      "targetContainsChanges": "PARTIAL",
+      "classification": "RECOVERED_IN_ANOTHER_PR",
+      "recoveryDestination": "PR #1073",
+      "verification": "Opening SHA unavailable; PR superseded by merged recovery."
+    },
+    {
+      "branch": "fix/confirmed-library-family-grouping-recovery",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1073,
+      "openedHeadSha": null,
+      "currentHeadSha": "a9613c8db91e9849eccf674c87c5bfd510d9581b",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": "873fd4c5a3ebb38ae353788de27fca07335dac49",
+      "targetContainsChanges": "YES",
+      "classification": "MERGED_AND_CURRENT",
+      "recoveryDestination": "master/consolidated-feature-integration",
+      "verification": "GitHub PR metadata confirms merged."
+    },
+    {
+      "branch": "chore/reconcile-studio-family-catalog-prs-1057-1067-v2",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1080,
+      "openedHeadSha": null,
+      "currentHeadSha": "a25ca74f5dd326edc1cba3cf35cf204b8847b99a2",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [
+        "src/components/studio-hub/__tests__/StudioHubComponentLibraryMobileRegression.test.ts",
+        "src/components/studio-hub/studio-hub-primitive-migration-catalog.css"
+      ],
+      "mergeCommitSha": "d5ace77cb716670c785411a69e7584f9b2f4ec0a",
+      "targetContainsChanges": "YES",
+      "classification": "MERGED_AND_CURRENT",
+      "recoveryDestination": "master/consolidated-feature-integration",
+      "verification": "GitHub PR metadata confirms merged; two files changed."
+    },
+    {
+      "branch": "studio-controls-base-reconcile-2026-10-28-v2",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1057,
+      "openedHeadSha": null,
+      "currentHeadSha": null,
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": null,
+      "targetContainsChanges": "PARTIAL",
+      "classification": "RECOVERED_IN_ANOTHER_PR",
+      "recoveryDestination": "PR #1073 and #1080",
+      "verification": "Closed unmerged; unique work accounted for, opening SHA UNKNOWN."
+    },
+    {
+      "branch": "studio-primitive-library-family-cleanup-2026-10-28-v2",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1067,
+      "openedHeadSha": null,
+      "currentHeadSha": null,
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": null,
+      "targetContainsChanges": "PARTIAL",
+      "classification": "RECOVERED_IN_ANOTHER_PR",
+      "recoveryDestination": "PR #1073 and #1080",
+      "verification": "Closed unmerged; unique work accounted for, opening SHA UNKNOWN."
+    }
+  ],
+  "integrationGaps": [
+    {
+      "feature": "Confirmed Primitive Library family organization",
+      "architecture": "IMPLEMENTED",
+      "backend": "NOT_APPLICABLE",
+      "frontend": "IMPLEMENTED",
+      "integration": "PARTIAL",
+      "tests": "PARTIAL",
+      "runtime": "NONE",
+      "responsive": "PARTIAL",
+      "documentation": "PARTIAL",
+      "release": "PARTIAL",
+      "gaps": [
+        "Focused tests and build not run.",
+        "Desktop/mobile browser review remains outstanding."
+      ],
+      "userImpact": "Source changes are merged but visual/runtime correctness is not proven.",
+      "acceptanceEvidence": [
+        "PR #1073 merge 873fd4c5a3ebb38ae353788de27fca07335dac49",
+        "PR #1080 merge d5ace77cb716670c785411a69e7584f9b2f4ec0a"
+      ]
+    },
+    {
+      "feature": "Conversation handoff workflow",
+      "architecture": "VERIFIED",
+      "backend": "NOT_APPLICABLE",
+      "frontend": "NOT_APPLICABLE",
+      "integration": "PARTIAL",
+      "tests": "PARTIAL",
+      "runtime": "NOT_APPLICABLE",
+      "responsive": "NOT_APPLICABLE",
+      "documentation": "PARTIAL",
+      "release": "PARTIAL",
+      "gaps": [
+        "This package/docs changes are in a pending PR.",
+        "Schema/document-system checks have not run on this branch."
+      ],
+      "userImpact": "Handoff content is prepared but package delivery and validation remain pending.",
+      "acceptanceEvidence": [
+        "This documentation PR",
+        "Existing conversation work-log schema"
+      ]
+    }
+  ]
+}
