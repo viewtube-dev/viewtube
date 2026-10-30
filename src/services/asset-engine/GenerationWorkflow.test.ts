@@ -294,4 +294,70 @@ describe("GenerationWorkflow", () => {
    }),
   })
  })
+ it("carries the exact prompt and served-model receipt into ContentBuild and operation lineage", () => {
+  const build = createContentBuild({
+   id: "cb-generation-workflow-prompt-receipt",
+   channelId: "channel-prompt-receipt",
+   legacyProjectId: "project-prompt-receipt",
+  })
+  const prepared = prepareGenerationRequest({
+   contentBuildId: build.id,
+   channelId: "channel-prompt-receipt",
+   projectId: "project-prompt-receipt",
+   toolId: "creator-canvas-os",
+   operation: "design-scenes",
+   targetSlot: "storyboard",
+   mode: "new-version",
+   creatorIntent: "Generate scenes from the approved concept.",
+  })
+  const promptReceipt = {
+   schemaVersion: "brain-prompt-run-receipt-v1",
+   traceId: "trace-prompt-receipt",
+   outputId: "asset-prompt-receipt",
+   channelId: "channel-prompt-receipt",
+   projectId: "project-prompt-receipt",
+   operationId: prepared.request.operationId,
+   workflowId: prepared.request.workflowId,
+   contentBuildId: build.id,
+   contextRevision: build.revision,
+   promptFamily: "content",
+   promptVersion: "scene-plan-v1",
+   constitutionVersion: "asset-constitution-v1",
+   contextResolverVersion: "asset-context-composition-v1",
+   outputSchemaVersion: "scene-plan-v1",
+   requestedModel: "gemini-3.1-flash-lite",
+   servedModel: "gemini-3.1-flash",
+   evidenceSnapshotIds: [],
+   evidenceRefs: ["evidence:concept-1"],
+   channelKnowledgeFingerprint: null,
+   projectRevision: null,
+   styleProfileVersion: null,
+   creatorConstraints: [],
+   repairCount: 1,
+   generatedAt: "2026-10-29T12:00:00.000Z",
+  } as any
+
+  const receipt = recordToolReceipt({
+   request: prepared.request,
+   outputAssetIds: ["asset-prompt-receipt"],
+   generationRecordId: "generation-prompt-receipt",
+   traceId: promptReceipt.traceId,
+   promptReceipt,
+  })
+  const outputEvent = listContentBuildEvents(build.id)
+   .find(event => event.eventType === "tool.output.recorded")
+
+  expect(receipt.promptReceipt).toEqual(promptReceipt)
+  expect(outputEvent?.metadata).toMatchObject({
+   promptReceipt,
+   operationRecord: {
+    metadata: { promptReceipt },
+    lineage: {
+     traceId: "trace-prompt-receipt",
+     generationRecordId: "generation-prompt-receipt",
+    },
+   },
+  })
+ })
+
 })
