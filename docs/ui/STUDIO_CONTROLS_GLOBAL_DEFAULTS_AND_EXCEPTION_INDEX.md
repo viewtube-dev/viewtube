@@ -1,10 +1,10 @@
 # Studio Controls — Definitive Global Defaults, Size Contract & Primitive Exceptions
 
 **Status:** Canonical requirements reference; implementation and rendered verification must be checked against the source files below.  
-**Reviewed:** 2026-10-17  
+**Reviewed:** 2026-10-30  
 **Repository:** `viewtube-dev/viewtube`  
-**Work branch:** `master/consolidated-feature-integration` (canonical integration target)  
-**Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/styles/studio-control-system.css`  
+**Work branch:** `codex/shared-studio-interaction-focus` (implementation branch); `master/consolidated-feature-integration` remains the integration target  
+**Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioValueToggles.tsx`, `src/studio-ui/primitives/StudioSplitAccordion.tsx`, `src/styles/studio-control-system.css`, `src/styles/studio-control-split.css`, `src/styles/studio-control-focus.css`  
 **Rendered reference:** `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` and `src/components/studio-hub/studio-hub-primitive-catalogs.css`
 
 > This document is the normative reference for Studio primitives. Historical notes and old audit snapshots elsewhere in this file are superseded by this section. When implementation differs, treat it as drift to fix—not as a new default—unless an exception is explicitly registered below and represented in the Confirmed Primitive Library.
@@ -15,7 +15,7 @@ The Confirmed Primitive Library is a production-component specimen and provenanc
 
 **NON-DEFAULT SETTINGS** must list only true departures from shared defaults. Do not repeat the 44px/28px lattice, global typography, ordinary selected/disabled behavior, or generic interaction rules under every family. Keep family-specific anatomy, real variants, and registered exceptions; put global contracts in the defaults strip and this index.
 
-Micro is already represented by the existing token ladder and is reserved for the informational split-left badge. It must not be introduced as a general interactive-button size. Do not add a second token generator or duplicate generated stylesheet when the current source already owns the contract.
+The current five-tier ladder is Supreme 60px, Standard 44px, Compact 28px, Mini 20px, and Micro 12px. Micro is a supported interactive size. A 14px badge or a fixed 20px closeable badge is a named component exception; neither changes the global ladder. Do not add a second token generator or duplicate generated stylesheet when the current source already owns the contract.
 
 A family is **source-confirmed** only when its specimen uses the production export, provenance identifies TSX/CSS/tokens/import paths, exception notes are concise, and source/API regression tests cover the public contract. Full visual certification additionally requires computed-style/browser evidence for standard, compact, and applicable exception sizes. The word “confirmed” alone is not proof that visual regression passed.
 
@@ -53,23 +53,23 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 
 The size tier determines height, border stroke, radius, typography, icon size, and icon stroke. Do not independently override one of these properties without a registered exception.
 
-| Property | Standard | Compact | Micro |
-|---|---:|---:|---:|
-| Control height | 44px | 28px | 14px |
-| Border/stroke width | 3px | 2px | 1px |
-| Corner radius | 6px | 4px | 2px |
-| Text size | 38px | 24px | 10px |
-| Text weight | 1000 | 1000 | 1000 |
-| Text stroke | 1px | 0.5px | 0.25px |
-| Icon size | 38px | 24px | 10px |
-| Default icon stroke | 1.9px | 2px | 1.5px |
-| Secondary focus-outline width (when applicable) | 1.95px | 1.3px | 0.65px |
-| Standard gap token | 4px (external layout only — grids/rows between whole controls; never an internal shell gap) | 4px | 4px |
-| Floating-label height (shared by text inputs and text areas) | 32px (prior 28px + 4px) | 21px (prior 19px + 2px) | Not registered — no micro floating-label fields exist; the micro tier mechanically copies the compact values without halving |
-| Floating-label raised-offset ratio | 1.2 (raised label sits 20% higher above the outer black border) | 1.2 | Not registered — same as compact by copy |
-| Text transform | Uppercase | Uppercase | Uppercase |
-| Letter spacing | -0.02em | -0.02em | -0.01em |
-| Line height | 0.86 | 0.86 | 1.0 |
+| Property | Supreme | Standard | Compact | Mini | Micro |
+|---|---:|---:|---:|---:|---:|
+| Control height | 60px | 44px | 28px | 20px | 12px |
+| Border/stroke width | 3px | 3px | 2px | 1.5px | 1px |
+| Corner radius | 6px | 6px | 4px | 3px | 2px |
+| Text size | 52px | 38px | 24px | 17.5px | 10px |
+| Text weight | 1000 | 1000 | 1000 | 1000 | 1000 |
+| Text stroke | 1px | 1px | 0.5px | 0.4px | 0.4px |
+| Icon size | 52px | 38px | 24px | 17.5px | 10px |
+| Default icon stroke | 1.9px | 1.9px | 2px | 1.6px | 1.5px |
+| Secondary focus-outline width | 1.95px | 1.95px | 1.3px | 0.975px | 0.65px |
+| Standard gap token | 4px (external only) | 4px | 4px | 4px | 4px |
+| Floating-label height | 44px | 32px | 21px | 17.5px | 10px |
+| Floating-label raised-offset ratio | 1.2 | 1.2 | 1.2 | 1.2 | 1.2 |
+| Text transform | Uppercase | Uppercase | Uppercase | Uppercase | Uppercase |
+| Letter spacing | -0.02em | -0.02em | -0.02em | -0.02em | -0.02em |
+| Line height | 1 | 0.86 | 0.86 | 1 | 1 |
 
 **Color/ratio invariant:** A size change scales geometry and typography; it must not silently change primary/secondary color ownership, text weight, label centering, split-rail color, or row-fill behavior.
 
