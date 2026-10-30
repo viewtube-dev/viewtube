@@ -25,6 +25,12 @@ html body :is(
   .vt-studio-side-counter:focus-within,
   .vt-studio-left-counter:focus-within,
   .vt-studio-double-split-slider:focus-within,
+  .vt-studio-counter.is-interaction-focus,
+  .vt-studio-side-counter.is-interaction-focus,
+  .vt-studio-left-counter.is-interaction-focus,
+  .vt-studio-double-split-slider.is-interaction-focus,
+  [data-vt-studio-control-family="counter"][data-vt-interaction-focus="true"],
+  [data-vt-studio-slider][data-vt-interaction-focus="true"],
   .vt-studio-value-toggle:focus-within,
   .vt-studio-username-input:focus-within,
   .vt-studio-upload-frame:has(.vt-studio-upload-frame__input:focus-visible)
