@@ -2191,8 +2191,8 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
             iconLeft={splitIcon}
             iconRight={
               <ChevronDown
-                size={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronSize.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
-                strokeWidth={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
+                size={STUDIO_DROPDOWN_TOKENS.chevronSize[sizeVariant]}
+                strokeWidth={STUDIO_DROPDOWN_TOKENS.chevronStroke[sizeVariant]}
               />
             }
             faceOnly
@@ -2208,8 +2208,8 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
             <span data-vt-studio-dropdown-value>{connectionMessage ?? selected?.label ?? placeholder}</span>
             <span className="vt-studio-dropdown-chevron is-trailing" data-vt-studio-dropdown-chevron aria-hidden="true">
               <ChevronDown
-                size={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronSize.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
-                strokeWidth={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
+                size={STUDIO_DROPDOWN_TOKENS.chevronSize[sizeVariant]}
+                strokeWidth={STUDIO_DROPDOWN_TOKENS.chevronStroke[sizeVariant]}
               />
             </span>
           </>
