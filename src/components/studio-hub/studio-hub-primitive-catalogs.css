@@ -1859,7 +1859,7 @@
 }
 .vt-confirmed-variants {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 .vt-confirmed-variant {
@@ -1896,7 +1896,7 @@
   overflow-wrap: anywhere;
 }
 @media (max-width: 560px) {
-  .vt-confirmed-variants { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vt-confirmed-variants { grid-template-columns: minmax(0, 1fr); }
   .vt-confirmed-family { padding: 10px; }
 }
 
@@ -2471,12 +2471,14 @@
   gap: 6px;
 }
 .vt-confirmed-square-variant-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, max-content));
+  display: flex;
+  flex-flow: row nowrap;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 10px;
   min-width: 0;
+  width: max-content;
+  max-width: 100%;
 }
 .vt-confirmed-square-variant-grid > button[data-vt-studio-icon-button="true"] {
   flex: 0 0 auto;
@@ -2495,10 +2497,10 @@
   gap: 8px;
 }
 .vt-confirmed-stepper-row-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, max-content));
-  align-items: start;
-  justify-content: start;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
   gap: 18px;
   min-width: 0;
 }
