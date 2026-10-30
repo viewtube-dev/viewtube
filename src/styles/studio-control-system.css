@@ -1894,12 +1894,18 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
   align-items: center;
   gap: 6px;
   width: max-content;
-  height: 20px;
-  padding: 0 2px 0 8px;
-  border-radius: 999px;
+  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
+  --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
+  height: var(--vt-studio-control-height);
+  min-height: var(--vt-studio-control-height);
+  padding: 0 4px 0 10px;
+  border: var(--vt-studio-control-stroke) solid #000;
+  border-radius: var(--vt-studio-control-radius);
   background: var(--vt-badge-primary);
   color: var(--vt-badge-text);
-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 1000 var(--vt-studio-control-font-size)/1 Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1917,11 +1923,16 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 .vt-studio-closeable-badge__label {
   display: inline-block;
   color: var(--vt-badge-text);
-  font: 1000 16px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+  font: 1000 var(--vt-studio-control-font-size)/1 Inter, ui-sans-serif, system-ui, sans-serif;
   letter-spacing: .02em;
   text-transform: uppercase;
 }
 .vt-studio-closeable-badge__close {
+  flex-basis: calc(var(--vt-studio-control-height) * .72);
+  width: calc(var(--vt-studio-control-height) * .72);
+  min-width: calc(var(--vt-studio-control-height) * .72);
+  height: calc(var(--vt-studio-control-height) * .72);
+
   box-sizing: border-box;
   flex: 0 0 16px;
   display: grid;
@@ -1944,8 +1955,8 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 }
 .vt-studio-closeable-badge__close svg {
   display: block;
-  width: 12px;
-  height: 12px;
+  width: 65%;
+  height: 65%;
   pointer-events: none;
 }
 .vt-studio-closeable-badge__close svg line {
