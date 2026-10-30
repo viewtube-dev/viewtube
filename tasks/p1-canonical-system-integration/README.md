@@ -52,3 +52,15 @@ See [Phase 0 reconciliation audit](audits/phase-0-reconciliation-2026-10-30.md) 
 - [Cross-system identity and provenance map](identity-map.md) — current typed IDs, owner boundaries and diagnostics contract gaps.
 
 - [Existing task crosswalk](task-crosswalk.md) — VT task IDs, continuation relationships and unresolved identity gates.
+
+
+## Workstream execution packets
+Each of the six workstream folders now has its own README, audit checklist, test/runtime plan and agent brief. These are discovery and execution aids; they do not create task identities or claim test/runtime completion.
+
+- [Skills and plugin routing index](skills-and-plugins.md)
+- [Brain continuity packet](workstreams/brain-continuity/README.md)
+- [Gemini governance packet](workstreams/gemini-governance/README.md)
+- [Unified diagnostics packet](workstreams/unified-diagnostics/README.md)
+- [Priority-25 runtime packet](workstreams/priority-25-runtime/README.md)
+- [Public resolver packet](workstreams/public-resolver/README.md)
+- [Studio Controls packet](workstreams/studio-controls/README.md)
