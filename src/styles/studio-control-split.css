@@ -314,9 +314,4 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
 .vt-studio-stepper-button { display:flex; box-sizing:border-box; align-items:center; justify-content:center; width:100%; min-width:0; height:100%; min-height:0; margin:0; padding:0; border:0; border-radius:0; background:var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); color:#000; box-shadow:none; font:inherit; line-height:1; cursor:pointer; transition:color var(--vt-studio-focus-outline-fade-ms, 500ms) ease, background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease; }
 .vt-studio-stepper-button > svg { display:block; flex:0 0 auto; width:var(--vt-studio-stepper-icon-size, calc(var(--vt-studio-control-height, 44px) * .56)); height:var(--vt-studio-stepper-icon-size, calc(var(--vt-studio-control-height, 44px) * .56)); max-width:100%; max-height:100%; color:#000; stroke:#000; stroke-width:var(--vt-studio-stepper-icon-stroke, 2.5); }
 .vt-studio-stepper-button:disabled { opacity:.35; cursor:not-allowed; }
-.vt-studio-stepper-button:focus-visible {
-  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65))
-    solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
-  outline-offset: 0;
-}
 @media (prefers-reduced-motion: reduce) { .vt-studio-stepper-button { transition:none; } }
