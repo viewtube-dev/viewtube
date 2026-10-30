@@ -9,7 +9,7 @@ const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
 const emitter = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 
-test("counter primitives use global full-row width without fixed widths or 2:1 value ratios", () => {
+test("counter primitives keep the canonical 2:1 number area without recovery-layer geometry overrides", () => {
   const start = styles.indexOf("/* New independent StudioCounter")
   const end = styles.indexOf("/* Side Toggle arrow", start)
   const counters = styles.slice(start, end)
