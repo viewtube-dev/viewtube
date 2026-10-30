@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createContentBuild, getContentBuild, listContentBuildEvents, resetContentBuildRepositoryForTests, updateContentBuild } from "./ContentBuildRepository"
-import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, getPublishTransaction, markPublishStepRunning, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
+import { beginPublishTransaction, completePublishStep, completePublishTransaction, failPublishTransaction, getPublishTransaction, markPublishStepRunning, markPublishStepAmbiguous, resolveAmbiguousPublishStepAsNotApplied, resolveAmbiguousPublishStepAsApplied, resetPublishTransactionRepositoryForTests } from "./PublishTransaction"
 import { getApprovedPublishSnapshot, resetApprovedPublishSnapshotRepositoryForTests } from "./ApprovedPublishSnapshot"
 import { listAlgorithmIntelligenceEvents } from "../brain/AlgorithmIntelligenceEventLedger"
 import type { PublishingPackageProjection } from "./PublishingPackageProjection"
@@ -192,6 +192,34 @@ describe("PublishTransaction",()=>{
   const running=markPublishStepRunning({transactionId:transaction.id,step:"upload-video"})
   expect(running.steps["upload-video"]).toMatchObject({status:"running",startedAt:expect.any(String)})
   expect(getPublishTransaction(transaction.id)?.steps["upload-video"]?.status).toBe("running")
+ })
+
+ it("preserves an ambiguous provider outcome after a remote write throws",()=>{
+  const transaction=beginPublishTransaction(projection())
+  markPublishStepRunning({transactionId:transaction.id,step:"upload-video"})
+  const ambiguous=markPublishStepAmbiguous({transactionId:transaction.id,step:"upload-video",error:"connection lost after dispatch"})
+  expect(ambiguous.steps["upload-video"]).toMatchObject({status:"ambiguous",error:"connection lost after dispatch"})
+  expect(getPublishTransaction(transaction.id)?.steps["upload-video"]?.status).toBe("ambiguous")
+ })
+
+ it("resolves an ambiguous upload as applied by binding the manually recovered YouTube ID",()=>{
+  const transaction=beginPublishTransaction(projection())
+  markPublishStepRunning({transactionId:transaction.id,step:"upload-video"})
+  markPublishStepAmbiguous({transactionId:transaction.id,step:"upload-video",error:"upload response was lost"})
+  const recovered=resolveAmbiguousPublishStepAsApplied({transactionId:transaction.id,step:"upload-video",youtubeVideoId:"youtube-recovered",checkedBy:"creator",evidence:"Matched the uploaded video in YouTube Studio"})
+  expect(recovered.youtubeVideoId).toBe("youtube-recovered")
+  expect(recovered.steps["upload-video"]?.status).toBe("completed")
+  expect(getContentBuild("cb-publish")?.youtube?.videoId).toBe("youtube-recovered")
+ })
+
+ it("only reopens an ambiguous provider step after explicit evidence that it was not applied",()=>{
+  const transaction=beginPublishTransaction(projection())
+  markPublishStepRunning({transactionId:transaction.id,step:"upload-video"})
+  markPublishStepAmbiguous({transactionId:transaction.id,step:"upload-video",error:"upload response was lost"})
+  expect(()=>resolveAmbiguousPublishStepAsNotApplied({transactionId:transaction.id,step:"upload-video",checkedBy:"",evidence:""})).toThrow(/operator and evidence/i)
+  const resolved=resolveAmbiguousPublishStepAsNotApplied({transactionId:transaction.id,step:"upload-video",checkedBy:"creator",evidence:"YouTube Studio search confirms no matching upload"})
+  expect(resolved.steps["upload-video"]?.status).toBe("pending")
+  expect(getPublishTransaction(transaction.id)?.steps["upload-video"]?.status).toBe("pending")
  })
 
  it("refuses transaction completion before the remote YouTube state is verified", () => {
