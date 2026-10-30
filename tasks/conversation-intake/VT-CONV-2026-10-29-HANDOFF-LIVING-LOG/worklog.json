@@ -20,8 +20,8 @@
     "The original package still needed a populated instruction register and a correction to its stale PR #503 attribution.",
     "The reusable handoff template needed explicit metadata, artifact links, a ten-sentence summary, single-line checkboxes and a one-phrase in-place update contract.",
     "The handoff system remains documentation-only; frontend and backend maturity are not applicable to this workflow.",
-    "The PR #1170 release-gate run passed production build, local smoke and Brain quality checks but failed other inherited checks.",
-    "Next: merge the follow-up contract/template/package work and run the focused document-system checks."
+    "PR #1177's dedicated handoff/document checks, production build, local smoke and Brain quality loop passed; unrelated Studio, focused-test, full-suite and typecheck gates remain failing.",
+    "Next: resolve or explicitly disposition unrelated repository gate failures, then complete PR #1177 review/merge; selected idea IDs remain UNKNOWN."
   ],
   "documents": [
     {
@@ -439,7 +439,7 @@
       "summary": "Add focused contract tests and CI coverage for the worklog schema, handoff template and originating conversation package.",
       "details": "Run test:conversation-handoff-contract, test:document-system and audit:documents.",
       "kind": "VERIFICATION",
-      "conversationState": "PLANNED",
+      "conversationState": "VERIFIED_IN_CONVERSATION",
       "domains": [
         "documentation",
         "verification",
@@ -465,13 +465,16 @@
         "PR #1177"
       ],
       "evidenceRefs": [
-        "https://github.com/viewtube-dev/viewtube/actions/runs/40967448782"
+        "https://github.com/viewtube-dev/viewtube/actions/runs/40981740716",
+        "npm run test:conversation-handoff-contract: PASS",
+        "npm run test:document-system: PASS",
+        "npm run audit:documents: PASS"
       ],
       "dependencies": [
         "follow-up branch"
       ],
       "blockers": [
-        "CI results pending."
+        "Overall repository release gates remain red on unrelated Studio/Brain code paths."
       ],
       "similarityKeys": [
         "handoff contract test",
@@ -490,8 +493,8 @@
       },
       "relationship": "NEW",
       "suggestedDestination": "Existing Verification / document-system CI",
-      "reviewStatus": "REVIEWING",
-      "disposition": "UPDATE_SPECIFICATION",
+      "reviewStatus": "RECONCILED",
+      "disposition": "ATTACH_RECEIPT_EVIDENCE",
       "targetRefs": [
         ".github/workflows/release-gates.yml"
       ],
@@ -837,12 +840,22 @@
       "targetBranch": "master/consolidated-feature-integration",
       "pullRequest": 1177,
       "openedHeadSha": "da40c647ea637a43a0a97cf6408b360f375223c6",
-      "currentHeadSha": "e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6",
+      "currentHeadSha": "a07aa2c008a0b89b66d2759c548532e805934572",
       "commitsAfterPrOpen": [
-        "e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6"
+        "e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6",
+        "7d82afa9dbe465fe23c388c8b6e5b3f30439bb8f",
+        "7cb5ff8a94130029718c81c1c2848e8ecce33427",
+        "ebe7563382b53652100a5c998e5dea41e240bcaa",
+        "d9c0f4531d6c32d13098cfe530e8cd45180cfd9c",
+        "a07aa2c008a0b89b66d2759c548532e805934572"
       ],
       "postPrChangedPaths": [
-        "scripts/audit/conversation-handoff-contract.test.mjs"
+        "scripts/audit/conversation-handoff-contract.test.mjs",
+        "docs/recovery/History.md",
+        "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/handoff.md",
+        "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/review.md",
+        "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/worklog.json",
+        ".claude/skills/viewtube-conversation-handoff/templates/handoff-template.md"
       ],
       "mergeCommitSha": null,
       "targetContainsChanges": "NO",
@@ -852,7 +865,7 @@
         "https://github.com/viewtube-dev/viewtube/pull/1177",
         "https://github.com/viewtube-dev/viewtube/commit/e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6"
       ],
-      "notes": "PR #1177 is open and mergeable. The first contract-test run found a test assertion wording mismatch, corrected by the listed post-open commit. Current PR metadata remains authoritative for any later branch-head changes; no merge is claimed."
+      "notes": "PR #1177 opened at da40c647ea637a43a0a97cf6408b360f375223c6. Compare to snapshot a07aa2c008a0b89b66d2759c548532e805934572 shows six post-open commits and six changed paths, all recorded above. Dedicated handoff/document CI job passed in run 40981740716. Overall release gates remain red for unrelated target-branch Studio/Brain failures. This worklog update itself is a subsequent PR commit; the live PR metadata is authoritative for the latest head."
     }
   ],
   "integrationGaps": [
@@ -864,22 +877,22 @@
         "backend": "NOT_APPLICABLE",
         "frontend": "NOT_APPLICABLE",
         "integration": "PARTIAL",
-        "tests": "PARTIAL",
+        "tests": "VERIFIED",
         "runtime": "NOT_APPLICABLE",
         "responsive": "NOT_APPLICABLE",
-        "documentation": "PARTIAL",
+        "documentation": "IMPLEMENTED",
         "release": "PARTIAL"
       },
       "gaps": [
         {
-          "category": "TESTS_WITHOUT_RUNTIME_PROOF",
-          "description": "PR #1170 did not run npm run test:document-system or npm run audit:documents; the follow-up adds a dedicated CI job and contract test.",
-          "userImpact": "The workflow's schema/template contract was not yet protected by an executed CI gate.",
-          "dependency": "Follow-up GitHub Actions run",
+          "category": "RELEASE_BLOCKED",
+          "description": "PR #1177 remains open; its documentation contract checks pass, but unrelated repository-wide Studio/Brain gates are failing and the change is not yet present on the target branch.",
+          "userImpact": "The completed living-log workflow is not yet the current target until PR #1177 merges.",
+          "dependency": "PR #1177 review and merge after repository gate failures are resolved or explicitly dispositioned.",
           "acceptanceEvidence": [
-            "npm run test:conversation-handoff-contract",
-            "npm run test:document-system",
-            "npm run audit:documents"
+            "https://github.com/viewtube-dev/viewtube/pull/1177",
+            "https://github.com/viewtube-dev/viewtube/actions/runs/40981740716",
+            "Target branch ancestry contains PR #1177 merge commit"
           ]
         }
       ],
