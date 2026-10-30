@@ -108,14 +108,14 @@ test("Studio counter and counter-slider press-and-hold are wired for touch and m
   assert.match(component, /const base = currentRef\.current/);
   assert.match(component, /max = 100/);
   assert.match(styles, /touch-action:\s*none/);
-  assert.match(styles, /color-mix\(in srgb, white 50%, var\(--pair-a\)\)/);
-  assert.match(styles, /-webkit-text-stroke:\s*1px #000/);
+  assert.match(styles, /--vt-studio-number-rest-color:\s*color-mix\(in srgb,[^;]*var\(--vt-studio-number-rest-mix\)/);
+  assert.match(styles, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) var\(--vt-studio-number-active-stroke, #000\)/);
 });
 test("both counter styles tint resting numeral fill and stroke against each palette, then use black text while pressed or held", () => {
   assert.match(styles, /\.vt-studio-counter__value,[\s\S]*?color:\s*color-mix\(in srgb, #fff var\(--vt-studio-number-default-white-mix, 50%\), var\(--vt-studio-number-background, var\(--pair-a\)\)\)/);
   assert.match(styles, /\.vt-studio-counter\.is-reversed \.vt-studio-counter__value,[\s\S]*?--vt-studio-number-background:\s*var\(--pair-b\)[\s\S]*?-webkit-text-stroke-color:\s*currentColor/);
-  assert.match(styles, /\.vt-studio-counter:has\([\s\S]*?color:\s*#000;\s*-webkit-text-fill-color:\s*#000;\s*-webkit-text-stroke:\s*1px var\(--vt-studio-control-accent, var\(--pair-a\)\)/);
-  assert.match(styles, /\.vt-studio-counter\.is-reversed:has\([\s\S]*?background:\s*color-mix\(in srgb, var\(--pair-b\) 50%, transparent\);\s*color:\s*#000;\s*-webkit-text-fill-color:\s*#000;\s*-webkit-text-stroke-color:\s*var\(--pair-b\)/);
+  assert.match(styles, /\.vt-studio-counter:has\([\s\S]*?color:\s*var\(--vt-studio-number-active-color, #000\);\s*-webkit-text-fill-color:\s*var\(--vt-studio-number-active-color, #000\);\s*-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) var\(--vt-studio-number-active-stroke, #000\)/);
+  assert.match(styles, /\.vt-studio-counter\.is-reversed:has\([\s\S]*?background:\s*color-mix\(in srgb, var\(--pair-b\) 50%, transparent\);\s*color:\s*var\(--vt-studio-number-active-color, #000\);\s*-webkit-text-fill-color:\s*var\(--vt-studio-number-active-color, #000\);\s*-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) var\(--vt-studio-number-active-stroke, #000\)/);
   assert.match(styles, /\.vt-studio-side-counter__value/);
   assert.match(styles, /\.vt-studio-side-counter\.is-reversed \.vt-studio-side-counter__value[\s\S]*?--vt-studio-number-background:\s*var\(--pair-b\)[\s\S]*?-webkit-text-stroke-color:\s*currentColor/);
 });
