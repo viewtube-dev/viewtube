@@ -4642,7 +4642,8 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 /* Counter and slider values share the same neutral-rest / black-in-use transition. */
 .vt-studio-counter__value,
 .vt-studio-side-counter__value,
-.vt-studio-double-split-slider__value {
+.vt-studio-double-split-slider__value,
+.vt-studio-word-counter__value {
   color: var(--vt-studio-number-rest-color);
   -webkit-text-fill-color: currentColor;
   -webkit-text-stroke-color: var(--vt-studio-number-rest-color);
@@ -7049,9 +7050,9 @@ details.vt-studio-two-line-module > :not(summary) {
   display: block;
   width: 100%;
   overflow: hidden;
-  color: var(--vt-studio-control-accent, var(--pair-a));
-  -webkit-text-fill-color: var(--vt-studio-control-accent, var(--pair-a));
-  -webkit-text-stroke: 1px var(--vt-studio-control-accent, var(--pair-a));
+  color: var(--vt-studio-number-rest-color);
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: 1px var(--vt-studio-number-rest-color);
   font-size: var(--vt-studio-control-font-size, 38px);
   font-weight: 1000;
   line-height: 1;
