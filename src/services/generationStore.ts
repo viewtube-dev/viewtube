@@ -78,4 +78,7 @@ export const setGenerationStatus = (
 export const clearGenerationRecords = () => {
  if (!canUseStorage()) return
  localStorage.removeItem(GENERATION_STORAGE_KEY)
+ window.dispatchEvent(new CustomEvent(GENERATION_RECORDS_CHANGED, {
+  detail: { operation: "clear", count: 0, latestId: null },
+ }))
 }
