@@ -2,9 +2,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 const runBrainTurn = vi.hoisted(() => vi.fn())
 const gatewayGenerate = vi.hoisted(() => vi.fn())
+const fetchPublicChannelSnapshot = vi.hoisted(() => vi.fn())
 
 vi.mock("../BrainOrchestrator", () => ({
  runBrainTurn,
+}))
+
+vi.mock("../../publicHandleMode", () => ({
+ fetchPublicChannelSnapshot,
 }))
 
 vi.mock("../runtime/BrainModelGateway", () => ({
@@ -23,6 +28,8 @@ describe("BrainRuntime", () => {
  beforeEach(() => {
   runBrainTurn.mockReset()
   gatewayGenerate.mockReset()
+  fetchPublicChannelSnapshot.mockReset()
+  fetchPublicChannelSnapshot.mockResolvedValue(null)
  })
 
  it("forwards project and evidence context while keeping surface metadata in the runtime", async () => {
