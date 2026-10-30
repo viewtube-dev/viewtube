@@ -192,12 +192,12 @@ test("removed standalone labeled components have no remaining source references"
   }
 });
 
-test("word toggle library has three skins, one standard toggle per row, and centered compact toggles", () => {
+test("word toggle library uses four skins with full-row standard and auto-width compact specimens", () => {
   const fieldCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   assert.match(catalog, /const WORD_TOGGLE_SKINS = CANONICAL_SKINS/);
   assert.match(catalog, /Array\(8\)\.fill\(false\)/);
   assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants,[\s\S]*?display:\s*flex !important;\s*flex-flow:\s*row wrap !important/);
-  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants\[data-control-size="28"\][\s\S]*?justify-items:\s*center/);
+  assert.match(styles, /\.vt-confirmed-word-toggle-family \.vt-confirmed-control-variants > \*,[\s\S]*?flex:\s*0 0 auto;\s*width:\s*auto/);
   assert.ok(catalog.includes("V1–V4 skins change the active fill and indicator colors only"));
   assert.match(completeCatalog, /CONTROL_SKINS\.slice\(0, 3\)/);
   assert.match(completeCatalog, /Array\(6\)\.fill\(false\)/);
