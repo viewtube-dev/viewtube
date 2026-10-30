@@ -236,6 +236,7 @@ const ConceptSceneStudio: React.FC<ConceptSceneStudioProps> = ({
      versionIds: created.map(item => item.version?.id).filter((id): id is string => Boolean(id)),
      variantGroupId: group.id,
      traceId: generated.trace.id,
+     promptReceipt: generated.record.promptReceipt || null,
      summary: "Generated three governed Concept Forge directions and attached them as ContentBuild variants.",
      metadata: { providerPath: "governed-asset-generator", brainAssetRecordId: generated.record.id },
     })
