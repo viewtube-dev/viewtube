@@ -23,6 +23,19 @@ describe("ContentBuild repository", () => {
   resetContentBuildRepositoryForTests()
  })
 
+ it("publishes a runtime invalidation event when canonical build history changes", () => {
+  let received: Event | null = null
+  const listener = (event: Event) => { received = event }
+  window.addEventListener("vt_content_build_repository_changed", listener)
+  try {
+   createContentBuild({ id: "cb-runtime-invalidation", channelId: "channel-a" })
+   expect(received).not.toBeNull()
+   expect((received as CustomEvent).detail).toMatchObject({ contentBuildId: "cb-runtime-invalidation" })
+  } finally {
+   window.removeEventListener("vt_content_build_repository_changed", listener)
+  }
+ })
+
  it("creates one durable build projection with a creation event", () => {
   const build = createContentBuild({
    id: "cb-001",
