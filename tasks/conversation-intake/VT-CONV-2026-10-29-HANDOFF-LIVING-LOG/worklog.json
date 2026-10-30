@@ -1,0 +1,853 @@
+{
+  "schemaVersion": "viewtube.conversation-work-log.v1",
+  "conversationId": "VT-CONV-2026-10-29-HANDOFF-LIVING-LOG",
+  "created": "2026-10-29",
+  "lastEdited": "2026-10-29",
+  "sourceHost": "ChatGPT",
+  "conversationName": "Unfinished Work Living Document Log — PR #1170 implementation and reconciliation",
+  "application": "ViewTube",
+  "sourceApplication": "ChatGPT",
+  "sourceConversationUrl": null,
+  "repository": "viewtube-dev/viewtube",
+  "targetBranch": "master/consolidated-feature-integration",
+  "reviewStatus": "PARTIALLY_RECONCILED",
+  "executiveSummary": [
+    "The user requested a reusable living handoff log for oversized ViewTube conversations, not a competing task tracker.",
+    "PR #1170 implemented the first governance-aligned instruction, branch/PR and integration-gap registers.",
+    "PR #1170 merged into master/consolidated-feature-integration as 0fd1d412758f212d8d6cf34a3a31d22270ea33c4.",
+    "All 13 PR files are present in the merged change and the target contains the merge commit.",
+    "The original source branch has no unique commits ahead of the merge and is 22 commits behind it.",
+    "The original package still needed a populated instruction register and a correction to its stale PR #503 attribution.",
+    "The reusable handoff template needed explicit metadata, artifact links, a ten-sentence summary, single-line checkboxes and a one-phrase in-place update contract.",
+    "The handoff system remains documentation-only; frontend and backend maturity are not applicable to this workflow.",
+    "The PR #1170 release-gate run passed production build, local smoke and Brain quality checks but failed other inherited checks.",
+    "Next: merge the follow-up contract/template/package work and run the focused document-system checks."
+  ],
+  "documents": [
+    {
+      "title": "CONVERSATION_HANDOFFS.md",
+      "path": "docs/governance/CONVERSATION_HANDOFFS.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/CONVERSATION_HANDOFFS.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "CONVERSATION_OS.md",
+      "path": "docs/governance/CONVERSATION_OS.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/CONVERSATION_OS.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "conversation-work-log.schema.json",
+      "path": "docs/governance/conversation-work-log.schema.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/conversation-work-log.schema.json",
+      "kind": "REPOSITORY_ARTIFACT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "SKILL.md",
+      "path": ".claude/skills/viewtube-conversation-handoff/SKILL.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/SKILL.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "handoff-template.md",
+      "path": ".claude/skills/viewtube-conversation-handoff/templates/handoff-template.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/templates/handoff-template.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "worklog-template.json",
+      "path": ".claude/skills/viewtube-conversation-handoff/templates/worklog-template.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-handoff/templates/worklog-template.json",
+      "kind": "REPOSITORY_ARTIFACT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "SKILL.md",
+      "path": ".claude/skills/viewtube-conversation-work-reconciliation/SKILL.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.claude/skills/viewtube-conversation-work-reconciliation/SKILL.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "conversation-handoff-workflow.md",
+      "path": "agent/contracts/conversation-handoff-workflow.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/agent/contracts/conversation-handoff-workflow.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "Index.md",
+      "path": "docs/Index.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/Index.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "registry.json",
+      "path": "docs/registry.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/registry.json",
+      "kind": "REPOSITORY_ARTIFACT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "History.md",
+      "path": "docs/recovery/History.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/recovery/History.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "handoff.md",
+      "path": "tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/handoff.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/handoff.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "worklog.json",
+      "path": "tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/worklog.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/worklog.json",
+      "kind": "REPOSITORY_ARTIFACT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "review.md",
+      "path": "tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/review.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/review.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "DOCUMENTATION.md",
+      "path": "docs/governance/DOCUMENTATION.md",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/governance/DOCUMENTATION.md",
+      "kind": "DOCUMENT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "conversation-handoff-contract.test.mjs",
+      "path": "scripts/audit/conversation-handoff-contract.test.mjs",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/scripts/audit/conversation-handoff-contract.test.mjs",
+      "kind": "REPOSITORY_ARTIFACT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "package.json",
+      "path": "package.json",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/package.json",
+      "kind": "REPOSITORY_ARTIFACT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "release-gates.yml",
+      "path": ".github/workflows/release-gates.yml",
+      "url": "https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/.github/workflows/release-gates.yml",
+      "kind": "REPOSITORY_ARTIFACT",
+      "status": "MERGED_OR_CURRENT",
+      "relatedItemIds": [
+        "CWI-001",
+        "CWI-002"
+      ]
+    },
+    {
+      "title": "PR #1170",
+      "path": "",
+      "url": "https://github.com/viewtube-dev/viewtube/pull/1170",
+      "kind": "PULL_REQUEST",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "CWI-001"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "itemId": "VT-CWI-001",
+      "title": "Initial governed conversation handoff and work reconciliation extension",
+      "summary": "PR #1170 added instruction tracking, branch/PR reconciliation, integration-gap maturity and governance/skill/template/schema integration.",
+      "details": "Merged implementation. Verification remains distinct from merge and application integration.",
+      "kind": "WORKFLOW",
+      "conversationState": "COMPLETED_IN_CONVERSATION",
+      "domains": [
+        "documentation",
+        "governance",
+        "agents"
+      ],
+      "capabilityIds": [
+        "CAP-DOCUMENT-GOVERNANCE"
+      ],
+      "surfaces": [
+        "conversation handoff",
+        "work reconciliation"
+      ],
+      "sourceRefs": [
+        "originating conversation 2026-10-29"
+      ],
+      "changedPaths": [
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "docs/governance/CONVERSATION_OS.md",
+        "docs/governance/conversation-work-log.schema.json",
+        ".claude/skills/viewtube-conversation-handoff/SKILL.md",
+        ".claude/skills/viewtube-conversation-handoff/templates/handoff-template.md",
+        ".claude/skills/viewtube-conversation-handoff/templates/worklog-template.json",
+        ".claude/skills/viewtube-conversation-work-reconciliation/SKILL.md",
+        "agent/contracts/conversation-handoff-workflow.md",
+        "docs/Index.md",
+        "docs/registry.json",
+        "docs/recovery/History.md",
+        "tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/handoff.md",
+        "tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/worklog.json",
+        "tasks/conversation-intake/VT-CONV-DOCS-OS-TASK-INDEX/review.md"
+      ],
+      "branchPrRefs": [
+        "PR #1170",
+        "docs/conversation-handoff-complete-register-2026-10-29"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170",
+        "https://github.com/viewtube-dev/viewtube/commit/0fd1d412758f212d8d6cf34a3a31d22270ea33c4"
+      ],
+      "dependencies": [],
+      "blockers": [
+        "Document-specific test commands were not run on the PR #1170 merge."
+      ],
+      "similarityKeys": [
+        "conversation handoff",
+        "living work log",
+        "instruction register"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "CRITICAL",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "LARGE",
+        "implementationRisk": "LOW",
+        "rationale": "Preserves user intent and delivery evidence across long agent conversations."
+      },
+      "relationship": "CONTINUATION",
+      "suggestedDestination": "Existing Conversation Handoffs specification",
+      "reviewStatus": "RECONCILED",
+      "disposition": "UPDATE_SPECIFICATION",
+      "targetRefs": [
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "docs/governance/CONVERSATION_OS.md"
+      ],
+      "harvestedMaterial": [
+        "PR/branch reconciliation schema",
+        "nine-axis integration maturity",
+        "instruction-level provenance"
+      ],
+      "reviewNotes": "Merged as PR #1170; do not recreate."
+    },
+    {
+      "itemId": "VT-CWI-002",
+      "title": "Complete living-log front matter and reusable template",
+      "summary": "Add date/name/application metadata, update-by-link-and-phrase instructions, ten-sentence summary, single-line unfinished checkboxes and artifact links.",
+      "details": "Follow-up implementation on docs/living-conversation-handoff-log-2026-10-29.",
+      "kind": "DOCUMENTATION",
+      "conversationState": "STARTED",
+      "domains": [
+        "documentation",
+        "governance"
+      ],
+      "capabilityIds": [
+        "CAP-DOCUMENT-GOVERNANCE"
+      ],
+      "surfaces": [
+        "handoff template"
+      ],
+      "sourceRefs": [
+        "user requirements 2026-10-29"
+      ],
+      "changedPaths": [
+        ".claude/skills/viewtube-conversation-handoff/templates/handoff-template.md",
+        "docs/governance/CONVERSATION_HANDOFFS.md",
+        "docs/governance/DOCUMENTATION.md"
+      ],
+      "branchPrRefs": [
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "evidenceRefs": [],
+      "dependencies": [
+        "PR #1170 merged"
+      ],
+      "blockers": [],
+      "similarityKeys": [
+        "living document log",
+        "unfinished work log",
+        "handoff template"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "HIGH",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "MEDIUM",
+        "implementationRisk": "LOW",
+        "rationale": "Makes the log easy to update from a mobile conversation without creating duplicate packages."
+      },
+      "relationship": "CONTINUATION",
+      "suggestedDestination": "Existing Conversation Handoffs specification and template",
+      "reviewStatus": "REVIEWING",
+      "disposition": "UPDATE_SPECIFICATION",
+      "targetRefs": [
+        "docs/governance/CONVERSATION_HANDOFFS.md"
+      ],
+      "harvestedMaterial": [],
+      "reviewNotes": "Follow-up PR pending."
+    },
+    {
+      "itemId": "VT-CWI-003",
+      "title": "Populate the originating conversation's instruction and artifact registers",
+      "summary": "Create the October 29 handoff package with individually traceable user requirements, PR evidence and document links.",
+      "details": "Preserve source conversation link as UNKNOWN because no URL was available; do not invent it.",
+      "kind": "DOCUMENTATION",
+      "conversationState": "STARTED",
+      "domains": [
+        "documentation",
+        "governance"
+      ],
+      "capabilityIds": [
+        "CAP-DOCUMENT-GOVERNANCE"
+      ],
+      "surfaces": [
+        "conversation intake"
+      ],
+      "sourceRefs": [
+        "originating conversation context"
+      ],
+      "changedPaths": [
+        "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/"
+      ],
+      "branchPrRefs": [
+        "PR #1170",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170"
+      ],
+      "dependencies": [],
+      "blockers": [
+        "Exact source conversation URL unavailable."
+      ],
+      "similarityKeys": [
+        "instruction register",
+        "artifact register",
+        "handoff package"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "HIGH",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "MEDIUM",
+        "implementationRisk": "LOW",
+        "rationale": "Makes the original request and its delivery evidence recoverable."
+      },
+      "relationship": "CONTINUATION",
+      "suggestedDestination": "Existing conversation-intake package",
+      "reviewStatus": "REVIEWING",
+      "disposition": "UPDATE_SPECIFICATION",
+      "targetRefs": [
+        "tasks/conversation-intake/VT-CONV-2026-10-29-HANDOFF-LIVING-LOG/"
+      ],
+      "harvestedMaterial": [],
+      "reviewNotes": "Source URL and numbered idea definitions remain unknown."
+    },
+    {
+      "itemId": "VT-CWI-004",
+      "title": "Verify living-log schema, templates and documentation governance",
+      "summary": "Add focused contract tests and CI coverage for the worklog schema, handoff template and originating conversation package.",
+      "details": "Run test:conversation-handoff-contract, test:document-system and audit:documents.",
+      "kind": "VERIFICATION",
+      "conversationState": "PLANNED",
+      "domains": [
+        "documentation",
+        "verification",
+        "developer-experience"
+      ],
+      "capabilityIds": [
+        "CAP-DOCUMENT-GOVERNANCE",
+        "CAP-VERIFICATION"
+      ],
+      "surfaces": [
+        "GitHub Actions"
+      ],
+      "sourceRefs": [
+        "PR #1170 CI run 40967448782"
+      ],
+      "changedPaths": [
+        "scripts/audit/conversation-handoff-contract.test.mjs",
+        "package.json",
+        ".github/workflows/release-gates.yml"
+      ],
+      "branchPrRefs": [
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/actions/runs/40967448782"
+      ],
+      "dependencies": [
+        "follow-up branch"
+      ],
+      "blockers": [
+        "CI results pending."
+      ],
+      "similarityKeys": [
+        "handoff contract test",
+        "document audit",
+        "schema validation"
+      ],
+      "value": {
+        "creatorImpact": "HIGH",
+        "systemLeverage": "HIGH",
+        "urgency": "HIGH",
+        "reusePotential": "HIGH",
+        "confidence": "HIGH",
+        "estimatedEffort": "SMALL",
+        "implementationRisk": "LOW",
+        "rationale": "Prevents regressions and turns previously unverified commands into a repeatable gate."
+      },
+      "relationship": "NEW",
+      "suggestedDestination": "Existing Verification / document-system CI",
+      "reviewStatus": "REVIEWING",
+      "disposition": "UPDATE_SPECIFICATION",
+      "targetRefs": [
+        ".github/workflows/release-gates.yml"
+      ],
+      "harvestedMaterial": [],
+      "reviewNotes": "Do not claim tests passed until the new PR checks complete."
+    },
+    {
+      "itemId": "VT-CWI-005",
+      "title": "Recover exact meanings of selected idea references 1, 4, 9, 10, 17 and 18",
+      "summary": "Preserve the user's selected idea numbers without guessing their labels or rewriting them.",
+      "details": "Exact titles/descriptions are not present in the available repository or conversation references.",
+      "kind": "RESEARCH",
+      "conversationState": "BLOCKED",
+      "domains": [
+        "documentation",
+        "ideas"
+      ],
+      "capabilityIds": [],
+      "surfaces": [
+        "Ideas Registry"
+      ],
+      "sourceRefs": [
+        "originating conversation 2026-10-29"
+      ],
+      "changedPaths": [],
+      "branchPrRefs": [],
+      "evidenceRefs": [],
+      "dependencies": [
+        "recover source idea list"
+      ],
+      "blockers": [
+        "Source idea definitions unavailable."
+      ],
+      "similarityKeys": [
+        "idea IDs 1 4 9 10 17 18"
+      ],
+      "value": {
+        "creatorImpact": "MEDIUM",
+        "systemLeverage": "MEDIUM",
+        "urgency": "LOW",
+        "reusePotential": "MEDIUM",
+        "confidence": "LOW",
+        "estimatedEffort": "UNKNOWN",
+        "implementationRisk": "LOW",
+        "rationale": "Avoids corrupting the user's selected idea references through ordinal guessing."
+      },
+      "relationship": "UNKNOWN",
+      "suggestedDestination": "Existing ideas/registry.json after source recovery",
+      "reviewStatus": "UNREVIEWED",
+      "disposition": null,
+      "targetRefs": [
+        "ideas/registry.json"
+      ],
+      "harvestedMaterial": [],
+      "reviewNotes": "Do not invent idea titles or create new ideas from the numbers alone."
+    }
+  ],
+  "instructions": [
+    {
+      "instructionId": "REQ-001",
+      "text": "Create a reusable Unfinished Work Living Document Log for oversized conversations, preserving completed and unfinished work without creating a competing task system.",
+      "status": "PARTIAL",
+      "relatedItemIds": [
+        "CWI-001"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [
+        1170
+      ],
+      "commits": [
+        "0fd1d412758f212d8d6cf34a3a31d22270ea33c4"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170"
+      ],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-002",
+      "text": "Record every distinct user request, instruction, correction, constraint and demand as its own clear single-line checkbox with truthful achievement status and PR/commit evidence.",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002",
+        "CWI-003"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [
+        1170
+      ],
+      "commits": [
+        "49918598057dcecf46373e778e8a5a205b5919b2"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170"
+      ],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-003",
+      "text": "Show conversation date, conversation name, application/product and source application in the living log.",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [],
+      "commits": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": [],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-004",
+      "text": "Link every document and artifact created or materially changed in the conversation.",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002",
+        "CWI-003"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [],
+      "commits": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": [],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-005",
+      "text": "Provide a concise executive handoff of no more than ten crucial-fact sentences.",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [],
+      "commits": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": [],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-006",
+      "text": "Include five best finishing/improvement ideas and route them through existing Ideas Registry and improvement recommendations.",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [],
+      "commits": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": [],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-007",
+      "text": "Allow an agent to update the existing log using its document link and the single phrase “Update the unfinished work log.”; update in place rather than creating duplicates.",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-002"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [],
+      "commits": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": [],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-008",
+      "text": "Reconcile branches and PRs independently, including the PR-opening snapshot, post-PR commits/files, unmerged work and target-branch presence.",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "CWI-001"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [
+        1170
+      ],
+      "commits": [
+        "0fd1d412758f212d8d6cf34a3a31d22270ea33c4"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "PRESENT_ON_TARGET",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170"
+      ],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-009",
+      "text": "Track features that are implemented but unconnected, missing application integration, missing UI/frontend or missing backend connections.",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "CWI-001"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [
+        1170
+      ],
+      "commits": [
+        "0fd1d412758f212d8d6cf34a3a31d22270ea33c4"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "PRESENT_ON_TARGET",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170"
+      ],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-010",
+      "text": "Reuse the existing Task Authority nine maturity axes and statuses; do not create parallel task, maturity or idea authorities.",
+      "status": "MERGED",
+      "relatedItemIds": [
+        "CWI-001"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [
+        1170
+      ],
+      "commits": [
+        "0fd1d412758f212d8d6cf34a3a31d22270ea33c4"
+      ],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "PRESENT_ON_TARGET",
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170"
+      ],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-011",
+      "text": "Preserve the previously selected idea references 1, 4, 9, 10, 17 and 18 without changing their meaning or guessing their titles.",
+      "status": "BLOCKED",
+      "relatedItemIds": [
+        "CWI-005"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [],
+      "commits": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "UNKNOWN",
+      "evidenceRefs": [],
+      "supersedes": null
+    },
+    {
+      "instructionId": "REQ-012",
+      "text": "Preserve all prior instructions, corrections, decisions, artifacts and unresolved work; do not invent links, status or evidence.",
+      "status": "IN_PR",
+      "relatedItemIds": [
+        "CWI-003"
+      ],
+      "branchRefs": [
+        "docs/conversation-handoff-complete-register-2026-10-29",
+        "docs/living-conversation-handoff-log-2026-10-29"
+      ],
+      "pullRequests": [],
+      "commits": [],
+      "targetBranch": "master/consolidated-feature-integration",
+      "deliveryState": "IN_PR",
+      "evidenceRefs": [],
+      "supersedes": null
+    }
+  ],
+  "branchPrReconciliation": [
+    {
+      "branch": "docs/conversation-handoff-complete-register-2026-10-29",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1170,
+      "openedHeadSha": null,
+      "currentHeadSha": "49918598057dcecf46373e778e8a5a205b5919b2",
+      "commitsAfterPrOpen": [],
+      "postPrChangedPaths": [],
+      "mergeCommitSha": "0fd1d412758f212d8d6cf34a3a31d22270ea33c4",
+      "targetContainsChanges": "YES",
+      "classification": "MERGED_AND_CURRENT",
+      "recoveryDestination": null,
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170",
+        "https://github.com/viewtube-dev/viewtube/commit/0fd1d412758f212d8d6cf34a3a31d22270ea33c4",
+        "GitHub compare: merge commit is an ancestor of master/consolidated-feature-integration; original branch is 22 commits behind and 0 commits ahead of the merge."
+      ],
+      "notes": "The PR-opening head snapshot is not recoverable. The PR's final head is 49918598057dcecf46373e778e8a5a205b5919b2. The source branch has no unique commits beyond the merge commit; no post-PR work needs recovery. The target has advanced eight commits beyond the merge at the initial reconciliation point."
+    }
+  ],
+  "integrationGaps": [
+    {
+      "featureId": "CAP-DOCUMENT-GOVERNANCE",
+      "title": "Living conversation handoff and unfinished-work log",
+      "maturity": {
+        "architecture": "VERIFIED",
+        "backend": "NOT_APPLICABLE",
+        "frontend": "NOT_APPLICABLE",
+        "integration": "PARTIAL",
+        "tests": "PARTIAL",
+        "runtime": "NOT_APPLICABLE",
+        "responsive": "NOT_APPLICABLE",
+        "documentation": "PARTIAL",
+        "release": "PARTIAL"
+      },
+      "gaps": [
+        {
+          "category": "TESTS_WITHOUT_RUNTIME_PROOF",
+          "description": "PR #1170 did not run npm run test:document-system or npm run audit:documents; the follow-up adds a dedicated CI job and contract test.",
+          "userImpact": "The workflow's schema/template contract was not yet protected by an executed CI gate.",
+          "dependency": "Follow-up GitHub Actions run",
+          "acceptanceEvidence": [
+            "npm run test:conversation-handoff-contract",
+            "npm run test:document-system",
+            "npm run audit:documents"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1170"
+      ]
+    }
+  ]
+}
