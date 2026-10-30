@@ -3800,7 +3800,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__rail {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__reset,
 .vt-studio-double-split-slider .vt-studio-double-split-slider__value {
@@ -3813,14 +3813,14 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   color: #000;
   font: inherit;
   line-height: 1;
   -webkit-text-stroke: 0;
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__reset {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   color: #000;
   cursor: pointer;
   font-size: calc(var(--vt-studio-control-height, 44px) * .72);
@@ -3831,10 +3831,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   opacity: .55;
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__value {
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
-  font-size: var(--vt-studio-control-font-size, 38px);
+  color: color-mix(in srgb, #fff var(--vt-studio-number-default-white-mix, 50%), var(--vt-studio-number-background));
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+  font-size: calc(var(--vt-studio-control-font-size, 38px) * .62);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -3850,10 +3850,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: 100%;
   align-items: center;
   padding-inline: calc(var(--vt-studio-control-height, 44px) * .18);
-  background: var(--vt-field-fill-rest);
-}
-.vt-studio-double-split-slider:has(input[type="range"]:focus-visible) [data-vt-studio-split-field] {
-  background: var(--vt-field-fill-focus);
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-double-split-slider input[type="range"] {
   appearance: none;
@@ -3867,8 +3864,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border: 0;
   border-radius: var(--vt-studio-slider-radius);
   outline: 0;
-  --vt-studio-slider-left-fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  background: #000;
+  --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: linear-gradient(to right,
+    var(--vt-studio-slider-left-fill) 0 var(--vt-studio-slider-progress, 0%),
+    color-mix(in srgb, var(--vt-studio-slider-left-fill) 50%, #fff) var(--vt-studio-slider-progress, 0%) 100%);
   border: var(--vt-studio-slider-stroke) solid #000;
   box-shadow: none;
   cursor: pointer;
@@ -3876,7 +3875,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-double-split-slider input[type="range"]::-webkit-slider-runnable-track {
   height: var(--vt-studio-slider-track-height);
   border: 0;
-  background: #000;
+  background: transparent;
 }
 .vt-studio-double-split-slider input[type="range"]::-webkit-slider-thumb {
   appearance: none;
@@ -3886,26 +3885,26 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: var(--vt-studio-slider-thumb-height);
   margin-top: calc((var(--vt-studio-slider-track-height) - var(--vt-studio-slider-thumb-height)) / 2);
   border: var(--vt-studio-slider-stroke) solid #000;
-  border-radius: inherit;
+  border-radius: calc(var(--vt-studio-slider-radius) * .5);
   background: #fff;
 }
 .vt-studio-double-split-slider input[type="range"]::-moz-range-track {
   height: var(--vt-studio-slider-track-height);
   border: 0;
   border-radius: var(--vt-studio-slider-radius);
-  background: #000;
+  background: transparent;
 }
 .vt-studio-double-split-slider input[type="range"]::-moz-range-progress {
   height: var(--vt-studio-slider-track-height);
   border-radius: var(--vt-studio-slider-radius);
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-double-split-slider input[type="range"]::-moz-range-thumb {
   box-sizing: border-box;
   width: var(--vt-studio-slider-thumb-width);
   height: var(--vt-studio-slider-thumb-height);
   border: var(--vt-studio-slider-stroke) solid #000;
-  border-radius: inherit;
+  border-radius: calc(var(--vt-studio-slider-radius) * .5);
   background: #fff;
 }
 .vt-studio-double-split-slider input[type="range"]:focus-visible {
@@ -3917,9 +3916,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   opacity: .55;
 }
 .vt-studio-double-split-slider[data-size="compact"] {
-  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
-  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
-  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-studio-control-height: var(--vt-studio-28-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-28-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-28-radius, 4px);
   --vt-studio-control-font-size: 24px;
   --vt-studio-control-icon-size: 24px;
 }
@@ -3936,7 +3935,13 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   font-size: 10px;
 }
 .vt-studio-double-split-slider[data-size="micro"] .vt-studio-double-split-slider__value {
-  font-size: 9px;
+  font-size: var(--vt-studio-micro-font-size, 10px);
+}
+.vt-studio-double-split-slider[data-size="mini"] {
+  --vt-studio-control-height: var(--vt-studio-mini-height, 20px);
+  --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
 }
 .vt-studio-double-split-slider.is-reversed {
   --vt-studio-control-primary: var(--pair-b, #ff7f6b);
