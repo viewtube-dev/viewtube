@@ -1,6 +1,6 @@
 # Evidence Explorer & Evidence Health
 
-**Status:** Proposed; not implemented  
+**Status:** Implementation in progress; validation pending  
 **Priority:** P1  
 **Destination:** Existing Brain Hub; exact route to verify
 
@@ -61,3 +61,14 @@ Implement the ViewTube Brain Evidence Explorer in viewtube-dev/viewtube. First i
 - Use existing production Studio primitives, semantic tokens and responsive conventions. Do not create page-local control styles.
 - Define loading, populated, empty, partial/stale, unavailable/permission-blocked and error states. Support keyboard/screen readers, visible focus, reduced motion, zoom, long content, narrow mobile and desktop.
 - Add regression tests before behavior changes. Run focused tests, typecheck/lint/build as applicable, and actual rendered mobile/desktop checks. Report verification honestly; a passing build is not visual certification.
+
+
+## Implementation checkpoint — 2026-10-30
+
+- **Branch:** `feat/brain-evidence-explorer-2026-10-30`
+- **Surface:** Existing Brain Hub tab at `/ai-brain?tab=evidence`; no parallel route or shell.
+- **Implemented in this pass:** Canonical dataset health, evidence fitness/coverage/scope summary, window selection, dataset status/search filters, EvidenceRecord inspection, source/provenance metadata and explicit unavailable/restricted/unscoped/error states.
+- **Ownership:** Reads through `resolveEvidenceIntelligence`; analytics truth remains `analytics-canon`; permission checks use `readBrainUserControls`.
+- **Turn boundary:** The panel labels itself as the current channel snapshot. Exact past-turn evidence remains in that turn's existing evidence ribbon/drawer; this panel does not claim snapshot records were all used by a selected answer.
+- **Refresh boundary:** Recheck re-reads the current local canonical snapshot and does not trigger an upstream YouTube sync.
+- **Validation:** Automated tests and build have not yet been run in the current execution environment. Do not treat this checkpoint as release-ready until focused tests, typecheck, build and rendered mobile/desktop checks are completed.
