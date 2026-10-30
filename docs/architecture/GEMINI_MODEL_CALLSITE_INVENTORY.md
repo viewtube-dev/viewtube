@@ -240,3 +240,21 @@ The creator comment responder no longer imports `generatePerfectReply` or `recom
 - Suggested video IDs are validated against the supplied creator-owned video list; unknown IDs cannot be emitted as recommendations.
 - Gateway contract tests are included in the dedicated Gemini CI job.
 - Exact-head verification is pending. The tag strategy test was corrected after run #5485 exposed an expectation mismatch (the test expected a failure for rank zero even though zero is intentionally the unknown sentinel). A fresh run must verify both migrations.
+
+
+## Timestamp and comment/tag migration audit — 2026-10-30
+
+The exact-head inventory at run #5496 / commit `69a09e5f1a0373fe94f3e027f49f02f363c122cb` reports:
+
+- 73 exported symbols in `gemini.ts`.
+- 37 production import-and-reference matches (not all are generation functions).
+- 35 exports without a static import reference; dynamic/re-export reachability still requires review before removal.
+- 66 direct SDK invocation sites concentrated in the provider owner and credential validation boundary.
+- Two literal dynamic imports, the expected BrainModelGateway provider adapter imports.
+- 19 model-ID literals and 18 credential-alias references.
+
+The same exact-head scan no longer lists the legacy tag functions `generateTagSuggestions` / `analyzeExistingTags` or comment functions `generatePerfectReply` / `recommendVideoForComment` as production callers. Those surfaces now use the existing AssetGenerator specialist path or BrainModelGateway.
+
+The next source slice moves `generateEducationalTimestampQuestions` callers in VideoUploaderWidget and VideoManagerWidget to `educationalTimestampStrategy` through Creator Assets. This slice is after run #5496 and needs a new exact-head artifact before counts are refreshed. Suggested timecodes are explicitly planning markers, not verified video timestamps.
+
+Remaining active production caller families still include analytics/research, planning, thumbnails, scripts, storyboards, end-screen, media transcription, speech and other creator surfaces. Provider SDK calls remain in the provider owner and GeminiKeyContext validation boundary; the static count of 66 is not 66 UI bypasses.
