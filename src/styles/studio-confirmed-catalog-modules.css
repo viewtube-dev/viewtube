@@ -213,6 +213,26 @@
   width: 100%;
   min-width: 0;
 }
+/* Each direct representative is its own disclosure module, not a row inside one mega-module. */
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-primitive-module,
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-family {
+  display: block;
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-primitive-module > .vt-confirmed-primitive-body,
+.vt-confirmed-direct-primitive-rows > .vt-confirmed-family > .vt-confirmed-primitive-body {
+  width: 100%;
+  min-width: 0;
+}
+.vt-confirmed-direct-primitive-rows .vt-confirmed-primitive-body > .vt-confirmed-variants > .vt-confirmed-variant {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
 .vt-confirmed-direct-primitive-rows > .vt-confirmed-variant {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
