@@ -24,6 +24,36 @@ describe("AI Brain runtime surface integration", () => {
   expect(source).toContain('window.removeEventListener(GEMINI_KEY_UPDATED_EVENT, refreshGeminiReadiness)')
  })
 
+ it("limits runtime snapshot refreshes to channel and project context changes", () => {
+  const runtimeEffect = source.slice(
+   source.indexOf("const [runtimeSnapshot, setRuntimeSnapshot]"),
+   source.indexOf("const snapshot = useMemo(", source.indexOf("const [runtimeSnapshot, setRuntimeSnapshot]")),
+  )
+  expect(runtimeEffect).toContain("[channelId, brain.activeProjectId, brain.projects]")
+  expect(runtimeEffect).toContain("window.requestIdleCallback(refreshRuntimeSnapshot, { timeout: 1200 })")
+  expect(runtimeEffect).toContain("setTimeout(refreshRuntimeSnapshot, 0)")
+  expect(runtimeEffect).not.toContain("recentTurns")
+  expect(runtimeEffect).not.toContain("learningEntries")
+ })
+
+ it("exposes a real channel evidence refresh and rebuilds Brain projections after it commits", () => {
+  expect(source).toContain('from "../context/InitialChannelBootstrapContext"')
+  expect(source).toContain("refreshInitialChannelBootstrap(true)")
+  expect(source).toContain('aria-label="Update Brain evidence"')
+  expect(source).toContain('initialBootstrapSnapshot?.manifestId')
+  expect(source).toContain("setEvidenceRefreshState")
+  expect(source).toContain("refreshInitialChannelBootstrap")
+  expect(source).toContain("result.status === \"partial\"")
+  expect(source).toContain("result.status === \"error\"")
+ })
+
+ it("constructs the runtime snapshot after render instead of during render", () => {
+  expect(source).toContain("const [runtimeSnapshot, setRuntimeSnapshot] = useState")
+  expect(source).toContain("useEffect(() => {")
+  expect(source).toContain("readBrainRuntimeSnapshot({")
+  expect(source).not.toContain("const runtimeSnapshot = useMemo(")
+ })
+
  it("mounts the canonical backend runtime snapshot above the conversation workspace", () => {
   expect(source).toContain('from "../services/brain/BrainRuntimeSnapshot"')
   expect(source).toContain('from "../components/brain/BrainRuntimePanel"')

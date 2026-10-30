@@ -359,22 +359,33 @@ const eventExplicitlyMatchesRequest = (
   || Boolean(receipt && event.entityId === receipt.id)
 }
 
-const descendantAlgorithmEvents = (
+export const collectDescendantAlgorithmEvents = (
  allEvents: AlgorithmIntelligenceEvent[],
  seedIds: Set<string>,
 ): AlgorithmIntelligenceEvent[] => {
- const included = new Set(seedIds)
- let changed = true
- while (changed) {
-  changed = false
-  for (const event of allEvents) {
-   if (included.has(event.id)) continue
-   if (event.parentEventIds?.some(parentId => included.has(parentId))) {
-    included.add(event.id)
-    changed = true
-   }
+ // Build the parent -> children index once, then walk only reachable events.
+ // The former repeated full-ledger scan could take O(depth * events) per
+ // provenance chain when events were stored in reverse chronological order.
+ const childrenByParent = new Map<string, AlgorithmIntelligenceEvent[]>()
+ for (const event of allEvents) {
+  for (const parentId of event.parentEventIds || []) {
+   const children = childrenByParent.get(parentId) || []
+   children.push(event)
+   childrenByParent.set(parentId, children)
   }
  }
+
+ const included = new Set(seedIds)
+ const pending = [...seedIds]
+ while (pending.length) {
+  const parentId = pending.pop()!
+  for (const child of childrenByParent.get(parentId) || []) {
+   if (included.has(child.id)) continue
+   included.add(child.id)
+   pending.push(child.id)
+  }
+ }
+
  return allEvents
   .filter(event => included.has(event.id))
   .sort((a, b) => a.createdAt - b.createdAt)
