@@ -148,7 +148,9 @@ export const resolveAmbiguousPublishStepAsApplied=(input:{transactionId:string;s
  if(!input.checkedBy.trim()||!input.evidence.trim())throw new Error("Manual recovery requires an operator and evidence.")
  if(transaction.steps[input.step]?.status!=="ambiguous")throw new Error("Publish step is not awaiting ambiguity resolution.")
  if(input.step==="upload-video"&&!input.youtubeVideoId&&!transaction.youtubeVideoId)throw new Error("Manual upload recovery must bind the confirmed YouTube video ID.")
- return completePublishStep({transactionId:input.transactionId,step:input.step,youtubeVideoId:input.youtubeVideoId,receipt:{...(input.receipt||{}),manualRecovery:true,checkedBy:input.checkedBy,evidence:input.evidence},toolId:"manual-publish-recovery"})
+ const completed=completePublishStep({transactionId:input.transactionId,step:input.step,youtubeVideoId:input.youtubeVideoId,receipt:{...(input.receipt||{}),manualRecovery:true,checkedBy:input.checkedBy,evidence:input.evidence},toolId:"manual-publish-recovery"})
+ if(input.step==="upload-video"&&completed.youtubeVideoId)return completePublishStep({transactionId:input.transactionId,step:"bind-youtube",youtubeVideoId:completed.youtubeVideoId,receipt:{manualRecovery:true,boundAfterReconciliation:true,checkedBy:input.checkedBy,evidence:input.evidence},toolId:"manual-publish-recovery"})
+ return completed
 }
 
 export const resolveAmbiguousPublishStepAsNotApplied=(input:{transactionId:string;step:PublishTransactionStep;checkedBy:string;evidence:string})=>{
