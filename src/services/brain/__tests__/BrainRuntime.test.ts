@@ -49,6 +49,7 @@ describe("BrainRuntime", () => {
   const result = await runBrainTask({
    channelId: "channel-1",
    userText: "What should I make next?",
+   operationId: "creator-action-123",
    snapshot: snapshot as any,
    systemPrompt: "system",
    growthContext: growthContext as any,
@@ -68,6 +69,7 @@ describe("BrainRuntime", () => {
   expect(turnInput).toMatchObject({
    channelId: "channel-1",
    userText: "What should I make next?",
+   operationId: "creator-action-123",
    snapshot,
    growthContext,
    recentTurns: [],
@@ -98,6 +100,7 @@ describe("BrainRuntime", () => {
    ...orchestratorResult,
    runtime: {
     runtimeVersion: BRAIN_RUNTIME_VERSION,
+    operationId: "creator-action-123",
     surface: "ai-brain",
     projectId: "project-1",
     contentBuildId: "cb-1",
@@ -259,6 +262,7 @@ describe("BrainRuntime", () => {
   })
 
   expect(metadata.runtimeVersion).toBe("brain-runtime-v1")
+  expect(metadata.operationId).toBeNull()
   expect(metadata.surface).toBe("unknown")
   expect(metadata.projectId).toBeNull()
   expect(metadata.artifactRefs).toHaveLength(50)

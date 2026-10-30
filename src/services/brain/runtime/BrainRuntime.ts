@@ -12,6 +12,7 @@ import type {
 export const BRAIN_RUNTIME_VERSION = "brain-runtime-v1"
 
 const toLegacyInput = (input: BrainRuntimeRequest): RunBrainTurnInput => ({
+ operationId: input.operationId,
  channelId: input.channelId,
  userText: input.userText,
  retryTurnId: input.retryTurnId,
@@ -39,6 +40,7 @@ export const buildBrainRuntimeMetadata = (
  input: BrainRuntimeRequest,
 ): BrainRuntimeMetadata => ({
  runtimeVersion: BRAIN_RUNTIME_VERSION,
+ operationId: input.operationId || null,
  surface: input.surface || "unknown",
  projectId: input.projectId || null,
  contentBuildId: typeof input.visibleContext?.contentBuildId === "string" ? input.visibleContext.contentBuildId : null,

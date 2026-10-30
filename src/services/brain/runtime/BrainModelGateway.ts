@@ -4,6 +4,8 @@ export interface BrainStructuredGenerationInput {
  history: any[]
  userText: string
  systemInstruction: string
+ /** Shared identity from the initiating creator action; not a provider-generated ID. */
+ operationId?: string
 }
 
 export interface BrainJsonGenerationInput {

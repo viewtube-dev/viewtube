@@ -153,6 +153,22 @@ describe("beginBrainTrace", () => {
  })
 
 
+ it("records provider identity separately from requested and served model names", () => {
+  const trace = beginBrainTrace({ kind: "question", channelId: "channel-1" })
+  trace.recordModelIdentity({
+   provider: "google-genai",
+   requested: "gemini-3.1-pro",
+   served: "gemini-3.1-flash-lite",
+   status: "served_known",
+  })
+  expect(trace.snapshot()).toMatchObject({
+   modelProvider: "google-genai",
+   modelRequested: "gemini-3.1-pro",
+   modelServed: "gemini-3.1-flash-lite",
+   modelIdentityStatus: "served_known",
+  })
+ })
+
  it("records requested-versus-served model identity without claiming an unknown served model", () => {
   const trace = beginBrainTrace({ kind: "question", channelId: "channel-1" })
   trace.recordModelIdentity({

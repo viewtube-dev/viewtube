@@ -23,6 +23,7 @@ export interface BrainRuntimePublicHandleContext {
 }
 
 export interface BrainRuntimeRequest extends RunBrainTurnInput {
+ operationId?: string | null
  surface?: BrainRuntimeSurface | (string & {})
  projectId?: string | null
  visibleContext?: Record<string, unknown> | null
@@ -33,6 +34,7 @@ export interface BrainRuntimeRequest extends RunBrainTurnInput {
 
 export interface BrainRuntimeMetadata {
  runtimeVersion: string
+ operationId: string | null
  surface: string
  projectId: string | null
  contentBuildId: string | null

@@ -348,6 +348,8 @@ export const BRAIN_PROMPT_VERSION = "brain-orchestrator-v2"
 export const BRAIN_OUTPUT_SCHEMA_VERSION = "structured-brain-output-v1"
 
 export interface RunBrainTurnInput {
+ /** Stable identity supplied by the initiating creator action, when available. */
+ operationId?: string | null
  channelId?: string | null
  userText: string
  retryTurnId?: string
@@ -414,6 +416,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
  // Non-model turns (including allowModel=false fallbacks) must not read browser-only provider settings.
  let requestedModel = input.modelGenerator || input.allowModel === false ? null : getActiveModel("text")
  let servedModel: string | null = null
+ let modelProvider: string | null = null
  let modelIdentityStatus: "served_known" | "requested_known_served_not_exposed" | "generator_identity_unavailable" | "model_disabled" = input.allowModel === false ? "model_disabled" : requestedModel ? "requested_known_served_not_exposed" : "generator_identity_unavailable"
  const generationInputSnapshot: BrainGenerationInputSnapshot<AIBrainContextSnapshot> = {
   snapshot: input.snapshot,
@@ -435,7 +438,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   : await beginAIBrainTurn({
    channelId: input.channelId,
    userText: input.userText,
-   metadata: { source: "brain_orchestrator", ...(input.promptOrigin ? { promptOrigin: input.promptOrigin } : {}), promptVersion: BRAIN_PROMPT_VERSION,
+   metadata: { operationId: input.operationId || null, source: "brain_orchestrator", ...(input.promptOrigin ? { promptOrigin: input.promptOrigin } : {}), promptVersion: BRAIN_PROMPT_VERSION,
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
     requestedModel,
@@ -670,10 +673,12 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   channelContext: savedChannelContext,
   creatorAnswerEvidenceRecords,
  })
- const questionTrace = beginBrainTrace({ kind: "question", channelId: input.channelId || null })
+ const operationId = input.operationId || pending.id
+ const questionTrace = beginBrainTrace({ kind: "question", channelId: input.channelId || null, operationId })
  questionTrace.setIntent({ intent: taskProfile.id, taskProfileId: taskProfile.id })
  questionTrace.recordCapabilities(capabilityIds)
  questionTrace.recordModelIdentity({
+  provider: modelProvider,
   requested: requestedModel,
   served: null,
   status: modelIdentityStatus,
@@ -803,12 +808,14 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     history: modelHistory || (input.history || []).slice(-8),
     userText: input.userText,
     systemInstruction: modelSystemInstruction || context.systemInstruction,
+    operationId,
    }), BRAIN_MODEL_TIMEOUT_MS)
    if (output.modelIdentity) {
+    modelProvider = output.modelIdentity.provider
     requestedModel = output.modelIdentity.requestedModel
     servedModel = output.modelIdentity.servedModel
     modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
-    questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
+    questionTrace.recordModelIdentity({ provider: modelProvider, requested: requestedModel, served: servedModel, status: modelIdentityStatus })
    }
    response = fromStructuredOutput(output, input.snapshot, [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords])
    response = { ...response, modules: formatCreatorGrowthModules(response, input.growthContext, input.userText) }
@@ -839,12 +846,14 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
       "- Use only supplied evidence for every numeric or channel-specific claim.",
       "- Differ materially from recent responses in both wording and recommended action.",
      ].join("\n"),
+     operationId,
     }), BRAIN_REPAIR_TIMEOUT_MS)
     if (repairedOutput.modelIdentity) {
+     modelProvider = repairedOutput.modelIdentity.provider
      requestedModel = repairedOutput.modelIdentity.requestedModel
      servedModel = repairedOutput.modelIdentity.servedModel
      modelIdentityStatus = servedModel ? "served_known" : "requested_known_served_not_exposed"
-     questionTrace.recordModelIdentity({ requested: requestedModel, served: servedModel, status: modelIdentityStatus })
+     questionTrace.recordModelIdentity({ provider: modelProvider, requested: requestedModel, served: servedModel, status: modelIdentityStatus })
     }
     const repairedResponse = fromStructuredOutput(repairedOutput, input.snapshot, [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords])
     const repairedCandidate = {
@@ -900,6 +909,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    confidence: evaluation.passed ? "high" : "medium",
    evidence: response.modules?.map((module) => module.title) || [],
    metadata: {
+    operationId,
     evaluationId: evaluation.id,
     rawUserMessage: input.userText,
     capabilities: capabilityIds,
@@ -910,7 +920,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
     requestedModel,
-    servedModel: null,
+    servedModel,
+    modelProvider,
     modelIdentityStatus,
     evidenceIds: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 100),
     channelId: input.channelId || null,
@@ -935,6 +946,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    evaluation,
    learningEntryIds: learning ? [learning.id] : [],
    metadata: {
+    operationId,
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
     generationPath,
@@ -943,7 +955,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
     requestedModel,
-    servedModel: null,
+    servedModel,
+    modelProvider,
     modelIdentityStatus,
     evidenceIds: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 100),
     evidenceRecords: renderedEvidenceRecords,
@@ -1033,6 +1046,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    confidence: evaluation.passed ? "high" : "medium",
    evidence: response.modules?.map((module) => module.title) || [],
    metadata: {
+    operationId,
     evaluationId: evaluation.id,
     rawUserMessage: input.userText,
     capabilities: capabilityIds,
@@ -1043,7 +1057,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
     requestedModel,
-    servedModel: null,
+    servedModel,
+    modelProvider,
     modelIdentityStatus,
     evidenceIds: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 100),
     channelId: input.channelId || null,
@@ -1066,6 +1081,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    evaluation,
    learningEntryIds: learning ? [learning.id] : [],
    metadata: {
+    operationId,
     orchestrationError: error instanceof Error ? error.message : String(error),
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
@@ -1075,7 +1091,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     contextResolverVersion: BRAIN_CONTEXT_RESOLVER_VERSION,
     outputSchemaVersion: BRAIN_OUTPUT_SCHEMA_VERSION,
     requestedModel,
-    servedModel: null,
+    servedModel,
+    modelProvider,
     modelIdentityStatus,
     evidenceIds: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id).slice(0, 100),
     evidenceRecords: renderedEvidenceRecords,

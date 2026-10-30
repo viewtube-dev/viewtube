@@ -80,6 +80,7 @@ export interface BrainTrace {
  /** Explicitly separates the requested model from the provider-served model. */
  modelRequested?: string | null
  modelServed?: string | null
+ modelProvider?: string | null
  modelIdentityStatus?: "served_known" | "requested_known_served_not_exposed" | "generator_identity_unavailable" | "model_disabled"
 
  /** Named grader results, 0-100. */
@@ -180,7 +181,7 @@ export interface BrainTraceRecorder {
  recordEvidence: (evidence: Partial<BrainTraceEvidence>) => void
  recordContext: (context: Partial<BrainTraceContext>) => void
  recordModel: (model: ModelResolution) => void
- recordModelIdentity: (input: { requested: string | null; served: string | null; status: NonNullable<BrainTrace["modelIdentityStatus"]> }) => void
+ recordModelIdentity: (input: { provider?: string | null; requested: string | null; served: string | null; status: NonNullable<BrainTrace["modelIdentityStatus"]> }) => void
  recordPromptVersion: (name: string, version: string) => void
  recordClaims: (claims: Partial<BrainTraceClaims>) => void
  recordStyle: (input: { styleProfileId?: string; styleScore?: number }) => void
@@ -243,7 +244,8 @@ export const beginBrainTrace = (input: {
   recordModel: (model) => {
    trace.model = model
   },
-  recordModelIdentity: ({ requested, served, status }) => {
+  recordModelIdentity: ({ provider, requested, served, status }) => {
+   trace.modelProvider = provider ?? null
    trace.modelRequested = requested
    trace.modelServed = served
    trace.modelIdentityStatus = status
