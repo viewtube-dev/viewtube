@@ -5054,6 +5054,7 @@ export const generateBrainJsonObject = async (input: {
  responseSchema?: Record<string, unknown>
  capability?: "analysis" | "thinking"
  history?: any[]
+ tools?: Array<Record<string, unknown>>
 }): Promise<unknown> => {
   return executeWithRetry(async () => {
    const response = await getAiClient().models.generateContent({
@@ -5069,6 +5070,7 @@ export const generateBrainJsonObject = async (input: {
      },
      responseMimeType: "application/json",
       ...(input.responseSchema ? { responseSchema: input.responseSchema as Schema } : {}),
+      ...(input.tools?.length ? { tools: input.tools as any } : {}),
     },
    })
    if (!response.text) throw new Error("The Brain model returned an empty tool-plan response")
