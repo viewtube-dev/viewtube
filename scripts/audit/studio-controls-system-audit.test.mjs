@@ -154,7 +154,7 @@ test("split text input accepts every canonical size supported by its production 
   assert.ok(splitInput.includes("../../styles/studio-split-text-input.css"));
   assert.ok(!splitInput.includes('sizeVariant?: "standard" | "compact"'));
   assert.ok(splitInputCss.includes("height: var(--vt-studio-control-height, 44px)"));
-  assert.ok(splitInputCss.includes("grid-template-columns: var(--vt-studio-split-rail-size"));
+  assert.ok(splitInputCss.includes("width: var(--vt-studio-split-rail-size"));
   assert.ok(!splitInputCss.includes("grid-template-columns: var(--vt-studio-control-height, 44px)"));
 });
 
