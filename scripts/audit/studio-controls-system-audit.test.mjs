@@ -120,12 +120,18 @@ test("vertical word-toggle handle retains measured word bounds and shared side i
 
 test("counter and bar family geometry comes from canonical family tokens and the system stylesheet", () => {
   assert.ok(tokens.includes("valueAreaAspectRatio: 2"));
+  assert.ok(tokens.includes("doubleSplitRailCount: 2"));
+  assert.ok(tokens.includes("sideRailCount: 1"));
   assert.ok(tokens.includes("heightToTextRatio: 1"));
   assert.ok(tokens.includes("heightToWidthRatio: 2.5"));
   assert.ok(generated.includes("--vt-studio-counter-value-area-aspect-ratio: 2 / 1;"));
+  assert.ok(generated.includes("--vt-studio-counter-double-rail-count: 2;"));
+  assert.ok(generated.includes("--vt-studio-counter-side-rail-count: 1;"));
   assert.ok(generated.includes("--vt-studio-bar-height-to-text-ratio: 1;"));
   assert.ok(generated.includes("--vt-studio-bar-height-to-width-ratio: 2.5;"));
   assert.ok(system.includes("var(--vt-studio-counter-value-area-aspect-ratio"));
+  assert.ok(system.includes("var(--vt-studio-counter-double-rail-count"));
+  assert.ok(system.includes("var(--vt-studio-counter-side-rail-count"));
   assert.ok(system.includes("var(--vt-studio-bar-height-to-text-ratio"));
   assert.ok(system.includes("var(--vt-studio-bar-height-to-width-ratio"));
   assert.ok(system.includes("var(--vt-studio-bar-radius"));
