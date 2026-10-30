@@ -4,7 +4,6 @@ import test from "node:test"
 
 const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
 const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
-const certification = readFileSync("src/studio-ui/StudioHubCertification.tsx", "utf8")
 const catalog = readFileSync("src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx", "utf8")
 const confirmedCatalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8")
 
@@ -68,9 +67,11 @@ test("word toggles use Late Silk and Velvet Release motion with reduced-motion a
   assert.match(styles, /\.vt-studio-44-word-handle-color\{[^}]*clip-path/)
 })
 
-test("certification catalog removes semantic tone demo and unifies square-icon specimens", () => {
-  assert.doesNotMatch(certification, /label="Semantic appearances"/)
-  assert.equal((certification.match(/label="Square icon variants \+ effects"/g) ?? []).length, 1)
-  assert.doesNotMatch(certification, /<StudioButton tone="(?:neutral|warning|success|danger)">/)
-  assert.doesNotMatch(certification, /<StudioSplitLeftButton[^>]*tone=/)
+test("retired certification, chat-action, select, search, and specimen-pair demos are removed from the library", () => {
+  const publicApi = readFileSync("src/studio-ui/index.ts", "utf8")
+  assert.doesNotMatch(confirmedCatalog, /StudioHubCertification|StudioChatActionGroup|StudioSelect|StudioSearchInput|StudioComponentGridSpecimen/)
+  assert.doesNotMatch(publicApi, /StudioHubCertification|StudioChatActionGroup|StudioComponentGridSpecimen/)
+  assert.doesNotMatch(controls, /export const StudioSelect|export const StudioSearchInput/)
+  assert.match(confirmedCatalog, /data-vt-library-component="StudioComponentGrid"/)
+  assert.match(confirmedCatalog, /data-vt-library-component="StudioComponentGridCell"/)
 })
