@@ -113,17 +113,17 @@ const floatingLabelOffsetRatio = readFloatingLabelMetric(sizeBaseBlock, "floatin
 const numberMix = Number(focusContract.match(/restTextMixPercent:\s*(\d+)/)?.[1]);
 const activeTextColor = focusContract.match(/activeTextColor:\s*"([^"]+)"/)?.[1];
 const activeStrokeColor = numberContract.match(/activeStrokeColor:\s*"([^"]+)"/)?.[1] ?? activeTextColor;
-const counterValueAreaAspectRatio = Number(numberContract.match(/valueAreaAspectRatio:\\s*([\\d.]+)/)?.[1]);
+const counterValueAreaAspectRatio = Number(numberContract.match(/valueAreaAspectRatio:\s*([\d.]+)/)?.[1]);
 const readBarNumber = (property) => {
-  const value = barContract.match(new RegExp(`\\\\b${property}:\\\\s*([\\\\d.]+)`))?.[1];
-  if (!value) throw new Error(`Missing Studio bar-toggle token: ${property}`);
+  const value = barContract.match(new RegExp(property + ":\\s*([\\d.]+)"))?.[1];
+  if (!value) throw new Error("Missing Studio bar-toggle token: " + property);
   return Number(value);
 };
 const barHeightToTextRatio = readBarNumber("heightToTextRatio");
 const barHeightToWidthRatio = readBarNumber("heightToWidthRatio");
 const barRadius = readBarNumber("radius");
 const barEmptyWhiteMixPercent = readBarNumber("emptyWhiteMixPercent");
-const barFullFillColor = barContract.match(/fullFillColor:\\s*"([^"]+)"/)?.[1] ?? "#000000";
+const barFullFillColor = barContract.match(/fullFillColor:\s*"([^"]+)"/)?.[1] ?? "#000000";
 if (!Number.isFinite(counterValueAreaAspectRatio)) throw new Error("Missing Studio counter value-area aspect ratio token");
 const focusHoldMs = Number(focusContract.match(/holdMs:\s*(\d+)/)?.[1]);
 const focusOutlineFadeMs = Number(focusContract.match(/outlineFadeMs:\s*(\d+)/)?.[1]);
