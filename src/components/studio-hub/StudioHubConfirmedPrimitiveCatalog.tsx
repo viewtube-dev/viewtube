@@ -178,7 +178,7 @@ const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens
 )
 
 const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[]; className?: string }> = ({ title, children, provenance, nonDefaultSettings = [], className }) => {
-  const representative = className?.split(/\\s+/).includes("vt-confirmed-representatives") ?? false
+  const representative = className?.split(/\s+/).includes("vt-confirmed-representatives") ?? false
   const headingId = representative ? "vt-confirmed-representatives-title" : undefined
   return (
   <section className={[`vt-confirmed-family ${title === "Button" || title === "Split-left" ? "vt-confirmed-button-family" : ""}`, className].filter(Boolean).join(" ")} aria-labelledby={headingId}>
