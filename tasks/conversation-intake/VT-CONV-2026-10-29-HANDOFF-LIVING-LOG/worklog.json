@@ -340,7 +340,8 @@
         "docs/governance/DOCUMENTATION.md"
       ],
       "branchPrRefs": [
-        "docs/living-conversation-handoff-log-2026-10-29"
+        "docs/living-conversation-handoff-log-2026-10-29",
+        "PR #1177"
       ],
       "evidenceRefs": [],
       "dependencies": [
@@ -397,7 +398,8 @@
       ],
       "branchPrRefs": [
         "PR #1170",
-        "docs/living-conversation-handoff-log-2026-10-29"
+        "docs/living-conversation-handoff-log-2026-10-29",
+        "PR #1177"
       ],
       "evidenceRefs": [
         "https://github.com/viewtube-dev/viewtube/pull/1170"
@@ -459,7 +461,8 @@
         ".github/workflows/release-gates.yml"
       ],
       "branchPrRefs": [
-        "docs/living-conversation-handoff-log-2026-10-29"
+        "docs/living-conversation-handoff-log-2026-10-29",
+        "PR #1177"
       ],
       "evidenceRefs": [
         "https://github.com/viewtube-dev/viewtube/actions/runs/40967448782"
@@ -584,7 +587,8 @@
         "docs/living-conversation-handoff-log-2026-10-29"
       ],
       "pullRequests": [
-        1170
+        1170,
+        1177
       ],
       "commits": [
         "49918598057dcecf46373e778e8a5a205b5919b2"
@@ -607,7 +611,9 @@
         "docs/conversation-handoff-complete-register-2026-10-29",
         "docs/living-conversation-handoff-log-2026-10-29"
       ],
-      "pullRequests": [],
+      "pullRequests": [
+        1177
+      ],
       "commits": [],
       "targetBranch": "master/consolidated-feature-integration",
       "deliveryState": "IN_PR",
@@ -626,7 +632,9 @@
         "docs/conversation-handoff-complete-register-2026-10-29",
         "docs/living-conversation-handoff-log-2026-10-29"
       ],
-      "pullRequests": [],
+      "pullRequests": [
+        1177
+      ],
       "commits": [],
       "targetBranch": "master/consolidated-feature-integration",
       "deliveryState": "IN_PR",
@@ -644,7 +652,9 @@
         "docs/conversation-handoff-complete-register-2026-10-29",
         "docs/living-conversation-handoff-log-2026-10-29"
       ],
-      "pullRequests": [],
+      "pullRequests": [
+        1177
+      ],
       "commits": [],
       "targetBranch": "master/consolidated-feature-integration",
       "deliveryState": "IN_PR",
@@ -662,7 +672,9 @@
         "docs/conversation-handoff-complete-register-2026-10-29",
         "docs/living-conversation-handoff-log-2026-10-29"
       ],
-      "pullRequests": [],
+      "pullRequests": [
+        1177
+      ],
       "commits": [],
       "targetBranch": "master/consolidated-feature-integration",
       "deliveryState": "IN_PR",
@@ -680,7 +692,9 @@
         "docs/conversation-handoff-complete-register-2026-10-29",
         "docs/living-conversation-handoff-log-2026-10-29"
       ],
-      "pullRequests": [],
+      "pullRequests": [
+        1177
+      ],
       "commits": [],
       "targetBranch": "master/consolidated-feature-integration",
       "deliveryState": "IN_PR",
@@ -788,7 +802,9 @@
         "docs/conversation-handoff-complete-register-2026-10-29",
         "docs/living-conversation-handoff-log-2026-10-29"
       ],
-      "pullRequests": [],
+      "pullRequests": [
+        1177
+      ],
       "commits": [],
       "targetBranch": "master/consolidated-feature-integration",
       "deliveryState": "IN_PR",
@@ -815,6 +831,28 @@
         "GitHub compare: merge commit is an ancestor of master/consolidated-feature-integration; original branch is 22 commits behind and 0 commits ahead of the merge."
       ],
       "notes": "The PR-opening head snapshot is not recoverable. The PR's final head is 49918598057dcecf46373e778e8a5a205b5919b2. The source branch has no unique commits beyond the merge commit; no post-PR work needs recovery. The target has advanced eight commits beyond the merge at the initial reconciliation point."
+    },
+    {
+      "branch": "docs/living-conversation-handoff-log-2026-10-29",
+      "targetBranch": "master/consolidated-feature-integration",
+      "pullRequest": 1177,
+      "openedHeadSha": "da40c647ea637a43a0a97cf6408b360f375223c6",
+      "currentHeadSha": "e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6",
+      "commitsAfterPrOpen": [
+        "e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6"
+      ],
+      "postPrChangedPaths": [
+        "scripts/audit/conversation-handoff-contract.test.mjs"
+      ],
+      "mergeCommitSha": null,
+      "targetContainsChanges": "NO",
+      "classification": "OPEN_PR",
+      "recoveryDestination": null,
+      "evidenceRefs": [
+        "https://github.com/viewtube-dev/viewtube/pull/1177",
+        "https://github.com/viewtube-dev/viewtube/commit/e63184ee06a0f00c4e2f25909b1c2bdbf2d3aeb6"
+      ],
+      "notes": "PR #1177 is open and mergeable. The first contract-test run found a test assertion wording mismatch, corrected by the listed post-open commit. Current PR metadata remains authoritative for any later branch-head changes; no merge is claimed."
     }
   ],
   "integrationGaps": [
