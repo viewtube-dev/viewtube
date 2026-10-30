@@ -28,6 +28,41 @@ The library must remain a showcase of real production exports—not a parallel i
 - Generated CSS is regenerated from its canonical emitter. Never hand-edit generated output.
 - No Codespaces. Do not edit production code during the audit-only phases. Do not remove legacy tracks until routes, consumers, and migration dependencies are traced and tested.
 
+## Existing work reconciliation and 2026-10-30 refresh
+
+This is a continuation audit, not a restart. The target branch already contains substantial Studio Controls audit work:
+
+- `docs/ui/STUDIO_CONTROLS_PHASE_0_1_2_AUDIT.md` records the 2026-10-29 source audit, its AUD-001 through AUD-010 discrepancy register, and subsequent Phase 3–6 source/catalog changes.
+- `tasks/p1-canonical-system-integration/workstreams/studio-controls/audit-checklist.md` remains the P1 workstream checklist. It is still marked NOT RUN as a complete visual/runtime audit; do not treat this new plan as a replacement status authority.
+- Existing machine checks include `scripts/audit/studio-hub-component-import-inventory.mjs`, `scripts/audit/studio-public-export-catalog-matrix.mjs`, `scripts/audit/confirmed-catalog-coverage.mjs`, and CSS/token/field/split/counter/dropdown-specific tests. Reuse and strengthen them rather than creating parallel audit utilities.
+- Existing catalog shell code confirms three routed tracks: hardcoded, primitive, and confirmed. The active confirmed catalog is imported from `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx`; legacy tracks remain live comparison/migration surfaces and must be traced before retirement.
+- The prior source report is a historical snapshot. Its 49-family and 64-public-export figures are not current counts and must not be repeated without refresh.
+
+**Current remote-source snapshot (2026-10-30, target branch HEAD `aa472be1b9bd7561fcfc1d8c97db4a420e410feb`):**
+
+| Inventory | Observed result | Evidence boundary |
+|---|---:|---|
+| `src/studio-ui/` | 64 tracked tree entries | Recursive Git tree; includes source, tests, CSS, and nested folders |
+| `src/styles/` | 45 tracked entries | Recursive Git tree; includes non-Studio styles and tests |
+| `src/components/` | 416 tracked entries | Full recursive scope; not all are Studio-related |
+| Studio-named/catalog/subtoolbox candidate paths | 72 | Filename/directory heuristic only; not a complete reachability classification |
+| Studio public-barrel value exports matching `Studio*` | 70 | Static export extraction from `src/studio-ui/index.ts` |
+| Those exports with a direct JSX/component-map match in Confirmed catalog | 70/70 | Static source match only; does not prove exactly-once visible runtime rendering or variant completeness |
+| Confirmed catalog `<Family>` blocks | 48 | Static source count |
+| Confirmed catalog `<Provenance>` blocks | 48 | Static source count |
+| Confirmed catalog `nonDefaultSettings` blocks | 48 | Static source count |
+
+**New findings / open questions from the refresh:**
+
+1. A second, root-level `src/components/StudioHubConfirmedPrimitiveCatalog.tsx` (about 166 KB) coexists with the documented active `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` (about 185 KB). This is a duplicate-catalog candidate, not yet proven dead. Trace every import, route, dynamic reference, test, and build inclusion before classifying it.
+2. `docs/ui/STUDIO_CONTROLS_AUTHORING_GUIDE.md` contains legacy guidance that conflicts with the newer hierarchy/token contract (for example, it specifies 32px standard type while the hierarchy and size contract specify 38px; it also overstates a single-file implementation owner despite dedicated primitive modules). Treat as stale documentation candidate; reconcile the full guide before editing.
+3. The active Confirmed catalog's family/provenance/settings counts are now 48, not the 49 recorded in the 2026-10-29 audit snapshot. Identify the removed/reorganized block and update the audit snapshot only after the exact diff and intent are understood.
+4. The current source-level export/catalog matrix has 70/70 matches, but it does not prove every eligible primitive has exactly one canonical visible representative, nor that all prop variants, supported size subsets, menu states, disabled/focus/selected states, and interaction paths are shown.
+5. The active stylesheet entry imports generated vars, a very large shared system sheet, core, split, fields, motion, parity, distill and recovery layers, then family sheets. This is a deliberate ordered cascade today; remaining `!important` and recovery declarations require selector-winner and consumer analysis, not count-based deletion.
+6. The repository's remote GitHub API does not expose local uncommitted working-tree state or execute local tests/browser capture. Phase 0 and all later runtime/visual claims remain bounded by that limitation until a real checkout/browser session is available.
+
+**Continuation rule:** Phase 1 refresh should close only the remaining file/import/consumer classification gaps. Reuse the existing Phase 0–6 audit, test suite, and P1 checklist as prior art. Do not create a second registry, duplicate inventory generator, or competing task-status ledger.
+
 ## Audit dimensions
 
 1. **Repository and ownership:** target ref/commit, dirty state, instructions, app entry points, active catalog, style import graph, ownership of each file.
