@@ -289,9 +289,9 @@ test("confirmed square icon button variants 1–4 are grouped into one standard 
   assert.match(styles, /\.vt-confirmed-square-variant-grid\s*\{[^}]*display:\s*flex[^}]*flex-flow:\s*row nowrap/);
 });
 
-test("square icon interaction effect specimens preserve two effect cards per row", () => {
-  assert.match(styles, /\.vt-confirmed-square-effect-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
-  assert.match(styles, /@media\s*\(max-width:\s*520px\)[\s\S]*?\.vt-confirmed-square-effect-grid\s*\{\s*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+test("square icon interaction effect specimens use full-width cards rather than columns", () => {
+  assert.match(styles, /\.vt-confirmed-square-effect-grid\s*\{[^}]*display:\s*flex[^}]*flex-flow:\s*column nowrap/);
+  assert.match(styles, /\.vt-confirmed-square-effect-pair\s*\{[^}]*width:\s*100%/);
 });
 
 test("confirmed stepper standard and compact specimens share one comparison row", () => {
