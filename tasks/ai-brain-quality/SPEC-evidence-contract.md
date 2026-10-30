@@ -28,3 +28,15 @@ Never: duplicate analytics storage; infer sensitive viewer traits; fabricate una
 - Scope mismatch is detectable before model invocation.
 - Missing/stale/conflicting evidence remains explicit.
 - Tests prove missing != zero and channel/project scope is preserved.
+
+
+## Target-branch implementation reconciliation — 2026-10-29
+
+Source inspection on `master/consolidated-feature-integration` confirms the additive contract is implemented in `src/services/brain/BrainEvidenceContract.ts`, including:
+- stable claim identity, source owner/source ID/snapshot, channel/project/ContentBuild/video scope, metric/value/unit, timeframe, freshness, epistemic state, confidence, provenance and limitations;
+- missing values remain `null`, never numeric zero;
+- explicit scope states and health summaries for coverage, missingness, staleness, conflicts and scope mismatch.
+
+The contract is consumed as a projection over canonical EvidenceRecord/analytics sources; it is not a replacement evidence store. `src/services/brain/BrainContextResolution.ts` also uses task and capability evidence requirements and reports missing required sections.
+
+**Verification boundary:** source presence is confirmed by fetch, but tests/typecheck/build/runtime caller coverage were not executed in this documentation pass. The success criteria remain open until Phase 1 of `tasks/p1-canonical-system-integration/workstreams/ai-brain-quality-and-systems-management/plan.md` passes on the exact target SHA.
