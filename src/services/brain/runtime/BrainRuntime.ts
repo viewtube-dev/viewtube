@@ -136,9 +136,14 @@ export const runBrainTask = async (
   : input.surface === "brain-hub-widget"
    ? "brain_hub"
    : "workspace"
- const evidenceIds = Array.isArray(input.snapshot?.evidencePack?.evidenceIds)
-  ? input.snapshot.evidencePack.evidenceIds
-  : []
+ const runtimeChannelId = publicContext.metadata
+  ? (publicContext.metadata.identity as { channelId: string }).channelId
+  : input.channelId
+ const evidenceIds = publicContext.metadata
+  ? publicContext.evidenceVideos.map((video) => video.evidenceId)
+  : Array.isArray(input.snapshot?.evidencePack?.evidenceIds)
+   ? input.snapshot.evidencePack.evidenceIds
+   : []
  const continuity = resolveBrainAssistantContinuity({
   location: {
    surface,
@@ -203,6 +208,7 @@ export const runBrainTask = async (
   : input.snapshot
  const runtimeInput: BrainRuntimeRequest = {
   ...input,
+  channelId: runtimeChannelId,
   snapshot: runtimeSnapshot,
   systemPrompt: [
    input.systemPrompt,
