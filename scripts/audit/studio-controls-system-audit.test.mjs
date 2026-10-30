@@ -9,6 +9,7 @@ const generated = read("src/styles/studio-control-vars.generated.css");
 const system = read("src/styles/studio-control-system.css");
 const split = read("src/styles/studio-control-split.css");
 const recovery = read("src/styles/studio-control-recovery-overrides.css");
+const distill = read("src/styles/studio-control-distill-overrides.css");
 const fields = read("src/styles/studio-control-fields.css");
 const recovery = read("src/styles/studio-control-recovery-overrides.css");
 const standaloneInputCss = read("src/styles/studio-text-input.css");
@@ -195,6 +196,9 @@ test("inter-module rails use the inner square size, not the full outer face", ()
   assert.ok(system.includes("aspect-ratio: 1 / 1"));
   assert.ok(!system.includes("width: var(--vt-im-face, var(--vt-studio-control-height, 44px)) !important"));
   assert.ok(!recovery.includes(".vt-studio-inter-module__rail { width: var(--vt-im-face"));
+  assert.ok(!distill.includes("flex: 0 0 var(--vt-studio-control-height, 44px) !important"));
+  assert.ok(!distill.includes("Top-split head columns: rail column = full control height"));
+  assert.ok(!distill.includes("width: var(--vt-im-face, 44px) !important"));
 });
 
 test("inter-modules are full-width and the representative section is a single full-width column", () => {
