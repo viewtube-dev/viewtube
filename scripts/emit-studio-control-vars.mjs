@@ -69,7 +69,7 @@ function readMenuNumber(property) {
 }
 
 function readMenuName(property) {
-  const match = dropdownMenuContract.match(new RegExp(`${property}:\\s*"([^"]+)"`));
+  const match = dropdownMenuContract.match(new RegExp(`(?:^|\\s)${property}:\\s*"([^"]+)"`));
   if (!match) throw new Error(`Missing Studio dropdown menu token: ${property}`);
   return match[1];
 }
