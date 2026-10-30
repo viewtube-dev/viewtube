@@ -110,6 +110,11 @@ import { selectBrainAnswerModules } from "./brainAnswerModuleSelection"
 import { BrainJournalDialog } from "../components/brain/BrainJournalDialog"
 import { BrainContextCorrectionDialog, type BrainContextCorrectionItem } from "../components/brain/BrainContextCorrectionDialog"
 import { readBrainRuntimeSnapshot } from "../services/brain/BrainRuntimeSnapshot"
+import { ALGORITHM_INTELLIGENCE_EVENT_CHANGED } from "../services/brain/AlgorithmIntelligenceEventLedger"
+import { BRAIN_TRACE_EVENT } from "../services/brain/BrainTrace"
+import { BRAIN_OUTCOME_EVENT } from "../services/brain/BrainOutcomeLedger"
+import { CONTENT_BUILD_REPOSITORY_CHANGED } from "../services/asset-engine/ContentBuildRepository"
+import { GENERATION_RECORDS_CHANGED } from "../services/generationStore"
 import { readBrainComposerDraft, writeBrainComposerDraft } from "../services/brain/BrainComposerDraftStore"
 import { buildScopedCreatorAnswerEvidenceRecords, mergeCreatorAnswerEvidenceIntoPack } from "../services/brain/CreatorAnswerEvidence"
 import { buildBrainContextDisplayItems } from "../services/brain/BrainContextPresentation"
@@ -1105,6 +1110,7 @@ const AIBrainCommandInterface: React.FC = () => {
 
  useEffect(() => {
   let active = true
+  let scheduled = false
   let idleHandle: number | null = null
   let timeoutHandle: ReturnType<typeof setTimeout> | null = null
   const refreshRuntimeSnapshot = () => {
@@ -1116,16 +1122,41 @@ const AIBrainCommandInterface: React.FC = () => {
    })
    if (active) setRuntimeSnapshot(nextSnapshot)
   }
-
-  // Let the first interactive frame paint before reading and joining local ledgers.
-  if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
-   idleHandle = window.requestIdleCallback(refreshRuntimeSnapshot, { timeout: 1200 })
-  } else {
-   timeoutHandle = setTimeout(refreshRuntimeSnapshot, 0)
+  const runScheduledRefresh = () => {
+   scheduled = false
+   idleHandle = null
+   timeoutHandle = null
+   refreshRuntimeSnapshot()
   }
+  const scheduleRefresh = () => {
+   if (!active || scheduled) return
+   scheduled = true
+   if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+    idleHandle = window.requestIdleCallback(runScheduledRefresh, { timeout: 1200 })
+   } else {
+    timeoutHandle = setTimeout(runScheduledRefresh, 0)
+   }
+  }
+  const invalidationEvents = [
+   ALGORITHM_INTELLIGENCE_EVENT_CHANGED,
+   BRAIN_TRACE_EVENT,
+   BRAIN_OUTCOME_EVENT,
+   CONTENT_BUILD_REPOSITORY_CHANGED,
+   GENERATION_RECORDS_CHANGED,
+   "canonical_store_updated",
+   "vt_initial_channel_bootstrap_committed",
+  ]
+  invalidationEvents.forEach(eventName => window.addEventListener(eventName, scheduleRefresh))
+  window.addEventListener("storage", scheduleRefresh)
+
+  // Initial read and subsequent invalidations share one idle scheduler. Multiple
+  // writes in a single operation collapse into one snapshot rebuild.
+  scheduleRefresh()
 
   return () => {
    active = false
+   invalidationEvents.forEach(eventName => window.removeEventListener(eventName, scheduleRefresh))
+   window.removeEventListener("storage", scheduleRefresh)
    if (idleHandle !== null && typeof window !== "undefined" && typeof window.cancelIdleCallback === "function") {
     window.cancelIdleCallback(idleHandle)
    }
