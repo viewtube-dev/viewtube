@@ -843,6 +843,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
       "- Use only supplied evidence for every numeric or channel-specific claim.",
       "- Differ materially from recent responses in both wording and recommended action.",
      ].join("\n"),
+     operationId,
     }), BRAIN_REPAIR_TIMEOUT_MS)
     if (repairedOutput.modelIdentity) {
      requestedModel = repairedOutput.modelIdentity.requestedModel
@@ -1039,6 +1040,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    confidence: evaluation.passed ? "high" : "medium",
    evidence: response.modules?.map((module) => module.title) || [],
    metadata: {
+    operationId,
     evaluationId: evaluation.id,
     rawUserMessage: input.userText,
     capabilities: capabilityIds,
