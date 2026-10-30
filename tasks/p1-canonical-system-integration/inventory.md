@@ -66,3 +66,10 @@ Audited target SHA: `0135fa33bf5cd59503c9feecce4977072ef60fec`. The initial lead
 - Client service: `src/services/publicHandleMode.ts`; tests: `src/services/publicHandleMode.test.ts`, `publicHandleMode.pending-ingestion.test.ts`, fixtures tests.
 - Brain: `src/services/brain/runtime/BrainRuntime.ts` and `BrainRuntimeContracts.ts`; Settings, SidebarChatbot, AIBrainCommandInterface and BrainHubWidget provide explicit public context for logged-out/disconnected sessions.
 - Stale scaffold: `src/features/capabilities/public-channel-resolution/` still contains a scaffold API URI and throwing write stub. Search found no production imports of its page/hook/API. Do not treat as canonical; separate no-loss cleanup required.
+
+
+### Shared identity/diagnostics code inventory (2026-10-30)
+- `src/services/operations/OperationEnvelope.ts` + tests: event/operation/correlation/causation/idempotency/scope/evidence/artifact contract.
+- `src/services/operations/OperationRecord.ts` + tests: operation lifecycle, approval and cross-domain lineage projection.
+- `src/services/diagnostics.ts`, `src/services/diagnostics/unified.ts` + tests, `src/app/onScreenDiagnostics.ts`: sanitized bounded diagnostics and adapter normalization.
+- `src/services/brain/BrainAssistantContinuity.ts`, `EvidenceRecord.ts`, `BrainOutcomeLedger.ts`, `AlgorithmIntelligenceEventLedger.ts`: existing context/evidence/outcome ancestry. See [identity map](identity-map.md).
