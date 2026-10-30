@@ -197,145 +197,45 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
 )
 
 const ConfirmedStudioCounterFamily: React.FC = () => {
-  const [values, setValues] = React.useState({ supreme: 22, standard: 22, compact: 3, mini: 2, micro: 7 })
-  const update = (size: keyof typeof values) => (value: number) => setValues(current => ({ ...current, [size]: value }))
-  return <Family title="StudioCounter · Five Size Tiers" nonDefaultSettings={[
-    "One canonical primary-fill design per size; inverse-color variants are intentionally excluded.",
-    "Independent button-only counter; range is 0–100 for every supported tier.",
-  ]} provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px supreme / 44px standard / 28px compact / 20px mini / 12px micro." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-    <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row"><div className="vt-confirmed-counter-size-rows">
-      {(["supreme","standard","compact","mini","micro"] as const).map(size => <div className="vt-confirmed-counter-size-row" key={size}><small>{size.toUpperCase()} · {({supreme:60,standard:44,compact:28,mini:20,micro:12})[size]}PX</small><div className="vt-confirmed-counter-pair"><StudioCounter value={values[size]} onValueChange={update(size)} size={size} min={0} max={100} ariaLabel={`${size} counter`} /></div></div>)}
-    </div></div>
+  const [values, setValues] = React.useState([22, 3, 4, 7, 8, 9, 10])
+  const update = (index: number) => (value: number) => setValues(current => current.map((old, i) => i === index ? value : old))
+  return <Family title="StudioCounter · Standard / Compact / Micro" nonDefaultSettings={[
+    "One canonical primary-fill design only; inverse-color variants are intentionally excluded.",
+    "Independent button-only counter; range is 0–100 for every specimen.",
+  ]} provenance={<Provenance primitive="StudioCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact / 12px micro · shared counter chevron and focus tokens." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <SizeMatrix label="Counter size examples"
+      standard={<StudioCounter value={values[0]} onValueChange={update(0)} size="standard" min={0} max={100} ariaLabel="Standard counter" />}
+      compact={[0,1].map(i => compact(<StudioCounter value={values[1+i]} onValueChange={update(1+i)} size="compact" min={0} max={100} ariaLabel={`Compact counter ${i+1}`} />, `compact-${i}`))}
+      micro={[0,1,2,3].map(i => micro(<StudioCounter value={values[3+i]} onValueChange={update(3+i)} size="micro" min={0} max={100} ariaLabel={`Micro counter ${i+1}`} />, `micro-${i}`))} />
   </Family>
 }
 
 const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
-  const [values, setValues] = React.useState({ supreme: 62, standard: 62, compact: 38, mini: 20, micro: 7 })
-  const update = (size: keyof typeof values) => (value: number) => setValues(current => ({ ...current, [size]: value }))
-  return <Family title="StudioDoubleSplitSlider · Five Size Tiers" nonDefaultSettings={[
-    "One canonical primary-fill design per size; inverse-color variants are intentionally excluded.",
-    "L1 range-slider track and live numeric readout on the shared double-split shell.",
-    "All specimens use a 0–100 value range.",
-  ]} provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px supreme / 44px standard / 28px compact / 20px mini / 12px micro." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-    <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row"><div className="vt-confirmed-counter-size-rows">
-      {(["supreme","standard","compact","mini","micro"] as const).map(size => <div className="vt-confirmed-counter-size-row" key={size}><small>{size.toUpperCase()} · {({supreme:60,standard:44,compact:28,mini:20,micro:12})[size]}PX</small><div className="vt-confirmed-slider-pair"><StudioDoubleSplitSlider value={values[size]} onValueChange={update(size)} size={size} ariaLabel={`${size} slider`} /></div></div>)}
-    </div></div>
-    <div className="vt-confirmed-variant is-full-row"><span>COUNTER-CONTROLLED · UP / DOWN</span><StudioDoubleSplitSlider value={values.standard} onValueChange={update("standard")} size="standard" leftControls="counter" ariaLabel="Counter-controlled slider" /></div>
+  const [values, setValues] = React.useState([62, 38, 42, 7, 12, 18, 24])
+  const update = (index: number) => (value: number) => setValues(current => current.map((old, i) => i === index ? value : old))
+  return <Family title="StudioDoubleSplitSlider · Standard / Compact / Micro" nonDefaultSettings={[
+    "One canonical primary-fill design only; inverse-color variants are intentionally excluded.",
+    "Shared double-split rail geometry and global slider fill defaults; all specimens use a 0–100 value range.",
+  ]} provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact / 12px micro · shared split-shell tokens." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <SizeMatrix label="Double split slider size examples"
+      standard={<StudioDoubleSplitSlider value={values[0]} onValueChange={update(0)} size="standard" ariaLabel="Standard slider" />}
+      compact={[0,1].map(i => compact(<StudioDoubleSplitSlider value={values[1+i]} onValueChange={update(1+i)} size="compact" ariaLabel={`Compact slider ${i+1}`} />, `compact-${i}`))}
+      micro={[0,1,2,3].map(i => micro(<StudioDoubleSplitSlider value={values[3+i]} onValueChange={update(3+i)} size="micro" ariaLabel={`Micro slider ${i+1}`} />, `micro-${i}`))} />
   </Family>
 }
 
 const ConfirmedStudioSideCounterFamily: React.FC = () => {
-  const [values, setValues] = React.useState({ supreme: 5, standard: 5, compact: 3, mini: 2, micro: 8 })
-  const update = (size: keyof typeof values) => (value: number) => setValues(current => ({ ...current, [size]: value }))
-  return <Family title="StudioSideCounter · Five Size Tiers" nonDefaultSettings={[
+  const [values, setValues] = React.useState([5, 3, 4, 8, 9, 10, 11])
+  const update = (index: number) => (value: number) => setValues(current => current.map((old, i) => i === index ? value : old))
+  return <Family title="StudioSideCounter · Standard / Compact / Micro" nonDefaultSettings={[
     "Dedicated right-side action rail with one canonical primary-fill specimen per size.",
     "No inverse-color or duplicate left-counter variants are shown in this family.",
-  ]} provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px supreme / 44px standard / 28px compact / 20px mini / 12px micro." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-    <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row"><div className="vt-confirmed-counter-size-rows">
-      {(["supreme","standard","compact","mini","micro"] as const).map(size => <div className="vt-confirmed-counter-size-row" key={size}><small>{size.toUpperCase()} · {({supreme:60,standard:44,compact:28,mini:20,micro:12})[size]}PX</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={values[size]} onValueChange={update(size)} size={size} min={0} max={100} ariaLabel={`${size} side counter`} /></div></div>)}
-    </div></div>
+  ]} provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact / 12px micro · shared counter chevron and focus tokens." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+    <SizeMatrix label="Side counter size examples"
+      standard={<StudioSideCounter value={values[0]} onValueChange={update(0)} size="standard" min={0} max={100} ariaLabel="Standard side counter" />}
+      compact={[0,1].map(i => compact(<StudioSideCounter value={values[1+i]} onValueChange={update(1+i)} size="compact" min={0} max={100} ariaLabel={`Compact side counter ${i+1}`} />, `compact-${i}`))}
+      micro={[0,1,2,3].map(i => micro(<StudioSideCounter value={values[3+i]} onValueChange={update(3+i)} size="micro" min={0} max={100} ariaLabel={`Micro side counter ${i+1}`} />, `micro-${i}`))} />
   </Family>
-}
-
-const SizeMatrix: React.FC<{ standard: React.ReactNode; compact: React.ReactNode[]; micro: React.ReactNode[]; label: string }> = ({ standard, compact, micro, label }) => (
-  <div className="vt-confirmed-size-matrix" aria-label={label}>
-    <div className="vt-confirmed-size-matrix__standard">{standard}</div>
-    <div className="vt-confirmed-size-matrix__compact">{compact.slice(0, 2)}</div>
-    <div className="vt-confirmed-size-matrix__micro">{micro.slice(0, 4)}</div>
-  </div>
-)
-
-const StudioPrimitiveRepresentatives: React.FC = () => {
-  const [selected, setSelected] = React.useState([false, false, false, false, false])
-  return <section className="vt-confirmed-family vt-confirmed-representatives" aria-labelledby="vt-confirmed-representatives-title">
-    <h3 id="vt-confirmed-representatives-title">Representatives · Production Primitives</h3>
-    <p className="vt-confirmed-defaults-summary">A curated quick reference of real production primitives. Detailed variants and family anatomy remain in their dedicated modules below.</p>
-    <div className="vt-confirmed-variants">
-      <div className="vt-confirmed-variant is-full-row"><span>STANDARD BUTTON</span><StudioButton sizeVariant="standard">CREATE</StudioButton></div>
-      <div className="vt-confirmed-variant is-full-row"><span>STANDARD TEXT INPUT</span><StudioTextInput sizeVariant="standard" aria-label="Representative text input" placeholder="TYPE HERE" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>STANDARD SPLIT BADGE</span><StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="standard">READY</StudioSplitLeftBadge></div>
-      <div className="vt-confirmed-variant is-full-row"><span>STANDARD LEFT WORD COUNTER</span><StudioLeftWordCounter value={2} onValueChange={() => {}} size="standard" ariaLabel="Representative word counter" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>STANDARD DOUBLE-SPLIT ARROW TOGGLE</span><StudioArrowToggle options={["ONE", "TWO", "THREE"]} value="TWO" onValueChange={() => {}} size="standard" ariaLabel="Representative arrow toggle" /></div>
-      <div className="vt-confirmed-variant is-full-row"><span>FIVE-SQUARE ICON GROUP · PRIMARY DEFAULT / SECONDARY SELECTED</span>
-        <StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Representative five square actions">
-          {(["Heart", "Bell", "Settings", "Download", "Refresh"] as const).map((label, index) => <StudioSquareIconButton key={label} icon={index === 0 ? <Check aria-hidden="true" /> : index === 1 ? <Sparkles aria-hidden="true" /> : <Settings2 aria-hidden="true" />} label={label} sizeVariant="standard" variant="v1" selected={selected[index]} onSelectedChange={value => setSelected(current => current.map((old, i) => i === index ? value : old))} />)}
-        </StudioSquareIconButtonGroup>
-      </div>
-    </div>
-  </section>
-}
-
-const RestoredPrimitiveShowcase: React.FC = () => {
-  const [vertical, setVertical] = React.useState([false, true, false, true, false, true, false])
-  const [leftWord, setLeftWord] = React.useState(2)
-  const [doubleWord, setDoubleWord] = React.useState(2)
-  const [arrow, setArrow] = React.useState("TWO")
-  const [side, setSide] = React.useState("MID")
-  const [leftSide, setLeftSide] = React.useState("LOW")
-  const [rightSide, setRightSide] = React.useState("HIGH")
-  const [bar, setBar] = React.useState(55)
-  const [accordion, setAccordion] = React.useState(1)
-  const words = ["ONE", "TWO", "THREE", "FOUR"]
-  const accordionItems = [
-    { accessibleLabel: "Overview", icon: <Check aria-hidden="true" />, content: <span>OVERVIEW</span> },
-    { accessibleLabel: "Settings", icon: <Settings2 aria-hidden="true" />, content: <span>SETTINGS</span> },
-    { accessibleLabel: "Insights", icon: <Sparkles aria-hidden="true" />, content: <span>INSIGHTS</span> },
-  ]
-  const compact = (node: React.ReactNode, key: string) => <div className="vt-confirmed-size-matrix__item" key={key}>{node}</div>
-  const micro = (node: React.ReactNode, key: string) => <div className="vt-confirmed-size-matrix__item" key={key}>{node}</div>
-  return <>
-    <Family title="StudioVerticalWordToggle · Shared Focus + Character Fade" nonDefaultSettings={["The production primitive owns the moving handle, word measurement, synchronized text-color fade, and reduced-motion behavior."]} provenance={<Provenance primitive="StudioVerticalWordToggle" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-restored-primitives.css" tokens="Global five-tier size contract · primary/secondary palette pair · shared focus outline." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <SizeMatrix label="Vertical word toggle size examples"
-        standard={<StudioVerticalWordToggle value={vertical[0]} onValueChange={value => setVertical(current => current.map((old, i) => i === 0 ? value : old))} words={["WRITE", "CREATE"]} sizeVariant="standard" aria-label="Standard vertical word toggle" />}
-        compact={[0,1].map(i => compact(<StudioVerticalWordToggle value={vertical[1+i]} onValueChange={value => setVertical(current => current.map((old, j) => j === 1+i ? value : old))} words={["OFF", "ON"]} sizeVariant="compact" aria-label={`Compact vertical word toggle ${i+1}`} />, `compact-${i}`))}
-        micro={[0,1,2,3].map(i => micro(<StudioVerticalWordToggle value={vertical[3+i]} onValueChange={value => setVertical(current => current.map((old, j) => j === 3+i ? value : old))} words={["OFF", "ON"]} sizeVariant="micro" aria-label={`Micro vertical word toggle ${i+1}`} />, `micro-${i}`))} />
-    </Family>
-    <Family title="StudioSquareIconButtonGroup · Five Primary Squares" nonDefaultSettings={["Five square buttons are primary-filled by default; selecting a button changes only that button to the secondary fill."]} provenance={<Provenance primitive="StudioSquareIconButtonGroup / StudioSquareIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-restored-primitives.css + src/styles/studio-control-system.css" tokens="Square 1×1 size geometry · primary resting fill · secondary selected fill." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row"><StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Five standard square actions">{["A","B","C","D","E"].map((label,index) => <StudioSquareIconButton key={label} icon={<Settings2 aria-hidden="true" />} label={`Standard action ${label}`} sizeVariant="standard" variant="v1" selected={selected[index]} onSelectedChange={value => setSelected(current => current.map((old,i) => i === index ? value : old))} />)}</StudioSquareIconButtonGroup></div>
-    </Family>
-    <Family title="StudioTextBox · Read-only Display Field" provenance={<Provenance primitive="StudioTextBox" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-restored-primitives.css" tokens="Black text and border · persistent primary inset stroke · secondary focus outline contract." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <SizeMatrix label="Text box size examples" standard={<StudioTextBox size="standard">STANDARD DISPLAY TEXT</StudioTextBox>}
-        compact={[0,1].map(i => compact(<StudioTextBox size="compact">{i === 0 ? "COMPACT DISPLAY" : "SECOND COMPACT DISPLAY"}</StudioTextBox>, `compact-${i}`))}
-        micro={[0,1,2,3].map(i => micro(<StudioTextBox size="micro">{`MICRO ${i+1}`}</StudioTextBox>, `micro-${i}`))} />
-    </Family>
-    <Family title="StudioLeftWordCounter · Four-state Cycle" provenance={<Provenance primitive="StudioLeftWordCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-word-counter.css" tokens="Shared counter chevron anatomy · ONE / TWO / THREE / FOUR cyclic value." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <SizeMatrix label="Left word counter size examples" standard={<StudioLeftWordCounter value={leftWord} onValueChange={setLeftWord} size="standard" ariaLabel="Standard left word counter" />}
-        compact={[0,1].map(i => compact(<StudioLeftWordCounter value={leftWord} onValueChange={setLeftWord} size="compact" ariaLabel={`Compact left word counter ${i+1}`} />, `compact-${i}`))}
-        micro={[0,1,2,3].map(i => micro(<StudioLeftWordCounter value={leftWord} onValueChange={setLeftWord} size="micro" ariaLabel={`Micro left word counter ${i+1}`} />, `micro-${i}`))} />
-    </Family>
-    <Family title="StudioSplitAccordion · Shared Split Anatomy" provenance={<Provenance primitive="StudioSplitAccordion" tsx="src/studio-ui/primitives/StudioSplitAccordion.tsx" css="src/styles/studio-split-accordion.css" tokens="Five size tiers · shared focus outline · reduced-motion-aware train animation." imports={["src/studio-ui/primitives/StudioSplitAccordion.tsx"]} />}>
-      <SizeMatrix label="Split accordion size examples" standard={<StudioSplitAccordion items={accordionItems} activeIndex={accordion} onActiveIndexChange={setAccordion} sizeVariant="standard" accessibleLabel="Standard split accordion" />}
-        compact={[0,1].map(i => compact(<StudioSplitAccordion items={accordionItems} defaultActiveIndex={i} sizeVariant="compact" accessibleLabel={`Compact split accordion ${i+1}`} />, `compact-${i}`))}
-        micro={[0,1,2,3].map(i => micro(<StudioSplitAccordion items={accordionItems} defaultActiveIndex={i%3} sizeVariant="micro" accessibleLabel={`Micro split accordion ${i+1}`} />, `micro-${i}`))} />
-    </Family>
-    <Family title="StudioArrowToggle · StudioSideToggle · StudioDoubleSideToggle" provenance={<Provenance primitive="StudioArrowToggle / StudioSideToggle / StudioDoubleSideToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-value-toggles.css" tokens="Shared StudioSplitShell rails · token-derived size geometry · common focus outline." imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
-      <div className="vt-confirmed-size-matrix">
-        <div className="vt-confirmed-size-matrix__standard"><StudioArrowToggle options={words} value={arrow} onValueChange={setArrow} size="standard" ariaLabel="Standard arrow toggle" /></div>
-        <div className="vt-confirmed-size-matrix__compact">{[0,1].map(i => <div className="vt-confirmed-size-matrix__item" key={i}><StudioArrowToggle options={words} value={arrow} onValueChange={setArrow} size="compact" ariaLabel={`Compact arrow toggle ${i+1}`} /></div>)}</div>
-        <div className="vt-confirmed-size-matrix__micro">{[0,1,2,3].map(i => <div className="vt-confirmed-size-matrix__item" key={i}><StudioArrowToggle options={words} value={arrow} onValueChange={setArrow} size="micro" ariaLabel={`Micro arrow toggle ${i+1}`} /></div>)}</div>
-      </div>
-      <div className="vt-confirmed-size-matrix">
-        <div className="vt-confirmed-size-matrix__standard"><StudioSideToggle options={words} value={side} onValueChange={setSide} arrowSide="right" size="standard" ariaLabel="Standard side toggle" /></div>
-        <div className="vt-confirmed-size-matrix__compact">{[0,1].map(i => <div className="vt-confirmed-size-matrix__item" key={i}><StudioSideToggle options={words} value={side} onValueChange={setSide} size="compact" ariaLabel={`Compact side toggle ${i+1}`} /></div>)}</div>
-        <div className="vt-confirmed-size-matrix__micro">{[0,1,2,3].map(i => <div className="vt-confirmed-size-matrix__item" key={i}><StudioSideToggle options={words} value={side} onValueChange={setSide} size="micro" ariaLabel={`Micro side toggle ${i+1}`} /></div>)}</div>
-      </div>
-      <div className="vt-confirmed-size-matrix">
-        <div className="vt-confirmed-size-matrix__standard"><StudioDoubleSideToggle left={{options:words,value:leftSide,onValueChange:setLeftSide}} right={{options:words,value:rightSide,onValueChange:setRightSide}} size="standard" /></div>
-        <div className="vt-confirmed-size-matrix__compact">{[0,1].map(i => <div className="vt-confirmed-size-matrix__item" key={i}><StudioDoubleSideToggle left={{options:words,value:leftSide,onValueChange:setLeftSide}} right={{options:words,value:rightSide,onValueChange:setRightSide}} size="compact" /></div>)}</div>
-        <div className="vt-confirmed-size-matrix__micro">{[0,1,2,3].map(i => <div className="vt-confirmed-size-matrix__item" key={i}><StudioDoubleSideToggle left={{options:words,value:leftSide,onValueChange:setLeftSide}} right={{options:words,value:rightSide,onValueChange:setRightSide}} size="micro" /></div>)}</div>
-      </div>
-    </Family>
-    <Family title="StudioBarToggle · Meter + Stepper Rails" provenance={<Provenance primitive="StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-value-toggles.css" tokens="0–100 value · bounded stepper · responsive bar count · accessible meter." imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
-      <SizeMatrix label="Bar toggle size examples" standard={<StudioBarToggle value={bar} onValueChange={setBar} size="standard" ariaLabel="Standard bar toggle" />}
-        compact={[0,1].map(i => compact(<StudioBarToggle value={bar} onValueChange={setBar} size="compact" ariaLabel={`Compact bar toggle ${i+1}`} />, `compact-${i}`))}
-        micro={[0,1,2,3].map(i => micro(<StudioBarToggle value={bar} onValueChange={setBar} size="micro" ariaLabel={`Micro bar toggle ${i+1}`} />, `micro-${i}`))} />
-    </Family>
-    <Family title="StudioDoubleSplitWordCounter · Double Chevron Rails" provenance={<Provenance primitive="StudioDoubleSplitWordCounter" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-value-toggles.css" tokens="Shared chevron source · square rails · four-state cyclic word count." imports={["src/studio-ui/primitives/StudioValueToggles.tsx"]} />}>
-      <SizeMatrix label="Double split word counter size examples" standard={<StudioDoubleSplitWordCounter value={doubleWord} onValueChange={setDoubleWord} size="standard" />}
-        compact={[0,1].map(i => compact(<StudioDoubleSplitWordCounter value={doubleWord} onValueChange={setDoubleWord} size="compact" />, `compact-${i}`))}
-        micro={[0,1,2,3].map(i => micro(<StudioDoubleSplitWordCounter value={doubleWord} onValueChange={setDoubleWord} size="micro" />, `micro-${i}`))} />
-    </Family>
-  </>
 }
 
 /** Certified production examples only. This catalog uses the real Studio Hub exports. */
