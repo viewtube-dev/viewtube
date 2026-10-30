@@ -74,3 +74,21 @@ Future gated DO/UNDO operations only after semantic action contracts, permission
 - Prompt Registry stays prompt inventory authority.
 - BrainTrace/ToolReceipt/Outcome systems stay runtime evidence owners.
 - The management system stores references and projections, not duplicate payload universes.
+
+
+## Current-target reconciliation and execution routing — 2026-10-29
+
+The September 24 capability map is retained as design history. The program is now governed by current canonical owners and the consolidated P1 execution plan:
+
+`tasks/p1-canonical-system-integration/workstreams/ai-brain-quality-and-systems-management/plan.md`.
+
+Target-source inspection confirms important partial foundations already exist:
+- evidence contract: `src/services/brain/BrainEvidenceContract.ts`;
+- task/capability context resolver: `src/services/brain/BrainContextResolution.ts`;
+- Channel Knowledge projection/retrieval: `src/services/brain/ChannelKnowledgeProjection.ts`;
+- read-only runtime provenance projection: `src/services/brain/BrainRuntimeSnapshot.ts`;
+- prompt authority/registry: `docs/specifications/PROMPTS.md` and `docs/specifications/prompt-registry.json`.
+
+These are not proof of complete runtime reachability, UI coverage, durable persistence or certification. Management runtime projection must reuse these canonical adapters and fill only demonstrated gaps.
+
+The M1–M12 dependency ordering remains a useful capability taxonomy, but execution must respect the migration notice above: agent claims/receipts and exact task state belong to Herald / Conversation OS / Crown / Task Authority, not a new AI management ledger. Managed actions remain deferred until read-only projection certification.

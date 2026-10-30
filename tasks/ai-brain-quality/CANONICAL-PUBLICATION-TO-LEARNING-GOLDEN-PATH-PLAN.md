@@ -51,3 +51,20 @@
 ## Definition of done
 
 The path is complete only when every required contract test passes, all required release gates are green, the exact deployed commit is verified, and the end-to-end evidence bundle proves the creator-approved lineage. A merged implementation without that evidence is not certified.
+
+
+## Cross-program execution alignment — 2026-10-29
+
+This golden path is the publication/evaluation/learning integration phase of the consolidated program:
+`tasks/p1-canonical-system-integration/workstreams/ai-brain-quality-and-systems-management/plan.md` Phase 5.
+
+Before implementation, complete Phase 0 baseline and verify the existing canonical publication owners and Phase 0–4 dependencies. Reuse the existing `BrainRuntimeSnapshot` provenance projection where useful; do not add a parallel provenance ledger.
+
+Additional explicit verification requirements:
+- exact stable identity propagation across request, context manifest, tool receipt, BrainTrace, ActionPacket, selected/final asset, PublishTransaction, analytics checkpoint, outcome, EvaluationRecord and learning candidate;
+- distinguish an evaluation event reference from a fully resolved durable EvaluationRecord;
+- prove authenticated server persistence and fresh-client hydration, not merely local/browser state;
+- test exact video/channel/snapshot/hash joins and idempotency under duplicate/retried delivery;
+- record exact tested commit and workflow evidence.
+
+No golden-path implementation or certification is claimed by this documentation update.
