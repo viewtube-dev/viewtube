@@ -256,3 +256,33 @@ Verified against the current integration branch:
 5. The Project receiver should reuse `ProjectCreationDialog` and `initializeProjectContentIdentity`; do not add a second Project store, create directly from packet payloads, or auto-call `addProject`.
 
 **Verification limitation:** GitHub file APIs permit source inspection and commits but do not provide a local checkout/test runner. No runtime code was changed and no Vitest/lint/typecheck result is claimed. Before implementation, run the repository's actual focused tests in a checkout; add the new contract tests first (RED), then implement the smallest receiver path (GREEN).
+
+
+### WF-01 — Receiver integration design decision (2026-10-30)
+
+**Canonical UI entry point:** `src/components/projects/ProjectBuilderModule.tsx`, not a new route or project store. It already owns the shared `ProjectCreationDialog` and workspace scope. The `project-calendar` capability route resolves to `/projects`.
+
+**Draft handoff path:**
+
+1. Mount `BrainLiveToolInbox destinationToolId="project-calendar"` in Project Builder.
+2. Extend the inbox prefill callback with an optional handoff context (handoff ID + packet ID + source/evidence/provenance identity); preserve existing one-argument consumers.
+3. For the Project receiver only, opening/loading a packet must leave it in `opened`; do not call `acceptToolIntegration` merely because prefill was applied.
+4. Add a typed, allow-listed Project draft mapper. Do not spread arbitrary packet payload properties into a `Project`. Keep the originating packet ID, source tool, evidence IDs, and provenance available to the confirmation flow.
+5. Pass the draft into the existing `ProjectCreationDialog` as initial values. Keep fields editable. Dialog close/reject must not call `addProject` or mark the handoff complete.
+6. On explicit Initialize Project action, validate the draft, initialize canonical Project/ContentBuild identity with `initializeProjectContentIdentity`, then persist through `addProject` / `setActiveProject`. Only after successful creation should the handoff transition to accepted/completed and record its resulting Project identity.
+7. Make confirmation idempotent. A retry after successful creation must resolve the already-created Project from a canonical packet-to-project association, not create another Project. This association must extend the existing handoff/Project identity owner; do not create a second localStorage registry.
+
+**Required regression tests (write first):**
+
+- A compatible comment/evidence packet appears in Project Builder and remains `opened` after prefill (not accepted/completed).
+- Only explicitly allow-listed fields populate the Project draft; unknown payload keys are ignored.
+- Evidence IDs, packet ID, source tool, provenance, channel and existing Project/ContentBuild context remain available after prefill.
+- Closing/rejecting the draft creates no Project and leaves a dismissible handoff.
+- Explicit confirmation calls the canonical identity initializer and creates exactly one Project/ContentBuild.
+- Repeated confirmation/re-delivery resolves the same Project and does not duplicate it.
+- A failed identity initialization leaves the handoff uncompleted and permits a safe retry.
+- Existing inbox consumers retain their current callback compatibility; review/acceptance semantics are not silently changed for unrelated destinations.
+
+**Known contract mismatch:** current `project-calendar.accepts` omits `comment` and `evidence`. Do not add either until the receiver and tests above exist. The producer should target the Project capability only with a payload kind that the typed mapper actually supports, or the shared capability contract must be deliberately extended alongside the receiver.
+
+**Current limitation:** source inspection is complete enough to specify the integration boundary, but this environment cannot resolve GitHub for a local checkout and GitHub file APIs cannot execute Vitest. No runtime implementation or test result is claimed.
