@@ -404,7 +404,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-control-floating-label-height: var(--vt-studio-standard-font-size, 38px);
   --vt-studio-control-floating-label-offset-ratio: var(--vt-studio-floating-label-offset-ratio, 1.2);
   --vt-studio-floating-label-size: var(--vt-studio-control-floating-label-height);
-  --vt-studio-control-focus-outline-width: 1.95px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-standard-focus-outline-width, 1.95px);
   position: relative;
   display: block;
   width: 100%;
@@ -413,7 +413,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 }
 .vt-studio-floating-field[data-size="compact"] {
   --vt-studio-control-floating-label-height: var(--vt-studio-compact-font-size, 24px);
-  --vt-studio-control-focus-outline-width: 1.3px;
+  --vt-studio-control-focus-outline-width: var(--vt-studio-compact-focus-outline-width, 1.3px);
 }
 .vt-studio-floating-field[data-size="micro"] {
   --vt-studio-control-floating-label-height: var(--vt-studio-micro-font-size, 10px);
@@ -5516,6 +5516,10 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
     solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
+}
+.vt-studio-value-toggle--double .vt-studio-value-toggle__divider {
+  outline: none;
+  box-shadow: none;
 }
 .vt-studio-value-toggle--double .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow:focus-visible {
   outline: none;
