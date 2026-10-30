@@ -59,7 +59,7 @@ import {
  estimateMeterQuote,
  getCurrentEntitlement,
 } from "./billingEntitlement"
-import { canonicalizeGeminiModelId, GEMINI_MODEL_REGISTRY, getGeminiModel, resolveGeminiModel, classifyGeminiFailure, type GeminiCapability, type GeminiModelResolution } from "./geminiModelGovernance"
+import { canonicalizeGeminiModelId, GEMINI_MODEL_REGISTRY, getGeminiModel, resolveGeminiModel, executeGeminiWithFallback, resolveGeminiGenerationProfile, pickGeminiGenerationOverrides, type GeminiCapability, type GeminiModelResolution } from "./geminiModelGovernance"
 import { consultBrainSync, annotateSystemPrompt } from "./brain/Utils";
 import {
  consumeUnifiedAiCredits,
@@ -452,52 +452,71 @@ export const getAiClient = () => {
  const generateContent = baseClient.models.generateContent.bind(baseClient.models)
  const generateContentStream = baseClient.models.generateContentStream.bind(baseClient.models)
 
-  const withCanonicalModel = async <T>(
-  op: "generateContent" | "generateContentStream",
-  args: any[],
-  run: (nextArgs: any[]) => Promise<T>,
- ): Promise<T> => {
-  const requestedModel = toCanonicalModel(String(args?.[0]?.model || "gemini-3.1-flash"))
-  const modelSequence = getProviderModelSequence(requestedModel)
-  let lastError: any
-  let transientFallbacks = 0
-  for (let index = 0; index < modelSequence.length; index += 1) {
-   const modelId = modelSequence[index]
-   try {
-    const nextArgs = [...args]
-    nextArgs[0] = { ...(nextArgs[0] || {}), model: modelId }
-    return await run(nextArgs)
-   } catch (error: any) {
-    lastError = error
-    const failure = classifyGeminiFailure({
-     status: error?.status,
-     code: error?.code,
-     message: error?.message ?? String(error),
-    })
-    const nextFallback = modelSequence[index + 1]
-    // Never mask credential, permission, quota, or unknown failures with a different model.
-    if (!failure.fallbackAllowed || !nextFallback) throw error
-    // A transient provider outage gets one retry only; unsupported-model errors may
-    // walk the short capability-compatible candidate list (at most three attempts).
-    if (failure.kind === "transient") {
-     if (transientFallbacks >= 1) throw error
-     transientFallbacks += 1
-    }
-    emitModelFallbackEvent({
-     sourceModel: modelId,
-     fallbackModel: nextFallback,
-     reason: failure.kind,
-     tool: op,
-     effectiveModel: nextFallback,
-     attempt: index + 1,
-    })
-   }
+  const servedModels = new WeakMap<object, string>()
+
+  const getRequestCapability = (request: any): GeminiCapability => {
+   const config = request?.config || {}
+   if (config.thinkingConfig) return "thinking"
+   const serialized = JSON.stringify(request?.contents || "").toLowerCase()
+   if (serialized.includes("video/") || serialized.includes("videodata")) return "video"
+   if (serialized.includes("audio/") || serialized.includes("audiodata")) return "audio"
+   if (serialized.includes("image/") || serialized.includes("imagedata")) return "image"
+   return "text"
   }
-  throw lastError
- }
+
+  const applyGenerationProfile = (request: any): any => {
+   const current = request || {}
+   const modelId = String(current.model || "gemini-3.1-flash")
+   const capability = getRequestCapability(current)
+   const modelResolution = resolveGeminiModel({ preference: modelId, capability })
+   const profile = resolveGeminiGenerationProfile({
+    capability,
+    modelId: modelResolution.served,
+    taskOverride: pickGeminiGenerationOverrides(current.config),
+   })
+   const settings = { ...profile.settings } as Record<string, unknown>
+   const thinkingLevel = settings.thinkingLevel
+   delete settings.thinkingLevel
+   const config = { ...settings, ...(current.config || {}) }
+   if (thinkingLevel && !config.thinkingConfig) {
+    config.thinkingConfig = { thinkingLevel: ThinkingLevel[thinkingLevel as keyof typeof ThinkingLevel] }
+   }
+   return { ...current, model: modelResolution.served, config }
+  }
+
+  const withCanonicalModel = async <T>(
+   op: "generateContent" | "generateContentStream",
+   args: any[],
+   run: (nextArgs: any[]) => Promise<T>,
+  ): Promise<T> => {
+   const originalRequest = args?.[0] || {}
+   const profiledRequest = applyGenerationProfile(originalRequest)
+   const requestedModel = toCanonicalModel(String(profiledRequest.model || "gemini-3.1-flash"))
+   const modelSequence = getProviderModelSequence(requestedModel)
+   const execution = await executeGeminiWithFallback({
+    modelCandidates: modelSequence,
+    execute: async (modelId) => {
+     const nextArgs = [...args]
+     nextArgs[0] = { ...profiledRequest, model: modelId }
+     return run(nextArgs)
+    },
+    onFallback: ({ sourceModel, fallbackModel, reason, attempt }) => emitModelFallbackEvent({
+     sourceModel,
+     fallbackModel,
+     reason,
+     tool: op,
+     effectiveModel: fallbackModel,
+     attempt,
+    }),
+   })
+   if (execution.response && typeof execution.response === "object") {
+    servedModels.set(execution.response as object, execution.servedModel)
+   }
+   return execution.response
+  }
 
  baseClient.models.generateContent = (async (...args: any[]) => {
-  const modelId = toCanonicalModel(String(args?.[0]?.model || "gemini-3.1-flash"))
+  const modelId = String(applyGenerationProfile(args?.[0]).model || "gemini-3.1-flash")
   const promptText = JSON.stringify(args?.[0]?.contents || "")
   const entitlement = getCurrentEntitlement()
  const quote = estimateMeterQuote(
@@ -571,7 +590,7 @@ export const getAiClient = () => {
  const response: any = await withCanonicalModel("generateContent", args, (nextArgs) =>
    (generateContent as any)(...nextArgs),
   )
-  const effectiveProviderModel = String(response?.modelVersion || args?.[0]?.model || modelId)
+  const effectiveProviderModel = String(response?.modelVersion || servedModels.get(response) || args?.[0]?.model || modelId)
   const effectiveCanonicalModel = inferCanonicalFromProvider(effectiveProviderModel)
   const usage = response?.usageMetadata || {}
   const inputTokens = Number(usage.promptTokenCount ?? usage.inputTokenCount ?? 0)
@@ -619,7 +638,7 @@ export const getAiClient = () => {
  }) as any
 
  baseClient.models.generateContentStream = (async (...args: any[]) => {
-  const modelId = toCanonicalModel(String(args?.[0]?.model || "gemini-3.1-flash"))
+  const modelId = String(applyGenerationProfile(args?.[0]).model || "gemini-3.1-flash")
   const promptText = JSON.stringify(args?.[0]?.contents || "")
   const entitlement = getCurrentEntitlement()
   const quote = estimateMeterQuote(
@@ -692,7 +711,7 @@ export const getAiClient = () => {
   return (async function* () {
    let inputTokens = 0
    let outputTokens = 0
-   let effectiveProviderModel = String(args?.[0]?.model || modelId)
+   let effectiveProviderModel = String(servedModels.get(responseStream as object) || args?.[0]?.model || modelId)
    try {
     for await (const chunk of responseStream as AsyncIterable<any>) {
      const usage = chunk?.usageMetadata || {}

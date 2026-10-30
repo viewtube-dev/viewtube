@@ -116,3 +116,17 @@ npx tsc --noEmit
 npm run build
 ```
 Also run the repository's provider architecture guard and full test suite. No test, typecheck, build, real-key probe, or production deployment result is claimed by this source-edit pass.
+
+
+## Phase 4 provider boundary update — 2026-10-29
+
+The shared `getAiClient()` wrapper is now the point where request capability, effective generation profile, provider fallback, and served-model attribution converge.
+
+- Both `generateContent` and `generateContentStream` pass through the same bounded fallback executor.
+- Capability inference recognizes explicit thinking config and image/video/audio MIME markers; text is the conservative default.
+- The capability resolver runs before entitlement preflight so the preflight quote uses the selected capability-compatible model.
+- The response's actual served model is tracked even when the SDK omits `modelVersion`, then used for post-response metering.
+- Only generation-profile keys are extracted from task config; provider tools, response schema, system instruction, and other SDK options are preserved as task configuration.
+- Fallback telemetry contains model IDs, operation, reason, attempt, and timestamp only. It does not include prompts, API keys, account identifiers, or raw provider errors.
+
+Phase 4 does not claim every caller explicitly annotates capability. Requests with nonstandard media payload structures remain a migration target for an explicit capability parameter. The legacy candidate map is retained until live compatibility and modality-preserving candidate evidence is available.
