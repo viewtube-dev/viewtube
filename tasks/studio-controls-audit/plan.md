@@ -287,3 +287,36 @@ Compare failures with the target-branch baseline and report pre-existing failure
 - Stale, duplicate, misleading, broken, missing, and unverified entries are explicitly classified.
 - Audit findings include severity, impact, evidence, and a narrow remediation owner.
 - Approved fixes have regression tests, synchronized docs, regenerated artifacts, passing build/tests, and observed browser verification.
+
+
+## Phase 1–2 continuation — verified test and ownership crosswalk (2026-10-30)
+
+**Inspection ref:** `d03e28010f7a45ddaac84a3554b6eaaa3d785436` (remote source only).
+
+### AUD-018 — Focused Studio test suite contains contradictory lifecycle assertions (P1 candidate)
+
+The current `package.json` `test:studio-controls` command explicitly runs both `src/components/studio-hub/StudioHubConfirmedInlineStepperCatalog.test.tsx` and `src/studio-ui/primitives/StudioControls.test.tsx`. The first expects the active catalog to render a standard and compact `StudioInlineStepper`, but the active catalog currently has no `StudioInlineStepper` tag/marker. In the second test file:
+
+- The import list imports `StudioSimpleDropdown` from `./StudioControls` and a render test instantiates it.
+- Later assertions require `StudioSplitStepper` and `StudioSimpleDropdown` to exist in the catalog, implementation source, and public barrel.
+- Further assertions require `StudioInlineStepper` to exist in the implementation source.
+- Current `StudioControls.tsx` and `src/studio-ui/index.ts` do not export these names, and the active catalog has no matching specimens.
+
+This is stronger than a catalog-only gap: the test file itself imports/uses an absent symbol, and several source-contract assertions conflict with the current implementation/API. The exact failing test output remains unverified because no checkout/test process was available. Do not make the tests pass by resurrecting old APIs automatically. First determine intended lifecycle for InlineStepper and SplitStepper (active, internal, or retired); reconcile SimpleDropdown with the established consolidation into StudioDropdown; then update either implementation/catalog/API or obsolete tests consistently.
+
+### AUD-019 — Public API matrix is intentionally incomplete for module-only exports (P2)
+
+The existing `studio-public-export-catalog-matrix.mjs` reads only `src/studio-ui/index.ts` and the active Confirmed catalog. It therefore cannot report module-only exports such as `StudioInlineStepper` / `StudioSplitStepper` in `StudioControls.tsx`, nor distinguish helpers like `StudioSplitShell` from user-facing primitives. Extend the existing matrix only after the lifecycle taxonomy is approved; do not add a second registry. The matrix's current empty `dispositions` object also means documented exceptions are not yet represented in executable source.
+
+### AUD-020 — A legacy coverage script encodes a CSS contract that conflicts with current Studio direction (P1/P2 decision)
+
+`scripts/audit/confirmed-catalog-coverage.mjs` contains checks for fixed geometry and several `!important` declarations, including black active bar toggles and split-text-input declarations. It also checks for unknown-family fail-closed copy that is absent from the current catalog. The script is not registered in `package.json`; meanwhile the focused suite does run newer parity, field, split, dropdown, and catalog tests. Treat the legacy script as an untrusted historical guard until each assertion is reconciled with current canonical tokens and user-approved control contracts. Do not register or run it as a release gate unchanged, and do not preserve obsolete `!important` rules solely to satisfy it.
+
+### Verified source facts / boundaries
+
+- The active library shell imports the nested catalog and also mounts a separate Confirmed Split Text Input catalog. This separate catalog must be included in the representative crosswalk; the 70/70 scan against the main catalog alone is not a whole-library count.
+- The focused script includes dedicated component, behavior, parity, split-stepper-divider, confirmed-library-layout, CSS ownership, dropdown/counter/slider and toggle checks. This provides a test inventory, not proof that the suite passes.
+- The module-only symbol inventory and all 416 `src/components/` entries remain incompletely reachability-classified. The root-level duplicate catalog still requires repository-wide call-site and dynamic-reference tracing.
+- No tests, typecheck, build, computed-style capture, keyboard test, or responsive browser test were executed. GitHub source reads do not expose local dirty state or provide a runnable checkout.
+
+**Next audit slice:** complete a component-level call-site graph (including the split-text-input secondary catalog, direct imports, lazy/dynamic references and tests), classify every module-only symbol and wrapper, then build the per-family API/variant matrix. Only after that should the existing tests/matrix be reconciled and executed in a real checkout.
