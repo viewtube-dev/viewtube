@@ -92,7 +92,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     colorPair: "conic perimeter and breathing layers use primary (--pair-a) and secondary (--pair-b) from the active Toolbox pair",
     behavior: "native file picker, drag/drop, image preview, filename announcement, disabled state, and reduced-motion support",
     shadowPolicy: "none",
-    rationale: "The upload frame is a ratio-based media canvas, not a fixed-height 44px/28px/14px control.",
+    rationale: "The upload frame is a ratio-based media canvas, not a fixed-height control.",
   },
   textareaTypography: {
     globalRuleException: true,
@@ -106,7 +106,7 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
     stroke: 3,
     radius: 6,
     shadow: 0,
-    rationale: "Prominent actions are a separate 56px action family, not a third ordinary control size.",
+    rationale: "Prominent actions are a separate 56px action family, not an ordinary control size.",
   },
 } as const
 
@@ -126,7 +126,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   splitIconRailColor: "secondary (--pair-b) by default; size-tier icon dimensions; centered on both axes",
   badgeTypography: "Inter, font-weight 1000, font-synthesis none; labels centered; no thin-weight inheritance",
   splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
-  globalSizeLattice: "standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; micro 14px / 1px border / 2px radius / 10px type and icon",
+  globalSizeLattice: "supreme 60px / 3px border / 6px radius / 52px type; standard 44px / 3px / 6px / 38px; compact 28px / 2px / 4px / 24px; mini 20px / 1.5px / 3px / 17.5px; micro 12px / 1px / 2px / 10px",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
 
@@ -145,7 +145,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   lineHeight: 0.86,
   shadowPolicy: "Global Studio primitive/component rule: no box-shadow, text-shadow, fake-shadow pseudo-layers, or shadow-based geometry compensation. No CSS transitions or press/hover transforms on primitive/component shells. Text-field borders and focus outlines remain explicit non-shadow strokes. Any future exception requires an approved token-backed contract and an accurate Reference Library entry.",
   squareIconButtonDefaults: {
-    geometry: "Square face matching the split-left icon rail: 44px standard / 28px compact; default large icon preset is 38px / 1.9 stroke standard and 24px / 2.0 stroke compact. The current (28px/18px) and moderate (34px/22px) icon presets are opt-in only.",
+    geometry: "Square face matches its selected size-tier rail; default icon size follows the five-tier token ladder. Current and moderate icon presets are opt-in only.",
     v1: "Primary (--pair-a) face fill; no shadow.",
     v2: "Secondary (--pair-b) face fill; no shadow.",
     v3: "Selectable v1/v2 color swap; click toggles the face fill only.",
@@ -203,7 +203,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
       borderStrokeColor: "#000000",
       inlineStrokeColor: "primary at 100% opacity",
       outlineStrokeColor: "secondary",
-      focusOutlineWidth: "65% of border width: 1.95px standard / 1.3px compact / 0.65px micro",
+      focusOutlineWidth: "65% of the selected tier border width; 1.95px supreme/standard, 1.3px compact, 0.975px mini, 0.65px micro",
       focusOutlineOffset: "0px for both sizes",
       outlineStrokeWidth: "65% of the selected border width; secondary color remains at 100% opacity",
     },
