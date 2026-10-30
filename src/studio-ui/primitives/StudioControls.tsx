@@ -2588,3 +2588,6 @@ StudioDoubleSplitSlider.displayName = "StudioDoubleSplitSlider";
 
 export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, StudioDoubleSplitWordCounter, STUDIO_VALUE_TOGGLE_VARIANTS } from "./StudioValueToggles";
 export type { StudioToggleAppearance, StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioBarToggleProps, StudioDoubleSplitWordCounterProps } from "./StudioValueToggles";
+
+export { StudioSplitAccordion, easeTrain, easeTrainInverse, openPanelWidth, iconPositions, planTrain, trainWidthsAt } from "./StudioSplitAccordion";
+export type { StudioSplitAccordionLayout, StudioSplitAccordionSize, StudioSplitAccordionVariant, StudioSplitAccordionBorderTone, StudioSplitAccordionItem, StudioSplitAccordionProps } from "./StudioSplitAccordion";
