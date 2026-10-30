@@ -39,6 +39,8 @@ test("all five size tiers are canonical, generated, and consumed by the system",
       assert.ok(generated.includes("--vt-studio-" + tier + "-" + cssKey + ": " + value + "px;"), tier + "." + key + " generated variable");
     }
     assert.ok(system.includes('data-size="' + tier + '"'), tier + " is consumed by the system stylesheet");
+    assert.ok(system.includes("--vt-studio-control-focus-outline-width: var(--vt-studio-" + tier + "-focus-outline-width"));
+    assert.ok(system.includes("--vt-studio-control-secondary-outline-width: var(--vt-studio-" + tier + "-secondary-outline-width"));
     if (tier === "micro") {
       assert.ok(componentGridCss.includes("--vt-studio-micro-stroke, 1px"));
       assert.ok(componentGridCss.includes("--vt-studio-micro-radius, 2px"));
@@ -49,6 +51,12 @@ test("all five size tiers are canonical, generated, and consumed by the system",
 test("component-level size documentation agrees with canonical Supreme and Mini typography", () => {
   assert.ok(controls.includes("supreme 60px / 3px border / 6px radius / 52px type and icon"));
   assert.ok(controls.includes("mini 20px / 1.5px border / 3px radius / 17.5px type and icon"));
+});
+
+test("outline stroke derives from the current tier and focus outlines use the 65-percent tier tokens", () => {
+  assert.ok(system.includes("--vt-studio-control-outline-stroke: calc(var(--vt-studio-control-stroke, 3px) * 0.5)"));
+  assert.ok(!system.includes("--vt-studio-control-focus-outline-width: 1.3px"));
+  assert.ok(!system.includes("--vt-studio-control-focus-outline-width: 1.95px"));
 });
 
 test("editable inputs and textareas switch text fill and glyph stroke together on focus", () => {
