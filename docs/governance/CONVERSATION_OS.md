@@ -326,3 +326,8 @@ Keep request completion separate from delivery. Distinguish local implementation
 Feature completion reviews reuse Task Authority's maturity axes and vocabulary. A component, API or passing unit test does not establish application integration. Record missing frontend/backend, authorization, persistence, workflow, feedback, runtime, responsive, documentation and release connections where relevant.
 
 The five-idea evolution pass routes proposals through existing Ideas Registry and improvement recommendations. The next-best-action recommendation derives from canonical tasks, Crown missions/work orders, dependencies, blockers and verification receipts. These are recommendations, not a parallel backlog or permission to mutate canonical task state.
+
+
+## Handoff execution contract
+
+For the exact operational sequence, use `docs/governance/CONVERSATION_HANDOFFS.md` and the existing handoff/reconciliation skills. A handoff is not complete merely because a summary exists: the three-file package, instruction register, work-item dispositions, branch/PR lineage, nine-axis integration gaps, artifact links, five routed proposals, validation and next action must all be accounted for. Keep unknown source links and unrecoverable Git lineage explicitly UNKNOWN.
