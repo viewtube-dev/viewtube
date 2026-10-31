@@ -96,6 +96,42 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
   assert.ok(fields.includes('textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"],'));
 });
 
+test("counter, slider and value-toggle families inherit the global full-row width", () => {
+  assert.match(split, /\.vt-studio-counter,[\s\S]*?width:\s*100%/);
+  assert.doesNotMatch(split, /--vt-studio-counter-root-width/);
+  assert.doesNotMatch(system, /\.vt-studio-counter,[\s\S]{0,240}width:\s*max-content/);
+  assert.match(valueToggleCss, /\.vt-studio-value-toggle\s*\{[\s\S]*?width:\s*100%/);
+  assert.doesNotMatch(distill, /\.vt-studio-(?:counter|side-counter|left-counter|double-split-slider|value-toggle)[^{]*\{[^}]*width:\s*(?:max-content|fit-content)/s);
+  assert.match(system, /\.vt-studio-44-word-toggle[^}]*width:\s*max-content/);
+  assert.ok(system.includes(".vt-studio-vertical-word-toggle"));
+});
+
+test("bar-toggle bars use the restored standard-height ratio", () => {
+  assert.match(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?height:\s*65%/);
+  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar[^}]*height:\s*65%/);
+});
+
+test("side-toggle arrow buttons occupy equal grid rows and labels are vertically centered", () => {
+  assert.match(sideRailCss, /grid-template-rows:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(sideRailCss, /\.vt-studio-side-counter__actions\s*>\s*button\s*\{[^}]*height:\s*auto/s);
+  assert.match(valueToggleCss, /\.vt-studio-value-toggle--side \.vt-studio-value-toggle__face\s*\{[^}]*place-items:\s*center/s);
+});
+
+test("split-left and double-split badge shells reserve and display every icon rail", () => {
+  assert.match(split, /\.vt-studio-split-shell\[data-vt-studio-split="left"\][\s\S]*?grid-template-columns:\s*var\(--vt-studio-control-height[^;]*minmax\(0,\s*1fr\)/);
+  assert.match(split, /\.vt-studio-split-shell\[data-vt-studio-split="double"\][\s\S]*?grid-template-columns:\s*var\(--vt-studio-control-height[^;]*minmax\(0,\s*1fr\)[^;]*var\(--vt-studio-control-height/);
+  assert.match(split, /\.vt-studio-split-left-badge__rail[\s\S]*?display:\s*flex/);
+  assert.match(split, /\.vt-studio-double-split-badge__rail[\s\S]*?display:\s*flex/);
+});
+
+test("switch, radio and checkbox faces scale from standard-size proportions", () => {
+  assert.match(recovery, /\.vt-studio-44-switch\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height[^;]*1\.72/s);
+  assert.match(recovery, /\.vt-studio-44-switch[^}]*background(?:-color)?:\s*var\(--vt-studio-control-secondary/s);
+  assert.match(recovery, /\.vt-studio-44-choice[^}]*background(?:-color)?:\s*color-mix/s);
+  assert.match(recovery, /\.vt-studio-44-choice[^}]*width:\s*var\(--vt-studio-control-height/s);
+  assert.match(recovery, /\.vt-studio-44-handle[^}]*width:\s*calc\(var\(--vt-studio-control-height/s);
+});
+
 test("side-counter and side-toggle rails share square geometry and generated size/icon tokens", () => {
   assert.ok(!sideRailCss.includes(":root {"));
   assert.ok(sideRailCss.includes("width: var(--vt-studio-control-height, 44px)"));
