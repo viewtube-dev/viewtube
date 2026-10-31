@@ -14,7 +14,7 @@ const distill = read("src/styles/studio-control-distill-overrides.css");
 const fields = read("src/styles/studio-control-fields.css");
 const standaloneInputCss = read("src/styles/studio-text-input.css");
 const splitInput = read("src/studio-ui/primitives/StudioSplitTextInput.tsx");
-const splitInputCss = read("src/styles/studio-split-text-input.css");
+const splitInputCss = read("src/studio-ui/primitives/studio-split-text-input.css");
 const catalog = read("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx");
 const publicIndex = read("src/studio-ui/index.ts");
 const catalogCss = read("src/components/studio-hub/studio-hub-primitive-catalogs.css");
@@ -149,7 +149,7 @@ test("split input rails use the inner square size and recovery CSS cannot stretc
 test("split text input accepts every canonical size supported by its production badge foundation", () => {
   assert.ok(splitInput.includes('import type { StudioControlSize } from "../tokens"'));
   assert.ok(splitInput.includes("sizeVariant?: StudioControlSize"));
-  assert.ok(splitInput.includes("../../styles/studio-split-text-input.css"));
+  assert.ok(splitInput.includes("./studio-split-text-input.css"));
   assert.ok(!splitInput.includes('sizeVariant?: "standard" | "compact"'));
   assert.ok(splitInputCss.includes("height: var(--vt-studio-control-height, 44px)"));
   assert.ok(splitInputCss.includes("width: var(--vt-studio-split-rail-size"));
