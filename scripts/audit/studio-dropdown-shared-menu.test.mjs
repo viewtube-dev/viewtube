@@ -29,6 +29,8 @@ test("the canonical token emitter publishes the shared menu motion variables", (
 test("regular and multi-select dropdown menus use the same opening animation", () => {
   assert.match(css, /\.vt-studio-dropdown-menu\s*\{[^}]*animation:\s*vt-studio-dropdown-menu-open var\(--vt-studio-dropdown-menu-open-duration,\s*160ms\) var\(--vt-studio-dropdown-menu-open-easing,[^)]*\) both/s);
   assert.match(css, /\.vt-studio-legend-menu\s*\{[^}]*animation:\s*vt-studio-dropdown-menu-open var\(--vt-studio-dropdown-menu-open-duration,\s*160ms\) var\(--vt-studio-dropdown-menu-open-easing,[^)]*\) both/s);
+  assert.match(css, /\\.vt-studio-dropdown-menu\\s*\\{[^}]*animation:\\s*vt-studio-dropdown-menu-open var\\(--vt-studio-dropdown-menu-open-duration,/s);
+  assert.match(css, /\\.vt-studio-legend-menu\\s*\\{[^}]*animation:\\s*vt-studio-dropdown-menu-open var\\(--vt-studio-dropdown-menu-open-duration,/s);
   assert.match(css, /@keyframes vt-studio-dropdown-menu-open/);
 });
 
