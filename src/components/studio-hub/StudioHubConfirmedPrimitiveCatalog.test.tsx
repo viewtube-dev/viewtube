@@ -925,3 +925,28 @@ describe("confirmed library cleanup and counter module visibility", () => {
     expect(source).toContain('data-vt-library-component="StudioComponentGridCell"');
   });
 });
+
+
+describe("primitive module global width and stylesheet ownership", () => {
+  it("shows canonical full-row auto width and shared styles in each primitive module settings panel", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(catalog).toContain('className="vt-confirmed-global-settings"');
+    expect(catalog).toContain("Width: full-row auto width by default");
+    expect(catalog).toContain("canonical Studio control entry");
+  });
+
+  it("loads the canonical control entry from independently imported primitive modules", () => {
+    const modules = [
+      "StudioControls.tsx",
+      "StudioValueToggles.tsx",
+      "StudioLedBadgeTab.tsx",
+      "StudioComponentGrid.tsx",
+      "StudioSplitTextInput.tsx",
+      "StudioSplitAccordion.tsx",
+    ];
+    for (const module of modules) {
+      const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives", module), "utf8");
+      expect(source, module).toContain("studio-control-entry.css");
+    }
+  });
+});
