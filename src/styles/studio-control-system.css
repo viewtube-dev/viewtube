@@ -1440,7 +1440,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:disab
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {  }
 }
 
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:var(--vt-studio-space-unit, 4px); width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:var(--vt-studio-control-font-weight,1000); line-height:var(--vt-studio-control-line-height,1); letter-spacing:var(--vt-studio-control-letter-spacing,-.02em); text-transform:var(--vt-studio-control-text-transform,uppercase); -webkit-text-stroke:var(--vt-studio-control-text-stroke,1px) currentColor; transform:none;  }
+button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button) > [data-vt-studio-button-face] { position:relative; z-index:1; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center; gap:var(--vt-studio-space-unit, 4px); width:100%; min-width:0; max-width:100%; height:100%; min-height:100%; flex:1 1 auto; padding:0 10px; border:var(--vt-studio-control-stroke) solid #000; border-radius:var(--vt-studio-control-radius); background:var(--vt-studio-control-accent,var(--pair-a));  color:#000; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; font-size:var(--vt-studio-control-font-size,38px); font-weight:var(--vt-studio-control-font-weight,1000); line-height:var(--vt-studio-control-line-height,1); letter-spacing:var(--vt-studio-control-letter-spacing,-.02em); text-transform:var(--vt-studio-control-text-transform,uppercase); -webkit-text-stroke:var(--vt-studio-control-text-stroke,1px) currentColor; transform:none;  }
 /* Compact text buttons follow the global row-fill default. Icon-only controls retain their fixed square geometry. */
 button[data-vt-studio-button="true"][data-size="compact"]:not([data-split-left="true"]):not([data-icon-only="true"]) {
   box-sizing: border-box;
@@ -1686,7 +1686,7 @@ button[data-vt-studio-button="true"][data-split-left="true"] [data-vt-studio-spl
   display: contents;
 }
 
-@media (prefers-reduced-motion:reduce) { button[data-vt-studio-button="true"], button[data-vt-studio-button="true"]::before, button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {  } }
+@media (prefers-reduced-motion:reduce) { button[data-vt-studio-button="true"], button[data-vt-studio-button="true"]::before, button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button) > [data-vt-studio-button-face] {  } }
 
 /* 4. Word-toggle sizing remains configurable at the component boundary. */
 .vt-studio-44-word-toggle {
@@ -2328,12 +2328,9 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 
 
 /* Studio Controls-owned stepper family styles moved from primitive sidecars. */
-/* Studio steppers share the Split-Left Username Input visual foundation:
-   primary translucent value surface,
-opaque secondary action rail,
-inset primary
-   strokes,
-black compound dividers{
+/* Studio steppers own a dedicated shell and do not depend on username-input styling. */
+.vt-studio-inline-stepper,
+.vt-studio-split-stepper {
   --vt-stepper-primary: var(--vt-studio-control-accent, var(--pair-a));
   --vt-stepper-secondary: var(--vt-studio-control-secondary, var(--pair-b));
   --vt-stepper-stroke: var(--vt-studio-control-stroke, 3px);
@@ -2714,16 +2711,16 @@ button[data-vt-studio-button="true"]:not([data-vt-studio-icon-button="true"])::b
   content: none !important;
   display: none !important;
 }
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button) > [data-vt-studio-button-face],
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   transform: none !important;
   
 }
-button[data-vt-studio-button="true"]:hover:not(:disabled),
+button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button):hover:not(:disabled),
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled) {
   transform: none !important;
 }
-button[data-vt-studio-button="true"]:active:not(:disabled),
+button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button):active:not(:disabled),
 button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled) {
   transform: none !important;
   
@@ -2876,15 +2873,15 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
 
 
 /* Confirmed Primitive flat-control contract (2026-10-16).
-   Global defaults: stationary geometry,
-no shell shadows{
+   Global defaults: stationary geometry, no shell shadows. */
+:where([data-vt-studio-control="true"]) {
   box-shadow: none !important;
   text-shadow: none !important;
   transform: none !important;
   translate: none !important;
 }
 :where(
-  button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
+  button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button) > [data-vt-studio-button-face],
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face],
   .vt-studio-split-left-badge__face,
   .vt-studio-split-right-badge__face,
@@ -2898,8 +2895,8 @@ no shell shadows{
   translate: none !important;
 }
 :where(
-  button[data-vt-studio-button="true"]:hover:not(:disabled),
-  button[data-vt-studio-button="true"]:active:not(:disabled),
+  button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button):hover:not(:disabled),
+  button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button):active:not(:disabled),
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:hover:not(:disabled),
   button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]:active:not(:disabled)
 ) {
@@ -3329,7 +3326,7 @@ button[data-vt-studio-button="true"][data-size="compact"]:is([data-split-left="t
 
 /* Canonical Studio primitives remain flat and motionless. */
 button[data-vt-studio-button="true"],
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button) > [data-vt-studio-button-face],
 .vt-studio-split-left-badge,
 .vt-studio-split-right-badge,
 .vt-studio-double-split-badge {
@@ -5268,7 +5265,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1;
   min-width: 0; max-width: 100%; box-sizing: border-box;
 }
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face] {
+button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button) > [data-vt-studio-button-face] {
   padding-inline: 4px; overflow: hidden; text-overflow: clip;
 }
 button[data-vt-studio-action-button="true"],
@@ -5452,7 +5449,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   [data-vt-studio-action-face],
   [data-vt-studio-split-label]
 ),
-button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
+button[data-vt-studio-button="true"]:not(.vt-studio-square-icon-button) > [data-vt-studio-button-face],
 button[data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
   box-sizing: border-box;
   overflow: hidden;
