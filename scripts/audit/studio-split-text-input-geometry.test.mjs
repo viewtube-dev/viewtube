@@ -3,7 +3,7 @@ import postcss from "postcss";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-const splitCss = readFileSync("src/styles/studio-split-text-input.css", "utf8");
+const splitCss = readFileSync("src/studio-ui/primitives/studio-split-text-input.css", "utf8");
 const splitComponent = readFileSync("src/studio-ui/primitives/StudioSplitTextInput.tsx", "utf8");
 const interCss = readFileSync("src/styles/studio-inter-module.css", "utf8");
 
