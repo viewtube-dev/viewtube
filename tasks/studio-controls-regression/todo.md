@@ -41,3 +41,10 @@
 ## Execution note
 
 The code and regression assertions above are committed to the recovery branch. Text-field styling was ported from `docs/studio-controls-regression-handoff-2026-10-30`; the shared inset-stroke selector and the recovery branch's explicit `studio-control-entry.css` import were retained. Additional recovery edits restore standalone square/circle icon borders, selected play/pause primary rail fill, double-side toggle alignment and dividers, top-split header separators, collapsed-header border positioning, intermodule side edges, and the default double-split slider counter. Focused regression assertions were added. Runtime tests, typecheck, production build, and browser interaction checks remain **pending** because this session has GitHub source-edit access but no repository checkout or executable project environment. Do not mark verification complete until those commands are run against this branch.
+
+
+## Follow-up recovery commit record — 2026-10-31
+
+- The five-action square icon group representative now relies on the component's default five actions rather than supplying a two-child demo; the group is full-row with equal-width items and one perimeter owner.
+- Removed recovery-layer double borders from icon faces and removed local double-split slider / double-side counter paint overrides so those families defer to their canonical styling sheets.
+- Remaining verification: confirm the component markup and CSS selectors in a running browser, run the focused Studio tests, typecheck, and production build. Do not mark the visual regressions closed until these gates pass.
