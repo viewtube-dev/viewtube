@@ -2,7 +2,7 @@
 import React, { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { StudioArrowToggle, StudioBarToggle, StudioDoubleSideToggle, StudioSideToggle } from "./StudioValueToggles";
+import { StudioArrowToggle, StudioBarToggle, StudioDoubleSideToggle, StudioDoubleSplitWordCounter, StudioSideToggle } from "./StudioValueToggles";
 
 const cleanups: Array<() => void> = [];
 function mount(element: React.ReactElement) {
@@ -28,6 +28,19 @@ afterEach(() => {
 });
 
 describe("Studio value toggle primitives", () => {
+  it("renders the controlled double-split word counter in the canonical value-toggle shell", () => {
+    const onValueChange = vi.fn();
+    const { container } = mount(<StudioDoubleSplitWordCounter size="standard" value={1} onValueChange={onValueChange} />);
+    const shell = container.querySelector(".vt-studio-split-shell.vt-studio-value-toggle.vt-studio-word-counter");
+    expect(shell).toBeTruthy();
+    expect(shell?.getAttribute("data-vt-studio-control-kind")).toBe("studio-double-split-word-counter");
+    expect(shell?.querySelectorAll(":scope > [data-vt-studio-split-rail]")).toHaveLength(2);
+    click(container.querySelector('button[aria-label="Previous Word"]'));
+    expect(onValueChange).toHaveBeenLastCalledWith(4);
+    click(container.querySelector('button[aria-label="Next Word"]'));
+    expect(onValueChange).toHaveBeenLastCalledWith(2);
+  });
+
   it("cycles Arrow Toggle options endlessly in both directions without disabling boundary arrows", () => {
     const onValueChange = vi.fn();
     const { container } = mount(<StudioArrowToggle options={["A", "B", "C"]} value="A" onValueChange={onValueChange} />);
