@@ -7314,6 +7314,9 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
   display: grid;
   place-items: center;
   align-self: stretch;
+  box-sizing: border-box;
+  width: var(--vt-studio-dropdown-option-rail-size, calc(var(--vt-studio-dropdown-rail-size, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
+  max-width: var(--vt-studio-dropdown-option-rail-size, calc(var(--vt-studio-dropdown-rail-size, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
   min-width: 0;
   min-height: 100%;
   padding: 0;
