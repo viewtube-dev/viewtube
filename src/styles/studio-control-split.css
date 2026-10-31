@@ -387,18 +387,11 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
   grid-column: 1 / -1;
 }
 
-/* Counters and sliders inherit the global full-row, auto-width layout.
-   Split rails stay square; the flexible value face consumes the remaining row. */
-:is(.vt-studio-counter, .vt-studio-side-counter, .vt-studio-left-counter, .vt-studio-double-split-slider) {
+/* Double-split sliders inherit the global full-row width; their rails remain square. */
+.vt-studio-double-split-slider {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   max-width: 100%;
   flex: 1 1 auto;
-}
-:is(.vt-studio-counter, .vt-studio-side-counter, .vt-studio-left-counter) > [data-vt-studio-split-label] {
-  flex: 1 1 auto;
-  width: auto;
-  min-width: 0;
-  max-width: 100%;
 }
