@@ -40,7 +40,7 @@
   display: flex; width: 100%; min-width: 0; height: 100%; align-items: center; justify-content: center;
   padding-block: 0; overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1; color: inherit;
 }
-.vt-studio-value-toggle--side .vt-studio-value-toggle__face { justify-content: flex-start; }
+.vt-studio-value-toggle--side .vt-studio-value-toggle__face { display: grid; place-items: center; align-content: center; justify-content: flex-start; line-height: 1; }
 .vt-studio-value-toggle--double { display: flex; align-items: stretch; width: 100%; min-width: 0; height: var(--vt-studio-control-height, 44px); border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden; }
 .vt-studio-value-toggle__double-side { display: flex; flex: 1 1 0; min-width: 0; }
 .vt-studio-value-toggle--double > .vt-studio-value-toggle__double-side > .vt-studio-split-shell {
@@ -63,7 +63,7 @@
 .vt-studio-value-toggle--double[data-right-appearance="black-primary-text"] .vt-studio-value-toggle__double-side:last-child { --vt-toggle-fill: #000; --vt-toggle-text: var(--pair-a); }
 .vt-studio-value-toggle--double[data-variant="v2"] .vt-studio-value-toggle__divider { display: none; }
 .vt-studio-value-toggle__bars { display: flex; flex: 1 1 auto; align-items: center; justify-content: center; gap: var(--vt-studio-control-stroke, 3px); min-width: 0; padding: 0 calc(var(--vt-studio-control-stroke, 3px) * 1.33); overflow: visible; }
-.vt-studio-value-toggle__bar { position: relative; flex: 1 1 0; min-width: 2px; height: 50%; border: 1px solid #000; background: transparent; }
+.vt-studio-value-toggle__bar { position: relative; flex: 1 1 0; min-width: 2px; height: 65%; border: 1px solid #000; background: transparent; }
 .vt-studio-value-toggle__bar[data-active="true"] { background: var(--pair-b); }
 .vt-studio-value-toggle__bar-tooltip { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; padding: 2px 4px; border: 1px solid #000; background: var(--pair-b); color: #000; font-size: 10px; font-weight: 1000; white-space: nowrap; opacity: 0; pointer-events: none; }
 .vt-studio-value-toggle__bar:hover .vt-studio-value-toggle__bar-tooltip,
