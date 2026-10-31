@@ -1443,3 +1443,28 @@ describe("StudioSplitTextInput badge-owned composition", () => {
     }
   });
 });
+
+describe("confirmed split badge rails and double-side toggle shell", () => {
+  it("renders both icon rails for split-left and double-split badges", () => {
+    const left = renderToStaticMarkup(<StudioSplitLeftBadge icon={<span>LEFT_ICON</span>}>READY</StudioSplitLeftBadge>);
+    const double = renderToStaticMarkup(<StudioDoubleSplitBadge leftIcon={<span>LEFT_ICON</span>} rightIcon={<span>RIGHT_ICON</span>}>READY</StudioDoubleSplitBadge>);
+    expect(left).toContain("LEFT_ICON");
+    expect(double).toContain("LEFT_ICON");
+    expect(double).toContain("RIGHT_ICON");
+    expect((double.match(/data-vt-studio-split-rail/g) ?? []).length).toBe(2);
+  });
+
+  it("keeps nested double-side shells borderless and leaves one outer perimeter", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-value-toggles.css"), "utf8");
+    expect(css).toContain(".vt-studio-value-toggle--double > .vt-studio-value-toggle__double-side > .vt-studio-split-shell");
+    expect(css).toContain("border: 0;");
+    expect(css).toContain("box-shadow: none;");
+  });
+
+  it("keeps confirmed counter and slider family specimens in a single column", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8");
+    expect(css).toContain(".vt-confirmed-counter-pair,");
+    expect(css).toContain("grid-template-columns: minmax(0, 1fr);");
+    expect(css).not.toContain("@media (min-width: 720px) {\n  .vt-confirmed-slider-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }");
+  });
+});
