@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 
 const css = readFileSync("src/styles/studio-control-system.css", "utf8");
 const toggleCss = readFileSync("src/styles/studio-control-value-toggles.css", "utf8");
+const sideRailCss = readFileSync("src/styles/studio-side-rail-unify.css", "utf8");
 const toggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8");
 const area = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
 const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
@@ -35,15 +36,15 @@ test("canonical size tokens preserve the five-tier geometry contract", () => {
 });
 
 test("side-toggle stack uses a centered overlay divider, not a half-cell border", () => {
-  assert.match(toggleCss, /\.vt-studio-value-toggle__arrow-stack::after[\s\S]*?top:\s*50%[\s\S]*?translateY\(-50%\)/);
-  assert.match(toggleCss, /\.vt-studio-value-toggle__arrow-stack\s*>\s*\.vt-studio-value-toggle__arrow[\s\S]*?border-bottom:\s*0\s*!important/);
+  assert.match(sideRailCss, /\.vt-studio-value-toggle__arrow-stack::after[\s\S]*?top:\s*50%[\s\S]*?translateY\(-50%\)/);
+  assert.match(toggleCss, /\.vt-studio-split-shell\.vt-studio-value-toggle > \[data-vt-studio-split-rail\] \.vt-studio-value-toggle__arrow[\s\S]*?border:\s*0/);
   assert.match(toggles, /export function StudioSideToggle/);
 });
 
-test("toggle chevrons use the standard, compact, and micro icon dimensions", () => {
-  assert.match(toggleCss, /\.vt-studio-value-toggle--side[\s\S]*?width:\s*14px/);
-  assert.match(toggleCss, /\.vt-studio-value-toggle--side\[data-size="compact"\][\s\S]*?width:\s*30px/);
-  assert.match(toggleCss, /\.vt-studio-value-toggle--side\[data-size="micro"\][\s\S]*?width:\s*15px/);
+test("toggle chevrons use control-height proportional icon sizing", () => {
+  assert.match(toggleCss, /--vt-studio-stepper-icon-size:\s*calc\(var\(--vt-studio-control-height, 44px\) \* \.82\)/);
+  assert.match(sideRailCss, /width:\s*min\(calc\(var\(--vt-studio-control-height, 44px\) \* 0\.62\), 100%\)/);
+  assert.match(sideRailCss, /stroke-width:\s*var\(--vt-studio-control-icon-stroke, 2\.5\)/);
 });
 
 test("textarea focus uses primary 15-percent fill and secondary proportional outline", () => {
