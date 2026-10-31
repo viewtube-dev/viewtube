@@ -1569,7 +1569,7 @@ export type StudioSquareIconButtonGroupSize = StudioControlInteractiveSize
 
 export interface StudioSquareIconButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Two or more square icon button faces, preferably StudioSquareIconButton. */
-  children: React.ReactNode
+  children?: React.ReactNode
   sizeVariant?: StudioSquareIconButtonGroupSize
   /** Accessible name for the action toolbar. */
   "aria-label"?: string
@@ -2918,7 +2918,7 @@ export interface StudioDoubleSplitSliderProps extends Omit<React.HTMLAttributes<
  */
 export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = ({
   value, onValueChange, min = 0, max = 100, step = 1,
-  size = "standard", disabled = false, ariaLabel = "Slider value", leftControls = "reset",
+  size = "standard", disabled = false, ariaLabel = "Slider value", leftControls = "counter",
   className, ...props
 }) => {
   const interactionFocus = useStudioInteractionFocus();
