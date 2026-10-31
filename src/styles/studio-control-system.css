@@ -2037,8 +2037,8 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-play-pause-measure] {
 button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] > svg {
   fill: none;
 }
-button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-split-rail] {
-  background: var(--vt-studio-control-accent, var(--pair-a));
+button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-split-rail][data-rail="start"] {
+  background-color: var(--vt-studio-control-primary, var(--vt-studio-control-accent, var(--pair-a)));
 }
 button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-secondary, var(--pair-b));
