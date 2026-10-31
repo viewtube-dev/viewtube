@@ -819,6 +819,19 @@ describe("confirmed representatives counter and slider design coverage", () => {
 });
 
 
+describe("confirmed counter and slider palette contract", () => {
+  it("uses the dedicated value-toggle stylesheet and excludes inverse-palette counter specimens", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(source).toContain('css="src/styles/studio-control-value-toggles.css"');
+    expect(source).not.toContain('StudioCounter className="is-reversed"');
+    expect(source).not.toContain('StudioSideCounter className="is-reversed"');
+    expect(source).not.toContain('StudioLeftCounter className="is-reversed"');
+    expect(source).not.toContain('StudioDoubleSplitSlider className="is-reversed"');
+    expect(source).not.toContain('StudioDoubleSplitWordCounter className="is-reversed"');
+    expect(source).not.toContain('StudioLeftWordSlider className="is-reversed"');
+  });
+});
+
 describe("confirmed individual module variant completeness", () => {
   it("renders every supported size tier in the dropdown and split-button family modules", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
