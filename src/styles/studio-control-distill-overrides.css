@@ -40,36 +40,6 @@
   touch-action: manipulation;
 }
 
-/* Stack rails share one centered divider; child borders cannot double it. */
-.vt-studio-value-toggle__arrow-stack {
-  position: relative;
-  display: grid !important;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  border: 0;
-}
-.vt-studio-value-toggle__arrow-stack > .vt-studio-value-toggle__arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 0;
-  border-bottom: 0 !important;
-}
-.vt-studio-value-toggle__arrow-stack::after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  top: 50%;
-  right: 0;
-  left: 0;
-  height: var(--vt-studio-control-stroke, 3px);
-  background: #000;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
 /* Icon groups size to their content instead of stretching across the row. */ 
  .vt-studio-square-icon-button-group { 
    display: inline-flex; 
