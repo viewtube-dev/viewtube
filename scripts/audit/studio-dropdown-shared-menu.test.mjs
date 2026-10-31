@@ -58,3 +58,24 @@ test("split-left dropdown options retain both icon rails around a centered optio
   assert.match(css, /\.vt-studio-dropdown-option-rail[^}]*width:\s*var\(--vt-studio-dropdown-rail-size/s);
   assert.match(css, /\.vt-studio-dropdown-option-label[^}]*text-align:\s*center/s);
 });
+
+
+test("split dropdown menu rows contain only the leading icon rail and no chevron section", () => {
+  const optionMarkup = controls.match(/variant === "split-left" \? \(([\s\S]*?)\) : option\.label/)?.[1] ?? "";
+  assert.match(optionMarkup, /vt-studio-dropdown-option-rail--start/);
+  assert.match(optionMarkup, /vt-studio-dropdown-option-label/);
+  assert.doesNotMatch(optionMarkup, /vt-studio-dropdown-option-rail--end|ChevronDown/);
+});
+
+test("regular dropdown option buttons use the full height and radius for their size bracket", () => {
+  assert.match(css, /\.vt-studio-dropdown-option\s*\{[^}]*height:\s*var\(--vt-studio-control-height/s);
+  assert.match(css, /\.vt-studio-dropdown-option\s*\{[^}]*border-radius:\s*var\(--vt-studio-control-radius/s);
+  assert.doesNotMatch(css, /\.vt-studio-dropdown-option\s*\+\s*\.vt-studio-dropdown-option[^}]*border-radius:\s*0/);
+});
+
+test("multi-select option and clear buttons use their bracket height and radius", () => {
+  assert.match(css, /\.vt-studio-legend-option\s*\{[^}]*height:\s*var\(--vt-legend-height/s);
+  assert.match(css, /\.vt-studio-legend-option\s*\{[^}]*border-radius:\s*var\(--vt-legend-radius/s);
+  assert.match(css, /\.vt-studio-legend-clear\s*\{[^}]*height:\s*var\(--vt-legend-height/s);
+  assert.match(css, /\.vt-studio-legend-clear\s*\{[^}]*border-radius:\s*var\(--vt-legend-radius/s);
+});
