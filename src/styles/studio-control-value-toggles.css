@@ -20,7 +20,7 @@
 .vt-studio-split-shell.vt-studio-value-toggle[data-vt-studio-split="left"] { grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr); }
 .vt-studio-split-shell.vt-studio-value-toggle[data-vt-studio-split="right"] { grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, 44px); }
 .vt-studio-split-shell.vt-studio-value-toggle[data-vt-studio-split="double"] { grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr) var(--vt-studio-control-height, 44px); }
-.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] {
+.vt-studio-split-shell.vt-studio-value-toggle--arrow > [data-vt-studio-split-rail] {
   width: var(--vt-studio-control-height, 44px); min-width: 0;
   background: var(--vt-studio-control-secondary, var(--pair-b)); border-color: #000;
 }
