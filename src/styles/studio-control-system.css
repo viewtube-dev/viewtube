@@ -4228,7 +4228,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: 100%;
   min-width: 0;
   min-height: 0;
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button {
   display: grid;
@@ -4240,22 +4240,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   color: #000;
   cursor: pointer;
   touch-action: none;
-}
-.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: var(--vt-studio-control-stroke, 3px);
-  transform: translateY(-50%);
-  background: #000;
-  pointer-events: none;
 }
 .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter svg {
   width: min(42px, 90%);
