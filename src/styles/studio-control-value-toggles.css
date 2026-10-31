@@ -41,11 +41,14 @@
   padding-block: 0; overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1; color: inherit;
 }
 .vt-studio-value-toggle--side .vt-studio-value-toggle__face { display: grid; place-items: center; align-content: center; justify-content: flex-start; line-height: 1; }
-.vt-studio-value-toggle--double { display: flex; align-items: stretch; width: 100%; min-width: 0; height: var(--vt-studio-control-height, 44px); border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden; }
+.vt-studio-value-toggle--double { display: flex; align-items: stretch; box-sizing: border-box; width: 100%; min-width: 0; height: var(--vt-studio-control-height, 44px); border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden; }
 .vt-studio-value-toggle__double-side { display: flex; flex: 1 1 0; min-width: 0; }
 .vt-studio-value-toggle--double > .vt-studio-value-toggle__double-side > .vt-studio-split-shell {
   flex: 1 1 auto;
+  box-sizing: border-box;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
   width: 100%;
   border: 0;
   outline: 0;
@@ -90,8 +93,10 @@
     solid var(--vt-studio-focus-outline-color, var(--pair-b));
   outline-offset: 0;
 }
-.vt-studio-value-toggle:focus-within .vt-studio-value-toggle__face {
+.vt-studio-value-toggle:focus-within .vt-studio-value-toggle__face,
+.vt-studio-value-toggle:focus-within .vt-studio-word-counter__value {
   color: #000;
+  -webkit-text-fill-color: #000;
   -webkit-text-stroke-color: #000;
 }
 .vt-studio-value-toggle:focus-within:not(.vt-studio-value-toggle--double) {
@@ -101,8 +106,11 @@
 .vt-studio-value-toggle--double .vt-studio-split-shell:focus-within {
   outline: none;
 }
-.vt-studio-value-toggle--double:focus-within .vt-studio-split-shell .vt-studio-value-toggle__face {
+.vt-studio-value-toggle--double:focus-within .vt-studio-split-shell .vt-studio-value-toggle__face,
+.vt-studio-value-toggle--double:focus-within .vt-studio-word-counter__value {
   color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke-color: #000;
 }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-value-toggle .vt-studio-value-toggle__face,
