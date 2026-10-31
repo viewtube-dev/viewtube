@@ -16,16 +16,29 @@ test("split text input styles target the actual rendered shell, rails, and edita
   assert.match(splitCss, /\[data-vt-studio-split-label\]/);
 });
 
-test("split input has one stable geometry rule and the canonical resting/focus field contract", () => {
-  assert.equal((splitCss.match(/html body \.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\]\[data-size\]/g) || []).length, 1);
-  assert.doesNotMatch(splitCss, /data-geometry-variant|padding-reference|half-vertical-padding|username-height/);
-  assert.match(splitCss, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-split-field-primary\)/);
-  assert.doesNotMatch(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\)/);
-  assert.match(splitCss, /background:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\)/);
-  assert.match(splitCss, /:is\(:focus, :focus-visible\)[\s\S]*?15%, transparent[\s\S]*?-webkit-text-stroke-color:\s*#000/);
+test("split input matches the Codex native-editing and single-shell focus contract", () => {
+  assert.equal((splitCss.match(/html body \.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\]\[data-size\]\s*\{/g) || []).length, 1);
+  assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\) !important/);
+  assert.match(splitCss, /background:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\) !important/);
+  assert.match(splitCss, /:is\(:focus, :focus-visible\)[\s\S]*?15%, transparent\)[\s\S]*?-webkit-text-stroke-color:\s*#000/);
   assert.match(splitCss, /\.vt-studio-split-text-input:focus-within[\s\S]*?outline:\s*calc\(var\(--vt-studio-control-stroke, 3px\) \* \.65\) solid var\(--vt-studio-control-secondary/);
+  assert.match(splitCss, /\[data-vt-studio-split-rail\]\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height\) - var\(--vt-studio-control-stroke\)\)/s);
   assert.match(splitCss, /caret-color:\s*var\(--vt-split-field-primary\)/);
   assert.doesNotMatch(splitComponent, /geometryVariant|data-geometry-variant/);
+});
+
+test("all editable fields receive a primary inset stroke and textarea focus outline", () => {
+  const textCss = readFileSync("src/styles/studio-text-input.css", "utf8");
+  const fieldCss = readFileSync("src/styles/studio-control-fields.css", "utf8");
+  const entryCss = readFileSync("src/styles/studio-control-entry.css", "utf8");
+  const distillCss = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8");
+  assert.match(textCss, /textarea\[data-vt-studio-control="true"\]/);
+  assert.match(textCss, /box-shadow:\s*inset 0 0 0 var\(--vt-field-inline-width\) var\(--vt-field-inline-primary\)/);
+  assert.match(fieldCss, /textarea\[data-vt-studio-control="true"\]:is\(:focus, :focus-visible\)/);
+  assert.match(fieldCss, /outline:\s*var\(--vt-studio-focus-outline-width[\s\S]*?var\(--vt-studio-focus-outline-color/);
+  assert.ok(entryCss.indexOf('@import "./studio-control-fields.css";') < entryCss.indexOf('@import "./studio-text-input.css";'));
+  assert.doesNotMatch(distillCss, /html body (?:input|textarea)\[data-vt-studio-control="true"\]/);
+  assert.doesNotMatch(distillCss, /html body \[data-vt-studio-control="true"\] textarea/);
 });
 
 test("intermodule sizing uses canonical supreme tokens and focus outline follows stroke ratio", () => {
