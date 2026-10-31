@@ -210,7 +210,36 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 .vt-studio-split-right-badge__rail,
 .vt-studio-double-split-badge__rail,
 [data-vt-studio-split-rail] {
+  display: flex;
+  flex: 0 0 var(--vt-studio-control-height, 44px);
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  max-width: var(--vt-studio-control-height, 44px);
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
   border-radius: 0;
+  overflow: hidden;
+}
+.vt-studio-split-left-badge__rail > svg,
+.vt-studio-split-right-badge__rail > svg,
+.vt-studio-double-split-badge__rail > svg {
+  display: block;
+  flex: 0 0 auto;
+  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  margin: auto;
+  color: #000;
+  stroke: #000;
+}
+.vt-studio-split-left-badge__rail > svg *,
+.vt-studio-split-right-badge__rail > svg *,
+.vt-studio-double-split-badge__rail > svg * {
+  stroke: #000;
 }
 .vt-studio-split-left-badge__rail > svg,
 .vt-studio-split-right-badge__rail > svg,
