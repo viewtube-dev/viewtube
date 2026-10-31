@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 const css = readFileSync("src/styles/studio-control-system.css", "utf8");
+const toggleCss = readFileSync("src/styles/studio-control-value-toggles.css", "utf8");
 const toggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8");
 const area = readFileSync("src/studio-ui/primitives/StudioTextArea.tsx", "utf8");
 const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
@@ -34,13 +35,13 @@ test("canonical size tokens preserve the five-tier geometry contract", () => {
 });
 
 test("side-toggle stack uses a centered overlay divider, not a half-cell border", () => {
-  assert.match(css, /\.vt-studio-value-toggle__arrow-stack::after[\s\S]*?top:\s*50%[\s\S]*?translateY\(-50%\)/);
-  assert.match(css, /\.vt-studio-value-toggle__arrow-stack\s*>\s*\.vt-studio-value-toggle__arrow[\s\S]*?border-bottom:\s*0\s*!important/);
+  assert.match(toggleCss, /\.vt-studio-value-toggle__arrow-stack::after[\s\S]*?top:\s*50%[\s\S]*?translateY\(-50%\)/);
+  assert.match(toggleCss, /\.vt-studio-value-toggle__arrow-stack\s*>\s*\.vt-studio-value-toggle__arrow[\s\S]*?border-bottom:\s*0\s*!important/);
   assert.match(toggles, /export function StudioSideToggle/);
 });
 
 test("toggle chevrons use the standard, compact, and micro icon dimensions", () => {
-  assert.match(css, /\.vt-studio-value-toggle--side[\s\S]*?width:\s*14px/);
+  assert.match(toggleCss, /\.vt-studio-value-toggle--side[\s\S]*?width:\s*14px/);
   assert.match(css, /\.vt-studio-value-toggle--side\[data-size="compact"\][\s\S]*?width:\s*30px/);
   assert.match(css, /\.vt-studio-value-toggle--side\[data-size="micro"\][\s\S]*?width:\s*15px/);
 });
@@ -57,7 +58,7 @@ test("single-line panels clip overflow without ellipses and exclude textareas", 
 });
 
 test("click growth animation targets the SVG glyph only", () => {
-  assert.match(css, /\.vt-studio-value-toggle__arrow:active svg\s*\{[^}]*animation:\s*vt-studio-value-toggle-grow/);
+  assert.match(toggleCss, /\.vt-studio-value-toggle__arrow:active svg\s*\{[^}]*animation:\s*vt-studio-value-toggle-grow/);
 });
 
 
@@ -87,7 +88,7 @@ test("floating-label risen typography uses one shared token pair while rest labe
 });
 
 test("double-side divider is centered and the confirmed catalog mixes compact and standard variants", () => {
-  assert.match(css, /\.vt-studio-value-toggle--double \.vt-studio-value-toggle__divider\s*\{[^}]*left:\s*50%;[^}]*translateX\(-50%\)/s);
+  assert.match(toggleCss, /\.vt-studio-value-toggle--double \.vt-studio-value-toggle__divider\s*\{[^}]*left:\s*50%;[^}]*translateX\(-50%\)/s);
   assert.match(catalog, /sizeVariant=\{tier\}/);
 });
 
