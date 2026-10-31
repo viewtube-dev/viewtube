@@ -129,6 +129,15 @@ test("both counter styles tint resting numeral fill and stroke against each pale
   assert.match(styles, /\.vt-studio-side-counter:has\([\s\S]*?color:\s*var\(--vt-studio-number-active-color, #000\)/);
 });
 
+test("confirmed counter and slider specimens do not include inverse-palette variants", () => {
+  assert.doesNotMatch(catalog, /StudioCounter className="is-reversed"/);
+  assert.doesNotMatch(catalog, /StudioSideCounter className="is-reversed"/);
+  assert.doesNotMatch(catalog, /StudioLeftCounter className="is-reversed"/);
+  assert.doesNotMatch(catalog, /StudioDoubleSplitSlider className="is-reversed"/);
+  assert.doesNotMatch(catalog, /StudioDoubleSplitWordCounter className="is-reversed"/);
+  assert.doesNotMatch(catalog, /StudioLeftWordSlider className="is-reversed"/);
+});
+
 test("StudioLeftCounter places the two-button action rail on the left without an inverse-palette variant", () => {
   const start = component.indexOf("export const StudioLeftCounter:");
   const end = component.indexOf("StudioLeftCounter.displayName", start);
