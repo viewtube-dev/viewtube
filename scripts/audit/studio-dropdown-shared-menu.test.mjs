@@ -50,12 +50,12 @@ test("split-left dropdown closed label is centered on the complete trigger box",
   assert.match(css, /\.vt-studio-dropdown\.is-split-left[^}]*[\s\S]{0,1800}\[data-vt-studio-split-label\][^}]*inset:\s*0/s);
 });
 
-test("split-left dropdown options retain both icon rails around a centered option label", () => {
+test("split-left dropdown options retain one leading icon rail and a centered label", () => {
   assert.match(controls, /variant === "split-left"\s*\?\s*\(/);
   assert.match(controls, /className="vt-studio-dropdown-option-rail vt-studio-dropdown-option-rail--start"/);
   assert.match(controls, /className="vt-studio-dropdown-option-label"/);
-  assert.match(controls, /className="vt-studio-dropdown-option-rail vt-studio-dropdown-option-rail--end"/);
-  assert.match(css, /\.vt-studio-dropdown-option-rail[^}]*width:\s*var\(--vt-studio-dropdown-rail-size/s);
+  assert.doesNotMatch(controls, /vt-studio-dropdown-option-rail--end/);
+  assert.match(css, /\.vt-studio-dropdown-option-rail[^}]*width:\s*var\(--vt-studio-dropdown-option-rail-size/s);
   assert.match(css, /\.vt-studio-dropdown-option-label[^}]*text-align:\s*center/s);
 });
 
