@@ -8,7 +8,6 @@
 /* Family behavior and parity, followed by scoped cross-family correction layers. */
 @import "./studio-control-split.css";
 @import "./studio-control-fields.css";
-@import "./studio-text-input.css";
 @import "./studio-control-motion.css";
 @import "./studio-field-parity.css";
 @import "./studio-control-distill-overrides.css";
@@ -20,3 +19,6 @@
 
 /* New counter-family variants must follow the shared production control cascade. */
 @import "./studio-control-word-counter.css";
+
+/* Last field layer: persistent primary inset must survive every family/correction sheet. */
+@import "./studio-text-input.css";
