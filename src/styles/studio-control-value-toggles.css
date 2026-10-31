@@ -43,7 +43,20 @@
 .vt-studio-value-toggle--side .vt-studio-value-toggle__face { justify-content: flex-start; }
 .vt-studio-value-toggle--double { display: flex; align-items: stretch; width: 100%; min-width: 0; height: var(--vt-studio-control-height, 44px); border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden; }
 .vt-studio-value-toggle__double-side { display: flex; flex: 1 1 0; min-width: 0; }
-.vt-studio-value-toggle__double-side > .vt-studio-split-shell { flex: 1 1 auto; min-width: 0; width: 100%; border: 0; border-radius: 0; }
+.vt-studio-value-toggle--double > .vt-studio-value-toggle__double-side > .vt-studio-split-shell {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.vt-studio-value-toggle--double > .vt-studio-value-toggle__double-side > .vt-studio-split-shell > [data-vt-studio-split-rail] {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
 .vt-studio-value-toggle__divider { flex: 0 0 var(--vt-studio-control-stroke, 3px); background: #000; }
 .vt-studio-value-toggle--double[data-right-appearance="primary"] .vt-studio-value-toggle__double-side:last-child { --vt-toggle-fill: var(--pair-a); --vt-toggle-text: #000; }
 .vt-studio-value-toggle--double[data-right-appearance="secondary"] .vt-studio-value-toggle__double-side:last-child { --vt-toggle-fill: var(--pair-b); --vt-toggle-text: #000; }
