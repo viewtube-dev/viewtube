@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import "../../styles/studio-control-value-toggles.css";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import { StudioSplitShell, STUDIO_LEFT_WORD_OPTIONS } from "./StudioControls";
 import type { StudioControlSize } from "../tokens";
@@ -270,7 +271,7 @@ export function StudioDoubleSplitWordCounter({
     <ChevronRight aria-hidden="true" focusable="false" />
   </button>;
   return <StudioSplitShell layout="double" sizeVariant={size}
-    className={["vt-studio-word-counter", className].filter(Boolean).join(" ")}
+    className={["vt-studio-value-toggle", "vt-studio-word-counter", className].filter(Boolean).join(" ")}
     shellProps={{
       role: "group", "aria-label": ariaLabel, "aria-disabled": disabled || undefined,
       "data-vt-studio-control-family": "counter",
