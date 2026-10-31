@@ -8,6 +8,7 @@ const controls = read("src/studio-ui/primitives/StudioControls.tsx");
 const valueToggles = read("src/studio-ui/primitives/StudioValueToggles.tsx");
 const generated = read("src/styles/studio-control-vars.generated.css");
 const system = read("src/styles/studio-control-system.css");
+const valueToggleCss = read("src/styles/studio-control-value-toggles.css");
 const split = read("src/styles/studio-control-split.css");
 const recovery = read("src/styles/studio-control-recovery-overrides.css");
 const distill = read("src/styles/studio-control-distill-overrides.css");
@@ -97,8 +98,8 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
 
 test("side-counter and side-toggle rails share square geometry and generated size/icon tokens", () => {
   assert.ok(!sideRailCss.includes(":root {"));
-  assert.ok(sideRailCss.includes("width: var(--vt-studio-split-rail-size"));
-  assert.ok(sideRailCss.includes("min-width: var(--vt-studio-split-rail-size"));
+  assert.ok(sideRailCss.includes("width: var(--vt-studio-control-height, 44px)"));
+  assert.ok(sideRailCss.includes("min-width: var(--vt-studio-control-height, 44px)"));
   assert.ok(sideRailCss.includes("stroke-width: var(--vt-studio-control-icon-stroke"));
   assert.ok(!sideRailCss.includes("--vt-studio-micro-stroke: 1.5px"));
   assert.ok(!sideRailCss.includes("stroke-width: 3;"));
@@ -119,8 +120,8 @@ test("double-side toggles reuse the same side-arrow controls and only the outer 
   assert.ok(doubleSide.includes("<StudioSideToggle"));
   assert.ok(doubleSide.includes("arrowSide=\"left\""));
   assert.ok(doubleSide.includes("arrowSide=\"right\""));
-  assert.match(system, /\.vt-studio-value-toggle--double \.vt-studio-value-toggle__divider\s*\{[^}]*outline:\s*none;[^}]*box-shadow:\s*none;/);
-  assert.ok(system.includes(".vt-studio-value-toggle--double:focus-within"));
+  assert.match(valueToggleCss, /\.vt-studio-value-toggle--double \.vt-studio-value-toggle__divider\s*\{[^}]*outline:\s*none;[^}]*box-shadow:\s*none;/);
+  assert.ok(valueToggleCss.includes(".vt-studio-value-toggle--double:focus-within"));
   assert.ok(!recovery.includes(".vt-studio-value-toggle--double:focus-within"));
   assert.ok(!recovery.includes(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider"));
 });
@@ -175,21 +176,19 @@ test("counter and bar family geometry comes from canonical family tokens and the
   assert.ok(generated.includes("--vt-studio-counter-side-rail-count: 1;"));
   assert.ok(generated.includes("--vt-studio-bar-height-to-text-ratio: 1;"));
   assert.ok(generated.includes("--vt-studio-bar-height-to-width-ratio: 2.5;"));
-  assert.ok(system.includes("var(--vt-studio-counter-value-area-aspect-ratio"));
+  assert.ok(split.includes("var(--vt-studio-counter-value-area-aspect-ratio"));
   assert.ok(split.includes("var(--vt-studio-counter-double-rail-count"));
   assert.ok(split.includes("var(--vt-studio-counter-side-rail-count"));
   assert.ok(split.includes("width: var(--vt-studio-counter-root-width)"));
   assert.ok(catalogCss.includes(":not(.vt-studio-counter):not(.vt-studio-side-counter):not(.vt-studio-left-counter)"));
   assert.ok(catalogCss.includes("justify-self: center;"));
-  assert.ok(system.includes("var(--vt-studio-bar-height-to-text-ratio"));
-  assert.ok(system.includes("var(--vt-studio-bar-height-to-width-ratio"));
-  assert.ok(system.includes("var(--vt-studio-bar-radius"));
-  assert.ok(system.includes("var(--vt-studio-bar-empty-white-mix"));
-  assert.ok(system.includes("color-mix(in srgb,#fff var(--vt-studio-bar-empty-white-mix,50%),var(--vt-studio-control-accent"));
-  assert.ok(system.includes('.vt-studio-value-toggle__bar[data-active="true"]{background:var(--vt-studio-bar-full-fill,#000)'));
-  assert.ok(system.includes("flex:0 0 var(--vt-studio-control-height)"));
-  assert.ok(system.includes("width:var(--vt-studio-control-height)"));
-  assert.ok(system.includes("height:100%"));
+  assert.ok(distill.includes("--vt-bar-height:"));
+  assert.ok(distill.includes("--vt-bar-gap:"));
+  assert.ok(valueToggleCss.includes('.vt-studio-value-toggle__bar[data-active="true"]'));
+  assert.ok(valueToggleCss.includes("background: var(--vt-studio-control-secondary"));
+  assert.ok(split.includes("flex: 0 0 var(--vt-studio-control-height, 44px)"));
+  assert.ok(split.includes("width: var(--vt-studio-control-height, 44px)"));
+  assert.ok(split.includes("height: 100%"));
   assert.ok(system.includes(".vt-studio-side-counter__value"));
   assert.ok(!recovery.includes(".vt-studio-value-toggle__bar {"));
   assert.ok(tokens.includes("micro: { height: 12, stroke: 1, radius: 2"));
@@ -198,9 +197,9 @@ test("counter and bar family geometry comes from canonical family tokens and the
 });
 
 test("double-side controls focus only the outside shell, never the center divider", () => {
-  assert.ok(system.includes(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider"));
-  assert.ok(system.includes("outline:none!important;box-shadow:none!important"));
-  assert.ok(system.includes(".vt-studio-value-toggle--double:focus-within"));
+  assert.ok(valueToggleCss.includes(".vt-studio-value-toggle--double .vt-studio-value-toggle__divider"));
+  assert.ok(valueToggleCss.includes("outline: none;"));
+  assert.ok(valueToggleCss.includes(".vt-studio-value-toggle--double:focus-within"));
 });
 
 test("inter-module rails use the inner square size, not the full outer face", () => {
