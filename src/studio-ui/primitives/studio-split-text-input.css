@@ -43,6 +43,7 @@ html body .vt-studio-split-text-input [data-vt-studio-split-label] {
   border-radius: 0;
   overflow: hidden;
   background: transparent !important;
+  pointer-events: none;
 }
 html body .vt-studio-split-text-input[data-split="left"] [data-vt-studio-split-label] {
   border-radius: 0 var(--vt-split-field-inner-radius) var(--vt-split-field-inner-radius) 0;
@@ -60,6 +61,7 @@ html body .vt-studio-split-text-input [data-vt-studio-split-rail] {
  * Grid stretch removes baseline and independently rounded height offsets. */
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
   --vt-split-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-split-field-inline-width: var(--vt-studio-control-stroke, 3px);
   display: block;
   box-sizing: border-box;
   align-self: stretch;
@@ -74,7 +76,8 @@ html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-
   border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary) !important;
   border-radius: inherit !important;
   outline: none !important;
-  box-shadow: none;
+  box-shadow: inset 0 0 0 var(--vt-split-field-inline-width) var(--vt-split-field-primary);
+  pointer-events: auto;
   background: color-mix(in srgb, var(--vt-split-field-primary) 50%, transparent) !important;
   background-clip: padding-box;
   color: var(--vt-split-field-primary);
