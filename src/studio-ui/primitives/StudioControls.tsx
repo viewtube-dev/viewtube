@@ -2824,7 +2824,7 @@ export const StudioUploadFrame: React.FC<StudioUploadFrameProps> = ({
 StudioUploadFrame.displayName = "StudioUploadFrame";
 
 
-/** BEM class names are retained for compatibility; anatomy is shared with buttons and username fields. */
+/** BEM class names are retained for compatibility; split text fields reuse the same badge-owned shell anatomy. */
 export interface StudioSplitLeftBadgeProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   icon?: React.ReactNode;
   children: React.ReactNode;
