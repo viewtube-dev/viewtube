@@ -365,3 +365,13 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
 .vt-studio-value-toggle--double .vt-studio-side-counter__rail[data-rail="end"] {
   border-left: var(--vt-studio-control-stroke, 3px) solid #000 !important;
 }
+
+
+button.vt-studio-square-icon-button:not(.vt-studio-square-icon-button-group button) > [data-vt-studio-button-face],
+button[data-vt-studio-circle-icon-button="true"]:not(.vt-studio-square-icon-button-group button) > [data-vt-studio-button-face] {
+  border: var(--vt-studio-control-stroke, 3px) solid #000 !important;
+  border-radius: var(--vt-studio-control-radius, 6px) !important;
+}
+button[data-vt-studio-circle-icon-button="true"]:not(.vt-studio-square-icon-button-group button) > [data-vt-studio-button-face] {
+  border-radius: 50% !important;
+}
