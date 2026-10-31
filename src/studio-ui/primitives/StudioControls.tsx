@@ -1576,11 +1576,26 @@ export interface StudioSquareIconButtonGroupProps extends React.HTMLAttributes<H
 }
 
 export const StudioSquareIconButtonGroup = React.forwardRef<HTMLDivElement, StudioSquareIconButtonGroupProps>(
-  ({ children, sizeVariant = "compact", className, "aria-label": ariaLabel = "Actions", ...rest }, ref) => {
-    const items = React.Children.toArray(children).filter(Boolean)
-    if (process.env.NODE_ENV !== "production" && items.length < 2) {
-      console.warn("[StudioSquareIconButtonGroup] expects 2 or more children; got", items.length)
-    }
+  ({ children, sizeVariant = "standard", className, "aria-label": ariaLabel = "Actions", ...rest }, ref) => {
+    const [selectedDefaultIndex, setSelectedDefaultIndex] = React.useState(-1)
+    const suppliedItems = React.Children.toArray(children).filter(Boolean)
+    const items = suppliedItems.length ? suppliedItems : [
+      { icon: <Bell />, label: "Notifications" },
+      { icon: <HeartIcon />, label: "Favorites" },
+      { icon: <Plus />, label: "Add" },
+      { icon: <RefreshCw />, label: "Refresh" },
+      { icon: <Settings2 />, label: "Settings" },
+    ].map((item, index) => (
+      <StudioSquareIconButton
+        key={item.label}
+        icon={item.icon}
+        label={item.label}
+        variant="v3"
+        selected={selectedDefaultIndex === index}
+        onSelectedChange={selected => setSelectedDefaultIndex(selected ? index : -1)}
+        sizeVariant={sizeVariant}
+      />
+    ))
 
     return (
       <div
