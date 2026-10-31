@@ -48,9 +48,9 @@ describe("Studio recovery control styling", () => {
     expect(controlSystemCss).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
     expect(controlSystemCss).toContain("border: var(--vt-studio-slider-stroke) solid #000;");
     expect(controlSystemCss).toContain("padding-inline: calc(var(--vt-studio-control-height, 44px) * .12);");
-    expect(controlSystemCss).toContain("linear-gradient(\n    90deg,");
-    expect(controlSystemCss).toContain("var(--vt-studio-control-primary, var(--pair-a, #36e0f6)) 0 50%");
-    expect(controlSystemCss).toContain("color-mix(in srgb, var(--vt-studio-control-primary, var(--pair-a, #36e0f6)) 50%, transparent) 50% 100%");
+    expect(controlSystemCss).toContain("--vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
+    expect(controlSystemCss).toContain("var(--vt-studio-slider-left-fill) 0 var(--vt-studio-slider-progress, 0%)");
+    expect(controlSystemCss).toContain("color-mix(in srgb, var(--vt-studio-slider-left-fill) 50%, transparent) var(--vt-studio-slider-progress, 0%) 100%");
   });
 
   it("keeps the bar-toggle recovery coloring while preserving token-owned geometry", () => {
