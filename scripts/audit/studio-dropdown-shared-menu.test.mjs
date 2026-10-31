@@ -16,10 +16,9 @@ test("dropdown menu opening motion is defined once in the canonical token contra
 });
 
 test("the canonical token emitter publishes the shared menu motion variables", () => {
-  assert.match(emitter, /menuOpenDurationMs/);
-  assert.match(emitter, /menuOpenEasing/);
-  assert.match(emitter, /menuOpenTranslateY/);
-  assert.match(emitter, /menuOpenScaleY/);
+  for (const token of ["menuOpenDurationMs", "menuOpenEasing", "menuOpenTranslateY", "menuOpenScaleY"]) {
+    assert.ok(emitter.includes(token), "emitter reads " + token);
+  }
   assert.match(generated, /--vt-studio-dropdown-menu-open-duration:\s*160ms/);
   assert.match(generated, /--vt-studio-dropdown-menu-open-easing:\s*cubic-bezier\(\.2,\.75,\.2,1\)/);
   assert.match(generated, /--vt-studio-dropdown-menu-open-translate-y:\s*5px/);
@@ -27,15 +26,11 @@ test("the canonical token emitter publishes the shared menu motion variables", (
 });
 
 test("regular and multi-select dropdown menus use the same opening animation", () => {
-  assert.match(css, /\.vt-studio-dropdown-menu\s*\{[^}]*animation:\s*vt-studio-dropdown-menu-open var\(--vt-studio-dropdown-menu-open-duration,\s*160ms\) var\(--vt-studio-dropdown-menu-open-easing,[^)]*\) both/s);
-  assert.match(css, /\.vt-studio-legend-menu\s*\{[^}]*animation:\s*vt-studio-dropdown-menu-open var\(--vt-studio-dropdown-menu-open-duration,\s*160ms\) var\(--vt-studio-dropdown-menu-open-easing,[^)]*\) both/s);
-  assert.match(css, /\\.vt-studio-dropdown-menu\\s*\\{[^}]*animation:\\s*vt-studio-dropdown-menu-open var\\(--vt-studio-dropdown-menu-open-duration,/s);
-  assert.match(css, /\\.vt-studio-legend-menu\\s*\\{[^}]*animation:\\s*vt-studio-dropdown-menu-open var\\(--vt-studio-dropdown-menu-open-duration,/s);
+  assert.match(css, /\.vt-studio-dropdown-menu,\s*\.vt-studio-legend-menu\s*\{[^}]*animation:\s*vt-studio-dropdown-menu-open var\(--vt-studio-dropdown-menu-open-duration,/s);
   assert.match(css, /@keyframes vt-studio-dropdown-menu-open/);
+  assert.doesNotMatch(css, /@keyframes vt-legend-menu-open/);
 });
 
 test("all dropdown menu variants honor reduced motion", () => {
-  const reducedMotion = css.match(/@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?(?=\n\/\*|\n\s*[^\s@][^\n]*\{|$)/g)?.join("\n") ?? "";
-  assert.match(reducedMotion, /vt-studio-dropdown-menu-open/);
-  assert.match(reducedMotion, /animation-duration:\s*\.01ms/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\) \{\s*\.vt-studio-dropdown-menu,\s*\.vt-studio-legend-menu\s*\{\s*animation-duration:\s*\.01ms/s);
 });
