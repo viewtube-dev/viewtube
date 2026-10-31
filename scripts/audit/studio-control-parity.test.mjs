@@ -57,8 +57,9 @@ test("single-line panels clip overflow without ellipses and exclude textareas", 
   assert.doesNotMatch(css, /textarea\s*\{[^}]*text-overflow:\s*clip/s);
 });
 
-test("click growth animation targets the SVG glyph only", () => {
-  assert.match(toggleCss, /\.vt-studio-value-toggle__arrow:active svg\s*\{[^}]*animation:\s*vt-studio-value-toggle-grow/);
+test("value-toggle family keeps focus transitions without adding click-growth motion", () => {
+  assert.match(toggleCss, /\.vt-studio-value-toggle:focus-within/);
+  assert.doesNotMatch(toggleCss, /\.vt-studio-value-toggle__arrow:active svg/);
 });
 
 
