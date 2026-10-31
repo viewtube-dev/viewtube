@@ -3,41 +3,6 @@
  * Keep this file focused on cross-family corrections; primitive geometry remains token-owned.
  */
 
-/* Canonical token-driven editable-field defaults; no specificity arms race. */
-html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-html body textarea[data-vt-studio-control="true"],
-html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-html body [data-vt-studio-control="true"] textarea {
-  box-sizing: border-box;
-  border-color: #000;
-  color: var(--vt-field-text);
-  -webkit-text-fill-color: var(--vt-field-text);
-  -webkit-text-stroke-color: var(--vt-field-text-stroke);
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width);
-  background-color: var(--vt-field-fill-rest);
-  caret-color: var(--vt-field-text);
-  box-shadow: none;
-  transition:
-    color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    background-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    outline-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out,
-    outline-width var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
-}
-html body input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
-html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
-html body [data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
-html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
-  color: var(--vt-field-text-focus);
-  -webkit-text-fill-color: var(--vt-field-text-focus);
-  -webkit-text-stroke-color: var(--vt-field-text-stroke-focus);
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width);
-  background-color: var(--vt-field-fill-focus);
-  caret-color: var(--vt-field-caret-focus);
-  outline: var(--vt-field-focus-outline);
-  outline-offset: 0;
-  box-shadow: none;
-}
 /* Floating labels use the same raised size across editable field kinds. */
 .vt-studio-floating-field {
   --vt-studio-floating-label-risen-font-size: 12px;
@@ -360,28 +325,6 @@ html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   box-shadow: none;
 }
 
-
-/* Final regression-recovery contract: this file loads last in studio-control-entry.css. */
-/* Editable fields use primary glyph strokes; read-only TextBox is the explicit exception. */
-html body input[data-vt-studio-control="true"],
-html body textarea[data-vt-studio-control="true"],
-html body [data-vt-studio-control="true"] textarea {
-  -webkit-text-stroke-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px));
-  color: var(--vt-field-text, #000);
-  -webkit-text-fill-color: var(--vt-field-text, #000);
-}
-/* Read-only TextBox intentionally keeps black text and black glyph stroke.
-   Its secondary outline (orange in the current palette) is a separate outer stroke. */
-html body .vt-studio-text-box[data-vt-studio-control="true"],
-html body .vt-studio-text-box[data-vt-studio-control="true"][data-size] {
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
-  -webkit-text-stroke-width: var(--vt-field-text-stroke-width, var(--vt-studio-control-text-stroke, 1px)) !important;
-  text-stroke: var(--vt-studio-control-text-stroke, 1px) #000 !important;
-}
 
 /* Side and double-side toggle faces are solid primary like counter value faces.
    Arrow button cells use the same solid secondary fill, black glyphs and shared divider. */
