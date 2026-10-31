@@ -1425,7 +1425,7 @@ describe("StudioSplitTextInput badge-owned composition", () => {
   });
 
   it("uses one shell perimeter and divider, secondary square rails, and a primary inset input stroke", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-split-text-input.css"), "utf8");
+    const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/studio-split-text-input.css"), "utf8");
     expect(css).toContain('grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr)');
     expect(css).toContain('background: var(--vt-studio-control-secondary');
     expect(css).toContain('box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary)');
