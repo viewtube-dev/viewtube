@@ -3978,9 +3978,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border-radius: 8px;
 }
 .vt-studio-upload-frame.is-drag { --vt-studio-upload-speed: 2.5; }
-.vt-studio-upload-frame:focus-visible {
-  outline: var(--vt-studio-control-stroke, 3px) solid #000;
-  outline-offset: 4px;
+.vt-studio-upload-frame:has(.vt-studio-upload-frame__input:focus-visible) {
+  outline: var(--vt-studio-focus-outline-width, calc(var(--vt-studio-control-stroke, 3px) * .65)) solid var(--vt-studio-focus-outline-color, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
 }
 .vt-studio-upload-frame.is-disabled { cursor: not-allowed; opacity: .55; }
 .vt-studio-upload-frame__input {
@@ -4129,11 +4129,15 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   translate: -50% 0;
 }
 @keyframes vt-studio-upload-spin { to { --vt-studio-upload-angle: 360deg; } }
-@keyframes vt-studio-upload-breathe { 0%, 100% { opacity: .06; scale: 1; } 45% { opacity: .38; scale: 1.012; } }
+@keyframes vt-studio-upload-breathe { 0%, 100% { opacity: .06; } 45% { opacity: .38; } }
 @keyframes vt-studio-upload-core { 0%, 100% { scale: 1; } 45% { scale: .975; } }
-@keyframes vt-studio-upload-nudge { 0%, 100% { translate: 0 0.2cqw; } 50% { translate: 0 -0.4cqw; } }
+@keyframes vt-studio-upload-nudge { 0%, 100% { translate: 0 2px; } 50% { translate: 0 -4px; } }
 @keyframes vt-studio-upload-pop { from { scale: .6; opacity: 0; } to { scale: 1; opacity: 1; } }
-
+@media (max-width: 460px) {
+  .vt-studio-upload-frame__center { gap: 8px; }
+  .vt-studio-upload-frame__icon { width: clamp(58px, 20cqw, 88px); }
+  .vt-studio-upload-frame__label { max-width: 100%; padding: 5px 10px; font-size: var(--vt-studio-28-font-size, 24px); }
+}
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-upload-frame,
   .vt-studio-upload-frame *,
@@ -4143,11 +4147,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
-  .vt-studio-upload-frame:hover .vt-studio-upload-frame__icon,
-  .vt-studio-upload-frame.is-drag .vt-studio-upload-frame__icon {
-    transform: none;
-  }
 }
+
 
 /* Studio control refinement pass: keep side-counter actions truly equal-height. */
 .vt-studio-side-counter__actions {
