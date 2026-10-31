@@ -113,6 +113,32 @@ test("vertical word-toggle handles use measured word bounds and match horizontal
   assert.ok(!recovery.includes("vt-studio-vertical-word-toggle__handle { inset: 3px !important"));
 });
 
+
+test("side and double-side toggle rail buttons reuse the side-counter action system", () => {
+  const side = valueToggles.slice(valueToggles.indexOf("export function StudioSideToggle"), valueToggles.indexOf("export function StudioDoubleSideToggle"));
+  assert.ok(side.includes("vt-studio-side-counter__actions"));
+  assert.ok(side.includes("vt-studio-side-counter__action-button"));
+  assert.doesNotMatch(distill, /\.vt-studio-value-toggle__arrow-stack/);
+  assert.doesNotMatch(valueToggleCss, /\.vt-studio-value-toggle__arrow-stack/);
+  assert.ok(system.includes(".vt-studio-side-counter__actions button"));
+});
+
+test("bar toggle bars stay below the control height and double-split word labels are vertically centered", () => {
+  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*height:\s*50%/s);
+  assert.match(system, /button\[data-vt-studio-play-pause="true"\]\[aria-pressed="true"\] \[data-vt-studio-split-rail\][\s\S]*?background:\s*var\(--vt-studio-control-accent/);
+  assert.match(valueToggleCss, /\.vt-studio-word-counter__value[^}]*align-items:\s:center/s);
+});
+
+test("primary inset field stroke survives the complete stylesheet cascade for inputs and textareas", () => {
+  const entry = read("src/styles/studio-control-entry.css");
+  const inputStyles = read("src/styles/studio-text-input.css");
+  const fieldStyles = read("src/styles/studio-control-fields.css");
+  assert.ok(entry.lastIndexOf('@import "./studio-text-input.css";') > entry.lastIndexOf('@import "./studio-control-word-counter.css";'));
+  assert.match(inputStyles, /html body :is\(input\.vt-studio-text-input,[\s\S]*?box-shadow:\s*inset 0 0 0 var\(--vt-field-inline-width\) var\(--vt-field-inline-primary\)/);
+  assert.doesNotMatch(fieldStyles, /box-shadow:\s*none/);
+  assert.match(inputStyles, /textarea\[data-vt-studio-control="true"\]/);
+});
+
 test("double-side toggles reuse the same side-arrow controls and only the outer shell owns focus outline", () => {
   const start = valueToggles.indexOf("export function StudioDoubleSideToggle");
   const end = valueToggles.indexOf("export type StudioBarToggleProps", start);
