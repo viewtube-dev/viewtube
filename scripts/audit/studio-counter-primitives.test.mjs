@@ -129,7 +129,7 @@ test("both counter styles tint resting numeral fill and stroke against each pale
   assert.match(styles, /\.vt-studio-side-counter:has\([\s\S]*?color:\s*var\(--vt-studio-number-active-color, #000\)/);
 });
 
-test("StudioLeftCounter places the two-button action rail on the left and is available for opposite-palette catalog specimens", () => {
+test("StudioLeftCounter places the two-button action rail on the left without an inverse-palette variant", () => {
   const start = component.indexOf("export const StudioLeftCounter:");
   const end = component.indexOf("StudioLeftCounter.displayName", start);
   const source = component.slice(start, end);
@@ -142,7 +142,7 @@ test("StudioLeftCounter places the two-button action rail on the left and is ava
   assert.match(styles, /\.vt-studio-left-counter,[\s\S]*?width:\s*100%/)
   assert.doesNotMatch(styles, /vt-studio-counter-width/)
   assert.match(styles, /\.vt-studio-left-counter__rail\[data-rail="start"\]\s*\{[^}]*border-right:/s);
-  assert.match(catalog, /StudioLeftCounter className="is-reversed"/);
+  assert.doesNotMatch(catalog, /StudioLeftCounter className="is-reversed"/);
   assert.doesNotMatch(catalog, /StudioSideCounter className="is-reversed"/);
 });
 
