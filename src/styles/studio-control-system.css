@@ -5852,14 +5852,14 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collap
   background: transparent !important;
 }
 .vt-studio-square-icon-button-group > button:first-child {
-  border-radius: var(--vt-icon-group-radius, 6px) 0 0 var(--vt-icon-group-radius, 6px);
+  border-radius: var(--vt-icon-group-radius, 6px) 0 0 var(--vt-icon-group-radius, 6px) !important;
 }
 .vt-studio-square-icon-button-group > button:last-child {
-  border-radius: 0 var(--vt-icon-group-radius, 6px) var(--vt-icon-group-radius, 6px) 0;
+  border-radius: 0 var(--vt-icon-group-radius, 6px) var(--vt-icon-group-radius, 6px) 0 !important;
 }
 .vt-studio-square-icon-button-group > button > [data-vt-studio-button-face] {
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  border-radius: inherit;
+  border-radius: inherit !important;
   overflow: hidden;
 }
 
