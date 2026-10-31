@@ -1,12 +1,11 @@
 import React from "react"
-import type { StudioControlSize } from "../tokens"
 import { StudioSplitLeftBadge, StudioSplitRightBadge, StudioDoubleSplitBadge } from "./StudioControls"
 import { StudioTextInput } from "./StudioTextInput"
 import "./studio-split-text-input.css"
 
 export interface StudioSplitTextInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "children" | "type"> {
   split?: "left" | "right" | "double"
-  sizeVariant?: StudioControlSize
+  sizeVariant?: "standard" | "compact"
   type?: "text" | "search" | "email" | "url" | "tel" | "password"
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
