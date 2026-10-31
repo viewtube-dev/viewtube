@@ -10,7 +10,7 @@
 .vt-studio-value-toggle__arrow-stack {
   position: relative;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   width: var(--vt-studio-control-height, 44px);
   min-width: var(--vt-studio-control-height, 44px);
   max-width: var(--vt-studio-control-height, 44px);
