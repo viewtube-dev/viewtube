@@ -72,7 +72,8 @@
     "test:studio-button-default-effects": "node --test scripts/audit/studio-button-default-effects.test.mjs",
     "test:studio-input-token-ownership": "node --test scripts/audit/studio-input-token-ownership.test.mjs",
     "test:studio-dropdown-counter-slider-contract": "node --test scripts/audit/studio-dropdown-counter-slider-contract.test.mjs",
-    "test:studio-control-fill": "node --test scripts/audit/studio-control-fill-and-catalog-cleanup.test.mjs"
+    "test:studio-control-fill": "node --test scripts/audit/studio-control-fill-and-catalog-cleanup.test.mjs",
+    "start:production.": "node scripts/production-stack.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
