@@ -5844,14 +5844,34 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collap
   align-self: flex-start;
 }
 
-/* Square icon button group: content-sized (not row-fill); default specimen uses 3 buttons. */
+/* Icon group is a row-fill component; each of its five square actions shares the row. */
 .vt-studio-square-icon-button-group,
 [data-vt-studio-icon-button-group="true"] {
-  width: max-content !important;
-  max-width: 100%;
-  flex: 0 0 auto !important;
-  display: inline-flex;
+  box-sizing: border-box;
+  display: flex;
   align-items: stretch;
+  width: 100% !important;
+  min-width: 0;
+  max-width: none;
+  flex: 1 1 100% !important;
+  overflow: visible;
+}
+.vt-studio-square-icon-button-group > button {
+  box-sizing: border-box;
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 0;
+}
+.vt-studio-square-icon-button-group > button:first-child {
+  border-radius: var(--vt-studio-control-radius, 6px) 0 0 var(--vt-studio-control-radius, 6px);
+}
+.vt-studio-square-icon-button-group > button:last-child {
+  border-radius: 0 var(--vt-studio-control-radius, 6px) var(--vt-studio-control-radius, 6px) 0;
+}
+.vt-studio-square-icon-button-group > button > [data-vt-studio-button-face] {
+  border: 0 !important;
+  border-radius: inherit;
+  overflow: hidden;
 }
 
 /* Final, isolated geometry for rebuilt split-right and double-split buttons. */
