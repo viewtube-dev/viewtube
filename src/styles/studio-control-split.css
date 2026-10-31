@@ -65,8 +65,7 @@
   color: #000;
   background: var(--vt-studio-control-secondary, var(--pair-b));
 }
-[data-vt-studio-control="true"] [data-vt-studio-split-label],
-[data-vt-studio-control="true"] [data-vt-studio-split-field] {
+[data-vt-studio-control="true"] [data-vt-studio-split-label] {
   box-sizing: border-box;
   min-width: 0;
   min-height: 0;
@@ -90,6 +89,24 @@
   color: #000;
   text-align: center;
   line-height: var(--vt-studio-control-line-height, .86);
+}
+
+/* The only fieldSlot consumer is the controlled double-split slider. */
+.vt-studio-double-split-slider > [data-vt-studio-split-field] {
+  box-sizing: border-box;
+  display: grid;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-items: stretch;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 
 /* A face-only split shell is nested inside StudioButton but follows the same grid. */
@@ -183,41 +200,6 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   border-radius: 0;
   line-height: var(--vt-studio-control-line-height, 0.86);
   color: #000;
-}
-
-/* Username composite: shell owns perimeter; inner input and rail do not duplicate it. */
-.vt-studio-username-input,
-.vt-studio-split-shell.vt-studio-username-input {
-  box-sizing: border-box;
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px);
-  overflow: hidden;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) var(--vt-studio-control-default-fill-opacity, 50%), transparent);
-}
-.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"],
-.vt-studio-username-input [data-vt-studio-split-field] > [data-vt-studio-control="true"],
-.vt-studio-username-input [data-vt-studio-split-label] > [data-vt-studio-control="true"] {
-  box-sizing: border-box;
-  border: 0;
-  border-radius: 0;
-  outline: none;
-  box-shadow: none;
-  background: transparent;
-  min-height: 100%;
-  height: 100%;
-}
-.vt-studio-username-input > [data-vt-studio-split-rail],
-.vt-studio-username-input [data-vt-studio-split-rail] {
-  border: 0;
-  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  color: #000;
-}
-.vt-studio-username-input [data-vt-studio-split-rail] svg,
-.vt-studio-username-input [data-vt-studio-split-rail] svg * {
-  color: #000;
-  stroke: #000;
 }
 
 /* All double-split rails retain the secondary role, including both sides. */
@@ -382,21 +364,6 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   height: 100%;
   min-height: 0;
   aspect-ratio: 1 / 1;
-}
-
-
-/* Split text inputs transfer focus paint to the composite shell, not a nested second outline. */
-.vt-studio-username-input:focus-within {
-  background: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, transparent);
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 0;
-  box-shadow: none;
-}
-.vt-studio-username-input:focus-within [data-vt-studio-split-field] > input[data-vt-studio-control="true"] {
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
-  caret-color: var(--vt-field-primary, var(--pair-a, #36e0f6));
 }
 
 
