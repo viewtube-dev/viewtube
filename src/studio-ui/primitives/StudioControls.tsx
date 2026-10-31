@@ -2186,6 +2186,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
               aria-selected={option.value === currentValue}
               disabled={option.disabled}
               className="vt-studio-dropdown-option"
+              data-vt-studio-dropdown-split-option={variant === "split-left" ? "true" : undefined}
               data-active={index === activeIndex || undefined}
               data-selected={option.value === currentValue || undefined}
               onMouseEnter={() => setActiveIndex(index)}
