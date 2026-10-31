@@ -271,6 +271,13 @@ const Family: React.FC<{ title: string; children: React.ReactNode; provenance: R
       {(nonDefaultSettings.length > 0 || provenance) && (
         <details className="vt-confirmed-source-details">
           <summary>Settings + source</summary>
+          <section className="vt-confirmed-global-settings" aria-label={`${title} global defaults`}>
+            <strong>GLOBAL DEFAULTS</strong>
+            <ul>
+              <li>Width: full-row auto width by default; intrinsic/content width is an explicit, source-backed exception only.</li>
+              <li>Shared Studio size, color, typography, border, inset-stroke, and focus rules load from the canonical Studio control entry.</li>
+            </ul>
+          </section>
           {nonDefaultSettings.length > 0 && (
             <section className="vt-confirmed-nondefault-settings" aria-label={`${title} settings`}>
               <strong>NON-DEFAULT SETTINGS</strong>
