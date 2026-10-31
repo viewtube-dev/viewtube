@@ -118,17 +118,17 @@ test("side-toggle arrow buttons occupy equal grid rows and labels are vertically
 });
 
 test("split-left and double-split badge shells reserve and display every icon rail", () => {
-  assert.match(split, /\.vt-studio-split-shell\[data-vt-studio-split="left"\][\s\S]*?grid-template-columns:\s*var\(--vt-studio-control-height[^;]*minmax\(0,\s*1fr\)/);
-  assert.match(split, /\.vt-studio-split-shell\[data-vt-studio-split="double"\][\s\S]*?grid-template-columns:\s*var\(--vt-studio-control-height[^;]*minmax\(0,\s*1fr\)[^;]*var\(--vt-studio-control-height/);
+  assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-split-left-badge\[data-vt-studio-split="left"\][\s\S]*?grid-template-columns:[^;]*minmax\(0, 1fr\)/);
+  assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-double-split-badge\[data-vt-studio-split="double"\][\s\S]*?grid-template-columns:[^;]*minmax\(0, 1fr\)[^;]*var\(--vt-studio-control-height/);
   assert.match(split, /\.vt-studio-split-left-badge__rail[\s\S]*?display:\s*flex/);
   assert.match(split, /\.vt-studio-double-split-badge__rail[\s\S]*?display:\s*flex/);
 });
 
 test("switch, radio and checkbox faces scale from standard-size proportions", () => {
-  assert.match(recovery, /\.vt-studio-44-switch\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height[^;]*1\.72/s);
-  assert.match(recovery, /\.vt-studio-44-switch[^}]*background(?:-color)?:\s*var\(--vt-studio-control-secondary/s);
-  assert.match(recovery, /\.vt-studio-44-choice[^}]*background(?:-color)?:\s*color-mix/s);
-  assert.match(recovery, /\.vt-studio-44-choice[^}]*width:\s*var\(--vt-studio-control-height/s);
+  assert.match(recovery, /button\[data-vt-studio-control="true"\]\.vt-studio-44-switch\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height[^;]*1\.72/s);
+  assert.match(recovery, /button\[data-vt-studio-control="true"\]\.vt-studio-44-switch\s*\{[^}]*background:\s*color-mix/s);
+  assert.match(recovery, /button\[data-vt-studio-control="true"\]\.vt-studio-44-choice\s*\{[^}]*background:\s*color-mix/s);
+  assert.match(recovery, /button\[data-vt-studio-control="true"\]\.vt-studio-44-choice\s*\{[^}]*width:\s*var\(--vt-studio-control-height/s);
   assert.match(recovery, /\.vt-studio-44-handle[^}]*width:\s*calc\(var\(--vt-studio-control-height/s);
 });
 
