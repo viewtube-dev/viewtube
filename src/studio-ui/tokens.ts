@@ -170,6 +170,10 @@ export const STUDIO_DROPDOWN_MENU_TOKENS = {
   selectedRowFill: "secondary" as const,
   rowStroke: "control" as const,
   chevronInset: 6,
+  menuOpenDurationMs: 160,
+  menuOpenEasing: "cubic-bezier(.2,.75,.2,1)",
+  menuOpenTranslateY: 5,
+  menuOpenScaleY: 0.98,
 } as const
 
 export const STUDIO_FOCUS_INTERACTION_TOKENS = {
