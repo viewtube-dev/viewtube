@@ -2755,30 +2755,7 @@ not button faces.
   transform: none !important;
   
 }
-/* Stepper action cells change the value{
-  
-  transform: none !important;
-  
-}
-@media (prefers-reduced-motion: reduce) {
-  button[data-vt-studio-button="true"],
-  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"],
-  button[data-vt-studio-button="true"] > [data-vt-studio-button-face],
-  button[data-vt-studio-control="true"][data-vt-studio-action-button="true"] > [data-vt-studio-action-face] {
-    
-  }
-}
-
-
-/* Stepper rail icons use a shared proportional box{
-  width: 70%;
-  height: 70%;
-}
-
-
-/* Stepper fields compose the canonical username-input foundation while retaining
-   the existing grid slots. Empty icon rails are hidden{ display: contents; }
-
+/* Stepper action sizing and motion are owned by the counter-family rules below. */
 
 /* Global Studio spacing and micro-size contract.
    Spacing is a 4px unit on all four sides; layouts may use explicit multiples.
@@ -3154,7 +3131,7 @@ no shell shadows{
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
   text-align: center;
 }
-.vt-studio-split-shell > [data-vt-studio-split-field] {
+.vt-studio-double-split-slider > [data-vt-studio-split-field] {
   box-sizing: border-box;
   display: flex;
   align-items: stretch;
@@ -3165,7 +3142,7 @@ no shell shadows{
   border-radius: 0;
   overflow: hidden;
 }
-.vt-studio-split-shell > [data-vt-studio-split-field] > [data-vt-studio-control="true"] {
+.vt-studio-double-split-slider > [data-vt-studio-split-field] > [data-vt-studio-control="true"] {
   width: 100%;
   min-width: 0;
   height: 100%;
@@ -3850,7 +3827,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__rail {
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__reset,
 .vt-studio-double-split-slider .vt-studio-double-split-slider__value {
@@ -3893,13 +3870,18 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   -webkit-text-fill-color: var(--vt-studio-number-active-color, #000);
   -webkit-text-stroke-color: var(--vt-studio-number-active-stroke, #000);
 }
-.vt-studio-double-split-slider [data-vt-studio-split-field] {
+.vt-studio-double-split-slider > [data-vt-studio-split-field] {
   display: grid;
   box-sizing: border-box;
+  flex: 1 1 auto;
   min-width: 0;
   height: 100%;
   align-items: center;
   padding-inline: calc(var(--vt-studio-control-height, 44px) * .18);
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-double-split-slider input[type="range"] {
@@ -3914,11 +3896,11 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border: 0;
   border-radius: var(--vt-studio-slider-radius);
   outline: 0;
-  --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  --vt-studio-slider-left-fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   background: linear-gradient(to right,
     var(--vt-studio-slider-left-fill) 0 var(--vt-studio-slider-progress, 0%),
     color-mix(in srgb, var(--vt-studio-slider-left-fill) 50%, #fff) var(--vt-studio-slider-progress, 0%) 100%);
-  border: var(--vt-studio-slider-stroke) solid #000;
+  border: 0;
   box-shadow: none;
   cursor: pointer;
 }
@@ -3947,7 +3929,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-double-split-slider input[type="range"]::-moz-range-progress {
   height: var(--vt-studio-slider-track-height);
   border-radius: var(--vt-studio-slider-radius);
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-double-split-slider input[type="range"]::-moz-range-thumb {
   box-sizing: border-box;
@@ -3957,10 +3939,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border-radius: calc(var(--vt-studio-slider-radius) * .5);
   background: #fff;
 }
-.vt-studio-double-split-slider input[type="range"]:focus-visible {
-  outline: var(--vt-studio-slider-stroke) solid var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
-  outline-offset: 2px;
-}
+.vt-studio-double-split-slider input[type="range"]:focus-visible { outline: none; }
 .vt-studio-double-split-slider input[type="range"]:disabled {
   cursor: not-allowed;
   opacity: .55;
@@ -3993,20 +3972,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
   --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
 }
-.vt-studio-double-split-slider.is-reversed {
-  --vt-studio-control-primary: var(--pair-b, #ff7f6b);
-  --vt-studio-control-secondary: var(--pair-a, #36e0f6);
-}
-.vt-studio-double-split-slider.is-reversed .vt-studio-double-split-slider__reset,
-.vt-studio-double-split-slider.is-reversed .vt-studio-double-split-slider__value {
-  background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b));
-}
-.vt-studio-double-split-slider.is-reversed .vt-studio-double-split-slider__reset {
-  background: var(--vt-studio-control-primary, var(--pair-b, #ff7f6b));
-  color: #000;
-}
-
-
 /* Left-action side counter shares the same action/value anatomy and palette rules. */
 .vt-studio-left-counter__rail[data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-left-counter.is-reversed { background: var(--pair-b); }
@@ -5161,7 +5126,7 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][da
 }
 .vt-studio-split-shell,
 .vt-studio-split-shell > [data-vt-studio-split-label],
-.vt-studio-split-shell > [data-vt-studio-split-field],
+.vt-studio-double-split-slider > [data-vt-studio-split-field],
 .vt-studio-split-left-badge,
 .vt-studio-split-right-badge,
 .vt-studio-double-split-badge {
@@ -6536,150 +6501,9 @@ button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-sele
  * Source fixes — not layered !important overrides where avoidable.
  * ============================================================================= */
 
-/* --- SPLIT TEXT / USERNAME / SEARCH FIELDS ---------------------------------
- * Starter pattern: one outer black shell; rail is square (aspect 1/1);
- * field face uses 50% primary fill; primary inset ring on ALL edges of the
- * text area (including bottom); input text vertically centered.
- * Nested [data-vt-studio-control] inside the field must NOT paint a second border.
- */
-
-.vt-studio-split-shell[data-vt-studio-control="true"]:has([data-vt-studio-split-field]),
-.vt-studio-split-shell:has([data-vt-studio-split-field]) {
-  box-sizing: border-box;
-  display: flex;
-  align-items: stretch;
-  height: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px);
-  overflow: hidden;
-  background: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 50%, transparent);
-}
-
-.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail],
-.vt-studio-split-shell:has([data-vt-studio-split-field]) .vt-studio-split-shell__rail {
-  box-sizing: border-box;
-  flex: 0 0 var(--vt-studio-control-height, 44px);
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
-  max-width: var(--vt-studio-control-height, 44px);
-  height: 100%;
-  aspect-ratio: 1 / 1;
-  display: grid;
-  place-items: center;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  border: 0;
-  /* Single divider toward the field — not a second outer stroke */
-  box-shadow: none;
-}
-
-.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail][data-rail="start"],
-.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail]:first-child {
-  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
-}
-.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail][data-rail="end"],
-.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail]:last-child {
-  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-right: 0;
-}
-
-.vt-studio-split-shell:has([data-vt-studio-split-field]) > [data-vt-studio-split-rail] svg {
-  width: 86%;
-  height: 86%;
-  max-width: calc(var(--vt-studio-control-height, 44px) * 0.86);
-  max-height: calc(var(--vt-studio-control-height, 44px) * 0.86);
-  display: block;
-}
-
-/* Field panel: primary inset stroke on all four edges (starter .field .body:after) */
-.vt-studio-split-shell > [data-vt-studio-split-field] {
-  position: relative;
-  box-sizing: border-box;
-  display: flex;
-  align-items: stretch;
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0 !important;
-  border-radius: 0;
-  overflow: hidden;
-  background: transparent;
-}
-
-.vt-studio-split-shell > [data-vt-studio-split-field]::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  border-radius: 0;
-  pointer-events: none;
-}
-
-/* Kill nested double borders / overlapping shells inside the field */
-.vt-studio-split-shell > [data-vt-studio-split-field] > [data-vt-studio-control="true"],
-.vt-studio-split-shell > [data-vt-studio-split-field] input,
-.vt-studio-split-shell > [data-vt-studio-split-field] .vt-studio-text-input,
-.vt-studio-split-shell > [data-vt-studio-split-field] [data-vt-studio-text-input] {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  min-height: 100%;
-  margin: 0;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  outline: none;
-  background: transparent !important;
-  display: flex;
-  align-items: center;
-}
-
-.vt-studio-split-shell > [data-vt-studio-split-field] input[type="text"],
-.vt-studio-split-shell > [data-vt-studio-split-field] input:not([type]),
-.vt-studio-split-shell > [data-vt-studio-split-field] input[type="search"] {
-  display: block;
-  width: 100%;
-  height: 100%;
-  padding: 0 10px;
-  border: 0 !important;
-  background: transparent !important;
-  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  -webkit-text-fill-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: var(--vt-studio-control-font-weight, 1000);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  /* Vertical centering: equal line-box inside full height */
-  padding-block: 0;
-}
-
-.vt-studio-split-shell > [data-vt-studio-split-field] input::placeholder {
-  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  opacity: 1;
-  line-height: 1;
-}
-
-.vt-studio-split-shell > [data-vt-studio-split-field]:focus-within::after {
-  /* Keep primary inset on focus; outer shell may use secondary focus outline */
-  border-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-}
-
-.vt-studio-split-shell:has([data-vt-studio-split-field]):focus-within {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 0;
-  background: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 15%, transparent);
-}
-
-.vt-studio-split-shell > [data-vt-studio-split-field] input:focus {
-  color: #000;
-  -webkit-text-fill-color: #000;
-  caret-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-}
+/* Split text inputs are owned by studio-split-text-input.css.
+   The only remaining fieldSlot consumer is StudioDoubleSplitSlider; its geometry
+   is scoped to that primitive in studio-control-split.css. */
 
 /* Standalone text input (non-split): same primary inset ring on all edges */
 [data-vt-studio-control="true"].vt-studio-text-input:not(.vt-studio-split-shell),
