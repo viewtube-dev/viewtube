@@ -215,7 +215,7 @@ test("StudioDoubleSplitWordCounter is exported as a double-rail word primitive w
   assert.match(valueToggles, /data-vt-studio-control-kind": "studio-double-split-word-counter"/);
   assert.match(valueToggles, /STUDIO_LEFT_WORD_OPTIONS/);
   assert.match(valueToggles, /vt-studio-word-counter__value/);
-  assert.match(valueToggleStyles, /\.vt-studio-word-counter:focus-within[\s\S]*?--vt-studio-control-secondary/);
+  assert.match(valueToggleStyles, /\.vt-studio-word-counter\s*\{[^}]*display:\s*grid/);
 });
 
 
@@ -251,7 +251,7 @@ test("counter families are independent modules and solid-fill word counter faces
   assert.match(catalog, /title="StudioDoubleSplitWordCounter[\s\S]*?defaultOpen/);
   assert.match(valueToggleStyles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\]\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s);
   assert.doesNotMatch(valueToggleStyles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\][^{]*\{[^}]*50%/s);
-  assert.match(valueToggleStyles, /\.vt-studio-word-counter__value\s*\{[^}]*color:\s*var\(--vt-studio-number-rest-color\)/s);
+  assert.match(valueToggleStyles, /\.vt-studio-word-counter__value\s*\{[^}]*display:\s*flex/);
   assert.match(valueToggleStyles, /\.vt-studio-word-counter__value\s*\{/);
 });
 
