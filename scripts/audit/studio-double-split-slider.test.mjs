@@ -39,3 +39,22 @@ test("confirmed primitive catalog includes standard, compact, and micro slider s
   assert.match(catalog, /StudioDoubleSplitSlider/);
   assert.match(catalog, /StudioDoubleSplitSlider · Standard \+ Compact \+ Micro/);
 });
+
+
+test("double-split slider keeps primary rails and a secondary center track without crossing rail bounds", () => {
+  assert.match(styles, /\.vt-studio-double-split-slider \.vt-studio-double-split-slider__rail\s*\{[^}]*background:\s*var\(--vt-studio-control-primary/s);
+  assert.match(styles, /\.vt-studio-double-split-slider > \[data-vt-studio-split-field\]\s*\{[^}]*background:\s*var\(--vt-studio-control-secondary/s);
+  assert.match(styles, /\.vt-studio-double-split-slider > \[data-vt-studio-split-field\]\s*\{[^}]*overflow:\s*hidden/s);
+  assert.match(styles, /\.vt-studio-double-split-slider input\[type="range"\]::-webkit-slider-thumb\s*\{[^}]*transform:\s*translateY\(/s);
+  assert.match(styles, /\.vt-studio-double-split-slider input\[type="range"\]\s*\{[^}]*box-sizing:\s:border-box/s);
+});
+
+test("arrow, side, double-side, and double-split word controls use counter character and focus tokens without local color overrides", () => {
+  const toggles = readFileSync("src/styles/studio-control-value-toggles.css", "utf8");
+  const distill = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8");
+  assert.match(toggles, /\.vt-studio-value-toggle__face,[\s\S]*?\.vt-studio-word-counter__value[\s\S]*?var\(--vt-studio-number-rest-color/);
+  assert.match(toggles, /\.vt-studio-value-toggle:focus-within[\s\S]*?\.vt-studio-value-toggle__face[\s\S]*?color:\s*var\(--vt-studio-number-active-color,\s*#000\)/);
+  assert.match(toggles, /\.vt-studio-value-toggle:focus-within[\s\S]*?\.vt-studio-word-counter__value[\s\S]*?-webkit-text-stroke-color:\s*var\(--vt-studio-number-active-stroke,\s*#000\)/);
+  assert.doesNotMatch(distill, /html body \.vt-studio-value-toggle--side:not\(\.vt-studio-value-toggle--nested\)[\s\S]*?!important/);
+  assert.doesNotMatch(distill, /html body \.vt-studio-value-toggle--double\[data-right-appearance/);
+});
