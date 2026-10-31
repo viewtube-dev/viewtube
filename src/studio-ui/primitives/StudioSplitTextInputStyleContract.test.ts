@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 
 const splitCss = readFileSync(new URL("./studio-split-text-input.css", import.meta.url), "utf8")
 const textInputCss = readFileSync(new URL("../../styles/studio-text-input.css", import.meta.url), "utf8")
+const controlSystemCss = readFileSync(new URL("../../styles/studio-control-system.css", import.meta.url), "utf8")
 
 describe("split input source-branch field contract", () => {
   it("keeps the native input editable and gives it a persistent primary inset", () => {
@@ -24,6 +25,12 @@ describe("split input source-branch field contract", () => {
     expect(textInputCss).toContain('input.vt-studio-text-input[data-size="compact"]')
     expect(textInputCss).toContain('input.vt-studio-text-input[data-size="mini"]')
     expect(textInputCss).toContain('input.vt-studio-text-input[data-size="micro"]')
+  })
+  it("restores source-branch floating and fixed label focus metrics", () => {
+    expect(controlSystemCss).toContain("--vt-studio-control-focus-outline-width: 1.95px;");
+    expect(controlSystemCss).toContain("--vt-studio-micro-focus-outline-width, 0.975px");
+    expect(controlSystemCss).toContain(".vt-studio-fixed-label-field:focus-within > :is(input, textarea)");
+    expect(controlSystemCss).toContain("outline: var(--vt-studio-control-focus-outline-width, 3px) solid var(--vt-studio-control-secondary, var(--pair-b));");
   })
   it("keeps the shared primary inset stroke for standalone inputs and textareas", () => {
     expect(textInputCss).toContain("textarea[data-vt-studio-control=\"true\"]")
