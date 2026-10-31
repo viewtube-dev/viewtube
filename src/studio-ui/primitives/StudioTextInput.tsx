@@ -12,7 +12,7 @@ type StudioTextInputBaseProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "size"
 > & {
-  /** standard = 44/38 · compact = 28/24 · micro = 14/10 */
+  /** Supreme = 60/51.82 · standard = 44/38 · compact = 28/24 · Mini = 20/16 · micro = 12/10 */
   sizeVariant?: StudioControlSize
 }
 
@@ -69,7 +69,7 @@ export type StudioTextInputProps =
 /**
  * Canonical single-line Studio input family.
  * Simple, floating-label, and fixed-label presentations share the same native
- * input typography: 38px standard / 24px compact / 10px micro.
+ * input typography: 51.82px Supreme / 38px standard / 24px compact / 16px Mini / 10px micro.
  */
 export const StudioTextInput = React.forwardRef<HTMLInputElement, StudioTextInputProps>(
   (props, ref) => {
@@ -211,7 +211,7 @@ export const StudioTextInput = React.forwardRef<HTMLInputElement, StudioTextInpu
         data-size={sizeVariant}
         data-vt-studio-control="true"
         data-vt-studio-field-kind="text-input"
-        className={["vt-studio-text-input", className].filter(Boolean).join(" ")}
+        className={["vt-studio-text-input", "vt-studio-text-input--simple", className].filter(Boolean).join(" ")}
         placeholder={placeholder}
         spellCheck={spellCheck}
         autoCorrect={autoCorrect}
