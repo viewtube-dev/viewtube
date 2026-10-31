@@ -3757,7 +3757,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__rail {
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__reset,
 .vt-studio-double-split-slider .vt-studio-double-split-slider__value {
