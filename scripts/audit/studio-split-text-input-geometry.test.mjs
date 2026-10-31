@@ -41,7 +41,7 @@ test("split text input stylesheet is complete and closes the nested field rule",
   assert.doesNotThrow(() => postcss.parse(splitCss), "split text input stylesheet must parse as valid CSS");
   assert.match(
     splitCss,
-    /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\);[\s\S]*?caret-color:\s*var\(--vt-split-field-primary\);[\s\S]*?\n}\s*$/,
+    /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-split-field-primary\);[\s\S]*?caret-color:\s*var\(--vt-split-field-primary\);[\s\S]*?\n}\s*$/,
     "nested field declarations must be complete and the rule must close",
   );
 });
