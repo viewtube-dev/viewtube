@@ -3641,21 +3641,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 1.5; }
 .vt-studio-counter button:focus-visible,
 .vt-studio-side-counter button:focus-visible { outline: 2px solid var(--pair-a); outline-offset: -4px; }
-/* Secondary palette variants reverse the canonical A/B color roles without changing geometry. */
-.vt-studio-counter.is-reversed [data-vt-studio-split-rail],
-.vt-studio-side-counter.is-reversed [data-vt-studio-split-rail] { background: var(--pair-a); }
-.vt-studio-counter.is-reversed .vt-studio-counter__rail,
-.vt-studio-side-counter.is-reversed .vt-studio-side-counter__rail { background: var(--pair-a); }
-.vt-studio-counter.is-reversed .vt-studio-counter__button,
-.vt-studio-side-counter.is-reversed .vt-studio-side-counter__actions button { background: var(--pair-a); color: #000; }
- .vt-studio-counter.is-reversed .vt-studio-counter__value,
-.vt-studio-side-counter.is-reversed .vt-studio-side-counter__value,
-.vt-studio-left-counter.is-reversed .vt-studio-side-counter__value { background: var(--pair-b); color: #000; }
-.vt-studio-counter.is-reversed .vt-studio-counter__rail[data-rail="start"],
-.vt-studio-counter.is-reversed .vt-studio-counter__rail[data-rail="end"],
-.vt-studio-side-counter.is-reversed .vt-studio-side-counter__rail[data-rail="end"] { border-color: #000; }
-
-
 /* Counter affordance polish: +/− and chevrons are 150% larger with heavier strokes. */
 .vt-studio-counter__button svg {
   width: 36px;
@@ -3772,16 +3757,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   /* Keep value-area backgrounds stable while pressing, especially on right counters. */
 }
 
-/* Reversed variants tint against the secondary number-area surface. */
-.vt-studio-counter.is-reversed .vt-studio-counter__value,
-.vt-studio-side-counter.is-reversed .vt-studio-side-counter__value,
-.vt-studio-left-counter.is-reversed .vt-studio-side-counter__value {
-  --vt-studio-number-background: var(--pair-b);
-  color: color-mix(in srgb, #fff var(--vt-studio-number-default-white-mix, 50%), var(--vt-studio-number-background));
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke-color: currentColor;
-}
-
 /* Standard/left counter: click and hold use the same black numeral treatment. */
 .vt-studio-counter:has(
   .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
@@ -3792,20 +3767,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-number-active-stroke, #000);
 }
 
-.vt-studio-counter.is-reversed:has(
-  .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
-) .vt-studio-counter__value {
-  background: color-mix(in srgb, var(--pair-b) 50%, transparent);
-  color: var(--vt-studio-number-active-color, #000);
-  -webkit-text-fill-color: var(--vt-studio-number-active-color, #000);
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-number-active-stroke, #000);
-}
-
 /* Right counter: numeral turns black, but the value-area background never changes. */
 .vt-studio-side-counter:has(
-  .vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
-) .vt-studio-side-counter__value,
-.vt-studio-side-counter.is-reversed:has(
   .vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-side-counter__value {
   color: var(--vt-studio-number-active-color, #000);
@@ -3974,16 +3937,8 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 /* Left-action side counter shares the same action/value anatomy and palette rules. */
 .vt-studio-left-counter__rail[data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-left-counter.is-reversed { background: var(--pair-b); }
-.vt-studio-left-counter.is-reversed { --vt-studio-number-background: var(--pair-b); }
-.vt-studio-left-counter.is-reversed .vt-studio-side-counter__value { background: var(--pair-b); }
-.vt-studio-left-counter.is-reversed .vt-studio-side-counter__actions,
-.vt-studio-left-counter.is-reversed .vt-studio-side-counter__actions button { background: var(--pair-a); }
-
 .vt-studio-left-counter:has(.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])) .vt-studio-side-counter__value,
-.vt-studio-left-counter.is-reversed:has(.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])) .vt-studio-side-counter__value { color: var(--vt-studio-number-active-color, #000); -webkit-text-fill-color: var(--vt-studio-number-active-color, #000); -webkit-text-stroke-color: var(--vt-studio-number-active-stroke, #000); }
 .vt-studio-left-counter:has(.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])) .vt-studio-side-counter__value { background: color-mix(in srgb, var(--pair-a) 50%, transparent); }
-.vt-studio-left-counter.is-reversed:has(.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])) .vt-studio-side-counter__value { background: color-mix(in srgb, var(--pair-b) 50%, transparent); }
 
 
 /* Canonical Studio Upload Frame — canvas exception, pair-color driven, flat shell. */
