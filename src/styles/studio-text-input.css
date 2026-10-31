@@ -24,13 +24,6 @@ input.vt-studio-text-input {
   appearance: none;
 }
 
-input.vt-studio-text-input[data-size="supreme"] {
-  height: var(--vt-studio-supreme-height, 60px);
-  border-width: var(--vt-studio-supreme-stroke, 3px);
-  border-radius: var(--vt-studio-supreme-radius, 6px);
-  font-size: var(--vt-studio-supreme-font-size, 52px);
-}
-
 input.vt-studio-text-input,
 input.vt-studio-text-input[data-size="standard"] {
   height: var(--vt-studio-standard-height, 44px);
@@ -44,15 +37,9 @@ input.vt-studio-text-input[data-size="compact"] {
   border-radius: var(--vt-studio-compact-radius, 4px);
   font-size: var(--vt-studio-compact-font-size, 24px);
 }
-input.vt-studio-text-input[data-size="mini"] {
-  height: var(--vt-studio-mini-height, 20px);
-  border-width: var(--vt-studio-mini-stroke, 1.5px);
-  border-radius: var(--vt-studio-mini-radius, 3px);
-  font-size: var(--vt-studio-mini-font-size, 17.5px);
-}
 
 input.vt-studio-text-input[data-size="micro"] {
-  height: var(--vt-studio-micro-height, 12px);
+  height: var(--vt-studio-micro-height, 14px);
   border-width: var(--vt-studio-micro-stroke, 1px);
   border-radius: var(--vt-studio-micro-radius, 2px);
   font-size: var(--vt-studio-micro-font-size, 10px);
@@ -69,7 +56,15 @@ input.vt-studio-text-input:focus,
 input.vt-studio-text-input:focus-visible {
   color: #000;
   -webkit-text-fill-color: #000;
-  caret-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  caret-color: #000;
   -webkit-text-stroke-color: #000;
 }
 
+/* The inset primary stroke uses the browser's rounded inner border geometry.
+ * It follows each field's existing border-radius without square gradient ends.
+ * Keep nested composite inputs excluded: their shell owns the perimeter. */
+html body :is(input.vt-studio-text-input, input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), textarea[data-vt-studio-control="true"]):not(.vt-studio-username-input input):not([data-vt-studio-split-field] > input):not([data-vt-studio-split-label] > input) {
+  --vt-field-inline-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  --vt-field-inline-width: var(--vt-studio-control-stroke, 3px);
+  box-shadow: inset 0 0 0 var(--vt-field-inline-width) var(--vt-field-inline-primary);
+}
