@@ -182,15 +182,6 @@ html body .vt-studio-split-text-input [data-vt-studio-split-field]::after {
 }
 
 
-/* Right-side rail face width includes the inner divider allowance so the
- * visible rail remains square against the reduced inner shell height.
+/* All split directions share the same square rail tracks. The divider is
+ * drawn inside the rail; it must not be added to the rail's track width.
  */
-html body .vt-studio-split-text-input[data-split="right"] > [data-vt-studio-control="true"] {
-  grid-template-columns: minmax(0, 1fr) calc(var(--vt-studio-control-height, 44px) + var(--vt-studio-control-stroke, 3px));
-}
-html body .vt-studio-split-text-input[data-split="double"] > [data-vt-studio-control="true"] {
-  grid-template-columns:
-    var(--vt-studio-control-height, 44px)
-    minmax(0, 1fr)
-    calc(var(--vt-studio-control-height, 44px) + var(--vt-studio-control-stroke, 3px));
-}
