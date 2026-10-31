@@ -97,7 +97,8 @@ test("editable inputs and textareas switch text fill and glyph stroke together o
 });
 
 test("counter, slider and value-toggle families inherit the global full-row width", () => {
-  assert.match(split, /\.vt-studio-counter,[\s\S]*?width:\s*100%/);
+  assert.match(system, /\.vt-studio-counter,[\s\S]{0,180}width:\s*100%/);
+  assert.match(split, /\.vt-studio-double-split-slider\s*\{[^}]*width:\s*100%/s);
   assert.doesNotMatch(split, /--vt-studio-counter-root-width/);
   assert.doesNotMatch(system, /\.vt-studio-counter,[\s\S]{0,240}width:\s*max-content/);
   assert.match(valueToggleCss, /\.vt-studio-value-toggle\s*\{[\s\S]*?width:\s*100%/);
