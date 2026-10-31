@@ -51,7 +51,7 @@ describe("confirmed composite primitive catalog", () => {
       "StudioIconButton", "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
       "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioTextInput",
-      "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioSplitLeftInput",
+      "StudioTextArea", "StudioTextBox", "StudioSplitTextInput",
       "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
@@ -210,16 +210,15 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain('aria-label="Compact circle icon button V4"')
   })
 
-  it("registers the username composite with standard and compact native inputs", () => {
-    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain('StudioUsernameInput · Split Identity Field')
-    expect(html).toContain('data-vt-studio-username-input="true"')
-    expect(html).toContain('data-vt-studio-username-rail="true"')
-    expect(html).toContain('data-icon-size-variant="large"')
-    expect(html).toContain('data-vt-library-component="StudioUsernameInput"')
-    expect(html).toContain('aria-label="Standard username"')
-    expect(html).toContain('aria-label="Compact username"')
-    expect(html).toContain('aria-label="Disabled username"')
+  it("registers the unified split text input across left, right, double, and all five sizes", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    expect(html).toContain('data-vt-library-component="StudioSplitTextInput"');
+    expect(html).toContain('aria-label="Standard split-left text input"');
+    expect(html).toContain('aria-label="Standard split-right text input"');
+    expect(html).toContain('aria-label="Standard double-split text input"');
+    expect(html).toContain('aria-label="Supreme split-left text input"');
+    expect(html).toContain('aria-label="Mini split-left text input"');
+    expect(html).toContain('aria-label="Micro split-left text input"');
   })
   it("registers the production closeable badge and animated tag editor under global rule exceptions", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
@@ -702,8 +701,8 @@ describe("confirmed primitive representative coverage", () => {
     for (const primitive of [
       "StudioButton", "StudioSplitLeftButton", "StudioDoubleSplitButton", "StudioTwoLineButton",
       "StudioSplitTwoLineButton", "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
-      "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioUsernameInput", "StudioNumberInput",
-      "StudioSplitLeftInput", "StudioSplitTextInput", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
+      "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioNumberInput",
+      "StudioSplitTextInput", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
       "StudioLeftWordCounter", "StudioDoubleSplitSlider", "StudioLeftWordSlider", "StudioSplitLeftBadge",
       "StudioSplitRightBadge", "StudioDoubleSplitBadge", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioWordToggle", "StudioVerticalWordToggle", "StudioArrowToggle", "StudioSideToggle",
@@ -848,8 +847,9 @@ describe("confirmed individual module variant completeness", () => {
     expect(wordFamily).toContain('["60", "44", "28", "20", "12"]');
     expect(dropdownFamily).toContain("StudioLegendMultiDropdown");
     expect(source).toContain("StudioIconButton · All Five Sizes");
-    expect(source).toContain('data-vt-library-component="StudioSplitLeftInput"');
-    expect(source).toContain('Compact split-left text input');
+    expect(source).toContain('data-vt-library-component="StudioSplitTextInput"');
+    expect(source).toContain('MINI · LEFT / RIGHT / DOUBLE');
+    expect(source).toContain('MICRO · LEFT / RIGHT / DOUBLE');
     expect(source).toContain('["supreme", "mini", "micro"] as const');
     expect(dropdownFamily).toContain("StudioSplitLeftDropdown");
   });
