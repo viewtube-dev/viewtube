@@ -85,3 +85,21 @@ test("split badge rails retain the Codex square inner geometry", () => {
   assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="right"\]/);
   assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="double"\]/);
 });
+
+
+test("split text inputs and split dropdown icon rails use the global split-rail icon token, not chevron sizing", () => {
+  const controlCss = readFileSync("src/styles/studio-control-system.css", "utf8");
+  const globalIconToken = /var\(--vt-studio-control-icon-size,\s*var\(--vt-studio-standard-icon-size,\s*38px\)\)/;
+  const inputIconRule = splitCss.match(/html body \.vt-studio-split-text-input \\[data-vt-studio-split-rail\\] > svg\\s*\\{([^}]*)\\}/);
+  const dropdownIconRule = controlCss.match(/\\.vt-studio-dropdown \\.vt-studio-dropdown-split-rail > svg\\s*\\{([^}]*)\\}/);
+  assert.ok(inputIconRule, "split text input rail SVG rule exists");
+  assert.ok(dropdownIconRule, "split dropdown icon rail SVG rule exists");
+  assert.match(inputIconRule[1], globalIconToken);
+  assert.match(dropdownIconRule[1], globalIconToken);
+  assert.doesNotMatch(inputIconRule[1], /86%/);
+  assert.doesNotMatch(dropdownIconRule[1], /vt-side-chevron-size|dropdown-chevron-size/);
+  assert.match(controlCss, /\\.vt-studio-dropdown-chevron svg\\s*\\{[^}]*width:\\s*var\\(--vt-studio-dropdown-chevron-size\\)/s,
+    "the chevron keeps its independent chevron-size contract");
+  assert.match(interCss, /width:\\s*calc\\(var\\(--vt-im-face\\) \\* \\.58\\)/,
+    "the accordion icon sizing is intentionally unchanged");
+});
