@@ -51,20 +51,8 @@
  
 
 
-/* Value toggles use the secondary focus outline without changing geometry. */
-.vt-studio-value-toggle:focus-within,
-.vt-studio-split-shell.vt-studio-value-toggle:focus-within,
-[data-vt-studio-value-toggle]:focus-within {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65))
-    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 0;
-}
-.vt-studio-value-toggle__arrow:focus-visible {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65))
-    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: calc(var(--vt-studio-control-stroke, 3px) * -1);
-  z-index: 5;
-}
+/* Value-toggle focus and character treatment are owned by
+   studio-control-value-toggles.css and the shared counter interaction tokens. */
 
 /* Multiselect count is a compact black badge inside the trigger text. */
 .vt-studio-legend-trigger-text {
@@ -296,39 +284,9 @@
 }
 
 
-/* Side and double-side toggle faces are solid primary like counter value faces.
-   Arrow button cells use the same solid secondary fill, black glyphs and shared divider. */
-html body .vt-studio-value-toggle--side:not(.vt-studio-value-toggle--nested) .vt-studio-value-toggle__face {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
-}
-html body .vt-studio-value-toggle--double .vt-studio-value-toggle__double-side:first-child .vt-studio-value-toggle__face {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
-}
-/* Preserve the explicit V1/V2 right-side appearance axis. */
-html body .vt-studio-value-toggle--double[data-right-appearance="primary"] .vt-studio-value-toggle__double-side:last-child .vt-studio-value-toggle__face {
-  background: var(--pair-a, #36e0f6) !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
-}
-html body .vt-studio-value-toggle--double[data-right-appearance="secondary"] .vt-studio-value-toggle__double-side:last-child .vt-studio-value-toggle__face {
-  background: var(--pair-b, #ff7f6b) !important;
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  -webkit-text-stroke-color: #000 !important;
-}
-html body .vt-studio-value-toggle--double[data-right-appearance="black-primary-text"] .vt-studio-value-toggle__double-side:last-child .vt-studio-value-toggle__face {
-  background: #000 !important;
-  color: var(--pair-a, #36e0f6) !important;
-  -webkit-text-fill-color: var(--pair-a, #36e0f6) !important;
-  -webkit-text-stroke-color: var(--pair-a, #36e0f6) !important;
-}
+/* Side and double-side faces inherit their appearance and character tokens
+   from the shared value-toggle primitive; no local !important color layer. */
+
 /* Split rails: outer-face 1×1, full shell height — no inset square, no vertical gap.
    (Replaces PR #923 distill rules that used align-self:center + height-2*stroke.) */
 html body [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
