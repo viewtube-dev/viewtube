@@ -125,6 +125,8 @@ test("side and double-side toggle rail buttons reuse the side-counter action sys
 
 test("bar toggle bars stay below the control height and double-split word labels are vertically centered", () => {
   assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*height:\s*50%/s);
+  assert.match(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?height:\s*50%/);
+  assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?height:\s*var\(--vt-bar-height\)/);
   assert.match(system, /button\[data-vt-studio-play-pause="true"\]\[aria-pressed="true"\] \[data-vt-studio-split-rail\]\[data-rail="start"\][\s\S]*?background-color:\s*var\(--vt-studio-control-primary/);
   assert.match(valueToggleCss, /\.vt-studio-word-counter__value[^}]*place-items:\s*center/s);
 });
