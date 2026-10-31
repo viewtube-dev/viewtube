@@ -61,7 +61,8 @@ test("split-left dropdown options retain one leading icon rail and a centered la
 
 
 test("split dropdown menu rows contain only the leading icon rail and no chevron section", () => {
-  const optionMarkup = controls.match(/variant === "split-left" \? \(([\s\S]*?)\) : option\.label/)?.[1] ?? "";
+  const dropdownMenuControls = controls.slice(controls.indexOf('className="vt-studio-dropdown-menu"'));
+  const optionMarkup = dropdownMenuControls.match(/variant === "split-left" \? \(([\s\S]*?)\) : option\.label/)?.[1] ?? "";
   assert.match(optionMarkup, /vt-studio-dropdown-option-rail--start/);
   assert.match(optionMarkup, /vt-studio-dropdown-option-label/);
   assert.doesNotMatch(optionMarkup, /vt-studio-dropdown-option-rail--end|ChevronDown/);
