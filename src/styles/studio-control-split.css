@@ -1,6 +1,5 @@
 /* One split-shell contract for split-left/right/double faces and rails. */
 [data-vt-studio-control="true"][data-vt-studio-split] {
-  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
   position: relative;
   display: grid;
   align-items: stretch;
@@ -11,13 +10,13 @@
   border: var(--vt-studio-control-stroke, 3px) solid #000;
 }
 [data-vt-studio-control="true"][data-vt-studio-split="left"] {
-  grid-template-columns: var(--vt-studio-split-rail-size) minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr);
 }
 [data-vt-studio-control="true"][data-vt-studio-split="right"] {
-  grid-template-columns: minmax(0, 1fr) var(--vt-studio-split-rail-size);
+  grid-template-columns: minmax(0, 1fr) auto;
 }
 [data-vt-studio-control="true"][data-vt-studio-split="double"] {
-  grid-template-columns: var(--vt-studio-split-rail-size) minmax(0, 1fr) var(--vt-studio-split-rail-size);
+  grid-template-columns: auto minmax(0, 1fr) auto;
 }
 [data-vt-studio-control="true"] [data-vt-studio-split-rail] {
   position: relative;
@@ -27,8 +26,8 @@
   align-items: center;
   justify-content: center;
   align-self: stretch;
-  min-width: var(--vt-studio-split-rail-size);
-  width: var(--vt-studio-split-rail-size);
+  min-width: var(--vt-studio-control-height, 44px);
+  width: var(--vt-studio-control-height, 44px);
   height: 100%;
   min-height: 0;
   margin: 0;
@@ -133,8 +132,8 @@
   position: relative;
   z-index: 1;
   box-sizing: border-box;
-  width: var(--vt-studio-split-rail-size);
-  min-width: var(--vt-studio-split-rail-size);
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
   height: 100%;
   border-radius: 0;
 }
@@ -149,7 +148,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 }
 button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] {
   display: grid;
-  grid-template-columns: var(--vt-studio-split-rail-size) minmax(0, 1fr);
+  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
   align-items: stretch;
   padding: 0;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
@@ -168,8 +167,8 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   display: grid;
   place-items: center;
   align-self: stretch;
-  width: var(--vt-studio-split-rail-size);
-  min-width: var(--vt-studio-split-rail-size);
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
   height: 100%;
   margin: 0;
   padding: 0;
@@ -332,18 +331,18 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
 [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
 [data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
 button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail] {
-  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - var(--vt-studio-control-stroke, 3px) - var(--vt-studio-control-stroke, 3px));
+  
   box-sizing: border-box;
-  width: var(--vt-studio-split-rail-size);
-  min-width: var(--vt-studio-split-rail-size);
-  max-width: var(--vt-studio-split-rail-size);
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  max-width: var(--vt-studio-control-height, 44px);
   height: 100%;
   min-height: 0;
   aspect-ratio: 1 / 1;
-  flex: 0 0 var(--vt-studio-split-rail-size);
+  flex: 0 0 var(--vt-studio-control-height, 44px);
 }
 button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] {
-  grid-template-columns: calc(var(--vt-studio-control-height, 44px) - var(--vt-studio-control-stroke, 3px) - var(--vt-studio-control-stroke, 3px)) minmax(0, 1fr);
+  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
 }
 
 
@@ -383,16 +382,16 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 .vt-studio-bar-toggle__rail {
   box-sizing: border-box;
   align-self: center;
-  height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
-  min-height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
-  max-height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
+  height: var(--vt-top-split-size, 44px);
+  min-height: var(--vt-top-split-size, 44px);
+  max-height: var(--vt-top-split-size, 44px);
   aspect-ratio: 1 / 1;
-  flex: 0 0 var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height, var(--vt-top-split-size, 44px)) - 2 * var(--vt-studio-control-stroke, var(--vt-top-split-stroke, 3px))));
+  flex: 0 0 var(--vt-top-split-size, 44px);
 }
 [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
 [data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
 button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail] {
-  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+  
 }
 .vt-studio-top-split-module__head[data-split="left"] {
   grid-template-columns: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px)) minmax(0, 1fr);
@@ -430,10 +429,10 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 .vt-studio-side-toggle__rail,
 .vt-studio-double-side-toggle__rail,
 .vt-studio-bar-toggle__rail {
-  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
-  width: var(--vt-studio-split-rail-size);
-  min-width: var(--vt-studio-split-rail-size);
-  max-width: var(--vt-studio-split-rail-size);
+  
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  max-width: var(--vt-studio-control-height, 44px);
 }
 
 /* Counter family width is a geometry exception: 2h value pane plus square rails. */
