@@ -46,7 +46,7 @@ test("double-split slider keeps primary rails and a secondary center track witho
   assert.match(styles, /\.vt-studio-double-split-slider > \[data-vt-studio-split-field\]\s*\{[^}]*background:\s*var\(--vt-studio-control-secondary/s);
   assert.match(styles, /\.vt-studio-double-split-slider > \[data-vt-studio-split-field\]\s*\{[^}]*overflow:\s*hidden/s);
   assert.match(styles, /\.vt-studio-double-split-slider input\[type="range"\]::-webkit-slider-thumb\s*\{[^}]*transform:\s*translateY\(/s);
-  assert.match(styles, /\.vt-studio-double-split-slider input\[type="range"\]\s*\{[^}]*box-sizing:\s:border-box/s);
+  assert.match(styles, /\.vt-studio-double-split-slider input\[type="range"\]\s*\{[^}]*box-sizing:\s*border-box/s);
 });
 
 test("arrow, side, double-side, and double-split word controls use counter character and focus tokens without local color overrides", () => {
