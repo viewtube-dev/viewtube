@@ -3186,7 +3186,7 @@ export interface StudioSplitStepperProps extends Omit<React.HTMLAttributes<HTMLD
 }
 export type StudioSplitStepperSize = NonNullable<StudioSplitStepperProps["size"]>;
 
-/** Username-input-derived compact numeric field with a secondary action rail. */
+/** Split numeric stepper with a secondary action rail. */
 export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
   value, onValueChange, min = 0, max = Number.POSITIVE_INFINITY, step = 1,
   size = "standard", ariaLabel = "Value", disabled = false, className, ...props
@@ -3199,7 +3199,6 @@ export const StudioSplitStepper: React.FC<StudioSplitStepperProps> = ({
       data-vt-studio-control="true"
       data-vt-studio-control-family="stepper"
       data-vt-studio-control-kind="split-stepper"
-      data-vt-studio-username-foundation="true"
       data-size={size}
     >
       <input
