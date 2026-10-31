@@ -68,7 +68,7 @@
 .vt-studio-value-toggle__bar-tooltip { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; padding: 2px 4px; border: 1px solid #000; background: var(--pair-b); color: #000; font-size: 10px; font-weight: 1000; white-space: nowrap; opacity: 0; pointer-events: none; }
 .vt-studio-value-toggle__bar:hover .vt-studio-value-toggle__bar-tooltip,
 .vt-studio-value-toggle__bar:focus-within .vt-studio-value-toggle__bar-tooltip { opacity: 1; }
-.vt-studio-word-counter__value { display: flex; align-items: center; justify-content: center; align-self: stretch; min-width: 0; width: 100%; height: 100%; padding: 0; line-height: 1; }
+.vt-studio-word-counter__value { display: grid; place-items: center; align-self: stretch; min-width: 0; width: 100%; height: 100%; padding: 0; line-height: 1; text-align: center; }
 .vt-studio-word-counter__button { display: grid; place-items: center; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; color: #000; }
 .vt-studio-word-counter__button { --vt-studio-stepper-icon-size: calc(var(--vt-studio-control-height, 44px) * .82); --vt-studio-stepper-icon-stroke: 3.75; }
 .vt-studio-word-counter__button svg { width: var(--vt-studio-stepper-icon-size); height: var(--vt-studio-stepper-icon-size); }
