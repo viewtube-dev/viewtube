@@ -2236,12 +2236,6 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
                     {splitIcon}
                   </span>
                   <span className="vt-studio-dropdown-option-label">{option.label}</span>
-                  <span className="vt-studio-dropdown-option-rail vt-studio-dropdown-option-rail--end" aria-hidden="true">
-                    <ChevronDown
-                      size={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronSize.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronSize.compact : STUDIO_DROPDOWN_TOKENS.chevronSize.standard}
-                      strokeWidth={sizeVariant === "supreme" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.supreme : sizeVariant === "compact" ? STUDIO_DROPDOWN_TOKENS.chevronStroke.compact : STUDIO_DROPDOWN_TOKENS.chevronStroke.standard}
-                    />
-                  </span>
                 </>
               ) : option.label}
             </button>
