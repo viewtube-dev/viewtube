@@ -137,15 +137,13 @@ test("split badge labels share the full outer-shell center axis without affectin
 });
 
 test("split input rails use the inner square size and recovery CSS cannot stretch split rails", () => {
-  assert.ok(splitInputCss.includes("var(--vt-studio-split-rail-size"));
-  assert.ok(!splitInputCss.includes("grid-template-columns: var(--vt-studio-control-height"));
-  assert.ok(split.includes("--vt-studio-split-rail-size"));
-  assert.ok(!split.includes("width: var(--vt-studio-control-height, 44px)"));
-  assert.ok(!split.includes("min-width: var(--vt-studio-control-height, 44px)"));
-  assert.ok(!recovery.includes(".vt-studio-split-shell__rail, [data-vt-studio-split-rail]"));
-  assert.ok(!recovery.includes("width: var(--vt-studio-control-height) !important"));
-  assert.ok(!split.includes("width: var(--vt-studio-control-height, 44px)"));
-  assert.ok(!split.includes("min-width: var(--vt-studio-control-height, 44px)"));
+  assert.ok(splitInputCss.includes("grid-template-columns: var(--vt-studio-control-height, 44px)"));
+  assert.ok(splitInputCss.includes("var(--vt-studio-control-secondary"));
+  assert.ok(split.includes("grid-template-columns: auto minmax(0, 1fr)"));
+  assert.ok(split.includes("grid-template-columns: minmax(0, 1fr) auto"));
+  assert.ok(split.includes("width: var(--vt-studio-control-height, 44px)"));
+  assert.ok(!split.includes("--vt-studio-split-rail-size"));
+  assert.ok(!recovery.includes("--vt-studio-split-rail-size"));
 });
 
 test("split text input accepts every canonical size supported by its production badge foundation", () => {
