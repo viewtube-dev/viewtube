@@ -3830,10 +3830,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   border: 0;
   border-radius: var(--vt-studio-slider-radius);
   outline: 0;
-  --vt-studio-slider-left-fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  --vt-studio-slider-left-fill: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
   background: linear-gradient(to right,
     var(--vt-studio-slider-left-fill) 0 var(--vt-studio-slider-progress, 0%),
-    color-mix(in srgb, var(--vt-studio-slider-left-fill) 50%, #fff) var(--vt-studio-slider-progress, 0%) 100%);
+    color-mix(in srgb, var(--vt-studio-slider-left-fill) 50%, transparent) var(--vt-studio-slider-progress, 0%) 100%);
   border: 0;
   box-shadow: none;
   cursor: pointer;
@@ -3842,11 +3842,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   box-sizing: border-box;
   height: var(--vt-studio-slider-track-height);
   border: var(--vt-studio-slider-stroke) solid #000;
-  background: linear-gradient(
-    90deg,
-    var(--vt-studio-control-primary, var(--pair-a, #36e0f6)) 0 50%,
-    color-mix(in srgb, var(--vt-studio-control-primary, var(--pair-a, #36e0f6)) 50%, transparent) 50% 100%
-  );
+  background: transparent;
 }
 .vt-studio-double-split-slider input[type="range"]::-webkit-slider-thumb {
   appearance: none;
@@ -4147,7 +4143,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 
 /* Give slider numbers more of their available split-face width. */
 .vt-studio-double-split-slider [data-vt-studio-split-field] {
-  padding-inline: calc(var(--vt-studio-control-height, 44px) * .09);
+  padding-inline: calc(var(--vt-studio-control-height, 44px) * .12);
 }
 .vt-studio-double-split-slider .vt-studio-double-split-slider__value {
   padding-inline: 0;
@@ -4165,7 +4161,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   height: 100%;
   min-width: 0;
   min-height: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));
 }
 .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button {
   display: grid;
