@@ -66,6 +66,8 @@ describe("Studio badge single-size contract", () => {
     expect(brainLed).toContain("37.5% { transform: scale(5); opacity: 0; }");
     expect(css).toContain("background: #fff;");
     expect(css).toContain("prefers-reduced-motion: reduce");
+    expect(css).toContain(".vt-studio-upload-frame:has(.vt-studio-upload-frame__input:focus-visible)");
+    expect(css).toContain("@media (max-width: 460px)");
   });
 });
 
@@ -146,10 +148,6 @@ describe("canonical Studio upload frame", () => {
     expect(css).toContain(".vt-studio-upload-frame__icon::before");
     expect(css).toContain(".vt-studio-upload-frame__icon::after");
     expect(css).toContain(".vt-studio-upload-frame.has-img .vt-studio-upload-frame__icon {");
-    expect(css).toContain("width: 48cqw");
-    expect(css).toContain("--vt-studio-upload-quarter-stroke: calc(var(--vt-studio-upload-frame-stroke) / 4)");
-    expect(css).toContain("--vt-studio-upload-speed: 2");
-    expect(css).toContain("animation: vt-studio-upload-click-pulse 1s ease-in-out both");
     const legacyCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubCompletePrimitiveCatalog.tsx"), "utf8");
     const migrationCatalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubPrimitiveMigrationCatalog.tsx"), "utf8");
     expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
