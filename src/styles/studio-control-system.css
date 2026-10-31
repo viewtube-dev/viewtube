@@ -7256,3 +7256,92 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* Dropdown phases 3–5: centered multi-select trigger, full-box split labels,
+   and option rows that preserve the split trigger's two square rails. */
+.vt-studio-legend-trigger-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+}
+.vt-studio-legend-trigger-label {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+.vt-studio-legend-count-badge {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35em;
+  padding-inline: .12em;
+  text-align: center;
+  white-space: nowrap;
+}
+.vt-studio-dropdown.is-split-left .vt-studio-split-shell [data-vt-studio-split-label] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  padding-inline: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
+  overflow: hidden;
+  text-align: center;
+  text-overflow: clip;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.vt-studio-dropdown.is-split-left .vt-studio-dropdown-option {
+  display: grid;
+  grid-template-columns: var(--vt-studio-dropdown-option-rail-size, calc(var(--vt-studio-dropdown-rail-size, 44px) - 2 * var(--vt-studio-control-stroke, 3px))) minmax(0, 1fr) var(--vt-studio-dropdown-option-rail-size, calc(var(--vt-studio-dropdown-rail-size, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
+  align-items: stretch;
+  gap: 0;
+  padding: 0 !important;
+  text-align: center;
+}
+.vt-studio-dropdown-option-rail {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 100%;
+  padding: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b));
+}
+.vt-studio-dropdown-option-rail--start {
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-dropdown-option-rail--end {
+  background: var(--vt-studio-control-accent, var(--pair-a));
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-dropdown-option-rail svg {
+  display: block;
+  width: min(var(--vt-studio-dropdown-chevron-size, 28px), 100%);
+  height: min(var(--vt-studio-dropdown-chevron-size, 28px), 100%);
+  max-width: 100%;
+  max-height: 100%;
+}
+.vt-studio-dropdown-option-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  padding-inline: 4px;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: clip;
+  white-space: nowrap;
+}
