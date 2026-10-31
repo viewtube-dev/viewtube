@@ -261,50 +261,6 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
 }
 
-/* The double-side toggle has three visible vertical separators: outer rails,
- * center join, and the split-shell rail dividers. Both stacked arrow buttons
- * occupy equal halves and center their glyphs vertically.
- */
-.vt-studio-value-toggle--double .vt-studio-value-toggle__divider {
-  display: block !important;
-  align-self: stretch;
-  width: var(--vt-studio-control-stroke, 3px);
-  min-width: var(--vt-studio-control-stroke, 3px);
-  background: #000;
-}
-.vt-studio-value-toggle--double .vt-studio-side-counter__actions {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  align-content: stretch;
-  align-items: stretch;
-  justify-items: stretch;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-}
-.vt-studio-value-toggle--double .vt-studio-side-counter__action-button {
-  display: grid;
-  box-sizing: border-box;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  padding: 0;
-  line-height: 1;
-}
-.vt-studio-value-toggle--double .vt-studio-side-counter__action-button svg {
-  display: block;
-  align-self: center;
-  justify-self: center;
-}
-.vt-studio-value-toggle--double .vt-studio-value-toggle__face {
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-  padding-block: 0;
-  line-height: 1;
-}
-
 /* Restore the top-split header's visible horizontal separator. The prior
  * transparent collapsed-header rule matched every top-split module.
  */
@@ -336,16 +292,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
 }
 
 /* Default double-split slider palette is the inverse of the prior rail scheme. */
-.vt-studio-double-split-slider > [data-vt-studio-split-rail] {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) !important;
-}
-.vt-studio-double-split-slider > [data-vt-studio-split-field] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-}
-.vt-studio-double-split-slider .vt-studio-double-split-slider__reset,
-.vt-studio-double-split-slider .vt-studio-double-split-slider__counter {
-  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-}
+/* Slider palette and counter faces are owned by the canonical split/counter family sheets. */
 
 
 /* Restore the outer vertical edges after the earlier zero-side-border reset. */
@@ -359,19 +306,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head {
   border-bottom-color: #000 !important;
 }
-.vt-studio-value-toggle--double .vt-studio-side-counter__rail[data-rail="start"] {
-  border-right: var(--vt-studio-control-stroke, 3px) solid #000 !important;
-}
-.vt-studio-value-toggle--double .vt-studio-side-counter__rail[data-rail="end"] {
-  border-left: var(--vt-studio-control-stroke, 3px) solid #000 !important;
-}
+/* Side-counter divider geometry is defined by its canonical split-shell family. */
 
 
-button.vt-studio-square-icon-button:not(.vt-studio-square-icon-button-group button) > [data-vt-studio-button-face],
-button[data-vt-studio-circle-icon-button="true"]:not(.vt-studio-square-icon-button-group button) > [data-vt-studio-button-face] {
-  border: var(--vt-studio-control-stroke, 3px) solid #000 !important;
-  border-radius: var(--vt-studio-control-radius, 6px) !important;
-}
-button[data-vt-studio-circle-icon-button="true"]:not(.vt-studio-square-icon-button-group button) > [data-vt-studio-button-face] {
-  border-radius: 50% !important;
-}
+/* The outer button owns the only perimeter; the inner face never draws a second border. */
