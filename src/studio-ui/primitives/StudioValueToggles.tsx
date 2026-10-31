@@ -56,14 +56,15 @@ function changeOption(props: CommonProps, direction: -1 | 1) {
   if (props.options[next] !== undefined && props.options[next] !== props.value) props.onValueChange(props.options[next]);
 }
 
-function ArrowButton({ direction, disabled, onClick, label }: {
+function ArrowButton({ direction, disabled, onClick, label, className = "vt-studio-value-toggle__arrow" }: {
   direction: "left" | "right" | "up" | "down";
   disabled?: boolean;
   onClick: () => void;
   label: string;
+  className?: string;
 }) {
   const Icon = direction === "left" ? ChevronLeft : direction === "right" ? ChevronRight : direction === "up" ? ChevronUp : ChevronDown;
-  return <button type="button" className="vt-studio-value-toggle__arrow" aria-label={label} disabled={disabled} onClick={onClick}>
+  return <button type="button" className={className} aria-label={label} disabled={disabled} onClick={onClick}>
     <Icon aria-hidden="true" />
   </button>;
 }
@@ -94,9 +95,9 @@ export function StudioSideToggle(props: StudioSideToggleProps) {
   const { options, value, arrowSide = "right", size = "standard", ariaLabel = "Choose value", className, reserveLabel } = props;
   const index = options.indexOf(value);
   const current = options[index < 0 ? 0 : index] ?? value;
-  const arrows = <div className="vt-studio-value-toggle__arrow-stack">
-    <ArrowButton direction="up" label="Previous option" disabled={props.disabled || !options.length} onClick={() => changeOption(props, -1)} />
-    <ArrowButton direction="down" label="Next option" disabled={props.disabled || !options.length} onClick={() => changeOption(props, 1)} />
+  const arrows = <div className="vt-studio-side-counter__actions">
+    <ArrowButton className="vt-studio-side-counter__action-button" direction="up" label="Previous option" disabled={props.disabled || !options.length} onClick={() => changeOption(props, -1)} />
+    <ArrowButton className="vt-studio-side-counter__action-button" direction="down" label="Next option" disabled={props.disabled || !options.length} onClick={() => changeOption(props, 1)} />
   </div>;
   return <StudioSplitShell layout={arrowSide} sizeVariant={size}
     className={["vt-studio-value-toggle", "vt-studio-value-toggle--side", className].filter(Boolean).join(" ")}
