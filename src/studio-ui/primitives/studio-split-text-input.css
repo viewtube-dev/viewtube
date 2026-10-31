@@ -99,12 +99,11 @@ html body .vt-studio-split-text-input [data-vt-studio-split-rail] {
   overflow: hidden;
   z-index: 1;
 }
-html body .vt-studio-split-text-input [data-vt-studio-split-rail] svg {
-  width: 86%;
-  height: 86%;
-  max-width: 86%;
-  max-height: 86%;
+html body .vt-studio-split-text-input [data-vt-studio-split-rail] > svg {
   display: block;
+  width: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
+  height: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
+  flex: 0 0 auto;
 }
 
 /**
