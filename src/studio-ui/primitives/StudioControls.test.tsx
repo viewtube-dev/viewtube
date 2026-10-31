@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioUsernameInput, StudioSplitLeftInput, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -105,14 +105,6 @@ describe("canonical Studio upload frame", () => {
     expect(html).toContain('aria-label="Vault asset import"');
   });
 
-  it("renders the canonical split-left input with search icon rail and native input attributes", () => {
-    const html = renderToStaticMarkup(<StudioSplitLeftInput icon={<span aria-hidden="true">⌕</span>} value="thumbnail" placeholder="Search assets…" aria-label="Search Vault assets" />);
-    expect(html).toContain('data-vt-studio-username-input="true"');
-    expect(html).toContain('aria-label="Search Vault assets"');
-    expect(html).toContain('placeholder="Search assets…"');
-    expect(html).toContain('value="thumbnail"');
-  });
-
   it("supports explicit single-select semantics in the shared legend dropdown", () => {
     const html = renderToStaticMarkup(<StudioLegendMultiDropdown label="Sort" accessibleLabel="Sort assets" selectionMode="single" value={["name-asc"]} options={[{ value: "name-asc", label: "NAME ASC" }, { value: "name-desc", label: "NAME DESC" }]} />);
     expect(html).toContain('data-vt-studio-dropdown-variant="single-select"');
@@ -166,9 +158,9 @@ describe("canonical Studio upload frame", () => {
     expect(legacyCatalog).toContain('if (name === "Upload Frame") return');
     expect(legacyCatalog).toContain("<StudioUploadFrame");
     expect(legacyCatalog).not.toContain("SubToolboxFileTarget");
-    expect(legacyCatalog).toContain("StudioSplitLeftInput");
+    expect(legacyCatalog).not.toContain("StudioSplitLeftInput");
     expect(migrationCatalog).toContain("<StudioUploadFrame");
-    expect(migrationCatalog).toContain("StudioSplitLeftInput");
+    expect(migrationCatalog).not.toContain("StudioSplitLeftInput");
     expect(migrationCatalog).not.toContain("SubToolboxFileTarget");
   });
 });
@@ -841,43 +833,6 @@ describe("Studio Circle Icon Button", () => {
   })
 })
 
-describe("Studio Username Split-Left Input", () => {
-  it("composes the canonical Studio text input with a split icon rail", () => {
-    const html = renderToStaticMarkup(<StudioUsernameInput icon={<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /></svg>} aria-label="Username" placeholder="Username" />)
-    expect(html).toContain('data-vt-studio-username-input="true"')
-    expect(html).toContain('data-vt-studio-username-rail="true"')
-    expect(html).toContain('data-icon-size-variant="large"')
-    expect(html).toContain('data-vt-studio-field-kind="text-input"')
-    expect(html).toContain('aria-label="Username"')
-    expect(html).not.toContain('data-vt-studio-button="true"')
-    expect(renderToStaticMarkup(<StudioUsernameInput icon={<span>U</span>} sizeVariant="compact" aria-label="Compact username" />)).toContain('data-size="compact"')
-  })
-
-  it("uses the primary inline stroke at the selected border width without important overrides", () => {
-    const css = readStudioControlCss()
-    const start = css.indexOf('.vt-studio-username-input input.vt-studio-username-input__input[data-vt-studio-control="true"] {')
-    const end = css.indexOf('.vt-studio-username-input[data-disabled="true"]', start)
-    const fieldRules = css.slice(start, end)
-    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary)")
-    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary)")
-    expect(fieldRules).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #8b8b8b")
-    expect(fieldRules).not.toContain("!important")
-  })
-
-  it("keeps the composite outline and inset strokes on the wrapper without a button shadow or seam", () => {
-    const css = readStudioControlCss()
-    expect(css).toContain('.vt-studio-username-input:focus-within')
-    expect(css).not.toContain('inset 0 var(--vt-studio-control-stroke) 0 0 var(--vt-field-primary)')
-    expect(css).not.toContain('inset calc(0px - var(--vt-studio-control-stroke)) 0 0 0 var(--vt-field-primary)')
-    expect(css).toContain('input.vt-studio-username-input__input[data-vt-studio-control="true"]:is(:focus, :focus-visible)')
-    expect(css).toContain('box-shadow: none !important;')
-    expect(css).toContain('button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face]')
-    expect(css).toContain('.vt-studio-username-input[data-size="standard"] {\n  --vt-studio-control-icon-size: 38px;\n  --vt-studio-control-icon-stroke: 1.9;')
-    expect(css).toContain('.vt-studio-username-input[data-size="compact"] {\n  --vt-studio-control-icon-size: 24px;\n  --vt-studio-control-icon-stroke: 2;')
-  })
-})
-
-
 describe("confirmed Studio primitive catalog ownership", () => {
   it("registers the simple dropdown and split stepper from the canonical Studio Controls module", () => {
     const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
@@ -1455,42 +1410,36 @@ describe("Studio left word counter and word slider", () => {
 });
 
 
-describe("StudioSplitTextInput transparent-panel composition", () => {
-  it("keeps the split badge shell and places a size-aware text input inside it", () => {
-    const html = renderToStaticMarkup(
-      <StudioSplitTextInput split="left" sizeVariant="standard" leftIcon={<span>SEARCH</span>} aria-label="Search" />,
-    );
-    expect(html).toContain('class="vt-studio-split-shell vt-studio-split-text-input"');
-    expect(html).toContain('data-vt-studio-split="left"');
-    expect(html).toContain('class="vt-studio-split-shell__rail"');
-    expect(html).toContain('class="vt-studio-split-text-input__field"');
-    expect(html).toContain('aria-label="Search"');
-    expect(html).toContain('data-size="standard"');
+describe("StudioSplitTextInput badge-owned composition", () => {
+  it("composes one split badge shell with the native StudioTextInput for left, right, and double layouts", () => {
+    const left = renderToStaticMarkup(<StudioSplitTextInput split="left" sizeVariant="standard" leftIcon={<span>SEARCH</span>} aria-label="Search" />);
+    const right = renderToStaticMarkup(<StudioSplitTextInput split="right" sizeVariant="standard" rightIcon={<span>FILTER</span>} aria-label="Filter" />);
+    const double = renderToStaticMarkup(<StudioSplitTextInput split="double" sizeVariant="standard" leftIcon={<span>SEARCH</span>} rightIcon={<span>FILTER</span>} aria-label="Search and filter" />);
+    expect(left).toContain('class="vt-studio-split-text-input"');
+    expect(left).toContain('data-vt-studio-split="left"');
+    expect(left).toContain('data-vt-library-component="StudioSplitLeftBadge"');
+    expect(right).toContain('data-vt-studio-split="right"');
+    expect(right).toContain('data-vt-library-component="StudioSplitRightBadge"');
+    expect(double).toContain('data-vt-studio-split="double"');
+    expect(double).toContain('data-vt-library-component="StudioDoubleSplitBadge"');
+    expect(double).toContain('class="vt-studio-text-input');
+    expect(double).toContain('aria-label="Search and filter"');
   });
 
-  it("uses a transparent split panel and an inset primary-border input without a second focus outline", () => {
-    const css = readStudioControlCss();
-    const shellStart = css.lastIndexOf(".vt-studio-split-shell.vt-studio-split-text-input {");
-    const fieldStart = css.lastIndexOf(".vt-studio-split-text-input__field {");
-    const focusStart = css.lastIndexOf(".vt-studio-split-text-input:focus-within");
-    expect(shellStart).toBeGreaterThanOrEqual(0);
-    expect(fieldStart).toBeGreaterThan(shellStart);
-    expect(focusStart).toBeGreaterThan(fieldStart);
-    const shell = css.slice(shellStart, fieldStart);
-    const field = css.slice(fieldStart, focusStart);
-    expect(shell).toContain("background: transparent");
-    expect(field).toContain("border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary");
-    expect(field).toContain("height: calc(var(--vt-studio-control-height, 44px) - 3 * var(--vt-studio-control-stroke, 3px))");
-    expect(field).toContain("align-self: center");
-    const rail = css.slice(css.indexOf(".vt-studio-split-text-input > .vt-studio-split-shell__rail"), css.indexOf(".vt-studio-split-text-input__field"));
-    expect(rail).toContain("place-items: center");
-    expect(rail).toContain("flex: 0 0 calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px))");
-    expect(rail).toContain("height: 100%");
-    expect(field).toContain("outline: none");
-    expect(field).toContain("background: var(--vt-field-fill-rest, transparent)");
-    expect(field).not.toContain("border: 0 !important");
-    expect(field).toContain("background-image: none !important");
-    expect(field).not.toContain("linear-gradient(");
-    expect(css.slice(focusStart, focusStart + 1000)).toContain("outline: none");
+  it("uses one shell perimeter and divider, secondary square rails, and a primary inset input stroke", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-split-text-input.css"), "utf8");
+    expect(css).toContain('grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr)');
+    expect(css).toContain('background: var(--vt-studio-control-secondary');
+    expect(css).toContain('box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary)');
+    expect(css).toContain('border: 0;');
+    expect(css).not.toContain('!important');
+    expect(css).not.toContain('border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary)');
+  });
+
+  it("supports the complete five-tier size contract", () => {
+    for (const size of ["supreme", "standard", "compact", "mini", "micro"] as const) {
+      const html = renderToStaticMarkup(<StudioSplitTextInput split="double" sizeVariant={size} aria-label={size + " split input"} />);
+      expect(html).toContain('data-size="' + size + '"');
+    }
   });
 });
