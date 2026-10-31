@@ -49,19 +49,18 @@ test("intermodule sizing uses canonical supreme tokens and focus outline follows
   assert.match(interCss, /\.vt-studio-inter-module__line-2/);
 });
 
-test("split text input stylesheet is complete and closes the nested field rule", () => {
+test("split text input stylesheet is complete and uses the Codex native inner border", () => {
   assert.doesNotMatch(splitCss, /\.\.\.\s*$/, "stylesheet must not be truncated");
   assert.doesNotThrow(() => postcss.parse(splitCss), "split text input stylesheet must parse as valid CSS");
-  assert.match(
-    splitCss,
-    /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-split-field-primary\);[\s\S]*?caret-color:\s*var\(--vt-split-field-primary\);[\s\S]*?\n}\s*$/,
-    "nested field declarations must be complete and the rule must close",
-  );
+  assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\) !important/);
+  assert.match(splitCss, /box-shadow:\s*none/);
+  assert.match(splitCss, /caret-color:\s*var\(--vt-split-field-primary\)/);
 });
 
-test("split input reserves fixed square rail tracks for left, right, and double layouts", () => {
-  assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="left"\] > \[data-vt-studio-control="true"\]\s*\{[^}]*grid-template-columns:[^;]+minmax\(0, 1fr\)/s);
-  assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="right"\] > \[data-vt-studio-control="true"\]\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) var\(--vt-studio-control-height, 44px\)/s);
-  assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="double"\] > \[data-vt-studio-control="true"\]\s*\{[^}]*grid-template-columns:[^;]+minmax\(0, 1fr\)[^;]+var\(--vt-studio-control-height, 44px\)/s);
-  assert.match(splitCss, /\[data-vt-studio-split-rail\]\s*\{[^}]*display:\s*grid[^}]*place-items:\s*center/s);
+test("split badge rails retain the Codex square inner geometry", () => {
+  assert.match(splitCss, /grid-template-rows:\s*minmax\(0, 1fr\)/);
+  assert.match(splitCss, /\[data-vt-studio-split-rail\]\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height\) - var\(--vt-studio-control-stroke\)\)[^}]*height:\s*100%/s);
+  assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="left"\]/);
+  assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="right"\]/);
+  assert.match(splitCss, /\.vt-studio-split-text-input\[data-split="double"\]/);
 });
