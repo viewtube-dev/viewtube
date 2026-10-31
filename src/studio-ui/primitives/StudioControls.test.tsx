@@ -957,7 +957,9 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     expect(html).toContain('data-vt-studio-slider-left-controls="counter"');
     expect(html).toContain('aria-label="Increase Level"');
     expect(html).toContain('aria-label="Decrease Level"');
-    expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter::after');
+    expect(css).not.toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter::after');
+    expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button');
+    expect(css).toContain('background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));');
     expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button.is-holding svg');
   });
 });
@@ -1232,6 +1234,7 @@ describe("StudioSquareIconButtonGroup joined rail", () => {
     expect(css).toContain(".vt-studio-square-icon-button-group");
     expect(css).toContain("border-right: var(--vt-icon-group-stroke) solid #000 !important;");
     expect(css).toContain("border-radius: 0 !important;");
+    expect(css).toContain("overflow: visible;");
   });
 });
 
