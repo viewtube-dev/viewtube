@@ -34,3 +34,27 @@ test("regular and multi-select dropdown menus use the same opening animation", (
 test("all dropdown menu variants honor reduced motion", () => {
   assert.match(css, /@media \(prefers-reduced-motion: reduce\) \{\s*\.vt-studio-dropdown-menu,\s*\.vt-studio-legend-menu\s*\{\s*animation-duration:\s*\.01ms/s);
 });
+
+
+const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
+
+test("multi-select closed trigger keeps selected label and count centered as one group", () => {
+  assert.match(css, /\.vt-studio-legend-trigger-text\s*\{[^}]*justify-content:\s*center/s);
+  assert.match(css, /\.vt-studio-legend-trigger-text\s*\{[^}]*text-align:\s*center/s);
+  assert.match(css, /\.vt-studio-legend-trigger-label\s*\{[^}]*flex:\s*0 1 auto/s);
+  assert.match(css, /\.vt-studio-legend-count-badge\s*\{[^}]*flex:\s*none/s);
+});
+
+test("split-left dropdown closed label is centered on the complete trigger box", () => {
+  assert.match(css, /\.vt-studio-dropdown\.is-split-left[^}]*[\s\S]{0,1800}\[data-vt-studio-split-label\][^}]*position:\s*absolute/s);
+  assert.match(css, /\.vt-studio-dropdown\.is-split-left[^}]*[\s\S]{0,1800}\[data-vt-studio-split-label\][^}]*inset:\s*0/s);
+});
+
+test("split-left dropdown options retain both icon rails around a centered option label", () => {
+  assert.match(controls, /variant === "split-left"\s*\?\s*\(/);
+  assert.match(controls, /className="vt-studio-dropdown-option-rail vt-studio-dropdown-option-rail--start"/);
+  assert.match(controls, /className="vt-studio-dropdown-option-label"/);
+  assert.match(controls, /className="vt-studio-dropdown-option-rail vt-studio-dropdown-option-rail--end"/);
+  assert.match(css, /\.vt-studio-dropdown-option-rail[^}]*width:\s*var\(--vt-studio-dropdown-rail-size/s);
+  assert.match(css, /\.vt-studio-dropdown-option-label[^}]*text-align:\s*center/s);
+});
