@@ -3598,36 +3598,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   stroke-width: 2.5;
 }
 
-/* Side Toggle arrow glyphs mirror Side Counter metrics by size; no global icon-size leakage. */
-.vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
-.vt-studio-value-toggle--double .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  display: block;
-  flex: 0 0 auto;
-  width: 14px;
-  height: 14px;
-  max-width: 100%;
-  max-height: 100%;
-  stroke-width: 2.5;
-}
-.vt-studio-value-toggle--side[data-size="supreme"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
-.vt-studio-value-toggle--double[data-size="supreme"] .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: 42px;
-  height: 42px;
-  stroke-width: 3.75;
-}
-.vt-studio-value-toggle--side[data-size="compact"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
-.vt-studio-value-toggle--double[data-size="compact"] .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: 30px;
-  height: 30px;
-  stroke-width: 3;
-}
-.vt-studio-value-toggle--side[data-size="micro"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg,
-.vt-studio-value-toggle--double[data-size="micro"] .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: 15px;
-  height: 15px;
-  stroke-width: 2.25;
-}
-
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__value,
 .vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__value,
 .vt-studio-left-counter[data-size="compact"] .vt-studio-side-counter__value { font-size: var(--vt-studio-compact-font-size, 24px); }
@@ -4492,8 +4462,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 /* Counter and slider values share the same neutral-rest / black-in-use transition. */
 .vt-studio-counter__value,
 .vt-studio-side-counter__value,
-.vt-studio-double-split-slider__value,
-.vt-studio-word-counter__value {
+.vt-studio-double-split-slider__value {
   color: var(--vt-studio-number-rest-color);
   -webkit-text-fill-color: currentColor;
   -webkit-text-stroke-color: var(--vt-studio-number-rest-color);
@@ -4507,9 +4476,6 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
 .vt-studio-side-counter,
 .vt-studio-left-counter,
 .vt-studio-double-split-slider,
-.vt-studio-word-counter,
-.vt-studio-value-toggle,
-[data-vt-studio-value-toggle],
 [data-vt-studio-control-family="counter"],
 [data-vt-studio-slider] {
   outline: 0 solid transparent;
@@ -5240,154 +5206,6 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   -webkit-text-stroke-width: .25px;
 }
 
-/* Studio value-toggle family: canonical primitive styles; no motion or shadow. */
-.vt-studio-value-toggle {
-  --vt-toggle-text: #000;
-  --vt-toggle-fill: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  --vt-toggle-icon: #000;
-  --vt-toggle-icon-fill: transparent;
-  display: flex; align-items: stretch; gap: 0; min-width: 0; width: 100%; box-sizing: border-box;
-  color: var(--vt-toggle-text); background: var(--vt-toggle-fill);
-  border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden;
-  font-family: var(--vt-studio-control-font-family, Inter, sans-serif); font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: 1000; line-height: 1; text-transform: uppercase; letter-spacing: -.02em;
-}
-.vt-studio-value-toggle[data-size="supreme"] { min-height: var(--vt-studio-supreme-height, 60px); }
-.vt-studio-value-toggle[data-size="standard"] { min-height: var(--vt-studio-standard-height, 44px); }
-.vt-studio-value-toggle[data-size="compact"] { min-height: 28px; font-size: var(--vt-studio-compact-font-size, 24px); border-width: var(--vt-studio-compact-stroke, 2px); border-radius: var(--vt-studio-compact-radius, 4px); }
-.vt-studio-value-toggle[data-size="micro"] { min-height: var(--vt-studio-micro-height, 12px); font-size: var(--vt-studio-micro-font-size, 10px); border-width: var(--vt-studio-micro-stroke, 1px); border-radius: var(--vt-studio-micro-radius, 2px); }
-.vt-studio-value-toggle__face { display: flex; align-items: center; justify-content: center; flex: 1 1 auto; min-width: 0; padding: 0 4px; overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1; color: var(--vt-toggle-text); }
-.vt-studio-value-toggle__arrow { display: grid; place-items: center; flex: 0 0 auto; padding: 0; border: 0; border-radius: 0; color: var(--vt-toggle-icon); background: var(--vt-toggle-icon-fill); cursor: pointer; }
-.vt-studio-value-toggle__arrow:disabled { opacity: .35; cursor: not-allowed; }
-.vt-studio-value-toggle__arrow:focus-visible { outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 0; }
-.vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  display: block; width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
-  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%); stroke-width: 2.5;
-  transform-origin: center;
-}
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(30px, 100%); height: min(30px, 100%); stroke-width: 3;
-}
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__arrow-stack .vt-studio-value-toggle__arrow svg {
-  width: min(15px, 100%); height: min(15px, 100%); stroke-width: 2.25;
-}
-.vt-studio-value-toggle__arrow:active:not(:disabled) svg,
-.vt-studio-value-toggle__arrow.is-holding svg { animation: vt-studio-counter-pop 180ms ease-out; }
-.vt-studio-value-toggle__arrow:focus-visible {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
-    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); outline-offset: 0;
-}
-.vt-studio-value-toggle--side .vt-studio-value-toggle__face { justify-content: flex-start; }
-.vt-studio-value-toggle--double { background: transparent; border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: 0; }
-.vt-studio-value-toggle__double-side { display: flex; flex: 1 1 0; min-width: 0; }
-.vt-studio-value-toggle__double-side[data-content-width="true"] { flex: 0 1 auto; width: max-content; max-width: 50%; }
-.vt-studio-value-toggle--nested { border: 0; border-radius: 0; min-width: 0; }
-.vt-studio-value-toggle__divider { flex: 0 0 1px; background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); }
-.vt-studio-value-toggle--bar { align-items: stretch; }
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars { gap: 1px; }
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bar { flex-basis: 10px; width: 10px; height: 20px; }
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars { gap: 1px; padding: 0 1px; }
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bar { flex-basis: 3px; width: 3px; height: 8px; border-width: .5px; }
-
-/* Value toggles compose StudioSplitShell; this is an intentional foundation reuse. */
-.vt-studio-split-shell.vt-studio-value-toggle {
-  display: grid; grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
-  width: 100%; min-width: 0; height: var(--vt-studio-control-height, 44px); min-height: var(--vt-studio-control-height, 44px);
-  border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px);
-  background: var(--vt-toggle-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  color: var(--vt-toggle-text, #000); font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
-  font-size: var(--vt-studio-control-font-size, 38px); font-weight: 1000; letter-spacing: -.02em; text-transform: uppercase;
-}
-.vt-studio-split-shell.vt-studio-value-toggle[data-vt-studio-split="left"] { grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr); }
-.vt-studio-split-shell.vt-studio-value-toggle[data-vt-studio-split="right"] { grid-template-columns: minmax(0, 1fr) var(--vt-studio-control-height, 44px); }
-.vt-studio-split-shell.vt-studio-value-toggle[data-vt-studio-split="double"] { grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr) var(--vt-studio-control-height, 44px); }
-.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] { width: var(--vt-studio-control-height, 44px); min-width: 0; background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)); border-color: #000; }
-.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-value-toggle__arrow { width: 100%; min-width: 0; height: 100%; padding: 0; color: var(--vt-toggle-icon, #000); background: var(--vt-toggle-icon-fill, transparent); }
- .vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-value-toggle__arrow svg { width: 100%; height: 100%; }
-.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-label] { min-width: 0; width: 100%; overflow: hidden; padding: 0 4px; background: var(--vt-toggle-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))); color: var(--vt-toggle-text, #000); -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor; }
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__face { display: flex; width: 100%; min-width: 0; height: 100%; align-items: center; justify-content: center; padding-block: 0; overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1; color: inherit; }
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow { display: grid; place-items: center; border: 0; border-radius: 0; cursor: pointer; }
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow:disabled { opacity: .35; cursor: not-allowed; }
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow:focus-visible {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 0;
-}
-
-.vt-studio-value-toggle--double:not(.vt-studio-split-shell) { display: flex; align-items: stretch; gap: 0; width: 100%; min-width: 0; min-height: var(--vt-studio-control-height, 44px); box-sizing: border-box; border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden; background: var(--vt-toggle-fill, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))); }
-.vt-studio-value-toggle__double-side { display: flex; flex: 1 1 0; min-width: 0; }
-.vt-studio-value-toggle__double-side > .vt-studio-split-shell { flex: 1 1 auto; min-width: 0; width: 100%; border: 0; border-radius: 0; }
-.vt-studio-value-toggle__double-side[data-content-width="true"] { flex: 0 1 auto; width: max-content; max-width: 50%; }
-.vt-studio-value-toggle__double-side[data-content-width="true"] > .vt-studio-split-shell { width: max-content; }
-.vt-studio-value-toggle__double-side[data-content-width="true"] .vt-studio-value-toggle__face { width: max-content; flex: 0 0 auto; padding-inline: 8px; }
-.vt-studio-value-toggle__divider { flex: 0 0 var(--vt-studio-control-stroke, 3px); background: #000; }
-/* Nested side toggles contribute no perimeter: the double toggle owns one shared border. */
-.vt-studio-split-shell.vt-studio-value-toggle.vt-studio-value-toggle--nested { border: 0; border-radius: 0; box-shadow: none; }
-.vt-studio-split-shell.vt-studio-value-toggle.vt-studio-value-toggle--nested > [data-vt-studio-split-rail] { border-radius: 0; }
-.vt-studio-value-toggle__arrow { transform-origin: center; }
-.vt-studio-value-toggle__arrow svg { transform-origin: center; }
-.vt-studio-value-toggle__arrow:active:not(:disabled) svg { animation: vt-studio-value-toggle-icon-pop 140ms ease-out; }
-@keyframes vt-studio-value-toggle-icon-pop {
-  0% { transform: scale(1); }
-  55% { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .vt-studio-value-toggle__arrow:active:not(:disabled) svg { animation: none; }
-}
-.vt-studio-split-shell.vt-studio-value-toggle--bar > [data-vt-studio-split-label] { overflow: visible; }
-.vt-studio-split-shell.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bars { gap: 1px; }
-.vt-studio-split-shell.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bar { flex-basis: 10px; width: 10px; height: 20px; }
-.vt-studio-split-shell.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bars { gap: 1px; padding: 0; }
-.vt-studio-split-shell.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bar { flex-basis: 3px; width: 3px; height: 8px; }
-
-/* Content-width variants reserve the widest word across all available options without
-   rendering it visibly; the actual value and measurement share one intrinsic grid cell. */
-.vt-studio-split-shell.vt-studio-value-toggle--nested .vt-studio-value-toggle__face[data-content-width="true"] {
-  display: grid; grid-template-columns: max-content; grid-template-rows: max-content;
-  width: max-content; min-width: max-content; flex: 0 0 auto; padding-inline: 8px;
-}
-.vt-studio-value-toggle__face[data-content-width="true"] { position: relative; }
-.vt-studio-value-toggle__face[data-content-width="true"] > span:first-child { position: absolute; inset: 0; min-width: 0; overflow: hidden; text-overflow: clip; white-space: nowrap; }
-.vt-studio-value-toggle__face[data-content-width="true"] > .vt-studio-value-toggle__measure { grid-area: 1 / 1; white-space: nowrap; visibility: hidden; pointer-events: none; }
-
-/* Both the outer wrapper and split-shell children use the global data-size token contract. */
-.vt-studio-value-toggle--double { height: var(--vt-studio-control-height, 44px); min-height: var(--vt-studio-control-height, 44px); }
-
-/* Double Side Toggle focus belongs to the shared outside perimeter, never the center divider. */
-.vt-studio-value-toggle--double .vt-studio-value-toggle__divider {
-  outline: none;
-  box-shadow: none;
-}
-.vt-studio-value-toggle--double:focus-within {
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
-    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  outline-offset: 0;
-}
-.vt-studio-value-toggle--double .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow:focus-visible {
-  outline: none;
-}
-
-/* Right-half appearance is an explicit variant axis independent of the V1/V2 divider. */
-.vt-studio-value-toggle--double[data-right-appearance="primary"] .vt-studio-value-toggle__double-side:last-child {
-  --vt-toggle-fill: var(--pair-a, #36e0f6);
-  --vt-toggle-text: #000;
-}
-.vt-studio-value-toggle--double[data-right-appearance="secondary"] .vt-studio-value-toggle__double-side:last-child {
-  --vt-toggle-fill: var(--pair-b, #ff7f6b);
-  --vt-toggle-text: #000;
-}
-.vt-studio-value-toggle--double[data-right-appearance="black-primary-text"] .vt-studio-value-toggle__double-side:last-child {
-  --vt-toggle-fill: #000;
-  --vt-toggle-text: var(--pair-a, #36e0f6);
-}
-/* Double Side Toggle owns one perimeter; propagate the same size tokens into both nested shells. */
-.vt-studio-value-toggle--double[data-size="supreme"] { --vt-studio-control-height: var(--vt-studio-supreme-height, 60px); --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px); --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px); --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px); --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px); }
-.vt-studio-value-toggle--double[data-size="compact"] { --vt-studio-control-height: var(--vt-studio-compact-height, 28px); --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px); --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px); --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px); --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px); }
-.vt-studio-value-toggle--double[data-size="micro"] { --vt-studio-control-height: var(--vt-studio-micro-height, 12px); --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px); --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px); --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px); --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px); }
-.vt-studio-value-toggle--double .vt-studio-value-toggle__double-side > .vt-studio-split-shell { height: 100%; min-height: 100%; font-size: var(--vt-studio-control-font-size); }
-.vt-studio-value-toggle--double[data-variant="v2"] .vt-studio-value-toggle__divider { display: none; }
-
-
 /* Studio Controls parity corrections (2026-10): stable split rails, field focus,
    and the shared single-line text-panel contract. Keep multiline writing surfaces
    out of the single-line alignment rule. */
@@ -5580,133 +5398,6 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   color: #000 !important;
   line-height: 1 !important;
 }
-
-/* One stack geometry and centered divider for all value-toggle arrow stacks. */
-.vt-studio-value-toggle__arrow-stack {
-  position: relative;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  align-self: stretch;
-  border: 0;
-  z-index: 2;
-}
-.vt-studio-value-toggle__arrow-stack > .vt-studio-value-toggle__arrow {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 0;
-  min-width: 0;
-  height: 100%;
-  border-bottom: 0 !important;
-  padding: 0;
-  pointer-events: auto;
-  touch-action: manipulation;
-}
-.vt-studio-value-toggle__arrow-stack::after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  inset-inline: 0;
-  top: 50%;
-  height: var(--vt-studio-control-stroke, 3px);
-  background: #000;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-/* Double-side separator is centered on the complete outer shell, not flex-content widths. */
-.vt-studio-value-toggle--double {
-  position: relative;
-}
-.vt-studio-value-toggle--double .vt-studio-value-toggle__divider {
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: var(--vt-studio-control-stroke, 3px);
-  flex: none;
-  transform: translateX(-50%);
-  background: #000;
-  pointer-events: none;
-}
-
-/* Lay out all ten level bars horizontally inside the split face. */
-.vt-studio-value-toggle__bars {
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 2px;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  padding: 0 4px;
-  box-sizing: border-box;
-}
-.vt-studio-value-toggle__bars > .vt-studio-value-toggle__bar {
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 18px;
-}
-
-/* Single bar definition: inactive bars remain legible over the primary face. */
-.vt-studio-value-toggle__bars,
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bars {
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  padding: 0 8px;
-  box-sizing: border-box;
-}
-.vt-studio-value-toggle__bar,
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar {
-  display: block;
-  flex: 0 0 12px;
-  width: 12px;
-  height: 28px;
-  align-self: center;
-  /* Empty bars must read on the primary face: light fill + black stroke. */
-  background: color-mix(in srgb, #fff 75%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  border: 2px solid #000;
-  box-sizing: border-box;
-  pointer-events: none;
-}
-.vt-studio-value-toggle__bar[data-active="true"],
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__bar[data-active="true"] {
-  background: #000;
-}
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bar,
-.vt-studio-split-shell.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__bar {
-  flex-basis: 10px;
-  width: 10px;
-  height: 20px;
-}
-.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bar,
-.vt-studio-split-shell.vt-studio-value-toggle[data-size="micro"] .vt-studio-value-toggle__bar {
-  flex-basis: 3px;
-  width: 3px;
-  height: 8px;
-  border-width: 0.5px;
-}
-.vt-studio-value-toggle__arrow,
-.vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__arrow {
-  position: relative;
-  z-index: 4;
-  pointer-events: auto;
-  touch-action: manipulation;
-}
-
 
 /* =============================================================================
    StudioSquareIconButtonGroup — joined square icon rail
@@ -6105,30 +5796,6 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
   outline-offset: 0;
 }
 \n
-/* Shared slider contract: filled (left) = secondary; empty (right) = black; rails stay secondary. */
-[data-vt-studio-slider] input[type="range"] {
-  --vt-studio-slider-left-fill: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  accent-color: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  background: #000;
-}
-[data-vt-studio-slider] input[type="range"]::-moz-range-progress {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-[data-vt-studio-slider] input[type="range"]::-webkit-slider-runnable-track {
-  background: #000;
-}
-[data-vt-studio-slider] input[type="range"]::-moz-range-track {
-  background: #000;
-}
-[data-vt-studio-slider] [data-vt-studio-split-rail],
-.vt-studio-value-toggle__double-side [data-vt-studio-split-rail],
-.vt-studio-side-counter [data-vt-studio-split-rail] {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-.vt-studio-value-toggle[data-vt-studio-value-toggle="side"] {
-  --vt-toggle-fill: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-}
-
 /* Geometry invariants shared by the counter and split-control families. */
 .vt-studio-counter__value,
 .vt-studio-side-counter__value {
@@ -6244,54 +5911,6 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collap
   max-width: 100%;
   flex: 0 0 auto !important;
   align-self: flex-start;
-}
-
-/* Side toggles realign with counters: square arrow rail = control height. */
-.vt-studio-value-toggle--side,
-.vt-studio-value-toggle[data-vt-studio-value-toggle="side"] {
-  width: 100%;
-}
-.vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack,
-.vt-studio-value-toggle[data-vt-studio-value-toggle="side"] .vt-studio-value-toggle__arrow-stack {
-  flex: 0 0 var(--vt-studio-control-height, 44px);
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
-  max-width: var(--vt-studio-control-height, 44px);
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  align-self: stretch;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
-  box-sizing: border-box;
-}
-.vt-studio-value-toggle--side[data-arrow-side="left"] .vt-studio-value-toggle__arrow-stack,
-.vt-studio-value-toggle[data-vt-studio-value-toggle="side"][data-arrow-side="left"] .vt-studio-value-toggle__arrow-stack {
-  border-left: 0;
-  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
-}
-.vt-studio-value-toggle--side .vt-studio-value-toggle__arrow,
-.vt-studio-value-toggle[data-vt-studio-value-toggle="side"] .vt-studio-value-toggle__arrow {
-  min-width: 0;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  background: transparent;
-}
-/* The arrow-stack pseudo-element owns the single centered horizontal divider. */
-.vt-studio-value-toggle[data-size="compact"] .vt-studio-value-toggle__arrow-stack {
-  flex-basis: var(--vt-studio-compact-height, 28px);
-  width: var(--vt-studio-compact-height, 28px);
-  min-width: var(--vt-studio-compact-height, 28px);
-  max-width: var(--vt-studio-compact-height, 28px);
-}
-.vt-studio-value-toggle--double {
-  width: 100%;
-}
-.vt-studio-value-toggle--double .vt-studio-value-toggle--side,
-.vt-studio-value-toggle--double .vt-studio-value-toggle--nested {
-  width: 100%;
-  border: 0;
-  border-radius: 0;
 }
 
 /* Square icon button group: content-sized (not row-fill); default specimen uses 3 buttons. */
@@ -6647,9 +6266,7 @@ details.vt-studio-two-line-module > :not(summary) {
 .vt-studio-value-toggle[data-size="micro"] .vt-studio-stepper-button,
 .vt-studio-word-counter[data-size="micro"] .vt-studio-stepper-button { --vt-stepper-chevron-size: var(--vt-studio-stepper-micro-chevron-size); --vt-stepper-chevron-stroke: var(--vt-studio-stepper-micro-chevron-stroke); }
 .vt-studio-counter:focus-within,
-.vt-studio-counter[data-vt-interaction-focus="true"],
-.vt-studio-word-counter:focus-within,
-.vt-studio-value-toggle--bar:focus-within {
+.vt-studio-counter[data-vt-interaction-focus="true"] {
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
     solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
@@ -6682,90 +6299,6 @@ details.vt-studio-two-line-module > :not(summary) {
   border-right: 6px solid transparent;
   border-top: 6px solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   transform: translateX(-50%);
-}
-
-/* Double-split word counter: square rails, flexible center, global full-row width. */
-.vt-studio-word-counter {
-  display: grid;
-  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr) var(--vt-studio-control-height, 44px);
-  grid-template-rows: minmax(0, 1fr);
-  width: 100%;
-  min-width: 0;
-  max-width: none;
-  flex: 1 1 auto;
-  height: var(--vt-studio-control-height, 44px);
-  box-sizing: border-box;
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
-  border-radius: var(--vt-studio-control-radius, 6px);
-  overflow: hidden;
-  background: var(--vt-studio-control-accent, var(--pair-a));
-  color: #000;
-}
-.vt-studio-word-counter[data-size="compact"] {
-  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
-  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
-  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
-}
-.vt-studio-word-counter[data-size="micro"] {
-  --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
-  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
-  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
-}
-.vt-studio-word-counter > [data-vt-studio-split-rail] {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  min-width: 0;
-  max-width: none;
-  height: 100%;
-  background: var(--vt-studio-control-secondary, var(--pair-b));
-}
-.vt-studio-word-counter > [data-vt-studio-split-rail][data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-word-counter > [data-vt-studio-split-rail][data-rail="end"] { border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-word-counter > [data-vt-studio-split-label] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  width: 100%;
-  height: 100%;
-  padding: 0 2px;
-  overflow: hidden;
-  background: var(--vt-studio-control-accent, var(--pair-a));
-}
-.vt-studio-word-counter__value {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  color: var(--vt-studio-number-rest-color);
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: 1px var(--vt-studio-number-rest-color);
-  font-size: var(--vt-studio-control-font-size, 38px);
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: -.02em;
-  text-align: center;
-  text-overflow: clip;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.vt-studio-word-counter:focus-within .vt-studio-word-counter__value,
-.vt-studio-word-counter[data-vt-interaction-focus="true"] .vt-studio-word-counter__value {
-  color: #000;
-  -webkit-text-fill-color: #000;
-  -webkit-text-stroke-color: #000;
-}
-.vt-studio-word-counter[data-size="compact"] .vt-studio-word-counter__value { font-size: var(--vt-studio-compact-font-size, 24px); }
-.vt-studio-word-counter[data-size="micro"] .vt-studio-word-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
-/* Ensure the bar rails consume the exact same button defaults as both counter primitives. */
-.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-stepper-button {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  color: #000;
-}
-.vt-studio-split-shell.vt-studio-value-toggle > [data-vt-studio-split-rail] .vt-studio-stepper-button svg {
-  width: min(var(--vt-stepper-chevron-size, var(--vt-studio-stepper-standard-chevron-size, 36px)), 100%);
-  height: min(var(--vt-stepper-chevron-size, var(--vt-studio-stepper-standard-chevron-size, 36px)), 100%);
-  stroke-width: var(--vt-stepper-chevron-stroke, var(--vt-studio-stepper-standard-chevron-stroke, 2.5));
 }
 
 /* Global dropdown menu contract: active primary/secondary pair, symmetric menu corners,
