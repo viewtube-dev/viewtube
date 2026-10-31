@@ -88,6 +88,10 @@
   --vt-studio-dropdown-menu-gap: 8px;
   --vt-studio-dropdown-menu-padding: 4px;
   --vt-studio-dropdown-menu-row-gap: 3px;
+  --vt-studio-dropdown-menu-open-duration: 160ms;
+  --vt-studio-dropdown-menu-open-easing: cubic-bezier(.2,.75,.2,1);
+  --vt-studio-dropdown-menu-open-translate-y: 5px;
+  --vt-studio-dropdown-menu-open-scale-y: 0.98;
   --vt-studio-dropdown-chevron-inset: 6px;
   --vt-studio-dropdown-menu-radius: var(--vt-studio-control-radius, 6px);
   --vt-studio-dropdown-row-radius: var(--vt-studio-control-radius, 6px);
@@ -129,8 +133,4 @@
   --vt-studio-floating-label-mini-height: 17.5px;
   --vt-studio-floating-label-micro-height: 10px;
   --vt-studio-floating-label-offset-ratio: 1.2;
-  --vt-studio-dropdown-menu-open-duration: 160ms;
-  --vt-studio-dropdown-menu-open-easing: cubic-bezier(.2,.75,.2,1);
-  --vt-studio-dropdown-menu-open-translate-y: 5px;
-  --vt-studio-dropdown-menu-open-scale-y: 0.98;
 }
