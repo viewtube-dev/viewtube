@@ -15,7 +15,7 @@ const readStudioControlCss = () => [
 
 describe("confirmed composite primitive catalog", () => {
   it("constrains every confirmed-library module to the toolbox width on mobile", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8")
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-confirmed-catalog-modules.css"), "utf8")
     const containment = css.slice(css.lastIndexOf("/* Confirmed library mobile containment: module cards must fit the toolbox column."))
     expect(containment).toContain(".vt-confirmed-catalog")
     expect(containment).toContain(".vt-confirmed-family-module")
