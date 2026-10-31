@@ -21,8 +21,6 @@ import {
   StudioActionButton,
   StudioChoice,
   StudioIconButton,
-  StudioUsernameInput,
-  StudioSplitLeftInput,
   StudioSplitRightButton,
   StudioCollapsingTwoLineModule,
   StudioRadio,
@@ -425,8 +423,6 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <h4 className="vt-confirmed-representative-heading">TEXT FIELDS</h4>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioNumberInput"><span>Number Input · STANDARD</span><StudioNumberInput aria-label="Number input specimen" defaultValue={42} sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInput"><span>Text Input · STANDARD</span><StudioTextInput sizeVariant="standard" aria-label="Text input standard specimen" placeholder="TYPE HERE" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>Username Split Input · STANDARD</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Username split input standard specimen" placeholder="CREATOR NAME" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftInput"><span>Split Left Search Input · STANDARD</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split left input standard specimen" placeholder="SEARCH ASSETS" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTextInput"><span>Split Text Input · STANDARD</span><StudioSplitTextInput split="left" leftIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split text input standard specimen" placeholder="SEARCH ASSETS" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextArea"><span>Text Area · STANDARD</span><StudioTextArea sizeVariant="standard" rows={3} aria-label="Text area standard specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextBox"><span>Text Box · STANDARD</span><StudioTextBox size="standard" aria-label="Text box standard specimen">Read-only text rendered by the production StudioTextBox primitive.</StudioTextBox></div>
@@ -961,9 +957,6 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
 const useConfirmedAdditionalPrimitiveSections = (): React.ReactNode[] => {
   const [choiceChecks, setChoiceChecks] = React.useState<boolean[]>(Array(5).fill(false))
   const [leftCounterValue, setLeftCounterValue] = React.useState(6)
-  const [username, setUsername] = React.useState("CREATOR")
-  const [compactUsername, setCompactUsername] = React.useState("CREATOR")
-  const [search, setSearch] = React.useState("")
   const [number, setNumber] = React.useState("12")
   const dropdownOptions = [
     { value: "balanced", label: "BALANCED" },
@@ -998,18 +991,6 @@ const useConfirmedAdditionalPrimitiveSections = (): React.ReactNode[] => {
             action={<StudioButton sizeVariant="compact" onClick={() => undefined}>SEND</StudioButton>}
           />
         </div>
-      </Family>
-      <Family title="StudioUsernameInput · Split Identity Field" nonDefaultSettings={["Leading identity rail is fixed-width and the editable area is one native text input inside a single split shell.", "Focus outline is owned by the outer shell; the native field adds neither a second outline nor an inset shadow."]} provenance={<Provenance primitive="StudioUsernameInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="44px standard split shell with shared field focus contract." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioUsernameInput"><span>STANDARD · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Standard username" value={username} onChange={(event) => setUsername(event.currentTarget.value)} placeholder="CREATOR NAME" /></div>
-        <div className="vt-confirmed-variant is-full-row"><span>COMPACT · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="compact" aria-label="Compact username" value={compactUsername} onChange={(event) => setCompactUsername(event.currentTarget.value)} placeholder="CREATOR NAME" /></div>
-        <div className="vt-confirmed-variant is-full-row"><span>SUPREME · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="supreme" aria-label="Supreme username" defaultValue="CREATOR NAME" placeholder="CREATOR NAME" /></div>
-        <div className="vt-confirmed-variant is-full-row"><span>MINI · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="mini" aria-label="Mini username" defaultValue="CREATOR" placeholder="CREATOR NAME" /></div>
-        <div className="vt-confirmed-variant is-full-row"><span>MICRO · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="micro" aria-label="Micro username" defaultValue="CREATOR" placeholder="CREATOR" /></div>
-        <div className="vt-confirmed-variant is-full-row"><span>DISABLED · CREATOR IDENTITY</span><StudioUsernameInput icon={<Home aria-hidden="true" />} sizeVariant="standard" aria-label="Disabled username" value="LOCKED CREATOR" disabled placeholder="CREATOR NAME" /></div>
-      </Family>
-      <Family title="StudioSplitLeftInput · Split Search Field" nonDefaultSettings={["This wrapper changes the leading search affordance only; shell geometry and focus ownership are shared with the canonical split input.", "Leading rail remains square; one outer outline owns focus for the composite."]} provenance={<Provenance primitive="StudioSplitLeftInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-split.css" tokens="Standard split input; fixed square left rail and 65% secondary focus outline." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftInput"><span>STANDARD · ASSET SEARCH</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split left input dedicated specimen" value={search} onChange={(event) => setSearch(event.currentTarget.value)} placeholder="SEARCH ASSETS" /></div>
-        {(["supreme", "compact", "mini", "micro"] as const).map(size => <div className="vt-confirmed-variant is-full-row" key={size}><span>{size.toUpperCase()} · ASSET SEARCH</span><StudioSplitLeftInput icon={<Settings2 aria-hidden="true" />} sizeVariant={size} aria-label={size + " split-left input"} defaultValue="SEARCH ASSETS" placeholder="SEARCH ASSETS" /></div>)}
       </Family>
       <Family title="StudioIconButton · All Five Sizes" nonDefaultSettings={["Standalone icon-button face is not the joined square-icon rail or the circular icon-button shape.", "All five canonical size tiers inherit StudioButton geometry and interaction defaults."]} provenance={<Provenance primitive="StudioIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Supreme / Standard / Compact / Mini / Micro · canonical stroke/radius · no lift." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
         {(["supreme", "standard", "compact", "mini", "micro"] as const).map(size => <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButton" key={size}><span>{size.toUpperCase()} · SETTINGS</span><StudioIconButton icon={<Settings2 aria-hidden="true" />} label={size + " settings"} sizeVariant={size} /></div>)}
@@ -1148,7 +1129,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
     <Family title="Studio Text Input · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Typography is intentionally 38px Standard, 24px Compact, and 10px Micro; label variants do not change those sizes.",
         "Floating labels use 80% of the input font size; fixed-label mode reserves a separate label box matching the multi-select dropdown.",
-      ]} provenance={<Provenance primitive="StudioTextInput · StudioSplitTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx + src/studio-ui/primitives/StudioSplitTextInput.tsx" css="src/styles/studio-control-system.css + src/styles/studio-text-input.css + src/studio-ui/primitives/studio-split-text-input.css" tokens="One native input family with simple, floating-label, and fixed-label variants; standard 44px / 38px, compact 28px / 24px, micro 12px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/studio-ui/primitives/StudioSplitTextInput.tsx", "src/styles/studio-control-entry.css", "src/styles/studio-text-input.css", "src/studio-ui/primitives/studio-split-text-input.css"]} />}>
+      ]} provenance={<Provenance primitive="StudioTextInput · StudioSplitTextInput" tsx="src/studio-ui/primitives/StudioTextInput.tsx + src/studio-ui/primitives/StudioSplitTextInput.tsx" css="src/styles/studio-control-system.css + src/styles/studio-text-input.css + src/styles/studio-split-text-input.css" tokens="One native input family with simple, floating-label, and fixed-label variants; standard 44px / 38px, compact 28px / 24px, micro 12px / 10px." imports={["src/studio-ui/primitives/StudioTextInput.tsx", "src/studio-ui/primitives/StudioSplitTextInput.tsx", "src/styles/studio-control-entry.css", "src/styles/studio-text-input.css", "src/styles/studio-split-text-input.css"]} />}>
       <div className="vt-confirmed-variant is-full-row"><span>60px supreme · simple input</span><StudioTextInput sizeVariant="supreme" aria-label="Studio plain text input supreme" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>44px standard · simple input</span><StudioTextInput sizeVariant="standard" aria-label="Studio plain text input standard" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
       <div className="vt-confirmed-variant is-full-row"><span>20px Mini · simple input</span><StudioTextInput sizeVariant="mini" aria-label="Studio plain text input Mini" placeholder="TYPE HERE" data-vt-library-component="StudioTextInput" /></div>
@@ -1173,6 +1154,18 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
         <StudioSplitTextInput split="left" sizeVariant="compact" leftIcon={<Check aria-hidden="true" />} aria-label="Compact split-left text input" placeholder="TYPE HERE" />
         <StudioSplitTextInput split="right" sizeVariant="compact" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Compact split-right text input" placeholder="TYPE HERE" />
         <StudioSplitTextInput split="double" sizeVariant="compact" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Compact double-split text input" placeholder="TYPE HERE" />
+        <span>SUPREME · LEFT / RIGHT / DOUBLE</span>
+        <StudioSplitTextInput split="left" sizeVariant="supreme" leftIcon={<Check aria-hidden="true" />} aria-label="Supreme split-left text input" placeholder="TYPE HERE" />
+        <StudioSplitTextInput split="right" sizeVariant="supreme" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Supreme split-right text input" placeholder="TYPE HERE" />
+        <StudioSplitTextInput split="double" sizeVariant="supreme" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Supreme double-split text input" placeholder="TYPE HERE" />
+        <span>MINI · LEFT / RIGHT / DOUBLE</span>
+        <StudioSplitTextInput split="left" sizeVariant="mini" leftIcon={<Check aria-hidden="true" />} aria-label="Mini split-left text input" placeholder="TYPE" />
+        <StudioSplitTextInput split="right" sizeVariant="mini" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Mini split-right text input" placeholder="TYPE" />
+        <StudioSplitTextInput split="double" sizeVariant="mini" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Mini double-split text input" placeholder="TYPE" />
+        <span>MICRO · LEFT / RIGHT / DOUBLE</span>
+        <StudioSplitTextInput split="left" sizeVariant="micro" leftIcon={<Check aria-hidden="true" />} aria-label="Micro split-left text input" placeholder="TYPE" />
+        <StudioSplitTextInput split="right" sizeVariant="micro" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Micro split-right text input" placeholder="TYPE" />
+        <StudioSplitTextInput split="double" sizeVariant="micro" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Micro double-split text input" placeholder="TYPE" />
       </div>
     </Family>
     <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
