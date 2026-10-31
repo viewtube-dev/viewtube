@@ -310,7 +310,7 @@ const ConfirmedPrimitiveGridOverview: React.FC = () => {
     <section className="vt-confirmed-primitive-grid-overview" data-vt-confirmed-primitive-grid="true" aria-labelledby="vt-confirmed-primitive-grid-title">
       <h2 id="vt-confirmed-primitive-grid-title">Primitive Grid · Live Production Components</h2>
       <p>Top-level quick reference: real production primitives across action, split, field, choice, counter, slider, and toggle designs. The complete standard representative inventory and detailed family variants follow below.</p>
-      <StudioComponentGrid cols={1} rows={7} size="standard" aria-label="Confirmed Studio primitive grid">
+      <StudioComponentGrid cols={1} rows={9} size="standard" aria-label="Confirmed Studio primitive grid">
         <StudioComponentGridCell col={1} row={1}>
           <div className="vt-confirmed-primitive-grid-cell" data-vt-library-component="StudioButton">
             <span>BUTTON</span>
