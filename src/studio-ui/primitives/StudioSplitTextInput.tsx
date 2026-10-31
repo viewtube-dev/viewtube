@@ -1,4 +1,5 @@
 import React from "react"
+import "../../styles/studio-control-entry.css"
 import { StudioSplitLeftBadge, StudioSplitRightBadge, StudioDoubleSplitBadge } from "./StudioControls"
 import { StudioTextInput } from "./StudioTextInput"
 import "./studio-split-text-input.css"
