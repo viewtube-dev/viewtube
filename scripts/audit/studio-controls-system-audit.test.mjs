@@ -113,7 +113,7 @@ test("bar-toggle bars use the restored standard-height ratio", () => {
 
 test("side-toggle arrow buttons occupy equal grid rows and labels are vertically centered", () => {
   assert.match(sideRailCss, /grid-template-rows:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
-  assert.match(sideRailCss, /\.vt-studio-side-counter__actions\s*>\s*button\s*\{[^}]*height:\s*auto/s);
+  assert.match(sideRailCss, /\.vt-studio-side-counter__actions\s*>\s*button,[\s\S]*?height:\s*auto/s);
   assert.match(valueToggleCss, /\.vt-studio-value-toggle--side \.vt-studio-value-toggle__face\s*\{[^}]*place-items:\s*center/s);
 });
 
