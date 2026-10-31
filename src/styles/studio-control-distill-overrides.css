@@ -159,7 +159,7 @@
   width: var(--vt-bar-width);
   min-width: var(--vt-bar-width);
   max-width: var(--vt-bar-width);
-  height: var(--vt-bar-height);
+  height: 50%;
   aspect-ratio: 2 / 5;
   align-self: center;
   border: 0 !important;
