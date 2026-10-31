@@ -15,7 +15,7 @@ test("StudioDoubleSplitSlider is built on the canonical double-split shell", () 
 test("StudioDoubleSplitSlider exposes an accessible range with live value and reset action", () => {
   assert.match(controls, /type="range"/);
   assert.match(controls, /aria-label=\{ariaLabel\}/);
-  assert.match(controls, /onValueChange\(nextValue\)/);
+  assert.match(controls, /onValueChange\(Math.min\(max, Math.max\(min, nextValue\)\)\)/);
   assert.match(controls, /aria-label=\{\x60Reset \$\{ariaLabel\}\x60\}/);
 });
 
@@ -37,7 +37,7 @@ test("slider styling keeps the L1 track and rectangular v2 handle at all Studio 
 
 test("confirmed primitive catalog includes standard, compact, and micro slider specimens", () => {
   assert.match(catalog, /StudioDoubleSplitSlider/);
-  assert.match(catalog, /StudioDoubleSplitSlider · Standard \+ Compact \+ Micro/);
+  assert.match(catalog, /StudioDoubleSplitSlider · Supreme \\+ Standard \\+ Compact \\+ Mini \\+ Micro/);
 });
 
 
