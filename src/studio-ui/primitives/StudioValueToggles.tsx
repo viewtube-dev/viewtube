@@ -100,8 +100,10 @@ export function StudioSideToggle(props: StudioSideToggleProps) {
     <ArrowButton className="vt-studio-side-counter__action-button" direction="down" label="Next option" disabled={props.disabled || !options.length} onClick={() => changeOption(props, 1)} />
   </div>;
   return <StudioSplitShell layout={arrowSide} sizeVariant={size}
-    className={["vt-studio-value-toggle", "vt-studio-value-toggle--side", className].filter(Boolean).join(" ")}
+    className={["vt-studio-value-toggle", "vt-studio-value-toggle--side", "vt-studio-side-counter", className].filter(Boolean).join(" ")}
     shellProps={{ "data-vt-studio-value-toggle": "side", "data-arrow-side": arrowSide, "data-size": size, style: appearanceStyle(props.appearance) }}
+    leftRailClassName={arrowSide === "left" ? "vt-studio-left-counter__rail" : undefined}
+    rightRailClassName={arrowSide === "right" ? "vt-studio-side-counter__rail" : undefined}
     leftRailContent={arrowSide === "left" ? arrows : undefined}
     rightRailContent={arrowSide === "right" ? arrows : undefined}>
     <span className="vt-studio-value-toggle__face" data-content-width={reserveLabel ? "true" : undefined} aria-live="polite" aria-label={ariaLabel} title={current}><span>{current}</span>{reserveLabel && <span className="vt-studio-value-toggle__measure" aria-hidden="true">{reserveLabel}</span>}</span>
