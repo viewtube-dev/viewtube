@@ -541,7 +541,7 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
       nonDefaultSettings={[
         "Uses an L1 range track inside the double-split shell; the numeric readout is bound to the same slider value.",
         "Handle is white with a rounded corner radius and black structural stroke; the track has no black bar or inset stroke.",
-        "Both split rails and the active range fill use the secondary color; the counter-controlled specimen shares its value with the slider.",
+        "Both split rails and the active range fill use the primary color; the center track surface uses secondary, and the counter-controlled specimen shares its value with the slider.",
       ]}
       provenance={<Provenance primitive="StudioDoubleSplitSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · square double-split rails · rectangular v2 handle · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
