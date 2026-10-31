@@ -326,87 +326,26 @@ button[data-vt-studio-play-pause="true"] [data-vt-studio-split-rail] {
 }
 
 
-/* Final rail invariant: each rail is a square inside the shell's inner box.
-   The black outer perimeter/divider stays separate; pair fill never becomes chrome. */
-[data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
-[data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
-button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail] {
-  
-  box-sizing: border-box;
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
-  max-width: var(--vt-studio-control-height, 44px);
-  height: 100%;
-  min-height: 0;
-  aspect-ratio: 1 / 1;
-  flex: 0 0 var(--vt-studio-control-height, 44px);
-}
-button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) > [data-vt-studio-button-face] {
-  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr);
-}
-
-
-/* Split-module rails are square within the header's content box, not the outer stroke. */
+/* Top split-module rails follow the shared full-size rail geometry. */
 .vt-studio-top-split-module__head[data-split="left"] {
-  grid-template-columns: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px)) minmax(0, 1fr);
+  grid-template-columns: var(--vt-top-split-size, 44px) minmax(0, 1fr);
 }
 .vt-studio-top-split-module__head[data-split="right"] {
-  grid-template-columns: minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+  grid-template-columns: minmax(0, 1fr) var(--vt-top-split-size, 44px);
 }
 .vt-studio-top-split-module__head[data-split="double"] {
-  grid-template-columns: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px)) minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+  grid-template-columns: var(--vt-top-split-size, 44px) minmax(0, 1fr) var(--vt-top-split-size, 44px);
 }
 .vt-studio-top-split-module__rail {
   box-sizing: border-box;
-  width: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
-  min-width: calc(var(--vt-top-split-size, 44px) - var(--vt-top-split-stroke, 3px));
+  width: var(--vt-top-split-size, 44px);
+  min-width: var(--vt-top-split-size, 44px);
+  max-width: var(--vt-top-split-size, 44px);
   height: 100%;
   min-height: 0;
   aspect-ratio: 1 / 1;
 }
 
-
-/* Regression recovery: rail geometry is a fixed square, never stretched to a tall grid row. */
-[data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
-[data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
-button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail],
-.vt-studio-split-left-badge__rail,
-.vt-studio-split-right-badge__rail,
-.vt-studio-double-split-badge__rail,
-.vt-studio-top-split-module__rail,
-.vt-studio-side-counter__rail,
-.vt-studio-counter__rail,
-.vt-studio-arrow-toggle__rail,
-.vt-studio-side-toggle__rail,
-.vt-studio-double-side-toggle__rail,
-.vt-studio-bar-toggle__rail {
-  box-sizing: border-box;
-  align-self: center;
-  height: var(--vt-top-split-size, 44px);
-  min-height: var(--vt-top-split-size, 44px);
-  max-height: var(--vt-top-split-size, 44px);
-  aspect-ratio: 1 / 1;
-  flex: 0 0 var(--vt-top-split-size, 44px);
-}
-[data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
-[data-vt-studio-control="true"] [data-vt-studio-split-face] > [data-vt-studio-split-rail],
-button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studio-split="left"]) [data-vt-studio-split-rail] {
-  
-}
-.vt-studio-top-split-module__head[data-split="left"] {
-  grid-template-columns: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px)) minmax(0, 1fr);
-}
-.vt-studio-top-split-module__head[data-split="right"] {
-  grid-template-columns: minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-}
-.vt-studio-top-split-module__head[data-split="double"] {
-  grid-template-columns: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px)) minmax(0, 1fr) calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-}
-.vt-studio-top-split-module__rail {
-  width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-  min-width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-  max-width: calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px));
-}
 /* Intermodules must consume the full available row; do not cap their width to a sidebar column. */
 .vt-studio-inter-module,
 .vt-studio-intermodule,
@@ -419,25 +358,9 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   grid-column: 1 / -1;
 }
 
-/* Named badge/counter rails use the same square inner-box dimension as split shells. */
-.vt-studio-split-left-badge__rail,
-.vt-studio-split-right-badge__rail,
-.vt-studio-double-split-badge__rail,
-.vt-studio-side-counter__rail,
-.vt-studio-counter__rail,
-.vt-studio-arrow-toggle__rail,
-.vt-studio-side-toggle__rail,
-.vt-studio-double-side-toggle__rail,
-.vt-studio-bar-toggle__rail {
-  
-  width: var(--vt-studio-control-height, 44px);
-  min-width: var(--vt-studio-control-height, 44px);
-  max-width: var(--vt-studio-control-height, 44px);
-}
-
 /* Counter family width is a geometry exception: 2h value pane plus square rails. */
 .vt-studio-counter {
-  --vt-studio-counter-root-width: calc((var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) * (var(--vt-studio-counter-value-area-aspect-ratio, 2) + var(--vt-studio-counter-double-rail-count, 2)) + 2 * var(--vt-studio-control-stroke, 3px));
+  --vt-studio-counter-root-width: calc(var(--vt-studio-control-height, 44px) * (var(--vt-studio-counter-value-area-aspect-ratio, 2) + var(--vt-studio-counter-double-rail-count, 2)) + 2 * var(--vt-studio-control-stroke, 3px));
   flex: 0 0 auto;
   width: var(--vt-studio-counter-root-width);
 }
