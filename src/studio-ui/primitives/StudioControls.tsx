@@ -2191,7 +2191,14 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
               onMouseEnter={() => setActiveIndex(index)}
               onClick={() => selectValue(option.value)}
             >
-              {option.label}
+              {variant === "split-left" ? (
+                <>
+                  <span className="vt-studio-dropdown-option-rail vt-studio-dropdown-option-rail--start" aria-hidden="true">
+                    {splitIcon}
+                  </span>
+                  <span className="vt-studio-dropdown-option-label">{option.label}</span>
+                </>
+              ) : option.label}
             </button>
           ))}
         </div>
