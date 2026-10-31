@@ -5475,7 +5475,7 @@ button[data-vt-studio-action-button="true"] {
   overflow: hidden;
 }
 
-/* Joined icon rail is always content-width; parent flex rows must not stretch it. */
+/* Joined icon rails retain intrinsic width; surrounding specimen rows may stretch. */
 .vt-studio-square-icon-button-group {
   display: inline-flex;
   width: max-content;
@@ -5483,7 +5483,6 @@ button[data-vt-studio-action-button="true"] {
   flex: 0 0 auto;
   align-self: flex-start;
 }
-
 [data-vt-brain-component="BrainAnswerFeedback"] .vt-studio-square-icon-button-group {
   display: inline-flex;
   width: max-content;
@@ -5844,32 +5843,18 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collap
   align-self: flex-start;
 }
 
-/* Icon group is a row-fill component; each of its five square actions shares the row. */
-.vt-studio-square-icon-button-group,
-[data-vt-studio-icon-button-group="true"] {
-  box-sizing: border-box;
-  display: flex;
-  align-items: stretch;
-  width: 100% !important;
-  min-width: 0;
-  max-width: none;
-  flex: 1 1 100% !important;
-  overflow: visible;
-}
+/* The joined group is content-width; its five fixed-size faces share one shell. */
 .vt-studio-square-icon-button-group > button {
-  box-sizing: border-box;
-  flex: 1 1 0;
-  min-width: 0;
-  border-radius: 0;
+  background: transparent !important;
 }
 .vt-studio-square-icon-button-group > button:first-child {
-  border-radius: var(--vt-studio-control-radius, 6px) 0 0 var(--vt-studio-control-radius, 6px);
+  border-radius: var(--vt-icon-group-radius, 6px) 0 0 var(--vt-icon-group-radius, 6px);
 }
 .vt-studio-square-icon-button-group > button:last-child {
-  border-radius: 0 var(--vt-studio-control-radius, 6px) var(--vt-studio-control-radius, 6px) 0;
+  border-radius: 0 var(--vt-icon-group-radius, 6px) var(--vt-icon-group-radius, 6px) 0;
 }
 .vt-studio-square-icon-button-group > button > [data-vt-studio-button-face] {
-  border: 0 !important;
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   border-radius: inherit;
   overflow: hidden;
 }
