@@ -3015,7 +3015,7 @@ button[data-vt-studio-control="true"][data-vt-studio-action-button="true"]::befo
   border-left: var(--vt-studio-control-stroke, 3px) solid #000 !important;
   border-right: 0 !important;
 }
-/* Unified split shell. Buttons, badges, and username inputs share the same
+/* Unified split shell. Buttons and badges share the same
    rail / label-or-field / rail anatomy. The shell owns its outline and clipping;
    faces and segment fills stay square so no pill-shaped interior leaks through. */
 .vt-studio-split-shell,
