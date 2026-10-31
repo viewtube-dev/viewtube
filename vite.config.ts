@@ -161,6 +161,7 @@ export default defineConfig(() => ({
       'viewtube-bsbw.onrender.com',
       'viewtube-system-convergence.onrender.com',
       'publisher-3n7h.onrender.com',
+      'viewtube-2-j88p.onrender.com',
     ],
   },
   // Pre-bundle the heavy dependency graphs used on first paint so cold dev
