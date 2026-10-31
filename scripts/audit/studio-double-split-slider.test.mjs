@@ -30,8 +30,8 @@ test("slider styling keeps the L1 track and rectangular v2 handle at all Studio 
   assert.match(styles, /\.vt-studio-double-split-slider__reset,\s*\n\.vt-studio-double-split-slider \.vt-studio-double-split-slider__value[\s\S]*?background:\s*var\(--vt-studio-control-primary/);
   assert.match(styles, /input\[type="range"\][\s\S]*?background:\s*linear-gradient\(to right,[\s\S]*?var\(--vt-studio-slider-progress, 0%\)/);
   assert.match(styles, /::-webkit-slider-runnable-track\s*\{[^}]*border:\s*var\(--vt-studio-slider-stroke\) solid #000/s);
-  assert.match(styles, /::-webkit-slider-thumb[\s\S]*?border:\s*var\(--vt-studio-slider-stroke\) solid #000;[\s\S]*?border-radius:\s*var\(--vt-studio-slider-radius\);[\s\S]*?background:\s*#000/);
-  assert.match(styles, /::-moz-range-thumb[\s\S]*?border:\s*var\(--vt-studio-slider-stroke\) solid #000;[\s\S]*?border-radius:\s*var\(--vt-studio-slider-radius\);[\s\S]*?background:\s*#000/);
+  assert.match(styles, /::-webkit-slider-thumb[\s\S]*?border:\s*var\(--vt-studio-slider-stroke\) solid #000;[\s\S]*?border-radius:\s*var\(--vt-studio-slider-radius\);[\s\S]*?background:\s*#fff/);
+  assert.match(styles, /::-moz-range-thumb[\s\S]*?border:\s*var\(--vt-studio-slider-stroke\) solid #000;[\s\S]*?border-radius:\s*var\(--vt-studio-slider-radius\);[\s\S]*?background:\s*#fff/);
   assert.match(styles, /\.vt-studio-double-split-slider\.is-reversed \.vt-studio-double-split-slider__reset \{\s*color:\s*#fff;/);
 });
 
