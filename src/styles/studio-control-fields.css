@@ -9,9 +9,9 @@ textarea[data-vt-studio-control="true"],
   outline: 0 solid transparent;
   box-shadow: none;
 }
-input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):focus-visible,
+input[data-vt-studio-control="true"]:focus-visible,
 textarea[data-vt-studio-control="true"]:focus-visible,
-[data-vt-studio-control="true"] input:not(.vt-studio-split-text-input__field):focus-visible,
+[data-vt-studio-control="true"] input:focus-visible,
 [data-vt-studio-control="true"] textarea:focus-visible {
   outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-studio-control-secondary, var(--pair-b));
   outline-offset: 0;
@@ -51,8 +51,8 @@ html body [data-vt-studio-control="true"] textarea {
 }
 
 /* Focused entered text is black; the control outline remains secondary. */
-[data-vt-studio-control="true"] input:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
-input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+[data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   color: #000;
@@ -247,9 +247,9 @@ textarea[data-vt-studio-control="true"],
   background-color: var(--vt-field-fill-rest);
   caret-color: var(--vt-field-text);
 }
-input[data-vt-studio-control="true"]:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+input[data-vt-studio-control="true"]:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
-[data-vt-studio-control="true"] input:not(.vt-studio-split-text-input__field):not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
+[data-vt-studio-control="true"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):is(:focus, :focus-visible),
 [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   color: var(--vt-field-text-focus);
   -webkit-text-fill-color: var(--vt-field-text-focus);
