@@ -5730,7 +5730,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   margin: 0;
   border: var(--vt-icon-group-stroke) solid #000;
   border-radius: var(--vt-icon-group-radius);
-  overflow: hidden;
+  overflow: visible;
   background: transparent;
   isolation: isolate;
 }
@@ -5788,6 +5788,7 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+  overflow: visible;
 }
 
 .vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"]:focus-visible,
