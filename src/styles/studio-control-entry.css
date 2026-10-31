@@ -8,6 +8,7 @@
 /* Family behavior and parity, followed by scoped cross-family correction layers. */
 @import "./studio-control-split.css";
 @import "./studio-control-fields.css";
+@import "./studio-text-input.css";
 @import "./studio-control-motion.css";
 @import "./studio-field-parity.css";
 @import "./studio-control-distill-overrides.css";
