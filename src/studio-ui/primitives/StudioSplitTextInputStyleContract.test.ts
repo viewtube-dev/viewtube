@@ -26,6 +26,14 @@ describe("split input source-branch field contract", () => {
     expect(textInputCss).toContain('input.vt-studio-text-input[data-size="mini"]')
     expect(textInputCss).toContain('input.vt-studio-text-input[data-size="micro"]')
   })
+  it("keeps textareas on the primary resting fill and secondary focus outline contract", () => {
+    expect(controlSystemCss).toContain("--vt-field-primary: var(--vt-studio-control-accent, var(--pair-a));");
+    expect(controlSystemCss).toContain("background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-default-fill-opacity), transparent);");
+    expect(controlSystemCss).toContain("textarea[data-vt-studio-control=\"true\"][data-vt-studio-field-kind=\"textarea\"]:is(:focus, :focus-visible)");
+    expect(controlSystemCss).toContain("background: color-mix(in srgb, var(--vt-field-primary) var(--vt-studio-control-focus-fill-opacity), transparent);");
+    expect(controlSystemCss).toContain("outline: var(--vt-field-outline-stroke) solid var(--vt-field-secondary);");
+    expect(controlSystemCss).toContain("-webkit-text-stroke: var(--vt-studio-control-text-stroke) #000;");
+  })
   it("restores source-branch floating and fixed label focus metrics", () => {
     expect(controlSystemCss).toContain("--vt-studio-control-focus-outline-width: 1.95px;");
     expect(controlSystemCss).toContain("--vt-studio-micro-focus-outline-width, 0.975px");
