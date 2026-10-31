@@ -14,6 +14,18 @@ const readStudioControlCss = () => [
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
+  it("constrains every confirmed-library module to the toolbox width on mobile", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/components/studio-hub/studio-hub-primitive-catalogs.css"), "utf8")
+    const containment = css.slice(css.lastIndexOf("/* Confirmed library mobile containment: module cards must fit the toolbox column."))
+    expect(containment).toContain(".vt-confirmed-catalog")
+    expect(containment).toContain(".vt-confirmed-family-module")
+    expect(containment).toContain(".vt-confirmed-primitive-module")
+    expect(containment).toMatch(/width:\s*100%/)
+    expect(containment).toMatch(/max-width:\s*100%/)
+    expect(containment).toMatch(/grid-template-columns:\s*minmax\(0,\s*1fr\)/)
+    expect(containment).toMatch(/@media\s*\(max-width:\s*720px\)/)
+  })
+
   it("retains solid/rainbow status badges, flush navigation tabs, and LED motion specimens", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
     expect(source).toContain("LED BADGE · SOLID + RAINBOW")
