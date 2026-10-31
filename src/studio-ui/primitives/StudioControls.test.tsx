@@ -1318,9 +1318,11 @@ describe("Studio Controls regression recovery contracts", () => {
 
   it("pins split rails to square inner dimensions and restores full-width intermodules", () => {
     const split = readFileSync("src/styles/studio-control-split.css", "utf8");
-    expect(split).toContain('height: var(--vt-studio-split-rail-size, calc(var(--vt-studio-control-height');
-    expect(split).toContain('aspect-ratio: 1 / 1;');
-    expect(split).toContain('calc(var(--vt-top-split-size, 44px) - 2 * var(--vt-top-split-stroke, 3px))');
+    expect(split).toContain('grid-template-columns: auto minmax(0, 1fr);');
+    expect(split).toContain('width: var(--vt-studio-control-height, 44px);');
+    expect(split).toContain('height: 100%;');
+    expect(split).not.toContain('--vt-studio-split-rail-size');
+    expect(split).toContain('width: var(--vt-top-split-size, 44px);');
     expect(split).toContain('.vt-studio-inter-module');
     expect(split).toContain('grid-column: 1 / -1;');
   });
