@@ -142,16 +142,6 @@ button[data-vt-studio-control="true"].vt-studio-44-choice.is-color-swap[aria-che
 .vt-studio-dropdown-menu > .vt-studio-dropdown-option:disabled { cursor: not-allowed; opacity: .45; }
 
 
-/* Final shared geometry contract: counters, sliders and value toggles consume the row.
-   Only horizontal/vertical word toggles retain content-sized width. */
-:is(.vt-studio-counter, .vt-studio-side-counter, .vt-studio-left-counter, .vt-studio-double-split-slider, .vt-studio-value-toggle):not(.vt-studio-44-word-toggle):not(.vt-studio-vertical-word-toggle) {
-  box-sizing: border-box;
-  width: 100% !important;
-  min-width: 0;
-  max-width: 100%;
-  flex: 1 1 auto;
-}
-
 /* Badge shells explicitly reserve square icon rails at the left and, for double badges, both ends. */
 .vt-studio-split-shell.vt-studio-split-left-badge,
 .vt-studio-split-shell.vt-studio-double-split-badge {
