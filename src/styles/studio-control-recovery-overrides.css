@@ -107,52 +107,6 @@ button[data-vt-studio-control="true"].vt-studio-44-choice.is-color-swap[aria-che
 }
 
 
-/* Supreme + Mini double-split slider counter rails: keep the two button faces
-   flush to the rail edge, matching the other size tiers. The central field
-   remains secondary; both counter faces remain primary with one shared divider. */
-.vt-studio-double-split-slider.is-counter-controls:is([data-size="supreme"], [data-size="mini"]) {
-  --vt-studio-split-rail-size: calc(var(--vt-studio-control-height) - 2 * var(--vt-studio-control-stroke));
-}
-.vt-studio-double-split-slider.is-counter-controls:is([data-size="supreme"], [data-size="mini"]) > .vt-studio-double-split-slider__rail {
-  box-sizing: border-box !important;
-  width: var(--vt-studio-split-rail-size) !important;
-  min-width: var(--vt-studio-split-rail-size) !important;
-  max-width: var(--vt-studio-split-rail-size) !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  align-self: stretch !important;
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6)) !important;
-}
-.vt-studio-double-split-slider.is-counter-controls:is([data-size="supreme"], [data-size="mini"]) .vt-studio-double-split-slider__counter {
-  display: grid !important;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) !important;
-  box-sizing: border-box !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  gap: 0 !important;
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6)) !important;
-}
-.vt-studio-double-split-slider.is-counter-controls:is([data-size="supreme"], [data-size="mini"]) .vt-studio-double-split-slider__counter > button {
-  box-sizing: border-box !important;
-  display: grid !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6)) !important;
-}
-
-
 /* Canonical open dropdown menu contract: detached panel, top-rounded shell, white unselected rows. */
 .vt-studio-dropdown-menu {
   top: calc(100% + 8px);
