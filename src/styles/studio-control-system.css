@@ -280,8 +280,10 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 
 .vt-studio-dropdown-option {
   display: flex;
+  box-sizing: border-box;
   width: 100%;
   min-width: 0;
+  height: var(--vt-studio-control-height, 44px);
   min-height: var(--vt-studio-control-height, 44px);
   align-items: center;
   margin-bottom: 3px;
@@ -345,7 +347,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   --vt-studio-dropdown-chevron-size: var(--vt-studio-dropdown-supreme-chevron-size, 38px);
   --vt-studio-dropdown-chevron-stroke: var(--vt-studio-dropdown-supreme-chevron-stroke, 3.41);
 }
-.vt-studio-dropdown-option + .vt-studio-dropdown-option { border-top: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: 0; }
+.vt-studio-dropdown-option + .vt-studio-dropdown-option { border-top: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-dropdown-option[data-active="true"] { background: color-mix(in srgb, var(--vt-studio-control-secondary, var(--pair-b)) 22%, white); }
 .vt-studio-dropdown-option[data-selected="true"] {
   background: var(--vt-studio-control-primary, var(--pair-a));
@@ -636,7 +638,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   animation: vt-studio-dropdown-menu-open var(--vt-studio-dropdown-menu-open-duration, 160ms) var(--vt-studio-dropdown-menu-open-easing, cubic-bezier(.2,.75,.2,1)) both;
 }
 .vt-studio-legend-option {
-  display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height);
+  display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; min-width: 0; height: var(--vt-legend-height); min-height: var(--vt-legend-height);
   margin-bottom: 3px; padding: 2px 8px; border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius);
   /* Open panel is primary-filled; option rows are white until selected. */
   background: white; color: #000; cursor: pointer; text-align: left;
@@ -663,7 +665,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-legend-option[data-selected="true"] .vt-studio-legend-check svg { opacity: 1; }
 .vt-studio-legend-option-text { min-width: 0; overflow-wrap: anywhere; }
 .vt-studio-legend-clear {
-  display: block; box-sizing: border-box; width: 100%; min-width: 0; min-height: var(--vt-legend-height); margin-top: 3px; padding: 2px 8px;
+  display: block; box-sizing: border-box; width: 100%; min-width: 0; height: var(--vt-legend-height); min-height: var(--vt-legend-height); margin-top: 3px; padding: 2px 8px;
   border: var(--vt-legend-stroke) solid #000; border-radius: var(--vt-legend-radius); background: var(--vt-legend-b); color: #000; cursor: pointer;
   font-size: 38px; font-weight: 1000; line-height: 1; letter-spacing: -.02em; text-transform: uppercase; text-align: center;
 }
@@ -7304,10 +7306,10 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
 }
 .vt-studio-dropdown.is-split-left .vt-studio-dropdown-option {
   display: grid;
-  grid-template-columns: var(--vt-studio-dropdown-option-rail-size, calc(var(--vt-studio-dropdown-rail-size, 44px) - 2 * var(--vt-studio-control-stroke, 3px))) minmax(0, 1fr) var(--vt-studio-dropdown-option-rail-size, calc(var(--vt-studio-dropdown-rail-size, 44px) - 2 * var(--vt-studio-control-stroke, 3px)));
+  grid-template-columns: var(--vt-studio-dropdown-option-rail-size, calc(var(--vt-studio-dropdown-rail-size, 44px) - 2 * var(--vt-studio-control-stroke, 3px))) minmax(0, 1fr);
   align-items: stretch;
   gap: 0;
-  padding: 0 !important;
+  padding: 0;
   text-align: center;
 }
 .vt-studio-dropdown-option-rail {
@@ -7325,17 +7327,8 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
 .vt-studio-dropdown-option-rail--start {
   border-right: var(--vt-studio-control-stroke, 3px) solid #000;
 }
-.vt-studio-dropdown-option-rail--end {
-  background: var(--vt-studio-control-accent, var(--pair-a));
-  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
-}
-.vt-studio-dropdown-option-rail svg {
-  display: block;
-  width: min(var(--vt-studio-dropdown-chevron-size, 28px), 100%);
-  height: min(var(--vt-studio-dropdown-chevron-size, 28px), 100%);
-  max-width: 100%;
-  max-height: 100%;
-}
+
+
 .vt-studio-dropdown-option-label {
   display: flex;
   align-items: center;
