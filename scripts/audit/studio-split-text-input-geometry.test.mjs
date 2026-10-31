@@ -56,6 +56,20 @@ test("intermodule sizing uses canonical supreme tokens and focus outline follows
   assert.match(interCss, /\.vt-studio-inter-module__line-2/);
 });
 
+test("right and double split text inputs use the same square rail tracks as left split inputs", () => {
+  assert.doesNotMatch(splitCss, /grid-template-columns:[^;]*calc\(var\(--vt-studio-control-height, 44px\) \+ var\(--vt-studio-control-stroke, 3px\)\)/s);
+  assert.match(splitCss, /data-split="left"[^}]*grid-template-columns:\s*var\(--vt-studio-control-height, 44px\) minmax\(0, 1fr\)/s);
+  assert.match(splitCss, /data-split="right"[^}]*grid-template-columns:\s*minmax\(0, 1fr\) var\(--vt-studio-control-height, 44px\)/s);
+  assert.match(splitCss, /data-split="double"[^}]*grid-template-columns:[\s\S]*?var\(--vt-studio-control-height, 44px\)[\s\S]*?var\(--vt-studio-control-height, 44px\)/s);
+});
+
+test("arrow, side, double-side and double-split word toggles share black focus character coloring", () => {
+  const toggleCss = readFileSync("src/styles/studio-control-value-toggles.css", "utf8");
+  assert.match(toggleCss, /\.vt-studio-value-toggle:focus-within \.vt-studio-value-toggle__face,[\s\S]*?\.vt-studio-value-toggle:focus-within \.vt-studio-word-counter__value/);
+  assert.match(toggleCss, /-webkit-text-fill-color:\s*#000/);
+  assert.match(toggleCss, /-webkit-text-stroke-color:\s*#000/);
+});
+
 test("split text input stylesheet is complete and uses the Codex native inner border", () => {
   assert.doesNotMatch(splitCss, /\.\.\.\s*$/, "stylesheet must not be truncated");
   assert.doesNotThrow(() => postcss.parse(splitCss), "split text input stylesheet must parse as valid CSS");
