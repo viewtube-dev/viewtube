@@ -1495,61 +1495,6 @@ export const StudioSplitShell: React.FC<StudioSplitShellProps> = ({
   )
 }
 
-export interface StudioUsernameInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "className" | "style"> {
-  icon: React.ReactNode
-  sizeVariant?: StudioControlSize
-  /** className/style apply to the composite; inputClassName/inputStyle target the native input. */
-  className?: string
-  style?: React.CSSProperties
-  inputClassName?: string
-  inputStyle?: React.CSSProperties
-}
-type StudioSplitFieldInputProps = StudioUsernameInputProps & {
-  libraryComponent: "StudioUsernameInput" | "StudioSplitLeftInput"
-}
-const StudioSplitFieldInput = React.forwardRef<HTMLInputElement, StudioSplitFieldInputProps>(
-  ({ icon, sizeVariant = "standard", className, style, inputClassName, inputStyle, disabled, libraryComponent, ...inputProps }, ref) => (
-    <StudioSplitShell
-      layout="left"
-      sizeVariant={sizeVariant}
-      iconLeft={<span data-vt-studio-username-rail="true">{icon}</span>}
-      className={studioClasses("vt-studio-username-input", className)}
-      shellProps={{
-        "data-vt-studio-username-input": "true",
-        "data-vt-studio-control-family": "field",
-        "data-vt-studio-control-kind": "split-input",
-        "data-vt-library-component": libraryComponent,
-        "data-icon-size-variant": "large",
-        "data-disabled": disabled ? "true" : undefined,
-        style,
-        "aria-disabled": disabled || undefined,
-      }}
-      fieldSlot
-    >
-      <StudioTextInput
-        {...inputProps}
-        ref={ref}
-        sizeVariant={sizeVariant}
-        disabled={disabled}
-        className={studioClasses("vt-studio-username-input__input", inputClassName)}
-        style={inputStyle}
-      />
-    </StudioSplitShell>
-  ),
-)
-StudioSplitFieldInput.displayName = "StudioSplitFieldInput"
-
-export const StudioUsernameInput = React.forwardRef<HTMLInputElement, StudioUsernameInputProps>(
-  (props, ref) => <StudioSplitFieldInput {...props} ref={ref} libraryComponent="StudioUsernameInput" />,
-)
-StudioUsernameInput.displayName = "StudioUsernameInput"
-
-export const StudioSplitLeftInput = React.forwardRef<HTMLInputElement, StudioUsernameInputProps>(
-  (props, ref) => <StudioSplitFieldInput {...props} ref={ref} libraryComponent="StudioSplitLeftInput" />,
-)
-StudioSplitLeftInput.displayName = "StudioSplitLeftInput"
-
-
 export const StudioSplitLeftButton = React.forwardRef<HTMLButtonElement, StudioSplitLeftButtonProps>(
   ({ icon, children, sizeVariant = "standard", iconSizeVariant = "large", ...props }, ref) => (
     <StudioButton ref={ref} sizeVariant={sizeVariant} faceLayout="split" data-split-left="true" data-vt-studio-split="left" data-icon-size-variant={iconSizeVariant} data-vt-library-component="StudioSplitLeftButton" {...props}>
