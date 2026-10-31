@@ -42,8 +42,8 @@ test("side-toggle stack uses a centered overlay divider, not a half-cell border"
 
 test("toggle chevrons use the standard, compact, and micro icon dimensions", () => {
   assert.match(toggleCss, /\.vt-studio-value-toggle--side[\s\S]*?width:\s*14px/);
-  assert.match(css, /\.vt-studio-value-toggle--side\[data-size="compact"\][\s\S]*?width:\s*30px/);
-  assert.match(css, /\.vt-studio-value-toggle--side\[data-size="micro"\][\s\S]*?width:\s*15px/);
+  assert.match(toggleCss, /\.vt-studio-value-toggle--side\[data-size="compact"\][\s\S]*?width:\s*30px/);
+  assert.match(toggleCss, /\.vt-studio-value-toggle--side\[data-size="micro"\][\s\S]*?width:\s*15px/);
 });
 
 test("textarea focus uses primary 15-percent fill and secondary proportional outline", () => {
