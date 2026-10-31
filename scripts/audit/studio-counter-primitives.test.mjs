@@ -67,7 +67,7 @@ test("counter palette variants use centered per-size pairs, tokenized numeral ti
   assert.equal((catalog.match(/max={100}/g) || []).length >= 12, true);
   assert.match(styles, /--vt-studio-number-rest-color:\s*color-mix\(in srgb,[^;]*var\(--vt-studio-number-rest-mix\)/);
   assert.match(styles, /\.vt-studio-counter__value,[\s\S]*?color:\s*color-mix\(in srgb, #fff var\(--vt-studio-number-default-white-mix, 50%\), var\(--vt-studio-number-background, var\(--pair-a\)\)\)/);
-  assert.match(styles, /\.vt-studio-counter\.is-reversed[\s\S]*?--vt-studio-number-background:\s*var\(--pair-b\)/);
+  assert.doesNotMatch(styles, /\.vt-studio-(?:counter|side-counter|left-counter|double-split-slider)\.is-reversed/);
   assert.match(styles, /background:\s*color-mix\(in srgb, var\(--pair-a\) 50%, transparent\)/);
   assert.match(catalogStyles, /\.vt-confirmed-counter-size-rows\s*\{[^}]*display:\s*grid/s);
   assert.match(catalogStyles, /\.vt-confirmed-counter-pair,[\s\S]*?\.vt-confirmed-slider-pair\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/s);
@@ -116,11 +116,11 @@ test("Studio counter and counter-slider press-and-hold are wired for touch and m
 });
 test("both counter styles tint resting numeral fill and stroke against each palette, then use black text while pressed or held", () => {
   assert.match(styles, /\.vt-studio-counter__value,[\s\S]*?color:\s*color-mix\(in srgb, #fff var\(--vt-studio-number-default-white-mix, 50%\), var\(--vt-studio-number-background, var\(--pair-a\)\)\)/);
-  assert.match(styles, /\.vt-studio-counter\.is-reversed \.vt-studio-counter__value,[\s\S]*?--vt-studio-number-background:\s*var\(--pair-b\)[\s\S]*?-webkit-text-stroke-color:\s*currentColor/);
+  assert.doesNotMatch(styles, /\.vt-studio-(?:counter|side-counter|left-counter|double-split-slider)\.is-reversed/);
   assert.match(styles, /\.vt-studio-counter:has\([\s\S]*?color:\s*var\(--vt-studio-number-active-color, #000\);\s*-webkit-text-fill-color:\s*var\(--vt-studio-number-active-color, #000\);\s*-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) var\(--vt-studio-number-active-stroke, #000\)/);
-  assert.match(styles, /\.vt-studio-counter\.is-reversed:has\([\s\S]*?background:\s*color-mix\(in srgb, var\(--pair-b\) 50%, transparent\);\s*color:\s*var\(--vt-studio-number-active-color, #000\);\s*-webkit-text-fill-color:\s*var\(--vt-studio-number-active-color, #000\);\s*-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\) var\(--vt-studio-number-active-stroke, #000\)/);
+  assert.match(styles, /\.vt-studio-counter:has\([\s\S]*?background:\s*color-mix\(in srgb, var\(--pair-a\) 50%, transparent\)/);
   assert.match(styles, /\.vt-studio-side-counter__value/);
-  assert.match(styles, /\.vt-studio-side-counter\.is-reversed \.vt-studio-side-counter__value[\s\S]*?--vt-studio-number-background:\s*var\(--pair-b\)[\s\S]*?-webkit-text-stroke-color:\s*currentColor/);
+  assert.match(styles, /\.vt-studio-side-counter:has\([\s\S]*?color:\s*var\(--vt-studio-number-active-color, #000\)/);
 });
 
 test("StudioLeftCounter places the two-button action rail on the left and is available for opposite-palette catalog specimens", () => {
