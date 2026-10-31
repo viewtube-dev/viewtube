@@ -212,10 +212,11 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   background: var(--vt-studio-control-secondary, var(--pair-b));
   color: #000;
 }
-.vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] > svg {
+.vt-studio-dropdown .vt-studio-dropdown-split-rail > svg {
   display: block;
-  width: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
-  height: min(var(--vt-side-chevron-size, calc(var(--vt-studio-control-height, 44px) * .62)), 100%);
+  width: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
+  height: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
+  flex: 0 0 auto;
   color: #000;
   stroke: #000;
 }
