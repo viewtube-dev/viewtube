@@ -60,7 +60,7 @@ test("split text input stylesheet is complete and uses the Codex native inner bo
   assert.doesNotMatch(splitCss, /\.\.\.\s*$/, "stylesheet must not be truncated");
   assert.doesNotThrow(() => postcss.parse(splitCss), "split text input stylesheet must parse as valid CSS");
   assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\) !important/);
-  assert.match(splitCss, /box-shadow:\s*none/);
+  assert.ok(splitCss.includes("box-shadow: inset 0 0 0 var(--vt-split-field-inline-width) var(--vt-split-field-primary)"));
   assert.match(splitCss, /caret-color:\s*var\(--vt-split-field-primary\)/);
 });
 
