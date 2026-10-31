@@ -109,3 +109,50 @@
   .vt-studio-value-toggle .vt-studio-value-toggle__arrow,
   .vt-studio-value-toggle .vt-studio-value-toggle__divider { transition: none; }
 }
+
+
+/* Final Double Side Toggle geometry: equal arrow cells, centered label and
+ * explicit black vertical dividers at each split boundary.
+ */
+.vt-studio-value-toggle--double .vt-studio-side-counter__actions {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  align-content: stretch;
+}
+.vt-studio-value-toggle--double .vt-studio-side-counter__action-button {
+  display: grid;
+  box-sizing: border-box;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  line-height: 1;
+}
+.vt-studio-value-toggle--double .vt-studio-side-counter__action-button svg {
+  display: block;
+  align-self: center;
+  justify-self: center;
+}
+.vt-studio-value-toggle--double .vt-studio-value-toggle__face {
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  padding-block: 0;
+  line-height: 1;
+}
+.vt-studio-value-toggle--double .vt-studio-side-counter__rail[data-rail="start"] {
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-value-toggle--double .vt-studio-side-counter__rail[data-rail="end"] {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-studio-value-toggle--double .vt-studio-value-toggle__divider {
+  display: block;
+  align-self: stretch;
+  flex: 0 0 var(--vt-studio-control-stroke, 3px);
+  background: #000;
+}
