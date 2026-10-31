@@ -89,8 +89,8 @@ test("split badge rails retain the Codex square inner geometry", () => {
 
 test("split text inputs and split dropdown icon rails use the global split-rail icon token, not chevron sizing", () => {
   const controlCss = readFileSync("src/styles/studio-control-system.css", "utf8");
-  const globalIconToken = /var\(--vt-studio-control-icon-size,\s*var\(--vt-studio-standard-icon-size,\s*38px\)\)/;
-  const inputIconRule = splitCss.match(/html body \.vt-studio-split-text-input \\[data-vt-studio-split-rail\\] > svg\\s*\\{([^}]*)\\}/);
+  const globalIconToken = /var\\(--vt-studio-control-icon-size,\\s*var\\(--vt-studio-standard-icon-size,\\s*38px\\)\\)/;
+  const inputIconRule = splitCss.match(/html body \\.vt-studio-split-text-input \\[data-vt-studio-split-rail\\] > svg\\s*\\{([^}]*)\\}/);
   const dropdownIconRule = controlCss.match(/\\.vt-studio-dropdown \\.vt-studio-dropdown-split-rail > svg\\s*\\{([^}]*)\\}/);
   assert.ok(inputIconRule, "split text input rail SVG rule exists");
   assert.ok(dropdownIconRule, "split dropdown icon rail SVG rule exists");
