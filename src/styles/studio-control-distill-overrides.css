@@ -329,24 +329,6 @@ html body .vt-studio-value-toggle--double[data-right-appearance="black-primary-t
   -webkit-text-fill-color: var(--pair-a, #36e0f6) !important;
   -webkit-text-stroke-color: var(--pair-a, #36e0f6) !important;
 }
-html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack,
-html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow-stack {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-}
-html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow,
-html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow {
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
-  color: #000 !important;
-}
-html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow svg,
-html body .vt-studio-value-toggle--double .vt-studio-value-toggle__arrow svg {
-  color: #000 !important;
-  stroke: #000 !important;
-}
-/* Keep the horizontal split between the two arrow buttons a single black stroke. */
-html body .vt-studio-value-toggle--side .vt-studio-value-toggle__arrow-stack::after {
-  background: #000 !important;
-}
 /* Split rails: outer-face 1×1, full shell height — no inset square, no vertical gap.
    (Replaces PR #923 distill rules that used align-self:center + height-2*stroke.) */
 html body [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail],
