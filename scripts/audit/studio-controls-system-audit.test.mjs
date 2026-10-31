@@ -125,8 +125,8 @@ test("side and double-side toggle rail buttons reuse the side-counter action sys
 
 test("bar toggle bars stay below the control height and double-split word labels are vertically centered", () => {
   assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*height:\s*50%/s);
-  assert.match(system, /button\[data-vt-studio-play-pause="true"\]\[aria-pressed="true"\] \[data-vt-studio-split-rail\][\s\S]*?background:\s*var\(--vt-studio-control-accent/);
-  assert.match(valueToggleCss, /\.vt-studio-word-counter__value[^}]*align-items:\s:center/s);
+  assert.match(system, /button\[data-vt-studio-play-pause="true"\]\[aria-pressed="true"\] \[data-vt-studio-split-rail\]\[data-rail="start"\][\s\S]*?background-color:\s*var\(--vt-studio-control-primary/);
+  assert.match(valueToggleCss, /\.vt-studio-word-counter__value[^}]*place-items:\s*center/s);
 });
 
 test("primary inset field stroke survives the complete stylesheet cascade for inputs and textareas", () => {
