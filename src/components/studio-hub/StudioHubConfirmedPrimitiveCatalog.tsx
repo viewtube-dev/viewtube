@@ -399,7 +399,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioSplitTextInput.tsx + src/studio-ui/primitives/StudioValueToggles.tsx"
         css="src/styles/studio-control-system.css + src/styles/studio-control-word-counter.css + src/studio-ui/primitives/studio-split-text-input.css"
         tokens="44px standard geometry; component-specific native input/textarea exceptions retained; word counter and slider share the five-tier Studio size contract"
-        imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioSplitTextInput.tsx", "src/studio-ui/primitives/StudioValueToggles.tsx", "src/styles/studio-control-word-counter.css", "src/studio-ui/primitives/studio-split-text-input.css"]}
+        imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioSplitTextInput.tsx", "src/studio-ui/primitives/StudioValueToggles.tsx", "src/styles/studio-control-value-toggles.css", "src/styles/studio-control-word-counter.css", "src/studio-ui/primitives/studio-split-text-input.css"]}
       />}
     >
       <div className="vt-confirmed-direct-primitive-rows" data-vt-confirmed-representatives="true" aria-label="Canonical primitive representatives">
@@ -628,7 +628,7 @@ const ConfirmedStudioLeftWordCounterFamily: React.FC = () => {
 
 
 const ConfirmedStudioDoubleSplitWordCounterFamily: React.FC = () => {
-  const [values, setValues] = React.useState([1, 1, 2, 2, 3, 3, 4, 4, 1, 1])
+  const [values, setValues] = React.useState([1, 2, 3, 4, 1])
   const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
   const updateAt = (index: number, value: number) => setValues(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))
   return (
@@ -636,17 +636,16 @@ const ConfirmedStudioDoubleSplitWordCounterFamily: React.FC = () => {
       title="StudioDoubleSplitWordCounter · Two Chevron Rails + Four-State Word Cycle" defaultOpen
       nonDefaultSettings={[
         "Both square rails step the same four-state word sequence; the left rail moves backward and the right rail moves forward.",
-        "Each size shows primary and reversed-palette specimens with independent word state.",
+        "One primary-palette specimen per size; inverse color variants are not part of the primitive contract.",
         "Both rails use the shared token-backed chevron button styling and focus behavior; no legacy stepper component is used.",
         "Available in Supreme, Standard, Compact, Mini, and Micro sizes.",
       ]}
-      provenance={<Provenance primitive="StudioDoubleSplitWordCounter" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="Shared Studio chevron button tokens · double-split 1:2:1 geometry · four-state word cycle · five sizes × two palette faces." imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/studio-ui/tokens.ts"]} />}
+      provenance={<Provenance primitive="StudioDoubleSplitWordCounter" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-value-toggles.css" tokens="Shared Studio chevron button tokens · double-split 1:2:1 geometry · four-state word cycle · five sizes." imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/studio-ui/tokens.ts"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioDoubleSplitWordCounter">
         <div className="vt-confirmed-counter-size-rows">
-          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]} · PRIMARY / REVERSED</small><div className="vt-confirmed-counter-pair">
-            <StudioDoubleSplitWordCounter size={size} value={values[index * 2]} onValueChange={value => updateAt(index * 2, value)} ariaLabel={`${size} double-split word counter`} />
-            <StudioDoubleSplitWordCounter className="is-reversed" size={size} value={values[index * 2 + 1]} onValueChange={value => updateAt(index * 2 + 1, value)} ariaLabel={`${size} double-split word counter reversed palette`} />
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]}</small><div className="vt-confirmed-counter-pair">
+            <StudioDoubleSplitWordCounter size={size} value={values[index]} onValueChange={value => updateAt(index, value)} ariaLabel={`${size} double-split word counter`} />
           </div></div>)}
         </div>
       </div>
@@ -655,7 +654,7 @@ const ConfirmedStudioDoubleSplitWordCounterFamily: React.FC = () => {
 }
 
 const ConfirmedStudioLeftWordSliderFamily: React.FC = () => {
-  const [values, setValues] = React.useState([1, 1, 2, 2, 3, 3, 4, 4, 1, 1])
+  const [values, setValues] = React.useState([1, 2, 3, 4, 1])
   const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
   const updateAt = (index: number, value: number) => setValues(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))
   return (
@@ -664,16 +663,15 @@ const ConfirmedStudioLeftWordSliderFamily: React.FC = () => {
       nonDefaultSettings={[
         "Slider and counter share one integer value in the 1–4 range; counter buttons use the shared accelerated hold behavior.",
         "The slider position and right-hand numeric readout always represent the same value.",
-        "Each size shows primary and reversed-palette variants with independent state.",
+        "One primary-palette specimen per size; inverse color variants are not part of the primitive contract.",
         "Available in Supreme, Standard, Compact, Mini, and Micro; shared flat, focus, disabled, and reduced-motion rules remain unchanged.",
       ]}
       provenance={<Provenance primitive="StudioLeftWordSlider" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-word-counter.css" tokens="60px / 44px / 28px / 20px / 12px · integer range 1–4 · numeric output on right rail · two palette faces" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-word-counter.css"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioLeftWordSlider">
         <div className="vt-confirmed-counter-size-rows">
-          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]} · PRIMARY / REVERSED</small><div className="vt-confirmed-slider-pair">
-            <StudioLeftWordSlider size={size} value={values[index * 2]} onValueChange={value => updateAt(index * 2, value)} ariaLabel={`${size} word slider specimen`} />
-            <StudioLeftWordSlider className="is-reversed" size={size} value={values[index * 2 + 1]} onValueChange={value => updateAt(index * 2 + 1, value)} ariaLabel={`${size} word slider reversed palette specimen`} />
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{({ supreme: "60px SUPREME", standard: "44px STANDARD", compact: "28px COMPACT", mini: "20px MINI", micro: "12px MICRO" } as const)[size]}</small><div className="vt-confirmed-slider-pair">
+            <StudioLeftWordSlider size={size} value={values[index]} onValueChange={value => updateAt(index, value)} ariaLabel={`${size} word slider specimen`} />
           </div></div>)}
         </div>
       </div>
