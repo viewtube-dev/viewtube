@@ -215,7 +215,8 @@ test("StudioDoubleSplitWordCounter is exported as a double-rail word primitive w
   assert.match(valueToggles, /data-vt-studio-control-kind": "studio-double-split-word-counter"/);
   assert.match(valueToggles, /STUDIO_LEFT_WORD_OPTIONS/);
   assert.match(valueToggles, /vt-studio-word-counter__value/);
-  assert.match(valueToggleStyles, /\.vt-studio-word-counter\s*\{[^}]*display:\s*grid/);
+  assert.match(valueToggleStyles, /\.vt-studio-word-counter__button\s*\{[^}]*display:\s*grid/);
+  assert.match(valueToggleStyles, /\.vt-studio-value-toggle:focus-within\s*\{[^}]*outline:/s);
 });
 
 
