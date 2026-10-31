@@ -5,6 +5,7 @@ import test from "node:test"
 const component = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8")
 const valueToggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8")
 const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
+const valueToggleStyles = readFileSync("src/styles/studio-control-value-toggles.css", "utf8")
 const distill = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8")
 const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8")
 const wordCounter = readFileSync("src/styles/studio-control-word-counter.css", "utf8")
@@ -191,9 +192,9 @@ test("bar toggle exposes a rounded percentage tooltip and preserves visible bars
 
 
 test("bar percentage tooltip escapes the component border and has a downward secondary-color pointer", () => {
-  assert.match(styles, /\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
-  assert.match(styles, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
-  assert.match(styles, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top:\s*6px solid var\(--vt-studio-control-secondary/s);
+  assert.match(distill, /\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
+  assert.match(distill, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
+  assert.match(distill, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top:\s*6px solid var\(--vt-studio-control-secondary/s);
 });
 
 test("all counter chevrons use one token-backed button class and shared click/hold animation", () => {
@@ -214,7 +215,7 @@ test("StudioDoubleSplitWordCounter is exported as a double-rail word primitive w
   assert.match(valueToggles, /data-vt-studio-control-kind": "studio-double-split-word-counter"/);
   assert.match(valueToggles, /STUDIO_LEFT_WORD_OPTIONS/);
   assert.match(valueToggles, /vt-studio-word-counter__value/);
-  assert.match(styles, /\.vt-studio-word-counter:focus-within[\s\S]*?--vt-studio-control-secondary/);
+  assert.match(valueToggleStyles, /\.vt-studio-word-counter:focus-within[\s\S]*?--vt-studio-control-secondary/);
 });
 
 
@@ -248,10 +249,10 @@ test("counter families are independent modules and solid-fill word counter faces
   assert.doesNotMatch(counterFamily, /<ConfirmedStudioSideCounterFamily\s*\/>/);
   assert.match(catalog, /<ConfirmedStudioSideCounterFamily\s*\/>/);
   assert.match(catalog, /title="StudioDoubleSplitWordCounter[\s\S]*?defaultOpen/);
-  assert.match(styles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\]\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s);
-  assert.doesNotMatch(styles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\][^{]*\{[^}]*50%/s);
-  assert.match(styles, /\.vt-studio-word-counter__value\s*\{[^}]*color:\s*var\(--vt-studio-number-rest-color\)/s);
-  assert.match(styles, /\.vt-studio-counter__value,[\s\S]*?\.vt-studio-word-counter__value\s*\{/s);
+  assert.match(valueToggleStyles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\]\s*\{[^}]*background:\s*var\(--vt-studio-control-accent/s);
+  assert.doesNotMatch(valueToggleStyles, /\.vt-studio-word-counter\s*>\s*\[data-vt-studio-split-label\][^{]*\{[^}]*50%/s);
+  assert.match(valueToggleStyles, /\.vt-studio-word-counter__value\s*\{[^}]*color:\s*var\(--vt-studio-number-rest-color\)/s);
+  assert.match(valueToggleStyles, /\.vt-studio-word-counter__value\s*\{/);
 });
 
 test("value-toggle recovery defaults do not repaint arrow-toggle faces with half-primary fill", () => {
