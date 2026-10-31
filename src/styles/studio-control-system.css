@@ -3709,11 +3709,16 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 .vt-confirmed-counter-pair {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
   gap: 8px;
-  width: max-content;
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
+}
+.vt-confirmed-counter-pair > * {
+  flex: 1 1 0;
+  min-width: 0;
 }
 /* Default numeral fill + stroke: 50% white mixed with the number-area surface. */
 .vt-studio-counter__value,
@@ -5808,7 +5813,6 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
    Head loses its bottom rule; body is fully removed so outer border is the only edge. */
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head,
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__head,
-.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head,
 details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head,
 details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head {
   border-bottom: 0 !important;
