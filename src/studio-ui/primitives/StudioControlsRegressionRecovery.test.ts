@@ -5,6 +5,7 @@ const root = new URL("../../", import.meta.url)
 const read = (relative: string) => readFileSync(new URL(relative, root), "utf8")
 const fields = read("styles/studio-text-input.css")
 const recovery = read("styles/studio-control-recovery-overrides.css")
+const splitInput = read("studio-ui/primitives/studio-split-text-input.css")
 const controls = read("studio-ui/primitives/StudioControls.tsx")
 
 describe("Studio controls regression recovery contract", () => {
@@ -45,5 +46,6 @@ describe("Studio controls regression recovery contract", () => {
     expect(recovery).toContain(".vt-studio-top-split-module:not([data-open=\"true\"]) > .vt-studio-top-split-module__head")
     expect(recovery).toContain("border-left: var(--vt-im-stroke")
     expect(recovery).toContain("grid-template-rows: minmax(0, 1fr) minmax(0, 1fr)")
+    expect(splitInput).toContain("calc(var(--vt-studio-control-height, 44px) + var(--vt-studio-control-stroke, 3px))")
   })
 })
