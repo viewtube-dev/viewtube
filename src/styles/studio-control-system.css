@@ -3452,10 +3452,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter,
 .vt-studio-left-counter {
   display: flex;
-  width: max-content;
+  width: 100%;
   min-width: 0;
-  max-width: none;
-  flex: 0 0 auto;
+  max-width: 100%;
+  flex: 1 1 auto;
   box-sizing: border-box;
   height: var(--vt-studio-control-height, 44px);
   border: var(--vt-studio-control-stroke, 3px) solid #000;
