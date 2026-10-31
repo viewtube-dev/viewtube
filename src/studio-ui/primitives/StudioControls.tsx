@@ -2300,12 +2300,12 @@ const useStudioCounterHold = (
       };
       repeat();
     }, 380);
-  }, [adjust, direction, disabled, max, min, step, stop]);
+  }, [adjust, direction, disabled, interactionFocus, max, min, step, stop]);
   const onClick = React.useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     if (suppressClick.current) {
       event.preventDefault(); event.stopPropagation(); suppressClick.current = false;
-    } else if (!disabled) adjust(direction);
-  }, [adjust, direction, disabled]);
+    } else if (!disabled) { interactionFocus?.pulse(); adjust(direction); }
+  }, [adjust, direction, disabled, interactionFocus]);
   return { isHolding, events: {
     onPointerDown, onPointerUp: stop, onPointerLeave: (event: React.PointerEvent<HTMLButtonElement>) => { if (event.pointerType === "mouse") stop(); },
     onPointerCancel: stop, onLostPointerCapture: stop, onBlur: stop, onClick,
@@ -2359,17 +2359,17 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
     const next = Number((base + direction * safeStep).toFixed(precision));
     onValueChange(Math.min(max, Math.max(min, next)));
   }, [max, min, onValueChange, safeStep]);
-  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min);
-  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min, interactionFocus);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max, interactionFocus);
   return (
     <StudioSplitShell
       layout="double"
       sizeVariant={size}
       className={studioClasses("vt-studio-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
       railClassName="vt-studio-counter__rail"
-      leftRailContent={<button type="button" className={`vt-studio-stepper-button vt-studio-counter__button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronLeft aria-hidden="true" focusable="false" /></button>}
-      rightRailContent={<button type="button" className={`vt-studio-stepper-button vt-studio-counter__button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronRight aria-hidden="true" focusable="false" /></button>}
-      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-counter", "data-vt-library-component": "StudioCounter" }}
+      leftRailContent={<button type="button" className={`vt-studio-stepper-button vt-studio-counter__button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronLeft aria-hidden="true" focusable="false" /></button>}
+      rightRailContent={<button type="button" className={`vt-studio-stepper-button vt-studio-counter__button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronRight aria-hidden="true" focusable="false" /></button>}
+      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, role: "group", "aria-label": ariaLabel, "data-vt-studio-control-family": "counter", "data-vt-studio-control-kind": "studio-counter", "data-vt-library-component": "StudioCounter" }}
     >
       <span className="vt-studio-counter__value" data-vt-studio-counter-value aria-live="polite">{String(current)}</span>
     </StudioSplitShell>
@@ -2937,8 +2937,8 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
       railClassName="vt-studio-double-split-slider__rail"
       leftRailContent={leftControls === "counter" ? (
         <span className="vt-studio-double-split-slider__counter" aria-label={`Adjust ${ariaLabel}`}>
-          <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
-          <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={`vt-studio-stepper-button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={`vt-studio-stepper-button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
         </span>
       ) : (
         <button
@@ -2951,10 +2951,10 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
         >↺</button>
       )}
       rightRailContent={<output className="vt-studio-double-split-slider__value" aria-live="off">{current}</output>}
-      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined, onPointerDownCapture: interactionFocus.start, onPointerUpCapture: interactionFocus.end, onPointerCancelCapture: interactionFocus.end,
-        "data-vt-studio-slider": props["data-vt-studio-slider"] ?? "double-split",
+      shellProps={{ ...props, "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined,
+        "data-vt-studio-slider": "double-split",
         "data-vt-studio-slider-left-controls": leftControls,
-        "data-vt-library-component": props["data-vt-library-component"] ?? "StudioDoubleSplitSlider",
+        "data-vt-library-component": "StudioDoubleSplitSlider",
         "data-size": size,
         "aria-disabled": disabled || !validBounds ? "true" : undefined,
       }}
