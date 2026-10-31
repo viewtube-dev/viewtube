@@ -27,6 +27,13 @@ test("split input matches the Codex native-editing and single-shell focus contra
   assert.doesNotMatch(splitComponent, /geometryVariant|data-geometry-variant/);
 });
 
+test("split input descendants remain pointer-interactive and retain the primary inset stroke", () => {
+  assert.match(splitCss, /\\[data-vt-studio-split-label\\][\\s\\S]*?pointer-events:\\s*none/);
+  assert.match(splitCss, /input\\.vt-studio-text-input[\\s\\S]*?pointer-events:\\s*auto/);
+  assert.match(splitCss, /--vt-split-field-inline-width:\\s*var\\(--vt-studio-control-stroke, 3px\\)/);
+  assert.match(splitCss, /box-shadow:\\s*inset 0 0 0 var\\(--vt-split-field-inline-width\\) var\\(--vt-split-field-primary\\)/);
+});
+
 test("all editable fields receive a primary inset stroke and textarea focus outline", () => {
   const textCss = readFileSync("src/styles/studio-text-input.css", "utf8");
   const fieldCss = readFileSync("src/styles/studio-control-fields.css", "utf8");
