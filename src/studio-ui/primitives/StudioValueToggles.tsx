@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import "../../styles/studio-control-entry.css";
 import "../../styles/studio-control-value-toggles.css";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import { StudioSplitShell, STUDIO_LEFT_WORD_OPTIONS } from "./StudioControls";
