@@ -1,8 +1,12 @@
 /* Collapsible Confirmed Primitive Library modules. */
 .vt-confirmed-family-module,
 .vt-confirmed-primitive-module {
+  display: block;
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  justify-self: stretch;
   margin: 0 0 8px;
   border: 3px solid #000;
   border-radius: 6px;
@@ -33,7 +37,7 @@
 .vt-confirmed-family-module:not([open]) > summary,
 .vt-confirmed-family-module:not([open]) .vt-confirmed-family-module__top,
 .vt-confirmed-primitive-module:not([open]) > summary { border-bottom: 0; }
-.vt-confirmed-family-module__body { display: grid; gap: 6px; padding: 8px; }
+.vt-confirmed-family-module__body { display: grid; gap: 6px; padding: 8px; width: 100%; min-width: 0; max-width: 100%; box-sizing: border-box; }
 .vt-confirmed-primitive-module {
   margin: 0;
   border-width: 2px;
