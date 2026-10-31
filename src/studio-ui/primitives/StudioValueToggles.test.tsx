@@ -56,7 +56,9 @@ describe("Studio value toggle primitives", () => {
     const onValueChange = vi.fn();
     const { container } = mount(<StudioSideToggle options={["LOW", "MID", "HIGH"]} value="LOW" onValueChange={onValueChange} arrowSide="left" />);
     expect(container.querySelector(".vt-studio-value-toggle__face")?.textContent).toContain("LOW");
-    const arrows = container.querySelectorAll(".vt-studio-value-toggle__arrow-stack button");
+    expect(container.querySelector(".vt-studio-side-counter")).not.toBeNull();
+    expect(container.querySelector(".vt-studio-left-counter__rail[data-rail=\"start\"]")).not.toBeNull();
+    const arrows = container.querySelectorAll(".vt-studio-side-counter__actions button");
     expect(arrows).toHaveLength(2);
     expect((arrows[0] as HTMLButtonElement).disabled).toBe(false);
     expect((arrows[1] as HTMLButtonElement).disabled).toBe(false);
