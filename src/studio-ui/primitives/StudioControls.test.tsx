@@ -17,7 +17,7 @@ const readStudioControlCss = () => [
   "studio-control-distill-overrides.css",
   "studio-control-recovery-overrides.css",
   "studio-control-word-counter.css",
-  "studio-split-text-input.css",
+  "studio-control-value-toggles.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
 
 const canonicalTail = (css: string) => {
