@@ -4,6 +4,9 @@
 - [ ] Add failing regression coverage for pointer/touch editability of left/right/double split inputs.
 - [x] Correct split-label pointer-event ownership so the native input receives interaction.
 - [x] Restore persistent primary inset stroke while preserving the shared focus behavior.
+- [x] Port the text-input TSX and split-input CSS from `docs/studio-controls-regression-handoff-2026-10-30`.
+- [x] Restore Supreme (51.82px), Mini, Standard, Compact and Micro single-line typography from the source branch.
+- [x] Restore source-branch floating/fixed label focus metrics and verify the shared textarea primary-rest/secondary-focus contract.
 - [ ] Verify keyboard, selection, cursor, controlled and uncontrolled editing.
 
 ## Phase 2 — Auto-width defaults and imports
@@ -34,4 +37,4 @@
 
 ## Execution note
 
-The code and regression assertions above are committed to the recovery branch. Runtime tests, typecheck, production build, and browser interaction checks remain **pending** because this session has GitHub source-edit access but no repository checkout or executable project environment. Do not mark verification complete until those commands are run against this branch.
+The code and regression assertions above are committed to the recovery branch. Text-field styling was ported from `docs/studio-controls-regression-handoff-2026-10-30`; the shared inset-stroke selector and the recovery branch's explicit `studio-control-entry.css` import were retained. Runtime tests, typecheck, production build, and browser interaction checks remain pending. Runtime tests, typecheck, production build, and browser interaction checks remain **pending** because this session has GitHub source-edit access but no repository checkout or executable project environment. Do not mark verification complete until those commands are run against this branch.
