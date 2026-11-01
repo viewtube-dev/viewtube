@@ -38,6 +38,10 @@ export interface BrainTraceContext {
  tokensEstimated: number
  sectionsIncluded: string[]
  sectionsDropped: string[]
+ /** Stable scope identity for the exact context sent to the model. */
+ channelId?: string | null
+ projectId?: string | null
+ contentBuildId?: string | null
 }
 
 export interface BrainTraceClaims {
