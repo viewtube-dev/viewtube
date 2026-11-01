@@ -493,6 +493,27 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
     />
    </div>
 
+   {trace ? (
+    <details className="border-t border-black/30 bg-white px-3 py-2" data-vt-brain-part="brain-turn-provenance">
+     <summary className="min-h-8 cursor-pointer content-center text-[10px] font-[1000] uppercase underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+      How this answer was produced · {trace.generationPath ? titleCase(trace.generationPath.replace(/_/g, " ")) : titleCase(trace.status)}
+     </summary>
+     <dl className="grid gap-2 py-2 text-[10px] leading-4 sm:grid-cols-2">
+      <div><dt className="font-black uppercase">Task profile</dt><dd>{trace.taskProfileId || "Not recorded"}</dd></div>
+      <div><dt className="font-black uppercase">Fallback reason</dt><dd>{trace.fallbackReason || "None recorded"}</dd></div>
+      <div><dt className="font-black uppercase">Model</dt><dd>{trace.modelServed || trace.modelRequested || "Not recorded"} · {trace.modelIdentityStatus || "identity unavailable"}</dd></div>
+      <div><dt className="font-black uppercase">Provider</dt><dd>{trace.modelProvider || "Not recorded"}</dd></div>
+      <div><dt className="font-black uppercase">Scope</dt><dd>Channel {trace.channelId || "unbound"} · Project {trace.projectId || "none"} · Build {trace.contentBuildId || "none"}</dd></div>
+      <div><dt className="font-black uppercase">Evidence</dt><dd>{trace.evidenceReturned} returned · {trace.evidenceMissing} missing</dd></div>
+      <div className="sm:col-span-2"><dt className="font-black uppercase">Capabilities</dt><dd>{trace.capabilities.join(", ") || "None recorded"}</dd></div>
+      <div className="sm:col-span-2"><dt className="font-black uppercase">Context included</dt><dd className="break-words">{trace.sectionsIncluded.join(", ") || "Not recorded"}</dd></div>
+      <div className="sm:col-span-2"><dt className="font-black uppercase">Context omitted / blocked</dt><dd className="break-words">{trace.sectionsDropped.join(", ") || "None recorded"}</dd></div>
+      {trace.validationReasons.length ? <div className="sm:col-span-2"><dt className="font-black uppercase">Validation / repair</dt><dd>{trace.validationReasons.join(" · ")}</dd></div> : null}
+      {trace.failureReason ? <div className="sm:col-span-2"><dt className="font-black uppercase">Failure class</dt><dd>{trace.failureReason}</dd></div> : null}
+     </dl>
+    </details>
+   ) : null}
+
    <section
     data-vt-brain-part="evidence-lineage"
     aria-label="Evidence lineage"
