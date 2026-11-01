@@ -768,14 +768,21 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    ? originalModelInputSnapshot.history
    : (input.history || []).slice(-8)
   questionTrace.recordEvidence({
+   requested: context.budget.requestedSections.map((id) => `section:${id}`),
    returned: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id),
-   missing: [],
+   missing: [
+    ...context.budget.omittedSections.filter((entry) => entry.startsWith("required_evidence_missing:") || entry.endsWith(":required_context_does_not_fit")),
+    ...input.snapshot.evidencePack.missingInputs.map((entry) => `dataset:${entry}`),
+   ],
    records: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords],
   })
   questionTrace.recordContext({
    tokensEstimated: context.budget.estimatedInputTokens,
-   sectionsIncluded: ["system_instruction", ...(renderedEvidenceRecords.length ? ["analytics_evidence_records"] : []), ...(renderedCreatorAnswerEvidenceRecords.length ? ["creator_answer_evidence_records"] : [])],
+   sectionsIncluded: [...context.budget.includedSections],
    sectionsDropped: [...context.budget.omittedSections],
+   channelId: input.channelId || null,
+   projectId: input.projectId || input.project?.id || creatorContext?.project?.projectId || null,
+   contentBuildId: input.project?.contentBuildId || creatorContext?.project?.contentBuildId || null,
   })
 
   try {
