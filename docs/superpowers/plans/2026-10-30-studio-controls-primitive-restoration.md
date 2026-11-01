@@ -92,3 +92,39 @@ These are global requirements for the port and supersede any narrower specimen/l
 - Reorganize the Confirmed Primitive Library specimen layout and add the Representatives section as part of the same catalog pass.
 - Verify every applicable module follows the Standard 1×full / Compact 2×half / Micro 4×quarter specimen sequence with no labels inserted between specimens.
 - Audit the resulting catalog for column layouts, inverse counter/slider specimens, inconsistent chevrons, and component-specific focus drift.
+
+
+## Execution checkpoint — 2026-10-31
+
+This checkpoint records repository inspection only; it does not certify completion.
+
+### Present in the destination branch
+
+- The branch contains production implementations for `StudioVerticalWordToggle`, `StudioSquareIconButtonGroup`, `StudioTextBox`, `StudioLeftWordCounter`, `StudioSplitAccordion`, and the five value-toggle exports.
+- `src/studio-ui/index.ts` exports the restored primitive names and associated public prop types.
+- Dedicated stylesheets exist for restored primitives, value toggles, split accordion, and shared focus.
+- `StudioRestoredPrimitives.test.tsx`, `StudioValueToggles.test.tsx`, and the restored-primitives Node audit are present and wired into `test:studio-controls`.
+- The confirmed catalog contains a Representatives implementation and size-matrix markup, and the plan's layout audit was expanded.
+
+### Static audit findings still requiring resolution or proof
+
+- `StudioValueToggles.tsx` imports `StudioSplitShell` and `STUDIO_LEFT_WORD_OPTIONS` from `StudioControls.tsx`, while `StudioControls.tsx` re-exports the value-toggle module. This is an ES-module cycle. The imported bindings appear to be consumed from component render paths, but the cycle must be exercised by the focused tests and typecheck; extract the shared shell/options into a dependency-neutral module if the tests or runtime expose initialization problems.
+- CSS ownership is split across component-level imports (`StudioControls.tsx`, `StudioValueToggles.tsx`, and `StudioSplitAccordion.tsx`), the Studio entry stylesheet, and the late focus import in `main.tsx`. Confirm the production bundle's effective order and check for duplicate inclusion before calling ownership resolved.
+- The catalog layout audit currently asserts the presence of `!important` in layout selectors. Review whether those declarations are genuinely necessary against the actual host layout; the user requirement is to prefer removing overrides rather than expanding them.
+- The shared focus selector and reduced-motion rule exist, but source inspection alone does not prove parity for keyboard focus, pointer-driven interaction dwell, and synchronized character fades across every consumer.
+
+### Verification evidence available at this checkpoint
+
+- GitHub reports the three Vercel deployment status contexts as successful for head commit `cf51380744daa8f3a25f9c10e4f84c299bdbb266`. These are deployment statuses, not test, typecheck, or build results.
+- GitHub returned no Actions workflow runs for that commit.
+- The repository's `test:studio-controls`, `typecheck`, and `build` commands have not been executed in this environment. A local clone attempt was blocked because this environment could not resolve `github.com`.
+- The open draft PR #631 is reported as not mergeable. The branch comparison against `master/consolidated-feature-integration` is diverged (185 commits ahead and 4,275 behind at this inspection).
+
+### Next required actions
+
+1. Resolve or explicitly validate the value-toggle/controls module cycle.
+2. Verify stylesheet inclusion/order and remove avoidable duplicate imports/overrides.
+3. Run `npm run test:studio-controls`, `npm run typecheck`, and `npm run build` in a repository-capable environment; fix every failure and rerun affected commands.
+4. Add/execute browser-level checks for representative focus, chevron, and catalog layout behavior if browser verification is available.
+5. Reassess the intended base branch and divergence before changing PR #631; do not retarget or merge wholesale without a dependency-aware reconciliation.
+6. Keep the PR draft until all verification gates pass.
