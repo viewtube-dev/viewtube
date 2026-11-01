@@ -7,6 +7,7 @@ export const BRAIN_CONTEXT_CHARS_PER_TOKEN_ESTIMATE = 3
 export interface BrainContextSectionResolution {
  text: string
  selectedSectionIds: string[]
+ requiredSectionIds: string[]
  omittedSectionIds: string[]
  characterCount: number
  maximumCharacters: number
@@ -181,6 +182,7 @@ export const resolveBrainContextSections = (
  return {
   text: selected.map((entry) => entry.text).join("\n"),
   selectedSectionIds: selected.map((entry) => entry.id),
+  requiredSectionIds: explicitRequired,
   omittedSectionIds: [...new Set(omittedSectionIds)],
   characterCount: selected.reduce((sum, entry) => sum + entry.text.length, 0) + Math.max(0, selected.length - 1),
   maximumCharacters,
