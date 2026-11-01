@@ -37,7 +37,13 @@ export interface BrainTraceEvidence {
 export interface BrainTraceContext {
  tokensEstimated: number
  sectionsIncluded: string[]
+ /** Required task/capability sections, distinct from evidence records. */
+ sectionsRequested?: string[]
  sectionsDropped: string[]
+ /** Stable scope identity for the exact context sent to the model. */
+ channelId?: string | null
+ projectId?: string | null
+ contentBuildId?: string | null
 }
 
 export interface BrainTraceClaims {
@@ -61,6 +67,9 @@ export interface BrainTrace {
  latencyMs?: number
  status: BrainTraceStatus
  failureReason?: string
+ generationPath?: "model" | "repaired_model" | "basic_guidance"
+ fallbackReason?: string
+ validationReasons?: string[]
 
  intent?: string
  taskProfileId?: string
@@ -191,6 +200,9 @@ export interface BrainTraceRecorder {
   status?: BrainTraceStatus
   outputRef?: string
   failureReason?: string
+  generationPath?: BrainTrace["generationPath"]
+  fallbackReason?: string
+  validationReasons?: string[]
  }) => BrainTrace
 }
 
@@ -213,7 +225,7 @@ export const beginBrainTrace = (input: {
   status: "running",
   capabilitiesInvoked: [],
   evidence: { requested: [], returned: [], missing: [] },
-  context: { tokensEstimated: 0, sectionsIncluded: [], sectionsDropped: [] },
+  context: { tokensEstimated: 0, sectionsIncluded: [], sectionsRequested: [], sectionsDropped: [] },
   claims: { fabricated: [], unverifiedDerived: [] },
   promptVersions: {},
   grades: {},
@@ -276,6 +288,9 @@ export const beginBrainTrace = (input: {
    trace.latencyMs = completedAt - startedAt
    if (completion?.outputRef) trace.outputRef = completion.outputRef
    if (completion?.failureReason) trace.failureReason = completion.failureReason
+   if (completion?.generationPath) trace.generationPath = completion.generationPath
+   if (completion?.fallbackReason) trace.fallbackReason = completion.fallbackReason
+   if (completion?.validationReasons) trace.validationReasons = [...completion.validationReasons]
    const finished = { ...trace, evidence: cloneTraceEvidence(trace.evidence) }
    activeSink.write(finished)
    return finished
