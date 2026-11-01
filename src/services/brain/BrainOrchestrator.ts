@@ -342,6 +342,17 @@ const withTimeout = async <T>(promise: Promise<T>, milliseconds: number): Promis
   new Promise<T>((_, reject) => setTimeout(() => reject(new Error("Brain response timed out")), milliseconds)),
  ])
 
+export const classifyBrainOrchestrationError = (error: unknown): string => {
+ const message = error instanceof Error ? error.message.toLowerCase() : String(error || "").toLowerCase()
+ if (/timeout|timed out|deadline exceeded/.test(message)) return "timeout"
+ if (/429|rate.?limit|quota/.test(message)) return "rate_limited"
+ if (/401|403|unauthorized|api key|permission denied/.test(message)) return "authorization_rejected"
+ if (/404|model.*(not found|unavailable)|unsupported model/.test(message)) return "model_unavailable"
+ if (/network|fetch failed|econn|connection reset|socket/.test(message)) return "network_error"
+ if (/400|invalid argument|bad request|schema/.test(message)) return "invalid_request"
+ return "unknown"
+}
+
 export const BRAIN_MODEL_TIMEOUT_MS = 30_000
 export const BRAIN_REPAIR_TIMEOUT_MS = 20_000
 export const BRAIN_PROMPT_VERSION = "brain-orchestrator-v2"
@@ -1017,6 +1028,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    questionTrace.complete({
     status: status === "complete" ? "complete" : "fallback",
     outputRef: response.id,
+    generationPath,
+    fallbackReason,
+    validationReasons: repairOutcome.reasons,
    })
   } catch {
    // Trace persistence must never fail an otherwise completed creator turn.
@@ -1047,7 +1061,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   const evaluation = validateBrainResponse({ response, snapshot: input.snapshot, recentTurns: input.recentTurns, growthContext: input.growthContext, expectedMode: taskProfile.answerMode })
   try {
    questionTrace.recordGrade("response_validation", evaluation.passed ? 100 : 0)
-   questionTrace.complete({ status: "fallback", outputRef: response.id, failureReason: error instanceof Error ? error.message : String(error) })
+   questionTrace.complete({ status: "fallback", outputRef: response.id, failureReason: classifyBrainOrchestrationError(error), generationPath, fallbackReason, validationReasons: repairOutcome.reasons })
   } catch {
    // Trace persistence must never mask the fallback response.
   }
@@ -1096,7 +1110,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    learningEntryIds: learning ? [learning.id] : [],
    metadata: {
     operationId,
-    orchestrationError: error instanceof Error ? error.message : String(error),
+    orchestrationError: classifyBrainOrchestrationError(error),
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
     generationPath,
