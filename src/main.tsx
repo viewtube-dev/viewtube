@@ -3,7 +3,6 @@ import './index.css'
 // The application root is the sole owner of the canonical Studio control CSS bundle.
 import './styles/studio-control-entry.css'
 import './styles/studio-text-input.css'
-import './styles/studio-text-input.css'
 import './styles/studio-dropdown-geometry.css'
 import './styles/studio-upload-geometry.css'
 import './components/studio-hub/studio-hub-confirmed-full-width.css'
