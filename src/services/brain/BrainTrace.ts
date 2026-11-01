@@ -65,6 +65,9 @@ export interface BrainTrace {
  latencyMs?: number
  status: BrainTraceStatus
  failureReason?: string
+ generationPath?: "model" | "repaired_model" | "basic_guidance"
+ fallbackReason?: string
+ validationReasons?: string[]
 
  intent?: string
  taskProfileId?: string
@@ -195,6 +198,9 @@ export interface BrainTraceRecorder {
   status?: BrainTraceStatus
   outputRef?: string
   failureReason?: string
+  generationPath?: BrainTrace["generationPath"]
+  fallbackReason?: string
+  validationReasons?: string[]
  }) => BrainTrace
 }
 
@@ -280,6 +286,9 @@ export const beginBrainTrace = (input: {
    trace.latencyMs = completedAt - startedAt
    if (completion?.outputRef) trace.outputRef = completion.outputRef
    if (completion?.failureReason) trace.failureReason = completion.failureReason
+   if (completion?.generationPath) trace.generationPath = completion.generationPath
+   if (completion?.fallbackReason) trace.fallbackReason = completion.fallbackReason
+   if (completion?.validationReasons) trace.validationReasons = [...completion.validationReasons]
    const finished = { ...trace, evidence: cloneTraceEvidence(trace.evidence) }
    activeSink.write(finished)
    return finished
