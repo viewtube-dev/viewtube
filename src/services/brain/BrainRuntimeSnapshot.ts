@@ -102,6 +102,9 @@ export interface BrainRuntimeTraceSummary {
  contentBuildId: string | null
  validationReasons: string[]
  failureReason: string | null
+ promptVersions: Record<string, string>
+ repairAttempts: number
+ outputRef: string | null
  capabilityCount: number
  evidenceReturned: number
  evidenceMissing: number
@@ -641,6 +644,9 @@ const summarizeTrace = (
   contentBuildId: trace.context?.contentBuildId || null,
   validationReasons: [...(trace.validationReasons || [])],
   failureReason: trace.failureReason || null,
+  promptVersions: { ...(trace.promptVersions || {}) },
+  repairAttempts: trace.repairAttempts || 0,
+  outputRef: trace.outputRef || null,
   capabilityCount: trace.capabilitiesInvoked?.length || 0,
   evidenceReturned: trace.evidence?.returned?.length || 0,
   evidenceMissing: trace.evidence?.missing?.length || 0,
