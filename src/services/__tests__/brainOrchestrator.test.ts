@@ -10,6 +10,7 @@ import type { StructuredBrainModelOutput } from "../gemini"
 import {
  BRAIN_MODEL_TIMEOUT_MS,
  BRAIN_REPAIR_TIMEOUT_MS,
+ classifyBrainOrchestrationError,
  runBrainTurn,
  validateBrainResponse,
 } from "../brain/BrainOrchestrator"
@@ -49,6 +50,20 @@ const nicheProfile = {
 }
 
 describe("BrainOrchestrator", () => {
+ it.each([
+  [new Error("request timed out"), "timeout"],
+  [new Error("429 quota exceeded"), "rate_limited"],
+  [new Error("403 API key rejected"), "authorization_rejected"],
+  [new Error("model not found"), "model_unavailable"],
+  [new Error("fetch failed: ECONNRESET"), "network_error"],
+  [new Error("400 invalid argument"), "invalid_request"],
+  [new Error("unclassified failure"), "unknown"],
+  [new Error("API key=AIzaSyEXAMPLE_SECRET"), "unknown"],
+ ])("classifies orchestration failures without returning raw error text", (error, expected) => {
+  expect(classifyBrainOrchestrationError(error)).toBe(expected)
+  expect(classifyBrainOrchestrationError(error)).not.toContain("AIza")
+ })
+
  it("persists one structured, channel-specific turn through the governed pipeline", async () => {
   const snapshot = makeSnapshot()
   const growthContext = buildCreatorGrowthContext(snapshot, [], [])
@@ -119,6 +134,8 @@ describe("BrainOrchestrator", () => {
    expect(trace?.context.sectionsIncluded).toContain("system_prompt")
    expect(trace?.context.sectionsDropped).toEqual(result.contextBudget.omittedSections)
    expect(trace?.context.channelId).toBe("trace-channel")
+   expect(trace?.generationPath).toBe("basic_guidance")
+   expect(trace?.fallbackReason).toBe("model_disabled")
    expect(trace?.evidence.records).toBeDefined()
    expect(trace?.promptVersions).toMatchObject({
     orchestrator: "brain-orchestrator-v2",
