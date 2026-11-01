@@ -10,7 +10,7 @@ describe("Brain task-profile routing matrix", () => {
   { label: "creator asset generation", text: "Draft a pinned comment for my latest video", id: "creator_asset_draft", intent: "content_generation", mode: "creator_asset_draft", assetKind: "pinned_comment" },
  ] as const
 
- it.each(cases)("routes $label to its explicit task profile", ({ text, id, intent, mode, ...extra }) => {
+ it.each(cases)("routes $label to its explicit task profile", ({ text, id, intent, mode, label: _label, ...extra }) => {
   const profile = resolveBrainTaskProfile(text)
   expect(profile).toMatchObject({ id, intent, answerMode: mode, ...extra })
  })
