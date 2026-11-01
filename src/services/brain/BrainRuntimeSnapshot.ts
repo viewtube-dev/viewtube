@@ -89,6 +89,7 @@ export interface BrainRuntimeTraceSummary {
  status: string
  intent: string | null
  taskProfileId: string | null
+ channelId: string | null
  generationPath: string | null
  fallbackReason: string | null
  modelProvider: string | null
@@ -627,6 +628,7 @@ const summarizeTrace = (
   status: trace.status,
   intent: trace.intent || null,
   taskProfileId: trace.taskProfileId || null,
+  channelId: trace.context?.channelId || trace.channelId || null,
   generationPath: trace.generationPath || null,
   fallbackReason: trace.fallbackReason || null,
   modelProvider: trace.modelProvider || null,
