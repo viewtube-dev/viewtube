@@ -697,6 +697,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   saved: originalModelInputSnapshot,
  })
  const restoreOriginalModelInput = Boolean(restoredModelInputSnapshot)
+ const restoredContextBudget = restoreOriginalModelInput ? restoredModelInputSnapshot?.contextBudget : undefined
+ const traceContextBudget = restoredContextBudget || context.budget
  let modelSystemInstruction: string | undefined
  let modelHistory: any[] | undefined
  try {
@@ -768,18 +770,22 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    ? originalModelInputSnapshot.history
    : (input.history || []).slice(-8)
   questionTrace.recordEvidence({
-   requested: context.budget.requestedSections.map((id) => `section:${id}`),
+   requested: (traceContextBudget.requestedSections || context.budget.requestedSections).map((id) => `section:${id}`),
    returned: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id),
    missing: [
-    ...context.budget.omittedSections.filter((entry) => entry.startsWith("required_evidence_missing:") || entry.endsWith(":required_context_does_not_fit")),
+    ...(traceContextBudget.omittedSections || context.budget.omittedSections).filter((entry) => entry.startsWith("required_evidence_missing:") || entry.endsWith(":required_context_does_not_fit")),
     ...input.snapshot.evidencePack.missingInputs.map((entry) => `dataset:${entry}`),
    ],
    records: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords],
   })
   questionTrace.recordContext({
-   tokensEstimated: context.budget.estimatedInputTokens,
-   sectionsIncluded: [...context.budget.includedSections],
-   sectionsDropped: [...context.budget.omittedSections],
+   tokensEstimated: traceContextBudget.estimatedInputTokens ?? context.budget.estimatedInputTokens,
+   sectionsIncluded: restoredContextBudget?.includedSections
+    ? [...restoredContextBudget.includedSections]
+    : restoreOriginalModelInput ? ["original_model_input_context_sections_unavailable"] : [...context.budget.includedSections],
+   sectionsDropped: restoredContextBudget?.omittedSections
+    ? [...restoredContextBudget.omittedSections]
+    : restoreOriginalModelInput ? ["original_model_input_context_metadata_unavailable"] : [...context.budget.omittedSections],
    channelId: input.channelId || null,
    projectId: input.projectId || input.project?.id || creatorContext?.project?.projectId || null,
    contentBuildId: input.project?.contentBuildId || creatorContext?.project?.contentBuildId || null,
@@ -987,6 +993,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
         userText: input.userText,
         evidenceRecords: renderedEvidenceRecords,
         creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
+        contextBudget: context.budget,
        },
       }),
     evidenceRecordQuality: renderedEvidenceRecords.length
