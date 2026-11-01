@@ -1,5 +1,4 @@
 import "../styles/toolbox-entry.css"
-import "../styles/studio-control-entry.css"
 
 export { STUDIO_TOKENS } from "./tokens"
 export type { StudioControlSize, StudioHierarchyLevel } from "./tokens"
