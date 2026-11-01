@@ -128,3 +128,31 @@ This checkpoint records repository inspection only; it does not certify completi
 4. Add/execute browser-level checks for representative focus, chevron, and catalog layout behavior if browser verification is available.
 5. Reassess the intended base branch and divergence before changing PR #631; do not retarget or merge wholesale without a dependency-aware reconciliation.
 6. Keep the PR draft until all verification gates pass.
+
+
+## Follow-up implementation — 2026-10-31
+
+### Changes committed
+
+- Centralized canonical Studio control stylesheet loading in `src/styles/studio-control-entry.css`, imported once by the application root (`src/main.tsx`).
+- Removed the global control-entry import from `src/studio-ui/index.ts`; the library barrel now exports primitives without taking ownership of the application's global CSS bundle.
+- Removed the focus stylesheet from the entry bundle. `src/main.tsx` retains the deliberate late import of `studio-control-focus.css` after `App.tsx` so the shared focus owner wins over component-local rules.
+- Removed duplicate direct imports of the individual system/core/split/fields/motion styles from `main.tsx`; removed a duplicate `studio-text-input.css` import introduced during the consolidation.
+- Extended `scripts/audit/studio-input-token-ownership.test.mjs` to assert this single-owner CSS import contract and the late focus import.
+- Corrected the stale micro-height expectation in that audit from 14px to the current 12px token contract.
+
+### Verification status
+
+- The new regression assertions and stylesheet changes are committed on `codex/shared-studio-interaction-focus`.
+- Static source inspection confirms the expected import ownership and order.
+- Tests have **not** been executed: this environment has GitHub source read/write access but no working repository checkout/runtime. Do not treat static assertions as a passing test run.
+- No GitHub Actions workflow run is available for the new commit. The repository workflows present in `.github/workflows` do not include a general Studio typecheck/test/build workflow.
+- Vercel status contexts on the latest commit fail with the explicit `build-rate-limit` upgrade URL. These failures do not identify a source-code compile failure and do not provide test evidence.
+- The branch remains significantly diverged from `master/consolidated-feature-integration` (191 commits ahead / 4,275 behind at the latest comparison). Do not merge or retarget wholesale; a dependency-aware branch reconciliation is still required.
+
+### Next actions
+
+1. Run `npm run test:studio-controls`, `npm run typecheck`, and `npm run build` in a real checkout; fix failures and rerun.
+2. Inspect the resulting CSS bundle/order and test representative keyboard focus, interaction dwell, synchronized fades, and reduced-motion behavior in a browser.
+3. Continue the remaining double-chevron consumer audit and review avoidable `!important` rules in the catalog/system CSS.
+4. Reconcile the PR base/divergence without dropping already-landed work; keep PR #631 in draft until verified.
