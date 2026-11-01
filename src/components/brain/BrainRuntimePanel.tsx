@@ -300,7 +300,9 @@ export const BrainRuntimePanel: React.FC<BrainRuntimePanelProps> = ({ snapshot, 
        <div className="sm:col-span-2"><dt className="font-black uppercase">Capabilities</dt><dd>{trace.capabilities.join(", ") || "None recorded"}</dd></div>
        <div className="sm:col-span-2"><dt className="font-black uppercase">Context included</dt><dd className="break-words">{trace.sectionsIncluded.join(", ") || "Not recorded"}</dd></div>
        <div className="sm:col-span-2"><dt className="font-black uppercase">Context omitted / blocked</dt><dd className="break-words">{trace.sectionsDropped.join(", ") || "None recorded"}</dd></div>
-       {trace.validationReasons.length ? <div className="sm:col-span-2"><dt className="font-black uppercase">Validation / repair</dt><dd>{trace.validationReasons.join(" · ")}</dd></div> : null}
+       <div><dt className="font-black uppercase">Repair attempts</dt><dd>{trace.repairAttempts}</dd></div>
+      <div><dt className="font-black uppercase">Prompt versions</dt><dd className="break-words">{Object.entries(trace.promptVersions).map(([key, value]) => \`${key}: ${value}\`).join(" · ") || "Not recorded"}</dd></div>
+      {trace.validationReasons.length ? <div className="sm:col-span-2"><dt className="font-black uppercase">Validation / repair</dt><dd>{trace.validationReasons.join(" · ")}</dd></div> : null}
        {trace.failureReason ? <div className="sm:col-span-2"><dt className="font-black uppercase">Failure class</dt><dd>{trace.failureReason}</dd></div> : null}
       </dl>
      </details>
