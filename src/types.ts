@@ -1630,6 +1630,10 @@ export interface BrainContextBudget {
  memoryCharacters: number
  knowledgeCharacters: number
  conversationCharacters: number
+ /** Exact section identifiers selected by the context resolver. */
+ includedSections?: string[]
+ /** Required section identifiers requested by task and capability policy. */
+ requestedSections?: string[]
  omittedSections: string[]
  /** Estimated input tokens from the conservative character ratio; not provider-reported usage. */
  estimatedInputTokens?: number

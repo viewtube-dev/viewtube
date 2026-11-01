@@ -375,4 +375,11 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain("whitespace-normal")
   expect(html).not.toMatch(/provider|account|credit|consent|internal error/i)
  })
+
+ it("includes the authoritative fallback reason in accessible status details", () => {
+  const html = renderToStaticMarkup(<BrainGenerationBadge path="basic_guidance" fallbackReason="model_disabled" />)
+  expect(html).toContain("Fallback reason: model disabled.")
+  expect(html).toContain("fallback reason: model disabled")
+  expect(html).toContain("Basic Guidance")
+ })
 })

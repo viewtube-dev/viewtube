@@ -54,6 +54,13 @@ export interface BrainModelInputSnapshot<TRecord = unknown> {
  userText?: unknown
  evidenceRecords?: TRecord[]
  creatorAnswerEvidenceRecords?: TRecord[]
+ /** Exact resolver manifest for the systemInstruction above; absent on legacy turns. */
+ contextBudget?: {
+  includedSections?: string[]
+  requestedSections?: string[]
+  omittedSections?: string[]
+  estimatedInputTokens?: number
+ }
 }
 
 /**

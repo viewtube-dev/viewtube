@@ -364,14 +364,15 @@ const GENERATION_BADGES: Record<BrainGenerationPath, { label: string; descriptio
  basic_guidance: { label: "Basic Guidance", description: "Full Brain generation was unavailable, so this is limited guidance based on the evidence available—not a complete analysis.", status: "warning" },
 }
 
-export const BrainGenerationBadge: React.FC<{ path: BrainGenerationPath }> = ({ path }) => {
+export const BrainGenerationBadge: React.FC<{ path: BrainGenerationPath; fallbackReason?: string | null }> = ({ path, fallbackReason }) => {
  const badge = GENERATION_BADGES[path]
+ const fallbackLabel = fallbackReason ? fallbackReason.replace(/_/g, " ") : null
  return (
   <span
    data-vt-brain-component="BrainGenerationBadge"
-   title={badge.description}
+   title={fallbackLabel ? `${badge.description} Fallback reason: ${fallbackLabel}.` : badge.description}
    className="max-w-full min-w-0"
-   aria-label={`${badge.label} response status`}
+   aria-label={`${badge.label} response status${fallbackLabel ? `; fallback reason: ${fallbackLabel}` : ""}`}
   >
    <BrainChatStatusBadge status={badge.status} label={badge.label} />
   </span>
@@ -644,7 +645,7 @@ const CreatorResponseCard: React.FC<{
         </div>
        ) : null}
       </div>
-      {response.generationPath ? <BrainGenerationBadge path={response.generationPath} /> : null}
+      {response.generationPath ? <BrainGenerationBadge path={response.generationPath} fallbackReason={response.fallbackReason} /> : null}
      </div>
      <BrainResponseSectionHeader
       title={sanitizeCreatorFacingBrainCopy(response.headline)}
