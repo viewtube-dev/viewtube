@@ -63,6 +63,20 @@ describe("BrainRuntimePanel", () => {
        kind: "asset",
        status: "complete",
        intent: "content_generation",
+       taskProfileId: "creator_asset_draft",
+       channelId: "channel-1",
+       generationPath: "model",
+       fallbackReason: null,
+       modelProvider: "google-genai",
+       modelRequested: "gemini-2.5-pro",
+       modelIdentityStatus: "served_known",
+       capabilities: ["content-generation"],
+       sectionsIncluded: ["system_prompt", "channel_evidence"],
+       sectionsDropped: ["recent_conversation"],
+       projectId: "project-2",
+       contentBuildId: "cb:project:project-2",
+       validationReasons: [],
+       failureReason: null,
        capabilityCount: 1,
        evidenceReturned: 2,
        evidenceMissing: 0,
@@ -167,6 +181,9 @@ describe("BrainRuntimePanel", () => {
   expect(html).toContain("Generation")
   expect(html).toContain("Receipt")
   expect(html).toContain("Brain Trace")
+  expect(html).toContain("How this answer was produced")
+  expect(html).toContain("creator_asset_draft")
+  expect(html).toContain("Context omitted / blocked")
   expect(html).toContain("Austerlitz package")
   expect(html).toContain("Video Publisher")
   expect(html).toContain("Gemini 2.5 Pro")
