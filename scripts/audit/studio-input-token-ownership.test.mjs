@@ -18,7 +18,7 @@ test("plain Studio input geometry consumes the generated size tokens", () => {
     "--vt-studio-compact-stroke: 2px",
     "--vt-studio-compact-radius: 4px",
     "--vt-studio-compact-font-size: 24px",
-    "--vt-studio-micro-height: 14px",
+    "--vt-studio-micro-height: 12px",
     "--vt-studio-micro-stroke: 1px",
     "--vt-studio-micro-radius: 2px",
     "--vt-studio-micro-font-size: 10px",
@@ -76,4 +76,29 @@ test("the new regression test is wired into the normal Studio controls test comm
   const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
   assert.equal(packageJson.scripts["test:studio-input-token-ownership"], "node --test scripts/audit/studio-input-token-ownership.test.mjs");
   assert.ok(packageJson.scripts["test:studio-controls"].includes("npm run test:studio-input-token-ownership"));
+});
+
+
+test("Studio control CSS has one entry owner and focus remains the final application import", () => {
+  const entry = readFileSync("src/styles/studio-control-entry.css", "utf8");
+  const main = readFileSync("src/main.tsx", "utf8");
+  const studioIndex = readFileSync("src/studio-ui/index.ts", "utf8");
+
+  for (const stylesheet of [
+    "studio-control-system.css",
+    "studio-control-vars.generated.css",
+    "studio-control-core.css",
+    "studio-control-split.css",
+    "studio-control-fields.css",
+    "studio-control-motion.css",
+    "studio-field-parity.css",
+  ]) assert.ok(entry.includes(`@import "./${stylesheet}"`), `entry must own ${stylesheet}`);
+
+  assert.doesNotMatch(entry, /@import\s+["']\.\/studio-control-focus\.css["']/,
+    "focus is intentionally loaded once, after App's component styles");
+  assert.match(main, /import\s+["']\.\/styles\/studio-control-entry\.css["']/);
+  assert.match(main, /import\s+App\s+from\s+["']\.\/App\.tsx["'][\s\S]*?import\s+["']\.\/styles\/studio-control-focus\.css["']/);
+  assert.doesNotMatch(main, /import\s+["']\.\/styles\/studio-control-(?:system|vars\.generated|core|split|fields|motion)\.css["']/);
+  assert.doesNotMatch(studioIndex, /studio-control-entry\.css/,
+    "library module exports primitives; application root owns the global stylesheet entry");
 });
