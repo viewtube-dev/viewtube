@@ -1,13 +1,8 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
-// Keep the existing shared controls available to other primitives, then load the
-// isolated plain text-input foundation last so its native input sizing wins.
-import './styles/studio-control-system.css'
-import './styles/studio-control-vars.generated.css'
-import './styles/studio-control-core.css'
-import './styles/studio-control-split.css'
-import './styles/studio-control-fields.css'
-import './styles/studio-control-motion.css'
+// The application root is the sole owner of the canonical Studio control CSS bundle.
+import './styles/studio-control-entry.css'
+import './styles/studio-text-input.css'
 import './styles/studio-text-input.css'
 import './styles/studio-dropdown-geometry.css'
 import './styles/studio-upload-geometry.css'
