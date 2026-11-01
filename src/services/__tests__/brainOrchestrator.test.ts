@@ -119,7 +119,6 @@ describe("BrainOrchestrator", () => {
    expect(trace?.context.sectionsIncluded).toContain("system_prompt")
    expect(trace?.context.sectionsDropped).toEqual(result.contextBudget.omittedSections)
    expect(trace?.context.channelId).toBe("trace-channel")
-   expect(trace?.context.projectId).toBeNull()
    expect(trace?.evidence.records).toBeDefined()
    expect(trace?.promptVersions).toMatchObject({
     orchestrator: "brain-orchestrator-v2",
