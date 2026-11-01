@@ -51,6 +51,7 @@ describe("resolveBrainModelInputSnapshot", () => {
   userText: "original question",
   evidenceRecords: [{ id: "analytics-1", value: 42 }],
   creatorAnswerEvidenceRecords: [{ id: "creator-answer-1", value: "goal" }],
+  contextBudget: { includedSections: ["system_prompt", "channel_evidence"], requestedSections: ["channel_evidence"], omittedSections: ["recent_conversation"], estimatedInputTokens: 320 },
  }
 
  it("restores the complete original model-visible snapshot for saved-evidence generation-only retries", () => {
@@ -61,6 +62,7 @@ describe("resolveBrainModelInputSnapshot", () => {
    continuity: "original_input_restored",
    saved,
   })).toEqual(saved)
+  expect(resolveBrainModelInputSnapshot({ retryTurn: true, generationOnly: true, mode: "saved", continuity: "original_input_restored", saved })?.contextBudget).toMatchObject({ includedSections: ["system_prompt", "channel_evidence"], requestedSections: ["channel_evidence"], omittedSections: ["recent_conversation"] })
  })
 
  it("does not restore saved model input for ordinary generation", () => {
