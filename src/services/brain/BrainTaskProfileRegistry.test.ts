@@ -10,8 +10,11 @@ describe("Brain task-profile routing matrix", () => {
   { label: "creator asset generation", text: "Draft a pinned comment for my latest video", id: "creator_asset_draft", intent: "content_generation", mode: "creator_asset_draft", assetKind: "pinned_comment" },
  ] as const
 
- it.each(cases)("routes $label to its explicit task profile", ({ text, id, intent, mode, label: _label, ...extra }) => {
-  const profile = resolveBrainTaskProfile(text)
-  expect(profile).toMatchObject({ id, intent, answerMode: mode, ...extra })
+ it.each(cases)("routes $label to its explicit task profile", (testCase) => {
+  const profile = resolveBrainTaskProfile(testCase.text)
+  expect(profile.id).toBe(testCase.id)
+  expect(profile.intent).toBe(testCase.intent)
+  expect(profile.answerMode).toBe(testCase.mode)
+  if ("assetKind" in testCase) expect(profile.assetKind).toBe(testCase.assetKind)
  })
 })
