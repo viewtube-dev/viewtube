@@ -34,8 +34,18 @@ export const StudioCalendarEventChip: React.FC<StudioCalendarEventChipProps> = (
     data-event-kind={kind}
     data-event-status={status}
     data-calendar-size={sizeVariant}
+    data-selected={selected ? "true" : undefined}
   >
-    {onRemove ? (
+    {sizeVariant === "mini" ? (
+      <>
+        {onClick ? (
+          <button type="button" className="vt-studio-calendar-event-chip__mini-label" aria-label={label} onClick={onClick}>{label}</button>
+        ) : (
+          <span className="vt-studio-calendar-event-chip__mini-label">{label}</span>
+        )}
+        {onRemove ? <button type="button" className="vt-studio-calendar-event-chip__mini-remove" aria-label={`Remove ${label}`} onClick={onRemove}>×</button> : null}
+      </>
+    ) : onRemove ? (
       <StudioCloseableBadge label={label} onClose={onRemove} entering={false} className="vt-studio-calendar-event-chip__removable" />
     ) : (
       <StudioSpectrumTag
