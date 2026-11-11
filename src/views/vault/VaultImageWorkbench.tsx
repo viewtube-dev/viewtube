@@ -412,20 +412,6 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
           <StudioSquareIconButton sizeVariant="compact" iconPreset="refresh" label="Reset resize dimensions" aria-label="Reset resize dimensions to original" title="Reset resize dimensions to original" onClick={() => patchTransform({ resizeWidth: null, resizeHeight: null })} disabled={busy} />
         </div>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-2">
-          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Rotate
-            <SubToolboxSelect id="vault-image-rotation" value={String(transform.rotation)} onChange={(event) => patchTransform({ rotation: Number(event.target.value) })}>
-              <option value="0">0°</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option>
-            </SubToolboxSelect>
-          </label>
-          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Output format
-            <SubToolboxSelect id="vault-image-format" value={transform.outputFormat} onChange={(event) => patchTransform({ outputFormat: event.target.value as VaultImageOutputFormat })}>
-              <option value="image/png">PNG · lossless</option><option value="image/jpeg">JPEG · compressed</option><option value="image/webp">WebP · compact</option>
-            </SubToolboxSelect>
-          </label>
-        </div>
         <div className="flex flex-wrap gap-2">
           <SubToolboxInnerActionButton label={busy ? "Processing…" : "Apply & Preview"} iconName="image" tone="cyan" onClick={() => void apply()} disabled={busy} />
           <SubToolboxInnerActionButton label="Extract Palette" iconName="palette" tone="purple" onClick={() => void extractPalette()} disabled={busy} />
