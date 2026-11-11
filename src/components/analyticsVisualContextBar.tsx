@@ -208,7 +208,7 @@ export const AnalyticsActiveStats: React.FC<{
           className="vt-analytics-active-stat h-full flex-none"
           style={statSplitButtonStyle(item, darkStats, resolvedTone, label)}
         >
-          <span className="vt-analytics-active-stat-copy flex h-full min-w-0 items-center justify-between gap-1 px-1 py-0 leading-none">
+          <span className="vt-analytics-active-stat-copy flex h-full min-w-0 items-center justify-between gap-1 px-0 py-0 leading-none">
             <span className={`vt-analytics-active-stat-label inline-flex min-w-0 items-center text-[10px] font-[1000] uppercase tracking-[0] ${item.labelClassName ?? "whitespace-nowrap"}`} style={{ color: item.color ?? (darkStats ? "#F3F4F6" : "#000000") }}>
               {normalizeAnalyticsStatLabel(label)}
             </span>
