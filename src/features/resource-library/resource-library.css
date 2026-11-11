@@ -186,7 +186,7 @@
 .vt-resource-card-meta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   min-width: 0;
 }
@@ -199,6 +199,9 @@
   font-weight: 1000;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .vt-resource-complete-tag {
