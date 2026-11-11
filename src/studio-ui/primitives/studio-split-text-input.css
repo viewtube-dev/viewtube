@@ -2,7 +2,7 @@
  * StudioSplitTextInput — single perimeter + text clear of rails
  * -------------------------------------------------------------
  * Shell (badge) owns the only black outer border + rail dividers.
- * Nested input: border 0; one primary inset via box-shadow.
+ * Nested input: primary border is painted inside its grid cell; no shadow layer.
  * Grid columns must stay rail | label so text never starts under the icon.
  */
 
