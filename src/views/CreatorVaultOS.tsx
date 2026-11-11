@@ -79,7 +79,7 @@ import {
  updateVaultTask,
 } from "../services/vaultTaskCenter"
 import { resolveVaultSelection } from "../services/vaultSelection"
-import { isVaultAssetProtected } from "../services/vaultMutationPolicy"
+import { canMutateVaultAsset, isVaultAssetProtected } from "../services/vaultMutationPolicy"
 import { resolveVaultComparePair } from "../services/vaultCompare"
 import {
  createVaultSmartCollection,
@@ -598,23 +598,25 @@ const CreatorVaultOS: React.FC = () => {
     ? asset.kind
     : "document"
   ))
-  const protectedSelection = selectedRecords.some((asset) => isVaultAssetProtected(asset))
-  /* lifecycle state is evaluated independently from account/workspace authorization */
-  const allSelectedTrashed = selectedRecords.length > 0 && selectedRecords.every((asset) => (
-   Boolean(asset.metadata?.trashedAt) || String(asset.metadata?.lifecycle || "").toUpperCase() === "TRASHED"
-  ))
-  const anySelectedTrashed = selectedRecords.some((asset) => (
-   Boolean(asset.metadata?.trashedAt) || String(asset.metadata?.lifecycle || "").toUpperCase() === "TRASHED"
-  ))
+  /* Local lifecycle policy drives UI eligibility; server/account authorization remains separate. */
+  const canArchiveSelection = selectedRecords.length > 0
+   && selectedRecords.every((asset) => canMutateVaultAsset(asset, "archive"))
+  const canDeleteSelection = selectedRecords.length > 0
+   && selectedRecords.every((asset) => canMutateVaultAsset(asset, "permanent-delete"))
+  const canEditSelectedMetadata = selectedRecords.length === 1
+   && canMutateVaultAsset(selectedRecords[0], "metadata-edit")
+  /* The current handoff handler accepts one selected asset and requires a registered compatible target. */
+  const canSendSelectedAsset = selectedRecords.length === 1
+   && getVaultAssetToolTargets(selectedRecords[0].kind).length > 0
   return resolveVaultMediaCapabilities({
    kinds,
    videoProcessorAvailable: false,
    audioProcessorAvailable: false,
    eligibility: {
-    archive: selectedRecords.length > 0 && !protectedSelection && !anySelectedTrashed,
-    delete: allSelectedTrashed && !protectedSelection,
-    metadataEdit: selectedRecords.length === 1 && !anySelectedTrashed,
-    sendTo: selectedRecords.length > 0,
+    archive: canArchiveSelection,
+    delete: canDeleteSelection,
+    metadataEdit: canEditSelectedMetadata,
+    sendTo: canSendSelectedAsset,
    },
   })
  }, [allAssets, selectedAssetIds])
