@@ -67,7 +67,7 @@ import {
 } from "../../studio-ui/primitives/StudioControls"
 import { StudioDoubleSplitWordCounter } from "../../studio-ui/primitives/StudioValueToggles"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
-import { StudioCalendarEventChip, StudioCalendarMediaRail } from "../../studio-ui/primitives/StudioCalendarPrimitives"
+import { StudioCalendarEventChip, StudioCalendarMultiDayBar, StudioCalendarThumbnailEventChip, StudioCalendarMediaRail } from "../../studio-ui/primitives/StudioCalendarPrimitives"
 import { StudioDropdown } from "../../studio-ui/primitives/StudioDropdown"
 import { StudioInterModule, StudioTwoLineInterModule } from "../../studio-ui/primitives/StudioInterModule"
 import { StudioResponseMetaRow } from "../../studio-ui/primitives/StudioResponseMetaRow"
@@ -1640,12 +1640,14 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
         </div>
       </div>
     </Family>
-      <Family title="Calendar Event & Media Rails · Standard Representatives" nonDefaultSettings={[
+      <Family title="Calendar Event Chips & Multi-day Bars · Mini Representatives" nonDefaultSettings={[
         "Each specimen below renders the production calendar primitive itself; the component root carries its library identity.",
-        "Event chips cover all five semantic kinds, scheduled and in-progress states, selected state, and the canonical removable-badge path.",
+        "Mini event chips cover all five semantic kinds, status, selected state, and the canonical removable-badge path.",
+        "Mini multi-day bars show single, start, middle, and end segments plus selected and channel-wide states.",
+        "Mini thumbnail event chips use a left 16:9 image segment with a divider and text/status rail.",
         "Media rails cover both 16:9 landscape and 9:16 portrait ratios across left, right, and double rail arrangements.",
         "Calendar state and publish dates remain owned by Projects; these are presentation primitives only.",
-      ]} provenance={<Provenance primitive="StudioCalendarEventChip · StudioCalendarMediaRail" tsx="src/studio-ui/primitives/StudioCalendarPrimitives.tsx" css="src/studio-ui/primitives/studio-calendar-primitives.css" tokens="Semantic primary/secondary colors · global Studio stroke/radius/spacing · ratio-based media geometry" imports={["src/studio-ui/primitives/StudioCalendarPrimitives.tsx", "src/studio-ui/primitives/studio-calendar-primitives.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
+      ]} provenance={<Provenance primitive="StudioCalendarEventChip · StudioCalendarMultiDayBar · StudioCalendarThumbnailEventChip · StudioCalendarMediaRail" tsx="src/studio-ui/primitives/StudioCalendarPrimitives.tsx" css="src/studio-ui/primitives/studio-calendar-primitives.css" tokens="Semantic primary/secondary colors · global Studio stroke/radius/spacing · ratio-based media geometry" imports={["src/studio-ui/primitives/StudioCalendarPrimitives.tsx", "src/studio-ui/primitives/studio-calendar-primitives.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarEventChip">
           <span>EVENT CHIPS · ALL SEMANTIC KINDS + REAL STATUS STATES</span>
           <div className="flex flex-wrap items-center gap-2">
@@ -1655,6 +1657,33 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
             <StudioCalendarEventChip label="CREATOR REMINDER" kind="reminder" status="open" />
             <StudioCalendarEventChip label="SPONSOR DEADLINE" kind="deadline" status="due soon" />
             <StudioCalendarEventChip label="REMOVABLE EVENT" kind="reminder" onRemove={() => undefined} />
+          </div>
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarEventChip">
+          <span>MINI EVENT CHIPS · 20PX BRACKET</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <StudioCalendarEventChip label="PUBLISH" kind="publish" status="scheduled" sizeVariant="mini" selected />
+            <StudioCalendarEventChip label="TASK" kind="task" status="in progress" sizeVariant="mini" />
+            <StudioCalendarEventChip label="MILESTONE" kind="milestone" status="upcoming" sizeVariant="mini" />
+            <StudioCalendarEventChip label="REMINDER" kind="reminder" sizeVariant="mini" />
+            <StudioCalendarEventChip label="DEADLINE" kind="deadline" status="due soon" sizeVariant="mini" />
+          </div>
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarMultiDayBar">
+          <span>MINI MULTI-DAY BAR · SINGLE / START / MIDDLE / END</span>
+          <div className="grid grid-cols-1 gap-1">
+            <StudioCalendarMultiDayBar label="SINGLE-DAY EVENT" segment="single" kind="publish" status="ready" />
+            <StudioCalendarMultiDayBar label="WEEK ONE · START" segment="start" kind="project" />
+            <StudioCalendarMultiDayBar label="WEEK TWO · MIDDLE" segment="middle" kind="project" />
+            <StudioCalendarMultiDayBar label="WEEK THREE · END" segment="end" kind="project" status="in progress" />
+            <StudioCalendarMultiDayBar label="CHANNEL-WIDE CAMPAIGN" segment="single" kind="milestone" channelWide />
+          </div>
+        </div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarThumbnailEventChip">
+          <span>MINI THUMBNAIL EVENT CHIP · LEFT 16:9 SPLIT</span>
+          <div className="grid grid-cols-1 gap-1">
+            <StudioCalendarThumbnailEventChip label="NEW EPISODE" kind="publish" status="scheduled" />
+            <StudioCalendarThumbnailEventChip label="THUMBNAIL READY" kind="task" status="approved" />
           </div>
         </div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCalendarMediaRail">
