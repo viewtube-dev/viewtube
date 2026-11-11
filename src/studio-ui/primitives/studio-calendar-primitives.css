@@ -164,6 +164,13 @@ button.vt-studio-calendar-thumbnail-event-chip {
   min-width: 0;
   padding: 0 3px;
 }
+.vt-studio-calendar-event-chip__mini-label:focus-visible,
+.vt-studio-calendar-event-chip__mini-remove:focus-visible,
+.vt-studio-calendar-multi-day-bar:focus-visible,
+.vt-studio-calendar-thumbnail-event-chip:focus-visible {
+  outline: var(--vt-studio-mini-focus-outline-width, 0.975px) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: var(--vt-studio-focus-outline-offset, 0px);
+}
 .vt-studio-calendar-media-rail {
   display: grid;
   box-sizing: border-box;
