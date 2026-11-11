@@ -1007,3 +1007,55 @@ describe("Studio Calendar primitives", () => {
     }
   });
 });
+
+
+describe("confirmed primitive catalog coverage corrections", () => {
+  it("represents SideCounter with the right-side production primitive at all five sizes", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf("const ConfirmedStudioSideCounterFamily");
+    const end = source.indexOf("const ConfirmedStudioSideTextCounterFamily", start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    expect(family).toContain('data-vt-library-component="StudioSideCounter"');
+    expect(family).toContain('primitive="StudioSideCounter"');
+    expect(family).toContain('<StudioSideCounter');
+    expect(family).not.toContain('<StudioLeftCounter');
+    for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+      expect(family).toContain(`size="${size}"`);
+    }
+  });
+
+  it("shows editable SideTextCounter specimens at every canonical size", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf("const ConfirmedStudioSideTextCounterFamily");
+    const end = source.indexOf("const ConfirmedStudioLeftWordCounterFamily", start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+      expect(family).toContain(`size="${size}"`);
+    }
+  });
+
+  it("shows five joined square actions with a selected V3 specimen at both supported group sizes", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf('title="Square Icon Button Groups');
+    const end = source.indexOf('title="Top Split Module', start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    expect((family.match(/<StudioSquareIconButton\b/g) ?? []).length).toBe(10);
+    expect((family.match(/variant="v3"/g) ?? []).length).toBe(10);
+    expect((family.match(/defaultSelected=\{true\}/g) ?? []).length).toBe(2);
+    expect(family).toContain('sizeVariant="standard"');
+    expect(family).toContain('sizeVariant="compact"');
+  });
+
+  it("documents the corrected five-tier border and radius ladder", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(source).toContain("3px / 3px / 2px / 1.5px / 1px borders");
+    expect(source).toContain("6px / 6px / 4px / 3px / 2px radii");
+    expect(source).not.toContain("1.5px / 1.5px borders");
+  });
+});
