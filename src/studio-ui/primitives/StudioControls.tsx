@@ -28,10 +28,11 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
   vaultSpectrumTag: {
     owner: "VaultAssetModule / StudioSpectrumTag",
     globalRuleException: true,
-    height: 15,
-    borderWidth: 2,
-    radius: 4,
-    fontSize: 8,
+    height: "15px default / 20px expanded",
+    borderWidth: "2px default / 8px÷3 expanded",
+    radius: "4px default / 16px÷3 expanded",
+    fontSize: "8px default / 32px÷3 expanded",
+    sizeVariants: { "15px": "donor-exact default geometry", "20px": "all geometry and typography scaled by 4/3" },
     fontWeight: 900,
     letterSpacing: "0.3px",
     fill: "alphabetical spectrum color mixed at 35% with white",
@@ -1980,6 +1981,8 @@ export interface StudioSpectrumTagProps {
   className?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   ariaLabel?: string
+  /** 20px is a proportional 4/3 expansion of the donor-exact 15px tag. */
+  size?: "15px" | "20px"
 }
 
 /**
@@ -1994,17 +1997,19 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   className,
   onClick,
   ariaLabel,
+  size = "15px",
 }) => {
   const normalized = label.trim().toUpperCase()
   const identity = (spectrumKey ?? label).trim().toUpperCase()
   const color = getAlphabeticalSpectrumColor(identity)
-  const classes = ["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")
+  const classes = ["vt-studio-spectrum-tag", size === "20px" && "is-20px", selected && "is-selected", className].filter(Boolean).join(" ")
   const style = { ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties
   if (!onClick) {
     return (
       <span
         className={classes}
         data-vt-studio-exception="vault-spectrum-tag"
+        data-size={size}
         data-tag={identity}
         style={style}
       >
@@ -2017,6 +2022,7 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
       type="button"
       className={classes}
       data-vt-studio-exception="vault-spectrum-tag"
+      data-size={size}
       data-tag={identity}
       aria-label={ariaLabel ?? normalized}
       aria-pressed={selected}
