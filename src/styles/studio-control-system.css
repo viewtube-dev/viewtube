@@ -3669,9 +3669,11 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   transform-origin: center;
 }
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg { width: 24px; height: 24px; stroke-width: 3; }
-.vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__actions button svg { width: 30px; height: 30px; stroke-width: 3; }
+.vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__actions button svg,
+.vt-studio-double-split-slider.is-counter-controls[data-size="compact"] .vt-studio-side-counter__actions button svg { width: 30px; height: 30px; stroke-width: 3; }
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 12px; height: 12px; stroke-width: 2.25; }
-.vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 2.25; }
+.vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg,
+.vt-studio-double-split-slider.is-counter-controls[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 2.25; }
 .vt-studio-counter__button:active svg,
 .vt-studio-side-counter__actions button:active svg { animation: vt-studio-counter-pop 180ms cubic-bezier(.2,.8,.2,1); }
 .vt-studio-counter__button.is-holding svg,
