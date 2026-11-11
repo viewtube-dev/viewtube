@@ -2293,7 +2293,7 @@ const CreatorVaultOS: React.FC = () => {
       {selectedAssetIds.length && assetOperationsMode === "tools" ? (
        <section aria-label="Send to ViewTube" className="rounded-lg border-[3px] border-current p-3">
         <div className="mb-2 text-xs font-black uppercase">Send to ViewTube…</div>
-        {selectedAsset && selectedToolTargets.length ? (
+        {selectedAssetIds.length === 1 && selectedAsset && selectedToolTargets.length ? (
          <div className="flex flex-wrap gap-2">
           {selectedToolTargets.map((target) => (
            <SubToolboxInnerActionButton key={target.id} label={target.label} iconName="link" tone="blue" onClick={() => sendSelectedAssetToTool(target.id)} />
