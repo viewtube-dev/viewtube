@@ -153,13 +153,11 @@ const analyticsMetricIconKey = (label: string): string => {
   return "analytics"
 }
 
-/** Reserve the split rail plus the widest supported label/value combination. */
+/** Preserve the previous stat-card width contract and reserve one square split rail. */
 const statSplitReservedWidth = (item: AnalyticsVisualStat, label: string): number => {
-  const labels = [label, ...(item.labelWidthValues ?? [])]
-  const values = [item.value, ...(item.valueWidthValues ?? [])]
-  const widestLabel = Math.max(...labels.map(statTextWidth))
-  const widestValue = Math.max(...values.map(statTextWidth))
-  return Math.max(item.minWidth ?? (item.compact ? 68 : 76), widestLabel + widestValue + 32)
+  const candidates = [label, item.value, ...(item.labelWidthValues ?? []), ...(item.valueWidthValues ?? [])]
+  const textWidth = Math.max(...candidates.map(statTextWidth))
+  return Math.max(item.minWidth ?? (item.compact ? 68 : 76), textWidth) + 28
 }
 
 const statSplitButtonStyle = (
@@ -208,8 +206,8 @@ export const AnalyticsActiveStats: React.FC<{
           className="vt-analytics-active-stat h-full flex-none"
           style={statSplitButtonStyle(item, darkStats, resolvedTone, label)}
         >
-          <span className="vt-analytics-active-stat-copy flex h-full min-w-0 items-center justify-between gap-1 px-0 py-0 leading-none">
-            <span className={`vt-analytics-active-stat-label inline-flex min-w-0 items-center text-[10px] font-[1000] uppercase tracking-[0] ${item.labelClassName ?? "whitespace-nowrap"}`} style={{ color: item.color ?? (darkStats ? "#F3F4F6" : "#000000") }}>
+          <span className="vt-analytics-active-stat-copy flex h-full min-w-0 flex-col items-start justify-center gap-0 px-0 py-0 leading-none">
+            <span className={`vt-analytics-active-stat-label inline-flex min-w-0 items-center text-[9px] font-[1000] uppercase tracking-[0] ${item.labelClassName ?? "whitespace-nowrap"}`} style={{ color: item.color ?? (darkStats ? "#F3F4F6" : "#000000") }}>
               {normalizeAnalyticsStatLabel(label)}
             </span>
             <strong className="inline-flex flex-none items-center whitespace-nowrap px-0 text-[13px] font-[1000] leading-none tracking-[0]" style={{ color: valueColor }}>
