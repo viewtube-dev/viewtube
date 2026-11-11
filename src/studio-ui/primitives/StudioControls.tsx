@@ -2439,6 +2439,96 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
 };
 StudioSideCounter.displayName = "StudioSideCounter";
 
+/** Editable text field with the canonical side-counter's stacked right action rail. */
+export interface StudioSideTextCounterProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size" | "value" | "defaultValue" | "onChange" | "type" | "min" | "max" | "step" | "className" | "style"
+> {
+  value: string | number;
+  onValueChange: (value: string) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: StudioControlSize;
+  disabled?: boolean;
+  ariaLabel?: string;
+  className?: string;
+  inputClassName?: string;
+  inputStyle?: React.CSSProperties;
+}
+
+export const StudioSideTextCounter = React.forwardRef<HTMLInputElement, StudioSideTextCounterProps>(({
+  value, onValueChange, min = 0, max = 100, step = 1,
+  size = "standard", disabled = false, ariaLabel = "Value",
+  className, inputClassName, inputStyle, ...inputProps
+}, ref) => {
+  const interactionFocus = useStudioInteractionFocus();
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const textValue = value == null ? "" : String(value);
+  const parsedValue = textValue.trim() === "" ? 0 : Number(textValue);
+  const current = Number.isFinite(parsedValue) ? parsedValue : 0;
+  const validBounds = Number.isFinite(min) && Number.isFinite(max) && min <= max;
+  const currentRef = React.useRef(current);
+  currentRef.current = current;
+  const adjust = React.useCallback((direction: -1 | 1) => {
+    const base = currentRef.current;
+    const precision = Math.min(12, Math.max(
+      String(base).split(".")[1]?.length ?? 0,
+      String(safeStep).split(".")[1]?.length ?? 0,
+    ));
+    const next = Number((base + direction * safeStep).toFixed(precision));
+    onValueChange(String(Math.min(max, Math.max(min, next))));
+  }, [max, min, onValueChange, safeStep]);
+  const decrement = useStudioCounterHold(
+    -1, current, min, max, safeStep, adjust,
+    disabled || !validBounds || current <= min, interactionFocus,
+  );
+  const increment = useStudioCounterHold(
+    1, current, min, max, safeStep, adjust,
+    disabled || !validBounds || current >= max, interactionFocus,
+  );
+  return (
+    <StudioSplitShell
+      layout="right"
+      fieldSlot
+      sizeVariant={size}
+      className={studioClasses("vt-studio-side-counter", "vt-studio-side-text-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
+      railClassName="vt-studio-side-counter__rail"
+      rightRailContent={<span className="vt-studio-side-counter__actions">
+        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={event => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={event => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
+      </span>}
+      shellProps={{
+        "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined,
+        onPointerDownCapture: interactionFocus.start,
+        onPointerUpCapture: interactionFocus.end,
+        onPointerCancelCapture: interactionFocus.end,
+        role: "group",
+        "aria-label": ariaLabel,
+        "data-vt-studio-control-family": "counter",
+        "data-vt-studio-control-kind": "studio-side-text-counter",
+        "data-vt-library-component": "StudioSideTextCounter",
+      }}
+    >
+      <StudioTextInput
+        {...inputProps}
+        ref={ref}
+        type="text"
+        value={textValue}
+        onChange={event => onValueChange(event.currentTarget.value)}
+        aria-label={inputProps["aria-label"] ?? ariaLabel}
+        disabled={disabled}
+        inputMode={inputProps.inputMode ?? "text"}
+        sizeVariant={size}
+        className={["vt-studio-side-text-counter__input", inputClassName].filter(Boolean).join(" ")}
+        style={inputStyle}
+      />
+    </StudioSplitShell>
+  );
+});
+StudioSideTextCounter.displayName = "StudioSideTextCounter";
+
+
 export const StudioLeftCounter: React.FC<StudioLeftCounterProps> = ({
   value, onValueChange, min = 0, max = 100, step = 1,
   size = "standard", disabled = false, ariaLabel = "Value",
