@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { MemoryRouter } from "react-router-dom"
 import { describe, expect, it } from "vitest"
 import ResourceLibrary from "./ResourceLibrary"
+import { StudioSpectrumTag } from "../../studio-ui"
 
 describe("Resource Library production reader", () => {
   it("renders Resource Index rows as canonical split-left Studio buttons with inline category metadata", () => {
@@ -18,6 +19,16 @@ describe("Resource Library production reader", () => {
     expect(html).toContain("vt-resource-card-meta")
     expect(html).toContain("vt-resource-card-category")
     expect(html).toContain("YouTube Strategy")
+  })
+
+  it("uses the canonical Spectrum tag for completed document status", () => {
+    const html = renderToStaticMarkup(
+      <StudioSpectrumTag label="COMPLETED" spectrumKey="completed" className="vt-resource-complete-tag" />,
+    )
+
+    expect(html).toContain("COMPLETED")
+    expect(html).toContain("vt-resource-complete-tag")
+    expect(html).toContain('data-vt-studio-exception="vault-spectrum-tag"')
   })
 
   it("renders the creator-first recommendations guide through Toolbox document modules", () => {
