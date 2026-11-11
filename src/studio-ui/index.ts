@@ -72,6 +72,7 @@ export type {
   StudioLegendMultiDropdownProps,
   StudioLegendMultiDropdownOption,
   StudioCounterProps,
+  StudioSideTextCounterProps,
   StudioLeftCounterProps,
   StudioLeftWordCounterProps,
   StudioLeftWordSliderProps,
