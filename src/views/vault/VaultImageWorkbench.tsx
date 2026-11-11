@@ -346,13 +346,6 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
               <div className="pointer-events-none absolute border-2 border-dashed border-white shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" style={{ left: (crop.x / sourceDimensions.width * 100) + "%", top: (crop.y / sourceDimensions.height * 100) + "%", width: (crop.width / sourceDimensions.width * 100) + "%", height: (crop.height / sourceDimensions.height * 100) + "%" }} />
             </div>
           </div>
-        </div>
-        <div className="grid grid-cols-3 gap-2">
-          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            JPEG / WebP quality
-            <StudioSideTextCounter ariaLabel="JPEG / WebP quality" value={transform.quality} min={0.1} max={1} step={0.05} inputMode="decimal" onValueChange={(value) => patchTransform({ quality: value.trim() === "" ? DEFAULT_VAULT_IMAGE_TRANSFORM.quality : Number(value) })} />
-          </label>
-        </div>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {(["x", "y", "width", "height"] as const).map((key) => (
               <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase" key={key}>
