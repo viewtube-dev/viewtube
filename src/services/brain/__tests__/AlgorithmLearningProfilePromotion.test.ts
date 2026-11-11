@@ -199,7 +199,7 @@ describe("AlgorithmLearningProfilePromotion", () => {
    creatorApproved: true,
   })
   expect(result.status).toBe("invalid_candidate_evidence")
-  expect(result.evidenceResolution.missingIds).toContain("evidence-2")
+  expect(result.evidenceResolution?.missingIds ?? []).toContain("evidence-2")
   expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
  })
 
