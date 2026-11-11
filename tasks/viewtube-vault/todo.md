@@ -249,3 +249,9 @@ Remaining work stays tracked by RH-UX120–146:
 - [ ] RH-CAP205 Complete accessibility review for capability modes, disabled states, labels, focus and keyboard operation.
 
 **Phase 2 status:** registry/status foundation exists; end-to-end action mapping and verification remain open.
+
+
+### 2026-11-11 follow-on — transcript resolver integration
+- [x] Use the shared, unit-tested transcript video-ID resolver in the Vault Inspector.
+- [x] Preserve ContentBuild YouTube binding fallback and add `youtubeId` metadata alias coverage.
+- [ ] Run focused transcript and CreatorVaultOS Vitest suites on the exact 10-31 branch.
