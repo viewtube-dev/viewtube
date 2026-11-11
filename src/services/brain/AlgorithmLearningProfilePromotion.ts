@@ -52,6 +52,28 @@ export const promoteApprovedAlgorithmLearningToProfile = async (
  }
 
  const { candidate, sourceEvent, review } = row
+ const sourceEventIds = Array.isArray(candidate.sourceEventIds)
+  ? [...new Set(candidate.sourceEventIds.filter((id) => typeof id === "string" && id.trim().length > 0))]
+  : []
+ const evidenceIds = Array.isArray(candidate.evidenceIds)
+  ? [...new Set(candidate.evidenceIds.filter((id) => typeof id === "string" && id.trim().length > 0))]
+  : []
+ const candidateEventParents = Array.isArray(sourceEvent.parentEventIds) ? sourceEvent.parentEventIds : []
+ const hasCompleteLineage = candidateEventParents.length > 0
+  && sourceEventIds.length === candidate.sampleSize
+  && sourceEventIds.every((id) => candidateEventParents.includes(id))
+  && evidenceIds.length > 0
+  && candidate.sampleSize >= 3
+  && Number.isFinite(candidate.positiveRate)
+  && candidate.positiveRate >= 0.67
+  && candidate.positiveRate <= 1
+ if (candidate.channelId !== input.channelId || !hasCompleteLineage) {
+  return {
+   status: candidate.channelId !== input.channelId ? "channel_scope_mismatch" as const : "invalid_candidate_evidence" as const,
+   candidate,
+   claim: null,
+  }
+ }
  const scalarIdentity = (values?: string[]): string | null =>
   values?.length === 1 ? values[0] : null
  const priorPromotion = listAlgorithmIntelligenceEvents({
@@ -74,7 +96,7 @@ export const promoteApprovedAlgorithmLearningToProfile = async (
   summary: candidate.statement,
   detail: input.note || `Promoted from measured Algorithm Intelligence learning candidate ${candidate.id}.`,
   category: "channel_fact",
-  evidence: candidate.evidenceIds,
+  evidence: evidenceIds,
  })
 
  const event = recordAlgorithmIntelligenceEvent({
@@ -89,7 +111,7 @@ export const promoteApprovedAlgorithmLearningToProfile = async (
   outputRef: scalarIdentity(candidate.outputRefs),
   actionPacketId: scalarIdentity(candidate.actionPacketIds),
   parentEventIds: [sourceEvent.id, review?.eventId].filter(Boolean) as string[],
-  evidenceIds: candidate.evidenceIds,
+  evidenceIds,
   confidence: candidate.confidence,
   title: "Algorithm learning promoted to Channel Profile",
   summary: candidate.statement,
