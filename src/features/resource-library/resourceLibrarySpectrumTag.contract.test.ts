@@ -38,5 +38,7 @@ describe("Resource Library Spectrum Tag contract", () => {
     ]) {
       expect(catalog).toContain(`data-vt-library-component="${component}"`)
     }
+    expect(catalog).toContain("Calendar Multi-Day Bar · TIMELINE / 20PX")
+    expect(catalog).toContain("Calendar Thumbnail Event Chip · TIMELINE / 20PX")
   })
 })
