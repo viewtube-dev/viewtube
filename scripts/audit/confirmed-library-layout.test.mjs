@@ -507,18 +507,18 @@ test("StudioDropdown owns the simple variant without a duplicate primitive famil
 });
 
 test("StudioSideTextCounter composes the side-counter rail with the canonical editable Studio input", () => {
-  assert.match(controls, /export const StudioSideTextCounter\s*=\s*React\.forwardRef/);
-  assert.match(controls, /<StudioTextInput[\\s\\S]*?type="text"/);
-  assert.match(controls, /onChange=\\{event => onValueChange\\(event\\.currentTarget\\.value\\)\\}/);
-  assert.match(controls, /aria-label=\\{inputProps\\["aria-label"\\] \\?\\? ariaLabel\\}/);
+  assert.ok(controls.includes("export const StudioSideTextCounter = React.forwardRef"));
+  assert.ok(controls.includes("<StudioTextInput"));
+  assert.ok(controls.includes('type="text"'));
+  assert.ok(controls.includes("onChange={event => onValueChange(event.currentTarget.value)}"));
+  assert.ok(controls.includes('aria-label={inputProps["aria-label"] ?? ariaLabel}'));
+  assert.ok(controls.includes("onValueChange(String(Math.min(max, Math.max(min, next))))"));
   const textInput = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
   assert.ok(textInput.includes('data-vt-studio-field-kind="text-input"'));
-  assert.match(controls, /onValueChange\\(String\\(Math\\.min\\(max, Math\\.max\\(min, next\\)\\)\\)\\)/);
-  assert.match(controls, /StudioSideTextCounter/);
   const publicIndex = readFileSync("src/studio-ui/index.ts", "utf8");
   assert.ok(publicIndex.includes("StudioSideTextCounter"));
   const controlStyles = readFileSync("src/styles/studio-control-system.css", "utf8");
-  assert.match(controlStyles, /\.vt-studio-side-text-counter\s*>\s*\[data-vt-studio-split-field\]/);
+  assert.ok(controlStyles.includes(".vt-studio-side-text-counter > [data-vt-studio-split-field]"));
   assert.ok(catalog.includes('data-vt-library-component="StudioSideTextCounter"'));
   assert.ok(catalog.includes('aria-label="Standard side text counter specimen"'));
 });
