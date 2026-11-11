@@ -3482,7 +3482,7 @@ const CreatorVaultOS: React.FC = () => {
              <SubToolboxInnerActionButton label="Archive Asset" iconName="archive" tone="cyan" onClick={() => archiveAsset(selectedAsset)} />
              <SubToolboxInnerActionButton label="Move to Trash" iconName="x" tone="pink" onClick={() => trashAsset(selectedAsset)} />
             </>
-           )}}
+           )}
           </div>
          </div>
          <div>
