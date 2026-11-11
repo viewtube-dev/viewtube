@@ -561,28 +561,22 @@ const ConfirmedStudioDoubleSplitSliderFamily: React.FC = () => {
 }
 
 const ConfirmedStudioSideCounterFamily: React.FC = () => {
-  const [leftSupreme, setLeftSupreme] = React.useState(5)
-  const [leftStandard, setLeftStandard] = React.useState(5)
-  const [leftMini, setLeftMini] = React.useState(3)
-  const [leftCompact, setLeftCompact] = React.useState(3)
-  const [leftMicro, setLeftMicro] = React.useState(8)
+  const [values, setValues] = React.useState([5, 5, 3, 3, 8])
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const labels = ["60px SUPREME", "44px STANDARD", "28px COMPACT", "20px MINI", "12px MICRO"]
   return (
     <Family
       title="StudioSideCounter · Supreme + Standard + Compact + Mini + Micro" defaultOpen
       nonDefaultSettings={[
-        "Numeric display uses a 2:1 width ratio; the left action rail contains two cells.",
-        "Keeps only the canonical left-rail specimen that matches the confirmed lower example.",
-        "All size specimens constrain the numeric value to 0–100.",
+        "This is the right-rail numeric counter: increment/decrement actions sit on the right.",
+        "The value face and square action rail use the shared Studio split-shell geometry.",
+        "All five size specimens constrain the numeric value to 0–100.",
       ]}
-      provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · square action rail and 2:1 value region · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
+      provenance={<Provenance primitive="StudioSideCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · right square action rail · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
     >
       <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioSideCounter">
         <div className="vt-confirmed-counter-size-rows">
-          <div className="vt-confirmed-counter-size-row"><small>60px SUPREME</small><div className="vt-confirmed-counter-pair"><StudioLeftCounter value={leftSupreme} onValueChange={setLeftSupreme} size="supreme" min={0} max={100} ariaLabel="Supreme left counter" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>44px STANDARD</small><div className="vt-confirmed-counter-pair"><StudioLeftCounter value={leftStandard} onValueChange={setLeftStandard} size="standard" min={0} max={100} ariaLabel="Standard left counter" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>28px COMPACT</small><div className="vt-confirmed-counter-pair"><StudioLeftCounter value={leftCompact} onValueChange={setLeftCompact} size="compact" min={0} max={100} ariaLabel="Compact left counter" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>20px MINI</small><div className="vt-confirmed-counter-pair"><StudioLeftCounter value={leftMini} onValueChange={setLeftMini} size="mini" min={0} max={100} ariaLabel="Mini left counter" /></div></div>
-          <div className="vt-confirmed-counter-size-row"><small>12px MICRO</small><div className="vt-confirmed-counter-pair"><StudioLeftCounter value={leftMicro} onValueChange={setLeftMicro} size="micro" min={0} max={100} ariaLabel="Micro left counter" /></div></div>
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small><div className="vt-confirmed-counter-pair"><StudioSideCounter value={values[index]} onValueChange={next => setValues(current => current.map((value, item) => item === index ? next : value))} size={size} min={0} max={100} ariaLabel={size + " side counter"} /></div></div>)}
         </div>
       </div>
     </Family>
@@ -592,20 +586,23 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 
 
 const ConfirmedStudioSideTextCounterFamily: React.FC = () => {
-  const [value, setValue] = React.useState("36");
+  const [values, setValues] = React.useState(["36", "36", "36", "36", "36"])
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const labels = ["60px SUPREME", "44px STANDARD", "28px COMPACT", "20px MINI", "12px MICRO"]
   return (
     <Family
-      title="StudioSideTextCounter · Editable Text + Numeric Stepper"
+      title="StudioSideTextCounter · Editable Text + Numeric Stepper · Five Sizes"
       nonDefaultSettings={[
         "The value face is the canonical single-line StudioTextInput; users can type arbitrary text or numeric values.",
         "The stacked right rail increments and decrements numeric text using the shared counter hold-repeat behavior.",
-        "The input inherits the global Studio field border, inset stroke, typography, fill, caret, and focus contract.",
+        "All five canonical size tiers inherit the global field border, inset stroke, typography, fill, caret, and focus contract.",
       ]}
-      provenance={<Provenance primitive="StudioSideTextCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-fields.css" tokens="Global five-tier Studio input sizing · side-counter square action rail · 0–100 step range." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-fields.css"]} />}
+      provenance={<Provenance primitive="StudioSideTextCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-fields.css" tokens="60px / 44px / 28px / 20px / 12px · editable text face · right square counter rail." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-fields.css"]} />}
     >
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounter">
-        <span>EDITABLE TEXT + NUMERIC SIDE COUNTER · STANDARD</span>
-        <StudioSideTextCounter value={value} onValueChange={setValue} size="standard" min={0} max={100} step={1} ariaLabel="Standard side text counter specimen" placeholder="TYPE TEXT OR NUMBER" />
+        <div className="vt-confirmed-counter-size-rows">
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small><StudioSideTextCounter value={values[index]} onValueChange={next => setValues(current => current.map((value, item) => item === index ? next : value))} size={size} min={0} max={100} step={1} ariaLabel={size + " side text counter specimen"} placeholder="TYPE TEXT OR NUMBER" /></div>)}
+        </div>
       </div>
     </Family>
   )
@@ -1092,7 +1089,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
     <ConfirmedCatalogFamilyGroups>
     <details className="vt-confirmed-family vt-confirmed-defaults-combined" data-vt-confirmed-family="defaults">
       <summary className="vt-confirmed-defaults-heading" id="vt-confirmed-global-defaults-title">Global Defaults + Exceptions · Source Contract</summary>
-      <p className="vt-confirmed-defaults-summary">60px Supreme · 44px Standard · 28px Compact · 20px Mini · 12px Micro · 3px / 3px / 2px / 1.5px / 1.5px borders · 6px / 6px / 4px / 3px / 3px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
+      <p className="vt-confirmed-defaults-summary">60px Supreme · 44px Standard · 28px Compact · 20px Mini · 12px Micro · 3px / 3px / 2px / 1.5px / 1px borders · 6px / 6px / 4px / 3px / 2px radii · Inter 1000 uppercase with size-scaled text stroke · 4px standard gap · row-fill by default; data-width="content" opts into intrinsic width · single-line input 38px / 24px · textarea 18px / 14px</p>
       <p><a href="https://github.com/viewtube-dev/viewtube/blob/master/consolidated-feature-integration/docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md" target="_blank" rel="noreferrer">Global defaults, exception index, and certification rules ↗</a></p>
       <details className="vt-confirmed-defaults-details">
         <summary>Show defaults, effective CSS behavior, and exceptions</summary>
@@ -1269,26 +1266,30 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
       </div>
     </Family>
     <Family
-      title="Square Icon Button Groups · Standard + Compact"
+      title="Square Icon Button Groups · Five Joined Squares · Standard + Compact"
       nonDefaultSettings={[
-        "Groups are rendered by the canonical StudioSquareIconButtonGroup primitive and contain real StudioSquareIconButton children.",
-        "Joined group uses max-content width instead of stretching across the catalog row.",
-        "Compact is the dense-toolbar variant; Standard is for lower-density action rows.",
+        "Each group contains five joined square faces and retains intrinsic content width.",
+        "V3 is the primary-to-secondary selectable skin: four specimens begin in the primary state and one begins selected in secondary.",
+        "Standard is the default action row; Compact is the dense-toolbar variant. Both use the same five-square geometry.",
       ]}
-      provenance={<Provenance primitive="StudioSquareIconButtonGroup / StudioSquareIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · intrinsic content width · one shared shell border with joined square faces" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
+      provenance={<Provenance primitive="StudioSquareIconButtonGroup / StudioSquareIconButton" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px standard / 28px compact · five joined square faces · primary default / secondary selected · intrinsic content width" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/index.ts"]} />}
     >
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSquareIconButtonGroup" style={{ display: "grid", gap: 8, justifyItems: "start", minWidth: 0 }}>
-        <span>STANDARD · JOINED ICON ACTIONS</span>
-        <StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Standard joined icon actions">
-          <StudioSquareIconButton icon={<Home aria-hidden="true" />} label="Home" sizeVariant="standard" />
-          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Settings" sizeVariant="standard" />
-          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Enhance" sizeVariant="standard" />
+        <span>STANDARD · FIVE JOINED SQUARES · ONE SELECTED</span>
+        <StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Standard five-square joined icon actions">
+          <StudioSquareIconButton icon={<Home aria-hidden="true" />} label="Home" sizeVariant="standard" variant="v3" />
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Settings" sizeVariant="standard" variant="v3" />
+          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Enhance" sizeVariant="standard" variant="v3" defaultSelected />
+          <StudioSquareIconButton icon={<Check aria-hidden="true" />} label="Confirm" sizeVariant="standard" variant="v3" />
+          <StudioSquareIconButton icon={<Info aria-hidden="true" />} label="Information" sizeVariant="standard" variant="v3" />
         </StudioSquareIconButtonGroup>
-        <span>COMPACT · CONTENT-WIDTH RAIL</span>
-        <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Compact joined icon actions">
-          <StudioSquareIconButton icon={<Check aria-hidden="true" />} label="Helpful" sizeVariant="compact" />
-          <StudioSquareIconButton icon={<Info aria-hidden="true" />} label="Not useful" sizeVariant="compact" />
-          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="More options" sizeVariant="compact" />
+        <span>COMPACT · FIVE JOINED SQUARES · ONE SELECTED</span>
+        <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Compact five-square joined icon actions">
+          <StudioSquareIconButton icon={<Home aria-hidden="true" />} label="Home" sizeVariant="compact" variant="v3" />
+          <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Settings" sizeVariant="compact" variant="v3" />
+          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Enhance" sizeVariant="compact" variant="v3" defaultSelected />
+          <StudioSquareIconButton icon={<Check aria-hidden="true" />} label="Confirm" sizeVariant="compact" variant="v3" />
+          <StudioSquareIconButton icon={<Info aria-hidden="true" />} label="Information" sizeVariant="compact" variant="v3" />
         </StudioSquareIconButtonGroup>
       </div>
     </Family>
