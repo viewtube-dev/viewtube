@@ -1497,6 +1497,6 @@ describe("confirmed split badge rails and double-side toggle shell", () => {
 describe("StudioSideTextCounter single outer perimeter", () => {
   it("removes the input's black border while retaining its primary inset stroke", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
-    expect(css).toMatch(/\.vt-studio-side-text-counter \.vt-studio-text-input--simple\s*\{[^}]*border:\s*0\s*;[^}]*box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-field-primary/s);
+    expect(css).toMatch(/\.vt-studio-side-text-counter input\.vt-studio-text-input--simple\[data-vt-studio-control="true"\]\s*\{[^}]*border:\s*0\s*;[^}]*box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-field-primary/s);
   });
 });
