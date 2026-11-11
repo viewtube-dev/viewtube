@@ -1214,6 +1214,25 @@
         "tasks/system-convergence/EVIDENCE-INTELLIGENCE-AUDIT.md",
         "tasks/system-convergence/EVIDENCE-RECORD-DERIVED-SIGNAL-CONTRACT.md"
       ]
+    },
+    {
+      "id": "DOC-AUDIT-AI-BRAIN-PHASE2-3-20261111",
+      "path": "tasks/system-convergence/AI-BRAIN-PHASE-2-3-EXECUTION-2026-11-11.md",
+      "class": "AUDIT",
+      "status": "ACTIVE",
+      "concern": "brain-channel-knowledge-governed-learning-and-prompt-provenance-phase-2-3-execution",
+      "owner": "BrainRuntime + Channel Profile/Knowledge + Prompt System Authority",
+      "productionDate": "2026-11-11",
+      "lastEdited": "2026-11-11",
+      "lastAuditedMainSha": "a279e52e63e816c0409a02e2feb4807f20c56e4b",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/domains/BRAIN.md",
+        "docs/specifications/PROMPTS.md",
+        "docs/specifications/prompt-registry.json",
+        "tasks/p1-canonical-system-integration/plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/brain-continuity/plan.md"
+      ]
     }
   ],
   "legacyGlobalSources": [
