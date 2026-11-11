@@ -346,7 +346,9 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
               <div className="pointer-events-none absolute border-2 border-dashed border-white shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" style={{ left: (crop.x / sourceDimensions.width * 100) + "%", top: (crop.y / sourceDimensions.height * 100) + "%", width: (crop.width / sourceDimensions.width * 100) + "%", height: (crop.height / sourceDimensions.height * 100) + "%" }} />
             </div>
           </div>
-            <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             JPEG / WebP quality
             <StudioSideTextCounter ariaLabel="JPEG / WebP quality" value={transform.quality} min={0.1} max={1} step={0.05} inputMode="decimal" onValueChange={(value) => patchTransform({ quality: value.trim() === "" ? DEFAULT_VAULT_IMAGE_TRANSFORM.quality : Number(value) })} />
           </label>
@@ -405,7 +407,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
           </label>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-3 gap-2">
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Focal point X (%)
             <StudioSideTextCounter ariaLabel="Focal point X" value={focalPoint.x} min={0} max={100} step={1} inputMode="decimal" onValueChange={(value) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, x: Math.max(0, Math.min(100, value.trim() === "" ? 0 : Number(value))) })) }} />
@@ -414,7 +416,11 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
             Focal point Y (%)
             <StudioSideTextCounter ariaLabel="Focal point Y" value={focalPoint.y} min={0} max={100} step={1} inputMode="decimal" onValueChange={(value) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, y: Math.max(0, Math.min(100, value.trim() === "" ? 0 : Number(value))) })) }} />
           </label>
-          <div className="col-span-2 flex flex-wrap items-end gap-2">
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            JPEG / WebP quality
+            <StudioSideTextCounter ariaLabel="JPEG / WebP quality" value={transform.quality} min={0.1} max={1} step={0.05} inputMode="decimal" onValueChange={(value) => patchTransform({ quality: value.trim() === "" ? DEFAULT_VAULT_IMAGE_TRANSFORM.quality : Number(value) })} />
+          </label>
+          <div className="col-span-3 flex flex-wrap items-end gap-2">
             <SubToolboxInnerActionButton label="Thumbnail Preset" iconName="image" tone="orange" onClick={() => patchTransform({ resizeWidth: 1280, resizeHeight: 720, preserveAspectRatio: true })} disabled={busy} />
             <SubToolboxInnerActionButton label="Web Optimize" iconName="refresh" tone="green" onClick={() => patchTransform({ resizeWidth: 1920, resizeHeight: 1080, preserveAspectRatio: true, outputFormat: "image/webp", quality: 0.82 })} disabled={busy} />
           </div>
