@@ -20,5 +20,6 @@ describe("CreatorVaultOS Lane B organization contract", () => {
   expect(source).toContain('selectedAsset.metadata?.trashedAt')
   expect(source).toContain('selectedAsset.metadata?.archivedAt')
   expect(source).toContain('label="Archive Asset"')
+  expect(source).toContain("resolveVaultTranscriptVideoId({ asset, contentBuildVideoId })")
  })
 })
