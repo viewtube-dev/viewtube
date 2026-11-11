@@ -204,6 +204,10 @@
   text-overflow: ellipsis;
 }
 
+.vt-resource-card.is-active .vt-resource-card-category {
+  color: var(--vt-resource-pair-primary, var(--vt-spectrum-8));
+}
+
 .vt-resource-complete-tag {
   flex: 0 0 auto;
 }
