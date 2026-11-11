@@ -136,3 +136,13 @@ Phase 3/4 work has started with additional test coverage:
 - `c49a45688be2e3bd0effcb533fc898c2aafa362a` — cover the legacy `youtubeId` metadata alias in resolver tests.
 
 The page previously duplicated the resolver logic and omitted the `youtubeId` alias. The Inspector now delegates to the tested helper, checking associated ContentBuild bindings first and then asset metadata. This is a source-level integration change; the focused Vitest command remains unrun in this environment.
+
+
+### Additional continuation — capability eligibility alignment
+
+- `289461ff79a3ac2cbcf23e3797b9fe43910248e4` — add a capability resolver test for unavailable Send To handoffs.
+- `b8ab06f28fd4522b8fc319dc76a980ed4201d415` — align Inspector capability eligibility with the canonical local mutation policy and registered compatible handoff targets.
+- `de4188756941c2c299fa93bd0c631009145a9e02` — remove the now-obsolete protection helper import.
+- `a8a7d7b987d7fc3243e7290295926e0780bb99fd` — add Inspector source-contract assertions for archive/delete policy checks and the single-asset handoff target check.
+
+The previous Send To eligibility treated any non-empty selection as handoff-capable, while the actual handler accepts one selected asset and routes only to registered compatible targets. Eligibility now requires exactly one selected asset with at least one compatible target. Archive, permanent-delete and metadata-edit eligibility now call the shared local lifecycle policy. These checks remain UI eligibility only and do not replace account/workspace authorization. Focused tests, typecheck, lint, build and browser checks are still outstanding.
