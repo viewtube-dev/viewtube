@@ -153,3 +153,22 @@
     -webkit-text-stroke-color var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out;
 }
 /* Double-side toggle uses the same unmodified side-counter rails and action cells. */
+
+
+/* Double-split word-counter divider ownership (2026-11-11).
+   Keep one separator at each button/panel join: the center value panel paints
+   both edges, while the two outer action rails remain borderless. */
+.vt-studio-word-counter[data-vt-studio-control="true"] > [data-vt-studio-split-rail] {
+  border: 0;
+}
+.vt-studio-word-counter[data-vt-studio-control="true"] > [data-vt-studio-split-label] {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+.vt-confirmed-counter-pair > .vt-studio-value-toggle.vt-studio-word-counter {
+  box-sizing: border-box;
+  flex: 0 1 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
