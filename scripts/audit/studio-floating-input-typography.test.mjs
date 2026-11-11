@@ -10,7 +10,7 @@ const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "ut
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 
 // Mini typography follows the canonical 17.5px token, never the retired 16px value.
-assert.match(input, /17\\.5px Mini/);
+assert.match(input, /17\.5px Mini/);
 assert.doesNotMatch(input, /16px Mini/);
 
 // The foundation is exactly one native input primitive with no label branches.
