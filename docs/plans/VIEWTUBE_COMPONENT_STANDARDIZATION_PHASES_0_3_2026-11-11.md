@@ -32,6 +32,13 @@ This branch consolidates the calendar-specific recovery work with the first Reso
 | `feat/calendar-phases-0-3-studio-recovery-sync-2026-11-11` | Cleanly based on requested target; 10 commits ahead / 0 behind, including seven initial calendar commits plus three follow-up refinements | Source of calendar recovery. All seven changed paths and latest refinements were synchronized into this branch |
 | `feat/calendar-resource-analytics-consolidation-2026-11-11` | Created from the requested target and advanced with calendar recovery plus Resource Index and Analytics work | Single consolidated working branch for this delivery |
 
+### Current PR state — 2026-11-11
+
+- [PR #1245](https://github.com/viewtube-dev/viewtube/pull/1245) merged the 10-commit calendar recovery into the requested target.
+- [PR #1246](https://github.com/viewtube-dev/viewtube/pull/1246) merged the consolidated calendar + Resource Index + Analytics implementation into the requested target at head `bf4d224b53791f954a1e7c86606f169ce6dad9d8`.
+- The same working branch retains five follow-up commits after that merged head. [PR #1247](https://github.com/viewtube-dev/viewtube/pull/1247) carries only those four-file final refinements into the same target.
+- PR #1247 is draft and GitHub currently reports it mergeable/rebaseable; its provider checks remain blocked by the Vercel build-rate limit.
+
 ### Recovery notes
 
 - The old calendar feature branches are historical and far behind the requested target; their merged PR contributions are already represented in the target lineage.
