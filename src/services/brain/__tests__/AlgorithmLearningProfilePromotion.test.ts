@@ -83,6 +83,18 @@ describe("AlgorithmLearningProfilePromotion", () => {
   mocks.listApprovedAlgorithmLearningCandidates.mockClear()
   mocks.recordAlgorithmIntelligenceEvent.mockClear()
   mocks.listBrainTraces.mockClear()
+  mocks.listBrainTraces.mockReset()
+  mocks.listBrainTraces.mockReturnValue([{
+   id: "trace-1",
+   channelId: "channel-1",
+   evidence: {
+    returned: ["evidence-1", "evidence-2"],
+    records: [
+     { id: "evidence-1", owner: "analytics-canon", sourceRef: "analytics://snapshot/1", sourceSnapshotId: "snapshot-1", channelId: "channel-1", freshness: "fresh", epistemicState: "OBSERVED", provenance: { evidenceIds: ["source-1"] } },
+     { id: "evidence-2", owner: "youtube-read", sourceRef: "youtube://video/2", sourceSnapshotId: "snapshot-2", channelId: "channel-1", freshness: "fresh", epistemicState: "KNOWN", provenance: { evidenceIds: ["source-2"] } },
+    ],
+   },
+  }])
   mocks.listAlgorithmIntelligenceEvents.mockReset()
   mocks.listAlgorithmIntelligenceEvents.mockReturnValue([])
   mocks.shouldBrainLearnFromInteraction.mockReturnValue(true)
