@@ -262,3 +262,5 @@ Remaining work stays tracked by RH-UX120–146:
 - [x] Use canonical local lifecycle policy for archive, permanent-delete and metadata-edit eligibility.
 - [x] Add regression coverage for unavailable handoff status and Inspector policy/target wiring.
 - [ ] Execute focused capability and CreatorVaultOS Vitest suites, then typecheck, governance, lint and build.
+
+- [x] Prevent the Send to ViewTube panel from offering first-asset-only handoffs during multi-selection; keep batch metadata exports available.
