@@ -16,6 +16,7 @@ import {
   Workflow,
 } from "lucide-react"
 import { SubToolbox } from "../../components/Toolbox"
+import { StudioSpectrumTag } from "../../studio-ui"
 import type {
   ParsedResourceSection,
   ResourceLibraryEntry,
@@ -376,8 +377,12 @@ export const ResourceDocumentRenderer: React.FC<ResourceDocumentRendererProps> =
   return (
     <article className="vt-resource-document" data-resource-id={resource.id}>
       <header className="vt-resource-document-hero">
-        <div className="vt-resource-document-kicker">
-          {resource.category} · {resource.format.toUpperCase()} · {resource.status.toUpperCase()}
+        <div className="vt-resource-document-kicker" aria-label="Resource category, format, and publication status">
+          <StudioSpectrumTag label={resource.category} spectrumKey={resource.category} selected size="20px" />
+          <span aria-hidden="true">·</span>
+          <StudioSpectrumTag label={resource.format} spectrumKey={resource.format} selected size="20px" />
+          <span aria-hidden="true">·</span>
+          <StudioSpectrumTag label={resource.status} spectrumKey={resource.status} selected size="20px" />
         </div>
         <h1>{parsed.title}</h1>
         <p>{resource.description}</p>
@@ -389,7 +394,7 @@ export const ResourceDocumentRenderer: React.FC<ResourceDocumentRendererProps> =
         </div>
         <div className="vt-resource-tag-row">
           {resource.tags.slice(0, 8).map((tag) => (
-            <span key={tag}>{tag}</span>
+            <StudioSpectrumTag key={tag} label={tag} spectrumKey={tag} size="15px" />
           ))}
         </div>
       </header>
