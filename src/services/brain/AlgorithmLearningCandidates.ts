@@ -67,7 +67,14 @@ export const deriveAlgorithmLearningCandidates = (channelId: string): AlgorithmL
   const decisive = positives + negatives
   const positiveRate = decisive ? positives / decisive : 0
   const sampleSize = decisive
-  const status = decisive >= 3 && positiveRate >= .67 ? "candidate" as const : "insufficient_evidence" as const
+  // A measured outcome is not a usable learning sample unless it carries its own evidence refs.
+  // Never let an aggregate positive rate hide a decisive row with no supporting evidence.
+  const hasCompleteEvidence = decisiveRows.length === decisive && decisiveRows.every(({ event }) =>
+   Array.isArray(event.evidenceIds) && event.evidenceIds.some((id) => typeof id === "string" && id.trim().length > 0),
+  )
+  const status = decisive >= 3 && positiveRate >= .67 && hasCompleteEvidence
+   ? "candidate" as const
+   : "insufficient_evidence" as const
   const category = categoryFor(rows[0])
   const label = rows[0].primingStepId || rows[0].recommendationId || rows[0].sourceId || key
   return {
