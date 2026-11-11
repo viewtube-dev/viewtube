@@ -244,7 +244,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   max-height: 100%;
 }
 .vt-studio-dropdown-chevron.is-leading { border-left: 0; border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; display: flex; align-items: center; justify-content: flex-start; min-width: 0; height: 100%; padding: 0 10px; overflow: hidden; text-overflow: clip; white-space: nowrap; font-weight: var(--vt-studio-control-font-weight, 1000); font-size: var(--vt-studio-control-font-size, 38px); line-height: 1; }
+.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; display: flex; align-items: center; justify-content: center; min-width: 0; height: 100%; padding: 0 10px; overflow: hidden; text-overflow: clip; white-space: nowrap; font-weight: var(--vt-studio-control-font-weight, 1000); font-size: var(--vt-studio-control-font-size, 38px); line-height: 1; text-align: center; }
 .vt-studio-dropdown.is-split-left .vt-studio-dropdown-chevron.is-trailing { grid-column: 3; grid-row: 1; border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] { background: var(--vt-studio-control-secondary, var(--pair-b)); }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: var(--vt-studio-control-secondary, var(--pair-b)); }
@@ -282,8 +282,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  height: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
+  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+  min-height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
   align-items: center;
   margin-bottom: 3px;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
@@ -701,8 +701,9 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   position: relative; display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; min-width: 0;
   height: var(--vt-legend-height); min-height: var(--vt-legend-height);
   padding: 0 8px 0 12px; border: var(--vt-legend-stroke) solid #000;
-  border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000; 
-  cursor: pointer; font-size: 38px; font-weight: 1000; line-height: 1; letter-spacing: -.02em; text-transform: uppercase; transform: none; 
+  border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000;
+  cursor: pointer; font-size: var(--vt-studio-control-font-size, 38px); font-weight: var(--vt-studio-control-font-weight, 1000); line-height: 1; letter-spacing: -.02em; text-transform: uppercase; transform: none;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { font-size: 24px; }
 .vt-studio-legend-trigger:hover, .vt-studio-legend-trigger:focus, .vt-studio-legend-trigger:focus-visible, .vt-studio-legend-trigger:active {  transform: none;  }
@@ -1062,8 +1063,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 }
 .vt-studio-dropdown-option {
   box-sizing: border-box;
-  min-height: var(--vt-dropdown-height, 44px) !important;
-  height: auto;
+  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
+  min-height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
   border: var(--vt-dropdown-stroke, 3px) solid #000 !important;
   border-radius: calc(var(--vt-dropdown-radius, 6px) - 2px) !important;
   margin: 0 0 3px !important;
@@ -1170,7 +1171,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   
 }
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
-  min-height: 28px !important;
+  height: calc(var(--vt-studio-control-height, 28px) - 2 * var(--vt-studio-control-stroke, 2px)) !important;
+  min-height: calc(var(--vt-studio-control-height, 28px) - 2 * var(--vt-studio-control-stroke, 2px)) !important;
   border-width: 2px !important;
   border-radius: 4px !important;
   padding: 2px 6px !important;
@@ -3647,14 +3649,11 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__value,
 .vt-studio-left-counter[data-size="micro"] .vt-studio-side-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg { width: 16px; height: 16px; }
-.vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__actions button svg,
-.vt-studio-left-counter[data-size="compact"] .vt-studio-side-counter__actions button svg,
-.vt-studio-double-split-slider.is-counter-controls[data-size="compact"] .vt-studio-side-counter__actions button svg { width: 30px; height: 30px; }
+.vt-studio-side-counter__actions[data-size="compact"] button svg { width: 30px; height: 30px; }
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 8px; height: 8px; stroke-width: 1.5; }
-.vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg,
-.vt-studio-double-split-slider.is-counter-controls[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 1.5; }
+.vt-studio-side-counter__actions[data-size="micro"] button svg { width: 15px; height: 15px; stroke-width: 1.5; }
 .vt-studio-counter button:focus-visible,
-:is(.vt-studio-side-counter, .vt-studio-double-split-slider.is-counter-controls) button:focus-visible { outline: 2px solid var(--pair-a); outline-offset: -4px; }
+.vt-studio-side-counter__actions button:focus-visible { outline: 2px solid var(--pair-a); outline-offset: -4px; }
 /* Counter affordance polish: +/− and chevrons are 150% larger with heavier strokes. */
 .vt-studio-counter__button svg {
   width: 36px;
@@ -3669,11 +3668,9 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   transform-origin: center;
 }
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg { width: 24px; height: 24px; stroke-width: 3; }
-.vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__actions button svg,
-.vt-studio-double-split-slider.is-counter-controls[data-size="compact"] .vt-studio-side-counter__actions button svg { width: 30px; height: 30px; stroke-width: 3; }
+.vt-studio-side-counter__actions[data-size="compact"] button svg { width: 30px; height: 30px; stroke-width: 3; }
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 12px; height: 12px; stroke-width: 2.25; }
-.vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg,
-.vt-studio-double-split-slider.is-counter-controls[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 2.25; }
+.vt-studio-side-counter__actions[data-size="micro"] button svg { width: 15px; height: 15px; stroke-width: 2.25; }
 .vt-studio-counter__button:active svg,
 .vt-studio-side-counter__actions button:active svg { animation: vt-studio-counter-pop 180ms cubic-bezier(.2,.8,.2,1); }
 .vt-studio-counter__button.is-holding svg,
@@ -3721,8 +3718,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 
 .vt-studio-counter button:disabled,
-.vt-studio-side-counter button:disabled,
-.vt-studio-double-split-slider.is-counter-controls button:disabled { opacity: .4; cursor: not-allowed; }
+.vt-studio-side-counter__actions button:disabled { opacity: .4; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-counter *, .vt-studio-side-counter * { scroll-behavior: auto; }
 }
@@ -6211,8 +6207,8 @@ details.vt-studio-two-line-module > :not(summary) {
   display: flex;
   width: 100%;
   min-width: 0;
-  min-height: var(--vt-dropdown-height, var(--vt-studio-control-height, 44px)) !important;
-  height: auto;
+  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
+  min-height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
   margin: 0 0 var(--vt-studio-dropdown-menu-row-gap, 3px) !important;
   padding: 2px 8px !important;
   border: var(--vt-studio-dropdown-row-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
