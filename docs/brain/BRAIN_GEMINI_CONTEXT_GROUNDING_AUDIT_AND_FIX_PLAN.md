@@ -206,3 +206,18 @@ No new owner or parallel data store is permitted. Reuse the current key vault, s
 - **No implementation fix is claimed.**
 
 The first implementation commit must be justified by the captured failure and include a regression test that goes red before the fix.
+
+
+### Phase 2C — resolve learning evidence to canonical turn records (2026-11-11)
+
+- [x] Resolve every candidate evidence ID against canonical `EvidenceRecord` objects retained on the candidate's own Brain traces.
+- [x] Require the record to pass the shared runtime `isEvidenceRecord` guard, match the requested channel, belong to a candidate trace, and appear in that trace's `evidence.returned` set.
+- [x] Fail closed when an ID is missing, malformed, cross-channel, not actually returned, or reused with conflicting record snapshots.
+- [x] Pass only resolved record IDs into the existing explicit Brain teaching path.
+- [x] Retain resolved record IDs, owner classes, source snapshot IDs, and trace IDs as promotion-event provenance; do not copy evidence payloads into a second store.
+- [x] Add regression coverage for missing canonical records and cross-channel records, plus assertions for promotion provenance.
+- [ ] Run focused candidate/promotion tests, typecheck, production build, and full release gates on the phase 2C head.
+- [ ] Verify fresh-session trace persistence/hydration and server-side authorization/idempotency. The current default BrainTrace sink is browser-local; this phase does not claim durable cross-session resolution or server authorization.
+- [ ] Verify end-to-end promotion against real permitted channel evidence without exposing private analytics or secrets.
+
+**Boundary:** Phase 2C closes the source-reference resolution gap only when canonical records are available on the candidate's trace. It does not convert the browser-local BrainTrace sink into durable server storage, nor claim that current promotion is server-authorized or globally idempotent.
