@@ -1492,3 +1492,11 @@ describe("confirmed split badge rails and double-side toggle shell", () => {
     expect(css).not.toContain("@media (min-width: 720px) {\n  .vt-confirmed-slider-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }");
   });
 });
+
+
+describe("StudioSideTextCounter single outer perimeter", () => {
+  it("removes the input's black border while retaining its primary inset stroke", () => {
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(css).toMatch(/\.vt-studio-side-text-counter \.vt-studio-text-input--simple\s*\{[^}]*border:\s*0\s*;[^}]*box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-field-primary/s);
+  });
+});
