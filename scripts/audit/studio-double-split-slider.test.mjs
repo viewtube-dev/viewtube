@@ -69,7 +69,9 @@ test("slider counter rails render the exact shared side-counter action buttons",
   assert.match(slider, /<button type="button" className=\{increment\.isHolding \? "is-holding" : undefined\}/);
   assert.match(slider, /<button type="button" className=\{decrement\.isHolding \? "is-holding" : undefined\}/);
   assert.doesNotMatch(slider, /className=\{\x60vt-studio-stepper-button/);
-  assert.match(slider, /<StudioDoubleSplitSlider[\s\S]*?leftControls="counter"/);
+  const leftWordStart = controls.indexOf("export const StudioLeftWordSlider:");
+  const leftWordEnd = controls.indexOf("StudioLeftWordSlider.displayName", leftWordStart);
+  assert.match(controls.slice(leftWordStart, leftWordEnd), /leftControls="counter"/);
 });
 
 test("slider counter button geometry and icon sizing are inherited from the shared side-counter rules", () => {
