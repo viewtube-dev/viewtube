@@ -385,7 +385,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2">
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Brightness (-100 to 100)
             <StudioSideTextCounter ariaLabel="Brightness" value={transform.brightness ?? 0} min={-100} max={100} step={1} inputMode="decimal" onValueChange={(value) => patchTransform({ brightness: value.trim() === "" ? 0 : Number(value) })} />
