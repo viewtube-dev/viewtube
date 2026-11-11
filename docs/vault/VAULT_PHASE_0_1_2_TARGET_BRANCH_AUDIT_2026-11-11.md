@@ -146,3 +146,7 @@ The page previously duplicated the resolver logic and omitted the `youtubeId` al
 - `a8a7d7b987d7fc3243e7290295926e0780bb99fd` — add Inspector source-contract assertions for archive/delete policy checks and the single-asset handoff target check.
 
 The previous Send To eligibility treated any non-empty selection as handoff-capable, while the actual handler accepts one selected asset and routes only to registered compatible targets. Eligibility now requires exactly one selected asset with at least one compatible target. Archive, permanent-delete and metadata-edit eligibility now call the shared local lifecycle policy. These checks remain UI eligibility only and do not replace account/workspace authorization. Focused tests, typecheck, lint, build and browser checks are still outstanding.
+
+
+- `b704d6db7502aceb2a5172438f81ec68bcef050d` — add a regression assertion that ViewTube handoff destinations are only offered for a single selected asset.
+- `a4e9d7a73d5d8b8fae32d456463902e31f20c99f` — enforce the same single-selection condition in the actual Send to ViewTube destination list; multi-select metadata exports remain available.
