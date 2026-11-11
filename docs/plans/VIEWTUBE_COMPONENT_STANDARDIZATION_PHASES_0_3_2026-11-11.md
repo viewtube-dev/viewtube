@@ -120,6 +120,20 @@ The Analytics metric badge uses a square Studio icon rail, metric color on the r
 - **Brain:** reasoning, evidence/context planning and governed learning; it consumes the canonical owners rather than maintaining duplicate project, asset or analytics stores.
 - **Channel pages:** compose channel-owned data with the same shared primitives; they do not redefine the primitive system.
 
+### Product-surface inventory (production entry points and adjacent compositions)
+
+| Surface | Production entry points / compositions inspected | Inventory treatment |
+|---|---|---|
+| Channel | `src/views/Channelytics.tsx`, `src/components/ChannelyticsChartToolbox.tsx`, `src/components/projects/ChannelPlanningSubtoolboxes.tsx` | Channel metrics and channel planning are domain compositions; their controls should consume Studio primitives, while channel identity and channel-level goals/tasks remain channel-owned |
+| Resource Library / Index | `ResourceLibrary.tsx`, `ResourceDocumentRenderer.tsx`, `resourceLibraryRegistry.ts`, discovery and palette contract tests | Registry owns document metadata; renderer owns document content; Resource Index row owns only selection presentation |
+| Resource Vault / Asset Management | `src/views/CreatorVaultOS.tsx`, `src/features/vault-workbench/VaultAdaptiveWorkbenchHost.tsx`, `ContentAssetEngine.tsx`, `ProjectAssetEngineSimple.tsx`, Vault asset-card / collection / metadata / selection test families | Vault owns durable artifacts and provenance; Asset Engine coordinates ContentBuild assets; Vault surfaces should reuse Studio inputs, dropdowns, upload frames, split buttons, badges and tags |
+| Analytics | `SimpleAnalytics.tsx`, `CinematicAnalyticsLab.tsx`, `InternalAnalyticsPanel.tsx`, `VtSyncLocalAnalyticsPage.tsx`, `AnalyticsVisualShell.tsx`, `UnifiedAnalyticsVisualModule.tsx`, `analyticsVisualContextBar.tsx`, `AnalyticsVisualIcon.tsx`, `StandardKPI.tsx` | Analytics Canon owns metric evidence; visual shells own chart composition; metric controls and stat badges reuse Studio primitives |
+| Studio Hub | `StudioHub.tsx`, `ToolboxUIReferenceLibrary.tsx`, `StudioHubCompletePrimitiveCatalog.tsx`, `StudioHubConfirmedPrimitiveCatalog.tsx`, `StudioHubPrimitiveMigrationCatalog.tsx`, `StudioControls.tsx`, Studio primitive CSS and contract tests | The 62-family confirmed registry is the shared component inventory; catalog specimens must render production primitives, not local lookalikes |
+| Projects / Calendar | `ProjectBuilder.tsx`, `ProjectBoardWorkspace.tsx`, `EmbeddedProjectKanbanWorkspace.tsx`, `ProjectPlannerCalendar.tsx`, `EmbeddedPublishingSchedule.tsx`, `ProjectScheduleContextSubtoolbox.tsx`, `projectCalendarPublicationState.ts` | Projects owns tasks, dates and schedule state; calendar components project this data and never persist duplicate events |
+| AI Brain | `AIBrainCommandInterface.tsx`, `AIBrainStudioWorkspace.tsx`, `BrainCommandCenter.tsx`, `BrainEvidenceHandoff.tsx`, `brainProjectContext.ts`, `brainReviewHandoffContext.ts` | Brain owns reasoning and governed learning; shared controls standardize presentation while evidence, project and asset records remain with their canonical owners |
+
+This inventory is the Phase 0–3 implementation scope and adjacent ownership map. It is not a claim that every individual JSX node across every ViewTube route has been exhaustively classified; a route-by-route UI coverage audit remains a separate certification pass. The production primitive family list above is the complete registered Studio Hub base family index currently referenced by the canonical component-index document.
+
 ## Phase 2 — Resource Index split-left document rows
 
 ### Implemented
