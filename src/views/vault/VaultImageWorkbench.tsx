@@ -4,7 +4,6 @@ import { StudioTextBox, StudioSquareIconButton } from "../../studio-ui/primitive
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
 import { SubToolboxInnerActionButton } from "../../components/Toolbox"
 import {
-  SubToolboxInput,
   SubToolboxSelect,
   SubToolboxStatePanel,
 } from "../../components/subtoolbox/SubToolboxPrimitives"
