@@ -11,6 +11,22 @@ export function analyzeSource(source, fileName = "unknown.tsx") {
   const imports = [];
   const exports = [];
   const jsxTags = new Set();
+  const librarySpecimens = [];
+
+  const jsxTagName = (tag) => {
+    if (ts.isIdentifier(tag)) return tag.text;
+    if (ts.isPropertyAccessExpression(tag) && ts.isIdentifier(tag.expression)) return tag.expression.text + "." + tag.name.text;
+    return null;
+  };
+
+  const collectDescendantTags = (node, result = []) => {
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+      const name = jsxTagName(node.tagName);
+      if (name) result.push(name);
+    }
+    ts.forEachChild(node, (child) => collectDescendantTags(child, result));
+    return result;
+  };
 
   for (const statement of file.statements) {
     if (ts.isImportDeclaration(statement) && ts.isStringLiteral(statement.moduleSpecifier)) {
@@ -47,15 +63,35 @@ export function analyzeSource(source, fileName = "unknown.tsx") {
 
   const visit = (node) => {
     if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
-      const tag = node.tagName;
-      if (ts.isIdentifier(tag)) jsxTags.add(tag.text);
-      else if (ts.isPropertyAccessExpression(tag) && ts.isIdentifier(tag.expression)) jsxTags.add(tag.expression.text + "." + tag.name.text);
+      const name = jsxTagName(node.tagName);
+      if (name) jsxTags.add(name);
     }
+
+    if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node)) {
+      const opening = ts.isJsxElement(node) ? node.openingElement : node;
+      const marker = opening.attributes.properties.find((property) =>
+        ts.isJsxAttribute(property) && property.name.getText(file) === "data-vt-library-component"
+      );
+      const markerValue = marker?.initializer;
+      const component = markerValue && ts.isStringLiteral(markerValue)
+        ? markerValue.text
+        : markerValue && ts.isJsxExpression(markerValue) && markerValue.expression && ts.isStringLiteral(markerValue.expression)
+          ? markerValue.expression.text
+          : null;
+
+      if (component) {
+        const tags = ts.isJsxElement(node)
+          ? node.children.flatMap((child) => collectDescendantTags(child))
+          : collectDescendantTags(node);
+        librarySpecimens.push({ component, tags: [...new Set(tags)] });
+      }
+    }
+
     ts.forEachChild(node, visit);
   };
   visit(file);
 
-  return { imports, exports, jsxTags: [...jsxTags], parseDiagnostics: file.parseDiagnostics.map((item) => ts.flattenDiagnosticMessageText(item.messageText, "\n")) };
+  return { imports, exports, jsxTags: [...jsxTags], librarySpecimens, parseDiagnostics: file.parseDiagnostics.map((item) => ts.flattenDiagnosticMessageText(item.messageText, "\n")) };
 }
 
 function walkSource(root) {
@@ -138,7 +174,9 @@ export function buildRegistry(root = process.cwd()) {
   const publicExports = barrel.exports.filter((entry) => /^Studio/.test(entry.exported) && !entry.typeOnly);
   const publicRows = publicExports.map((entry) => {
     const binding = catalogBindings.find((item) => item.imported === entry.exported);
-    const marker = catalogSource.includes(`data-vt-library-component="${entry.exported}"`);
+    const marker = Boolean(binding && catalog.librarySpecimens.some((specimen) =>
+      specimen.component === entry.exported && specimen.tags.includes(binding.local)
+    ));
     const rendered = Boolean(binding && catalog.jsxTags.includes(binding.local));
     return {
       name: entry.exported,
@@ -157,7 +195,9 @@ export function buildRegistry(root = process.cwd()) {
       localName: item.local,
       source: item.module,
       status: "not-exported-from-public-barrel-owner-disposition-required",
-      representativeMarker: catalogSource.includes(`data-vt-library-component="${item.imported}"`),
+      representativeMarker: catalog.librarySpecimens.some((specimen) =>
+        specimen.component === item.imported && specimen.tags.includes(item.local)
+      ),
       rendered: catalog.jsxTags.includes(item.local),
     }));
 
