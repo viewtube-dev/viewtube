@@ -317,3 +317,29 @@ test("Confirmed Library keeps the split text input in the canonical Text Fields 
   assert.ok(catalog.includes("<ConfirmedStudioCounterFamily />"));
   assert.ok(catalog.includes("<ConfirmedStudioSideCounterFamily />"));
 });
+
+
+test("counter module specimens preserve the canonical full-width three-cell shell", () => {
+  assert.match(system, /\.vt-confirmed-counter-pair\s*>\s*\.vt-studio-counter\s*\{[^}]*width:\s*100%/s);
+  assert.match(system, /\.vt-confirmed-counter-pair\s*>\s*\.vt-studio-value-toggle\.vt-studio-word-counter\s*\{[^}]*width:\s*100%/s);
+  assert.match(system, /\.vt-confirmed-counter-pair\s*>\s*\.vt-studio-counter\s*\{[^}]*flex:\s*0\s+1\s+100%/s);
+});
+
+test("StudioCounter owns one divider at each value-panel edge, never stacked rail borders", () => {
+  const start = system.lastIndexOf("/* StudioCounter interior divider ownership");
+  assert.ok(start >= 0, "counter divider ownership must be explicit in the canonical system stylesheet");
+  const block = system.slice(start);
+  assert.match(block, /\.vt-studio-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-rail\]\s*\{[^}]*border:\s*0/s);
+  assert.match(block, /\.vt-studio-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-label\]\s*\{[^}]*border-left:\s*var\(--vt-studio-control-stroke/s);
+  assert.match(block, /border-right:\s*var\(--vt-studio-control-stroke/s);
+});
+
+test("double-split word counter paints one vertical divider at each button-to-panel join", () => {
+  const start = valueToggleCss.lastIndexOf("/* Double-split word-counter divider ownership");
+  assert.ok(start >= 0, "word-counter divider ownership must be explicit in its primitive stylesheet");
+  const block = valueToggleCss.slice(start);
+  assert.match(block, /\.vt-studio-word-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-rail\]\s*\{[^}]*border:\s*0/s);
+  assert.match(block, /\.vt-studio-word-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-label\]\s*\{[^}]*border-left:\s*var\(--vt-studio-control-stroke/s);
+  assert.match(block, /border-right:\s*var\(--vt-studio-control-stroke/s);
+  assert.ok(valueToggles.includes('className={["vt-studio-value-toggle", "vt-studio-word-counter"'));
+});
