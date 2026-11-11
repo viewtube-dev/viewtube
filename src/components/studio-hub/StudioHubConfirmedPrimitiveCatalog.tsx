@@ -1283,7 +1283,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
         <StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Standard five-square joined icon actions">
           <StudioSquareIconButton icon={<Home aria-hidden="true" />} label="Home" sizeVariant="standard" variant="v3" />
           <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Settings" sizeVariant="standard" variant="v3" />
-          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Enhance" sizeVariant="standard" variant="v3" defaultSelected />
+          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Enhance" sizeVariant="standard" variant="v3" defaultSelected={true} />
           <StudioSquareIconButton icon={<Check aria-hidden="true" />} label="Confirm" sizeVariant="standard" variant="v3" />
           <StudioSquareIconButton icon={<Info aria-hidden="true" />} label="Information" sizeVariant="standard" variant="v3" />
         </StudioSquareIconButtonGroup>
@@ -1291,7 +1291,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
         <StudioSquareIconButtonGroup sizeVariant="compact" aria-label="Compact five-square joined icon actions">
           <StudioSquareIconButton icon={<Home aria-hidden="true" />} label="Home" sizeVariant="compact" variant="v3" />
           <StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="Settings" sizeVariant="compact" variant="v3" />
-          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Enhance" sizeVariant="compact" variant="v3" defaultSelected />
+          <StudioSquareIconButton icon={<Sparkles aria-hidden="true" />} label="Enhance" sizeVariant="compact" variant="v3" defaultSelected={true} />
           <StudioSquareIconButton icon={<Check aria-hidden="true" />} label="Confirm" sizeVariant="compact" variant="v3" />
           <StudioSquareIconButton icon={<Info aria-hidden="true" />} label="Information" sizeVariant="compact" variant="v3" />
         </StudioSquareIconButtonGroup>
