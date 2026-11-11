@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "productionDate": "2026-09-26",
-  "lastEdited": "2026-10-30",
+  "lastEdited": "2026-11-11",
   "migrationState": "phase-d-brain-prompt-authority-consolidation",
   "authorityRule": "One primary authority per bounded concern. Current executable evidence verifies implementation; registry metadata determines documentation role.",
   "entries": [
@@ -1192,6 +1192,27 @@
         "docs/governance/TASK_AUTHORITY.md",
         "docs/governance/VERIFICATION.md",
         "docs/architecture/PRODUCT_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "id": "DOC-AUDIT-AI-BRAIN-PHASE0-1-20261111",
+      "path": "tasks/system-convergence/AI-BRAIN-PHASE-0-1-RECONCILIATION-2026-11-11.md",
+      "class": "AUDIT",
+      "status": "ACTIVE",
+      "concern": "current-SHA Brain evidence/context ownership, reachability and Phase 0/1 reconciliation",
+      "owner": "BrainRuntime + Evidence & Intelligence + Creator Context",
+      "productionDate": "2026-11-11",
+      "lastEdited": "2026-11-11",
+      "lastAuditedMainSha": "a279e52e63e816c0409a02e2feb4807f20c56e4b",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/domains/BRAIN.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md",
+        "docs/governance/TASK_AUTHORITY.md",
+        "tasks/p1-canonical-system-integration/plan.md",
+        "tasks/p1-canonical-system-integration/workstreams/brain-continuity/plan.md",
+        "tasks/system-convergence/EVIDENCE-INTELLIGENCE-AUDIT.md",
+        "tasks/system-convergence/EVIDENCE-RECORD-DERIVED-SIGNAL-CONTRACT.md"
       ]
     }
   ],
