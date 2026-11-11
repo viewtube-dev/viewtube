@@ -116,3 +116,19 @@ The next Project-context convergence step is:
 5. retain the old `BrainProjectContext` shape as a compatibility projection until callers are migrated.
 
 Do not create a second Project repository to accomplish this.
+
+
+## Current-target refresh — 2026-11-11
+
+The 2026-09-26 pre-migration table above is historical. At target SHA `a279e52e63e816c0409a02e2feb4807f20c56e4b`, `CreatorContextResolver.ts` is a read-only convergence facade used by `BrainOrchestrator`. It resolves:
+
+- channel-scoped controls, creator answers, Channel Profile and Channel Knowledge;
+- Style Profile when personalization is enabled;
+- Project by exact supplied/indexed `projectId`, rejecting a supplied project whose ID does not match;
+- linked ContentBuild through `ContentBuildRepository.getContentBuild`;
+- visible UI context only when it matches the requested Project scope;
+- transient surface/selection context and deduplicated artifact/evidence refs.
+
+This supersedes the older note that the facade only passed `projectId + visibleContext`: exact Project and linked ContentBuild lookup now exist in the current source. It does not prove every caller passes canonical Project records or that all browser surfaces preserve the same envelope. Those remain Phase 1 caller-parity/runtime tests.
+
+Current-source reference: `src/services/brain/CreatorContextResolver.ts` (blob `f212c90821203467463f0093efa3caab72b2e3c7`). Current target SHA and broader evidence/context map: `tasks/system-convergence/AI-BRAIN-PHASE-0-1-RECONCILIATION-2026-11-11.md`.

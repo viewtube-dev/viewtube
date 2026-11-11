@@ -213,3 +213,18 @@ The facade must:
 - existing specialist modules remain intact;
 - old bridges remain until zero-caller certification;
 - caller audit and classification registry are updated.
+
+
+## Current-target refresh — 2026-11-11
+
+The historical 2026-09-27 caller audit is retained as prior-art, not treated as current certification. The exact target now inspected is `master/consolidated-feature-integration@a279e52e63e816c0409a02e2feb4807f20c56e4b`.
+
+Current source confirms that `EvidenceIntelligenceResolver` now projects canonical analytics into EvidenceRecord/claims/health, task-scoped statistics, optional audience intelligence, canonical opportunity evidence and deterministic finding context. `BrainOrchestrator` supplies the selected records to `BrainContextBroker`, grades the same selected records, captures only records actually rendered into the model input, and retains IDs/fingerprints in turn/trace metadata. This is stronger than the older bridge-only description above.
+
+The resolver is still analytics-canon-centered. The EvidenceRecord owner union includes comments, transcripts, YouTube-read, Vault, Project, publishing, outcomes, experiments, research and creator-confirmed sources, but this audit did not establish production producer-to-turn reachability for all those owners. Do not equate a declared owner/type with an integrated producer.
+
+Creator Context is a distinct governed envelope through `CreatorContextResolver`; it must not be collapsed into EvidenceRecord. Current resolver reads channel-scoped creator answers/profile/knowledge/style and resolves exact Project IDs with linked ContentBuild when available. Current niche research remains a separate prompt-context/citation path rather than a fully normalized EvidenceRecord feed.
+
+The public/private isolation concern from PR #1193 remains a required regression gate until a current-SHA test proves a logged-out public-handle request cannot access a connected-channel analytics snapshot, including identity-match edge cases.
+
+See `tasks/system-convergence/AI-BRAIN-PHASE-0-1-RECONCILIATION-2026-11-11.md` for the complete current owner, identity, source reachability, risk and Phase 1 acceptance matrix. No tests/build/typecheck/browser checks were executed during the documentation refresh.
