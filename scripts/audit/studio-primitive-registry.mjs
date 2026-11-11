@@ -102,7 +102,7 @@ export function buildRegistry(root = process.cwd()) {
     for (const item of parsed.imports) {
       if (!item.source.startsWith(".") && !item.source.startsWith("/")) continue;
       const resolved = ts.resolveModuleName(item.source, filePath, options, ts.sys).resolvedModule?.resolvedFileName;
-      if (/\.(?:css|scss|sass|less|svg|png|jpe?g|webp|gif|woff2?|ttf)(?:\\?.*)?$/i.test(item.source)) continue;
+      if (/\.(?:css|scss|sass|less|svg|png|jpe?g|webp|gif|woff2?|ttf)(?:\?.*)?$/i.test(item.source)) continue;
       if (!resolved) {
         unresolved.push({ importer: relative(root, filePath), specifier: item.source });
         continue;
