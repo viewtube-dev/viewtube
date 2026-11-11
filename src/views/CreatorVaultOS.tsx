@@ -3466,19 +3466,22 @@ const CreatorVaultOS: React.FC = () => {
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Recovery & Lifecycle</div>
           <div className="flex flex-wrap gap-2">
-           {selectedAsset.metadata?.trashed === true ? (
+           {selectedAsset.metadata?.trashedAt || String(selectedAsset.metadata?.lifecycle || "").toUpperCase() === "TRASHED" ? (
             <>
              <SubToolboxInnerActionButton label="Restore from Trash" iconName="checklist" tone="green" onClick={() => restoreAsset(selectedAsset)} />
              <SubToolboxInnerActionButton label="Delete Permanently" iconName="x" tone="pink" onClick={() => permanentlyDeleteAsset(selectedAsset)} />
             </>
-           ) : selectedAsset.metadata?.archived === true ? (
+           ) : selectedAsset.metadata?.archivedAt || String(selectedAsset.metadata?.lifecycle || "").toUpperCase() === "ARCHIVED" ? (
             <>
              <SubToolboxInnerActionButton label="Restore from Archive" iconName="checklist" tone="green" onClick={() => restoreAsset(selectedAsset)} />
              <SubToolboxInnerActionButton label="Move to Trash" iconName="x" tone="pink" onClick={() => trashAsset(selectedAsset)} />
             </>
            ) : (
-            <SubToolboxInnerActionButton label="Move to Trash" iconName="x" tone="pink" onClick={() => trashAsset(selectedAsset)} />
-           )}
+            <>
+             <SubToolboxInnerActionButton label="Archive Asset" iconName="archive" tone="cyan" onClick={() => archiveAsset(selectedAsset)} />
+             <SubToolboxInnerActionButton label="Move to Trash" iconName="x" tone="pink" onClick={() => trashAsset(selectedAsset)} />
+            </>
+           )}}
           </div>
          </div>
          <div>
