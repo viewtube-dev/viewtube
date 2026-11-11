@@ -31,7 +31,7 @@ test("builds a derived public-export and consumer graph from the existing catalo
     fs.writeFileSync(fullPath, content);
   };
   try {
-    write("tsconfig.json", JSON.stringify({ compilerOptions: { moduleResolution: "Bundler", module: "ESNext", jsx: "react-jsx" } }));
+    write("tsconfig.json", JSON.stringify({ compilerOptions: { moduleResolution: "bundler", module: "esnext", jsx: "react-jsx" } }));
     write("src/studio-ui/index.ts", 'export { StudioButton } from "./primitives/StudioButton";');
     write("src/studio-ui/primitives/StudioButton.tsx", "export const StudioButton = () => null;");
     write("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx",
