@@ -2383,8 +2383,8 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
     const next = Number((base + direction * safeStep).toFixed(precision));
     onValueChange(Math.min(max, Math.max(min, next)));
   }, [max, min, onValueChange, safeStep]);
-  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || !isAdjustable || current <= min, interactionFocus);
-  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || !isAdjustable || current >= max, interactionFocus);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min, interactionFocus);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max, interactionFocus);
   return (
     <StudioSplitShell
       layout="double"
@@ -2482,11 +2482,11 @@ export const StudioSideTextCounter = React.forwardRef<HTMLInputElement, StudioSi
   }, [max, min, onValueChange, safeStep]);
   const decrement = useStudioCounterHold(
     -1, current, min, max, safeStep, adjust,
-    disabled || !validBounds || current <= min,
+    disabled || !validBounds || !isAdjustable || current <= min,
   );
   const increment = useStudioCounterHold(
     1, current, min, max, safeStep, adjust,
-    disabled || !validBounds || current >= max,
+    disabled || !validBounds || !isAdjustable || current >= max,
   );
   return (
     <StudioSplitShell
@@ -2496,8 +2496,8 @@ export const StudioSideTextCounter = React.forwardRef<HTMLInputElement, StudioSi
       className={studioClasses("vt-studio-side-counter", "vt-studio-side-text-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
       railClassName="vt-studio-side-counter__rail"
       rightRailContent={<span className="vt-studio-side-counter__actions">
-        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={event => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
-        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={event => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || !isAdjustable || current >= max} {...increment.events} onClick={event => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || !isAdjustable || current <= min} {...decrement.events} onClick={event => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
       shellProps={{
         "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined,
