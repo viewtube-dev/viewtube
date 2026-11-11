@@ -371,8 +371,8 @@ test("StudioSideTextCounter primary inline stroke is thinner on horizontal edges
   const start = fields.lastIndexOf("/* StudioSideTextCounter: the shell owns the black perimeter;");
   assert.ok(start >= 0, "side text counter field inset rule must exist");
   const block = fields.slice(start);
-  assert.match(block, /box-shadow:\\s*inset 0 calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* 0\\.5\\) 0 0 var\\(--vt-field-primary/);
-  assert.match(block, /inset 0 calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* -0\\.5\\) 0 0 var\\(--vt-field-primary/);
-  assert.match(block, /inset var\\(--vt-studio-control-stroke, 3px\\) 0 0 0 var\\(--vt-field-primary/);
-  assert.match(block, /inset calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* -1\\) 0 0 0 var\\(--vt-field-primary/);
+  assert.match(block, /box-shadow:\s*inset 0 calc\(var\(--vt-studio-control-stroke, 3px\) \* 0\.5\) 0 0 var\(--vt-field-primary/);
+  assert.match(block, /inset 0 calc\(var\(--vt-studio-control-stroke, 3px\) \* -0\.5\) 0 0 var\(--vt-field-primary/);
+  assert.match(block, /inset var\(--vt-studio-control-stroke, 3px\) 0 0 0 var\(--vt-field-primary/);
+  assert.match(block, /inset calc\(var\(--vt-studio-control-stroke, 3px\) \* -1\) 0 0 0 var\(--vt-field-primary/);
 });
