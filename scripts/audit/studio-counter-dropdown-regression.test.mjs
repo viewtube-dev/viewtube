@@ -12,20 +12,20 @@ const emitter = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 
 test("counter shells use square size-tier rails and a 2:1 value face", () => {
-  assert.match(styles, /\\.vt-studio-counter\\s*\\{[^}]*display:\\s*grid;[^}]*grid-template-columns:\\s*var\\(--vt-studio-control-height,\\s*44px\\)\\s+minmax\\(0,\\s*1fr\\)\\s+var\\(--vt-studio-control-height,\\s*44px\\)/s)
-  assert.match(styles, /\\.vt-studio-counter__value,[\\s\\S]*?aspect-ratio:\\s*2\\s*\\/\\s*1/)
-  assert.match(generated, /--vt-studio-counter-value-area-aspect-ratio:\\s*2\\s*\\/\\s*1/)
-  assert.match(tokens, /valueAreaAspectRatio:\\s*2/)
-  assert.match(split, /\\[data-vt-studio-control="true"\\] \\[data-vt-studio-split-rail\\][\\s\\S]*?width: var\\(--vt-studio-control-height,\\s*44px\\)/)
+  assert.match(styles, /\.vt-studio-counter\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*var\(--vt-studio-control-height,\s*44px\)\s+minmax\(0,\s*1fr\)\s+var\(--vt-studio-control-height,\s*44px\)/s)
+  assert.match(styles, /\.vt-studio-counter__value,[\s\S]*?aspect-ratio:\s*2\s*\/\s*1/)
+  assert.match(generated, /--vt-studio-counter-value-area-aspect-ratio:\s*2\s*\/\s*1/)
+  assert.match(tokens, /valueAreaAspectRatio:\s*2/)
+  assert.match(split, /\[data-vt-studio-control="true"\] \[data-vt-studio-split-rail\][\s\S]*?width: var\(--vt-studio-control-height,\s*44px\)/)
   assert.doesNotMatch(recovery, /vt-studio-counter.*width|vt-studio-side-counter.*width/)
 })
 
 test("double-split word counter inherits a solid primary face and black focus text", () => {
-  assert.match(valueToggleStyles, /\\.vt-studio-value-toggle\\s*\\{[^}]*--vt-toggle-fill:\\s*var\\(--vt-studio-control-accent/)
-  assert.match(valueToggleStyles, /\\.vt-studio-split-shell\\.vt-studio-value-toggle\\s*\\{[^}]*background:\\s*var\\(--vt-toggle-fill/)
-  assert.match(valueToggleStyles, /:focus-within[\\s\\S]*?\\.vt-studio-word-counter__value[\\s\\S]*?color:\\s*var\\(--vt-studio-number-active-color,\\s*#000\\)/)
-  assert.match(valueToggleStyles, /\\.vt-studio-word-counter\\[data-vt-studio-control="true"\\] > \\[data-vt-studio-split-label\\][\\s\\S]*?border-left:/)
-  assert.doesNotMatch(valueToggleStyles, /\\.vt-studio-value-toggle--arrow[^}]*background:\\s*color-mix\\([^}]*50%/)
+  assert.match(valueToggleStyles, /\.vt-studio-value-toggle\s*\{[^}]*--vt-toggle-fill:\s*var\(--vt-studio-control-accent/)
+  assert.match(valueToggleStyles, /\.vt-studio-split-shell\.vt-studio-value-toggle\s*\{[^}]*background:\s*var\(--vt-toggle-fill/)
+  assert.match(valueToggleStyles, /:focus-within[\s\S]*?\.vt-studio-word-counter__value[\s\S]*?color:\s*var\(--vt-studio-number-active-color,\s*#000\)/)
+  assert.match(valueToggleStyles, /\.vt-studio-word-counter\[data-vt-studio-control="true"\] > \[data-vt-studio-split-label\][\s\S]*?border-left:/)
+  assert.doesNotMatch(valueToggleStyles, /\.vt-studio-value-toggle--arrow[^}]*background:\s*color-mix\([^}]*50%/)
 })
 
 test("bar toggle tooltip is focus-only, the shell has a focus outline, and bars layer above rails", () => {
