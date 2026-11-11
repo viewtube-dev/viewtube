@@ -2481,11 +2481,11 @@ export const StudioSideTextCounter = React.forwardRef<HTMLInputElement, StudioSi
   }, [max, min, onValueChange, safeStep]);
   const decrement = useStudioCounterHold(
     -1, current, min, max, safeStep, adjust,
-    disabled || !validBounds || current <= min, interactionFocus,
+    disabled || !validBounds || current <= min,
   );
   const increment = useStudioCounterHold(
     1, current, min, max, safeStep, adjust,
-    disabled || !validBounds || current >= max, interactionFocus,
+    disabled || !validBounds || current >= max,
   );
   return (
     <StudioSplitShell
