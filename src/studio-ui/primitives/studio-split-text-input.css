@@ -129,10 +129,10 @@ html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-
   margin: 0;
   padding: 0 var(--vt-split-field-pad);
   pointer-events: auto;
-  border: 0;
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary);
   border-radius: inherit;
   outline: none;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary);
+  box-shadow: none;
   background: color-mix(in srgb, white 50%, var(--vt-split-field-primary) 50%);
   background-clip: padding-box;
   color: var(--vt-split-field-primary);
@@ -190,13 +190,13 @@ html body .vt-studio-split-text-input [data-vt-studio-split-field]::after {
    from the top or bottom at Standard and Compact heights. */
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
-  border: 0;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
+  box-shadow: none;
 }
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size]:is(:focus, :focus-visible) {
-  border: 0;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
+  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
+  box-shadow: none;
 }
 \n
 /* Standard and Compact nested inputs can receive their own control-size
@@ -205,16 +205,16 @@ html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="standard"] input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="standard"] input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
   --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
-  border: 0;
-  box-shadow: inset 0 0 0 var(--vt-studio-standard-stroke, 3px) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
+  border: var(--vt-studio-standard-stroke, 3px) solid var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
+  box-shadow: none;
 }
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="compact"] input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="compact"] input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
   --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
-  border: 0;
-  box-shadow: inset 0 0 0 var(--vt-studio-compact-stroke, 2px) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
+  border: var(--vt-studio-compact-stroke, 2px) solid var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
+  box-shadow: none;
 }
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="standard"]:focus-within input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="compact"]:focus-within input.vt-studio-text-input[data-vt-studio-control="true"] {
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
+  box-shadow: none;
 }
