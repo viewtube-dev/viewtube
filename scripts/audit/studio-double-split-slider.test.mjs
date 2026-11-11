@@ -59,3 +59,23 @@ test("arrow, side, double-side, and double-split word controls use counter chara
   assert.doesNotMatch(distill, /html body \.vt-studio-value-toggle--side:not\(\.vt-studio-value-toggle--nested\)[\s\S]*?!important/);
   assert.doesNotMatch(distill, /html body \.vt-studio-value-toggle--double\[data-right-appearance/);
 });
+
+
+test("slider counter rails render the exact shared side-counter action buttons", () => {
+  const sliderStart = controls.indexOf("export const StudioDoubleSplitSlider:");
+  const sliderEnd = controls.indexOf("StudioDoubleSplitSlider.displayName", sliderStart);
+  const slider = controls.slice(sliderStart, sliderEnd);
+  assert.match(slider, /className="vt-studio-side-counter__actions vt-studio-double-split-slider__counter"/);
+  assert.match(slider, /<button type="button" className=\{increment\.isHolding \? "is-holding" : undefined\}/);
+  assert.match(slider, /<button type="button" className=\{decrement\.isHolding \? "is-holding" : undefined\}/);
+  assert.doesNotMatch(slider, /className=\{\x60vt-studio-stepper-button/);
+  assert.match(slider, /<StudioDoubleSplitSlider[\s\S]*?leftControls="counter"/);
+});
+
+test("slider counter button geometry and icon sizing are inherited from the shared side-counter rules", () => {
+  assert.match(styles, /\.vt-studio-side-counter__actions\s*\{[^}]*display:\s*grid/s);
+  assert.match(styles, /\.vt-studio-side-counter__actions button\s*\{[^}]*height:\s*100%/s);
+  assert.match(styles, /\.vt-studio-side-counter__actions button svg\s*\{[^}]*width:\s*42px/s);
+  assert.doesNotMatch(styles, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter > button\s*\{/);
+  assert.doesNotMatch(styles, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter svg\s*\{/);
+});
