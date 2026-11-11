@@ -203,7 +203,7 @@ export const AnalyticsActiveStats: React.FC<{
           onClick={item.onClick}
           disabled={!item.onClick}
           aria-label={`${normalizeAnalyticsStatLabel(label)} ${item.value}`}
-          className="vt-analytics-active-stat h-full flex-none"
+          className="vt-analytics-active-stat h-full w-auto flex-none"
           style={statSplitButtonStyle(item, darkStats, resolvedTone, label)}
         >
           <span className="vt-analytics-active-stat-copy flex h-full min-w-0 flex-col items-start justify-center gap-0 px-0 py-0 leading-none">
