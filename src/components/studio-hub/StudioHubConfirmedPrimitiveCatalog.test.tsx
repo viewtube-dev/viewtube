@@ -963,6 +963,11 @@ describe("Studio Calendar mini primitives", () => {
     expect(markup).toContain('data-calendar-segment="middle"');
     expect(markup).toContain('data-calendar-segment="end"');
     expect(markup).toContain('data-thumbnail-ratio="16:9"');
+    const calendarCss = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/studio-calendar-primitives.css"), "utf8");
+    expect(calendarCss).toContain("height: 20px");
+    expect(calendarCss).toContain("border: 1.5px solid #000");
+    expect(calendarCss).toContain("color-mix(in srgb, #fff 50%");
+    expect(calendarCss).not.toContain("50%, transparent");
   });
 
   it("exports every calendar mini primitive through the Studio public API", () => {
