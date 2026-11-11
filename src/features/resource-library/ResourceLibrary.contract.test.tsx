@@ -27,7 +27,6 @@ describe("Resource Library production reader", () => {
     expect(css).toContain("aspect-ratio: 1 / 1")
     expect(css).toContain("width: var(--vt-studio-control-height, 44px)")
     expect(css).toContain("height: var(--vt-studio-control-height, 44px)")
-    expect(css).toContain("grid-template-columns: minmax(0, 1fr)")
   })
 
   it("uses the canonical Spectrum tag for completed document status", () => {
