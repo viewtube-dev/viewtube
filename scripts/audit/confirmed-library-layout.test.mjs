@@ -508,7 +508,12 @@ test("StudioDropdown owns the simple variant without a duplicate primitive famil
 
 test("StudioSideTextCounter composes the side-counter rail with the canonical editable Studio input", () => {
   assert.match(controls, /export const StudioSideTextCounter\s*=\s*React\.forwardRef/);
-  assert.match(controls, /<StudioTextInput[\s\S]*?data-vt-studio-field-kind="text-input"/);
+  assert.match(controls, /<StudioTextInput[\\s\\S]*?type="text"/);
+  assert.match(controls, /onChange=\\{event => onValueChange\\(event\\.currentTarget\\.value\\)\\}/);
+  assert.match(controls, /aria-label=\\{inputProps\\["aria-label"\\] \\?\\? ariaLabel\\}/);
+  const textInput = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+  assert.ok(textInput.includes('data-vt-studio-field-kind="text-input"'));
+  assert.match(controls, /onValueChange\\(String\\(Math\\.min\\(max, Math\\.max\\(min, next\\)\\)\\)\\)/);
   assert.match(controls, /StudioSideTextCounter/);
   const publicIndex = readFileSync("src/studio-ui/index.ts", "utf8");
   assert.ok(publicIndex.includes("StudioSideTextCounter"));
