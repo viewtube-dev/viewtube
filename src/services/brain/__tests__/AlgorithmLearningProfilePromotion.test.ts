@@ -167,7 +167,7 @@ describe("AlgorithmLearningProfilePromotion", () => {
    creatorApproved: true,
   })
   expect(result.status).toBe("invalid_candidate_evidence")
-  expect("evidenceResolution" in result ? result.evidenceResolution : null).toMatchObject({ missingIds: ["evidence-1", "evidence-2"] })
+  expect(result.evidenceResolution?.missingIds ?? []).toEqual(["evidence-1", "evidence-2"])
   expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
   expect(mocks.recordAlgorithmIntelligenceEvent).not.toHaveBeenCalled()
  })
@@ -261,7 +261,7 @@ describe("AlgorithmLearningProfilePromotion", () => {
    creatorApproved: true,
   })
   expect(result.status).toBe("invalid_candidate_evidence")
-  expect("evidenceResolution" in result ? result.evidenceResolution.conflictingIds : []).toContain("evidence-1")
+  expect(result.evidenceResolution?.conflictingIds ?? []).toContain("evidence-1")
   expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
  })
 
