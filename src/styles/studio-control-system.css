@@ -6447,3 +6447,27 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
   height: 100%;
 }
 
+
+
+/* StudioCounter interior divider ownership (2026-11-11).
+   The split shell owns the perimeter. Its value face owns the two interior
+   separators so the rail and panel cannot paint adjacent duplicate strokes. */
+.vt-studio-counter[data-vt-studio-control="true"] > [data-vt-studio-split-rail] {
+  border: 0;
+}
+.vt-studio-counter[data-vt-studio-control="true"] > [data-vt-studio-split-label] {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+
+/* Confirmed counter modules must not flex-shrink the primitive's three-cell grid.
+   The specimen wrapper owns the row width; the primitive retains its own rails. */
+.vt-confirmed-counter-pair > .vt-studio-counter,
+.vt-confirmed-counter-pair > .vt-studio-side-counter,
+.vt-confirmed-counter-pair > .vt-studio-left-counter {
+  box-sizing: border-box;
+  flex: 0 1 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
