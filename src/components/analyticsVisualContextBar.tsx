@@ -168,6 +168,8 @@ const statSplitButtonStyle = (
 ): React.CSSProperties => ({
   "--pair-a": item.backgroundTone ?? (dark ? ANALYTICS_DARK_STATS_BACKGROUND : "#EDEDED"),
   "--pair-b": resolvedTone ?? "#E5E7EB",
+  width: "auto",
+  flex: "0 0 auto",
   minWidth: statSplitReservedWidth(item, label),
 } as React.CSSProperties)
 
