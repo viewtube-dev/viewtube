@@ -177,16 +177,28 @@ Do not infer the repository commit SHA from a file blob SHA. Do not call source 
 The source/API cross-check found two concrete registry risks that must remain visible:
 
 - `StudioTextInput.tsx` comments describe the Mini type/icon size as **16px**, while `src/studio-ui/tokens.ts` and the normative defaults contract define Mini as **17.5px**. Treat the token/contract value as authoritative; correct the stale component comments in a dedicated code change with a focused test or static contract check.
-- The Confirmed catalog imports several `StudioControls.tsx` symbols that are not exported in the currently inspected public barrel: `StudioNumberInput`, `StudioVerticalWordToggle`, `StudioBrainStatusIndicator`, `StudioSplitLeftDropdown`, and `StudioDoubleSplitSlider`. Do not silently promote these to public API. Record each as **API status unresolved** until its intended visibility is confirmed; then either export it with its prop type or explicitly document it as internal-only/intentionally-unexported.
+The five catalog-only symbols have now been given explicit **provisional source-based dispositions**. These decisions keep the public barrel conservative; they do not add or remove public exports.
 
-These are not automatic defects: an internal catalog specimen may legitimately exercise an internal symbol. They are registry completeness gaps because public API status must be explicit.
+| Symbol | Disposition | Source evidence and rationale |
+|---|---|---|
+| `StudioNumberInput` | **Intentionally unexported** | Thin numeric specialization of the canonical `StudioTextInput` (sets `type="number"`); the Confirmed catalog is its only known specimen in this audit. Keep the shared field implementation as owner and avoid widening the public API without a production consumer. |
+| `StudioVerticalWordToggle` | **Internal-only** | Explicitly registered as a content-driven height exception and shown in the Confirmed catalog. The public barrel already exposes `StudioWordToggle`; keep this specialized vertical presentation internal until a stable external-use contract is requested. |
+| `StudioBrainStatusIndicator` | **Internal-only** | Low-level LED + borderless status composition. The public barrel exposes `StudioBrainStatusBadge` as the semantic status surface; retain the indicator as an implementation/catalog primitive rather than a second public status API. |
+| `StudioSplitLeftDropdown` | **Intentionally unexported** | Thin wrapper over `StudioDropdown` with `variant="split-left"`. The public `StudioDropdown` already owns the variant-capable dropdown contract; do not publish a duplicate wrapper API. |
+| `StudioDoubleSplitSlider` | **Internal-only** | Shared low-level implementation contract used by the left-word slider family and also shown as a Confirmed catalog specimen. Keep the implementation reusable internally; expose the higher-level consumer API rather than the lower-level building block. |
+
+These dispositions are grounded in the current source shape and existing public alternatives. They should be revisited only if a real production consumer or an explicit API requirement changes the trade-off. A catalog specimen is not, by itself, a reason to promote an internal symbol.
+
+## Registry scanner integrity
+
+The scanner now records each `data-vt-library-component` marker together with the descendant JSX primitive rendered inside that specimen wrapper. A marker string and a primitive render elsewhere in the same catalog no longer count as a representative pair. This closes a false-positive path in which a stale marker could certify the wrong component. A regression test covers the mismatched-marker case.
 
 ## Known gaps and next acceptance work
 
-- The source-map pass does not embed a frozen consumer graph; run the new source scanner on the exact commit to generate the current consumer report.
-- Five catalog-only symbols remain owner-disposition items; the audit reports them explicitly without guessing public/internal/deprecated intent.
+- The scanner implementation and regression test are committed, but the generated exact-commit consumer report and a successful CI execution of the scanner test are still required before Phase 3 can be certified.
 - The Confirmed catalog's provenance coverage must be checked family by family; a shared source import is not sufficient evidence of complete metadata.
+- Current CI on the latest branch snapshot also reports unrelated blockers that prevent broad Studio certification: a TSX parse error in `src/views/CreatorVaultOS.tsx`, failing existing Studio field/toggle/split CSS contracts, a Confirmed catalog specimen assertion, and failures in other repository governance/type-check jobs. These are recorded as observed failures, not attributed to the registry scanner without evidence.
 - The CSS entry still contains multiple recovery/parity layers whose ownership and removal candidates need a separate rule-level audit.
 - Visual certification remains separate and requires browser/computed-style evidence at supported tiers and states.
 
-These gaps are visible work items, not hidden assumptions. The first three phases establish the authority and registry framework so the next audits can be evidence-backed and non-duplicative.
+These gaps are visible work items, not hidden assumptions. Phases 1–2 remain complete; Phase 3 has a source-backed registry and explicit API dispositions, but is not certified until its scanner tests/report and the relevant Studio contracts pass.
