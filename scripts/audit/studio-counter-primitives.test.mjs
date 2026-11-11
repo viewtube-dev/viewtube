@@ -57,7 +57,7 @@ test("counter affordances have hold-repeat, enlarged icons, activation motion, a
   assert.match(styles, /vt-studio-counter-pop/);
   assert.match(styles, /vt-studio-counter-hold-pulse/);
   assert.match(styles, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s);
-  assert.match(styles, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter > button\.is-holding svg/);
+  assert.match(styles, /\.vt-studio-side-counter__actions button\.is-holding svg/);
 });
 
 test("counter palette variants use centered per-size pairs, tokenized numeral tint, and 0–100", () => {
