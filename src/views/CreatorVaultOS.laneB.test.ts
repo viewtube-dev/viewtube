@@ -23,6 +23,7 @@ describe("CreatorVaultOS Lane B organization contract", () => {
   expect(source).toContain('canMutateVaultAsset(asset, "archive")')
   expect(source).toContain('canMutateVaultAsset(asset, "permanent-delete")')
   expect(source).toContain("getVaultAssetToolTargets(selectedRecords[0].kind).length > 0")
+  expect(source).toContain("selectedAssetIds.length === 1 && selectedAsset && selectedToolTargets.length")
   expect(source).toContain("resolveVaultTranscriptVideoId({ asset, contentBuildVideoId })")
  })
 })
