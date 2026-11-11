@@ -372,7 +372,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
               <div className="min-w-0 flex-1">
                 <StudioSideTextCounter id="vault-image-resize-width" ariaLabel="Resize width" value={transform.resizeWidth ?? ""} min={1} max={16384} step={1} inputMode="numeric" placeholder="Original" onValueChange={(value) => patchTransform({ resizeWidth: value.trim() ? Number(value) : null })} />
               </div>
-              <StudioSquareIconButton label="Reset resize width to original" tooltip={`Original width: ${sourceDimensions.width}px`} icon={<RotateCcw aria-hidden="true" size={14} />} sizeVariant="compact" onClick={() => patchTransform({ resizeWidth: null })} />
+              <StudioSquareIconButton label="Reset resize width to original" tooltip={`Original width: ${sourceDimensions.width}px`} icon={<RotateCcw aria-hidden="true" size={14} />} sizeVariant="compact" onClick={() => patchTransform({ resizeWidth: sourceDimensions.width })} />
             </div>
           </div>
           <div className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
@@ -381,7 +381,7 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
               <div className="min-w-0 flex-1">
                 <StudioSideTextCounter id="vault-image-resize-height" ariaLabel="Resize height" value={transform.resizeHeight ?? ""} min={1} max={16384} step={1} inputMode="numeric" placeholder="Original" onValueChange={(value) => patchTransform({ resizeHeight: value.trim() ? Number(value) : null })} />
               </div>
-              <StudioSquareIconButton label="Reset resize height to original" tooltip={`Original height: ${sourceDimensions.height}px`} icon={<RotateCcw aria-hidden="true" size={14} />} sizeVariant="compact" onClick={() => patchTransform({ resizeHeight: null })} />
+              <StudioSquareIconButton label="Reset resize height to original" tooltip={`Original height: ${sourceDimensions.height}px`} icon={<RotateCcw aria-hidden="true" size={14} />} sizeVariant="compact" onClick={() => patchTransform({ resizeHeight: sourceDimensions.height })} />
             </div>
           </div>
         </div>
