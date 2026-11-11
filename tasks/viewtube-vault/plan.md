@@ -418,3 +418,55 @@ Confirmed source findings:
 - Multiline text areas remain tall enough for real editing; mobile input font-size contract is preserved.
 - No behavior, metadata, derivative lineage, import review, or handoff semantics regress.
 - Exact commit has a successful build and the desktop/portrait/landscape screenshot review is recorded.
+
+
+---
+
+## Continuation — Product clarity, capability coverage and Brain integration (2026-11-11)
+
+**Audit authority:** `docs/vault/VAULT_PRODUCT_CLARITY_AND_CAPABILITY_COVERAGE_AUDIT_2026-11-11.md`  
+**Target baseline:** `master/consolidated-feature-integration` @ `524fbcefd37f34b12d34a57d2725b2280c6692ab`  
+**Decision:** EXTEND the current Vault plan and task ledger. Do not create a second Vault implementation or replace existing unfinished work.
+
+### Product outcome
+
+Make the existing Vault immediately understandable and efficient for creators while retaining its existing capabilities. Users should always understand what resource or selection they are working with, what each control does, what an operation will change, where results go, and what actually happened.
+
+### Reconciled priorities
+
+1. Finish existing RH-UX120–146 before adding a new navigation or component system.
+2. Audit every visible tool and control from UI entry through handler, service, permission, persistence/worker, output and test. A UI label is not evidence of a working capability.
+3. Give each action clear purpose, prerequisites, consequence, destination and truthful status.
+4. Keep the Library as the default primary surface; move low-frequency configuration and secondary actions into contextual surfaces.
+5. Fix Brain evidence navigation so a cited resource opens the exact canonical Vault asset, not a generic Reference Studio route.
+6. Preserve existing Brain permission, evidence and approval contracts; keep retrieval read-only and mutations proposal-first.
+7. Complete missing processing capabilities only when a real provider/worker, safe execution boundary, durable receipt and lineage are available.
+8. Route Projects, Editor, Publishing, Research and Analytics features to their canonical owners.
+
+### Execution phases
+
+- **Phase 0 — Truth and baseline:** verify exact branch/head, open PRs, route, page composition, every tool call path, current tests and current runtime availability. Record existing failures.
+- **Phase 1 — Library-first UX:** execute RH-UX120–146, with a per-control plain-language inventory and responsive row plan.
+- **Phase 2 — Capability coverage:** classify each tool/action as covered, partial, missing UI, broken wiring, stale UI, misleading UI, duplicate UI or unverified. Repair the highest-impact truthful-state and discovery gaps.
+- **Phase 3 — Brain integration:** correct canonical asset deep links; test permission, freshness, evidence identity and missing/deleted asset behavior; verify that displayed evidence is exactly the evidence supplied to the turn.
+- **Phase 4 — Missing capability completion:** prioritize vision suggestions, local transcription, proxy derivatives, Project handoffs and VT_E1 derivative safety only after confirming canonical owners and real backend dependencies.
+- **Phase 5 — Release certification:** focused tests, typecheck, lint, build, keyboard/accessibility checks, desktop/portrait/landscape browser evidence and exact-head post-merge verification.
+
+### Architectural constraints
+
+- One canonical asset identity and current Vault/Asset Engine ownership.
+- Projects and ContentBuild retain project lifecycle ownership.
+- BrainRuntime remains the reasoning/context layer, not an asset store or duplicate registry.
+- ActionPacket/Handoff remains the cross-tool transport.
+- Existing Studio Controls and Toolbox/SubToolbox primitives remain the UI authority.
+- No new shared primitive, external provider, storage dependency, incompatible schema migration or destructive data operation without the required decision/approval.
+- No fake progress, availability, analytics, AI suggestions, saved outputs or success states.
+
+### Definition of done
+
+- Every visible tool has a source-backed capability record and a clear creator-facing explanation.
+- Every visible action reaches a real canonical owner and has truthful eligibility, permission, result and failure behavior.
+- The Library is immediately reachable on mobile; no duplicate navigation/filter/action ownership remains.
+- Brain citations open the exact permitted Vault asset and preserve canonical IDs/provenance.
+- Unsupported processors are clearly unavailable and do not appear operational.
+- Existing and new tests pass on the exact implementation head; visual and accessibility checks are recorded rather than inferred.
