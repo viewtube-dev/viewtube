@@ -1,6 +1,7 @@
 import React from "react"
-import { Image as ImageIcon } from "lucide-react"
-import { StudioTextBox } from "../../studio-ui/primitives/StudioControls"
+import { Image as ImageIcon, Sun, Contrast, Droplets, Crosshair, MoveHorizontal, MoveVertical, ArrowLeftRight, ArrowUpDown, Gauge } from "lucide-react"
+import { StudioTextBox, StudioSquareIconButton } from "../../studio-ui/primitives/StudioControls"
+import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
 import { SubToolboxInnerActionButton } from "../../components/Toolbox"
 import {
   SubToolboxInput,
@@ -346,57 +347,84 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
               <div className="pointer-events-none absolute border-2 border-dashed border-white shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" style={{ left: (crop.x / sourceDimensions.width * 100) + "%", top: (crop.y / sourceDimensions.height * 100) + "%", width: (crop.width / sourceDimensions.width * 100) + "%", height: (crop.height / sourceDimensions.height * 100) + "%" }} />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {(["x", "y", "width", "height"] as const).map((key) => (
-              <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase" key={key}>
-                {key}
-                <SubToolboxInput type="number" min={key === "width" || key === "height" ? 1 : 0} max={key === "x" ? sourceDimensions.width - 1 : key === "y" ? sourceDimensions.height - 1 : undefined} value={crop[key]} onChange={(event) => { invalidatePreview(); setCrop((current) => ({ ...current, [key]: Number(event.target.value) })) }} />
-              </label>
-            ))}
+          <div className="grid grid-cols-2 gap-2" data-vault-adjustment-row="crop-position">
+            <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+              X
+              <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<MoveHorizontal aria-hidden="true" />} aria-label="Crop X" min={0} max={sourceDimensions.width - 1} value={crop.x} onChange={(event) => { invalidatePreview(); setCrop((current) => ({ ...current, x: Number(event.target.value) })) }} />
+            </label>
+            <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+              Y
+              <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<MoveVertical aria-hidden="true" />} aria-label="Crop Y" min={0} max={sourceDimensions.height - 1} value={crop.y} onChange={(event) => { invalidatePreview(); setCrop((current) => ({ ...current, y: Number(event.target.value) })) }} />
+            </label>
+          </div>
+          <div className="grid grid-cols-2 gap-2" data-vault-adjustment-row="crop-size">
+            <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+              Width
+              <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<ArrowLeftRight aria-hidden="true" />} aria-label="Crop width" min={1} max={sourceDimensions.width} value={crop.width} onChange={(event) => { invalidatePreview(); setCrop((current) => ({ ...current, width: Number(event.target.value) })) }} />
+            </label>
+            <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+              Height
+              <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<ArrowUpDown aria-hidden="true" />} aria-label="Crop height" min={1} max={sourceDimensions.height} value={crop.height} onChange={(event) => { invalidatePreview(); setCrop((current) => ({ ...current, height: Number(event.target.value) })) }} />
+            </label>
           </div>
           </>
         ) : null}
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2" data-vault-adjustment-row="tone">
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Brightness (-100 to 100)
-            <SubToolboxInput type="number" min={-100} max={100} value={transform.brightness || 0} onChange={(event) => patchTransform({ brightness: Number(event.target.value) })} />
+            Brightness
+            <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<Sun aria-hidden="true" />} aria-label="Brightness" min={-100} max={100} value={transform.brightness || 0} onChange={(event) => patchTransform({ brightness: Number(event.target.value) })} />
           </label>
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Contrast (-100 to 100)
-            <SubToolboxInput type="number" min={-100} max={100} value={transform.contrast || 0} onChange={(event) => patchTransform({ contrast: Number(event.target.value) })} />
+            Contrast
+            <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<Contrast aria-hidden="true" />} aria-label="Contrast" min={-100} max={100} value={transform.contrast || 0} onChange={(event) => patchTransform({ contrast: Number(event.target.value) })} />
           </label>
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Saturation (-100 to 100)
-            <SubToolboxInput type="number" min={-100} max={100} value={transform.saturation || 0} onChange={(event) => patchTransform({ saturation: Number(event.target.value) })} />
-          </label>
-          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Resize width
-            <SubToolboxInput type="number" min={1} max={16384} placeholder="Original" value={transform.resizeWidth ?? ""} onChange={(event) => patchTransform({ resizeWidth: event.target.value ? Number(event.target.value) : null })} />
-          </label>
-          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Resize height
-            <SubToolboxInput type="number" min={1} max={16384} placeholder="Original" value={transform.resizeHeight ?? ""} onChange={(event) => patchTransform({ resizeHeight: event.target.value ? Number(event.target.value) : null })} />
-          </label>
-          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            JPEG / WebP quality
-            <SubToolboxInput type="number" min={0.1} max={1} step={0.05} value={transform.quality} onChange={(event) => patchTransform({ quality: Number(event.target.value) })} />
+            Saturation
+            <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<Droplets aria-hidden="true" />} aria-label="Saturation" min={-100} max={100} value={transform.saturation || 0} onChange={(event) => patchTransform({ saturation: Number(event.target.value) })} />
           </label>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-3 gap-2" data-vault-adjustment-row="focal-quality">
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Focal point X (%)
-            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.x} onChange={(event) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, x: Math.max(0, Math.min(100, Number(event.target.value))) })) }} />
+            Focal X (%)
+            <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<Crosshair aria-hidden="true" />} aria-label="Focal point X" min={0} max={100} value={focalPoint.x} onChange={(event) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, x: Math.max(0, Math.min(100, Number(event.target.value))) })) }} />
           </label>
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Focal point Y (%)
-            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.y} onChange={(event) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, y: Math.max(0, Math.min(100, Number(event.target.value))) })) }} />
+            Focal Y (%)
+            <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<Crosshair aria-hidden="true" />} aria-label="Focal point Y" min={0} max={100} value={focalPoint.y} onChange={(event) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, y: Math.max(0, Math.min(100, Number(event.target.value))) })) }} />
           </label>
-          <div className="col-span-2 flex flex-wrap items-end gap-2">
-            <SubToolboxInnerActionButton label="Thumbnail Preset" iconName="image" tone="orange" onClick={() => patchTransform({ resizeWidth: 1280, resizeHeight: 720, preserveAspectRatio: true })} disabled={busy} />
-            <SubToolboxInnerActionButton label="Web Optimize" iconName="refresh" tone="green" onClick={() => patchTransform({ resizeWidth: 1920, resizeHeight: 1080, preserveAspectRatio: true, outputFormat: "image/webp", quality: 0.82 })} disabled={busy} />
-          </div>
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Quality
+            <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<Gauge aria-hidden="true" />} aria-label="JPEG or WebP quality" min={0.1} max={1} step={0.05} value={transform.quality} onChange={(event) => patchTransform({ quality: Number(event.target.value) })} />
+          </label>
+        </div>
+
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-end gap-2" data-vault-adjustment-row="resize">
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Resize width
+            <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<ArrowLeftRight aria-hidden="true" />} aria-label="Resize width" min={1} max={16384} placeholder="Original" value={transform.resizeWidth ?? ""} onChange={(event) => patchTransform({ resizeWidth: event.target.value ? Number(event.target.value) : null })} />
+          </label>
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Resize height
+            <StudioSplitTextInput split="left" sizeVariant="compact" type="number" leftIcon={<ArrowUpDown aria-hidden="true" />} aria-label="Resize height" min={1} max={16384} placeholder="Original" value={transform.resizeHeight ?? ""} onChange={(event) => patchTransform({ resizeHeight: event.target.value ? Number(event.target.value) : null })} />
+          </label>
+          <StudioSquareIconButton sizeVariant="compact" iconPreset="refresh" label="Reset resize dimensions" aria-label="Reset resize dimensions to original" title="Reset resize dimensions to original" onClick={() => patchTransform({ resizeWidth: null, resizeHeight: null })} disabled={busy} />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-2">
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Rotate
+            <SubToolboxSelect id="vault-image-rotation" value={String(transform.rotation)} onChange={(event) => patchTransform({ rotation: Number(event.target.value) })}>
+              <option value="0">0°</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option>
+            </SubToolboxSelect>
+          </label>
+          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            Output format
+            <SubToolboxSelect id="vault-image-format" value={transform.outputFormat} onChange={(event) => patchTransform({ outputFormat: event.target.value as VaultImageOutputFormat })}>
+              <option value="image/png">PNG · lossless</option><option value="image/jpeg">JPEG · compressed</option><option value="image/webp">WebP · compact</option>
+            </SubToolboxSelect>
+          </label>
         </div>
         <div className="flex flex-wrap gap-2">
           <SubToolboxInnerActionButton label={busy ? "Processing…" : "Apply & Preview"} iconName="image" tone="cyan" onClick={() => void apply()} disabled={busy} />
