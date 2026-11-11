@@ -163,7 +163,6 @@ export function buildRegistry(root = process.cwd()) {
   const barrelPath = path.join(root, "src/studio-ui/index.ts");
   const catalog = parsedFiles.get(catalogPath) ?? analyzeSource(fs.readFileSync(catalogPath, "utf8"), catalogPath);
   const barrel = parsedFiles.get(barrelPath) ?? analyzeSource(fs.readFileSync(barrelPath, "utf8"), barrelPath);
-  const catalogSource = fs.readFileSync(catalogPath, "utf8");
   const catalogBindings = catalog.imports.flatMap((item) => {
     const resolved = item.source.startsWith(".")
       ? ts.resolveModuleName(item.source, catalogPath, options, ts.sys).resolvedModule?.resolvedFileName
