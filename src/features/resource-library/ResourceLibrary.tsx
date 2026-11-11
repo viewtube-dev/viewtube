@@ -219,14 +219,12 @@ const ResourceLibrary: React.FC = () => {
                       aria-pressed={active}
                     >
                       <div className="vt-resource-card-copy">
-                        <div className="vt-resource-card-meta">
-                          <span className="vt-resource-card-category">{resource.category}</span>
-                          {completedResources.includes(resource.id) ? (
-                            <StudioSpectrumTag label="COMPLETED" spectrumKey="completed" className="vt-resource-complete-tag" />
-                          ) : null}
-                        </div>
+                        <span className="vt-resource-card-category">{resource.category}</span>
                         <strong>{resource.shortTitle}</strong>
                         <small>{resource.readTime} · {resource.difficulty}</small>
+                        {completedResources.includes(resource.id) ? (
+                          <StudioSpectrumTag label="COMPLETED" spectrumKey="completed" className="vt-resource-complete-tag" />
+                        ) : null}
                       </div>
                     </StudioSplitLeftButton>
                   )
