@@ -127,3 +127,12 @@ Phase 3/4 work has started with additional test coverage:
 - `d2992ca8d6fff90a1d04d1da21ddd66cc6df8605` — cover detached-version identity, source preservation, and lineage metadata.
 
 **Verification limitation:** GitHub source readback confirms the edits are present. Vitest, typecheck, lint, build, and browser checks have not run in this session. These commits are not represented as test-passing.
+
+
+### Additional continuation — shared transcript ID resolution
+
+- `3761d2522006366b6eab53b77d989f981f6f0c28` — require CreatorVaultOS to use the shared transcript video-ID resolver.
+- `0452a9907d7cf63c6137df263806ebdc4bb5ab18` — route Inspector transcript acquisition through the shared resolver while retaining ContentBuild usage fallback.
+- `c49a45688be2e3bd0effcb533fc898c2aafa362a` — cover the legacy `youtubeId` metadata alias in resolver tests.
+
+The page previously duplicated the resolver logic and omitted the `youtubeId` alias. The Inspector now delegates to the tested helper, checking associated ContentBuild bindings first and then asset metadata. This is a source-level integration change; the focused Vitest command remains unrun in this environment.
