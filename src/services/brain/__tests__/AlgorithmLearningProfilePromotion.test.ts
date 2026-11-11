@@ -38,6 +38,17 @@ const mocks = vi.hoisted(() => {
   listApprovedAlgorithmLearningCandidates: vi.fn((_channelId?: string): any[] => [{ candidate, sourceEvent, review }]),
   listAlgorithmIntelligenceEvents: vi.fn((_input?: any): any[] => []),
   recordAlgorithmIntelligenceEvent: vi.fn((input?: any): any => ({ id: input?.id || "promotion-event-1", ...input })),
+  listBrainTraces: vi.fn((_channelId?: string): any[] => [{
+   id: "trace-1",
+   channelId: "channel-1",
+   evidence: {
+    returned: ["evidence-1", "evidence-2"],
+    records: [
+     { id: "evidence-1", owner: "analytics-canon", sourceRef: "analytics://snapshot/1", sourceSnapshotId: "snapshot-1", channelId: "channel-1", freshness: "fresh", epistemicState: "OBSERVED", provenance: { evidenceIds: ["source-1"] } },
+     { id: "evidence-2", owner: "youtube-read", sourceRef: "youtube://video/2", sourceSnapshotId: "snapshot-2", channelId: "channel-1", freshness: "fresh", epistemicState: "KNOWN", provenance: { evidenceIds: ["source-2"] } },
+    ],
+   },
+  }]),
  }
 })
 
