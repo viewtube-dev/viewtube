@@ -211,8 +211,6 @@ const ResourceLibrary: React.FC = () => {
                       type="button"
                       sizeVariant="standard"
                       icon={<FileText aria-hidden="true" />}
-                      variant={active ? "v2" : "v1"}
-                      selected={active}
                       className={`vt-resource-card ${active ? "is-active" : ""}`}
                       style={getResourcePaletteStyle(resource.accentPaletteIndex)}
                       onClick={() => selectResource(resource.id)}
