@@ -143,6 +143,44 @@ describe("AlgorithmLearningProfilePromotion", () => {
   expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
  })
 
+ it("rejects evidence IDs that do not resolve to canonical records actually returned on a candidate trace", async () => {
+  mocks.listBrainTraces.mockReturnValue([{
+   id: "trace-1",
+   channelId: "channel-1",
+   evidence: { returned: ["evidence-1"], records: [] },
+  }])
+  const result = await promoteApprovedAlgorithmLearningToProfile({
+   channelId: "channel-1",
+   candidateId: mocks.candidate.id,
+   creatorApproved: true,
+  })
+  expect(result.status).toBe("invalid_candidate_evidence")
+  expect(result.evidenceResolution).toMatchObject({ missingIds: ["evidence-1", "evidence-2"] })
+  expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
+  expect(mocks.recordAlgorithmIntelligenceEvent).not.toHaveBeenCalled()
+ })
+
+ it("rejects canonical evidence records outside the requested channel", async () => {
+  mocks.listBrainTraces.mockReturnValue([{
+   id: "trace-1",
+   channelId: "channel-1",
+   evidence: {
+    returned: ["evidence-1", "evidence-2"],
+    records: [
+     { id: "evidence-1", owner: "analytics-canon", sourceRef: "analytics://snapshot/1", channelId: "foreign-channel", freshness: "fresh", epistemicState: "OBSERVED", provenance: { evidenceIds: [] } },
+     { id: "evidence-2", owner: "youtube-read", sourceRef: "youtube://video/2", channelId: "foreign-channel", freshness: "fresh", epistemicState: "KNOWN", provenance: { evidenceIds: [] } },
+    ],
+   },
+  }])
+  const result = await promoteApprovedAlgorithmLearningToProfile({
+   channelId: "channel-1",
+   candidateId: mocks.candidate.id,
+   creatorApproved: true,
+  })
+  expect(result.status).toBe("invalid_candidate_evidence")
+  expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
+ })
+
  it("rejects a candidate whose persisted channel scope differs from the request", async () => {
   mocks.listApprovedAlgorithmLearningCandidates.mockReturnValue([{
    candidate: { ...mocks.candidate, channelId: "channel-foreign" },
