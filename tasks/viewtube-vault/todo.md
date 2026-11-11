@@ -184,3 +184,55 @@
 - [ ] No duplicate primitive styling authority or feature-local component geometry is introduced.
 - [ ] Typecheck, focused tests, relevant suite, lint, and production build are green or any baseline failure is explicitly documented.
 - [ ] Final live screenshot review confirms the deployed exact commit.
+
+
+---
+
+## Phases 0–2 execution snapshot — 2026-11-11
+
+**Target:** `fix/studio-controls-regression-recovery-2026-10-31`  
+**Target head at audit start:** `d237d97b576ef30e1bb398b8be4194cd9712a46d`  
+**Evidence:** `docs/vault/VAULT_PHASE_0_1_2_TARGET_BRANCH_AUDIT_2026-11-11.md`
+
+### Phase 0 — target reconciliation
+
+- [x] Confirm the 10-31 branch as the implementation target.
+- [x] Inspect the production Vault route, CreatorVaultOS, canonical asset adapter, deep-link resolver, Brain adapter, capability registry, adaptive host, tests and package scripts on the target.
+- [x] Confirm the canonical resolver filename is `src/services/vaultAssetDeepLink.ts`; do not add a duplicate resolver.
+- [x] Reject wholesale merge of `audit/vault-product-clarity-2026-11-11` (diverged: 5 ahead / 136 behind at comparison).
+- [ ] Run focused Vault/Brain tests, operation-store tests, typecheck, governance checks, build and changed-file lint on an exact local checkout.
+- [ ] Capture desktop, mobile portrait and mobile landscape baseline screenshots.
+
+**Phase 0 status:** source reconciliation complete; runtime/build/browser baseline still blocked and not certified.
+
+### Phase 1 — Library-first UX
+
+Verified in target source (not yet browser-certified):
+- [x] Workspace layout settings already open in a modal rather than occupying the normal page flow.
+- [x] Library search, navigation and filters have dedicated toolbar entry points.
+- [x] Navigation and filter drawers close one another when opened.
+- [x] Batch, Group Builder and “Send to ViewTube…” actions are selection- and mode-dependent.
+- [x] External destinations are grouped under “Send to ViewTube…”.
+- [x] Asset cards use the shared media-first `VaultAssetModule`.
+
+Remaining work stays tracked by RH-UX120–146:
+- [ ] Verify and finish Library-first first-viewport placement at desktop and mobile sizes.
+- [ ] Complete responsive row-packing across every visible SubToolbox.
+- [ ] Verify list overflow, drawers, focus, keyboard, touch targets and mobile orientation behavior.
+- [ ] Complete exact-commit screenshot and UI audit certification.
+
+**Phase 1 status:** substantial source implementation verified; remaining responsive and visual acceptance is open.
+
+### Phase 2 — capability discoverability and truthful states
+
+- [x] Confirm the existing capability registry and adaptive host; do not create a second registry.
+- [x] Confirm video/audio processor availability defaults to false in CreatorVaultOS and unavailable reasons are surfaced.
+- [x] Confirm the adaptive host labels availability and reasons.
+- [ ] RH-CAP200 Map every visible Vault action to its UI entry point, handler, canonical service, permission/policy, output/receipt, recovery path and tests.
+- [ ] RH-CAP201 Reconcile adaptive capability entries with existing page actions; do not duplicate controls or handlers.
+- [ ] RH-CAP202 Give every visible action a plain-language purpose, prerequisites, consequence, destination and recovery explanation.
+- [ ] RH-CAP203 Add tests for selection compatibility, unavailable reasons, protected assets and capability-to-handler coverage.
+- [ ] RH-CAP204 Ensure no status chip or mode tab implies execution unless a real operation callback is wired.
+- [ ] RH-CAP205 Complete accessibility review for capability modes, disabled states, labels, focus and keyboard operation.
+
+**Phase 2 status:** registry/status foundation exists; end-to-end action mapping and verification remain open.
