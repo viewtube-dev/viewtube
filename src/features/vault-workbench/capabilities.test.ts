@@ -27,6 +27,12 @@ describe("Vault media capability resolution", () => {
     expect(capabilities.find((item) => item.id === "archive")?.available).toBe(false)
     expect(capabilities.find((item) => item.id === "delete")?.available).toBe(false)
   })
+
+  it("marks Send To unavailable when no compatible handoff exists", () => {
+    const capabilities = resolveVaultMediaCapabilities({ kinds: ["document"], eligibility: { sendTo: false } })
+    expect(capabilities.find((item) => item.id === "send-to"))
+      .toMatchObject({ available: false, reason: expect.stringContaining("handoff") })
+  })
   it("provides and filters the canonical Workbench modes", () => {
     expect(VAULT_WORKBENCH_MODES.map((mode) => mode.id)).toEqual(["browse", "inspect", "compare", "edit", "process", "organize", "workflow"])
     const capabilities = resolveVaultMediaCapabilities({ kinds: ["image"] })
