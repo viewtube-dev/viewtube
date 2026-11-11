@@ -35,13 +35,15 @@ test("builds a derived public-export and consumer graph from the existing catalo
     write("src/studio-ui/index.ts", 'export { StudioButton } from "./primitives/StudioButton";');
     write("src/studio-ui/primitives/StudioButton.tsx", "export const StudioButton = () => null;");
     write("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx",
-      'import { StudioButton } from "../../studio-ui"; export const Catalog = () => <StudioButton data-vt-library-component="StudioButton" />;');
+      'import { StudioButton } from "../../studio-ui"; export const Catalog = () => <><div data-vt-library-component="StudioButton"><StudioButton /></div><div data-vt-library-component="StudioGhost"><StudioButton /></div></>;');
     write("src/views/Consumer.tsx",
       'import { StudioButton as Button } from "../studio-ui"; export const Consumer = () => <Button />;');
 
     const report = buildRegistry(root);
     assert.equal(report.summary.publicStudioValueExports, 1);
     assert.equal(report.publicExports[0].status, "public-represented");
+    assert.equal(report.publicExports[0].representativeMarker, true);
+    assert.equal(report.publicExports[0].rendered, true);
     const button = report.consumers.find((row) => row.name === "StudioButton");
     assert.ok(button);
     assert.ok(button.productionConsumers.includes("src/views/Consumer.tsx"));
@@ -59,4 +61,26 @@ test("target branch catalog-only controls remain explicitly visible for owner AP
     assert.ok(names.includes(name), `${name} should be reported, not silently promoted or omitted`);
   }
   assert.equal(report.catalogOnlyUnexportedSymbols.every((row) => row.status === "not-exported-from-public-barrel-owner-disposition-required"), true);
+});
+
+test("a library marker must wrap the matching primitive, not merely coexist elsewhere in the catalog", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "studio-primitive-marker-"));
+  const write = (relativePath, source) => {
+    const fullPath = path.join(root, relativePath);
+    fs.mkdirSync(path.dirname(fullPath), { recursive: true });
+    fs.writeFileSync(fullPath, source);
+  };
+  try {
+    write("tsconfig.json", JSON.stringify({ compilerOptions: { moduleResolution: "bundler", module: "esnext", jsx: "react-jsx" } }));
+    write("src/studio-ui/index.ts", 'export { StudioButton } from "./primitives/StudioButton";');
+    write("src/studio-ui/primitives/StudioButton.tsx", "export const StudioButton = () => null;");
+    write("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx",
+      'import { StudioButton } from "../../studio-ui"; export const Catalog = () => <><div data-vt-library-component="StudioButton"><span>Missing primitive</span></div><div><StudioButton /></div></>;');
+    const report = buildRegistry(root);
+    assert.equal(report.publicExports[0].representativeMarker, false);
+    assert.equal(report.publicExports[0].rendered, true);
+    assert.equal(report.publicExports[0].status, "public-imported-without-representative");
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
 });
