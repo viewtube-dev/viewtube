@@ -570,8 +570,8 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
     <Family
       title="StudioSideCounter · Supreme + Standard + Compact + Mini + Micro" defaultOpen
       nonDefaultSettings={[
-        "Numeric display uses a 2:1 width ratio; the right action rail contains two cells.",
-        "Uses the canonical left-rail specimen, with the action rail and value panel matching the confirmed lower example.",
+        "Numeric display uses a 2:1 width ratio; the left action rail contains two cells.",
+        "Keeps only the canonical left-rail specimen that matches the confirmed lower example.",
         "All size specimens constrain the numeric value to 0–100.",
       ]}
       provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · square action rail and 2:1 value region · 0–100 range." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}
