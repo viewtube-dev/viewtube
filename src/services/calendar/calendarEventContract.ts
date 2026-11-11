@@ -27,20 +27,28 @@ export type CalendarEventStatus =
   | "cancelled"
   | "unknown"
 
-export type CalendarEventSourceKind =
+export type CalendarEventOwner =
+  | "projects"
+  | "publisher"
+  | "asset_engine"
+  | "analytics"
+
+export type CalendarEventRecordType =
   | "project"
   | "project_task"
   | "content_build"
   | "asset"
-  | "analytics"
+  | "analytics_checkpoint"
 
 export type CalendarDateKey = `${number}-${number}-${number}`
 
 export interface CalendarEventSource {
   /** Stable ID in the system that owns the record. */
   recordId: string
-  /** Source-of-truth system; never a calendar-local record. */
-  owner: CalendarEventSourceKind
+  /** Canonical source-of-truth system; never a calendar-local record. */
+  owner: CalendarEventOwner
+  /** Record role within the owning system. */
+  recordType: CalendarEventRecordType
   /** Owning project, when the event participates in a project lifecycle. */
   projectId?: string
   contentBuildId?: string
@@ -67,17 +75,11 @@ export interface CalendarEventProjection {
   externalVerifiedAt?: string
 }
 
-export interface CalendarEventProjectionSource {
-  projects: readonly unknown[]
-  /** Publisher/ContentBuild snapshots are joined by their canonical IDs. */
-  contentBuildIds?: readonly string[]
-}
-
 /**
  * Existing owner mapping:
- * - Project.publishDate -> project / publish, one-day date
- * - Project.tasks[].dueDate -> project_task / task, one-day date
- * - ContentBuild.youtube.scheduledAt -> content_build / publish, verified state only
+ * - Projects / Project.publishDate -> projects / project, one-day publish date
+ * - Projects / Project.tasks[].dueDate -> projects / project_task, one-day task date
+ * - ContentBuild.youtube.scheduledAt -> publisher / content_build, verified state only
  * - Multi-day bars require an explicit start/end range from the owning record.
  *
  * Do not add Project.startDate/endDate or a calendar event table until the
