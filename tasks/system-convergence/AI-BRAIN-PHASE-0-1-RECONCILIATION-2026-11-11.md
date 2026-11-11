@@ -245,3 +245,27 @@ Then record the repository's actual typecheck, source-governance and build comma
 **Tests/build/typecheck/browser:** not run.  
 **Certification:** not claimed.  
 **Next gate:** run the focused baseline at the pinned SHA and finish the complete producer/caller census before runtime implementation.
+
+
+## 7. Current-SHA CI verification update — 2026-11-11
+
+The first GitHub Actions run for the documentation branch head `b3a0cc15c6c5939904d8e6e79d96e32f32ea16ac` completed as **failure** (run 6184). This is now the available executable baseline for this documentation branch; it does not change the pinned target-branch SHA above.
+
+Passed jobs/steps:
+- production build;
+- Brain quality-loop contract and tests;
+- local browser smoke.
+
+Failed jobs:
+- document-system audit;
+- source-governance / confirmed catalog;
+- Gemini-governance focused Vitest group;
+- focused-contract gate;
+- full test suite;
+- TypeScript typecheck.
+
+The document audit identifies multiple ACTIVE registry entries claiming the same Priority-25 runtime, public-resolver and Studio Controls execution-packet concerns. Confirmed-catalog failures are Studio split-input CSS/specimen and primitive coverage assertions. Focused-contract stopped at a Studio specimen assertion. Typecheck includes existing Studio exports/types, OpportunityEvidenceAdapter, generationStore and Brain command-interface errors. Gemini-governance caller inventory generation succeeded, but its following test group failed. These are blockers to aggregate certification and must be resolved/classified in their owning workstreams; no such failures are to be hidden by weakening gates.
+
+**Phase 0/1 disposition remains:** source and plan reconciliation complete; runtime baseline certification blocked by the failed aggregate run, missing focused Brain evidence/context/public-private tests, and Task Authority claim/receipt verification.
+
+Phase 2 and 3 source reconciliation and implementation gates are recorded in [AI Brain Phase 2/3 execution](AI-BRAIN-PHASE-2-3-EXECUTION-2026-11-11.md).
