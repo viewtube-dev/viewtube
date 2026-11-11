@@ -17,5 +17,8 @@ describe("CreatorVaultOS Lane B organization contract", () => {
   expect(source).toContain("Toggle Favorite")
   expect(source).toContain("Archive Selection")
   expect(source).toContain("Move to Trash")
+  expect(source).toContain('selectedAsset.metadata?.trashedAt')
+  expect(source).toContain('selectedAsset.metadata?.archivedAt')
+  expect(source).toContain('label="Archive Asset"')
  })
 })
