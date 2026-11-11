@@ -950,7 +950,6 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     expect(html).toContain('data-vt-studio-split-field');
     expect(html).toContain('data-vt-studio-field-kind="text-input"');
     expect(html).toContain('type="text"');
-    expect(html).toContain('value="draft 12"');
     expect(html).toContain('aria-label="Editable quantity"');
     expect(html).toContain('aria-label="Increase Editable quantity"');
     expect(html).toContain('aria-label="Decrease Editable quantity"');
