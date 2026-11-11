@@ -423,7 +423,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSquareIconButton"><span>Square Icon Button · STANDARD</span><StudioSquareIconButton icon={<Settings2 aria-hidden="true" />} label="SETTINGS" aria-label="Square icon button standard specimen" sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCircleIconButton"><span>Circle Icon Button · STANDARD</span><StudioCircleIconButton icon={<Check aria-hidden="true" />} label="CONFIRM" aria-label="Circle icon button standard specimen" sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSquareIconButtonGroup"><span>Square Icon Button Group · STANDARD</span><StudioSquareIconButtonGroup sizeVariant="standard" aria-label="Standard icon button group" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioPlayPauseButton"><span>Play / Pause Button · STANDARD</span><StudioPlayPauseButton defaultPlaying={false} sizeVariant="standard" aria-label="Play pause standard specimen" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioPlayPauseButton"><span>Play / Pause Button · STANDARD · SELECTED / PLAYING</span><StudioPlayPauseButton defaultPlaying={true} sizeVariant="standard" aria-label="Play pause selected standard specimen" /></div>
         <h4 className="vt-confirmed-representative-heading">DROPDOWNS</h4>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDropdown"><span>Studio Dropdown · STANDARD</span><StudioDropdown sizeVariant="standard" ariaLabel="Studio dropdown standard specimen" defaultValue="balanced" options={dropdownOptions} /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLegendMultiDropdown"><span>Legend Multi Dropdown · STANDARD</span><StudioLegendMultiDropdown label="VIDEOS" sizeVariant="standard" ariaLabel="Legend multi dropdown standard specimen" defaultValue={["videos"]} options={[{ value: "videos", label: "VIDEOS" }, { value: "shorts", label: "SHORTS" }]} /></div>
@@ -965,7 +965,7 @@ const ConfirmedCatalogFamilyGroups: React.FC<{ children: React.ReactNode }> = ({
 
 const useConfirmedAdditionalPrimitiveSections = (): React.ReactNode[] => {
   const [choiceChecks, setChoiceChecks] = React.useState<boolean[]>(Array(5).fill(false))
-  const [leftCounterValue, setLeftCounterValue] = React.useState(6)
+  const [leftCounterValues, setLeftCounterValues] = React.useState([6, 6, 6, 6, 6])
   const [number, setNumber] = React.useState("12")
   const dropdownOptions = [
     { value: "balanced", label: "BALANCED" },
@@ -1070,8 +1070,12 @@ const useConfirmedAdditionalPrimitiveSections = (): React.ReactNode[] => {
         </div>
       </Family>
 
-      <Family title="StudioLeftCounter · Standard" defaultOpen nonDefaultSettings={["Left-action counter variant with the same 2:1 numeric display as the standard counter."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="Square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>STANDARD · LEFT ACTION RAIL</span><StudioLeftCounter value={leftCounterValue} onValueChange={setLeftCounterValue} size="standard" min={0} max={100} ariaLabel="Left counter dedicated specimen" /></div>
+      <Family title="StudioLeftCounter · Supreme + Standard + Compact + Mini + Micro" defaultOpen nonDefaultSettings={["Left-action counter variant with the same shared 2:1 numeric display at all five canonical sizes."]} provenance={<Provenance primitive="StudioLeftCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="60px / 44px / 28px / 20px / 12px · left square action rail and 2:1 value region." imports={["src/studio-ui/primitives/StudioControls.tsx"]} />}>
+        <div className="vt-confirmed-variant is-full-row vt-confirmed-counter-row" data-vt-library-component="StudioLeftCounter">
+          <div className="vt-confirmed-counter-size-rows">
+            {(["supreme", "standard", "compact", "mini", "micro"] as const).map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{["60px SUPREME", "44px STANDARD", "28px COMPACT", "20px MINI", "12px MICRO"][index]}</small><div className="vt-confirmed-counter-pair"><StudioLeftCounter value={leftCounterValues[index]} onValueChange={next => setLeftCounterValues(current => current.map((value, item) => item === index ? next : value))} size={size} min={0} max={100} ariaLabel={size + " left counter dedicated specimen"} /></div></div>)}
+          </div>
+        </div>
       </Family>
     </>
   )
