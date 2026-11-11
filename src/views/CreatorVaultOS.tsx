@@ -1281,14 +1281,13 @@ const CreatorVaultOS: React.FC = () => {
  }
 
  const resolveAssetYouTubeVideoId = (asset: VaultAsset): string | null => {
-  const direct = asset.metadata?.youtubeVideoId || asset.metadata?.videoId
-  if (typeof direct === "string" && direct.trim()) return direct.trim()
   const usage = getVaultAssetUsage(asset.id)
   for (const item of usage) {
-   const videoId = getContentBuild(item.contentBuildId)?.youtube?.videoId
+   const contentBuildVideoId = getContentBuild(item.contentBuildId)?.youtube?.videoId || null
+   const videoId = resolveVaultTranscriptVideoId({ asset, contentBuildVideoId })
    if (videoId) return videoId
   }
-  return null
+  return resolveVaultTranscriptVideoId({ asset })
  }
 
  const acquireTranscriptForAsset = async (asset: VaultAsset, taskId?: string | null) => {
