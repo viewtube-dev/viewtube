@@ -255,3 +255,10 @@ Remaining work stays tracked by RH-UX120–146:
 - [x] Use the shared, unit-tested transcript video-ID resolver in the Vault Inspector.
 - [x] Preserve ContentBuild YouTube binding fallback and add `youtubeId` metadata alias coverage.
 - [ ] Run focused transcript and CreatorVaultOS Vitest suites on the exact 10-31 branch.
+
+
+### 2026-11-11 follow-on — capability eligibility alignment
+- [x] Gate Send To capability on a single selected asset and a registered compatible handoff target.
+- [x] Use canonical local lifecycle policy for archive, permanent-delete and metadata-edit eligibility.
+- [x] Add regression coverage for unavailable handoff status and Inspector policy/target wiring.
+- [ ] Execute focused capability and CreatorVaultOS Vitest suites, then typecheck, governance, lint and build.
