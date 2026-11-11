@@ -285,15 +285,13 @@
   width: fit-content;
   max-width: 100%;
   margin-bottom: 12px;
-  padding: 5px 8px;
-  border: 2px solid var(--vt-resource-ink);
-  border-radius: 5px;
-  background: var(--vt-resource-cyan);
-  font-size: 9px;
-  line-height: 1.1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  color: var(--vt-resource-ink);
+  font-size: 10px;
   font-weight: 1000;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .vt-resource-document-hero h1 {
@@ -347,16 +345,7 @@
   gap: 5px;
 }
 
-.vt-resource-tag-row span {
-  padding: 4px 7px;
-  border: 2px solid var(--vt-resource-ink);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 40%, white);
-  font-size: 8px;
-  font-weight: 1000;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
+
 
 .vt-resource-intro {
   padding: 14px 16px;

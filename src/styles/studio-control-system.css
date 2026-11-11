@@ -2038,6 +2038,16 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   user-select: none;
   
 }
+/* 20px bracket scales every 15px donor dimension by 4/3. */
+.vt-studio-spectrum-tag.is-20px {
+  height: 20px;
+  min-height: 20px;
+  padding: 1.3333px 4px;
+  border-width: 2.6667px;
+  border-radius: 5.3333px;
+  font-size: 10.6667px;
+  letter-spacing: .4px;
+}
 .vt-studio-spectrum-tag.is-selected {
   background: var(--vt-spectrum-tag-color);
   color: #000;
