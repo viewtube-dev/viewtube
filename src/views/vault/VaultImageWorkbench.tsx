@@ -1,6 +1,6 @@
 import React from "react"
-import { Image as ImageIcon } from "lucide-react"
-import { StudioTextBox } from "../../studio-ui/primitives/StudioControls"
+import { Image as ImageIcon, RotateCcw } from "lucide-react"
+import { StudioSideTextCounter, StudioSquareIconButton, StudioTextBox } from "../../studio-ui/primitives/StudioControls"
 import { SubToolboxInnerActionButton } from "../../components/Toolbox"
 import {
   SubToolboxInput,
@@ -346,52 +346,73 @@ export const VaultImageWorkbench: React.FC<VaultImageWorkbenchProps> = ({ asset,
               <div className="pointer-events-none absolute border-2 border-dashed border-white shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" style={{ left: (crop.x / sourceDimensions.width * 100) + "%", top: (crop.y / sourceDimensions.height * 100) + "%", width: (crop.width / sourceDimensions.width * 100) + "%", height: (crop.height / sourceDimensions.height * 100) + "%" }} />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            JPEG / WebP quality
+            <StudioSideTextCounter ariaLabel="JPEG / WebP quality" value={transform.quality} min={0.1} max={1} step={0.05} inputMode="decimal" onValueChange={(value) => patchTransform({ quality: value.trim() === "" ? DEFAULT_VAULT_IMAGE_TRANSFORM.quality : Number(value) })} />
+          </label>
+        </div>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {(["x", "y", "width", "height"] as const).map((key) => (
               <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase" key={key}>
                 {key}
-                <SubToolboxInput type="number" min={key === "width" || key === "height" ? 1 : 0} max={key === "x" ? sourceDimensions.width - 1 : key === "y" ? sourceDimensions.height - 1 : undefined} value={crop[key]} onChange={(event) => { invalidatePreview(); setCrop((current) => ({ ...current, [key]: Number(event.target.value) })) }} />
+                <StudioSideTextCounter
+                  ariaLabel={`Crop ${key}`}
+                  value={crop[key]}
+                  min={key === "width" || key === "height" ? 1 : 0}
+                  max={key === "x" ? sourceDimensions.width - 1 : key === "y" ? sourceDimensions.height - 1 : 16384}
+                  step={1}
+                  inputMode="numeric"
+                  onValueChange={(value) => { invalidatePreview(); setCrop((current) => ({ ...current, [key]: value.trim() === "" ? (key === "width" || key === "height" ? 1 : 0) : Number(value) })) }}
+                />
               </label>
             ))}
           </div>
           </>
         ) : null}
 
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            <label htmlFor="vault-image-resize-width">Resize width</label>
+            <div className="flex min-w-0 items-stretch gap-1">
+              <div className="min-w-0 flex-1">
+                <StudioSideTextCounter id="vault-image-resize-width" ariaLabel="Resize width" value={transform.resizeWidth ?? ""} min={1} max={16384} step={1} inputMode="numeric" placeholder="Original" onValueChange={(value) => patchTransform({ resizeWidth: value.trim() ? Number(value) : null })} />
+              </div>
+              <StudioSquareIconButton label="Reset resize width to original" tooltip={`Original width: ${sourceDimensions.width}px`} icon={<RotateCcw aria-hidden="true" size={14} />} sizeVariant="compact" onClick={() => patchTransform({ resizeWidth: null })} />
+            </div>
+          </div>
+          <div className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
+            <label htmlFor="vault-image-resize-height">Resize height</label>
+            <div className="flex min-w-0 items-stretch gap-1">
+              <div className="min-w-0 flex-1">
+                <StudioSideTextCounter id="vault-image-resize-height" ariaLabel="Resize height" value={transform.resizeHeight ?? ""} min={1} max={16384} step={1} inputMode="numeric" placeholder="Original" onValueChange={(value) => patchTransform({ resizeHeight: value.trim() ? Number(value) : null })} />
+              </div>
+              <StudioSquareIconButton label="Reset resize height to original" tooltip={`Original height: ${sourceDimensions.height}px`} icon={<RotateCcw aria-hidden="true" size={14} />} sizeVariant="compact" onClick={() => patchTransform({ resizeHeight: null })} />
+            </div>
+          </div>
+        </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Brightness (-100 to 100)
-            <SubToolboxInput type="number" min={-100} max={100} value={transform.brightness || 0} onChange={(event) => patchTransform({ brightness: Number(event.target.value) })} />
+            <StudioSideTextCounter ariaLabel="Brightness" value={transform.brightness ?? 0} min={-100} max={100} step={1} inputMode="decimal" onValueChange={(value) => patchTransform({ brightness: value.trim() === "" ? 0 : Number(value) })} />
           </label>
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Contrast (-100 to 100)
-            <SubToolboxInput type="number" min={-100} max={100} value={transform.contrast || 0} onChange={(event) => patchTransform({ contrast: Number(event.target.value) })} />
+            <StudioSideTextCounter ariaLabel="Contrast" value={transform.contrast ?? 0} min={-100} max={100} step={1} inputMode="decimal" onValueChange={(value) => patchTransform({ contrast: value.trim() === "" ? 0 : Number(value) })} />
           </label>
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Saturation (-100 to 100)
-            <SubToolboxInput type="number" min={-100} max={100} value={transform.saturation || 0} onChange={(event) => patchTransform({ saturation: Number(event.target.value) })} />
-          </label>
-          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Resize width
-            <SubToolboxInput type="number" min={1} max={16384} placeholder="Original" value={transform.resizeWidth ?? ""} onChange={(event) => patchTransform({ resizeWidth: event.target.value ? Number(event.target.value) : null })} />
-          </label>
-          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            Resize height
-            <SubToolboxInput type="number" min={1} max={16384} placeholder="Original" value={transform.resizeHeight ?? ""} onChange={(event) => patchTransform({ resizeHeight: event.target.value ? Number(event.target.value) : null })} />
-          </label>
-          <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
-            JPEG / WebP quality
-            <SubToolboxInput type="number" min={0.1} max={1} step={0.05} value={transform.quality} onChange={(event) => patchTransform({ quality: Number(event.target.value) })} />
+            <StudioSideTextCounter ariaLabel="Saturation" value={transform.saturation ?? 0} min={-100} max={100} step={1} inputMode="decimal" onValueChange={(value) => patchTransform({ saturation: value.trim() === "" ? 0 : Number(value) })} />
           </label>
         </div>
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Focal point X (%)
-            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.x} onChange={(event) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, x: Math.max(0, Math.min(100, Number(event.target.value))) })) }} />
+            <StudioSideTextCounter ariaLabel="Focal point X" value={focalPoint.x} min={0} max={100} step={1} inputMode="decimal" onValueChange={(value) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, x: Math.max(0, Math.min(100, value.trim() === "" ? 0 : Number(value))) })) }} />
           </label>
           <label className="flex min-w-0 flex-col gap-1 text-xs font-black uppercase">
             Focal point Y (%)
-            <SubToolboxInput type="number" min={0} max={100} value={focalPoint.y} onChange={(event) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, y: Math.max(0, Math.min(100, Number(event.target.value))) })) }} />
+            <StudioSideTextCounter ariaLabel="Focal point Y" value={focalPoint.y} min={0} max={100} step={1} inputMode="decimal" onValueChange={(value) => { invalidatePreview(); setFocalPoint((current) => ({ ...current, y: Math.max(0, Math.min(100, value.trim() === "" ? 0 : Number(value))) })) }} />
           </label>
           <div className="col-span-2 flex flex-wrap items-end gap-2">
             <SubToolboxInnerActionButton label="Thumbnail Preset" iconName="image" tone="orange" onClick={() => patchTransform({ resizeWidth: 1280, resizeHeight: 720, preserveAspectRatio: true })} disabled={busy} />
