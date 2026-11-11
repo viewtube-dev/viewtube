@@ -16,6 +16,8 @@
   padding: 0 3px;
   gap: 3px;
   overflow: hidden;
+  color: var(--vt-studio-control-ink, #000);
+  font: 900 9px/1 var(--vt-studio-control-font, inherit);
   border: 1.5px solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
   background: var(--vt-studio-control-primary-fill, color-mix(in srgb, #fff 50%, var(--vt-studio-control-primary, var(--pair-a, #36e0f6))));
