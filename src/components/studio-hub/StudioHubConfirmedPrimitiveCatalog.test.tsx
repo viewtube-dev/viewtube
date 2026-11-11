@@ -950,3 +950,25 @@ describe("primitive module global width and stylesheet ownership", () => {
     }
   });
 });
+
+
+describe("Studio Calendar mini primitives", () => {
+  it("renders the production mini multi-day bar and event chip primitives in the confirmed catalog", () => {
+    const markup = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    for (const primitive of ["StudioCalendarMultiDayBar", "StudioCalendarThumbnailEventChip"]) {
+      expect(markup).toContain(`data-vt-library-component="${primitive}"`);
+    }
+    expect(markup).toContain('data-calendar-size="mini"');
+    expect(markup).toContain('data-calendar-segment="start"');
+    expect(markup).toContain('data-calendar-segment="middle"');
+    expect(markup).toContain('data-calendar-segment="end"');
+    expect(markup).toContain('data-thumbnail-ratio="16:9"');
+  });
+
+  it("exports every calendar mini primitive through the Studio public API", () => {
+    const publicApi = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8");
+    for (const primitive of ["StudioCalendarMultiDayBar", "StudioCalendarThumbnailEventChip"]) {
+      expect(publicApi).toContain(primitive);
+    }
+  });
+});
