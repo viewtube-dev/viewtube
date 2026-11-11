@@ -57,6 +57,34 @@ describe("AlgorithmLearningCandidates evidence threshold", () => {
   })
  })
 
+ it("keeps a cohort insufficient when any decisive outcome lacks supporting evidence refs", () => {
+  recordOutcome("positive-1", "positive")
+  recordOutcome("positive-2", "positive")
+  recordOutcome("positive-3", "positive")
+  recordAlgorithmIntelligenceEvent({
+   id: "negative-1",
+   channelId: "channel-learning-threshold",
+   kind: "OUTCOME_MEASURED",
+   sourceSystem: "workflow",
+   sourceId: "same-recommendation",
+   recommendationId: "recommendation:shared",
+   title: "Measured outcome without evidence",
+   summary: "This decisive result has no evidence references",
+   confidence: "medium",
+   evidenceIds: [],
+   metadata: { evaluation: { status: "negative" } },
+  })
+
+  const [candidate] = deriveAlgorithmLearningCandidates("channel-learning-threshold")
+
+  expect(candidate).toMatchObject({
+   sampleSize: 4,
+   positiveRate: 0.75,
+   status: "insufficient_evidence",
+  })
+  expect(candidate.sourceEventIds).toHaveLength(4)
+ })
+
  it("keeps recommendations with shared suffixes in separate evidence cohorts", () => {
   recordOutcome("alpha-1", "positive", "recommendation:alpha:shared")
   recordOutcome("alpha-2", "positive", "recommendation:alpha:shared")
