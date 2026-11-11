@@ -130,6 +130,19 @@ The Confirmed catalog currently imports and renders specimens from the following
 | `StudioChatResponseShell.tsx` | Chat response shell |
 | `StudioPublishingCard.tsx` | Publishing-card composition |
 
+### Automated consumer and API audit
+
+The registry is now backed by a derived source scanner rather than a manually duplicated consumer list:
+
+- `scripts/audit/studio-primitive-registry.mjs` scans the `src` TypeScript/TSX tree, resolves imports into `src/studio-ui/**`, and records named symbol imports, local aliases, JSX use, production consumers, and test consumers.
+- It compares value exports from `src/studio-ui/index.ts` with the Confirmed catalog's import bindings, `data-vt-library-component` provenance markers, and actual JSX representatives.
+- Catalog-imported symbols missing from the public barrel are reported separately as **owner disposition required**. That status is intentionally neutral: it does not infer that a symbol should be public or that it is safe to remove.
+- `npm run audit:studio-primitive-registry` writes derived JSON and Markdown reports under `reports/studio-primitive-registry/`.
+- `npm run test:studio-primitive-registry` validates alias/type parsing, module resolution, representative detection, consumer attribution, and the five known catalog-only symbols.
+- The focused registry test is included in `npm run test:studio-controls`. The existing Studio Hub import inventory remains useful for recursive reachability from the Studio Hub route; this new scanner complements it by searching the full `src` tree.
+
+The audit report is generated output, not a second hand-maintained source of truth. Regenerate it from the exact commit being reviewed.
+
 ### Registry update protocol
 
 When adding or changing a primitive:
@@ -170,8 +183,8 @@ These are not automatic defects: an internal catalog specimen may legitimately e
 
 ## Known gaps and next acceptance work
 
-- A complete consumer graph for every cataloged symbol has not been established by this source-map pass.
-- Every catalog import still needs explicit public/internal/deprecated classification against the export barrel.
+- The source-map pass does not embed a frozen consumer graph; run the new source scanner on the exact commit to generate the current consumer report.
+- Five catalog-only symbols remain owner-disposition items; the audit reports them explicitly without guessing public/internal/deprecated intent.
 - The Confirmed catalog's provenance coverage must be checked family by family; a shared source import is not sufficient evidence of complete metadata.
 - The CSS entry still contains multiple recovery/parity layers whose ownership and removal candidates need a separate rule-level audit.
 - Visual certification remains separate and requires browser/computed-style evidence at supported tiers and states.
