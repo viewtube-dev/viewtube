@@ -1673,9 +1673,9 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
           <span>MINI MULTI-DAY BAR · SINGLE / START / MIDDLE / END</span>
           <div className="grid grid-cols-1 gap-1">
             <StudioCalendarMultiDayBar label="SINGLE-DAY EVENT" segment="single" kind="publish" status="ready" />
-            <StudioCalendarMultiDayBar label="WEEK ONE · START" segment="start" kind="project" />
-            <StudioCalendarMultiDayBar label="WEEK TWO · MIDDLE" segment="middle" kind="project" />
-            <StudioCalendarMultiDayBar label="WEEK THREE · END" segment="end" kind="project" status="in progress" />
+            <StudioCalendarMultiDayBar label="WEEK ONE · START" segment="start" kind="milestone" />
+            <StudioCalendarMultiDayBar label="WEEK TWO · MIDDLE" segment="middle" kind="milestone" />
+            <StudioCalendarMultiDayBar label="WEEK THREE · END" segment="end" kind="milestone" status="in progress" />
             <StudioCalendarMultiDayBar label="CHANNEL-WIDE CAMPAIGN" segment="single" kind="milestone" channelWide />
           </div>
         </div>
