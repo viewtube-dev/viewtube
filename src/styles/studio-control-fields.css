@@ -210,3 +210,23 @@ html body .vt-studio-side-text-counter input.vt-studio-side-text-counter__input[
   box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px)
     var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
+
+
+/* StudioSideTextCounter: the split shell owns the only black perimeter.
+   The field slot is a transparent layout cell; the input owns only its
+   primary inset stroke, never a second black border. */
+html body .vt-studio-side-text-counter[data-vt-studio-control="true"] > [data-vt-studio-split-field] {
+  box-sizing: border-box;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  background: transparent;
+}
+html body .vt-studio-side-text-counter[data-vt-studio-control="true"] > [data-vt-studio-split-field] > input.vt-studio-side-text-counter__input[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  border: 0;
+  outline: 0;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px)
+    var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
