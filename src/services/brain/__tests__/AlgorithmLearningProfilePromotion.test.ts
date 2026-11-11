@@ -232,6 +232,7 @@ describe("AlgorithmLearningProfilePromotion", () => {
    category: "channel_fact",
    evidence: mocks.candidate.evidenceIds,
   }))
+  expect(mocks.listBrainTraces).toHaveBeenCalledWith("channel-1")
   expect(mocks.recordAlgorithmIntelligenceEvent).toHaveBeenCalledWith(expect.objectContaining({
    kind: "LEARNING_PROMOTED",
    sourceId: mocks.candidate.id,
@@ -241,6 +242,14 @@ describe("AlgorithmLearningProfilePromotion", () => {
    outputRef: "asset-1",
    actionPacketId: "packet-1",
    parentEventIds: expect.arrayContaining(["candidate-event-1", "review-event-1"]),
+   evidenceIds: mocks.candidate.evidenceIds,
+   metadata: expect.objectContaining({
+    evidenceResolution: expect.objectContaining({
+     resolvedRecordIds: mocks.candidate.evidenceIds,
+     owners: ["analytics-canon", "youtube-read"],
+     sourceSnapshotIds: ["snapshot-1", "snapshot-2"],
+    }),
+   }),
   }))
  })
 })
