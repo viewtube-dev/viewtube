@@ -5510,6 +5510,8 @@ button[data-vt-studio-action-button="true"] {
   --vt-top-split-size: var(--vt-studio-control-height, 44px);
   --vt-top-split-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-top-split-radius: var(--vt-studio-control-radius, 6px);
+  --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-standard-icon-stroke, 1.9);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -5521,10 +5523,36 @@ button[data-vt-studio-action-button="true"] {
   background: #fff;
 }
 
+.vt-studio-top-split-module[data-size="supreme"] {
+  --vt-top-split-size: var(--vt-studio-supreme-height, 60px);
+  --vt-top-split-stroke: var(--vt-studio-supreme-stroke, 3px);
+  --vt-top-split-radius: var(--vt-studio-supreme-radius, 6px);
+  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-supreme-icon-stroke, 1.9);
+}
+
 .vt-studio-top-split-module[data-size="compact"] {
   --vt-top-split-size: var(--vt-studio-compact-height, 28px);
   --vt-top-split-stroke: var(--vt-studio-compact-stroke, 2px);
   --vt-top-split-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-compact-icon-stroke, 2);
+}
+
+.vt-studio-top-split-module[data-size="mini"] {
+  --vt-top-split-size: var(--vt-studio-mini-height, 20px);
+  --vt-top-split-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-top-split-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 17.5px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-mini-icon-stroke, 1.6);
+}
+
+.vt-studio-top-split-module[data-size="micro"] {
+  --vt-top-split-size: var(--vt-studio-micro-height, 12px);
+  --vt-top-split-stroke: var(--vt-studio-micro-stroke, 1.5px);
+  --vt-top-split-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-micro-icon-stroke, 1.5);
 }
 
 .vt-studio-top-split-module__head {
@@ -5578,9 +5606,11 @@ button[data-vt-studio-action-button="true"] {
   -webkit-text-stroke: 0;
 }
 .vt-studio-top-split-module__rail > svg {
-  width: calc(var(--vt-top-split-size) * 0.65);
-  height: calc(var(--vt-top-split-size) * 0.65);
+  /* Match split badge / button rail icon contract for the active size bracket. */
+  width: min(var(--vt-studio-control-icon-size, 38px), 90%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 90%);
   stroke: currentColor;
+  stroke-width: var(--vt-studio-control-icon-stroke, 1.9);
 }
 .vt-studio-top-split-module__head[data-split="right"] .vt-studio-top-split-module__rail,
 .vt-studio-top-split-module__head[data-split="double"] .vt-studio-top-split-module__rail[data-rail="end"] {
@@ -5825,8 +5855,8 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
     var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
 }
 
-/* Collapsed modules: single bottom border only (outer shell).
-   Head loses its bottom rule; body is fully removed so outer border is the only edge. */
+/* Collapsed modules: shell keeps the bottom perimeter edge (avoids radius clip).
+   Head loses its bottom rule so there is exactly one black edge. */
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head,
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__head,
 details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head,
@@ -5995,12 +6025,12 @@ button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-sele
 }
 
 .vt-studio-collapsing-split-module:not([open]) {
-  border-bottom: 0 !important;
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
 }
 
 .vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
 .vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
-  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+  border-bottom: 0 !important;
 }
 
 .vt-studio-collapsing-split-module[open] {
@@ -6134,13 +6164,13 @@ summary .vt-studio-top-split-module__title {
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
 }
 
-/* Closed: no extra shell bottom — header bottom border IS the component bottom
-   (collapsed module looks like a split badge) */
+/* Closed: shell keeps bottom perimeter (aligned with expanded header/body divider).
+   Head has no bottom rule — avoids double edge and radius clipping. */
 details.vt-studio-collapsing-split-module:not([open]),
 details.vt-studio-two-line-module:not([open]),
 .vt-studio-collapsing-split-module:not([open]),
 .vt-studio-two-line-module:not([open]) {
-  border-bottom: 0 !important;
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
 }
 
 /* Open: restore shell bottom under white body; header rule stays the divider */
