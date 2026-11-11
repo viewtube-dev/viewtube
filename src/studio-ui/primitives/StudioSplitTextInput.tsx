@@ -7,7 +7,7 @@ import "./studio-split-text-input.css"
 export interface StudioSplitTextInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "children" | "type"> {
   split?: "left" | "right" | "double"
   sizeVariant?: "standard" | "compact"
-  type?: "text" | "search" | "email" | "url" | "tel" | "password"
+  type?: "text" | "search" | "email" | "url" | "tel" | "password" | "number"
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
   inputClassName?: string
