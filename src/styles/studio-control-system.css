@@ -3491,7 +3491,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-counter,
 .vt-studio-side-counter,
 .vt-studio-left-counter {
-  display: flex;
   width: 100%;
   min-width: 0;
   max-width: 100%;
@@ -3531,6 +3530,12 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   box-sizing: border-box;
   background: var(--pair-b);
   border: 0;
+}
+
+/* StudioCounter is a true double-split: one action rail at each end. */
+.vt-studio-counter {
+  display: grid;
+  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr) var(--vt-studio-control-height, 44px);
 }
 .vt-studio-counter__rail {
   display: flex;
@@ -3769,11 +3774,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   /* Keep value-area backgrounds stable while pressing, especially on right counters. */
 }
 
-/* Standard/left counter: click and hold use the same black numeral treatment. */
+/* Counter interaction changes numeral treatment only; the text-panel fill stays fixed. */
 .vt-studio-counter:has(
   .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-counter__value {
-  background: color-mix(in srgb, var(--pair-a) 50%, white);
   color: var(--vt-studio-number-active-color, #000);
   -webkit-text-fill-color: var(--vt-studio-number-active-color, #000);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-number-active-stroke, #000);
@@ -3962,8 +3966,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 /* Left-action side counter shares the same action/value anatomy and palette rules. */
 .vt-studio-left-counter__rail[data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-left-counter:has(.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])) .vt-studio-side-counter__value,
-.vt-studio-left-counter:has(.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])) .vt-studio-side-counter__value { background: color-mix(in srgb, var(--pair-a) 50%, white); }
+/* Left-counter focus inherits the stable value-area fill; only the glyph changes. */
 
 
 /* Canonical Studio Upload Frame — canvas exception, pair-color driven, flat shell. */
@@ -6233,7 +6236,6 @@ details.vt-studio-two-line-module > :not(summary) {
   z-index: 5;
 }
 .vt-studio-stepper-button:disabled { opacity: .4; cursor: not-allowed; }
-.vt-studio-counter[data-size="supreme"] .vt-studio-stepper-button,
 /* Global dropdown menu contract: active primary/secondary pair, symmetric menu corners,
    full-width option rows, and trigger text centered independently of the chevron rail. */
 .vt-studio-dropdown-menu {
