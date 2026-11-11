@@ -18,7 +18,7 @@ const mocks = vi.hoisted(() => {
   positiveRate: 1,
   status: "candidate" as const,
  }
- const sourceEvent = { id: "candidate-event-1" }
+ const sourceEvent = { id: "candidate-event-1", parentEventIds: ["outcome-1", "outcome-2", "outcome-3"] }
  const review = {
   candidateId: candidate.id,
   decision: "approve_for_profile_review" as const,
@@ -110,6 +110,36 @@ describe("AlgorithmLearningProfilePromotion", () => {
    creatorApproved: true,
   })
   expect(result.status).toBe("not_approved_for_profile_review")
+  expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
+ })
+
+ it("rejects a candidate with missing evidence or incomplete source-event lineage", async () => {
+  mocks.listApprovedAlgorithmLearningCandidates.mockReturnValue([{
+   candidate: { ...mocks.candidate, evidenceIds: [] },
+   sourceEvent: mocks.sourceEvent,
+   review: mocks.review,
+  }])
+  const result = await promoteApprovedAlgorithmLearningToProfile({
+   channelId: "channel-1",
+   candidateId: mocks.candidate.id,
+   creatorApproved: true,
+  })
+  expect(result.status).toBe("invalid_candidate_evidence")
+  expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
+ })
+
+ it("rejects a candidate whose persisted channel scope differs from the request", async () => {
+  mocks.listApprovedAlgorithmLearningCandidates.mockReturnValue([{
+   candidate: { ...mocks.candidate, channelId: "channel-foreign" },
+   sourceEvent: mocks.sourceEvent,
+   review: mocks.review,
+  }])
+  const result = await promoteApprovedAlgorithmLearningToProfile({
+   channelId: "channel-1",
+   candidateId: mocks.candidate.id,
+   creatorApproved: true,
+  })
+  expect(result.status).toBe("channel_scope_mismatch")
   expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
  })
 
