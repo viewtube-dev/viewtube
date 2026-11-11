@@ -42,7 +42,7 @@ test("side counter and slider counter dividers are centered against their full t
   assert.match(css, /\.vt-studio-side-counter__actions\s*\{[^}]*position:\s*relative/s)
   assert.match(css, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)[^}]*height:\s*var\(--vt-studio-control-stroke/s)
   assert.doesNotMatch(css, /\.vt-studio-side-counter__actions button:first-child::after/)
-  assert.match(component, /className="vt-studio-side-counter__actions vt-studio-double-split-slider__counter"/)
+  assert.match(component, /className="vt-studio-side-counter__actions"/)
   assert.match(css, /\.vt-studio-side-counter__actions\s*\{[^}]*display:\s*grid/s)
   assert.match(css, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s)
   assert.doesNotMatch(css, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter > button:first-child::after/)
