@@ -952,17 +952,42 @@ describe("primitive module global width and stylesheet ownership", () => {
 });
 
 
-describe("Studio Calendar mini primitives", () => {
-  it("renders the production mini multi-day bar and event chip primitives in the confirmed catalog", () => {
+describe("Studio Calendar primitives", () => {
+  it("renders every production calendar primitive and its registered variants in the confirmed catalog", () => {
     const markup = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
-    for (const primitive of ["StudioCalendarMultiDayBar", "StudioCalendarThumbnailEventChip"]) {
+    for (const primitive of [
+      "StudioCalendarEventChip",
+      "StudioCalendarMultiDayBar",
+      "StudioCalendarThumbnailEventChip",
+      "StudioCalendarMediaRail",
+    ]) {
       expect(markup).toContain(`data-vt-library-component="${primitive}"`);
     }
+
+    // Event chips: standard semantic kinds, status/selection/removal, and mini tier.
+    expect(markup).toContain('data-event-kind="publish"');
+    expect(markup).toContain('data-event-kind="task"');
+    expect(markup).toContain('data-event-kind="milestone"');
+    expect(markup).toContain('data-event-kind="reminder"');
+    expect(markup).toContain('data-event-kind="deadline"');
     expect(markup).toContain('data-calendar-size="mini"');
+    expect(markup).toContain('data-selected="true"');
+
+    // Multi-day bars: all four segment shapes plus channel-wide state.
+    expect(markup).toContain('data-calendar-segment="single"');
     expect(markup).toContain('data-calendar-segment="start"');
     expect(markup).toContain('data-calendar-segment="middle"');
     expect(markup).toContain('data-calendar-segment="end"');
+    expect(markup).toContain('data-channel-wide="true"');
+
+    // Thumbnail and media-rail variants preserve both media ratios and all rail layouts.
     expect(markup).toContain('data-thumbnail-ratio="16:9"');
+    expect(markup).toContain('data-aspect-ratio="16:9"');
+    expect(markup).toContain('data-aspect-ratio="9:16"');
+    expect(markup).toContain('data-split="left"');
+    expect(markup).toContain('data-split="right"');
+    expect(markup).toContain('data-split="double"');
+
     const calendarCss = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/studio-calendar-primitives.css"), "utf8");
     expect(calendarCss).toContain("height: 20px");
     expect(calendarCss).toContain("border: 1.5px solid #000");
@@ -970,9 +995,14 @@ describe("Studio Calendar mini primitives", () => {
     expect(calendarCss).not.toContain("50%, transparent");
   });
 
-  it("exports every calendar mini primitive through the Studio public API", () => {
+  it("exports every calendar primitive through the Studio public API", () => {
     const publicApi = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8");
-    for (const primitive of ["StudioCalendarMultiDayBar", "StudioCalendarThumbnailEventChip"]) {
+    for (const primitive of [
+      "StudioCalendarEventChip",
+      "StudioCalendarMultiDayBar",
+      "StudioCalendarThumbnailEventChip",
+      "StudioCalendarMediaRail",
+    ]) {
       expect(publicApi).toContain(primitive);
     }
   });
