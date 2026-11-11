@@ -61,7 +61,7 @@ export const searchVaultForBrain = (
    role: "context" as const,
    source: "vault" as const,
    detail: [asset.kind, asset.projectName, asset.toolId].filter(Boolean).join(" · "),
-   route: "/reference-studio/toolbox-system",
+   route: `/vault?${new URLSearchParams({ assetId: asset.id }).toString()}`,
    freshness: new Date(asset.updatedAt).toISOString(),
   })),
  }
