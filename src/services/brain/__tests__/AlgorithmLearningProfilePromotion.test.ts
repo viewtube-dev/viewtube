@@ -69,6 +69,9 @@ vi.mock("../AlgorithmIntelligenceEventLedger", () => ({
  listAlgorithmIntelligenceEvents: mocks.listAlgorithmIntelligenceEvents,
  recordAlgorithmIntelligenceEvent: mocks.recordAlgorithmIntelligenceEvent,
 }))
+vi.mock("../BrainTrace", () => ({
+ listBrainTraces: mocks.listBrainTraces,
+}))
 
 import { promoteApprovedAlgorithmLearningToProfile } from "../AlgorithmLearningProfilePromotion"
 
@@ -79,6 +82,7 @@ describe("AlgorithmLearningProfilePromotion", () => {
   mocks.shouldBrainLearnFromInteraction.mockClear()
   mocks.listApprovedAlgorithmLearningCandidates.mockClear()
   mocks.recordAlgorithmIntelligenceEvent.mockClear()
+  mocks.listBrainTraces.mockClear()
   mocks.listAlgorithmIntelligenceEvents.mockReset()
   mocks.listAlgorithmIntelligenceEvents.mockReturnValue([])
   mocks.shouldBrainLearnFromInteraction.mockReturnValue(true)
