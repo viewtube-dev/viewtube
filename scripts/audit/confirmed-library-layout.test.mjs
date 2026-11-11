@@ -513,6 +513,8 @@ test("StudioSideTextCounter composes the side-counter rail with the canonical ed
   assert.ok(controls.includes("onChange={event => onValueChange(event.currentTarget.value)}"));
   assert.ok(controls.includes('aria-label={inputProps["aria-label"] ?? ariaLabel}'));
   assert.ok(controls.includes("onValueChange(String(Math.min(max, Math.max(min, next))))"));
+  assert.ok(controls.includes("const isAdjustable = textValue.trim() === \"\" || Number.isFinite(parsedValue)"));
+  assert.ok(controls.includes("!isAdjustable"));
   const textInput = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
   assert.ok(textInput.includes('data-vt-studio-field-kind="text-input"'));
   const publicIndex = readFileSync("src/studio-ui/index.ts", "utf8");
