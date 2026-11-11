@@ -180,7 +180,7 @@ This inventory is the Phase 0–3 implementation scope and adjacent ownership ma
 
 **Not yet run in this environment:** focused Vitest tests, `npm run typecheck`, `npm run build`, `npm run test:studio-controls`, broader test suite, desktop/mobile browser checks, keyboard/screen-reader checks and reduced-motion checks.
 
-The code changes and regression assertions are committed to the working branch, but the phases are not release-certified until those checks pass. Do not describe CI, build or visual verification as green without fresh evidence from the branch's head commit.
+The code changes and regression assertions are committed to the working branch, but the phases are not release-certified until those checks pass. At the current PR head, no GitHub Actions workflow run is associated with the commit; the three Vercel status checks fail with the provider's build-rate-limit URL. That is an infrastructure/account limit, not evidence of a source failure or a passing build. This environment cannot clone the repository to run tests locally. Do not describe CI, build or visual verification as green without fresh evidence from the branch's head commit.
 
 ## Next verification commands
 
