@@ -157,7 +157,7 @@
   gap: 7px;
 }
 
-.vt-resource-card {
+.vt-resource-card[data-vt-studio-button="true"] {
   width: 100%;
   min-width: 0;
   min-height: 76px;
