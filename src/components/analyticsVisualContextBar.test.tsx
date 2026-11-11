@@ -21,6 +21,8 @@ describe("analytics split-left metric badges", () => {
     expect(html).toContain('data-vt-studio-split="left"')
     expect(html).toContain('data-rail="start"')
     expect(html).toContain("vt-analytics-active-stat-copy")
+    expect(html).toContain("flex-col")
+    expect(html).toContain("gap-0")
     expect(html).toContain("py-0")
     expect(html).toContain("VIEWS")
     expect(html).toContain("1.2M")
