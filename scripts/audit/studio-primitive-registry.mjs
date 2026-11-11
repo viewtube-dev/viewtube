@@ -3,8 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
 
-const SOURCE_EXTENSIONS = /\\.(?:tsx?|jsx?)$/;
-const STUDIO_MODULE = /\\/src\\/studio-ui(?:\\/|$)/;
+const SOURCE_EXTENSIONS = /\.(?:tsx?|jsx?)$/;
+const STUDIO_MODULE = /\/src\/studio-ui(?:\/|$)/;
 
 export function analyzeSource(source, fileName = "unknown.tsx") {
   const file = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
@@ -55,7 +55,7 @@ export function analyzeSource(source, fileName = "unknown.tsx") {
   };
   visit(file);
 
-  return { imports, exports, jsxTags: [...jsxTags], parseDiagnostics: file.parseDiagnostics.map((item) => ts.flattenDiagnosticMessageText(item.messageText, "\\n")) };
+  return { imports, exports, jsxTags: [...jsxTags], parseDiagnostics: file.parseDiagnostics.map((item) => ts.flattenDiagnosticMessageText(item.messageText, "\n")) };
 }
 
 function walkSource(root) {
@@ -102,6 +102,7 @@ export function buildRegistry(root = process.cwd()) {
     for (const item of parsed.imports) {
       if (!item.source.startsWith(".") && !item.source.startsWith("/")) continue;
       const resolved = ts.resolveModuleName(item.source, filePath, options, ts.sys).resolvedModule?.resolvedFileName;
+      if (/\.(?:css|scss|sass|less|svg|png|jpe?g|webp|gif|woff2?|ttf)(?:\\?.*)?$/i.test(item.source)) continue;
       if (!resolved) {
         unresolved.push({ importer: relative(root, filePath), specifier: item.source });
         continue;
@@ -115,7 +116,7 @@ export function buildRegistry(root = process.cwd()) {
           localName: binding.local,
           typeOnly: binding.typeOnly,
           rendered: parsed.jsxTags.includes(binding.local),
-          testFile: /\\.(?:test|spec)\\.[jt]sx?$/.test(filePath),
+          testFile: /\.(?:test|spec)\.[jt]sx?$/.test(filePath),
         });
         consumers.set(binding.imported, list);
       }
@@ -187,10 +188,10 @@ export function buildRegistry(root = process.cwd()) {
 }
 
 function renderMarkdown(report) {
-  const publicRows = report.publicExports.map((row) => `| \`${row.name}\` | ${row.status} | ${row.source} | ${row.representativeMarker ? "yes" : "no"} | ${row.rendered ? "yes" : "no"} |`).join("\\n");
-  const internalRows = report.catalogOnlyUnexportedSymbols.map((row) => `| \`${row.name}\` | ${row.status} | \`${row.source}\` | ${row.representativeMarker ? "yes" : "no"} |`).join("\\n") || "| — | None | — | — |";
-  const consumerRows = report.consumers.map((row) => `| \`${row.name}\` | ${row.consumerCount} | ${row.productionConsumers.map((file) => `\`${file}\``).join(", ") || "—"} | ${row.testConsumers.length} |`).join("\\n");
-  return `# Studio Primitive Registry Audit\\n\\nGenerated from the current source tree. This report is derived from production imports and the Confirmed Primitive Library; it is not a second hand-maintained registry.\\n\\n## Summary\\n\\n${Object.entries(report.summary).map(([key, value]) => `- ${key}: ${value}`).join("\\n")}\\n\\n## Public Studio exports\\n\\n| Export | Status | Export source | Catalog marker | Rendered in catalog |\\n|---|---|---|---|---|\\n${publicRows}\\n\\n## Catalog symbols not exported from the public barrel\\n\\nThese symbols are catalog imports but are not currently public-barrel exports. This is a classification queue, not an assumption that they should become public.\\n\\n| Symbol | Status | Implementation module | Catalog marker |\\n|---|---|---|---|\\n${internalRows}\\n\\n## Production consumers\\n\\n| Symbol | Import uses | Production files | Test files |\\n|---|---:|---|---:|\\n${consumerRows}\\n`;
+  const publicRows = report.publicExports.map((row) => `| \`${row.name}\` | ${row.status} | ${row.source} | ${row.representativeMarker ? "yes" : "no"} | ${row.rendered ? "yes" : "no"} |`).join("\n");
+  const internalRows = report.catalogOnlyUnexportedSymbols.map((row) => `| \`${row.name}\` | ${row.status} | \`${row.source}\` | ${row.representativeMarker ? "yes" : "no"} |`).join("\n") || "| — | None | — | — |";
+  const consumerRows = report.consumers.map((row) => `| \`${row.name}\` | ${row.consumerCount} | ${row.productionConsumers.map((file) => `\`${file}\``).join(", ") || "—"} | ${row.testConsumers.length} |`).join("\n");
+  return `# Studio Primitive Registry Audit\n\nGenerated from the current source tree. This report is derived from production imports and the Confirmed Primitive Library; it is not a second hand-maintained registry.\n\n## Summary\n\n${Object.entries(report.summary).map(([key, value]) => `- ${key}: ${value}`).join("\n")}\n\n## Public Studio exports\n\n| Export | Status | Export source | Catalog marker | Rendered in catalog |\n|---|---|---|---|---|\n${publicRows}\n\n## Catalog symbols not exported from the public barrel\n\nThese symbols are catalog imports but are not currently public-barrel exports. This is a classification queue, not an assumption that they should become public.\n\n| Symbol | Status | Implementation module | Catalog marker |\n|---|---|---|---|\n${internalRows}\n\n## Production consumers\n\n| Symbol | Import uses | Production files | Test files |\n|---|---:|---|---:|\n${consumerRows}\n`;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname)) {
@@ -198,7 +199,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(im
   const report = buildRegistry(root);
   const output = path.join(root, "reports/studio-primitive-registry");
   fs.mkdirSync(output, { recursive: true });
-  fs.writeFileSync(path.join(output, "studio-primitive-registry.json"), JSON.stringify(report, null, 2) + "\\n");
+  fs.writeFileSync(path.join(output, "studio-primitive-registry.json"), JSON.stringify(report, null, 2) + "\n");
   fs.writeFileSync(path.join(output, "studio-primitive-registry.md"), renderMarkdown(report));
   console.log(JSON.stringify(report.summary, null, 2));
   if (report.summary.unresolvedLocalImports > 0) process.exitCode = 1;
