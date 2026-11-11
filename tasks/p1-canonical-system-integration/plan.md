@@ -61,3 +61,13 @@ The October Phase 0 reconciliation remains the completed donor/plan migration ba
 - Phase 0: source/PR/authority refresh completed; current-SHA focused tests, typecheck/build/source-governance and canonical work-claim verification remain open. Do not mark runtime baseline certified.
 - Phase 1: static owner/contract/source-path map completed for the Brain continuity slice. Universal producer reachability, all-surface caller parity, public/private regression proof and end-to-end identity propagation remain open.
 - No new runtime owner or persistence system is authorized. Continue through the existing Brain Continuity and Evidence & Intelligence workstreams.
+
+
+## Phase 2/3 start — 2026-11-11
+
+The Brain Continuity and Prompt System execution slices are now source-reconciled in [AI Brain Phase 2/3 execution](../system-convergence/AI-BRAIN-PHASE-2-3-EXECUTION-2026-11-11.md).
+
+- **Phase 2 — Channel Knowledge / governed learning:** implementation footholds verified in `ChannelKnowledgeProjection`, its focused tests and `BrainLearningPersistence`. Contract reconciliation is started. Candidate evidence validation, canonical promotion-writer proof, server authorization/idempotency, fresh-session hydration and context-pack parity remain open.
+- **Phase 3 — Prompt reachability / provenance:** `PROMPTS.md`, prompt registry, `BrainTaskProfileRegistry`, `BrainModelGateway`, `BrainOrchestrator` and `BrainTrace` inspected. Caller inventory and trace contract reconciliation are started. Exact caller inventory, all-caller trace coverage and provider-reported model identity parity remain open.
+- **Phase 0/1 certification:** GitHub Actions run 6184 on the documentation branch failed aggregate gates. Production build, Brain quality-loop tests and local smoke passed; document/source governance, Gemini governance, focused contracts, full suite and typecheck failed. See the Phase 0/1 reconciliation and Phase 2/3 execution packets for failure classification.
+- No runtime behavior or persistence owner was changed. Use test-first implementation and existing canonical owners only.
