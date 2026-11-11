@@ -210,7 +210,6 @@ const ResourceLibrary: React.FC = () => {
                       key={resource.id}
                       type="button"
                       sizeVariant="standard"
-                      iconSizeVariant="small"
                       icon={<FileText aria-hidden="true" />}
                       variant={active ? "v2" : "v1"}
                       selected={active}
