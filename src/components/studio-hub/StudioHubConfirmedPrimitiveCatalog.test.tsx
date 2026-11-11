@@ -1058,4 +1058,15 @@ describe("confirmed primitive catalog coverage corrections", () => {
     expect(source).toContain("6px / 6px / 4px / 3px / 2px radii");
     expect(source).not.toContain("1.5px / 1.5px borders");
   });
+
+  it("represents LeftCounter independently at all five canonical sizes", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf('title="StudioLeftCounter · Supreme + Standard + Compact + Mini + Micro"');
+    const end = source.indexOf("</Family>", start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+      expect(family).toContain(`size="${size}"`);
+    }
+  });
 });
