@@ -23,7 +23,7 @@ The requested phases are **not all complete**. Phase 0 source reconciliation is 
 - Canonical asset search and identity remain in `src/services/vaultAdapter.ts`; the adapter stores asset metadata in browser localStorage. This is not proof of server durability.
 - `CreatorVaultOS.tsx` imports the canonical Studio Controls and SubToolbox systems, the canonical Vault adapters/services, project handoff services, and the existing Vault deep-link resolver.
 - `src/services/vaultAssetDeepLink.ts` is the actual resolver path on this branch. The earlier audit's reference to `resolveVaultAssetDeepLink.ts` was a filename error; do not create that duplicate.
-- `src/services/brain/BrainVaultAdapter.ts` is read-only and permission-gated, but currently emits the stale generic route `/reference-studio/toolbox-system`.
+- `src/services/brain/BrainVaultAdapter.ts` is read-only and permission-gated. The stale generic route was corrected in commit `79f4466082958c63cf15e3b04c8c5b56009a4241` to `/vault?assetId=...`, with a regression assertion added in `vaultBrainSearch.test.ts`.
 - `src/services/brain/phaseOneIntegration.ts` already registers Vault routes and describes the existing Vault adapter as a Brain source. This binding must be reconciled with the real `/vault` resource deep-link contract; it is not evidence that all Brain actions are implemented.
 - `package.json` defines `test`, `typecheck`, `build`, `check:src-governance`, and `test:vault-operation-store`. None was executed in this environment.
 
@@ -109,3 +109,21 @@ npm run build
 ```
 
 Then run changed-file lint, keyboard/accessibility review, and desktop/mobile portrait/mobile landscape browser checks. The above commands and browser checks were not run during this static audit.
+
+
+## Follow-on implementation update — 2026-11-11
+
+The following source changes were committed directly to the requested 10-31 branch after the static audit:
+
+- `ae5e4840a94bf9d0e7edfb5a2cc17631ec0924bd` — add a regression test asserting Brain Vault evidence routes to the selected canonical Vault asset.
+- `79f4466082958c63cf15e3b04c8c5b56009a4241` — replace the stale Brain evidence destination with the canonical `/vault?assetId=...` route.
+- `f4597094759824b45509acbbbb620852951dd85f` — make Inspector recovery controls read the lifecycle fields actually written by `setVaultAssetState` (`archivedAt`, `trashedAt`, and `lifecycle`), and expose the existing single-asset archive handler.
+- `c7993dc6e61d796e2bb0fa4c37cc781bf74333c7` — add a regression assertion for Inspector archive/recovery state fields.
+
+Phase 2 now has two targeted implementation corrections, but remains open: the full visible-action-to-handler/policy/receipt/recovery map and adaptive-host action contract are not complete. The host's status entries remain informational; no fake action controls were introduced.
+
+Phase 3/4 work has started with additional test coverage:
+- `cbecef96f765ffa7e23fe4a50c1d559636791d62` — cover transcript video-ID precedence, legacy metadata fallback, ContentBuild fallback, and invalid candidates.
+- `d2992ca8d6fff90a1d04d1da21ddd66cc6df8605` — cover detached-version identity, source preservation, and lineage metadata.
+
+**Verification limitation:** GitHub source readback confirms the edits are present. Vitest, typecheck, lint, build, and browser checks have not run in this session. These commits are not represented as test-passing.
