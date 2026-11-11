@@ -44,7 +44,10 @@ describe("Studio recovery control styling", () => {
   });
 
   it("styles the counter-controlled slider rails and center track with the split primary-fill contract", () => {
-    expect(controlSystemCss).toContain(".vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button");
+    expect(controlSystemCss).toContain(".vt-studio-side-counter__actions button");
+    expect(controlSystemCss).toContain(".vt-studio-double-split-slider.is-counter-controls[data-size=\"compact\"] .vt-studio-side-counter__actions button svg");
+    expect(controlSystemCss).toContain(".vt-studio-double-split-slider.is-counter-controls[data-size=\"micro\"] .vt-studio-side-counter__actions button svg");
+    expect(controlSystemCss).not.toContain(".vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button {");
     expect(controlSystemCss).toContain("background: var(--vt-studio-control-primary, var(--pair-a, #36e0f6));");
     expect(controlSystemCss).toContain("border: var(--vt-studio-slider-stroke) solid #000;");
     expect(controlSystemCss).toContain("padding-inline: calc(var(--vt-studio-control-height, 44px) * .12);");
