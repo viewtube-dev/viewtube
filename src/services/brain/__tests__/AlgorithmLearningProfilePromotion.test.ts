@@ -172,6 +172,37 @@ describe("AlgorithmLearningProfilePromotion", () => {
   expect(mocks.recordAlgorithmIntelligenceEvent).not.toHaveBeenCalled()
  })
 
+ it("rejects records not returned by the candidate trace or attached to another trace", async () => {
+  mocks.listBrainTraces.mockReturnValue([{
+   id: "trace-1",
+   channelId: "channel-1",
+   evidence: {
+    returned: ["evidence-1"],
+    records: [
+     { id: "evidence-1", owner: "analytics-canon", sourceRef: "analytics://snapshot/1", channelId: "channel-1", freshness: "fresh", epistemicState: "OBSERVED", provenance: { evidenceIds: [] } },
+     { id: "evidence-2", owner: "youtube-read", sourceRef: "youtube://video/2", channelId: "channel-1", freshness: "fresh", epistemicState: "KNOWN", provenance: { evidenceIds: [] } },
+    ],
+   },
+  }, {
+   id: "trace-not-in-candidate",
+   channelId: "channel-1",
+   evidence: {
+    returned: ["evidence-2"],
+    records: [
+     { id: "evidence-2", owner: "youtube-read", sourceRef: "youtube://video/2", channelId: "channel-1", freshness: "fresh", epistemicState: "KNOWN", provenance: { evidenceIds: [] } },
+    ],
+   },
+  }])
+  const result = await promoteApprovedAlgorithmLearningToProfile({
+   channelId: "channel-1",
+   candidateId: mocks.candidate.id,
+   creatorApproved: true,
+  })
+  expect(result.status).toBe("invalid_candidate_evidence")
+  expect(result.evidenceResolution.missingIds).toContain("evidence-2")
+  expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
+ })
+
  it("rejects canonical evidence records outside the requested channel", async () => {
   mocks.listBrainTraces.mockReturnValue([{
    id: "trace-1",
