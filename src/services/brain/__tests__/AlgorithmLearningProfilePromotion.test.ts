@@ -224,6 +224,47 @@ describe("AlgorithmLearningProfilePromotion", () => {
   expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
  })
 
+ it("rejects conflicting canonical snapshots for the same evidence ID", async () => {
+  mocks.listApprovedAlgorithmLearningCandidates.mockReturnValue([{
+   candidate: { ...mocks.candidate, traceIds: ["trace-1", "trace-2"] },
+   sourceEvent: mocks.sourceEvent,
+   review: mocks.review,
+  }])
+  const recordOne = {
+   id: "evidence-1",
+   owner: "analytics-canon",
+   sourceRef: "analytics://snapshot/1",
+   sourceSnapshotId: "snapshot-1",
+   channelId: "channel-1",
+   freshness: "fresh",
+   epistemicState: "OBSERVED",
+   provenance: { evidenceIds: ["source-1"] },
+  }
+  mocks.listBrainTraces.mockReturnValue([{
+   id: "trace-1",
+   channelId: "channel-1",
+   evidence: {
+    returned: ["evidence-1", "evidence-2"],
+    records: [recordOne, {
+     id: "evidence-2", owner: "youtube-read", sourceRef: "youtube://video/2", sourceSnapshotId: "snapshot-2",
+     channelId: "channel-1", freshness: "fresh", epistemicState: "KNOWN", provenance: { evidenceIds: ["source-2"] },
+    }],
+   },
+  }, {
+   id: "trace-2",
+   channelId: "channel-1",
+   evidence: { returned: ["evidence-1"], records: [{ ...recordOne, sourceSnapshotId: "snapshot-conflict" }] },
+  }])
+  const result = await promoteApprovedAlgorithmLearningToProfile({
+   channelId: "channel-1",
+   candidateId: mocks.candidate.id,
+   creatorApproved: true,
+  })
+  expect(result.status).toBe("invalid_candidate_evidence")
+  expect(result.evidenceResolution.conflictingIds).toContain("evidence-1")
+  expect(mocks.teachAIBrainExplicitly).not.toHaveBeenCalled()
+ })
+
  it("rejects a candidate whose persisted channel scope differs from the request", async () => {
   mocks.listApprovedAlgorithmLearningCandidates.mockReturnValue([{
    candidate: { ...mocks.candidate, channelId: "channel-foreign" },
