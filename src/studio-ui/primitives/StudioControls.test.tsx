@@ -1500,3 +1500,11 @@ describe("StudioSideTextCounter single outer perimeter", () => {
     expect(css).toMatch(/\.vt-studio-side-text-counter input\.vt-studio-text-input--simple\[data-vt-studio-control="true"\]\s*\{[^}]*border:\s*0\s*;[^}]*box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-field-primary/s);
   });
 });
+
+
+describe("StudioSideTextCounter field-layer perimeter ownership", () => {
+  it("keeps the nested input borderless while preserving its primary inset stroke in the canonical field layer", () => {
+    const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
+    expect(fields).toMatch(/html body \.vt-studio-side-text-counter input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*border:\s*0\s*;[^}]*box-shadow:\s*inset 0 0 0/s);
+  });
+});
