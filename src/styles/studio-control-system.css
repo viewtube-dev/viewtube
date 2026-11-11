@@ -5522,7 +5522,9 @@ button[data-vt-studio-action-button="true"] {
   display: grid;
   align-items: stretch;
   min-width: 0;
+  height: var(--vt-top-split-size);
   min-height: var(--vt-top-split-size);
+  max-height: var(--vt-top-split-size);
   border-bottom: var(--vt-top-split-stroke) solid #000;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   color: #000;
@@ -5555,7 +5557,11 @@ button[data-vt-studio-action-button="true"] {
   box-sizing: border-box;
   display: grid;
   place-items: center;
-  min-width: 0;
+  width: var(--vt-top-split-size);
+  min-width: var(--vt-top-split-size);
+  max-width: var(--vt-top-split-size);
+  height: 100%;
+  aspect-ratio: 1 / 1;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   border-right: var(--vt-top-split-stroke) solid #000;
   color: #000;
@@ -5580,7 +5586,9 @@ button[data-vt-studio-action-button="true"] {
   display: flex;
   align-items: center;
   min-width: 0;
-  padding: 0 4px;
+  width: 100%;
+  height: 100%;
+  padding: 0 6px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: clip;
