@@ -5,6 +5,21 @@ import { describe, expect, it } from "vitest"
 import ResourceLibrary from "./ResourceLibrary"
 
 describe("Resource Library production reader", () => {
+  it("renders Resource Index rows as canonical split-left Studio buttons with inline category metadata", () => {
+    const html = renderToStaticMarkup(
+      <MemoryRouter initialEntries={["/resources?resource=youtube-recommendations-discovery"]}>
+        <ResourceLibrary />
+      </MemoryRouter>,
+    )
+
+    expect(html).toContain('data-vt-library-component="StudioSplitLeftButton"')
+    expect(html).toContain('data-vt-studio-split="left"')
+    expect(html).toContain('data-rail="start"')
+    expect(html).toContain("vt-resource-card-meta")
+    expect(html).toContain("vt-resource-card-category")
+    expect(html).toContain("YouTube Strategy")
+  })
+
   it("renders the creator-first recommendations guide through Toolbox document modules", () => {
     const html = renderToStaticMarkup(
       <MemoryRouter
