@@ -360,8 +360,19 @@ test("StudioSideTextCounter input is inset and vertically centered within the sh
   const start = fields.lastIndexOf("/* StudioSideTextCounter: the split shell owns the only black perimeter.");
   assert.ok(start >= 0, "side text counter inset layout must be explicit");
   const block = fields.slice(start);
-  assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*display:\s*:flex/s);
-  assert.match(block, /align-items:\s*:center/s);
-  assert.match(block, /padding-block:\s*:var\(--vt-studio-control-stroke/s);
-  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*height:\s*:100%/s);
+  assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*display:\s*flex/s);
+  assert.match(block, /align-items:\s*center/s);
+  assert.match(block, /padding-block:\s*var\(--vt-studio-control-stroke/s);
+  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*height:\s*100%/s);
+});
+
+
+test("StudioSideTextCounter primary inline stroke is thinner on horizontal edges than vertical edges", () => {
+  const start = fields.lastIndexOf("/* StudioSideTextCounter: the shell owns the black perimeter");
+  assert.ok(start >= 0, "side text counter field inset rule must exist");
+  const block = fields.slice(start);
+  assert.match(block, /box-shadow:\\s*inset 0 calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* 0\\.5\\) 0 0 var\\(--vt-field-primary/);
+  assert.match(block, /inset 0 calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* -0\\.5\\) 0 0 var\\(--vt-field-primary/);
+  assert.match(block, /inset var\\(--vt-studio-control-stroke, 3px\\) 0 0 0 var\\(--vt-field-primary/);
+  assert.match(block, /inset calc\\(var\\(--vt-studio-control-stroke, 3px\\) \\* -1\\) 0 0 0 var\\(--vt-field-primary/);
 });
