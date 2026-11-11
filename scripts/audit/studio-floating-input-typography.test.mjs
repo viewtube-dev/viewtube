@@ -9,6 +9,10 @@ const main = readFileSync("src/main.tsx", "utf8");
 const controls = readFileSync("src/studio-ui/primitives/StudioControls.tsx", "utf8");
 const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 
+// Mini typography follows the canonical 17.5px token, never the retired 16px value.
+assert.match(input, /17\\.5px Mini/);
+assert.doesNotMatch(input, /16px Mini/);
+
 // The foundation is exactly one native input primitive with no label branches.
 assert.ok(input.includes("export const StudioTextInput = React.forwardRef"));
 assert.ok(input.includes('"vt-studio-text-input"'));
