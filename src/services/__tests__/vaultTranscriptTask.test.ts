@@ -19,10 +19,17 @@ describe("resolveVaultTranscriptVideoId", () => {
    metadata: { videoId: " legacy-video " },
   })
   const buildOnly = createLocalVaultAsset({ name: "Build", kind: "video", tags: [] })
+  const youtubeAlias = createLocalVaultAsset({
+   name: "YouTube alias",
+   kind: "video",
+   tags: [],
+   metadata: { youtubeId: " youtube-alias-id " },
+  })
 
   expect(resolveVaultTranscriptVideoId({ asset: canonical, contentBuildVideoId: "build-id" })).toBe("youtube-primary")
   expect(resolveVaultTranscriptVideoId({ asset: legacy })).toBe("legacy-video")
   expect(resolveVaultTranscriptVideoId({ asset: buildOnly, contentBuildVideoId: " build-video " })).toBe("build-video")
+  expect(resolveVaultTranscriptVideoId({ asset: youtubeAlias })).toBe("youtube-alias-id")
  })
 
  it("returns null when every candidate is missing or invalid", () => {
