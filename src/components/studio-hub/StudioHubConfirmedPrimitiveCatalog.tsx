@@ -30,6 +30,7 @@ import {
   StudioCounter,
   StudioDoubleSplitSlider,
   StudioSideCounter,
+  StudioSideTextCounter,
   StudioLeftCounter,
   StudioLeftWordCounter,
   StudioLeftWordSlider,
@@ -592,6 +593,27 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
     </Family>
   )
 
+}
+
+
+const ConfirmedStudioSideTextCounterFamily: React.FC = () => {
+  const [value, setValue] = React.useState("36");
+  return (
+    <Family
+      title="StudioSideTextCounter · Editable Text + Numeric Stepper"
+      nonDefaultSettings={[
+        "The value face is the canonical single-line StudioTextInput; users can type arbitrary text or numeric values.",
+        "The stacked right rail increments and decrements numeric text using the shared counter hold-repeat behavior.",
+        "The input inherits the global Studio field border, inset stroke, typography, fill, caret, and focus contract.",
+      ]}
+      provenance={<Provenance primitive="StudioSideTextCounter" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-fields.css" tokens="Global five-tier Studio input sizing · side-counter square action rail · 0–100 step range." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-fields.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounter">
+        <span>EDITABLE TEXT + NUMERIC SIDE COUNTER · STANDARD</span>
+        <StudioSideTextCounter value={value} onValueChange={setValue} size="standard" min={0} max={100} step={1} ariaLabel="Standard side text counter specimen" placeholder="TYPE TEXT OR NUMBER" />
+      </div>
+    </Family>
+  )
 }
 
 const ConfirmedStudioLeftWordCounterFamily: React.FC = () => {
@@ -1519,6 +1541,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
     <ConfirmedStudioValueToggleFamily />
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioSideCounterFamily />
+    <ConfirmedStudioSideTextCounterFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioLeftWordCounterFamily />
     <ConfirmedStudioDoubleSplitWordCounterFamily />
