@@ -159,6 +159,15 @@ Every Design Intelligence → Source Discovery → Component Intelligence handof
 
 Do not infer the repository commit SHA from a file blob SHA. Do not call source inspection a visual audit. Do not claim tests/build/browser verification unless those checks were actually executed.
 
+## Source conflicts and API classification findings
+
+The source/API cross-check found two concrete registry risks that must remain visible:
+
+- `StudioTextInput.tsx` comments describe the Mini type/icon size as **16px**, while `src/studio-ui/tokens.ts` and the normative defaults contract define Mini as **17.5px**. Treat the token/contract value as authoritative; correct the stale component comments in a dedicated code change with a focused test or static contract check.
+- The Confirmed catalog imports several `StudioControls.tsx` symbols that are not exported in the currently inspected public barrel: `StudioNumberInput`, `StudioVerticalWordToggle`, `StudioBrainStatusIndicator`, `StudioSplitLeftDropdown`, and `StudioDoubleSplitSlider`. Do not silently promote these to public API. Record each as **API status unresolved** until its intended visibility is confirmed; then either export it with its prop type or explicitly document it as internal-only/intentionally-unexported.
+
+These are not automatic defects: an internal catalog specimen may legitimately exercise an internal symbol. They are registry completeness gaps because public API status must be explicit.
+
 ## Known gaps and next acceptance work
 
 - A complete consumer graph for every cataloged symbol has not been established by this source-map pass.
