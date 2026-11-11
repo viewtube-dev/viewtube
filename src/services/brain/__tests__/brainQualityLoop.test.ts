@@ -50,7 +50,7 @@ vi.mock("../../gemini", () => ({
 vi.mock("../BrainContextBroker", () => ({
   buildBrainContextPack: vi.fn(() => ({
     systemInstruction: "Use the supplied evidence. Do not invent metrics.",
-    budget: { usedCharacters: 100, maximumCharacters: 12000, estimatedInputTokens: 100, omittedSections: [] },
+    budget: { usedCharacters: 100, maximumCharacters: 12000, estimatedInputTokens: 100, omittedSections: [], includedSections: ["system_prompt", "channel_evidence"], requestedSections: ["system_prompt", "channel_evidence"] },
   })),
 }));
 
@@ -135,7 +135,7 @@ describe("Brain generation quality loop", () => {
       taskProfileId: "strategy",
       generationPath: "repaired_model",
       promptVersion: expect.any(String),
-      contextResolverVersion: "brain-context-resolution-v1",
+      contextResolverVersion: "brain-context-resolution-v2",
       outputSchemaVersion: "structured-brain-output-v1",
       requestedModel: null,
       servedModel: null,
@@ -192,7 +192,7 @@ describe("Brain generation quality loop", () => {
       generationPath: "basic_guidance",
       fallbackReason: "provider_error",
       repaired: false,
-      contextResolverVersion: "brain-context-resolution-v1",
+      contextResolverVersion: "brain-context-resolution-v2",
       outputSchemaVersion: "structured-brain-output-v1",
       creatorContextVersion: null,
       creatorContextProjectSource: null,

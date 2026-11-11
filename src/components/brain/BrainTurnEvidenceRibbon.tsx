@@ -140,7 +140,17 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
           </p>
         ) : null}
 
-        <p className="break-words text-[10px] font-bold leading-4 text-black/65">Captured: {captureLabel}</p>
+        <p className="break-words text-[10px] font-bold leading-4 text-black/65">Evidence snapshot · Captured: {captureLabel}</p>
+
+        {evidenceIntegrityStatus === "verified" ? (
+          <p data-vt-brain-part="evidence-identity-verified" role="status" className="break-words text-[10px] font-bold leading-4 text-black/65">
+            Evidence identity verified. These records match the saved prompt manifest.
+          </p>
+        ) : evidenceIntegrityStatus === "unavailable" ? (
+          <p data-vt-brain-part="evidence-identity-unavailable" role="note" className="break-words text-[10px] font-bold leading-4 text-black/65">
+            Prompt evidence identity unavailable. Record-level provenance is unavailable for this saved turn.
+          </p>
+        ) : null}
 
         {noPreparedEvidence ? (
           <p
@@ -188,9 +198,9 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
             role="alert"
             className="grid gap-0.5 border-[2px] border-black bg-[#FF7AC8] p-2"
           >
-            <strong className="text-[10px] font-[1000] uppercase">Evidence could not be verified</strong>
+            <strong className="text-[10px] font-[1000] uppercase">Evidence identity could not be verified</strong>
             <p className="break-words text-xs font-bold leading-5">
-              Saved evidence IDs do not match the records used for this answer. Detailed provenance is hidden so a
+              The saved record IDs do not match the prompt evidence manifest. Detailed provenance is hidden so a
               different set is not shown as if it were the model input.
             </p>
           </div>
@@ -198,7 +208,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
 
         <details data-vt-brain-part="evidence-request-constraints" className="min-w-0 border-t border-black/20 pt-1.5">
           <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-2 text-[10px] font-[1000] uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black">
-            <span>How evidence was chosen</span>
+            <span>Selection request</span>
             <span className="text-black/50">{requestConstraints ? requestConstraints.length : 0}</span>
           </summary>
           <div className="grid gap-1 py-1">
@@ -252,7 +262,7 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
             </p>
           ) : evidenceRecords === undefined ? (
             <p className="break-words py-1 text-[10px] font-bold leading-4 text-black/70">
-              Record-level detail is unavailable for this saved turn.
+              Record-level provenance is unavailable for this saved turn.
             </p>
           ) : evidenceRecords.length === 0 ? (
             <p className="break-words py-1 text-[10px] font-bold leading-4 text-black/70">
@@ -346,6 +356,11 @@ export const BrainTurnEvidenceRibbon: React.FC<BrainTurnEvidenceRibbonProps> = (
                         <StudioSplitLeftBadge sizeVariant="micro">Conflicting values</StudioSplitLeftBadge>
                       ) : null}
                     </div>
+                    {record.provenance.evidenceIds.length ? (
+                      <p data-vt-evidence-source-refs={record.id} className="break-words text-[9px] font-bold leading-4 text-black/65">
+                        Source evidence references: {record.provenance.evidenceIds.join(", ")}
+                      </p>
+                    ) : null}
                     <dl className="grid min-w-0 grid-cols-2 gap-x-2 gap-y-1 text-[9px] leading-4 sm:grid-cols-3">
                       <div>
                         <dt className="font-black uppercase text-black/50">State</dt>

@@ -213,3 +213,12 @@ The facade must:
 - existing specialist modules remain intact;
 - old bridges remain until zero-caller certification;
 - caller audit and classification registry are updated.
+
+
+## Current branch coverage checkpoint — 2026-11-11
+
+The Brain Gemini follow-on branch now uses the resolver facade for analytics-canon records and the CreatorAnswerEvidence projection for creator-confirmed intake. The latter is channel-scoped and is included in the exact model-input snapshot, trace, and persisted turn metadata. The Brain evidence ribbon validates record identity against the saved prompt manifest and refuses to show record-level provenance for legacy/mismatched snapshots.
+
+The broad EvidenceOwner union is not proof that every owner is integrated. Current branch inspection found no wired EvidenceRecord adapters for Project/ContentBuild, Vault, Publishing receipts, YouTube-read, Comments, Transcripts, Research, Outcomes, or Experiments. Existing systems such as BrainVaultAdapter, BrainProjectContext, BrainPublicationOutcomeBridge and OpportunityEvidenceAdapter remain source-specific adapters/projections with their own contracts. Their metadata must not be relabeled as typed EvidenceRecords until the source scope, stable identity, snapshot and permission semantics are proven.
+
+Next slice is Phase 6 in `docs/brain/BRAIN_GEMINI_CONTEXT_GROUNDING_AUDIT_AND_FIX_PLAN.md`: start with Project/ContentBuild, Vault metadata and verified publication receipts, then separately audit acquisition owners and outcome ledgers. No new store, no broad owner migration, and no destructive quarantine is authorized by this checkpoint.

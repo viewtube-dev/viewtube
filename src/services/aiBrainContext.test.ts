@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import { describe, expect, it } from "vitest"
 import { loadAiBrainContext, saveChannelContextProfile, syncChannelContextToLegacyAnswers, syncLegacyAnswersToChannelContext } from "./aiBrainContext"
 import type { ChannelContextProfile } from "../context/ChannelContextProfile"

@@ -45,12 +45,13 @@ describe("resolveBrainRetryInput", () => {
 
 
 describe("resolveBrainModelInputSnapshot", () => {
- const saved = {
+ const saved: import("./BrainRetryContinuity").BrainModelInputSnapshot<{ id: string; value: number | string }> = {
   systemInstruction: "exact original system instruction",
   history: [{ role: "user", content: "original history" }],
   userText: "original question",
   evidenceRecords: [{ id: "analytics-1", value: 42 }],
-  creatorAnswerEvidenceRecords: [{ id: "creator-answer-1", value: "goal" }],
+  creatorAnswerEvidenceRecords: [{ id: "creator-answer-1", value: 7 }],
+  contextBudget: { includedSections: ["system_prompt", "channel_evidence"], requestedSections: ["channel_evidence"], omittedSections: ["recent_conversation"], estimatedInputTokens: 320 },
  }
 
  it("restores the complete original model-visible snapshot for saved-evidence generation-only retries", () => {
@@ -61,6 +62,7 @@ describe("resolveBrainModelInputSnapshot", () => {
    continuity: "original_input_restored",
    saved,
   })).toEqual(saved)
+  expect(resolveBrainModelInputSnapshot({ retryTurn: true, generationOnly: true, mode: "saved", continuity: "original_input_restored", saved })?.contextBudget).toMatchObject({ includedSections: ["system_prompt", "channel_evidence"], requestedSections: ["channel_evidence"], omittedSections: ["recent_conversation"] })
  })
 
  it("does not restore saved model input for ordinary generation", () => {
@@ -89,6 +91,16 @@ describe("resolveBrainModelInputSnapshot", () => {
    retryTurn: true, generationOnly: true, mode: "saved",
    continuity: "legacy_context_reconstructed", saved,
   })).toBeUndefined()
+ })
+
+ it("does not invent a context manifest for legacy saved model inputs", () => {
+  const legacySaved = { systemInstruction: "legacy original system instruction" }
+  const restored = resolveBrainModelInputSnapshot({
+   retryTurn: true, generationOnly: true, mode: "saved",
+   continuity: "original_input_restored", saved: legacySaved,
+  })
+  expect(restored).toEqual(legacySaved)
+  expect(restored?.contextBudget).toBeUndefined()
  })
 
  it("does not restore when the saved snapshot is missing or lacks a system instruction", () => {

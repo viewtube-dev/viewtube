@@ -39,6 +39,9 @@ describe("Brain context resolution", () => {
    maximumCharacters: 2000,
    capabilityIds: ["statistics-intelligence"],
   })
+  expect(result.requiredSectionIds).toContain("system_prompt")
+  expect(result.requiredSectionIds).toContain("channel_evidence")
+  expect(result.requiredSectionIds).toContain("evidence_quality")
   expect(result.omittedSectionIds).toContain("required_evidence_missing:channel_evidence")
   expect(result.omittedSectionIds).toContain("required_evidence_missing:evidence_quality")
   expect(result.omittedSectionIds).toContain("required_evidence_missing:shared_evidence_contract")
@@ -84,6 +87,7 @@ describe("required context integrity", () => {
   ], { userText: "Analyze my channel views", maximumCharacters: 100 })
 
   expect(result.selectedSectionIds).toContain("system_prompt")
+  expect(result.requiredSectionIds).toContain("channel_evidence")
   expect(result.selectedSectionIds).not.toContain("creator_control_policy")
   expect(result.omittedSectionIds).toContain("creator_control_policy:required_context_does_not_fit")
   expect(result.text).not.toContain("permission rules")

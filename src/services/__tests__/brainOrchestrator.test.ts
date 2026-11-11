@@ -10,6 +10,7 @@ import type { StructuredBrainModelOutput } from "../gemini"
 import {
  BRAIN_MODEL_TIMEOUT_MS,
  BRAIN_REPAIR_TIMEOUT_MS,
+ classifyBrainOrchestrationError,
  runBrainTurn,
  validateBrainResponse,
 } from "../brain/BrainOrchestrator"
@@ -49,6 +50,20 @@ const nicheProfile = {
 }
 
 describe("BrainOrchestrator", () => {
+ it.each([
+  [new Error("request timed out"), "timeout"],
+  [new Error("429 quota exceeded"), "rate_limited"],
+  [new Error("403 API key rejected"), "authorization_rejected"],
+  [new Error("model not found"), "model_unavailable"],
+  [new Error("fetch failed: ECONNRESET"), "network_error"],
+  [new Error("400 invalid argument"), "invalid_request"],
+  [new Error("unclassified failure"), "unknown"],
+  [new Error("API key=AIzaSyEXAMPLE_SECRET"), "authorization_rejected"],
+ ])("classifies orchestration failures without returning raw error text", (error, expected) => {
+  expect(classifyBrainOrchestrationError(error)).toBe(expected)
+  expect(classifyBrainOrchestrationError(error)).not.toContain("AIza")
+ })
+
  it("persists one structured, channel-specific turn through the governed pipeline", async () => {
   const snapshot = makeSnapshot()
   const growthContext = buildCreatorGrowthContext(snapshot, [], [])
@@ -114,6 +129,13 @@ describe("BrainOrchestrator", () => {
     modelIdentityStatus: "model_disabled",
    })
    expect(trace?.evidence.returned).toEqual(result.response.evidenceIds)
+   expect(trace?.context.sectionsRequested?.length).toBeGreaterThan(0)
+   expect(trace?.evidence.missing).toEqual(expect.arrayContaining(snapshot.evidencePack.missingInputs.map((entry) => `dataset:${entry}`)))
+   expect(trace?.context.sectionsIncluded).toContain("system_prompt")
+   expect(trace?.context.sectionsDropped).toEqual(result.contextBudget.omittedSections)
+   expect(trace?.context.channelId).toBe("trace-channel")
+   expect(trace?.generationPath).toBe("basic_guidance")
+   expect(trace?.fallbackReason).toBe("model_disabled")
    expect(trace?.evidence.records).toBeDefined()
    expect(trace?.promptVersions).toMatchObject({
     orchestrator: "brain-orchestrator-v2",
@@ -297,6 +319,10 @@ describe("BrainOrchestrator", () => {
 
   expect(provider).toHaveBeenCalledTimes(1)
   expect(failed.fallbackReason).toBe("provider_error")
+  expect(failed.generationPath).toBe("basic_guidance")
+  expect(failed.turn.status).toBe("fallback")
+  expect(failed.turn.metadata?.orchestrationError).toBe("unknown")
+  expect(failed.turn.metadata?.orchestrationError).not.toContain("provider unavailable")
   expect(failed.repaired).toBe(false)
   expect(disabled.fallbackReason).toBe("model_disabled")
  })
@@ -377,5 +403,15 @@ describe("BrainOrchestrator", () => {
 
   expect(evaluation.passed).toBe(false)
   expect(evaluation.repairReasons).toContain("Answer the audience-language task with an audience finding, concrete language guidance, and an evidence boundary.")
+ })
+
+ it("classifies provider failures without persisting raw error messages", () => {
+  expect(classifyBrainOrchestrationError(new Error("request timed out"))).toBe("timeout")
+  expect(classifyBrainOrchestrationError(new Error("429 quota exceeded"))).toBe("rate_limited")
+  expect(classifyBrainOrchestrationError(new Error("403 permission denied"))).toBe("authorization_rejected")
+  expect(classifyBrainOrchestrationError(new Error("404 model not found"))).toBe("model_unavailable")
+  expect(classifyBrainOrchestrationError(new Error("fetch failed: ECONNRESET"))).toBe("network_error")
+  expect(classifyBrainOrchestrationError(new Error("400 invalid argument"))).toBe("invalid_request")
+  expect(classifyBrainOrchestrationError(new Error("provider unavailable"))).toBe("unknown")
  })
 })

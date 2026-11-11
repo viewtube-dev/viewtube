@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import React, { act } from "react"
 import { createRoot } from "react-dom/client"
 import { renderToStaticMarkup } from "react-dom/server"
@@ -48,15 +50,19 @@ const renderHub = () =>
 
 describe("AIBrainCommandInterface", () => {
  let storage: ReturnType<typeof createStorage>
+ let originalWindowLocalStorage: PropertyDescriptor | undefined
 
  beforeEach(() => {
   storage = createStorage()
   vi.stubGlobal("localStorage", storage)
-  vi.stubGlobal("window", { localStorage: storage })
+  originalWindowLocalStorage = Object.getOwnPropertyDescriptor(window, "localStorage")
+  Object.defineProperty(window, "localStorage", { configurable: true, value: storage })
  })
 
  afterEach(() => {
   vi.unstubAllGlobals()
+  if (originalWindowLocalStorage) Object.defineProperty(window, "localStorage", originalWindowLocalStorage)
+  else Reflect.deleteProperty(window, "localStorage")
  })
 
 
@@ -371,8 +377,15 @@ describe("AIBrainCommandInterface", () => {
   expect(html).toContain('role="status"')
   expect(html).toContain('tabindex="0"')
   expect(html).toContain(`aria-label="${label} response status"`)
-  expect(html).toContain("response was prepared")
+  expect(html).toContain(path === "basic_guidance" ? "Full Brain generation was unavailable" : "This response was prepared")
   expect(html).toContain("whitespace-normal")
   expect(html).not.toMatch(/provider|account|credit|consent|internal error/i)
+ })
+
+ it("includes the authoritative fallback reason in accessible status details", () => {
+  const html = renderToStaticMarkup(<BrainGenerationBadge path="basic_guidance" fallbackReason="model_disabled" />)
+  expect(html).toContain("Fallback reason: model disabled.")
+  expect(html).toContain("fallback reason: model disabled")
+  expect(html).toContain("Basic Guidance")
  })
 })

@@ -1,12 +1,13 @@
 import { resolveBrainTaskProfile } from "./BrainTaskProfileRegistry"
 import { BRAIN_CAPABILITY_EVIDENCE_REQUIREMENTS } from "./BrainCapabilityRegistry"
 
-export const BRAIN_CONTEXT_RESOLVER_VERSION = "brain-context-resolution-v1"
+export const BRAIN_CONTEXT_RESOLVER_VERSION = "brain-context-resolution-v2"
 export const BRAIN_CONTEXT_CHARS_PER_TOKEN_ESTIMATE = 3
 
 export interface BrainContextSectionResolution {
  text: string
  selectedSectionIds: string[]
+ requiredSectionIds: string[]
  omittedSectionIds: string[]
  characterCount: number
  maximumCharacters: number
@@ -181,6 +182,7 @@ export const resolveBrainContextSections = (
  return {
   text: selected.map((entry) => entry.text).join("\n"),
   selectedSectionIds: selected.map((entry) => entry.id),
+  requiredSectionIds: [...new Set([...explicitRequired, ...candidates.filter((candidate) => candidate.required).map((candidate) => candidate.id)])],
   omittedSectionIds: [...new Set(omittedSectionIds)],
   characterCount: selected.reduce((sum, entry) => sum + entry.text.length, 0) + Math.max(0, selected.length - 1),
   maximumCharacters,
