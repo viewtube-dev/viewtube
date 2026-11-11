@@ -944,7 +944,7 @@ describe("Studio counter divider alignment and slider counter hold", () => {
 
   it("renders the side text counter as a controlled canonical text input with the stacked side rail", () => {
     const html = renderToStaticMarkup(
-      <StudioSideTextCounter value="draft 12" onValueChange={() => {}} ariaLabel="Editable quantity" placeholder="Type text or number" />,
+      <StudioSideTextCounter value="36" onValueChange={() => {}} ariaLabel="Editable quantity" placeholder="Type text or number" />,
     );
     expect(html).toContain('data-vt-library-component="StudioSideTextCounter"');
     expect(html).toContain('data-vt-studio-split-field');
@@ -955,6 +955,16 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     expect(html).toContain('aria-label="Increase Editable quantity"');
     expect(html).toContain('aria-label="Decrease Editable quantity"');
     expect(html).toContain('class="vt-studio-side-counter__actions"');
+    expect(html).toContain('value="36"');
+    expect(html).not.toContain('disabled=""');
+  });
+
+  it("keeps arbitrary text editable and disables numeric stepping until the value is numeric", () => {
+    const html = renderToStaticMarkup(
+      <StudioSideTextCounter value="draft text" onValueChange={() => {}} ariaLabel="Editable label" />,
+    );
+    expect(html).toContain('value="draft text"');
+    expect((html.match(/disabled=""/g) || []).length).toBe(2);
   });
 
   it("wires the double-split slider counter variant to the shared counter hold hook", () => {
