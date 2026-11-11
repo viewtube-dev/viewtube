@@ -168,3 +168,18 @@
 - [ ] Add full parity tests for legacy receipts, missing identity fields, retry/replay and cross-channel isolation.
 - [ ] Execute exact-head GenerationWorkflow, OperationRecord, BrainRuntimeSnapshot and full release-gate tests before marking Phase 2 complete.
 
+
+
+## Evidence owner projection expansion — Phase 6 started 2026-11-11
+
+- [x] Re-audit runtime evidence owner coverage on the current implementation branch.
+- [x] Confirm analytics-canon and creator-confirmed records reach prompt/trace/ribbon through existing owners.
+- [ ] Add typed Project/ContentBuild evidence projection from canonical resolved objects.
+- [ ] Add typed Vault asset-metadata evidence projection from the read-only Vault adapter.
+- [ ] Add typed publishing-identity evidence projection from verified publication receipts.
+- [ ] Audit YouTube-read/comments/transcript/research acquisition callers and permission boundaries before adding adapters.
+- [ ] Map outcomes/experiment to existing outcome/operation identities before projecting them.
+- [ ] Prove channel/project scope, freshness, prompt-budget, retry, trace and rendered-manifest parity for each new owner.
+- [ ] Certify evidence IDs end-to-end with a permitted redacted browser turn.
+
+No new evidence store is authorized. Projections remain read-only, source-owned, and fail closed on scope mismatch.

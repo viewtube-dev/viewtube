@@ -342,6 +342,17 @@ const withTimeout = async <T>(promise: Promise<T>, milliseconds: number): Promis
   new Promise<T>((_, reject) => setTimeout(() => reject(new Error("Brain response timed out")), milliseconds)),
  ])
 
+export const classifyBrainOrchestrationError = (error: unknown): string => {
+ const message = error instanceof Error ? error.message.toLowerCase() : String(error || "").toLowerCase()
+ if (/timeout|timed out|deadline exceeded/.test(message)) return "timeout"
+ if (/429|rate.?limit|quota/.test(message)) return "rate_limited"
+ if (/401|403|unauthorized|api key|permission denied/.test(message)) return "authorization_rejected"
+ if (/404|model.*(not found|unavailable)|unsupported model/.test(message)) return "model_unavailable"
+ if (/network|fetch failed|econn|connection reset|socket/.test(message)) return "network_error"
+ if (/400|invalid argument|bad request|schema/.test(message)) return "invalid_request"
+ return "unknown"
+}
+
 export const BRAIN_MODEL_TIMEOUT_MS = 30_000
 export const BRAIN_REPAIR_TIMEOUT_MS = 20_000
 export const BRAIN_PROMPT_VERSION = "brain-orchestrator-v2"
@@ -697,6 +708,8 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   saved: originalModelInputSnapshot,
  })
  const restoreOriginalModelInput = Boolean(restoredModelInputSnapshot)
+ const restoredContextBudget = restoreOriginalModelInput ? restoredModelInputSnapshot?.contextBudget : undefined
+ const traceContextBudget = restoredContextBudget || (restoreOriginalModelInput ? undefined : context.budget)
  let modelSystemInstruction: string | undefined
  let modelHistory: any[] | undefined
  try {
@@ -756,26 +769,37 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   // section selection and the context budget. An ID substring is not proof that
   // the record itself was supplied to the model.
   renderedEvidenceRecords = restoreOriginalModelInput && Array.isArray(restoredModelInputSnapshot?.evidenceRecords)
-   ? originalModelInputSnapshot.evidenceRecords
+   ? (restoredModelInputSnapshot?.evidenceRecords || [])
    : getEvidenceRecordsActuallyRendered(context.systemInstruction, promptEvidenceRecords)
   renderedCreatorAnswerEvidenceRecords = restoreOriginalModelInput && Array.isArray(restoredModelInputSnapshot?.creatorAnswerEvidenceRecords)
-   ? originalModelInputSnapshot.creatorAnswerEvidenceRecords
+   ? (restoredModelInputSnapshot?.creatorAnswerEvidenceRecords || [])
    : getEvidenceRecordsActuallyRendered(context.systemInstruction, creatorAnswerEvidenceRecords)
   modelSystemInstruction = restoreOriginalModelInput
    ? restoredModelInputSnapshot?.systemInstruction
    : context.systemInstruction
   modelHistory = restoreOriginalModelInput && Array.isArray(restoredModelInputSnapshot?.history)
-   ? originalModelInputSnapshot.history
+   ? (restoredModelInputSnapshot?.history || [])
    : (input.history || []).slice(-8)
   questionTrace.recordEvidence({
+   requested: [],
    returned: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords].map((record) => record.id),
-   missing: [],
+   missing: input.snapshot.evidencePack.missingInputs.map((entry) => `dataset:${entry}`),
    records: [...renderedEvidenceRecords, ...renderedCreatorAnswerEvidenceRecords],
   })
   questionTrace.recordContext({
-   tokensEstimated: context.budget.estimatedInputTokens,
-   sectionsIncluded: ["system_instruction", ...(renderedEvidenceRecords.length ? ["analytics_evidence_records"] : []), ...(renderedCreatorAnswerEvidenceRecords.length ? ["creator_answer_evidence_records"] : [])],
-   sectionsDropped: [...context.budget.omittedSections],
+   tokensEstimated: traceContextBudget?.estimatedInputTokens ?? (restoreOriginalModelInput ? 0 : context.budget.estimatedInputTokens),
+   sectionsIncluded: restoredContextBudget?.includedSections
+    ? [...restoredContextBudget.includedSections]
+    : restoreOriginalModelInput ? ["original_model_input_context_sections_unavailable"] : [...(context.budget.includedSections || [])],
+   sectionsRequested: traceContextBudget?.requestedSections
+    ? [...traceContextBudget.requestedSections]
+    : restoreOriginalModelInput ? ["original_model_input_context_sections_unavailable"] : [...(context.budget.requestedSections || [])],
+   sectionsDropped: restoredContextBudget?.omittedSections
+    ? [...restoredContextBudget.omittedSections]
+    : restoreOriginalModelInput ? ["original_model_input_context_metadata_unavailable"] : [...context.budget.omittedSections],
+   channelId: input.channelId || null,
+   projectId: input.projectId || input.project?.id || creatorContext?.project?.projectId || null,
+   contentBuildId: input.project?.contentBuildId || creatorContext?.project?.contentBuildId || null,
   })
 
   try {
@@ -789,6 +813,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
       userText: input.userText,
       evidenceRecords: renderedEvidenceRecords,
       creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
+      contextBudget: traceContextBudget,
      },
      retryEvidenceMode: input.retryTurnId ? input.retryEvidenceMode || "saved" : undefined,
      retryContextContinuity,
@@ -928,7 +953,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
     ...creatorContextMetadata(),
-    contextBudget: context.budget,
+    contextBudget: traceContextBudget,
     repairReasons: repairOutcome.reasons,
     repairAttempted: repairOutcome.attempted,
     repairSucceeded: repairOutcome.succeeded,
@@ -971,6 +996,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
         userText: input.userText,
         evidenceRecords: renderedEvidenceRecords,
         creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
+        contextBudget: traceContextBudget,
        },
       }
      : {
@@ -980,6 +1006,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
         userText: input.userText,
         evidenceRecords: renderedEvidenceRecords,
         creatorAnswerEvidenceRecords: renderedCreatorAnswerEvidenceRecords,
+        contextBudget: traceContextBudget,
        },
       }),
     evidenceRecordQuality: renderedEvidenceRecords.length
@@ -990,7 +1017,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
     ...creatorContextMetadata(),
-    contextBudget: context.budget,
+    contextBudget: traceContextBudget,
     evaluationId: evaluation.id,
     repairReasons: repairOutcome.reasons,
     repairAttempted: repairOutcome.attempted,
@@ -1003,6 +1030,9 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    questionTrace.complete({
     status: status === "complete" ? "complete" : "fallback",
     outputRef: response.id,
+    generationPath,
+    fallbackReason,
+    validationReasons: repairOutcome.reasons,
    })
   } catch {
    // Trace persistence must never fail an otherwise completed creator turn.
@@ -1033,7 +1063,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
   const evaluation = validateBrainResponse({ response, snapshot: input.snapshot, recentTurns: input.recentTurns, growthContext: input.growthContext, expectedMode: taskProfile.answerMode })
   try {
    questionTrace.recordGrade("response_validation", evaluation.passed ? 100 : 0)
-   questionTrace.complete({ status: "fallback", outputRef: response.id, failureReason: error instanceof Error ? error.message : String(error) })
+   questionTrace.complete({ status: "fallback", outputRef: response.id, failureReason: classifyBrainOrchestrationError(error), generationPath, fallbackReason, validationReasons: repairOutcome.reasons })
   } catch {
    // Trace persistence must never mask the fallback response.
   }
@@ -1065,7 +1095,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
     projectId: input.projectId || input.project?.id || null,
     contentBuildId: input.project?.contentBuildId || null,
     ...creatorContextMetadata(),
-    contextBudget: context.budget,
+    contextBudget: traceContextBudget,
     repairReasons: [],
     repairAttempted: false,
     repairSucceeded: false,
@@ -1082,7 +1112,7 @@ export const runBrainTurn = async (input: RunBrainTurnInput): Promise<BrainOrche
    learningEntryIds: learning ? [learning.id] : [],
    metadata: {
     operationId,
-    orchestrationError: error instanceof Error ? error.message : String(error),
+    orchestrationError: classifyBrainOrchestrationError(error),
     capabilities: capabilityIds,
     taskProfileId: taskProfile.id,
     generationPath,

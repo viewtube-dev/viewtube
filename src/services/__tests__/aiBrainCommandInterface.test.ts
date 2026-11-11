@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { fallbackContext } from "../../context/GlobalDataContextTypes"
 import { getVtSyncSnapshot } from "../../features/vt-sync-local"
@@ -40,15 +42,19 @@ const createStorage = () => {
 
 describe("aiBrainCommandInterface", () => {
  let storage: ReturnType<typeof createStorage>
+ let originalWindowLocalStorage: PropertyDescriptor | undefined
 
  beforeEach(() => {
   storage = createStorage()
   vi.stubGlobal("localStorage", storage)
-  vi.stubGlobal("window", { localStorage: storage })
+  originalWindowLocalStorage = Object.getOwnPropertyDescriptor(window, "localStorage")
+  Object.defineProperty(window, "localStorage", { configurable: true, value: storage })
  })
 
  afterEach(() => {
   vi.unstubAllGlobals()
+  if (originalWindowLocalStorage) Object.defineProperty(window, "localStorage", originalWindowLocalStorage)
+  else Reflect.deleteProperty(window, "localStorage")
  })
 
  it("classifies missing VT-SYNC diagnostics without converting unknown rows to zero", () => {

@@ -34,7 +34,7 @@ describe("BrainComposerDock", () => {
     expect(html.indexOf('aria-label="Message to ViewTube Brain"')).toBeLessThan(html.indexOf('aria-label="Open prompt library"'))
     expect(html.indexOf('aria-label="Open prompt library"')).toBeLessThan(html.indexOf('aria-label="Send message"'))
     expect(css).toContain('grid-template-columns: minmax(0, 4.4fr) minmax(0, 1fr)')
-    expect(css).toContain('grid-template-rows: repeat(2, minmax(0, 1fr))')
+    expect(css).toContain('grid-template-rows: repeat(3, minmax(0, 1fr))')
     expect(css).toContain('gap: 4px')
     expect(html).toContain("Enter to send")
     expect(html).toContain("Shift+Enter for a new line")

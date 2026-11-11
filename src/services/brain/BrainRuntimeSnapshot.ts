@@ -88,6 +88,24 @@ export interface BrainRuntimeTraceSummary {
  kind: string
  status: string
  intent: string | null
+ taskProfileId: string | null
+ channelId: string | null
+ generationPath: string | null
+ fallbackReason: string | null
+ modelProvider: string | null
+ modelRequested: string | null
+ modelIdentityStatus: string | null
+ capabilities: string[]
+ sectionsIncluded: string[]
+ sectionsRequested: string[]
+ sectionsDropped: string[]
+ projectId: string | null
+ contentBuildId: string | null
+ validationReasons: string[]
+ failureReason: string | null
+ promptVersions: Record<string, string>
+ evidenceReturnedIds: string[]
+ evidenceMissingIds: string[]
  capabilityCount: number
  evidenceReturned: number
  evidenceMissing: number
@@ -613,6 +631,24 @@ const summarizeTrace = (
   kind: trace.kind,
   status: trace.status,
   intent: trace.intent || null,
+  taskProfileId: trace.taskProfileId || null,
+  channelId: trace.context?.channelId || trace.channelId || null,
+  generationPath: trace.generationPath || null,
+  fallbackReason: trace.fallbackReason || null,
+  modelProvider: trace.modelProvider || null,
+  modelRequested: trace.modelRequested || null,
+  modelIdentityStatus: trace.modelIdentityStatus || null,
+  capabilities: [...(trace.capabilitiesInvoked || [])],
+  sectionsIncluded: [...(trace.context?.sectionsIncluded || [])],
+  sectionsRequested: [...(trace.context?.sectionsRequested || [])],
+  sectionsDropped: [...(trace.context?.sectionsDropped || [])],
+  projectId: trace.context?.projectId || null,
+  contentBuildId: trace.context?.contentBuildId || null,
+  validationReasons: [...(trace.validationReasons || [])],
+  failureReason: trace.failureReason || null,
+  promptVersions: { ...(trace.promptVersions || {}) },
+  evidenceReturnedIds: [...(trace.evidence?.returned || [])],
+  evidenceMissingIds: [...(trace.evidence?.missing || [])],
   capabilityCount: trace.capabilitiesInvoked?.length || 0,
   evidenceReturned: trace.evidence?.returned?.length || 0,
   evidenceMissing: trace.evidence?.missing?.length || 0,

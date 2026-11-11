@@ -193,7 +193,8 @@ export const ChatConversationViewport: React.FC<{
     onScroll={onScroll}
     className={`brain-chat-scrollbar flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-y-auto overscroll-y-contain touch-pan-y [-webkit-overflow-scrolling:touch] ${className}`}
     aria-label="Brain conversation"
-    role="region"
+    role="log"
+    aria-live="polite"
     tabIndex={0}
   >
     {children}

@@ -39,7 +39,7 @@ describe("BrainFeedbackControls", () => {
   await act(async () => resolveSave?.())
   expect(onFeedback).toHaveBeenCalledWith(message, "helpful")
   expect(container.textContent).toContain("Saved")
-  expect(helpful?.style.backgroundColor).toBe("rgb(63, 238, 86)")
+  expect(helpful?.getAttribute("data-vt-studio-button-on")).toBe("true")
  })
 
  it("surfaces a retry state when feedback persistence fails", async () => {

@@ -1,7 +1,7 @@
 # Brain Gemini and Context Grounding — Audit and Fix Plan
 
 **Production Date:** 2026-10-29  
-**Last Edited:** 2026-10-29  
+**Last Edited:** 2026-11-11  
 **Class:** ACTIVE_PLAN  
 **Status:** ACTIVE  
 **Concern:** Brain chat model execution, creator context, capability selection, evidence grounding, and truthful generation status  
@@ -10,14 +10,15 @@
 **Target repository:** `viewtube-dev/viewtube`  
 **Target branch:** `master/consolidated-feature-integration`  
 **Planning branch:** `plan/brain-gemini-context-grounding-audit`
-**Implementation branch:** `fix/brain-gemini-context-grounding-phases-0-1`  
+**Implementation branch:** `fix/brain-gemini-context-grounding-phases-2-5-rebased`  
+**Landed predecessor:** PR [#1145](https://github.com/viewtube-dev/viewtube/pull/1145) (Phases 0–1 readiness subscription)  
 **Related authorities:** `docs/domains/BRAIN.md`, `docs/brain/AI_BRAIN_QUICK_WINS_MASTER_IMPLEMENTATION_PLAN.md`, `docs/brain/AI_BRAIN_FEATURE_MASTER_AND_IMPLEMENTATION_READINESS.md`, `docs/specifications/PROMPTS.md`, `docs/governance/VERIFICATION.md`
 
 ## Objective
 
 When a creator has configured a Gemini API key, Brain chat must attempt model generation through the canonical runtime, supply the correct channel/project/profile/context and only eligible evidence for the current turn, select capabilities appropriate to the creator's request, and report honestly when generation or grounding is unavailable. Generic fallback text must not masquerade as a model-grounded answer.
 
-This is a diagnosis and implementation plan, not a claim that the live failure has already been reproduced or that any fix has been implemented.
+This plan now records implemented source-level fixes and their verification. Phases 1–4 have deterministic implementation and regression coverage; the original live generic-answer symptom has not been reproduced in an authenticated browser session, so the live root cause and end-to-end resolution remain unproven.
 
 ## Scope and non-goals
 
@@ -112,39 +113,41 @@ No new owner or parallel data store is permitted. Reuse the current key vault, s
 - [x] Add regression tests for Gemini-key save/clear notifications in `src/services/keyVault.test.ts` and a mounted-surface contract in `src/views/AIBrainRuntimeSurface.contract.test.ts` (execution still pending).
 - [x] Replace render-only `canUseGemini = hasGeminiKey()` with state refreshed on the canonical key-change event, existing `yt_settings_updated`, and cross-tab `storage` events; clean up listeners on unmount.
 - [x] Trace the canonical Key Vault write/update notification and the provider's `getAiSettings()/resolveGeminiApiKey()` path. Reuse the existing notification/store contract; no second key store was introduced.
-- [ ] Keep key presence separate from provider health. Surface missing key, invalid/rejected key, model-unavailable, quota/rate limit, timeout, and other provider failures only when supported by actual error classification.
-- [ ] Ensure a failed provider call records a truthful fallback reason and never reports Full Brain/model success.
+- [x] Keep key presence separate from provider health in the runtime result: classify timeout, quota/rate limit, authorization rejection, model unavailable, network failure, invalid request, and unknown provider failures without persisting raw exception text.
+- [x] Ensure a failed provider call records a truthful fallback reason and basic-guidance generation path; regression tests assert it cannot be mistaken for model success.
 - [ ] Verify key material is redacted from logs, traces, telemetry, screenshots and test fixtures.
 
 **Acceptance:** Saving/changing a key while the page is mounted changes readiness for the next turn; valid configuration reaches the provider boundary; invalid configuration produces an actionable, accurately classified failure.
 
 ### Phase 2 — Prove and fix context/evidence continuity (H4)
 
-- [ ] For the captured turn, compare the source snapshot with the prompt input and resolved context sections.
-- [ ] Assert the expected channel identity, project/content build, profile fields, and permitted evidence IDs remain in scope for the same channel and turn.
-- [ ] Assert required section IDs are either selected or surfaced as explicit omissions/gaps; do not silently present the turn as fully grounded.
-- [ ] Trace creator controls and evidence-quality/scope blocks to their canonical source. Fix only the actual faulty owner or stale snapshot dependency.
-- [ ] Verify selected/omitted section reporting is retained in existing trace/model-input metadata where supported; extend existing metadata only if a specific evidence gap is proven.
+- [x] Add deterministic orchestration assertions comparing the source evidence pack, rendered prompt evidence records, and trace output.
+- [x] Record stable channel, project, and content-build scope on the same turn trace.
+- [x] Record exact resolver-selected sections, required section IDs, and explicit omissions/required-context gaps.
+- [x] Keep evidence-quality and creator-control enforcement in the canonical context broker; do not bypass scope or permission checks.
+- [x] Persist the resolver manifest with the exact model-input snapshot and restore it on saved-evidence generation-only retries; mark legacy retry provenance unavailable rather than inventing section lineage.
+- [ ] Capture and compare a redacted real browser turn. This remains blocked until a permitted test session/key and non-sensitive fixture context are available.
 
 **Acceptance:** The exact context shown as used is the context supplied to the model; no cross-channel leakage; missing or blocked evidence remains a truthful limitation; required-context omissions are visible and testable.
 
 ### Phase 3 — Fix intent/capability and answer-validation defects (H3/H5)
 
-- [ ] Add table-driven cases for direct question, strategy request, analytics diagnosis, channel-profile question, and creator-asset generation.
-- [ ] For each case, assert task-profile ID, selected capability IDs, required context sections, and response mode.
-- [ ] Replay a real downgraded model output against `validateBrainResponse`; classify each rejection as legitimate safety/evidence enforcement or an incorrect heuristic.
-- [ ] Repair only the faulty rule. Keep numeric/evidence safeguards and retry/side-effect boundaries intact.
-- [ ] Ensure repaired model output is evaluated with the same required context and that a failed repair preserves a clear failure reason.
-- [ ] Compare structured model output → validated response → persisted turn → rendered response, all tied to one turn ID.
+- [x] Add table-driven task-profile routing cases for direct question, strategy request, analytics diagnosis, channel-profile question, and creator-asset generation.
+- [x] Assert selected capability IDs, capability-required context sections, and response mode together across the five task cases.
+- [x] Add deterministic model-output cases for generic/incorrect-mode responses, one bounded repair, independently validated repair acceptance, and repair/provider failure fallback; preserve numeric/evidence safeguards and retry boundaries.
+- [x] Ensure repaired model output is evaluated with the same required context and that a failed repair preserves a clear failure reason.
+- [x] Assert generation path, fallback reason, repair outcome, and persisted turn metadata across the orchestration tests.
+- [ ] Replay a redacted real downgraded model output against `validateBrainResponse` and compare structured output → validated response → persisted turn → rendered response for one live turn ID. This requires a permitted authenticated Gemini test session.
 
 **Acceptance:** Good contextual responses are not downgraded by unrelated heuristic checks; genuinely unsafe or ungrounded answers remain blocked; direct questions receive direct answers and task-specific requests receive the correct output type.
 
 ### Phase 4 — Provenance and creator-facing status
 
-- [ ] Keep the generation badge derived from the authoritative generation path and fallback reason.
-- [ ] Make the existing “How produced”/runtime details reveal actual model served, capability IDs, evidence returned/missing, prompt version, repair state and operation outcome where recorded.
-- [ ] Do not display a model identity, capability execution, evidence citation or success state without corresponding runtime records.
-- [ ] Keep detailed diagnostics collapsed by default while making actionable provider/context failures discoverable.
+- [x] Keep the creator-facing generation badge bound to the authoritative response generation path and expose its fallback reason in accessible status details.
+- [x] Persist generation path, fallback reason, validation/repair reasons, and a safe failure class on the authoritative Brain trace.
+- [x] Extend the existing runtime snapshot and collapsed “How this answer was produced” details with actual model/provider identity, capability IDs, evidence returned/missing, prompt versions, repair attempts, scope, and included/omitted context sections.
+- [x] Keep identity and success fields sourced from trace records; unknown values remain explicitly unavailable.
+- [x] Keep detailed diagnostics collapsed by default.
 
 **Acceptance:** A creator can distinguish model-generated, repaired-model, and local basic-guidance answers; a developer can diagnose why without accessing secrets or private chain-of-thought.
 
@@ -203,6 +206,60 @@ No new owner or parallel data store is permitted. Reuse the current key vault, s
 - **Not yet reproduced against a live browser/session.**
 - **PR CI ran:** production build passed; local smoke passed; Brain quality loop passed; the keyVault test file (5 tests) and Brain runtime surface contract file (15 tests) passed inside the focused aggregate.
 - **PR CI is not green overall:** source governance fails in the confirmed Studio catalog audit; the broad focused suite has multiple unrelated existing contract failures; typecheck reports errors in files outside this change. Full-suite result was still running at the time of this update.
-- **No implementation fix is claimed.**
+- **Phase 1 readiness reactivity and the Phase 2–4 provenance implementation are present.** Live reproduction and final release verification remain open.
 
 The first implementation commit must be justified by the captured failure and include a regression test that goes red before the fix.
+
+
+### Phase 2–4 follow-on checkpoint (2026-10-31)
+
+- [x] Created follow-on branch from the current `master/consolidated-feature-integration`; predecessor PR #1145 is already merged and was not rewritten.
+- [x] Context resolver now returns selected and required section IDs; the context broker preserves those in the existing context-budget contract.
+- [x] BrainTrace records the exact included/omitted sections, requested required sections, evidence records returned, explicit required-section/dataset gaps, and channel/project/content-build scope.
+- [x] Saved model-input snapshots now carry the context resolver manifest; saved-input retries restore it, while legacy retries explicitly report unavailable original section metadata.
+- [x] BrainTrace records generation path, fallback reason, validation/repair reasons, and a safe failure classification. Raw orchestration exception messages are no longer copied into the trace or turn's `orchestrationError` field.
+- [x] Runtime snapshot and existing Brain Runtime Panel expose collapsed turn provenance, including actual model/provider identity, capabilities, evidence counts, context sections, prompt versions, repair attempts, and failure classification.
+- [x] Added tests for required context manifests, retry continuity, five task-profile/capability/context/response-mode cases, safe failure classification, trace provenance, runtime-panel rendering, and generation-badge fallback status.
+- [ ] Live browser reproduction is still not proven: no permitted redacted Gemini test turn was available in this execution. Do not claim that the original generic-answer symptom is resolved solely from these deterministic tests.
+- [ ] Run focused Brain tests, broader governance/typecheck/build, and browser/runtime verification; record actual results before marking Phase 5 complete.
+- [x] GitHub Actions production build and local smoke pass on the follow-on branch.
+- [ ] Full release-gates, focused tests, typecheck, governance, and browser verification must all be green before merge.
+
+
+### Phase 0–5 verification update (2026-11-11, latest CI inspection)
+
+- [x] Context resolver v2, required/included/omitted section provenance, scoped evidence trace, saved retry continuity, safe failure classification, runtime snapshot/panel fields, and accessible generation fallback reason are implemented.
+- [x] Corrected the trace contract so `sectionsRequested` is required and typed, fixed restored-snapshot TypeScript narrowing, and corrected the retry test's shared evidence-record type.
+- [x] Brain generation quality-loop workflow job passed on commit `54d007db8290af2542338f02d8a5fdfe566d927e`.
+- [x] Production build and local browser smoke job passed on that same workflow run.
+- [x] Full-suite run found one runtime-snapshot assertion using an obsolete served-model fixture; corrected the expected value to the actual canonical `gemini-2.5-pro` served identity in commit `af87edfc42b6603fe409f80c5f6806d53324784c`.
+- [ ] Current-head release-gates run [#6176](https://github.com/viewtube-dev/viewtube/actions/runs/42986302661) is queued. Await its Brain runtime snapshot, Brain quality loop, typecheck, full-suite and governance results before calling verification complete.
+- [ ] Repository-wide typecheck and full-suite currently expose many unrelated integration-baseline failures in Studio catalog/primitives, route loaders, document audit, test environment setup, and Gemini key-context source contracts. The Brain-specific quality loop passed; the runtime snapshot test fix awaits rerun.
+- [ ] No authenticated, redacted Gemini browser turn was performed. The connected browser project did not have sufficient credits, so the original live generic-answer symptom is not yet reproduced end-to-end.
+- [ ] Keep PR #1241 in draft until current-head Brain tests pass and the live Gemini/browser verification is available. Do not merge or claim the reported symptom is fully fixed based only on implementation and unit tests.
+
+
+### Phase 6 — Expand typed evidence projections to the remaining canonical owners (started 2026-11-11)
+
+**Purpose:** extend the same read-only EvidenceRecord contract beyond analytics and creator-confirmed intake without creating another store or changing source ownership.
+
+**Current verified coverage on this branch**
+- [x] `analytics-canon`: canonical dataset/metric projection through `projectCanonicalEvidenceRecords` and `EvidenceIntelligenceResolver`; channel-scope mismatch fails closed.
+- [x] `creator-confirmed`: scoped creator-intake answers are projected, filtered by channel and personalization controls, rendered as explicitly user-provided context, and persisted with prompt-manifest identity.
+- [ ] `project` / ContentBuild: canonical Project and ContentBuild are resolved for task context, but no typed EvidenceRecord projection is yet wired into Brain prompt evidence.
+- [ ] `vault`: `BrainVaultAdapter` returns metadata-only BrainEvidenceItems; typed EvidenceRecord projection and prompt-manifest continuity are not yet wired.
+- [ ] `publishing`: verified publication identity receipts exist, but are not yet projected into the Brain EvidenceRecord prompt/trace contract.
+- [ ] `youtube-read`, `comments`, `transcript`, `research`: acquisition/read paths require a fresh caller and permission audit before projection; no owner adapter is claimed here.
+- [ ] `outcomes`, `experiment`: preserve their existing ledgers and operation identities; projection waits for idempotency/identity mapping and outcome ownership certification.
+
+**First implementation slice**
+1. Build a caller/permission/scope matrix for Project/ContentBuild, Vault, and publication receipts.
+2. Add pure, read-only EvidenceRecord projections over already-resolved canonical objects; do not fetch or persist from the projection layer.
+3. Pass only active-channel and active-project matches to the existing context broker; retain owner, source ref, source snapshot, freshness, epistemic state, and provenance.
+4. Include those records in the exact model-input snapshot and retry manifest, then record the same IDs in BrainTrace and the evidence ribbon.
+5. Add source-owner, cross-channel, stale/missing, prompt-budget, retry-continuity, and render-manifest tests before wiring any additional owner.
+6. Do not project creator goals, project intent, prompt instructions, model recommendations, or speculative text as observed evidence.
+
+**Gate 6:** each newly supported owner has a canonical read source, a verified caller, explicit permission and scope checks, a stable source reference/snapshot, parity tests, and trace-to-render ID continuity. Keep unsupported owners visibly unsupported; do not create placeholder facts.
+
+**Known limit:** this phase is an audited next-step plan, not a claim that all EvidenceOwner values are integrated. The existing release-gates run does not validate source-owner integration beyond the current Brain quality loop.

@@ -113,6 +113,7 @@ describe("Brain Studio chat primitives", () => {
       </ChatConversationViewport>,
     )
     expect(html).toContain('role="log"')
+    expect(html).toContain('aria-live="polite"')
     expect(html).toContain('aria-label="Brain conversation"')
     expect(html).toContain("Newest turn")
     expect(html).toContain('aria-hidden="true"')

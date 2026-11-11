@@ -121,7 +121,8 @@ describe("BrainTurnEvidenceRibbon selection request", () => {
   expect(html).toContain("Long-form, Live")
   expect(html).toContain("2025-10-22 – 2026-10-22")
   expect(html).toContain("tutorial, beginner")
-  expect(html).toContain("All selection constraints")
+  expect(html).toContain("Cohort selection")
+  expect(html).toContain("Top-ranked videos")
  })
 
  it("explains when a legacy saved turn did not retain request constraints", () => {

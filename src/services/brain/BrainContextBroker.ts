@@ -71,7 +71,7 @@ export const buildBrainContextPack = (input: {
  creatorContext?: CreatorContextEnvelope | null
  channelContext?: ChannelContextProfile | null
  maximumCharacters?: number
-}): { systemInstruction: string; budget: BrainContextBudget } => {
+}): { systemInstruction: string; budget: BrainContextBudget & { includedSections: string[]; requestedSections: string[] } } => {
  const requestedChannelId = input.channelId || null
  const creatorContextMatchesChannel = Boolean(
   input.creatorContext
@@ -362,6 +362,8 @@ export const buildBrainContextPack = (input: {
    memoryCharacters: memory.length + channelKnowledge.length + projectContext.length + creatorStyle.length + channelContext.length,
    knowledgeCharacters: knowledge.length + research.length,
    conversationCharacters: clippedConversation.length,
+   includedSections: resolvedContext.selectedSectionIds,
+   requestedSections: resolvedContext.requiredSectionIds,
    omittedSections,
   },
  }

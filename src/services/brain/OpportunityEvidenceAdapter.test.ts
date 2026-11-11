@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import type { AIBrainEvidencePack } from "../../types"
 import { buildOpportunityEvidenceFromBrainPack, buildOpportunityEvidenceFromCanonicalBundle } from "./OpportunityEvidenceAdapter"
+import type { TacticProposal } from "./OpportunityIntelligence"
 
 const pack = (): AIBrainEvidencePack => ({
  promptVersion: "brain-chat-v2",
@@ -292,7 +293,7 @@ describe("Opportunity Radar to Tactics Engine handoff contract", () => {
     }
     const result = buildOpportunityTacticsPacket({ opportunity, lifecycleState: "accepted", createdAt: "2026-10-17T12:00:00.000Z" })
     if (!result.ok) throw new Error("fixture packet should be valid")
-    const tactic = {
+    const tactic: TacticProposal = {
       id: "tactic-1", sourceOpportunityId: "op-1", channelId: "channel-1", evidenceIds: ["ev-1"],
       targetOutcome: "Improve qualified watch time", actionSteps: ["Draft a follow-up"],
       prerequisites: [], expectedImpact: { hypothesis: "May improve watch time", confidence: 0.55, horizon: "28d" },
