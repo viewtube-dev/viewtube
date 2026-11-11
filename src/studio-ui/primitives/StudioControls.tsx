@@ -2383,8 +2383,8 @@ export const StudioCounter: React.FC<StudioCounterProps> = ({
     const next = Number((base + direction * safeStep).toFixed(precision));
     onValueChange(Math.min(max, Math.max(min, next)));
   }, [max, min, onValueChange, safeStep]);
-  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || current <= min, interactionFocus);
-  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || current >= max, interactionFocus);
+  const decrement = useStudioCounterHold(-1, current, min, max, safeStep, adjust, disabled || !validBounds || !isAdjustable || current <= min, interactionFocus);
+  const increment = useStudioCounterHold(1, current, min, max, safeStep, adjust, disabled || !validBounds || !isAdjustable || current >= max, interactionFocus);
   return (
     <StudioSplitShell
       layout="double"
@@ -2466,6 +2466,7 @@ export const StudioSideTextCounter = React.forwardRef<HTMLInputElement, StudioSi
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const textValue = value == null ? "" : String(value);
   const parsedValue = textValue.trim() === "" ? 0 : Number(textValue);
+  const isAdjustable = textValue.trim() === "" || Number.isFinite(parsedValue);
   const current = Number.isFinite(parsedValue) ? parsedValue : 0;
   const validBounds = Number.isFinite(min) && Number.isFinite(max) && min <= max;
   const currentRef = React.useRef(current);
