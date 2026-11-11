@@ -184,3 +184,27 @@
 - [ ] No duplicate primitive styling authority or feature-local component geometry is introduced.
 - [ ] Typecheck, focused tests, relevant suite, lint, and production build are green or any baseline failure is explicitly documented.
 - [ ] Final live screenshot review confirms the deployed exact commit.
+
+
+## Lane UX-D — capability clarity and action transparency
+- [ ] RH-UX147 Build the source-backed inventory for every visible Vault module, subtool, control and shortcut: purpose, event/handler, canonical service, permission, persistence/worker, output, tests and current status.
+- [ ] RH-UX148 Rewrite ambiguous tool/action labels and descriptions in plain language; every action states what it does, required selection/input, consequence and destination.
+- [ ] RH-UX149 Standardize truthful availability, disabled-reason, loading, partial-success, failure and recovery states using existing shared UI patterns.
+- [ ] RH-UX150 Make Library-first navigation and contextual actions the only owners for search, filters, navigation and selection actions; reconcile against RH-UX120–146 rather than adding parallel controls.
+- [ ] RH-UX151 Verify every icon-only action has an accessible name and tooltip/focus/long-press explanation; verify keyboard and touch behavior.
+- [ ] RH-UX152 Add coverage regression checks ensuring each visible Vault action maps to a real capability and no unsupported processor is advertised.
+- [ ] RH-UX153 Re-run the technical UI audit and one batched desktop/mobile portrait/mobile landscape review after the UX lanes are implemented.
+
+## Lane BR — Brain and ViewTube resource integration
+- [ ] RH-BR160 Correct BrainVaultAdapter evidence routes to canonical resource-specific Vault deep links using the existing resolver; remove the generic Reference Studio destination.
+- [ ] RH-BR161 Add tests for exact resource deep links, permission denial, missing/deleted assets, stable canonical evidence IDs and freshness.
+- [ ] RH-BR162 Verify Brain retrieval uses the exact permitted Vault evidence supplied to the current turn; retain read-only retrieval and existing context/evidence contracts.
+- [ ] RH-BR163 Map Brain-proposed Vault operations to existing approved capability/action/receipt contracts; do not add a parallel Brain or Vault tool registry.
+- [ ] RH-BR164 Verify asset identity and provenance survive Vault → Studio/Projects/Editor/Research/Publishing handoffs and return paths.
+- [ ] RH-BR165 Add end-to-end evidence for Brain resource search → cited result → canonical Vault asset open → approved action proposal → authoritative receipt/result.
+
+### Checkpoint — clarity and Brain integration
+- [ ] No visible Vault action is decorative, misleading or unexplained.
+- [ ] Every capability status is grounded in implementation and runtime evidence.
+- [ ] Brain citations open the exact canonical Vault asset and preserve permissions/provenance.
+- [ ] No duplicate resource store, evidence store, capability registry, project store or processing engine is introduced.
