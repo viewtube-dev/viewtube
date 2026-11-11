@@ -343,3 +343,14 @@ test("double-split word counter paints one vertical divider at each button-to-pa
   assert.match(block, /border-right:\s*var\(--vt-studio-control-stroke/s);
   assert.ok(valueToggles.includes('className={["vt-studio-value-toggle", "vt-studio-word-counter"'));
 });
+
+
+test("StudioSideTextCounter has one outer black perimeter and no nested field border", () => {
+  const start = fields.lastIndexOf("/* StudioSideTextCounter exception");
+  assert.ok(start >= 0, "side text counter field ownership must be explicit");
+  const block = fields.slice(start);
+  assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*border:\s*0/s);
+  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*border:\s*0/s);
+  assert.match(block, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke/);
+  assert.ok(controls.includes('fieldSlot'));
+});
