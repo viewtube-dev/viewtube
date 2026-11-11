@@ -981,11 +981,11 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     expect(html).toContain('data-vt-studio-slider-left-controls="counter"');
     expect(html).toContain('aria-label="Increase Level"');
     expect(html).toContain('aria-label="Decrease Level"');
-    expect(css).not.toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter::after');
+    expect(css).toContain('.vt-studio-side-counter__actions::after');
     expect(css).toContain('.vt-studio-side-counter__actions button');
-    expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls[data-size="compact"] .vt-studio-side-counter__actions button svg');
-    expect(css).toContain('.vt-studio-double-split-slider.is-counter-controls[data-size="micro"] .vt-studio-side-counter__actions button svg');
-    expect(css).not.toContain('.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button {');
+    expect(css).toContain('.vt-studio-side-counter__actions[data-size="compact"] button svg');
+    expect(css).toContain('.vt-studio-side-counter__actions[data-size="micro"] button svg');
+    expect(slider).toContain('className="vt-studio-side-counter__actions" data-size={size}');
     expect(css).toContain('background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));');
     expect(css).toContain('.vt-studio-side-counter__actions button.is-holding svg');
   });
