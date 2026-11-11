@@ -79,7 +79,7 @@ import {
  updateVaultTask,
 } from "../services/vaultTaskCenter"
 import { resolveVaultSelection } from "../services/vaultSelection"
-import { canMutateVaultAsset, isVaultAssetProtected } from "../services/vaultMutationPolicy"
+import { canMutateVaultAsset } from "../services/vaultMutationPolicy"
 import { resolveVaultComparePair } from "../services/vaultCompare"
 import {
  createVaultSmartCollection,
