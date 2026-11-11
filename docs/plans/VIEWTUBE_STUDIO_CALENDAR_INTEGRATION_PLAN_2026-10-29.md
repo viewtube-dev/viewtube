@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-29  
 **PR target branch:** `fix/studio-controls-regression-recovery-2026-10-31`  
-**Implementation branch:** `feat/calendar-phases-0-3-studio-recovery-sync-2026-11-11`  
+**Implementation branch:** `feat/calendar-resource-analytics-consolidation-2026-11-11`  
 **Canonical data owner:** Projects / Project records; no second calendar store  
 **Status:** Phases 0–3 implementation in progress on the recovery-targeted branch; runtime verification and release gates remain open
 

@@ -1,5 +1,7 @@
 import React from "react"
 import { getVtVisualMetricColor } from "../styles/toolboxPalette"
+import { StudioSplitLeftButton } from "../studio-ui"
+import { AnalyticsVisualIcon } from "./AnalyticsVisualIcon"
 
 export const ANALYTICS_VISUAL_CONTEXT_BAR_HEIGHTS = {
   standard: 32,
@@ -13,6 +15,7 @@ type Tone = "pink" | "cyan" | "lime" | "yellow" | "purple" | "orange" | "white"
 export interface AnalyticsVisualStat {
   label: string
   value: string
+  iconKey?: string
   tone?: Tone | string
   bg?: string
   color?: string
@@ -136,35 +139,37 @@ export const resolveAnalyticsVisualContextBarHeight = (
   return ANALYTICS_VISUAL_CONTEXT_BAR_HEIGHTS.standard
 }
 
-const statButtonClass = (clickable: boolean, dark: boolean): string =>
-  `h-full w-auto flex-none px-0 inline-flex flex-col items-stretch justify-start tabular-nums leading-none overflow-hidden transition-colors ${
-    clickable
-      ? (dark ? "cursor-pointer hover:brightness-125" : "cursor-pointer hover:bg-gray-50")
-      : "cursor-default"
-  }`
-
 /** Rough advance width of a string at the stat row's 13px face. */
 const statTextWidth = (value: string): number => Math.ceil(value.trim().length * 13 * 0.72) + 8
 
-/**
- * Width a card reserves: its declared minimum, or the widest label/value it
- * has been told it can ever show — whichever is larger. With no declaration
- * this is exactly the previous behaviour, and the card still grows to fit.
- */
-const statReservedWidth = (item: AnalyticsVisualStat): number => {
-  const floor = item.minWidth ?? (item.compact ? 68 : 76)
-  const candidates = [...(item.labelWidthValues ?? []), ...(item.valueWidthValues ?? [])]
-  if (candidates.length === 0) return floor
-  return Math.max(floor, ...candidates.map(statTextWidth))
+const analyticsMetricIconKey = (label: string): string => {
+  const normalized = label.toLowerCase()
+  if (normalized.includes("view") || normalized.includes("ctr")) return "trend"
+  if (normalized.includes("watch") || normalized.includes("retention") || normalized.includes("avp") || normalized.includes("avd")) return "activity"
+  if (normalized.includes("subscriber") || normalized.includes("comment") || normalized.includes("audience")) return "users"
+  if (normalized.includes("revenue") || normalized.includes("rpm")) return "revenue"
+  if (normalized.includes("traffic") || normalized.includes("share")) return "share"
+  if (normalized.includes("save") || normalized.includes("playlist")) return "collection"
+  return "analytics"
 }
 
-const statButtonStyle = (
+/** Preserve the previous stat-card width contract and reserve one square split rail. */
+const statSplitReservedWidth = (item: AnalyticsVisualStat, label: string): number => {
+  const candidates = [label, item.value, ...(item.labelWidthValues ?? []), ...(item.valueWidthValues ?? [])]
+  const textWidth = Math.max(...candidates.map(statTextWidth))
+  return Math.max(item.minWidth ?? (item.compact ? 68 : 76), textWidth) + 28
+}
+
+const statSplitButtonStyle = (
   item: AnalyticsVisualStat,
   dark: boolean,
+  resolvedTone: string | undefined,
+  label: string,
 ): React.CSSProperties => ({
-  background: item.backgroundTone ?? (dark ? ANALYTICS_DARK_STATS_BACKGROUND : "#EDEDED"),
-  minWidth: statReservedWidth(item),
-})
+  "--pair-a": item.backgroundTone ?? (dark ? ANALYTICS_DARK_STATS_BACKGROUND : "#EDEDED"),
+  "--pair-b": resolvedTone ?? "#E5E7EB",
+  minWidth: statSplitReservedWidth(item, label),
+} as React.CSSProperties)
 
 export const resolveAnalyticsStatValueColor = (
   item: AnalyticsVisualStat,
@@ -190,26 +195,26 @@ export const AnalyticsActiveStats: React.FC<{
       const valueColor = resolveAnalyticsStatValueColor(item, darkStats, resolvedTone)
 
       return (
-        <button
+        <StudioSplitLeftButton
           key={`${item.label}-${index}`}
+          icon={<AnalyticsVisualIcon iconKey={item.iconKey ?? analyticsMetricIconKey(label)} size={16} strokeWidth={3} />}
+          sizeVariant="compact"
+          selected={Boolean(item.isActive)}
           onClick={item.onClick}
           disabled={!item.onClick}
-          className={statButtonClass(Boolean(item.onClick), darkStats)}
-          style={statButtonStyle(item, darkStats)}
+          aria-label={`${normalizeAnalyticsStatLabel(label)} ${item.value}`}
+          className="vt-analytics-active-stat h-full w-auto flex-none"
+          style={statSplitButtonStyle(item, darkStats, resolvedTone, label)}
         >
-          <span
-            className="inline-flex h-[55%] items-center justify-center whitespace-nowrap px-1 text-[13px] font-[900] leading-none tracking-[0]"
-            style={{ color: valueColor }}
-          >
-            {item.value}
+          <span className="vt-analytics-active-stat-copy flex h-full min-w-0 flex-col items-start justify-center gap-0 px-0 py-0 leading-none">
+            <span className={`vt-analytics-active-stat-label inline-flex min-w-0 items-center text-[9px] font-[1000] uppercase tracking-[0] ${item.labelClassName ?? "whitespace-nowrap"}`} style={{ color: item.color ?? (darkStats ? "#F3F4F6" : "#000000") }}>
+              {normalizeAnalyticsStatLabel(label)}
+            </span>
+            <strong className="inline-flex flex-none items-center whitespace-nowrap px-0 text-[13px] font-[1000] leading-none tracking-[0]" style={{ color: valueColor }}>
+              {item.value}
+            </strong>
           </span>
-          <span
-            className={`inline-flex h-[45%] w-full items-center justify-center text-[11px] font-[1000] uppercase tracking-[0] text-black ${item.labelClassName ?? "whitespace-nowrap"}`}
-            style={{ background: resolvedTone ?? "#E5E7EB", color: item.color ?? "#000000" }}
-          >
-            {normalizeAnalyticsStatLabel(label)}
-          </span>
-        </button>
+        </StudioSplitLeftButton>
       )
     })}
   </div>
