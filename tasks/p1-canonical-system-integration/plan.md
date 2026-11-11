@@ -52,3 +52,12 @@ Each consequential path has one canonical owner, typed connections, preserved id
 Phase 0 source reconciliation was completed and merged via PR #1205. The follow-up source maps and six workstream execution packets have been migrated to PR #1216. Current findings and corrected owners are in [phase-0 reconciliation audit](audits/phase-0-reconciliation-2026-10-30.md), [identity map](identity-map.md), and [task crosswalk](task-crosswalk.md). Do not repeat Phase 0 from scratch; refresh only when the target SHA changes.
 
 Remaining identity gate: Priority-25 still has no confirmed capability/task identity. VT-025 is an unrelated Analytics task. Task Index VNext structured storage/writer is also not present; Task Authority remains the lifecycle authority and the one-goal file remains a temporary projection.
+
+
+## Phase 0/1 refresh — 2026-11-11
+
+The October Phase 0 reconciliation remains the completed donor/plan migration baseline (PRs #1205 and #1216 merged). The target has since advanced; the current target HEAD was re-pinned to `a279e52e63e816c0409a02e2feb4807f20c56e4b` (merge of PR #1242). A new current-SHA Brain evidence/context reconciliation is recorded in `tasks/system-convergence/AI-BRAIN-PHASE-0-1-RECONCILIATION-2026-11-11.md`.
+
+- Phase 0: source/PR/authority refresh completed; current-SHA focused tests, typecheck/build/source-governance and canonical work-claim verification remain open. Do not mark runtime baseline certified.
+- Phase 1: static owner/contract/source-path map completed for the Brain continuity slice. Universal producer reachability, all-surface caller parity, public/private regression proof and end-to-end identity propagation remain open.
+- No new runtime owner or persistence system is authorized. Continue through the existing Brain Continuity and Evidence & Intelligence workstreams.
