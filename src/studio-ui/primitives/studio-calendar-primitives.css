@@ -10,10 +10,47 @@
   max-width: 100%;
 }
 .vt-studio-calendar-event-chip[data-calendar-size="mini"] {
+  box-sizing: border-box;
   min-height: 20px;
+  height: 20px;
+  padding: 0 3px;
   gap: 3px;
+  overflow: hidden;
+  border: 1.5px solid #000;
+  border-radius: var(--vt-studio-control-radius, 6px);
+  background: var(--vt-studio-control-primary-fill, color-mix(in srgb, #fff 50%, var(--vt-studio-control-primary, var(--pair-a, #36e0f6))));
+}
+.vt-studio-calendar-event-chip[data-calendar-size="mini"][data-selected="true"] {
+  background: var(--vt-studio-control-secondary-fill, color-mix(in srgb, #fff 50%, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))));
+}
+.vt-studio-calendar-event-chip__mini-label {
+  display: block;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.vt-studio-calendar-event-chip__mini-remove {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 1px solid #000;
+  border-radius: 2px;
+  color: #000;
+  background: #fff;
+  font: 900 10px/9px var(--vt-studio-control-font, inherit);
 }
 .vt-studio-calendar-event-chip[data-calendar-size="mini"] .vt-studio-calendar-event-chip__status {
+  flex: 0 0 auto;
+  max-width: 35%;
   font-size: 8px;
 }
 .vt-studio-calendar-event-chip__status {
