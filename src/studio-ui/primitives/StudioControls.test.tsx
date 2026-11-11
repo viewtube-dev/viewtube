@@ -1508,3 +1508,28 @@ describe("StudioSideTextCounter field-layer perimeter ownership", () => {
     expect(fields).toMatch(/html body \.vt-studio-side-text-counter input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*border:\s*0\s*;[^}]*box-shadow:\s*inset 0 0 0/s);
   });
 });
+
+
+describe("confirmed counter representative and focus-surface regressions", () => {
+  it("places StudioCounter action rails on opposite sides and gives Supreme the same split grid geometry", () => {
+    const css = readStudioControlCss();
+    expect(css).toMatch(/\.vt-studio-counter\s*,\s*\.vt-studio-side-counter\s*,\s*\.vt-studio-left-counter\s*\{[^}]*display:\s*grid\s*;[^}]*grid-template-columns:\s*var\(--vt-studio-control-height[^;]*minmax\(0,\s*1fr\)[^;]*var\(--vt-studio-control-height/s);
+    expect(css).not.toMatch(/\.vt-studio-counter\[data-size="supreme"\] \.vt-studio-stepper-button\s*,\s*\/\* Global dropdown menu contract/);
+  });
+
+  it("keeps only the correctly designed left-rail specimen for each StudioSideCounter size", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = catalog.indexOf("const ConfirmedStudioSideCounterFamily");
+    const end = catalog.indexOf("const ConfirmedStudioSideTextCounterFamily", start);
+    const family = catalog.slice(start, end);
+    expect(family).toContain("<StudioLeftCounter");
+    expect(family).not.toContain("<StudioSideCounter");
+    expect((family.match(/<StudioLeftCounter/g) ?? []).length).toBe(5);
+  });
+
+  it("does not repaint counter text panels to 50% primary while an action is focused or held", () => {
+    const css = readStudioControlCss();
+    expect(css).not.toMatch(/\.vt-studio-counter:has\([\s\S]*?\) \.vt-studio-counter__value\s*\{[^}]*background:/);
+    expect(css).not.toMatch(/\.vt-studio-left-counter:has\([\s\S]*?\) \.vt-studio-side-counter__value\s*\{[^}]*background:/);
+  });
+});
