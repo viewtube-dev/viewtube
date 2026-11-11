@@ -165,7 +165,7 @@ This inventory is the Phase 0–3 implementation scope and adjacent ownership ma
 - Keeps the metric's resolved tone on the icon rail and preserves the light/dark value-color contract.
 - Uses a compact right-side label/value arrangement with zero vertical padding.
 - Reserves width for the widest declared label/value variants.
-- Applies a scoped content-width exception only inside the horizontal stat strip; the shared Studio button and global full-row default are unchanged.
+- Applies an inline width:auto / flex:0 0 auto exception only inside the horizontal stat strip; the shared Studio button and global full-row default are unchanged.
 - Preserves the existing click callback and disabled behavior.
 - Added a server-rendered test for the split-left component identity, rail and compact text pane.
 
@@ -174,7 +174,7 @@ This inventory is the Phase 0–3 implementation scope and adjacent ownership ma
 - [x] Uses the public Studio split-left button rather than hand-built rail markup.
 - [x] Square icon rail is supplied by the shared primitive.
 - [x] Right-side label/value content has no vertical padding.
-- [x] The horizontal stat strip uses a scoped content-width exception rather than changing the global Studio width default.
+- [x] The horizontal stat strip uses an inline width:auto / flex:0 0 auto exception rather than changing the global Studio width default.
 - [x] Metric colors, dark-canvas behavior, width candidates and callbacks are retained in the component contract.
 - [ ] Focused tests, typecheck and browser visual certification.
 
