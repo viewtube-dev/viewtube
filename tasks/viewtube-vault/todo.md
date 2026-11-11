@@ -1,5 +1,18 @@
 # ViewTube Vault Donor Re-Harvest — Task Ledger
 
+## 2026-11-11 continuation on 10-31 target
+
+- [x] Correct Brain Vault evidence links to canonical /vault asset deep links; add regression assertion.
+- [x] Align Inspector archive/trash recovery visibility with the canonical lifecycle fields written by the Vault adapter; expose the existing single-asset archive handler.
+- [x] Add transcript video-ID source-resolution coverage (canonical metadata, legacy metadata, ContentBuild fallback, invalid candidates).
+- [x] Add detached-version regression coverage for new identity, source preservation, and lineage metadata.
+- [ ] Run focused Vitest, typecheck, lint, build, and browser certification on the exact target branch; GitHub source readback is not a substitute for execution.
+- [ ] Complete RH-UX120–146 visual/responsive acceptance.
+- [ ] Complete RH-CAP200–205 action-to-handler/policy/receipt/recovery mapping and capability-host integration.
+- [ ] Continue RH-C049–051 (Vision suggestions, arbitrary local-file transcription backend, proxy derivative task).
+- [ ] Continue RH-D lineage/dependency end-to-end verification and missing regression coverage.
+
+
 ## Planning / reconciliation
 - [x] RH-P001 Unzip and audit uploaded donor source.
 - [x] RH-P002 Reclassify donor as multi-owner harvest.
