@@ -68,7 +68,6 @@ export interface StudioCalendarMultiDayBarProps {
   kind?: StudioCalendarEventKind
   status?: string
   segment?: StudioCalendarMiniSegment
-  progress?: number
   channelWide?: boolean
   selected?: boolean
   onClick?: () => void
@@ -80,15 +79,11 @@ export const StudioCalendarMultiDayBar: React.FC<StudioCalendarMultiDayBarProps>
   kind = "publish",
   status,
   segment = "single",
-  progress,
   channelWide = false,
   selected = false,
   onClick,
   className,
 }) => {
-  const boundedProgress = typeof progress === "number" && Number.isFinite(progress)
-    ? Math.min(100, Math.max(0, progress))
-    : undefined
   const content = (
     <>
       <span className="vt-studio-calendar-multi-day-bar__label">{label}</span>
@@ -105,7 +100,6 @@ export const StudioCalendarMultiDayBar: React.FC<StudioCalendarMultiDayBarProps>
     "data-calendar-segment": segment,
     "data-channel-wide": channelWide ? "true" : undefined,
     "data-selected": selected ? "true" : undefined,
-    "data-progress": boundedProgress,
     "aria-label": [label, status].filter(Boolean).join(", "),
   }
   return onClick
