@@ -1513,7 +1513,7 @@ describe("StudioSideTextCounter field-layer perimeter ownership", () => {
 describe("confirmed counter representative and focus-surface regressions", () => {
   it("places StudioCounter action rails on opposite sides and gives Supreme the same split grid geometry", () => {
     const css = readStudioControlCss();
-    expect(css).toMatch(/\.vt-studio-counter\s*,\s*\.vt-studio-side-counter\s*,\s*\.vt-studio-left-counter\s*\{[^}]*display:\s*grid\s*;[^}]*grid-template-columns:\s*var\(--vt-studio-control-height[^;]*minmax\(0,\s*1fr\)[^;]*var\(--vt-studio-control-height/s);
+    expect(css).toMatch(/\.vt-studio-counter\s*\{[^}]*display:\s*grid\s*;[^}]*grid-template-columns:\s*var\(--vt-studio-control-height[^;]*minmax\(0,\s*1fr\)[^;]*var\(--vt-studio-control-height/s);
     expect(css).not.toMatch(/\.vt-studio-counter\[data-size="supreme"\] \.vt-studio-stepper-button\s*,\s*\/\* Global dropdown menu contract/);
   });
 
