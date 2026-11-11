@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioSideCounter, StudioSideTextCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -939,6 +939,21 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     const html = renderToStaticMarkup(<StudioSideCounter value={5} onValueChange={() => {}} ariaLabel="Quantity" />);
     expect(html).toContain('aria-label="Increase Quantity"');
     expect(html).toContain('aria-label="Decrease Quantity"');
+    expect(html).toContain('class="vt-studio-side-counter__actions"');
+  });
+
+  it("renders the side text counter as a controlled canonical text input with the stacked side rail", () => {
+    const html = renderToStaticMarkup(
+      <StudioSideTextCounter value="draft 12" onValueChange={() => {}} ariaLabel="Editable quantity" placeholder="Type text or number" />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioSideTextCounter"');
+    expect(html).toContain('data-vt-studio-split-field');
+    expect(html).toContain('data-vt-studio-field-kind="text-input"');
+    expect(html).toContain('type="text"');
+    expect(html).toContain('value="draft 12"');
+    expect(html).toContain('aria-label="Editable quantity"');
+    expect(html).toContain('aria-label="Increase Editable quantity"');
+    expect(html).toContain('aria-label="Decrease Editable quantity"');
     expect(html).toContain('class="vt-studio-side-counter__actions"');
   });
 
