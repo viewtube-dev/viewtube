@@ -35,6 +35,7 @@ export {
   StudioLegendMultiDropdown,
   StudioCounter,
   StudioSideCounter,
+  StudioSideTextCounter,
   StudioLeftCounter,
   StudioLeftWordCounter,
   StudioLeftWordSlider,
