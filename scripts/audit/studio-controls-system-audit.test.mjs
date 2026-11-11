@@ -360,8 +360,8 @@ test("StudioSideTextCounter input is inset and vertically centered within the sh
   const start = fields.lastIndexOf("/* StudioSideTextCounter: the split shell owns the only black perimeter.");
   assert.ok(start >= 0, "side text counter inset layout must be explicit");
   const block = fields.slice(start);
-  assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*display:\s:flex/s);
-  assert.match(block, /align-items:\s:center/s);
-  assert.match(block, /padding-block:\s:var\(--vt-studio-control-stroke/s);
-  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*height:\s:100%/s);
+  assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*display:\s*:flex/s);
+  assert.match(block, /align-items:\s*:center/s);
+  assert.match(block, /padding-block:\s*:var\(--vt-studio-control-stroke/s);
+  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*height:\s*:100%/s);
 });
