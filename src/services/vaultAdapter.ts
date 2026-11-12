@@ -241,6 +241,9 @@ export const setVaultAssetState = (
  const lifecycle = String(metadata.lifecycle || "DRAFT").toUpperCase()
  if (input.archived === true && !canMutateVaultAsset(existing, "archive")) return null
  if (input.trashed === true && !canMutateVaultAsset(existing, "trash")) return null
+ const restoreRequested = (input.archived === false && input.trashed !== true)
+  || (input.trashed === false && input.archived !== true)
+ if (restoreRequested && !canMutateVaultAsset(existing, "restore")) return null
 
  if (typeof input.favorite === "boolean") metadata.favorite = input.favorite
 
