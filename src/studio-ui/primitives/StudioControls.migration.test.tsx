@@ -1,15 +1,15 @@
 import React from "react"
 import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
-import { StudioDropdown, StudioLegendMultiDropdown, StudioSplitLeftInput, StudioUploadFrame } from "./StudioControls"
+import { StudioDropdown, StudioLegendMultiDropdown, StudioUploadFrame } from "./StudioControls"
 import { StudioSplitTextInput } from "./StudioSplitTextInput"
 
 describe("Studio Controls migrations for Vault and Studio Hub", () => {
   it("renders the split-left search input with native input props and the icon rail", () => {
     const html = renderToStaticMarkup(
-      <StudioSplitLeftInput icon={<span aria-hidden="true">⌕</span>} value="thumbnail" placeholder="Search assets…" aria-label="Search Vault assets" />,
+      <StudioSplitTextInput split="left" leftIcon={<span aria-hidden="true">⌕</span>} value="thumbnail" placeholder="Search assets…" aria-label="Search Vault assets" />,
     )
-    expect(html).toContain('data-vt-studio-username-input="true"')
+    expect(html).toContain('data-vt-studio-split-shell="true"')
     expect(html).toContain('aria-label="Search Vault assets"')
     expect(html).toContain('placeholder="Search assets…"')
     expect(html).toContain('value="thumbnail"')
