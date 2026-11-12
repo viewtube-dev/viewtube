@@ -154,7 +154,7 @@ The previous Send To eligibility treated any non-empty selection as handoff-capa
 
 ### Additional continuation — restore transition policy
 
-- `04f5ca7be0cf842a3100f372b771a91b7be27488` — add a recovery regression case rejecting restore requests when an asset is neither archived nor trashed.
+- `3ef485ae14d9b2901798c54b1a021853fe3a77fa` — add the recovery regression case rejecting restore requests when an asset is neither archived nor trashed (the earlier attempted test-only update did not change the file and is not counted as evidence).
 - `74812defa1c20e62c1ddd98fbf2c6ad33374991b` — enforce the canonical `canMutateVaultAsset(..., "restore")` policy in `setVaultAssetState` before clearing archive/trash state. Archive-to-trash transitions remain distinct and are not mistaken for restore.
 
 This closes a service-layer policy gap: restore controls were gated in the Inspector, but the canonical adapter accepted restore-shaped state updates without checking that a recoverable lifecycle state existed. The test was added before the implementation. The Vitest test has not been executed in this connector-only session; source readback is the available verification.
