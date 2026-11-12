@@ -1,6 +1,7 @@
 import React from "react"
 import type { StudioControlSize } from "../tokens"
 import "../../styles/studio-control-entry.css"
+import "../../styles/studio-panel-accordion.css"
 
 export interface StudioPanelAccordionItem {
   icon: React.ReactNode
