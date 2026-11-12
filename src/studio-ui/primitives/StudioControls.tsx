@@ -2365,6 +2365,7 @@ export type StudioLeftWordSliderProps = Omit<StudioDoubleSplitSliderProps, "min"
 
 export const STUDIO_LEFT_WORD_OPTIONS = ["ONE", "TWO", "THREE", "FOUR"] as const;
 export type StudioLeftWord = typeof STUDIO_LEFT_WORD_OPTIONS[number];
+export type StudioLeftWordVariant = StudioLeftWord;
 
 export const normalizeStudioLeftWordIndex = (value: number): number => {
   if (!Number.isFinite(value)) return 1;
