@@ -1058,6 +1058,7 @@ describe("Supreme and Micro production size contract", () => {
       supreme: 60,
       standard: 44,
       compact: 28,
+      mini: 20,
       micro: 12,
     }
     for (const [size, height] of Object.entries(expected) as [StudioControlSize, number][]) {
