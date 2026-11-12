@@ -53,12 +53,12 @@ test("builds a derived public-export and consumer graph from the existing catalo
   }
 });
 
-test("target branch catalog-only controls remain explicitly visible for owner API classification", () => {
+test("target branch controls already in the barrel are classified as public exports", () => {
   const root = process.cwd();
   const report = buildRegistry(root);
-  const names = report.catalogOnlyUnexportedSymbols.map((row) => row.name);
+  const names = report.publicExports.map((row) => row.name);
   for (const name of ["StudioNumberInput", "StudioVerticalWordToggle", "StudioBrainStatusIndicator", "StudioSplitLeftDropdown", "StudioDoubleSplitSlider"]) {
-    assert.ok(names.includes(name), `${name} should be reported, not silently promoted or omitted`);
+    assert.ok(names.includes(name), `${name} should be recognized as a public barrel export`);
   }
   assert.equal(report.catalogOnlyUnexportedSymbols.every((row) => row.status === "not-exported-from-public-barrel-owner-disposition-required"), true);
 });
