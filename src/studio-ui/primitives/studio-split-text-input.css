@@ -215,5 +215,5 @@ html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-siz
 }
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="standard"]:focus-within input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="compact"]:focus-within input.vt-studio-text-input[data-vt-studio-control="true"] {
-  box-shadow: none;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
 }
