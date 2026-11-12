@@ -264,3 +264,24 @@ test("value-toggle recovery defaults do not repaint arrow-toggle faces with half
   assert.doesNotMatch(recoveryFill, /\.vt-studio-value-toggle\s*,/);
   assert.doesNotMatch(recoveryFill, /\.vt-studio-split-shell\.vt-studio-value-toggle\s*\{/);
 });
+
+test("split-left input and side text counter bind every size tier to distinct vertical geometry", () => {
+  const splitInputCss = readFileSync("src/studio-ui/primitives/studio-split-text-input.css", "utf8");
+  const tierValues = {
+    supreme: ["60px", "3px", "6px", "51.82px"],
+    standard: ["44px", "3px", "6px", "38px"],
+    compact: ["28px", "2px", "4px", "24px"],
+    mini: ["20px", "1.5px", "3px", "17.5px"],
+    micro: ["12px", "1px", "2px", "10px"],
+  };
+  for (const [tier, [height, stroke, radius, fontSize]] of Object.entries(tierValues)) {
+    assert.match(splitInputCss, new RegExp('data-size="' + tier + '"[^}]*--vt-studio-control-height:\\s*' + height.replace(".", "\\\\.") ));
+    assert.match(styles, new RegExp('data-size="' + tier + '"[^}]*--vt-studio-control-height:\\s*var\\(--vt-studio-' + tier + '-height'));
+    assert.match(styles, new RegExp('data-size="' + tier + '"[^}]*--vt-studio-control-stroke:\\s*var\\(--vt-studio-' + tier + '-stroke'));
+    assert.match(styles, new RegExp('data-size="' + tier + '"[^}]*--vt-studio-control-radius:\\s*var\\(--vt-studio-' + tier + '-radius'));
+    assert.ok(fontSize.length > 0 && stroke.length > 0 && radius.length > 0);
+  }
+  assert.match(styles, /\.vt-studio-side-text-counter[^}]*align-items:\\s*center/s);
+  assert.match(styles, /\.vt-studio-counter__value,[\\s\\S]*?align-items:\\s*center;[\\s\\S]*?justify-content:\\s*center/);
+  assert.match(splitInputCss, /input\\.vt-studio-text-input[^}]*align-self:\\s*stretch/s);
+});
