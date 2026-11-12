@@ -2,7 +2,7 @@
  * StudioSplitTextInput — single perimeter + text clear of rails
  * -------------------------------------------------------------
  * Shell (badge) owns the only black outer border + rail dividers.
- * Nested input: primary border is painted inside its grid cell; no shadow layer.
+ * Nested input: no real border; primary inset stroke stays inside the input box.
  * Grid columns must stay rail | label so text never starts under the icon.
  */
 
@@ -129,10 +129,10 @@ html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-
   margin: 0;
   padding: 0 var(--vt-split-field-pad);
   pointer-events: auto;
-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary);
+  border: 0;
   border-radius: inherit;
   outline: none;
-  box-shadow: none;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary);
   background: color-mix(in srgb, white 50%, var(--vt-split-field-primary) 50%);
   background-clip: padding-box;
   color: var(--vt-split-field-primary);
@@ -152,9 +152,9 @@ html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-
 
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size]:is(:focus, :focus-visible) {
-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary);
+  border: 0;
   outline: none;
-  box-shadow: none;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary);
   background: color-mix(in srgb, white 85%, var(--vt-split-field-primary) 15%);
   color: #000;
   -webkit-text-fill-color: #000;
@@ -186,17 +186,16 @@ html body .vt-studio-split-text-input [data-vt-studio-split-field]::after {
  */
 
 
-/* Inset stroke is painted inside the content box, so it cannot be clipped
-   from the top or bottom at Standard and Compact heights. */
+/* Keep the primary inset stroke inside the field's own box at every tier. */
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
-  box-shadow: none;
+  border: 0;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
 }
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-control="true"][data-size]:is(:focus, :focus-visible) {
-  border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
-  box-shadow: none;
+  border: 0;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
 }
 \n
 /* Standard and Compact nested inputs can receive their own control-size
@@ -205,14 +204,14 @@ html body .vt-studio-split-text-input input.vt-studio-text-input[data-vt-studio-
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="standard"] input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="standard"] input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
   --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
-  border: var(--vt-studio-standard-stroke, 3px) solid var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
-  box-shadow: none;
+  border: 0;
+  box-shadow: inset 0 0 0 var(--vt-studio-standard-stroke, 3px) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
 }
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="compact"] input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="compact"] input.vt-studio-text-input[data-vt-studio-control="true"][data-size] {
   --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
-  border: var(--vt-studio-compact-stroke, 2px) solid var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
-  box-shadow: none;
+  border: 0;
+  box-shadow: inset 0 0 0 var(--vt-studio-compact-stroke, 2px) var(--vt-split-field-primary, var(--vt-field-primary, var(--pair-a, #36e0f6)));
 }
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="standard"]:focus-within input.vt-studio-text-input[data-vt-studio-control="true"],
 html body .vt-studio-split-text-input > [data-vt-studio-control="true"][data-size="compact"]:focus-within input.vt-studio-text-input[data-vt-studio-control="true"] {
