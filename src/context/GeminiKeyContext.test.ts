@@ -27,7 +27,7 @@ describe("Gemini API-key validation contract", () => {
     expect(source).toContain("Google rejected this API key.");
     expect(source).toContain("Key saved locally, but Google denied verification.");
     expect(source).toContain("Key saved locally. Google could not verify the connection right now");
-    expect(source).toContain("setApiKey(trimmedKey);");
+    expect(source).toMatch(/if\s*\(!setApiKey\(trimmedKey\)\)/);
     expect(source).toContain("return true;");
     expect(source).toContain("return false;");
     expect(source).not.toContain("setValidationError(error.message");
