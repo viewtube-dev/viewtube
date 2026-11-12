@@ -150,3 +150,11 @@ The previous Send To eligibility treated any non-empty selection as handoff-capa
 
 - `b704d6db7502aceb2a5172438f81ec68bcef050d` — add a regression assertion that ViewTube handoff destinations are only offered for a single selected asset.
 - `a4e9d7a73d5d8b8fae32d456463902e31f20c99f` — enforce the same single-selection condition in the actual Send to ViewTube destination list; multi-select metadata exports remain available.
+
+
+### Additional continuation — restore transition policy
+
+- `04f5ca7be0cf842a3100f372b771a91b7be27488` — add a recovery regression case rejecting restore requests when an asset is neither archived nor trashed.
+- `74812defa1c20e62c1ddd98fbf2c6ad33374991b` — enforce the canonical `canMutateVaultAsset(..., "restore")` policy in `setVaultAssetState` before clearing archive/trash state. Archive-to-trash transitions remain distinct and are not mistaken for restore.
+
+This closes a service-layer policy gap: restore controls were gated in the Inspector, but the canonical adapter accepted restore-shaped state updates without checking that a recoverable lifecycle state existed. The test was added before the implementation. The Vitest test has not been executed in this connector-only session; source readback is the available verification.
