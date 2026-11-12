@@ -17,6 +17,12 @@ export {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
   StudioButton,
+  StudioNumberInput,
+  StudioSplitLeftDropdown,
+  StudioBrainStatusIndicator,
+  StudioInlineStepper,
+  StudioSplitStepper,
+  StudioDoubleSplitSlider,
   StudioTwoLineButton,
   StudioSplitTwoLineButton,
   StudioActionButton,
@@ -62,6 +68,7 @@ export {
   StudioSpectrumTag,
   StudioCloseableBadge,
   StudioTagEditor,
+  StudioVerticalWordToggle,
 } from "./primitives/StudioControls"
 export type {
   StudioButtonProps,
@@ -117,6 +124,10 @@ export type {
   StudioTagEditorProps,
 } from "./primitives/StudioControls"
 export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, StudioDoubleSplitWordCounter } from "./primitives/StudioValueToggles";
+export { StudioSplitTextInput } from "./primitives/StudioSplitTextInput";
+export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInput";
+export { StudioPanelAccordion } from "./primitives/StudioPanelAccordion";
+export type { StudioPanelAccordionProps, StudioPanelAccordionItem } from "./primitives/StudioPanelAccordion";
 export type { StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioDoubleSplitWordCounterProps, StudioToggleAppearance } from "./primitives/StudioValueToggles";
 export { StudioComponentGrid, StudioComponentGridCell, StudioComponentGridRow } from "./primitives/StudioComponentGrid";
 export type { StudioComponentGridProps, StudioComponentGridCellProps, StudioGridSize, StudioGridCorners } from "./primitives/StudioComponentGrid";
