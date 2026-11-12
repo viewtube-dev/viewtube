@@ -6471,3 +6471,100 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
   min-width: 0;
   max-width: 100%;
 }
+
+
+/* Counter size-tier geometry is explicit at the shell boundary. The old
+   compact/micro-only overrides left Supreme and Mini inheriting Standard
+   geometry and typography, which made the five specimens collapse into groups. */
+.vt-studio-counter[data-size="supreme"],
+.vt-studio-side-counter[data-size="supreme"],
+.vt-studio-left-counter[data-size="supreme"] {
+  --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
+  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px);
+  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px);
+}
+.vt-studio-counter[data-size="standard"],
+.vt-studio-side-counter[data-size="standard"],
+.vt-studio-left-counter[data-size="standard"] {
+  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
+  --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
+  --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
+}
+.vt-studio-counter[data-size="compact"],
+.vt-studio-side-counter[data-size="compact"],
+.vt-studio-left-counter[data-size="compact"] {
+  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px);
+  --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px);
+}
+.vt-studio-counter[data-size="mini"],
+.vt-studio-side-counter[data-size="mini"],
+.vt-studio-left-counter[data-size="mini"] {
+  --vt-studio-control-height: var(--vt-studio-mini-height, 20px);
+  --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
+  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 17.5px);
+}
+.vt-studio-counter[data-size="micro"],
+.vt-studio-side-counter[data-size="micro"],
+.vt-studio-left-counter[data-size="micro"] {
+  --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
+  --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
+}
+
+/* Numerals use the full value-face box, not the label's inline baseline.
+   No top/bottom border is painted on the face; the shell owns the perimeter. */
+.vt-studio-counter__value,
+.vt-studio-side-counter__value {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-block: 0;
+  line-height: 1;
+  text-align: center;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-variant-numeric: tabular-nums;
+}
+.vt-studio-counter__rail,
+.vt-studio-side-counter__rail,
+.vt-studio-left-counter__rail {
+  min-height: 0;
+  height: 100%;
+  align-self: stretch;
+}
+.vt-studio-side-counter__actions {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  align-self: stretch;
+  height: 100%;
+}
+.vt-studio-side-counter__actions button {
+  min-height: 0;
+  height: 100%;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+.vt-studio-side-counter__actions button svg {
+  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+}
+.vt-studio-counter__button svg {
+  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+}
