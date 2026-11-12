@@ -264,3 +264,9 @@ Remaining work stays tracked by RH-UX120–146:
 - [ ] Execute focused capability and CreatorVaultOS Vitest suites, then typecheck, governance, lint and build.
 
 - [x] Prevent the Send to ViewTube panel from offering first-asset-only handoffs during multi-selection; keep batch metadata exports available.
+
+
+### 2026-11-11 follow-on — restore transition policy
+- [x] Require canonical restore eligibility before clearing archive/trash state in the asset adapter.
+- [x] Add regression coverage for rejecting restore requests against active assets.
+- [ ] Run `src/services/__tests__/vaultRecovery.test.ts` and the broader Vault lifecycle/recovery tests on the exact 10-31 checkout.
