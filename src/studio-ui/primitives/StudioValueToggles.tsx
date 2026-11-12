@@ -281,7 +281,7 @@ export function StudioDoubleSplitWordCounter({
       "data-vt-studio-control-family": "counter",
       "data-vt-studio-control-kind": "studio-double-split-word-counter",
       "data-vt-library-component": "StudioDoubleSplitWordCounter",
-      "data-word-count": safeOptions.length, "data-size": size,
+      "data-word-count": String(safeOptions.length), "data-size": size,
     }}
     leftRailContent={leftButton} rightRailContent={rightButton}>
     <span className="vt-studio-word-counter__value" aria-live="polite" aria-atomic="true">{current}</span>
