@@ -179,8 +179,6 @@ export { StudioResponseMetaRow } from "./primitives/StudioResponseMetaRow"
 export type { StudioResponseMetaRowProps, StudioResponseMetaRowSize } from "./primitives/StudioResponseMetaRow"
 export type { StudioInterModuleProps, StudioInterModuleSize } from "./primitives/StudioInterModule"
 
-export { StudioSplitTextInput } from "./primitives/StudioSplitTextInput"
-export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInput"
 
 export { StudioLedBadgeTab } from "./primitives/StudioLedBadgeTab"
 export type { StudioLedBadgeTabProps, StudioLedBadgeTabMode, StudioLedAnimation, StudioLedAlert, StudioLedTone } from "./primitives/StudioLedBadgeTab"
