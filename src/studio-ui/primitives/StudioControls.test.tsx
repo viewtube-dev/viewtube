@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioSideTextInput, StudioDoubleSplitTextInput, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -1611,3 +1611,55 @@ describe("Studio icon rail text input styling contract", () => {
     expect(actions).toContain('aria-label="Right action"')
   })
 })
+
+
+describe("centered side text input primitives", () => {
+  it("renders the single-icon side input with a centered editable value panel", () => {
+    const html = renderToStaticMarkup(
+      <StudioSideTextInput value="SEARCH" onValueChange={() => undefined} icon={<span>SEARCH_ICON</span>} size="standard" ariaLabel="Side search" />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioSideTextInput"');
+    expect(html).toContain('data-vt-studio-split="right"');
+    expect(html).toContain("SEARCH_ICON");
+    expect(html).toContain('class="vt-studio-side-text-input__input');
+    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
+    expect(css).toContain(".vt-studio-side-text-input .vt-studio-side-text-input__input");
+    expect(css).toContain("text-align: center;");
+  });
+
+  it("renders the double-split input with two independent square icon rails and one centered field", () => {
+    const html = renderToStaticMarkup(
+      <StudioDoubleSplitTextInput
+        value="SEARCH"
+        onValueChange={() => undefined}
+        leftIcon={<span>LEFT_ICON</span>}
+        rightIcon={<span>RIGHT_ICON</span>}
+        size="standard"
+        ariaLabel="Double split search"
+        leftIconLabel="Open filters"
+        rightIconLabel="Run search"
+        onLeftIconClick={() => undefined}
+        onRightIconClick={() => undefined}
+      />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioDoubleSplitTextInput"');
+    expect(html).toContain('data-vt-studio-split="double"');
+    expect(html).toContain('aria-label="Double split search"');
+    expect(html).toContain('aria-label="Open filters"');
+    expect(html).toContain('aria-label="Run search"');
+    expect(html).toContain("LEFT_ICON");
+    expect(html).toContain("RIGHT_ICON");
+    expect((html.match(/data-vt-studio-split-rail/g) ?? []).length).toBe(2);
+    expect(html).toContain('class="vt-studio-double-split-text-input__input');
+  });
+
+  it("registers both input primitives as pure representatives and individual five-size modules", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(catalog).toContain('data-vt-library-component="StudioSideTextInput"');
+    expect(catalog).toContain('data-vt-library-component="StudioDoubleSplitTextInput"');
+    expect(catalog).toContain("ConfirmedStudioSideTextInputFamily");
+    expect(catalog).toContain("ConfirmedStudioDoubleSplitTextInputFamily");
+    expect(catalog).toContain("<ConfirmedStudioSideTextInputFamily />");
+    expect(catalog).toContain("<ConfirmedStudioDoubleSplitTextInputFamily />");
+  });
+});
