@@ -31,7 +31,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(source).toContain("LED BADGE · SOLID + RAINBOW")
     expect(source).toContain("FLUSH NAVIGATION · FOUR TABS / ONE ACTIVE")
     expect(source).toContain("MOTION STATES · STEADY / PRISM / RADAR / FLARE2 / BLINK")
-    expect(source).toContain('label:"THINKING"')
+    expect(source).toContain('label="THINKING"')
   })
 
   it("shows the InterModule specimen using the production 4px side-gutter bleed override", () => {
