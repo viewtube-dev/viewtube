@@ -50,6 +50,7 @@ describe("StudioSplitTextInput", () => {
             aria-label="Editable split field"
           />,
         )
+        expect(container.querySelector('[data-vt-studio-split-input="true"] [data-vt-studio-split-label]')).not.toBeNull()
         const input = container.querySelector("input") as HTMLInputElement | null
         expect(input).not.toBeNull()
         if (!input) return
