@@ -1,7 +1,7 @@
 # Studio Controls — Definitive Global Defaults, Size Contract & Primitive Exceptions
 
 **Status:** Canonical requirements reference; implementation and rendered verification must be checked against the source files below.  
-**Reviewed:** 2026-10-27  
+**Reviewed:** 2026-11-13  
 **Repository:** `viewtube-dev/viewtube`  
 **Work branch:** `master/consolidated-feature-integration` (canonical integration target)  
 **Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/studio-ui/primitives/StudioSplitAccordion.tsx`, `src/styles/studio-control-system.css`, `src/styles/studio-split-accordion.css`  
