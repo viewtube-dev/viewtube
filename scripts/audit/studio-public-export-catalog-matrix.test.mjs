@@ -51,7 +51,7 @@ test("critical public primitives have direct representatives in the confirmed ca
   const critical = [
     "StudioButton", "StudioTextInput", "StudioTextArea", "StudioTextBox",
     "StudioSplitTextInput", "StudioArrowToggle", "StudioSideToggle",
-    "StudioDoubleSideToggle", "StudioBarToggle", "StudioSplitAccordion",
+    "StudioDoubleSideToggle", "StudioBarToggle", "StudioSplitAccordion", "StudioPanelAccordion", "StudioInlineStepper", "StudioSplitStepper",
     "StudioDropdown", "StudioPublishingCard", "StudioLedBadgeTab",
     "StudioChatComposerDock", "StudioChatResponseShell",
     "StudioInput", "Studioarea", "Studiotoggle", "Studioswitch", "Studioradio", "Studiocheck", "Studioxbox",
