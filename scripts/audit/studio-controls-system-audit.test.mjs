@@ -9,6 +9,7 @@ const valueToggles = read("src/studio-ui/primitives/StudioValueToggles.tsx");
 const generated = read("src/styles/studio-control-vars.generated.css");
 const system = read("src/styles/studio-control-system.css");
 const valueToggleCss = read("src/styles/studio-control-value-toggles.css");
+const core = read("src/styles/studio-control-core.css");
 const split = read("src/styles/studio-control-split.css");
 const recovery = read("src/styles/studio-control-recovery-overrides.css");
 const distill = read("src/styles/studio-control-distill-overrides.css");
