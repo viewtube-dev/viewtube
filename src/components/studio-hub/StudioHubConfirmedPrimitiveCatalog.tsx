@@ -65,7 +65,10 @@ import {
   StudioSideToggle,
   StudioDoubleSideToggle,
   StudioBarToggle,
+  StudioInlineStepper,
+  StudioSplitStepper,
 } from "../../studio-ui/primitives/StudioControls"
+import { StudioPanelAccordion } from "../../studio-ui/primitives/StudioPanelAccordion"
 import { StudioDoubleSplitWordCounter } from "../../studio-ui/primitives/StudioValueToggles"
 import { StudioSplitAccordion } from "../../studio-ui/primitives/StudioSplitAccordion"
 import { StudioCalendarEventChip, StudioCalendarMultiDayBar, StudioCalendarThumbnailEventChip, StudioCalendarMediaRail } from "../../studio-ui/primitives/StudioCalendarPrimitives"
@@ -390,6 +393,8 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   const [sliderValue, setSliderValue] = React.useState(58)
   const [leftCounterRepValue, setLeftCounterRepValue] = React.useState(12)
   const [doubleWordCounterValue, setDoubleWordCounterValue] = React.useState(2)
+  const [inlineStepperValue, setInlineStepperValue] = React.useState(24)
+  const [splitStepperValue, setSplitStepperValue] = React.useState(36)
   const [sideTextCounterValue, setSideTextCounterValue] = React.useState("42")
   const [iconRailActionCount, setIconRailActionCount] = React.useState(0)
   const [composerValue, setComposerValue] = React.useState("Draft a response…")
@@ -407,8 +412,8 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         "The double-split face uses two square rails and one divider; module and accordion geometry is documented in the dedicated families.",
       ]}
       provenance={<Provenance
-        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioSplitTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioLeftWordCounter · StudioLeftWordSlider · StudioDoubleSplitSlider"
-        tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioSplitTextInput.tsx + src/studio-ui/primitives/StudioValueToggles.tsx"
+        primitive="StudioButton · StudioSplitLeftButton · StudioDoubleSplitButton · StudioTwoLineButton · StudioSplitTwoLineButton · StudioDropdown · StudioLegendMultiDropdown · StudioSplitLeftDropdown · StudioArrowToggle · StudioBarToggle · StudioWordToggle · StudioTextInput · StudioSplitTextInput · StudioTextArea · StudioTextBox · StudioSideToggle · StudioDoubleSideToggle · StudioCounter · StudioSideCounter · StudioLeftWordCounter · StudioLeftWordSlider · StudioDoubleSplitSlider · StudioInlineStepper · StudioSplitStepper · StudioPanelAccordion"
+        tsx="src/studio-ui/primitives/StudioControls.tsx + src/studio-ui/primitives/StudioSplitTextInput.tsx + src/studio-ui/primitives/StudioValueToggles.tsx + src/studio-ui/primitives/StudioPanelAccordion.tsx"
         css="src/styles/studio-control-system.css + src/styles/studio-control-value-toggles.css + src/styles/studio-control-word-counter.css + src/studio-ui/primitives/studio-split-text-input.css"
         tokens="44px standard geometry; component-specific native input/textarea exceptions retained; word counter and slider share the five-tier Studio size contract"
         imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/primitives/StudioSplitTextInput.tsx", "src/studio-ui/primitives/StudioValueToggles.tsx", "src/styles/studio-control-value-toggles.css", "src/styles/studio-control-word-counter.css", "src/studio-ui/primitives/studio-split-text-input.css"]}
@@ -465,6 +470,8 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideCounter"><span>Side Counter · STANDARD</span><StudioSideCounter size="standard" value={sideCounterValue} onValueChange={setSideCounterValue} min={0} max={100} ariaLabel="Side counter standard representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>Left Counter · STANDARD</span><StudioLeftCounter size="standard" value={leftCounterRepValue} onValueChange={setLeftCounterRepValue} min={0} max={100} ariaLabel="Left counter standard representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitWordCounter"><span>Double-Split Word Counter · STANDARD</span><StudioDoubleSplitWordCounter size="standard" value={doubleWordCounterValue} onValueChange={setDoubleWordCounterValue} ariaLabel="Double-split word counter standard representative" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInlineStepper"><span>Inline Numeric Stepper · STANDARD</span><StudioInlineStepper value={inlineStepperValue} onValueChange={setInlineStepperValue} min={0} max={100} size="standard" ariaLabel="Inline numeric stepper standard representative" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitStepper"><span>Split Numeric Stepper · STANDARD</span><StudioSplitStepper value={splitStepperValue} onValueChange={setSplitStepperValue} min={0} max={100} size="standard" ariaLabel="Split numeric stepper standard representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordSlider"><span>Left Word Slider · STANDARD</span><StudioLeftWordSlider size="standard" value={leftWordSliderValue} onValueChange={setLeftWordSliderValue} ariaLabel="Left word slider standard representative" /></div>
         <h4 className="vt-confirmed-representative-heading">BADGES</h4>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftBadge"><span>Split Left Badge · STANDARD</span><StudioSplitLeftBadge icon={<Check aria-hidden="true" />} sizeVariant="standard">READY</StudioSplitLeftBadge></div>
@@ -504,6 +511,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingSplitModule"><span>Collapsing Split Module · STANDARD · OPEN</span><StudioCollapsingSplitModule title="COLLAPSING MODULE" split="double" startIcon={<Info aria-hidden="true" />} sizeVariant="standard" defaultOpen><p>Expanded body separated from its header by the required horizontal divider.</p><StudioInterModule title="INNER SECTION" sizeVariant="standard" defaultOpen><p>Inner section content.</p></StudioInterModule></StudioCollapsingSplitModule></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioCollapsingTwoLineModule"><span>Collapsing Two-Line Module · STANDARD</span><StudioCollapsingTwoLineModule title="CREATOR SETTINGS" description="Identity and publishing preferences" split="double" sizeVariant="standard" defaultOpen><p>Two-line collapsible module body.</p></StudioCollapsingTwoLineModule></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitAccordion"><span>Split Accordion · STANDARD</span><StudioSplitAccordion sizeVariant="standard" accessibleLabel="Confirmed split accordion" items={[{accessibleLabel:"OVERVIEW",icon:<Home aria-hidden="true" />,content:<p>Overview section content.</p>},{accessibleLabel:"SETTINGS",icon:<Settings2 aria-hidden="true" />,content:<p>Settings section content.</p>},{accessibleLabel:"STATUS",icon:<Info aria-hidden="true" />,content:<p>Status section content.</p>}]} /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioPanelAccordion"><span>Panel Accordion · STANDARD</span><StudioPanelAccordion size="standard" items={[{label:"OVERVIEW",icon:<Home aria-hidden="true" />,content:<p>Overview panel content rendered by StudioPanelAccordion.</p>},{label:"SETTINGS",icon:<Settings2 aria-hidden="true" />,content:<p>Settings panel content rendered by StudioPanelAccordion.</p>},{label:"STATUS",icon:<Info aria-hidden="true" />,content:<p>Status panel content rendered by StudioPanelAccordion.</p>}]}/></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioResponseMetaRow"><span>Response Meta Row · COMPACT</span><StudioResponseMetaRow title="ANSWER SUMMARY" status={<StudioBrainStatusBadge label="VERIFIED" tone="green" appearance="tinted" />} metadata={<span>3 SOURCES</span>} trailing={<span>OPEN DETAILS</span>} sizeVariant="compact" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioChatResponseShell"><span>Chat Response Shell · COMPACT</span><StudioChatResponseShell metadata={<StudioResponseMetaRow title="ANSWER SUMMARY" metadata={<span>3 SOURCES</span>} sizeVariant="compact" />} actions={<><StudioButton sizeVariant="compact">COPY</StudioButton><StudioButton sizeVariant="compact">RETRY</StudioButton></>}><p>Answer-first response content using the production shell.</p></StudioChatResponseShell></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounter"><span>Side Text Counter · STANDARD</span><StudioSideTextCounter value={sideTextCounterValue} onValueChange={setSideTextCounterValue} size="standard" ariaLabel="Standard side text counter representative" /></div>
@@ -976,7 +984,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Button ·|Prominent Action|Square Icon Button|Two-Line Button|Split-left Button|Play\/Pause Split-left Button|Circle Icon Button|StudioIconButton/.test(title)
     || componentName === "ConfirmedStudioButtonFamily"
     || componentName === "ConfirmedStudioSplitButtonFamily") return "Buttons & Badges"
-  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
+  if (/Top Split Module|Collapsing|InterModule|Split Accordion|Panel Accordion|Upload Frame|Response Meta Row/.test(title)) return "Modules & Frames"
   if (/SpectrumTag|TagEditor|Tag Editor|Spectrum Tags|Closeable Badge|StudioCloseableBadge|Ranked Metadata Tag/.test(title)) return "Compositions"
   if (/Publishing Card|StudioChatResponseShell|StudioResponseMetaRow/.test(title)) return "Compositions"
   return null
