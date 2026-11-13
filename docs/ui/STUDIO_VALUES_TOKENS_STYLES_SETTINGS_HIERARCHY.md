@@ -334,7 +334,7 @@ The migration is selective: `codex/shared-studio-interaction-focus` is the visua
 - Switch/choice track dimensions are family-owned and cannot be collapsed by content-width metadata. Their background faces remain visible behind handles.
 - Square icon effects are opt-in primitive behavior; the Confirmed Library presents one standard row and one compact row rather than separate effect modules. The outer icon button/face allow overflow for badges and tooltips.
 - Dropdown chevron size and stroke are token-indexed for all five tiers across standard/simple, split-left, and multi-select variants.
-- Double-split slider adopts the reference primary rail/progress styling and interaction-focus hold lifecycle while retaining the destination size tiers.
+- Double-split slider uses secondary side rails, a primary center track, and a 50% white/secondary active progress fill, with the shared interaction-focus hold lifecycle and canonical size tiers.
 - Upload frame uses the reference 16:9 canvas and centered label; file APIs, image/video handling, accessibility, and object-URL cleanup remain production contracts.
 - Split text input uses one canonical stylesheet and the reference primary inline stroke with token-derived split rails.
 
