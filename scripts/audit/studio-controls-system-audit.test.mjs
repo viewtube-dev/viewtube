@@ -169,6 +169,8 @@ test("bar toggle geometry and fills are owned by the primitive stylesheet and ca
   assert.match(valueToggleCss, /background:\s*var\(--vt-studio-bar-full-fill,\s*#000000\)/);
   assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar/);
   assert.doesNotMatch(distill, /\.vt-studio-value-toggle--bar/);
+  assert.match(core, /\[data-vt-studio-control="true"\] \[data-vt-studio-split-rail\][\s\S]*?position:\s*relative;[\s\S]*?z-index:\s*1/);
+  assert.doesNotMatch(distill, /\[data-vt-studio-split-rail\]/);
   assert.match(system, /button\[data-vt-studio-play-pause="true"\]\[aria-pressed="true"\] \[data-vt-studio-split-rail\]\[data-rail="start"\][\s\S]*?background-color:\s*var\(--vt-studio-control-primary/);
   assert.match(valueToggleCss, /\.vt-studio-word-counter__value[^}]*place-items:\s*center/s);
 });
