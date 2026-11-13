@@ -101,3 +101,20 @@ test("direct primitive representatives are grouped by related component family",
   assert.equal(has("BADGES & STATUS INDICATORS", "StudioBrainStatusBadge"), true);
   assert.equal(has("MODULES & COMPOSITIONS", "StudioPanelAccordion"), true);
 });
+
+test("value-toggle gallery covers all five sizes and every supported rail variant", () => {
+  const start = catalog.indexOf("const ConfirmedStudioValueToggleFamily");
+  const end = catalog.indexOf("export default StudioHubConfirmedPrimitiveCatalog", start);
+  assert.notEqual(start, -1, "dedicated value-toggle family should exist");
+  assert.notEqual(end, -1, "catalog export should close the value-toggle family");
+  const family = catalog.slice(start, end);
+  assert.match(family, /const sizes = \["supreme", "standard", "compact", "mini", "micro"\] as const/);
+  for (const component of ["StudioArrowToggle", "StudioSideToggle", "StudioDoubleSideToggle", "StudioBarToggle"]) {
+    assert.ok(family.includes("<" + component), component + " should have dedicated specimens");
+    assert.ok(family.includes("<" + component + " size={size}"), component + " should be represented at every size");
+  }
+  for (const side of ['"left"', '"right"', '"double"']) assert.ok(family.includes(side), "arrow icon-side variant " + side);
+  for (const side of ['"left"', '"right"']) assert.ok(family.includes(side), "side-toggle arrow orientation " + side);
+  for (const variant of ['"v1"', '"v2"']) assert.ok(family.includes(variant), "double-side divider variant " + variant);
+  for (const appearance of ['"primary"', '"secondary"', '"black-primary-text"']) assert.ok(family.includes(appearance), "double-side right appearance " + appearance);
+});
