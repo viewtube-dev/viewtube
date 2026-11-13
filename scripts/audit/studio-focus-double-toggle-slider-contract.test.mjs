@@ -98,6 +98,8 @@ test("text boxes retain a primary inline inset stroke without a clearing rule", 
 test("bar-toggle tooltip is visible only on focus and has a secondary downspout", () => {
   assert.match(toggles, /\.vt-studio-value-toggle--bar:focus-within \.vt-studio-value-toggle__bar-tooltip\s*\{[^}]*visibility:\s*visible;[^}]*opacity:\s*1/s);
   assert.doesNotMatch([toggles, distill].join("\\n"), /\.vt-studio-value-toggle__bar:hover/);
+  assert.doesNotMatch([toggles, distill].join("\\n"), /\.vt-studio-value-toggle--bar(?::is\\()?[^{}]*hover[^{}]*\\.vt-studio-value-toggle__bar-tooltip/);
+  assert.match(toggles, /\.vt-studio-value-toggle--bar:focus-within\\s*\\{[^}]*outline:/s);
   assert.match(toggles, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top-color:\s*var\(--vt-studio-control-secondary/s);
   assert.match(valueToggles, /index === Math\.max\(0, filled - 1\) && filled > 0 \?/);
   assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar/);
