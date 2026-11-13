@@ -9,13 +9,13 @@ input.vt-studio-text-input {
   border-style: solid;
   border-color: #000;
   border-radius: var(--vt-studio-standard-radius, 6px);
-  background: color-mix(in srgb, var(--pair-a, #36e0f6) 50%, transparent);
-  color: var(--pair-a, #36e0f6);
-  -webkit-text-fill-color: var(--pair-a, #36e0f6);
-  caret-color: var(--pair-a, #36e0f6);
+  background: var(--vt-field-fill-rest, color-mix(in srgb, white 50%, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 50%));
+  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-fill-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  caret-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-weight: 1000;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   letter-spacing: -0.02em;
   text-transform: uppercase;
   line-height: normal;
@@ -67,10 +67,11 @@ input.vt-studio-text-input::placeholder {
 
 input.vt-studio-text-input:focus,
 input.vt-studio-text-input:focus-visible {
+  background: var(--vt-field-fill-focus, color-mix(in srgb, white 85%, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 15%));
   color: #000;
   -webkit-text-fill-color: #000;
-  caret-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
-  -webkit-text-stroke-color: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+  caret-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-stroke-color: #000;
 }
 
 /* The inset primary stroke uses the browser's rounded inner border geometry.
@@ -114,7 +115,7 @@ html body textarea[data-vt-studio-control="true"]:is(:focus, :focus-visible),
 html body [data-vt-studio-control="true"] textarea:is(:focus, :focus-visible) {
   outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)) !important;
   outline-offset: 0 !important;
-  background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 15%, transparent);
+  background: var(--vt-field-fill-focus, color-mix(in srgb, white 85%, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 15%));
   color: #000;
   -webkit-text-fill-color: #000;
   -webkit-text-stroke-color: #000;
