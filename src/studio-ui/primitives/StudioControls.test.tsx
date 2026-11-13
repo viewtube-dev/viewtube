@@ -1590,6 +1590,11 @@ describe("Studio icon rail text input styling contract", () => {
     expect(iconInput).toContain("var(--vt-field-primary")
     expect(iconInput).toContain("outline-offset: 0")
     expect(iconInput).toContain("var(--vt-field-secondary")
+    expect(iconInput).toContain("var(--vt-studio-supreme-icon-size")
+    expect(iconInput).toContain("var(--vt-studio-standard-icon-stroke")
+    expect(iconInput).toContain("var(--vt-studio-compact-icon-stroke")
+    expect(iconInput).toContain("var(--vt-studio-mini-icon-stroke")
+    expect(iconInput).toContain("var(--vt-studio-micro-icon-stroke")
   })
 
   it("keeps non-interactive rails free of button semantics and gives action rails one button per side", async () => {

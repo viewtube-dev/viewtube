@@ -62,13 +62,13 @@ html body .vt-studio-icon-button-rail-text-input input.vt-studio-icon-button-rai
 .vt-studio-icon-rail-text-input__glyph svg,
 .vt-studio-icon-button-rail-text-input__button svg {
   display: block;
-  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
-  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  width: min(var(--vt-studio-standard-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-standard-icon-size, 38px), 100%);
   max-width: 100%;
   max-height: 100%;
   color: #000;
   stroke: #000;
-  stroke-width: var(--vt-studio-control-icon-stroke, 1.9);
+  stroke-width: var(--vt-studio-standard-icon-stroke, 1.9);
 }
 
 .vt-studio-icon-rail-text-input__glyph svg *,
@@ -106,24 +106,27 @@ html body .vt-studio-icon-button-rail-text-input input.vt-studio-icon-button-rai
 
 .vt-studio-icon-rail-text-input[data-size="supreme"] .vt-studio-icon-rail-text-input__glyph svg,
 .vt-studio-icon-button-rail-text-input[data-size="supreme"] .vt-studio-icon-button-rail-text-input__button svg {
-  width: var(--vt-studio-supreme-icon-size, 51.82px);
-  height: var(--vt-studio-supreme-icon-size, 51.82px);
+  width: var(--vt-studio-supreme-icon-size, 52px);
+  height: var(--vt-studio-supreme-icon-size, 52px);
+  stroke-width: var(--vt-studio-supreme-icon-stroke, 1.9);
 }
 .vt-studio-icon-rail-text-input[data-size="compact"] .vt-studio-icon-rail-text-input__glyph svg,
 .vt-studio-icon-button-rail-text-input[data-size="compact"] .vt-studio-icon-button-rail-text-input__button svg {
   width: var(--vt-studio-compact-icon-size, 24px);
   height: var(--vt-studio-compact-icon-size, 24px);
+  stroke-width: var(--vt-studio-compact-icon-stroke, 2);
 }
 .vt-studio-icon-rail-text-input[data-size="mini"] .vt-studio-icon-rail-text-input__glyph svg,
 .vt-studio-icon-button-rail-text-input[data-size="mini"] .vt-studio-icon-button-rail-text-input__button svg {
   width: var(--vt-studio-mini-icon-size, 17.5px);
   height: var(--vt-studio-mini-icon-size, 17.5px);
+  stroke-width: var(--vt-studio-mini-icon-stroke, 1.6);
 }
 .vt-studio-icon-rail-text-input[data-size="micro"] .vt-studio-icon-rail-text-input__glyph svg,
 .vt-studio-icon-button-rail-text-input[data-size="micro"] .vt-studio-icon-button-rail-text-input__button svg {
   width: var(--vt-studio-micro-icon-size, 10px);
   height: var(--vt-studio-micro-icon-size, 10px);
-  stroke-width: 1.5;
+  stroke-width: var(--vt-studio-micro-icon-stroke, 1.5);
 }
 
 @media (prefers-reduced-motion: reduce) {
