@@ -4,6 +4,7 @@ import test from "node:test";
 
 const toggles = readFileSync("src/styles/studio-control-value-toggles.css", "utf8");
 const splitInput = readFileSync("src/studio-ui/primitives/studio-split-text-input.css", "utf8");
+const splitComponent = readFileSync("src/studio-ui/primitives/StudioSplitTextInput.tsx", "utf8");
 const controls = readFileSync("src/styles/studio-control-system.css", "utf8");
 const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
 const splitStyles = readFileSync("src/styles/studio-control-split.css", "utf8");
@@ -37,9 +38,11 @@ test("split text input uses one continuous primary inset stroke at every size", 
 });
 
 
-test("standard and compact split text inputs bind their inline stroke to their own size tier", () => {
-  assert.match(splitInput, /\.vt-studio-split-text-input > \[data-vt-studio-control="true"\]\[data-size="standard"\] input[\s\S]*?--vt-studio-control-stroke:\s*var\(--vt-studio-standard-stroke/);
-  assert.match(splitInput, /\.vt-studio-split-text-input > \[data-vt-studio-control="true"\]\[data-size="compact"\] input[\s\S]*?--vt-studio-control-stroke:\s*var\(--vt-studio-compact-stroke/);
+test("split input sizes use the shared data-size token hierarchy without local stroke overrides", () => {
+  assert.match(splitComponent, /sizeVariant=\{sizeVariant\}/);
+  assert.match(controls, /\[data-vt-studio-control\]\s*\{[\s\S]*?--vt-studio-control-stroke:\s*var\(--vt-studio-standard-stroke/);
+  assert.match(controls, /\[data-vt-studio-control\]\[data-size="compact"\]\s*\{[\s\S]*?--vt-studio-control-stroke:\s*var\(--vt-studio-compact-stroke/);
+  assert.doesNotMatch(splitInput, /\.vt-studio-split-text-input > \[data-vt-studio-control="true"\]\[data-size="(?:standard|compact)"\] input/);
 });
 
 test("slider track retains tier-aware clearance from both vertical dividers", () => {
