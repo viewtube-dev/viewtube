@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioSideTextInput, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -964,6 +964,36 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     );
     expect(html).toContain('value="draft text"');
     expect((html.match(/disabled=""/g) || []).length).toBe(2);
+  });
+
+  it("centers side text counter content using the global centered text-panel default", () => {
+    const css = readStudioControlCss();
+    expect(css).toMatch(/\.vt-studio-side-text-counter \.vt-studio-side-text-counter__input\s*\{[^}]*text-align:\s*center/s);
+  });
+
+  it("renders the icon-rail side text input as an editable centered field with one icon section", () => {
+    const html = renderToStaticMarkup(
+      <StudioSideTextInput value="Centered" onValueChange={() => {}} icon={<span>SEARCH_ICON</span>} ariaLabel="Search text" />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioSideTextInput"');
+    expect(html).toContain('data-vt-studio-control-kind="studio-side-text-input"');
+    expect(html).toContain('value="Centered"');
+    expect(html).toContain('aria-label="Search text"');
+    expect(html).toContain('data-vt-studio-side-text-input-icon');
+    expect(html).toContain('SEARCH_ICON');
+    expect(html).not.toContain('Increase Search text');
+    expect(html).not.toContain('Decrease Search text');
+    const css = readStudioControlCss();
+    expect(css).toMatch(/\.vt-studio-side-text-input \.vt-studio-side-text-input__input\s*\{[^}]*text-align:\s*center/s);
+  });
+
+  it("makes the icon rail actionable only when an icon callback is supplied", () => {
+    const html = renderToStaticMarkup(
+      <StudioSideTextInput value="" onValueChange={() => {}} icon={<span>GO</span>} iconLabel="Run search" onIconClick={() => {}} ariaLabel="Search" />,
+    );
+    expect(html).toContain('aria-label="Run search"');
+    expect(html).toContain('type="button"');
+    expect(html).toContain('data-vt-studio-side-text-input-icon');
   });
 
   it("wires the double-split slider counter variant to the shared counter hold hook", () => {
