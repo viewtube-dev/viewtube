@@ -262,7 +262,8 @@ html body .vt-studio-side-text-input[data-vt-studio-control="true"] > [data-vt-s
   box-shadow: none;
   background: transparent;
 }
-html body .vt-studio-side-text-input input.vt-studio-side-text-input__input[data-vt-studio-control="true"] {
+html body .vt-studio-side-text-input input.vt-studio-side-text-input__input[data-vt-studio-control="true"],
+html body .vt-studio-double-split-text-input input.vt-studio-double-split-text-input__input[data-vt-studio-control="true"] {
   box-sizing: border-box;
   display: block;
   flex: 1 1 auto;
