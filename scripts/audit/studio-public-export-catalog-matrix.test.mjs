@@ -126,9 +126,9 @@ test("vertical word toggle shows every canonical skin at all five size tiers", (
   assert.notEqual(end, -1, "canonical word-toggle family should close");
   const family = catalog.slice(start, end);
   assert.match(family, /Array\(20\)\.fill\(false\)/, "five sizes × four skins need independent state");
-  for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
-    assert.ok(family.includes('sizeVariant="' + size + '"'), size + " vertical word toggle specimens should exist");
-  }
-  assert.equal((family.match(/VERTICAL_WORD_TOGGLE_VARIANTS\.map/g) || []).length, 5,
-    "each of the five sizes should show all four vertical toggle skins");
+  assert.match(family, /const verticalSizes = \["supreme", "standard", "compact", "mini", "micro"\] as const/);
+  assert.match(family, /verticalSizes\.map\(\(size, sizeIndex\)/);
+  assert.ok(family.includes("sizeVariant={size}"), "each vertical size row should render its current tier");
+  assert.match(family, /VERTICAL_WORD_TOGGLE_VARIANTS\.map\(\(item, variantIndex\)/,
+    "each size row should render the four canonical vertical skins");
 });
