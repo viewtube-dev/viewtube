@@ -5385,6 +5385,8 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   align-items: stretch;
   width: max-content;
   max-width: 100%;
+  flex: 0 0 auto;
+  align-self: flex-start;
   height: var(--vt-icon-group-size);
   min-height: var(--vt-icon-group-size);
   padding: 0;
@@ -5490,20 +5492,6 @@ button[data-vt-studio-action-button="true"] {
   overflow: hidden;
 }
 
-/* Joined icon rails retain intrinsic width; surrounding specimen rows may stretch. */
-.vt-studio-square-icon-button-group {
-  display: inline-flex;
-  width: max-content;
-  max-width: 100%;
-  flex: 0 0 auto;
-  align-self: flex-start;
-}
-[data-vt-brain-component="BrainAnswerFeedback"] .vt-studio-square-icon-button-group {
-  display: inline-flex;
-  width: max-content;
-  flex: 0 0 auto;
-  align-self: flex-start;
-}
 
 /* =============================================================================
    StudioTopSplitModule — split chrome above a white content body
