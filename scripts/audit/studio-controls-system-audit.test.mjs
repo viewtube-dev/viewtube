@@ -160,10 +160,15 @@ test("side and double-side toggle rail buttons reuse the side-counter action sys
   assert.ok(system.includes(".vt-studio-side-counter__actions button"));
 });
 
-test("bar toggle bars stay below the control height and double-split word labels are vertically centered", () => {
-  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*height:\s*50%/s);
-  assert.match(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?height:\s*50%/);
-  assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?height:\s*var\(--vt-bar-height\)/);
+test("bar toggle geometry and fills are owned by the primitive stylesheet and canonical tokens", () => {
+  assert.match(valueToggleCss, /--vt-bar-height:\s*calc\(var\(--vt-studio-control-font-size,\s*38px\)\s*\*\s*var\(--vt-studio-bar-height-to-text-ratio,\s*1\)\)/);
+  assert.match(valueToggleCss, /--vt-bar-width:\s*calc\(var\(--vt-bar-height\)\s*\/\s*var\(--vt-studio-bar-height-to-width-ratio,\s*2\.5\)\)/);
+  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*height:\s*var\(--vt-bar-height\)/s);
+  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*border-radius:\s*var\(--vt-bar-radius\)/s);
+  assert.match(valueToggleCss, /background:\s*color-mix\(in srgb,\s*#fff var\(--vt-studio-bar-empty-white-mix,\s*50%\),\s*var\(--vt-studio-control-accent/);
+  assert.match(valueToggleCss, /background:\s*var\(--vt-studio-bar-full-fill,\s*#000000\)/);
+  assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar/);
+  assert.doesNotMatch(distill, /\.vt-studio-value-toggle--bar/);
   assert.match(system, /button\[data-vt-studio-play-pause="true"\]\[aria-pressed="true"\] \[data-vt-studio-split-rail\]\[data-rail="start"\][\s\S]*?background-color:\s*var\(--vt-studio-control-primary/);
   assert.match(valueToggleCss, /\.vt-studio-word-counter__value[^}]*place-items:\s*center/s);
 });
