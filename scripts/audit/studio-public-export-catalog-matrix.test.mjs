@@ -121,7 +121,7 @@ test("value-toggle gallery covers all five sizes and every supported rail varian
 
 test("vertical word toggle shows every canonical skin at all five size tiers", () => {
   const start = catalog.indexOf("const CanonicalWordToggleFamily");
-  const end = catalog.indexOf("\\nconst Provenance", start);
+  const end = catalog.indexOf("\nconst Provenance", start);
   assert.notEqual(start, -1, "canonical word-toggle family should exist");
   assert.notEqual(end, -1, "canonical word-toggle family should close");
   const family = catalog.slice(start, end);
