@@ -260,7 +260,7 @@ const Provenance: React.FC<{ primitive: string; tsx: string; css: string; tokens
 
 const Family: React.FC<{ title: string; children: React.ReactNode; provenance: React.ReactNode; nonDefaultSettings?: string[]; defaultOpen?: boolean }> = ({ title, children, provenance, nonDefaultSettings = [], defaultOpen = false }) => (
   <details
-    className={`vt-confirmed-family vt-confirmed-primitive-module ${/Button|Split-left/.test(title) ? "vt-confirmed-button-family" : ""}`}
+    className={`vt-confirmed-family vt-confirmed-primitive-module ${/Button|Split-left/.test(title) && !/Icon Button Rail Text Inputs/.test(title) ? "vt-confirmed-button-family" : ""}`}
     data-vt-confirmed-primitive="true"
     data-vt-primitive-title={title}
     open={defaultOpen || undefined}

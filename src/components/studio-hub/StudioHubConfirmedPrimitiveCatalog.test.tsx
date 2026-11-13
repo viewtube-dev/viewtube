@@ -147,6 +147,8 @@ describe("confirmed composite primitive catalog", () => {
       expect(categoryCount(category), `${category} parent module count`).toBe(1)
     }
     expect(html).not.toContain("Counters & Sliders")
+    const iconButtonModule = html.match(/<details class="([^"]*)"[^>]*data-vt-primitive-title="Studio Icon Button Rail Text Inputs[^"]*"/)
+    expect(iconButtonModule?.[1] ?? "").not.toContain("vt-confirmed-button-family")
     expect(source).not.toContain("<ConfirmedCatalogFamilyGroups>\n       <Family title=\"StudioChatComposerDock")
     expect(source).toContain("useConfirmedAdditionalPrimitiveSections")
     expect(source).toContain('title="Compatibility Field Exports · Standard"')
