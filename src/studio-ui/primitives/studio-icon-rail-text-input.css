@@ -22,6 +22,8 @@
 }
 .vt-studio-icon-button-rail-text-input__button:disabled { cursor: not-allowed; opacity: .5; }
 .vt-studio-icon-button-rail-text-input__button:focus-visible {
-  position: relative; z-index: 1; outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid #000;
+  position: relative; z-index: 1;
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65))
+    solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: calc(var(--vt-studio-control-stroke, 3px) * -1);
 }
