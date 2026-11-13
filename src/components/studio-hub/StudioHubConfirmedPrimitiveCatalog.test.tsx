@@ -69,7 +69,7 @@ describe("confirmed composite primitive catalog", () => {
       "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
-      "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
+      "StudioDoubleSplitSlider", "StudioInlineStepper", "StudioSplitStepper", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
       "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioBrainStatusIndicator", "StudioTagEditor", "StudioUploadFrame",
       "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell",
     ]) {
@@ -100,6 +100,7 @@ describe("confirmed composite primitive catalog", () => {
       "Word Toggles · Standard + Compact + Vertical",
       "StudioCounter · Supreme + Standard + Compact + Mini + Micro",
       "StudioDoubleSplitSlider · Supreme + Standard + Compact + Mini + Micro",
+      "Studio Numeric Steppers · Inline + Split",
     ]) {
       expect(source).toContain(`title="${title}"`)
     }
@@ -652,6 +653,7 @@ describe("confirmed primitive family taxonomy", () => {
     expect(classifyConfirmedCatalogItem(specimen("StudioCounter · Standard"))).toBe("Controls")
     expect(classifyConfirmedCatalogItem(specimen("StudioDoubleSplitSlider · Standard"))).toBe("Controls")
     expect(classifyConfirmedCatalogItem(specimen("Arrow / Side / Double Side / Bar Toggles"))).toBe("Controls")
+    expect(classifyConfirmedCatalogItem(specimen("Studio Numeric Steppers · Inline + Split"))).toBe("Controls")
     expect(classifyConfirmedCatalogItem(specimen("Studio Text Input · Standard"))).toBe("Text Fields")
     expect(classifyConfirmedCatalogItem(specimen("Studio Icon Rail Text Inputs · Non-Interactive"))).toBe("Text Fields")
     expect(classifyConfirmedCatalogItem(specimen("Studio Icon Button Rail Text Inputs · Five Sizes"))).toBe("Text Fields")
@@ -796,6 +798,28 @@ describe("Studio Calendar confirmed primitive representatives", () => {
     expect(source).toContain('data-vt-library-component="StudioSplitStepper"')
   })
 
+});
+
+
+describe("confirmed numeric stepper family coverage", () => {
+  it("renders the imported inline and split steppers at their supported standard and compact sizes", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    const start = source.indexOf("const ConfirmedStudioNumericStepperFamily");
+    const end = source.indexOf("const ConfirmedStudioValueToggleFamily", start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    expect(family).toContain('const sizes = ["standard", "compact"] as const');
+    expect(family).toContain("<StudioInlineStepper size={size}");
+    expect(family).toContain("<StudioSplitStepper size={size}");
+    expect(html).toContain('data-vt-library-component="StudioInlineStepper"');
+    expect(html).toContain('data-vt-library-component="StudioSplitStepper"');
+    expect(html).toContain('data-vt-studio-control-kind="inline-stepper"');
+    expect(html).toContain('data-vt-studio-control-kind="split-stepper"');
+    expect(html).toContain('data-size="standard"');
+    expect(html).toContain('data-size="compact"');
+  });
 });
 
 
