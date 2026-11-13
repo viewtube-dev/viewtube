@@ -21,10 +21,10 @@ export const StudioSplitTextInput = React.forwardRef<HTMLInputElement, StudioSpl
     return (
       <span className={["vt-studio-split-text-input", className].filter(Boolean).join(" ")} data-vt-studio-control="true" data-size={sizeVariant} data-split={split} style={style}>
         {split === "double"
-          ? <StudioDoubleSplitBadge sizeVariant={sizeVariant} leftIcon={leftIcon} rightIcon={rightIcon}>{input}</StudioDoubleSplitBadge>
+          ? <StudioDoubleSplitBadge data-vt-studio-split-input="true" sizeVariant={sizeVariant} leftIcon={leftIcon} rightIcon={rightIcon}>{input}</StudioDoubleSplitBadge>
           : split === "right"
-            ? <StudioSplitRightBadge sizeVariant={sizeVariant} icon={rightIcon}>{input}</StudioSplitRightBadge>
-            : <StudioSplitLeftBadge sizeVariant={sizeVariant} icon={leftIcon}>{input}</StudioSplitLeftBadge>}
+            ? <StudioSplitRightBadge data-vt-studio-split-input="true" sizeVariant={sizeVariant} icon={rightIcon}>{input}</StudioSplitRightBadge>
+            : <StudioSplitLeftBadge data-vt-studio-split-input="true" sizeVariant={sizeVariant} icon={leftIcon}>{input}</StudioSplitLeftBadge>}
       </span>
     )
   },
