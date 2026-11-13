@@ -170,9 +170,3 @@
 /* Side and double-side faces inherit their appearance and character tokens
    from the shared value-toggle primitive; no local !important color layer. */
 
-/* Split rails: outer-face 1×1, full shell height — no inset square, no vertical gap.
-   (Replaces PR #923 distill rules that used align-self:center + height-2*stroke.) */
-html body [data-vt-studio-control="true"][data-vt-studio-split] > [data-vt-studio-split-rail] {
-  position: relative;
-  z-index: 1;
-}
