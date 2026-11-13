@@ -103,7 +103,7 @@ These are the intended shared defaults. A named family contract may narrow suppo
 
 **Focused text input / textarea:** black outer border, primary inline inset stroke retained, black text and glyph stroke, 85% white / 15% primary fill blend, secondary outline at 65% of border width with zero offset, primary caret. The outer border must not become primary on focus.
 
-**TextBox:** black text and black glyph stroke, primary inline inset stroke, secondary outline. Do not substitute the generic primary glyph stroke simply because the component is a field.
+**TextBox:** black outer border, primary inline inset stroke, primary text and glyph stroke at rest, and a 50% white / 50% primary fill blend. When a caller makes the read-only box focusable, focus changes text and glyph stroke to black, uses an 85% white / 15% primary fill blend, and adds the secondary outline at 65% of the border width with zero offset.
 
 These are distinct visual layers: outer border, inline inset stroke, and focus outline. One must not be omitted or substituted for another. Text-input caret width/shape behavior is a separate runtime behavior to test; it must not be inferred from color tokens alone.
 
