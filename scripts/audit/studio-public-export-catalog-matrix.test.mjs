@@ -65,11 +65,11 @@ test("critical public primitives have direct representatives in the confirmed ca
 
 test("direct primitive representatives are grouped by related component family", () => {
   const sectionStart = catalog.indexOf('data-vt-confirmed-representatives="true"');
-  const sectionEnd = catalog.indexOf('\\n      </div>\\n    </Family>', sectionStart);
+  const sectionEnd = catalog.indexOf("\n      </div>\n    </Family>", sectionStart);
   assert.notEqual(sectionStart, -1, "direct representative section should exist");
   assert.notEqual(sectionEnd, -1, "direct representative section should close");
   const section = catalog.slice(sectionStart, sectionEnd);
-  const headings = [...section.matchAll(/<h4[^>]*>(.*?)<\\/h4>/g)].map(match => match[1]);
+  const headings = [...section.matchAll(/<h4[^>]*>(.*?)<\/h4>/g)].map(match => match[1]);
   assert.deepEqual(headings, [
     "BUTTONS & ICON BUTTONS",
     "TEXT ENTRY & INPUTS",
