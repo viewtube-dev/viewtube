@@ -1,6 +1,6 @@
 import React from "react"
 import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
-import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
+import { Check, Home, Info, Search, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
@@ -32,6 +32,8 @@ import {
   StudioDoubleSplitSlider,
   StudioSideCounter,
   StudioSideTextCounter,
+  StudioSideTextInput,
+  StudioDoubleSplitTextInput,
   StudioLeftCounter,
   StudioLeftWordCounter,
   StudioLeftWordSlider,
@@ -463,7 +465,9 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideCounter"><span>Side Counter · STANDARD</span><StudioSideCounter size="standard" value={sideCounterValue} onValueChange={setSideCounterValue} min={0} max={100} ariaLabel="Side counter standard representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>Left Counter · STANDARD</span><StudioLeftCounter size="standard" value={leftCounterRepValue} onValueChange={setLeftCounterRepValue} min={0} max={100} ariaLabel="Left counter standard representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordCounter"><span>Left Word Counter · STANDARD</span><StudioLeftWordCounter size="standard" value={leftWordValue} onValueChange={setLeftWordValue} ariaLabel="Studio left word counter standard specimen" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounter"><span>Side Text Counter · STANDARD</span><StudioSideTextCounter value={sideTextCounterValue} onValueChange={setSideTextCounterValue} size="standard" ariaLabel="Standard side text counter representative" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounter"><span>Side Text Counter · STANDARD</span><StudioSideTextCounter value={sideTextCounterValue} onValueChange={setSideTextCounterValue} size="standard" ariaLabel="Standard side text counter representative" /></div>        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounter"><span>Side Text Counter · STANDARD</span><StudioSideTextCounter value={sideTextCounterValue} onValueChange={setSideTextCounterValue} size="standard" ariaLabel="Standard side text counter representative" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextInput"><span>Side Text Input · STANDARD · CENTERED + ICON RAIL</span><StudioSideTextInput value="SEARCH" onValueChange={() => undefined} icon={<Search aria-hidden="true" />} size="standard" ariaLabel="Standard side text input representative" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitTextInput"><span>Double Split Text Input · STANDARD · CENTERED + TWO ICON RAILS</span><StudioDoubleSplitTextInput value="SEARCH" onValueChange={() => undefined} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Search aria-hidden="true" />} size="standard" ariaLabel="Standard double split text input representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitWordCounter"><span>Double-Split Word Counter · STANDARD</span><StudioDoubleSplitWordCounter size="standard" value={doubleWordCounterValue} onValueChange={setDoubleWordCounterValue} ariaLabel="Double-split word counter standard representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioInlineStepper"><span>Inline Numeric Stepper · STANDARD</span><StudioInlineStepper value={inlineStepperValue} onValueChange={setInlineStepperValue} min={0} max={100} size="standard" ariaLabel="Inline numeric stepper standard representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitStepper"><span>Split Numeric Stepper · STANDARD</span><StudioSplitStepper value={splitStepperValue} onValueChange={setSplitStepperValue} min={0} max={100} size="standard" ariaLabel="Split numeric stepper standard representative" /></div>
@@ -687,6 +691,51 @@ const ConfirmedStudioSideTextCounterFamily: React.FC = () => {
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounter">
         <div className="vt-confirmed-counter-size-rows">
           {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small><StudioSideTextCounter value={values[index]} onValueChange={next => setValues(current => current.map((value, item) => item === index ? next : value))} size={size} min={0} max={100} step={1} ariaLabel={size + " side text counter specimen"} placeholder="TYPE TEXT OR NUMBER" /></div>)}
+        </div>
+      </div>
+    </Family>
+  )
+}
+
+
+const ConfirmedStudioSideTextInputFamily: React.FC = () => {
+  const [values, setValues] = React.useState(["SEARCH", "SEARCH", "SEARCH", "SEARCH", "SEARCH"])
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const labels = ["60px SUPREME", "44px STANDARD", "28px COMPACT", "20px MINI", "12px MICRO"]
+  return (
+    <Family title="StudioSideTextInput · Centered Editable Text + Single Icon Rail · Five Sizes"
+      nonDefaultSettings={[
+        "The center panel uses the global centered text alignment default and canonical StudioTextInput field behavior.",
+        "The single square right rail contains one centered icon and replaces the side text counter's stacked increment/decrement buttons.",
+        "The icon is decorative unless an action callback is supplied; all five canonical size tiers share global rail and field tokens.",
+      ]}
+      provenance={<Provenance primitive="StudioSideTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-fields.css" tokens="60px / 44px / 28px / 20px / 12px · centered editable field · one square icon rail." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-fields.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextInput">
+        <div className="vt-confirmed-counter-size-rows">
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small><StudioSideTextInput value={values[index]} onValueChange={next => setValues(current => current.map((value, item) => item === index ? next : value))} icon={<Search aria-hidden="true" />} size={size} ariaLabel={size + " side text input specimen"} placeholder="TYPE TEXT" /></div>)}
+        </div>
+      </div>
+    </Family>
+  )
+}
+
+const ConfirmedStudioDoubleSplitTextInputFamily: React.FC = () => {
+  const [values, setValues] = React.useState(["SEARCH", "SEARCH", "SEARCH", "SEARCH", "SEARCH"])
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const labels = ["60px SUPREME", "44px STANDARD", "28px COMPACT", "20px MINI", "12px MICRO"]
+  return (
+    <Family title="StudioDoubleSplitTextInput · Centered Editable Text + Two Icon Rails · Five Sizes"
+      nonDefaultSettings={[
+        "The center panel uses the global centered text alignment default and canonical StudioTextInput field behavior.",
+        "Left and right square icon rails are independent and share global square rail geometry, secondary fill, and size-tier icon tokens.",
+        "Each rail is decorative unless its own action callback is supplied; all five canonical size tiers are represented.",
+      ]}
+      provenance={<Provenance primitive="StudioDoubleSplitTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-fields.css" tokens="60px / 44px / 28px / 20px / 12px · centered editable field · two square icon rails." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-fields.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitTextInput">
+        <div className="vt-confirmed-counter-size-rows">
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small><StudioDoubleSplitTextInput value={values[index]} onValueChange={next => setValues(current => current.map((value, item) => item === index ? next : value))} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Search aria-hidden="true" />} size={size} ariaLabel={size + " double split text input specimen"} placeholder="TYPE TEXT" /></div>)}
         </div>
       </div>
     </Family>
@@ -1629,6 +1678,8 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioSideCounterFamily />
     <ConfirmedStudioSideTextCounterFamily />
+    <ConfirmedStudioSideTextInputFamily />
+    <ConfirmedStudioDoubleSplitTextInputFamily />
     <ConfirmedStudioIconRailTextInputFamily />
     <ConfirmedStudioIconButtonRailTextInputFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
