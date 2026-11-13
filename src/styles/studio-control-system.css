@@ -3412,7 +3412,9 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   text-shadow: none;
 }
 input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"] {
-  line-height: var(--vt-studio-control-line-height, 1);
+  /* Native single-line inputs center their text from the control box. A tight
+     1em line box pushes glyphs low in Standard/Compact/Micro and clips metrics. */
+  line-height: normal;
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
 }
 input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"] {
