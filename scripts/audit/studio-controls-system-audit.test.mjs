@@ -108,11 +108,6 @@ test("counter, slider and value-toggle families inherit the global full-row widt
   assert.ok(system.includes(".vt-studio-vertical-word-toggle"));
 });
 
-test("bar-toggle bars use the restored standard-height ratio", () => {
-  assert.match(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?height:\s*65%/);
-  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar[^}]*height:\s*65%/);
-});
-
 test("side-toggle arrow buttons occupy equal grid rows and labels are vertically centered", () => {
   assert.match(sideRailCss, /grid-template-rows:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(sideRailCss, /\.vt-studio-side-counter__actions\s*>\s*button,[\s\S]*?height:\s*auto/s);
@@ -276,10 +271,14 @@ test("counter and bar family geometry comes from canonical family tokens and the
   assert.ok(split.includes("width: var(--vt-studio-counter-root-width)"));
   assert.ok(catalogCss.includes(":not(.vt-studio-counter):not(.vt-studio-side-counter):not(.vt-studio-left-counter)"));
   assert.ok(catalogCss.includes("justify-self: center;"));
-  assert.ok(distill.includes("--vt-bar-height:"));
-  assert.ok(distill.includes("--vt-bar-gap:"));
+  assert.ok(valueToggleCss.includes("--vt-bar-height: calc("));
+  assert.ok(valueToggleCss.includes("--vt-bar-width: calc("));
+  assert.ok(valueToggleCss.includes("var(--vt-studio-bar-empty-white-mix, 50%)"));
   assert.ok(valueToggleCss.includes('.vt-studio-value-toggle__bar[data-active="true"]'));
-  assert.ok(valueToggleCss.includes("background: var(--vt-studio-control-secondary"));
+  assert.ok(valueToggleCss.includes("background: var(--vt-studio-bar-full-fill, #000000)"));
+  assert.ok(!distill.includes("--vt-bar-height:"));
+  assert.ok(!distill.includes("--vt-bar-gap:"));
+  assert.ok(!distill.includes(".vt-studio-value-toggle__bar"));
   assert.ok(split.includes("flex: 0 0 var(--vt-studio-control-height, 44px)"));
   assert.ok(split.includes("width: var(--vt-studio-control-height, 44px)"));
   assert.ok(split.includes("height: 100%"));
