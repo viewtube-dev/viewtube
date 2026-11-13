@@ -25,15 +25,3 @@
   position: relative; z-index: 1; outline: calc(var(--vt-studio-control-stroke, 3px) * .65) solid #000;
   outline-offset: calc(var(--vt-studio-control-stroke, 3px) * -1);
 }
-.vt-studio-icon-rail-text-input[data-size="compact"] .vt-studio-icon-rail-text-input__glyph svg,
-.vt-studio-icon-button-rail-text-input[data-size="compact"] .vt-studio-icon-button-rail-text-input__button svg {
-  width: var(--vt-studio-compact-icon-size, 24px); height: var(--vt-studio-compact-icon-size, 24px);
-}
-.vt-studio-icon-rail-text-input[data-size="mini"] .vt-studio-icon-rail-text-input__glyph svg,
-.vt-studio-icon-button-rail-text-input[data-size="mini"] .vt-studio-icon-button-rail-text-input__button svg {
-  width: var(--vt-studio-mini-icon-size, 17.5px); height: var(--vt-studio-mini-icon-size, 17.5px);
-}
-.vt-studio-icon-rail-text-input[data-size="micro"] .vt-studio-icon-rail-text-input__glyph svg,
-.vt-studio-icon-button-rail-text-input[data-size="micro"] .vt-studio-icon-button-rail-text-input__button svg {
-  width: var(--vt-studio-micro-icon-size, 10px); height: var(--vt-studio-micro-icon-size, 10px); stroke-width: 1.5;
-}
