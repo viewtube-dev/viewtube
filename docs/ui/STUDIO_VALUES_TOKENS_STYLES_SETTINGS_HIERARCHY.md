@@ -83,8 +83,8 @@ These are the intended shared defaults. A named family contract may narrow suppo
 | Line height | `1` for control text; multiline reading roles may declare a separate explicit role |
 | Primary / secondary | `--pair-a` / `--pair-b` |
 | Outer border | Black (`#000`) unless a family contract explicitly says otherwise |
-| Ordinary field fill | Primary at 50% opacity |
-| Focused field fill | Primary at 15% opacity |
+| Ordinary field fill | 50% white / 50% primary blend |
+| Focused field fill | 85% white / 15% primary blend |
 | Ordinary field text/glyph stroke | Primary |
 | Focused field text/glyph stroke | Black |
 | Field inline inset stroke | Primary, always present, same width as the outer border |
@@ -99,9 +99,9 @@ These are the intended shared defaults. A named family contract may narrow suppo
 
 ### Field state contract
 
-**Resting text input / textarea:** black outer border, primary inline inset stroke at all times, primary text and glyph stroke, primary 50% fill, primary caret.
+**Resting text input / textarea:** black outer border, primary inline inset stroke at all times, primary text and glyph stroke, 50% white / 50% primary fill blend, primary caret.
 
-**Focused text input / textarea:** black outer border, primary inline inset stroke retained, black text and glyph stroke, primary 15% fill, secondary outline at 65% of border width with zero offset, primary caret. The outer border must not become primary on focus.
+**Focused text input / textarea:** black outer border, primary inline inset stroke retained, black text and glyph stroke, 85% white / 15% primary fill blend, secondary outline at 65% of border width with zero offset, primary caret. The outer border must not become primary on focus.
 
 **TextBox:** black text and black glyph stroke, primary inline inset stroke, secondary outline. Do not substitute the generic primary glyph stroke simply because the component is a field.
 
