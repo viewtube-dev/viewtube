@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 const splitCss = readFileSync("src/studio-ui/primitives/studio-split-text-input.css", "utf8");
+const controlSplitCss = readFileSync("src/styles/studio-control-split.css", "utf8");
 const splitComponent = readFileSync("src/studio-ui/primitives/StudioSplitTextInput.tsx", "utf8");
 const interCss = readFileSync("src/styles/studio-inter-module.css", "utf8");
 
@@ -18,19 +19,35 @@ test("split text input styles target the actual rendered shell, rails, and edita
 
 test("split input matches the Codex native-editing and single-shell focus contract", () => {
   assert.equal((splitCss.match(/html body \.vt-studio-split-text-input input\.vt-studio-text-input\[data-vt-studio-control="true"\]\[data-size\]\s*\{/g) || []).length, 1);
-  assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\)/);
-  assert.match(splitCss, /background:\s*color-mix\(in srgb, var\(--vt-split-field-primary\) 50%, transparent\) !important/);
-  assert.match(splitCss, /:is\(:focus, :focus-visible\)[\s\S]*?15%, transparent\)[\s\S]*?-webkit-text-stroke-color:\s*#000/);
+  assert.match(controlSplitCss, /\[data-vt-studio-control="true"\]\[data-vt-studio-split\][\s\S]*?border:\s*var\(--vt-studio-control-stroke, 3px\) solid #000/);
+  assert.match(splitCss, /border:\s*0 !important/);
+  assert.match(splitCss, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-split-field-primary\) !important/);
+  assert.match(splitCss, /background:\s*var\(--vt-field-fill-rest,\s*color-mix\(in srgb, white 50%, var\(--vt-split-field-primary\) 50%\)\)/);
+  assert.match(splitCss, /:is\(:focus, :focus-visible\)[\s\S]*?var\(--vt-field-fill-focus,[\s\S]*?white 85%, var\(--vt-split-field-primary\) 15%[\s\S]*?-webkit-text-stroke-color:\s*#000/);
   assert.match(splitCss, /\.vt-studio-split-text-input:focus-within[\s\S]*?outline:\s*calc\(var\(--vt-studio-control-stroke, 3px\) \* \.65\) solid var\(--vt-studio-control-secondary/);
   assert.match(splitCss, /\[data-vt-studio-split-rail\]\s*\{[^}]*width:\s*calc\(var\(--vt-studio-control-height\) - var\(--vt-studio-control-stroke\)\)/s);
   assert.match(splitCss, /caret-color:\s*var\(--vt-split-field-primary\)/);
   assert.doesNotMatch(splitComponent, /geometryVariant|data-geometry-variant/);
 });
 
+test("split input label occupies its real grid cell and remains pointer-interactive", () => {
+  const labelRule = splitCss.match(/html body \.vt-studio-split-text-input > \[data-vt-studio-control="true"\]\[data-vt-studio-split\] > \[data-vt-studio-split-label\]\s*\{([^}]*)\}/);
+  assert.ok(labelRule, "split text input needs an explicit label-layer override");
+  assert.match(labelRule[1], /display:\s*flex/);
+  assert.match(labelRule[1], /grid-row:\s*1/);
+  assert.doesNotMatch(labelRule[1], /pointer-events:\s*none/);
+  assert.match(splitComponent, /data-vt-studio-split-input="true"/);
+  assert.match(controlSplitCss, /data-vt-studio-split\]:not\(\[data-vt-studio-split-input="true"\]\) \[data-vt-studio-split-label\]/);
+  assert.match(splitCss, /data-split="left"[\s\S]*?grid-column:\s*2/);
+  assert.match(splitCss, /data-split="right"[\s\S]*?grid-column:\s*1/);
+  assert.match(splitCss, /data-split="double"[\s\S]*?grid-column:\s*2/);
+});
+
 test("split input descendants remain pointer-interactive and retain the primary inset stroke", () => {
-  assert.ok(splitCss.includes("pointer-events: none"));
+  assert.ok(controlSplitCss.includes("pointer-events: none"));
   assert.ok(splitCss.includes("pointer-events: auto"));
-  assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\)/);
+  assert.match(splitCss, /border:\s*0 !important/);
+  assert.match(splitCss, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-split-field-primary\) !important/);
   assert.ok(splitCss.includes("box-shadow: none;"));
 });
 
@@ -73,7 +90,8 @@ test("arrow, side, double-side and double-split word toggles share black focus c
 test("split text input stylesheet is complete and uses the Codex native inner border", () => {
   assert.doesNotMatch(splitCss, /\.\.\.\s*$/, "stylesheet must not be truncated");
   assert.doesNotThrow(() => postcss.parse(splitCss), "split text input stylesheet must parse as valid CSS");
-  assert.match(splitCss, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid var\(--vt-split-field-primary\) !important/);
+  assert.match(splitCss, /border:\s*0 !important/);
+  assert.match(splitCss, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-split-field-primary\) !important/);
   assert.ok(splitCss.includes("box-shadow: none;"));
   assert.match(splitCss, /caret-color:\s*var\(--vt-split-field-primary\)/);
 });

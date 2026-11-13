@@ -244,7 +244,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   max-height: 100%;
 }
 .vt-studio-dropdown-chevron.is-leading { border-left: 0; border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; display: flex; align-items: center; justify-content: flex-start; min-width: 0; height: 100%; padding: 0 10px; overflow: hidden; text-overflow: clip; white-space: nowrap; font-weight: var(--vt-studio-control-font-weight, 1000); font-size: var(--vt-studio-control-font-size, 38px); line-height: 1; }
+.vt-studio-dropdown.is-split-left button[data-dropdown-trigger="true"] [data-vt-studio-split-label] { grid-column: 2; grid-row: 1; display: flex; align-items: center; justify-content: center; min-width: 0; height: 100%; padding: 0 10px; overflow: hidden; text-overflow: clip; white-space: nowrap; font-weight: var(--vt-studio-control-font-weight, 1000); font-size: var(--vt-studio-control-font-size, 38px); line-height: 1; text-align: center; }
 .vt-studio-dropdown.is-split-left .vt-studio-dropdown-chevron.is-trailing { grid-column: 3; grid-row: 1; border-left: var(--vt-studio-control-stroke, 3px) solid #000; }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="start"] { background: var(--vt-studio-control-secondary, var(--pair-b)); }
 .vt-studio-dropdown .vt-studio-dropdown-split-rail[data-rail="end"] { background: var(--vt-studio-control-secondary, var(--pair-b)); }
@@ -282,8 +282,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  height: var(--vt-studio-control-height, 44px);
-  min-height: var(--vt-studio-control-height, 44px);
+  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+  min-height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
   align-items: center;
   margin-bottom: 3px;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
@@ -701,8 +701,9 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   position: relative; display: flex; align-items: center; gap: 8px; box-sizing: border-box; width: 100%; min-width: 0;
   height: var(--vt-legend-height); min-height: var(--vt-legend-height);
   padding: 0 8px 0 12px; border: var(--vt-legend-stroke) solid #000;
-  border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000; 
-  cursor: pointer; font-size: 38px; font-weight: 1000; line-height: 1; letter-spacing: -.02em; text-transform: uppercase; transform: none; 
+  border-radius: var(--vt-legend-radius); background: var(--vt-legend-a); color: #000;
+  cursor: pointer; font-size: var(--vt-studio-control-font-size, 38px); font-weight: var(--vt-studio-control-font-weight, 1000); line-height: 1; letter-spacing: -.02em; text-transform: uppercase; transform: none;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
 }
 .vt-studio-legend-multi[data-size="compact"] .vt-studio-legend-trigger { font-size: 24px; }
 .vt-studio-legend-trigger:hover, .vt-studio-legend-trigger:focus, .vt-studio-legend-trigger:focus-visible, .vt-studio-legend-trigger:active {  transform: none;  }
@@ -1062,8 +1063,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 }
 .vt-studio-dropdown-option {
   box-sizing: border-box;
-  min-height: var(--vt-dropdown-height, 44px) !important;
-  height: auto;
+  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
+  min-height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
   border: var(--vt-dropdown-stroke, 3px) solid #000 !important;
   border-radius: calc(var(--vt-dropdown-radius, 6px) - 2px) !important;
   margin: 0 0 3px !important;
@@ -1170,7 +1171,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
   
 }
 .vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
-  min-height: 28px !important;
+  height: calc(var(--vt-studio-control-height, 28px) - 2 * var(--vt-studio-control-stroke, 2px)) !important;
+  min-height: calc(var(--vt-studio-control-height, 28px) - 2 * var(--vt-studio-control-stroke, 2px)) !important;
   border-width: 2px !important;
   border-radius: 4px !important;
   padding: 2px 6px !important;
@@ -2035,6 +2037,16 @@ button[data-vt-studio-icon-button="true"][data-success="true"] [data-vt-square-s
   cursor: pointer;
   user-select: none;
   
+}
+/* 20px bracket scales every 15px donor dimension by 4/3. */
+.vt-studio-spectrum-tag.is-20px {
+  height: 20px;
+  min-height: 20px;
+  padding: 1.3333px 4px;
+  border-width: 2.6667px;
+  border-radius: 5.3333px;
+  font-size: 10.6667px;
+  letter-spacing: .4px;
 }
 .vt-studio-spectrum-tag.is-selected {
   background: var(--vt-spectrum-tag-color);
@@ -3400,7 +3412,9 @@ textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
   text-shadow: none;
 }
 input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"] {
-  line-height: var(--vt-studio-control-line-height, 1);
+  /* Native single-line inputs center their text from the control box. A tight
+     1em line box pushes glyphs low in Standard/Compact/Micro and clips metrics. */
+  line-height: normal;
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
 }
 input[data-vt-studio-control="true"][data-vt-studio-field-kind="text-input"][data-size="compact"] {
@@ -3491,7 +3505,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-counter,
 .vt-studio-side-counter,
 .vt-studio-left-counter {
-  display: flex;
   width: 100%;
   min-width: 0;
   max-width: 100%;
@@ -3531,6 +3544,12 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   box-sizing: border-box;
   background: var(--pair-b);
   border: 0;
+}
+
+/* StudioCounter is a true double-split: one action rail at each end. */
+.vt-studio-counter {
+  display: grid;
+  grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr) var(--vt-studio-control-height, 44px);
 }
 .vt-studio-counter__rail {
   display: flex;
@@ -3642,12 +3661,11 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 .vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__value,
 .vt-studio-left-counter[data-size="micro"] .vt-studio-side-counter__value { font-size: var(--vt-studio-micro-font-size, 10px); }
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg { width: 16px; height: 16px; }
-.vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__actions button svg,
-.vt-studio-left-counter[data-size="compact"] .vt-studio-side-counter__actions button svg { width: 30px; height: 30px; }
+.vt-studio-side-counter__actions[data-size="compact"] button svg { width: 30px; height: 30px; }
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 8px; height: 8px; stroke-width: 1.5; }
-.vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 1.5; }
+.vt-studio-side-counter__actions[data-size="micro"] button svg { width: 15px; height: 15px; stroke-width: 1.5; }
 .vt-studio-counter button:focus-visible,
-.vt-studio-side-counter button:focus-visible { outline: 2px solid var(--pair-a); outline-offset: -4px; }
+.vt-studio-side-counter__actions button:focus-visible { outline: 2px solid var(--pair-a); outline-offset: -4px; }
 /* Counter affordance polish: +/− and chevrons are 150% larger with heavier strokes. */
 .vt-studio-counter__button svg {
   width: 36px;
@@ -3662,18 +3680,15 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   transform-origin: center;
 }
 .vt-studio-counter[data-size="compact"] .vt-studio-counter__button svg { width: 24px; height: 24px; stroke-width: 3; }
-.vt-studio-side-counter[data-size="compact"] .vt-studio-side-counter__actions button svg { width: 30px; height: 30px; stroke-width: 3; }
+.vt-studio-side-counter__actions[data-size="compact"] button svg { width: 30px; height: 30px; stroke-width: 3; }
 .vt-studio-counter[data-size="micro"] .vt-studio-counter__button svg { width: 12px; height: 12px; stroke-width: 2.25; }
-.vt-studio-side-counter[data-size="micro"] .vt-studio-side-counter__actions button svg { width: 15px; height: 15px; stroke-width: 2.25; }
+.vt-studio-side-counter__actions[data-size="micro"] button svg { width: 15px; height: 15px; stroke-width: 2.25; }
 .vt-studio-counter__button:active svg,
-.vt-studio-side-counter__actions button:active svg,
-.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button:active svg { animation: vt-studio-counter-pop 180ms cubic-bezier(.2,.8,.2,1); }
+.vt-studio-side-counter__actions button:active svg { animation: vt-studio-counter-pop 180ms cubic-bezier(.2,.8,.2,1); }
 .vt-studio-counter__button.is-holding svg,
-.vt-studio-side-counter__actions button.is-holding svg,
-.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button.is-holding svg { animation: vt-studio-counter-hold-pulse 1.15s ease-in-out infinite; }
+.vt-studio-side-counter__actions button.is-holding svg { animation: vt-studio-counter-hold-pulse 1.15s ease-in-out infinite; }
 .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]),
-.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]),
-.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]) {
+.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]) {
   outline: none;
   box-shadow: none;
   border-color: inherit;
@@ -3681,8 +3696,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 
 /* Press/hold changes icon color only; button geometry and borders stay fixed. */
 .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]) svg,
-.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]) svg,
-.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]) svg {
+.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"]) svg {
   color: #000;
   stroke: #000;
 }
@@ -3711,14 +3725,12 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-counter__button:active svg,
   .vt-studio-side-counter__actions button:active svg,
-  .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button:active svg,
   .vt-studio-counter__button.is-holding svg,
-  .vt-studio-side-counter__actions button.is-holding svg,
-  .vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button.is-holding svg { animation: none; }
+  .vt-studio-side-counter__actions button.is-holding svg { animation: none; }
 }
 
 .vt-studio-counter button:disabled,
-.vt-studio-side-counter button:disabled { opacity: .4; cursor: not-allowed; }
+.vt-studio-side-counter__actions button:disabled { opacity: .4; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) {
   .vt-studio-counter *, .vt-studio-side-counter * { scroll-behavior: auto; }
 }
@@ -3769,11 +3781,10 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   /* Keep value-area backgrounds stable while pressing, especially on right counters. */
 }
 
-/* Standard/left counter: click and hold use the same black numeral treatment. */
+/* Counter interaction changes numeral treatment only; the text-panel fill stays fixed. */
 .vt-studio-counter:has(
   .vt-studio-counter__button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])
 ) .vt-studio-counter__value {
-  background: color-mix(in srgb, var(--pair-a) 50%, white);
   color: var(--vt-studio-number-active-color, #000);
   -webkit-text-fill-color: var(--vt-studio-number-active-color, #000);
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-number-active-stroke, #000);
@@ -3962,8 +3973,7 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
 }
 /* Left-action side counter shares the same action/value anatomy and palette rules. */
 .vt-studio-left-counter__rail[data-rail="start"] { border-right: var(--vt-studio-control-stroke, 3px) solid #000; }
-.vt-studio-left-counter:has(.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])) .vt-studio-side-counter__value,
-.vt-studio-left-counter:has(.vt-studio-side-counter__actions button:is(:active, :focus-visible, .is-holding, [data-press-holding="true"])) .vt-studio-side-counter__value { background: color-mix(in srgb, var(--pair-a) 50%, white); }
+/* Left-counter focus inherits the stable value-area fill; only the glyph changes. */
 
 
 /* Canonical Studio Upload Frame — canvas exception, pair-color driven, flat shell. */
@@ -4199,49 +4209,6 @@ html body button[data-vt-studio-button="true"][data-split-left="true"] > [data-v
   font-size: calc(var(--vt-studio-control-font-size, 38px) * .72);
 }
 .vt-studio-double-split-slider[data-size="compact"] .vt-studio-double-split-slider__value { font-size: 18px; }
-
-/* Optional side-counter controls for the double-split slider's left rail. */
-.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter {
-  position: relative;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-}
-.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter > button {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  height: 100%;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
-  color: #000;
-  cursor: pointer;
-  touch-action: none;
-}
-.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter svg {
-  width: min(42px, 90%);
-  height: min(42px, 90%);
-  stroke-width: 3.75;
-}
-.vt-studio-double-split-slider.is-counter-controls[data-size="compact"] .vt-studio-double-split-slider__counter svg {
-  width: min(30px, 90%);
-  height: min(30px, 90%);
-  stroke-width: 3;
-}
-.vt-studio-double-split-slider.is-counter-controls[data-size="micro"] .vt-studio-double-split-slider__counter svg {
-  width: min(15px, 90%);
-  height: min(15px, 90%);
-  stroke-width: 2.25;
-}
-.vt-studio-double-split-slider.is-counter-controls .vt-studio-double-split-slider__counter button:disabled { opacity: .4; cursor: not-allowed; }
 
 /* Dropdown chevrons use a stable end rail without a redundant divider in simple mode. */
 .vt-studio-dropdown:not(.is-split-left) .vt-studio-dropdown-chevron.is-trailing {
@@ -4729,8 +4696,7 @@ button.vt-studio-vertical-word-toggle[data-vt-studio-control="true"],
   .vt-studio-vertical-word-toggle__word { transition: none !important; }
 }
 
-/* Read-only text display shares textarea tokens but never receives edit/focus states. */
-/* Read-only text display follows the same geometry and glyph contract as editable fields. */
+/* Read-only text display shares textarea size/typography tokens and the field color contract. It remains non-editable; focus styling applies only when a caller makes it focusable. */
 .vt-studio-text-box[data-vt-studio-control="true"] {
   position: relative;
   box-sizing: border-box;
@@ -4741,19 +4707,17 @@ button.vt-studio-vertical-word-toggle[data-vt-studio-control="true"],
   min-height: var(--vt-studio-textarea-min-height, 92px);
   margin: 0;
   padding: var(--vt-studio-textarea-standard-padding-block, 10px) var(--vt-studio-textarea-standard-padding-inline, 12px);
-  border: var(--vt-studio-control-stroke, 3px) solid #000;
   border-radius: var(--vt-studio-control-radius, 6px);
-  background: color-mix(in srgb, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) var(--vt-studio-control-default-fill-opacity, 50%), white);
-  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-focus-outline-width-ratio, .65)) solid var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b)));
+  background: var(--vt-field-fill-rest, color-mix(in srgb, white 50%, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 50%));
+  outline: 0 solid transparent;
   outline-offset: 0;
-  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
-  color: #000;
-  -webkit-text-fill-color: #000;
+  color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  -webkit-text-fill-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   font-family: var(--vt-studio-control-font-family, Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
   font-size: var(--vt-studio-textarea-standard-font-size, 18px);
   font-weight: 1000;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
-  text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   line-height: var(--vt-studio-textarea-line-height, .85);
   letter-spacing: var(--vt-studio-control-letter-spacing, -.02em);
   text-transform: uppercase;
@@ -4765,22 +4729,22 @@ button.vt-studio-vertical-word-toggle[data-vt-studio-control="true"],
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="supreme"] {
   padding: calc(var(--vt-studio-textarea-standard-padding-block, 10px) * 1.363636) calc(var(--vt-studio-textarea-standard-padding-inline, 12px) * 1.363636);
   font-size: var(--vt-studio-textarea-supreme-font-size, 24.55px);
-  -webkit-text-stroke: var(--vt-studio-textarea-supreme-text-stroke, .68px) #000;
+  -webkit-text-stroke: var(--vt-studio-textarea-supreme-text-stroke, .68px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="compact"] {
   padding: var(--vt-studio-textarea-compact-padding-block, 8px) var(--vt-studio-textarea-compact-padding-inline, 10px);
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
-  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, .35px) #000;
+  -webkit-text-stroke: var(--vt-studio-textarea-compact-text-stroke, .35px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="mini"] {
   padding: var(--vt-studio-textarea-compact-padding-block, 8px) var(--vt-studio-textarea-compact-padding-inline, 10px);
   font-size: var(--vt-studio-textarea-mini-font-size, 17.5px);
-  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, .375px) #000;
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, .375px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
 .vt-studio-text-box[data-vt-studio-control="true"][data-size="micro"] {
   padding: var(--vt-studio-textarea-micro-padding-block, 4px) var(--vt-studio-textarea-micro-padding-inline, 5px);
   font-size: var(--vt-studio-textarea-micro-font-size, 10px);
-  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, .25px) #000;
+  -webkit-text-stroke: var(--vt-studio-textarea-micro-text-stroke, .25px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
 /* Textarea and read-only text display share the canonical 0.85 line-height token. */
 textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"] {
@@ -5266,7 +5230,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   background: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, white);
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   outline: calc(var(--vt-studio-control-stroke, 3px) * .65)
     solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
@@ -5308,7 +5272,7 @@ button[data-vt-studio-button="true"][data-size="micro"] > [data-vt-studio-button
   background: color-mix(in srgb, var(--vt-field-primary, var(--pair-a, #36e0f6)) 15%, white);
   color: #000;
   -webkit-text-fill-color: #000;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) #000;
+  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   outline: calc(var(--vt-studio-control-stroke, 3px) * .65)
     solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   outline-offset: 0;
@@ -5418,6 +5382,8 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   align-items: stretch;
   width: max-content;
   max-width: 100%;
+  flex: 0 0 auto;
+  align-self: flex-start;
   height: var(--vt-icon-group-size);
   min-height: var(--vt-icon-group-size);
   padding: 0;
@@ -5523,20 +5489,6 @@ button[data-vt-studio-action-button="true"] {
   overflow: hidden;
 }
 
-/* Joined icon rails retain intrinsic width; surrounding specimen rows may stretch. */
-.vt-studio-square-icon-button-group {
-  display: inline-flex;
-  width: max-content;
-  max-width: 100%;
-  flex: 0 0 auto;
-  align-self: flex-start;
-}
-[data-vt-brain-component="BrainAnswerFeedback"] .vt-studio-square-icon-button-group {
-  display: inline-flex;
-  width: max-content;
-  flex: 0 0 auto;
-  align-self: flex-start;
-}
 
 /* =============================================================================
    StudioTopSplitModule — split chrome above a white content body
@@ -5545,6 +5497,8 @@ button[data-vt-studio-action-button="true"] {
   --vt-top-split-size: var(--vt-studio-control-height, 44px);
   --vt-top-split-stroke: var(--vt-studio-control-stroke, 3px);
   --vt-top-split-radius: var(--vt-studio-control-radius, 6px);
+  --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-standard-icon-stroke, 1.9);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -5556,10 +5510,36 @@ button[data-vt-studio-action-button="true"] {
   background: #fff;
 }
 
+.vt-studio-top-split-module[data-size="supreme"] {
+  --vt-top-split-size: var(--vt-studio-supreme-height, 60px);
+  --vt-top-split-stroke: var(--vt-studio-supreme-stroke, 3px);
+  --vt-top-split-radius: var(--vt-studio-supreme-radius, 6px);
+  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-supreme-icon-stroke, 1.9);
+}
+
 .vt-studio-top-split-module[data-size="compact"] {
   --vt-top-split-size: var(--vt-studio-compact-height, 28px);
   --vt-top-split-stroke: var(--vt-studio-compact-stroke, 2px);
   --vt-top-split-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-compact-icon-stroke, 2);
+}
+
+.vt-studio-top-split-module[data-size="mini"] {
+  --vt-top-split-size: var(--vt-studio-mini-height, 20px);
+  --vt-top-split-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-top-split-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 17.5px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-mini-icon-stroke, 1.6);
+}
+
+.vt-studio-top-split-module[data-size="micro"] {
+  --vt-top-split-size: var(--vt-studio-micro-height, 12px);
+  --vt-top-split-stroke: var(--vt-studio-micro-stroke, 1.5px);
+  --vt-top-split-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
+  --vt-studio-control-icon-stroke: var(--vt-studio-micro-icon-stroke, 1.5);
 }
 
 .vt-studio-top-split-module__head {
@@ -5567,7 +5547,9 @@ button[data-vt-studio-action-button="true"] {
   display: grid;
   align-items: stretch;
   min-width: 0;
+  height: var(--vt-top-split-size);
   min-height: var(--vt-top-split-size);
+  max-height: var(--vt-top-split-size);
   border-bottom: var(--vt-top-split-stroke) solid #000;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   color: #000;
@@ -5600,16 +5582,22 @@ button[data-vt-studio-action-button="true"] {
   box-sizing: border-box;
   display: grid;
   place-items: center;
-  min-width: 0;
+  width: var(--vt-top-split-size);
+  min-width: var(--vt-top-split-size);
+  max-width: var(--vt-top-split-size);
+  height: 100%;
+  aspect-ratio: 1 / 1;
   background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
   border-right: var(--vt-top-split-stroke) solid #000;
   color: #000;
   -webkit-text-stroke: 0;
 }
 .vt-studio-top-split-module__rail > svg {
-  width: calc(var(--vt-top-split-size) * 0.65);
-  height: calc(var(--vt-top-split-size) * 0.65);
+  /* Match split badge / button rail icon contract for the active size bracket. */
+  width: min(var(--vt-studio-control-icon-size, 38px), 90%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 90%);
   stroke: currentColor;
+  stroke-width: var(--vt-studio-control-icon-stroke, 1.9);
 }
 .vt-studio-top-split-module__head[data-split="right"] .vt-studio-top-split-module__rail,
 .vt-studio-top-split-module__head[data-split="double"] .vt-studio-top-split-module__rail[data-rail="end"] {
@@ -5625,7 +5613,9 @@ button[data-vt-studio-action-button="true"] {
   display: flex;
   align-items: center;
   min-width: 0;
-  padding: 0 4px;
+  width: 100%;
+  height: 100%;
+  padding: 0 6px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: clip;
@@ -5852,8 +5842,8 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
     var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
 }
 
-/* Collapsed modules: single bottom border only (outer shell).
-   Head loses its bottom rule; body is fully removed so outer border is the only edge. */
+/* Collapsed modules: shell keeps the bottom perimeter edge (avoids radius clip).
+   Head loses its bottom rule so there is exactly one black edge. */
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head,
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__head,
 details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head,
@@ -6022,12 +6012,12 @@ button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-sele
 }
 
 .vt-studio-collapsing-split-module:not([open]) {
-  border-bottom: 0 !important;
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
 }
 
 .vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
 .vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
-  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+  border-bottom: 0 !important;
 }
 
 .vt-studio-collapsing-split-module[open] {
@@ -6161,13 +6151,13 @@ summary .vt-studio-top-split-module__title {
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
 }
 
-/* Closed: no extra shell bottom — header bottom border IS the component bottom
-   (collapsed module looks like a split badge) */
+/* Closed: shell keeps bottom perimeter (aligned with expanded header/body divider).
+   Head has no bottom rule — avoids double edge and radius clipping. */
 details.vt-studio-collapsing-split-module:not([open]),
 details.vt-studio-two-line-module:not([open]),
 .vt-studio-collapsing-split-module:not([open]),
 .vt-studio-two-line-module:not([open]) {
-  border-bottom: 0 !important;
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
 }
 
 /* Open: restore shell bottom under white body; header rule stays the divider */
@@ -6233,7 +6223,6 @@ details.vt-studio-two-line-module > :not(summary) {
   z-index: 5;
 }
 .vt-studio-stepper-button:disabled { opacity: .4; cursor: not-allowed; }
-.vt-studio-counter[data-size="supreme"] .vt-studio-stepper-button,
 /* Global dropdown menu contract: active primary/secondary pair, symmetric menu corners,
    full-width option rows, and trigger text centered independently of the chevron rail. */
 .vt-studio-dropdown-menu {
@@ -6253,8 +6242,8 @@ details.vt-studio-two-line-module > :not(summary) {
   display: flex;
   width: 100%;
   min-width: 0;
-  min-height: var(--vt-dropdown-height, var(--vt-studio-control-height, 44px)) !important;
-  height: auto;
+  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
+  min-height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
   margin: 0 0 var(--vt-studio-dropdown-menu-row-gap, 3px) !important;
   padding: 2px 8px !important;
   border: var(--vt-studio-dropdown-row-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
@@ -6423,4 +6412,207 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
   border: var(--vt-studio-control-stroke, 3px) solid var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   border-radius: max(0px, calc(var(--vt-studio-control-radius, 6px) - var(--vt-studio-control-stroke, 3px)));
   pointer-events: none;
+}
+
+
+/* Editable side counter: shell owns black perimeter; input owns only primary inset.
+   No padding on the field host (that created the double-outline gap). */
+.vt-studio-side-text-counter > [data-vt-studio-split-field] {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: stretch;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.vt-studio-side-text-counter .vt-studio-side-text-counter__input,
+.vt-studio-side-text-counter input.vt-studio-side-text-counter__input,
+.vt-studio-side-text-counter input.vt-studio-text-input--simple[data-vt-studio-control="true"] {
+  display: block;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding-block: 0;
+  border: 0;
+  border-radius: 0;
+  line-height: 1;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+}
+
+
+
+/* StudioCounter interior divider ownership (2026-11-11).
+   The split shell owns the perimeter. Its value face owns the two interior
+   separators so the rail and panel cannot paint adjacent duplicate strokes. */
+.vt-studio-counter[data-vt-studio-control="true"] > [data-vt-studio-split-rail] {
+  border: 0;
+}
+.vt-studio-counter[data-vt-studio-control="true"] > [data-vt-studio-split-label] {
+  border-left: var(--vt-studio-control-stroke, 3px) solid #000;
+  border-right: var(--vt-studio-control-stroke, 3px) solid #000;
+}
+
+/* Confirmed counter modules must not flex-shrink the primitive's three-cell grid.
+   The specimen wrapper owns the row width; the primitive retains its own rails. */
+.vt-confirmed-counter-pair > .vt-studio-counter,
+.vt-confirmed-counter-pair > .vt-studio-side-counter,
+.vt-confirmed-counter-pair > .vt-studio-left-counter {
+  box-sizing: border-box;
+  flex: 0 1 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+
+/* Counter size-tier geometry is explicit at the shell boundary. The old
+   compact/micro-only overrides left Supreme and Mini inheriting Standard
+   geometry and typography, which made the five specimens collapse into groups. */
+.vt-studio-counter[data-size="supreme"],
+.vt-studio-side-counter[data-size="supreme"],
+.vt-studio-left-counter[data-size="supreme"] {
+  --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
+  --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px);
+  --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px);
+}
+.vt-studio-counter[data-size="standard"],
+.vt-studio-side-counter[data-size="standard"],
+.vt-studio-left-counter[data-size="standard"] {
+  --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
+  --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
+  --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px);
+  --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
+  --vt-studio-control-icon-size: var(--vt-studio-standard-icon-size, 38px);
+}
+.vt-studio-counter[data-size="compact"],
+.vt-studio-side-counter[data-size="compact"],
+.vt-studio-left-counter[data-size="compact"] {
+  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
+  --vt-studio-control-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
+  --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px);
+  --vt-studio-control-icon-size: var(--vt-studio-compact-icon-size, 24px);
+}
+.vt-studio-counter[data-size="mini"],
+.vt-studio-side-counter[data-size="mini"],
+.vt-studio-left-counter[data-size="mini"] {
+  --vt-studio-control-height: var(--vt-studio-mini-height, 20px);
+  --vt-studio-control-stroke: var(--vt-studio-mini-stroke, 1.5px);
+  --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
+  --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
+  --vt-studio-control-icon-size: var(--vt-studio-mini-icon-size, 17.5px);
+}
+.vt-studio-counter[data-size="micro"],
+.vt-studio-side-counter[data-size="micro"],
+.vt-studio-left-counter[data-size="micro"] {
+  --vt-studio-control-height: var(--vt-studio-micro-height, 12px);
+  --vt-studio-control-stroke: var(--vt-studio-micro-stroke, 1px);
+  --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
+  --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
+  --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
+}
+
+/* Numerals use the full value-face box, not the label's inline baseline.
+   No top/bottom border is painted on the face; the shell owns the perimeter. */
+.vt-studio-counter__value,
+.vt-studio-side-counter__value {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-block: 0;
+  line-height: 1;
+  text-align: center;
+  font-size: var(--vt-studio-control-font-size, 38px);
+  font-variant-numeric: tabular-nums;
+}
+.vt-studio-counter__rail,
+.vt-studio-side-counter__rail,
+.vt-studio-left-counter__rail {
+  min-height: 0;
+  height: 100%;
+  align-self: stretch;
+}
+.vt-studio-side-counter__actions {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  align-self: stretch;
+  height: 100%;
+}
+.vt-studio-side-counter__actions button {
+  min-height: 0;
+  height: 100%;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+.vt-studio-side-counter__actions button svg {
+  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+}
+.vt-studio-counter__button svg {
+  width: min(var(--vt-studio-control-icon-size, 38px), 100%);
+  height: min(var(--vt-studio-control-icon-size, 38px), 100%);
+}
+
+/* StudioSideTextCounter centered value text and single-icon rail. */
+.vt-studio-side-text-counter .vt-studio-side-text-counter__input,
+.vt-studio-side-text-input .vt-studio-side-text-input__input,
+.vt-studio-double-split-text-input .vt-studio-double-split-text-input__input {
+  text-align: center;
+}
+.vt-studio-side-text-input > [data-vt-studio-split-field] {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: stretch;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+}
+.vt-studio-side-text-input__icon,
+.vt-studio-side-text-input__icon-button {
+  appearance: none;
+  box-sizing: border-box;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #000;
+}
+.vt-studio-side-text-input__icon-button { cursor: pointer; }
+.vt-studio-side-text-input__icon-button:disabled { opacity: .4; cursor: not-allowed; }
+.vt-studio-side-text-input__icon :is(svg),
+.vt-studio-side-text-input__icon-button :is(svg) {
+  display: block;
+  width: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
+  height: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
+  max-width: 100%;
+  max-height: 100%;
+  color: currentColor;
+  stroke: currentColor;
 }

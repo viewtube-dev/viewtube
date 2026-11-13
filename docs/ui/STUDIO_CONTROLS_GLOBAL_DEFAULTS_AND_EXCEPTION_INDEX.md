@@ -1,7 +1,7 @@
 # Studio Controls — Definitive Global Defaults, Size Contract & Primitive Exceptions
 
 **Status:** Canonical requirements reference; implementation and rendered verification must be checked against the source files below.  
-**Reviewed:** 2026-10-27  
+**Reviewed:** 2026-11-13  
 **Repository:** `viewtube-dev/viewtube`  
 **Work branch:** `master/consolidated-feature-integration` (canonical integration target)  
 **Canonical sources:** `src/studio-ui/tokens.ts`, `src/studio-ui/primitives/StudioControls.tsx`, `src/studio-ui/primitives/StudioTextInput.tsx`, `src/studio-ui/primitives/StudioTextArea.tsx`, `src/studio-ui/primitives/StudioSplitAccordion.tsx`, `src/styles/studio-control-system.css`, `src/styles/studio-split-accordion.css`  
@@ -30,6 +30,13 @@ A family is **source-confirmed** only when its specimen uses the production expo
 - No shadow, fake shadow, movement, or component-specific global-token change is introduced. Panel content is hidden when inactive and is labelled by its controlling trigger.
 - The Confirmed Primitive Library specimen and component/catalog contract tests are the source-certification surface. Visual browser certification must be reported separately from source/test certification.
 
+## Numeric Stepper — supported size subset (2026-11-13)
+
+- Canonical production exports: `StudioInlineStepper` and `StudioSplitStepper` from `src/studio-ui/primitives/StudioControls.tsx`.
+- Both APIs support Standard (44px) and Compact (28px) only. Supreme, Mini, and Micro are not supported and must not be fabricated in catalog galleries.
+- Inline Stepper presents decrement / editable value / increment in one flat control. Split Stepper presents the editable value beside one secondary action rail.
+- They are Controls, not compositions. The Confirmed Primitive Library must include direct imported Standard representatives and a dedicated family module showing both supported sizes with independent controlled values.
+
 ## 1. Global defaults — independent of size
 
 These rules apply first. The selected size tier changes dimensions, not the meaning of the shared color, alignment, typography, or layout rules.
@@ -44,7 +51,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 | Baseline line-height | `1` for single-line controls; textarea multiline exception is `0.85` from the multiline token |
 | Primary color | `--pair-a` |
 | Secondary color | `--pair-b` |
-| Default fill | Fields use 50% primary fill at rest and 15% on focus. Solid button/badge/action faces may use 100% primary only where their family contract explicitly specifies a solid face; do not generalize that exception to fields or all controls. |
+| Default fill | Fields use a 50% white / 50% primary blend at rest and an 85% white / 15% primary blend on focus. Solid button/badge/action faces may use 100% primary only where their family contract explicitly specifies a solid face; do not generalize that exception to fields or all controls. |
 | Alternate / split-rail fill | Secondary color; split icon rails are secondary by default |
 | Default label color | Black (`#000`) unless a primitive/state contract explicitly specifies primary-colored text |
 | Default outer border | Black (`#000`) |
@@ -121,6 +128,12 @@ These are content-driven components, not fixed-width row controls. Their intrins
 | Word toggles | Width determined by the words and their measured active segment; must stay inside its container | Active handle fits measured word without overlap or overflow; text centered; state swaps color only and does not change outer geometry |
 | Tag editor | Row/container may fill; individual tags remain content-width; action controls are square | Plus/check actions use compact 28px / 2px / 4px geometry unless a future documented size variant is added |
 
+## 4A. Fixed-content-width square icon group exception
+
+- `StudioSquareIconButtonGroup` is the registered non-text content-width control exception. Its intrinsic width is exactly five fixed-size square faces in one shared outer shell; it must not flex-grow to fill the row.
+- The group uses the selected size tier for each square face. Default V3 faces use primary fill; selected V3 faces use secondary fill. The outer shell owns the perimeter and internal dividers.
+- Keep the group overflow visible so focus outlines, badges, and supported effects are not clipped. Geometry and state styling belong to `studio-control-system.css`; do not add duplicate width/overflow rules in `studio-control-distill-overrides.css`.
+
 ## 5. Text fields — explicit alignment and state contract
 
 **Both single-line text inputs and multiline textareas are left-aligned.** Text alignment is not a size variant and must never flip to right alignment.
@@ -132,11 +145,11 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Alignment: left; vertically centered.
 - Standard/compact type: 38px / 24px, weight 1000, uppercase, `-0.02em` tracking, default line-height (`1`).
 - Geometry: 44px / 28px high, 3px / 2px border, 6px / 4px radius.
-- Resting fill: primary color at 50% opacity.
+- Resting fill: 50% white / 50% primary blend.
 - Resting value, placeholder, and caret: primary color.
 - Outer border: black, size-tier stroke.
 - Resting inline text stroke: primary color, matching the resting text color and selected size-tier width.
-- Focus fill: primary color at 15% opacity.
+- Focus fill: 85% white / 15% primary blend.
 - Focus text and inline text stroke: black (`#000000`), matching one another.
 - Focus caret: primary color (`--pair-a`), not black.
 - Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px standard / 1.3px compact / 0.975px Mini and 0.65px Micro), outline offset 0.
@@ -153,7 +166,7 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Geometry still follows the selected size tier: standard 44px family / 3px border / 6px radius; compact 28px family / 2px border / 4px radius. The 92px minimum surface may make the textarea taller than the nominal one-line control height.
 The multiline exception is sourced from `STUDIO_CONTROL_SIZE_BASE.multiline` in `src/studio-ui/tokens.ts` and emitted by `scripts/emit-studio-control-vars.mjs` into `src/styles/studio-control-vars.generated.css`. Do not use the single-line input font-size or text-stroke tokens for textarea glyphs.
 
-- Rest/focus fill and color contract matches the text input: 50% primary at rest, 15% primary on focus, primary text at rest, black text on focus, secondary 100%-opacity outline at 65% of the selected border width, offset 0.
+- Rest/focus fill and color contract matches the text input: 50% white / 50% primary blend at rest, 85% white / 15% primary blend on focus, primary text at rest, black text on focus, secondary 100%-opacity outline at 65% of the selected border width, offset 0.
 - Floating/fixed label variants are presentation variants of the same textarea primitive, not separate typography or border systems. Resting floating labels match the native field primitive and size tier; every raised label is 18px, regardless of input/textarea type or standard/compact size.
 - No internal gap: textarea shells and any split anatomy inside them are flush; the 4px spacing unit is reserved for external gaps between whole controls.
 
@@ -278,8 +291,8 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 | Mini type/icon | 20px height; 1.5px / 3px geometry; 17.5px type/icon | Token and generated CSS align; duplicate tier declarations removed from core/recovery | Source aligned; runtime verification outstanding |
 | Micro | 12px; 1px stroke / 2px radius; 10px type/icon; 0.65px outline; `-0.02em` letter-spacing | Tokens, generated CSS, and system selector align | Source aligned; runtime verification outstanding |
 | Micro letter spacing | Shared `-0.02em` | TypeScript token matches the global contract | Source aligned; runtime verification outstanding |
-| Editable field inset | Primary inset persists at rest and focus; focus changes text/glyph to black | Shared field rules own editable text/stroke/color/caret; recovery field rules preserve the standard inset; split input owns its shell border and gradient inset in `studio-split-text-input.css` and routes focus through its shell | Source aligned; computed-style/browser verification outstanding |
-| TextBox | Black text/glyph; primary inset; secondary outline | Recovery CSS declares black text/glyph, primary inset, secondary outline | Source-aligned; browser verification outstanding |
+| Editable field inset | Primary inset persists at rest and focus; focus changes text/glyph to black | Shared field rules own editable text/stroke/color/caret; split input owns its black shell border and primary inset stroke, uses white-mixed rest/focus fills, and keeps its label as an interactive grid cell in `studio-split-text-input.css` | Source aligned; computed-style/browser verification outstanding |
+| TextBox | Primary text/glyph + 50% white/primary fill at rest; black text/glyph + 85% white/15% primary fill and secondary zero-offset outline when focusable; primary inset always | Field layer owns black outer border and primary inset; system layer owns primary resting glyphs; focus state switches glyphs to black | Source aligned; browser verification outstanding |
 | Catalog provenance | Real production exports; catalog CSS owns arrangement only | Confirmed catalog imports production primitives, including dedicated `StudioSplitTextInput` and `StudioSplitAccordion` | Source registration confirmed; visual certification outstanding |
 
 ### Required follow-up
@@ -341,7 +354,7 @@ All canonical Studio single-select dropdown variants (standard, simple, and spli
 - Global ownership order: global component defaults → five global size tiers → family defaults → registered primitive exceptions → generated variables and production consumers. Do not create a parallel token source or duplicate family override layer.
 - Five tiers: Supreme 60px / 3px / 6px / 52px; Standard 44px / 3px / 6px / 38px; Compact 28px / 2px / 4px / 24px; Mini 20px / 1.5px / 3px / 17.5px; Micro 12px / 1px / 2px / 10px. The sequence and values live in `STUDIO_CONTROL_SIZE_BASE`.
 - Text alignment for split-left, split-right, and double-split badges is measured against the full outer shell. The internal rail count must not move the label's center axis. Editable split text input is excluded and remains left-aligned.
-- Editable field glyph stroke always matches glyph fill: primary at rest, black on focus. The primary inline inset remains present in both states. TextBox always has black text/glyph, primary inline inset, and secondary zero-offset outline.
+- Editable field glyph stroke always matches glyph fill: primary at rest, black on focus. The primary inline inset remains present in both states. TextBox follows the same rest/focus field contract: primary text/glyph with a 50% white / 50% primary fill at rest; black text/glyph with an 85% white / 15% primary fill and secondary zero-offset outline when focusable.
 - Focused text fill and glyph stroke share the same transition duration/easing. Focus outline fade-out must animate instead of disappearing abruptly.
 - Inter-modules default to full width and flush edges; split rails are square to their tier, with no inherited 4px container inset.
 - Counter and side-counter number areas use 2:1 width-to-height geometry; split action rails remain 1:1 squares. The double-split Counter shell derives total width from four inner-height units (two square rails plus a 2h value area) plus the outer border strokes; Side Counter derives width from three inner-height units (one rail plus the 2h value area) plus the outer border strokes. This is a named family geometry exception, not a generic content-width exception. Side Counter is a separate Confirmed Library family module, not nested in Counter. The ratio and rail counts are named by STUDIO_COUNTER_NUMBER_TOKENS.valueAreaAspectRatio, doubleSplitRailCount, and sideRailCount, and emitted as --vt-studio-counter-value-area-aspect-ratio / --vt-studio-counter-double-rail-count / --vt-studio-counter-side-rail-count.

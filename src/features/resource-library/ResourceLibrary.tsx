@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom"
 import { SubToolbox, ToolboxScaffold } from "../../components/Toolbox"
 import { VT_SPECTRUM_PALETTE_06, getToolboxPaletteColors } from "../../styles/toolboxPalette"
 import ResourceDocumentRenderer from "./ResourceDocumentRenderer"
+import { StudioSplitLeftButton, StudioSpectrumTag } from "../../studio-ui"
 import {
   RESOURCE_LIBRARY_ENTRIES,
   RESOURCE_LEARNING_PATHS,
@@ -18,6 +19,8 @@ const getResourcePaletteStyle = (index: number): React.CSSProperties => {
   return {
     "--vt-resource-pair-primary": pair.header,
     "--vt-resource-pair-secondary": pair.icon,
+    "--pair-a": pair.header,
+    "--pair-b": pair.icon,
   } as React.CSSProperties
 }
 
@@ -203,22 +206,25 @@ const ResourceLibrary: React.FC = () => {
                 {filteredResources.map((resource) => {
                   const active = selectedResource?.id === resource.id
                   return (
-                    <button
+                    <StudioSplitLeftButton
                       key={resource.id}
                       type="button"
+                      sizeVariant="standard"
+                      icon={<FileText aria-hidden="true" />}
                       className={`vt-resource-card ${active ? "is-active" : ""}`}
                       style={getResourcePaletteStyle(resource.accentPaletteIndex)}
                       onClick={() => selectResource(resource.id)}
                       aria-pressed={active}
                     >
-                      <div className="vt-resource-card-icon"><FileText aria-hidden="true" /></div>
                       <div className="vt-resource-card-copy">
-                        <span>{resource.category}</span>
+                        <span className="vt-resource-card-category">{resource.category}</span>
                         <strong>{resource.shortTitle}</strong>
                         <small>{resource.readTime} · {resource.difficulty}</small>
-                        {completedResources.includes(resource.id) ? <em className="vt-resource-complete-mark">COMPLETED</em> : null}
+                        {completedResources.includes(resource.id) ? (
+                          <StudioSpectrumTag label="COMPLETED" spectrumKey="completed" className="vt-resource-complete-tag" />
+                        ) : null}
                       </div>
-                    </button>
+                    </StudioSplitLeftButton>
                   )
                 })}
 

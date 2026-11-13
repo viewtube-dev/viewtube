@@ -9,6 +9,7 @@ const valueToggles = read("src/studio-ui/primitives/StudioValueToggles.tsx");
 const generated = read("src/styles/studio-control-vars.generated.css");
 const system = read("src/styles/studio-control-system.css");
 const valueToggleCss = read("src/styles/studio-control-value-toggles.css");
+const core = read("src/styles/studio-control-core.css");
 const split = read("src/styles/studio-control-split.css");
 const recovery = read("src/styles/studio-control-recovery-overrides.css");
 const distill = read("src/styles/studio-control-distill-overrides.css");
@@ -32,11 +33,11 @@ const tiers = {
 
 test("all five size tiers are canonical, generated, and consumed by the system", () => {
   for (const [tier, values] of Object.entries(tiers)) {
-    const tokenBlock = tokens.match(new RegExp("\\b" + tier + ":\\s*\\{([^}]*)\\}"))?.[1];
+    const tokenBlock = tokens.match(new RegExp("\\b" + tier + ":\s*\{([^}]*)\\}"))?.[1];
     assert.ok(tokenBlock, "missing " + tier + " token object");
     for (const [key, value] of Object.entries(values)) {
       const numeric = String(value).replace(".", "\\.");
-      assert.match(tokenBlock, new RegExp("\\b" + key + ":\\s*" + numeric + "(?:,|\\s)"), tier + "." + key + " token");
+      assert.match(tokenBlock, new RegExp("\\b" + key + ":\s*" + numeric + "(?:,|\s)"), tier + "." + key + " token");
       const cssKey = key.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase());
       assert.ok(generated.includes("--vt-studio-" + tier + "-" + cssKey + ": " + value + "px;"), tier + "." + key + " generated variable");
     }
@@ -107,11 +108,6 @@ test("counter, slider and value-toggle families inherit the global full-row widt
   assert.ok(system.includes(".vt-studio-vertical-word-toggle"));
 });
 
-test("bar-toggle bars use the restored standard-height ratio", () => {
-  assert.match(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?height:\s*65%/);
-  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar[^}]*height:\s*65%/);
-});
-
 test("side-toggle arrow buttons occupy equal grid rows and labels are vertically centered", () => {
   assert.match(sideRailCss, /grid-template-rows:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(sideRailCss, /\.vt-studio-side-counter__actions\s*>\s*button,[\s\S]*?height:\s*auto/s);
@@ -160,10 +156,38 @@ test("side and double-side toggle rail buttons reuse the side-counter action sys
   assert.ok(system.includes(".vt-studio-side-counter__actions button"));
 });
 
-test("bar toggle bars stay below the control height and double-split word labels are vertically centered", () => {
-  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*height:\s*50%/s);
-  assert.match(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?height:\s*50%/);
-  assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar,[\s\S]*?height:\s*var\(--vt-bar-height\)/);
+test("square icon button group is content-width and system-owned with primary/secondary selection", () => {
+  const start = system.indexOf(".vt-studio-square-icon-button-group {");
+  const end = system.indexOf("}", start);
+  const groupRule = system.slice(start, end);
+  assert.notEqual(start, -1, "square icon group base rule should exist");
+  assert.equal((system.match(/\.vt-studio-square-icon-button-group\s*\{/g) || []).length, 1, "square icon group should have one base geometry rule");
+  assert.match(groupRule, /display:\s*inline-flex/);
+  assert.match(groupRule, /width:\s*max-content/);
+  assert.match(groupRule, /flex:\s*0 0 auto/);
+  assert.match(groupRule, /align-self:\s*flex-start/);
+  assert.match(groupRule, /overflow:\s*visible/);
+  assert.doesNotMatch(distill, /\.vt-studio-square-icon-button-group/);
+  assert.match(system, /data-vt-studio-button-variant="v3"\]\[data-vt-studio-button-on="false"[\s\S]*?background:\s*var\(--pair-a/);
+  assert.match(system, /data-vt-studio-button-variant="v3"\]\[data-vt-studio-button-on="true"[\s\S]*?background:\s*var\(--pair-b/);
+});
+
+test("bar toggle geometry and fills are owned by the primitive stylesheet and canonical tokens", () => {
+  assert.match(valueToggleCss, /--vt-bar-height:\s*calc\(var\(--vt-studio-control-font-size,\s*38px\)\s*\*\s*var\(--vt-studio-bar-height-to-text-ratio,\s*1\)\)/);
+  assert.match(valueToggleCss, /--vt-bar-width:\s*calc\(var\(--vt-bar-height\)\s*\/\s*var\(--vt-studio-bar-height-to-width-ratio,\s*2\.5\)\)/);
+  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*height:\s*var\(--vt-bar-height\)/s);
+  assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*border-radius:\s*var\(--vt-bar-radius\)/s);
+  assert.match(valueToggleCss, /background:\s*color-mix\(in srgb,\s*#fff var\(--vt-studio-bar-empty-white-mix,\s*50%\),\s*var\(--vt-studio-control-accent/);
+  assert.match(valueToggleCss, /background:\s*var\(--vt-studio-bar-full-fill,\s*#000000\)/);
+  assert.match(generated, /--vt-studio-bar-height-to-text-ratio:\s*1;/);
+  assert.match(generated, /--vt-studio-bar-height-to-width-ratio:\s*2\.5;/);
+  assert.match(generated, /--vt-studio-bar-radius:\s*2px;/);
+  assert.match(generated, /--vt-studio-bar-empty-white-mix:\s*50%;/);
+  assert.match(generated, /--vt-studio-bar-full-fill:\s*#000000;/);
+  assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar/);
+  assert.doesNotMatch(distill, /\.vt-studio-value-toggle--bar/);
+  assert.match(core, /\[data-vt-studio-control="true"\] \[data-vt-studio-split-rail\][\s\S]*?position:\s*relative;[\s\S]*?z-index:\s*1/);
+  assert.doesNotMatch(distill, /\[data-vt-studio-split-rail\]/);
   assert.match(system, /button\[data-vt-studio-play-pause="true"\]\[aria-pressed="true"\] \[data-vt-studio-split-rail\]\[data-rail="start"\][\s\S]*?background-color:\s*var\(--vt-studio-control-primary/);
   assert.match(valueToggleCss, /\.vt-studio-word-counter__value[^}]*place-items:\s*center/s);
 });
@@ -247,10 +271,14 @@ test("counter and bar family geometry comes from canonical family tokens and the
   assert.ok(split.includes("width: var(--vt-studio-counter-root-width)"));
   assert.ok(catalogCss.includes(":not(.vt-studio-counter):not(.vt-studio-side-counter):not(.vt-studio-left-counter)"));
   assert.ok(catalogCss.includes("justify-self: center;"));
-  assert.ok(distill.includes("--vt-bar-height:"));
-  assert.ok(distill.includes("--vt-bar-gap:"));
+  assert.ok(valueToggleCss.includes("--vt-bar-height: calc("));
+  assert.ok(valueToggleCss.includes("--vt-bar-width: calc("));
+  assert.ok(valueToggleCss.includes("var(--vt-studio-bar-empty-white-mix, 50%)"));
   assert.ok(valueToggleCss.includes('.vt-studio-value-toggle__bar[data-active="true"]'));
-  assert.ok(valueToggleCss.includes("background: var(--vt-studio-control-secondary"));
+  assert.ok(valueToggleCss.includes("background: var(--vt-studio-bar-full-fill, #000000)"));
+  assert.ok(!distill.includes("--vt-bar-height:"));
+  assert.ok(!distill.includes("--vt-bar-gap:"));
+  assert.ok(!distill.includes(".vt-studio-value-toggle__bar"));
   assert.ok(split.includes("flex: 0 0 var(--vt-studio-control-height, 44px)"));
   assert.ok(split.includes("width: var(--vt-studio-control-height, 44px)"));
   assert.ok(split.includes("height: 100%"));
@@ -316,4 +344,80 @@ test("Confirmed Library keeps the split text input in the canonical Text Fields 
   assert.ok(catalogCss.includes("grid-template-columns: minmax(0, 1fr)"));
   assert.ok(catalog.includes("<ConfirmedStudioCounterFamily />"));
   assert.ok(catalog.includes("<ConfirmedStudioSideCounterFamily />"));
+});
+
+
+test("counter module specimens preserve the canonical full-width three-cell shell", () => {
+  assert.match(system, /\.vt-confirmed-counter-pair\s*>\s*\.vt-studio-counter\s*\{[^}]*width:\s*100%/s);
+  assert.match(system, /\.vt-confirmed-counter-pair\s*>\s*\.vt-studio-value-toggle\.vt-studio-word-counter\s*\{[^}]*width:\s*100%/s);
+  assert.match(system, /\.vt-confirmed-counter-pair\s*>\s*\.vt-studio-counter\s*\{[^}]*flex:\s*0\s+1\s+100%/s);
+});
+
+test("StudioCounter owns one divider at each value-panel edge, never stacked rail borders", () => {
+  const start = system.lastIndexOf("/* StudioCounter interior divider ownership");
+  assert.ok(start >= 0, "counter divider ownership must be explicit in the canonical system stylesheet");
+  const block = system.slice(start);
+  assert.match(block, /\.vt-studio-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-rail\]\s*\{[^}]*border:\s*0/s);
+  assert.match(block, /\.vt-studio-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-label\]\s*\{[^}]*border-left:\s*var\(--vt-studio-control-stroke/s);
+  assert.match(block, /border-right:\s*var\(--vt-studio-control-stroke/s);
+});
+
+test("double-split word counter paints one vertical divider at each button-to-panel join", () => {
+  const start = valueToggleCss.lastIndexOf("/* Double-split word-counter divider ownership");
+  assert.ok(start >= 0, "word-counter divider ownership must be explicit in its primitive stylesheet");
+  const block = valueToggleCss.slice(start);
+  assert.match(block, /\.vt-studio-word-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-rail\]\s*\{[^}]*border:\s*0/s);
+  assert.match(block, /\.vt-studio-word-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-label\]\s*\{[^}]*border-left:\s*var\(--vt-studio-control-stroke/s);
+  assert.match(block, /border-right:\s*var\(--vt-studio-control-stroke/s);
+  assert.ok(valueToggles.includes('className={["vt-studio-value-toggle", "vt-studio-word-counter"'));
+});
+
+
+test("StudioSideTextCounter has one outer black perimeter and no nested field border", () => {
+  const start = fields.lastIndexOf("/* StudioSideTextCounter exception");
+  assert.ok(start >= 0, "side text counter field ownership must be explicit");
+  const block = fields.slice(start);
+  assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*border:\s*0/s);
+  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*border:\s*0/s);
+  assert.match(block, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke/);
+  assert.ok(controls.includes('fieldSlot'));
+});
+
+
+test("StudioSideTextCounter input is inset and vertically centered within the shell perimeter", () => {
+  const start = fields.lastIndexOf("/* StudioSideTextCounter: the shell owns the black perimeter;");
+  assert.ok(start >= 0, "side text counter inset layout must be explicit");
+  const block = fields.slice(start);
+  assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*display:\s*flex/s);
+  assert.match(block, /align-items:\s*center/s);
+  assert.match(block, /padding-block:\s*var\(--vt-studio-control-stroke/s);
+  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*height:\s*100%/s);
+});
+
+
+test("StudioSideTextCounter primary inline stroke is thinner on horizontal edges than vertical edges", () => {
+  const start = fields.lastIndexOf("/* StudioSideTextCounter: the shell owns the black perimeter;");
+  assert.ok(start >= 0, "side text counter field inset rule must exist");
+  const block = fields.slice(start);
+  assert.match(block, /box-shadow:\s*inset 0 calc\(var\(--vt-studio-control-stroke, 3px\) \* 0\.5\) 0 0 var\(--vt-field-primary/);
+  assert.match(block, /inset 0 calc\(var\(--vt-studio-control-stroke, 3px\) \* -0\.5\) 0 0 var\(--vt-field-primary/);
+  assert.match(block, /inset var\(--vt-studio-control-stroke, 3px\) 0 0 0 var\(--vt-field-primary/);
+  assert.match(block, /inset calc\(var\(--vt-studio-control-stroke, 3px\) \* -1\) 0 0 0 var\(--vt-field-primary/);
+});
+
+
+test("single-line text fields use native vertical centering across every split-field family", () => {
+  const stylesheets = [
+    ["plain text input", read("src/styles/studio-text-input.css")],
+    ["split text input", read("src/studio-ui/primitives/studio-split-text-input.css")],
+    ["icon rail text input", read("src/studio-ui/primitives/studio-icon-rail-text-input.css")],
+    ["shared side-counter field", read("src/styles/studio-control-fields.css")],
+  ];
+  for (const [name, css] of stylesheets) {
+    assert.match(css, /line-height:\s*normal\s*;/, name + " must use native vertical centering");
+    assert.doesNotMatch(css, /input[^{}]*\{[^}]*line-height:\s*1\s*;/s, name + " must not force a tight native-input line box");
+  }
+  const system = read("src/styles/studio-control-system.css");
+  assert.match(system, /input\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="text-input"\]\s*\{[^}]*line-height:\s*normal\s*;/s,
+    "the global field selector must not override native input centering with the 1em control token");
 });

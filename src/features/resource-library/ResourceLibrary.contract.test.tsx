@@ -1,10 +1,44 @@
 import React from "react"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { MemoryRouter } from "react-router-dom"
 import { describe, expect, it } from "vitest"
 import ResourceLibrary from "./ResourceLibrary"
+import { StudioSpectrumTag } from "../../studio-ui"
 
 describe("Resource Library production reader", () => {
+  it("restores the original Resource Index row treatment while keeping a square canonical split-left rail", () => {
+    const html = renderToStaticMarkup(
+      <MemoryRouter initialEntries={["/resources?resource=youtube-recommendations-discovery"]}>
+        <ResourceLibrary />
+      </MemoryRouter>,
+    )
+    const css = readFileSync(resolve(process.cwd(), "src/features/resource-library/resource-library.css"), "utf8")
+
+    expect(html).toContain('data-vt-library-component="StudioSplitLeftButton"')
+    expect(html).toContain('data-vt-studio-split="left"')
+    expect(html).toContain('data-rail="start"')
+    expect(html).toContain("vt-resource-card-copy")
+    expect(html).toContain("vt-resource-card-category")
+    expect(html).toContain("YouTube Strategy")
+    expect(css).toContain("min-height: 76px")
+    expect(css).toContain("border-radius: 10px")
+    expect(css).toContain("aspect-ratio: 1 / 1")
+    expect(css).toContain("width: var(--vt-studio-control-height, 44px)")
+    expect(css).toContain("height: var(--vt-studio-control-height, 44px)")
+  })
+
+  it("uses the canonical Spectrum tag for completed document status", () => {
+    const html = renderToStaticMarkup(
+      <StudioSpectrumTag label="COMPLETED" spectrumKey="completed" className="vt-resource-complete-tag" />,
+    )
+
+    expect(html).toContain("COMPLETED")
+    expect(html).toContain("vt-resource-complete-tag")
+    expect(html).toContain('data-vt-studio-exception="vault-spectrum-tag"')
+  })
+
   it("renders the creator-first recommendations guide through Toolbox document modules", () => {
     const html = renderToStaticMarkup(
       <MemoryRouter

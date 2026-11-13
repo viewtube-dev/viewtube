@@ -157,66 +157,97 @@
   gap: 7px;
 }
 
-.vt-resource-card {
+.vt-resource-card[data-vt-studio-button="true"] {
   width: 100%;
+  min-width: 0;
   min-height: 76px;
-  display: grid;
-  grid-template-columns: 48px minmax(0, 1fr);
-  gap: 10px;
-  align-items: stretch;
+  height: auto;
   padding: 0;
+  color: var(--vt-resource-ink);
+  text-align: left;
+  overflow: visible;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.vt-resource-card[data-vt-studio-button="true"][data-vt-studio-split="left"] > [data-vt-studio-button-face] {
+  box-sizing: border-box;
+  min-height: 70px;
+  height: 100%;
   border: 3px solid var(--vt-resource-ink);
   border-radius: 10px;
   background: #fff;
-  color: var(--vt-resource-ink);
-  text-align: left;
   overflow: hidden;
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
 }
 
-.vt-resource-card:hover {
+.vt-resource-card:hover,
+.vt-resource-card:focus-visible {
   transform: translate(-1px, -1px);
   box-shadow: 4px 4px 0 var(--vt-resource-pair-shadow);
 }
 
 .vt-resource-card.is-active {
-  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 11%, white);
   box-shadow: 4px 4px 0 var(--vt-resource-pair-shadow);
 }
 
-.vt-resource-card-icon {
-  min-width: 48px;
+/* Preserve the canonical split-left grid and keep its icon cell square at 44×44. */
+.vt-resource-card[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-rail] {
+  box-sizing: border-box;
+  width: var(--vt-studio-control-height, 44px);
+  min-width: var(--vt-studio-control-height, 44px);
+  height: var(--vt-studio-control-height, 44px);
+  aspect-ratio: 1 / 1;
+  align-self: center;
   display: grid;
   place-items: center;
   border-right: 3px solid var(--vt-resource-ink);
   background: var(--vt-resource-pair-secondary, var(--vt-spectrum-0));
 }
 
-.vt-resource-card-icon svg {
-  width: 23px;
-  height: 23px;
-  stroke-width: 3;
+.vt-resource-card[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  background: #fff;
+}
+
+.vt-resource-card.is-active[data-vt-studio-button="true"][data-vt-studio-split="left"] [data-vt-studio-split-label] {
+  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 11%, white);
 }
 
 .vt-resource-card-copy {
   min-width: 0;
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   justify-content: center;
   gap: 2px;
   padding: 8px 9px 8px 0;
+  text-align: left;
 }
 
-.vt-resource-card-copy > span {
+.vt-resource-card-category {
+  min-width: 0;
+  color: color-mix(in srgb, var(--vt-resource-purple) 76%, var(--vt-resource-ink));
   font-size: 8px;
+  line-height: 1.1;
   font-weight: 1000;
   letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--vt-resource-purple) 76%, var(--vt-resource-ink));
+}
+
+.vt-resource-complete-tag {
+  align-self: flex-start;
+  margin-top: 4px;
+  flex: 0 0 auto;
 }
 
 .vt-resource-card-copy > strong {
+  min-width: 0;
   font-size: 12px;
   line-height: 1.08;
   font-weight: 1000;
@@ -225,6 +256,7 @@
 
 .vt-resource-card-copy > small {
   font-size: 9px;
+  line-height: 1.1;
   font-weight: 800;
   opacity: 0.54;
 }
@@ -253,15 +285,13 @@
   width: fit-content;
   max-width: 100%;
   margin-bottom: 12px;
-  padding: 5px 8px;
-  border: 2px solid var(--vt-resource-ink);
-  border-radius: 5px;
-  background: var(--vt-resource-cyan);
-  font-size: 9px;
-  line-height: 1.1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  color: var(--vt-resource-ink);
+  font-size: 10px;
   font-weight: 1000;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .vt-resource-document-hero h1 {
@@ -315,16 +345,7 @@
   gap: 5px;
 }
 
-.vt-resource-tag-row span {
-  padding: 4px 7px;
-  border: 2px solid var(--vt-resource-ink);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 40%, white);
-  font-size: 8px;
-  font-weight: 1000;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
+
 
 .vt-resource-intro {
   padding: 14px 16px;
@@ -918,20 +939,6 @@
   background: color-mix(in srgb, var(--vt-resource-pair-primary, var(--vt-spectrum-8)) 9%, var(--vt-resource-paper));
   font-size: 11px;
   font-weight: 900;
-}
-
-.vt-resource-complete-mark {
-  align-self: flex-start;
-  margin-top: 4px;
-  padding: 2px 5px;
-  border: 1px solid var(--vt-resource-pair-secondary, var(--vt-spectrum-0));
-  border-radius: 4px;
-  color: var(--vt-resource-ink);
-  background: color-mix(in srgb, var(--vt-resource-pair-secondary, var(--vt-spectrum-0)) 15%, var(--vt-resource-paper));
-  font-size: 8px;
-  font-style: normal;
-  font-weight: 950;
-  letter-spacing: 0.06em;
 }
 
 .vt-resource-reader-actions {

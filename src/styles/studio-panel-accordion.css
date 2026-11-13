@@ -1,0 +1,64 @@
+/* StudioPanelAccordion: one square selector rail and one flexible active panel. */
+.vt-studio-panel-accordion {
+  --vt-studio-panel-height: var(--vt-studio-control-height, 44px);
+  --vt-studio-panel-stroke: var(--vt-studio-control-stroke, 3px);
+  --vt-studio-panel-radius: var(--vt-studio-control-radius, 6px);
+  display: grid;
+  grid-template-columns: var(--vt-studio-panel-height) minmax(0, 1fr);
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  border: var(--vt-studio-panel-stroke) solid #000;
+  border-radius: var(--vt-studio-panel-radius);
+  overflow: hidden;
+  background: color-mix(in srgb, white 50%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%);
+}
+.vt-studio-panel-accordion[data-size="compact"] {
+  --vt-studio-panel-height: var(--vt-studio-compact-height, 28px);
+  --vt-studio-panel-stroke: var(--vt-studio-compact-stroke, 2px);
+  --vt-studio-panel-radius: var(--vt-studio-compact-radius, 4px);
+}
+.vt-studio-panel-accordion__rails {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-right: var(--vt-studio-panel-stroke) solid #000;
+}
+.vt-studio-panel-accordion__rail {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--vt-studio-panel-height);
+  min-width: var(--vt-studio-panel-height);
+  min-height: var(--vt-studio-panel-height);
+  padding: 0;
+  border: 0;
+  border-bottom: var(--vt-studio-panel-stroke) solid #000;
+  border-radius: 0;
+  background: var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  color: #000;
+  cursor: pointer;
+}
+.vt-studio-panel-accordion__rail:last-child { border-bottom: 0; }
+.vt-studio-panel-accordion__rail[data-active="true"] {
+  background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
+}
+.vt-studio-panel-accordion__rail:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: calc(var(--vt-studio-panel-stroke) * .65) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: calc(var(--vt-studio-panel-stroke) * -1);
+}
+.vt-studio-panel-accordion__icon,
+.vt-studio-panel-accordion__icon svg {
+  display: block;
+  width: min(62%, 28px);
+  height: min(62%, 28px);
+}
+.vt-studio-panel-accordion__panel {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: var(--vt-studio-panel-height);
+  padding: var(--vt-studio-space-unit, 4px);
+  background: color-mix(in srgb, white 85%, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 15%);
+}

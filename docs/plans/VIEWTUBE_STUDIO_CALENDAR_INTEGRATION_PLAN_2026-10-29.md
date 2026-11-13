@@ -1,10 +1,10 @@
 # ViewTube Studio Calendar — Primitive Integration & Copy Contract
 
 **Date:** 2026-10-29  
-**Target branch:** `master/consolidated-feature-integration`  
-**Implementation branch:** `feat/studio-calendar-controls-integration-2026-10-29`  
+**PR target branch:** `fix/studio-controls-regression-recovery-2026-10-31`  
+**Implementation branch:** `feat/calendar-resource-analytics-consolidation-2026-11-11`  
 **Canonical data owner:** Projects / Project records; no second calendar store  
-**Status:** Implementation in progress; release gates not yet certified
+**Status:** Phases 0–3 implementation in progress on the recovery-targeted branch; runtime verification and release gates remain open
 
 ## Product contract
 
@@ -25,6 +25,51 @@ The visual language stays neo-brutalist and uses the canonical Studio controls f
 | 5. Projects integration | Use Studio primitives in the existing calendar without replacing its state/data owner | **Implemented; verification pending** | Calendar controls use Studio button, square icon button, dropdown, closeable badge, event-chip and media-rail primitives; inline styles moved to `ProjectPlannerCalendar.css` |
 | 6. Development workflow/data | Preserve project opening, schedule edits, task dates, and identity; reconcile external publishing state only through existing owners | **Integrated locally; external refresh remains pending** | Current Project `publishDate` and `tasks` remain canonical; saved ContentBuild YouTube binding status is displayed and schedule-date drift is surfaced. This is a read-only saved-state view, not a live YouTube API refresh. Post-publish checkpoints remain outside this phase |
 | 7. Docs, regression, PR | Record copy contract, add tests/catalog coverage, run gates, open PR | **In progress** | This document and focused tests are added; CI/browser review and PR creation remain |
+
+
+## Recovery-branch execution record — phases 0–3
+
+### Phase 0 — source and branch reconciliation
+
+- The recovery branch is the PR base: `fix/studio-controls-regression-recovery-2026-10-31`.
+- The implementation branch is based directly on that recovery branch, preserving its 28 commits that are not present on `master/consolidated-feature-integration`.
+- The target branch has two commits not present on the recovery branch. They are not merged wholesale; calendar work is being selectively applied to the recovery branch to avoid replacing Studio Controls recovery work.
+- The October 29 calendar integration and catalog branches are historical references, not merge candidates. The standalone calendar HTML is a visual/interaction specimen only; its localStorage demo data is not production persistence.
+- Canonical source references reconciled: this plan, the 13B Planner Calendar guides, the Projects / Asset Engine / Publishing architecture plan, the integrated content lifecycle plan, the Brain master resource, and the Studio Hub component-library source of truth.
+- Repository hygiene: do not overwrite the unrelated Settings task files. This calendar plan remains the single calendar roadmap; older 13B guides are behavioral references, not competing checklists.
+
+### Phase 1 — event contract and source ownership
+
+The shared projection contract is `src/services/calendar/calendarEventContract.ts`. It defines a source-owned event projection, stable owner/record identity, inclusive date ranges, status, optional timezone, Asset Engine/Vault thumbnail identity, and externally verified schedule metadata.
+
+| Calendar projection | Canonical owner | Existing field / rule |
+| --- | --- | --- |
+| Project publication | Projects | `Project.publishDate`; one-day event |
+| Project task | Projects | `Project.tasks[].dueDate`; one-day event |
+| YouTube scheduled/published state | Publisher / ContentBuild | `ContentBuild.youtube`; show only verified external state |
+| Thumbnail/media | Asset Engine / Vault | Asset ID and provenance; UI resolves preview URL |
+| Multi-day project/campaign bar | Owning project/workflow | Requires an explicit owner-managed start/end range |
+
+No calendar table, browser-local calendar store, duplicate task store, or new Project date-range fields are introduced in this phase. `publishDate` remains the publication date and must not be overloaded as a project start/end date. A future range field must be approved and persisted by the owning Projects workflow before the calendar projects it.
+
+### Phase 2 — Mini Studio calendar primitives
+
+- `StudioCalendarEventChip` now has a Mini size variant while retaining its existing Standard default and removal/status behavior.
+- `StudioCalendarMultiDayBar` represents one-day and week-segmented bars with explicit start/middle/end/single segments, status, selected state, optional progress, and channel-wide dashed treatment.
+- `StudioCalendarThumbnailEventChip` adds an inline left 16:9 thumbnail section sized from the Mini chip height; it accepts a resolved thumbnail URL and has an accessible empty-image fallback.
+- `StudioCalendarMediaRail` remains the larger 16:9 / 9:16 media composition and is not repurposed as a thumbnail chip.
+- Mini geometry follows the shared Studio size ladder: 20px overall height, 1.5px border, 3px horizontal padding. Calendar fills use 50% white mixed with the semantic color, never 50% transparency.
+- The new primitives use the existing global Studio control tokens and are publicly exported from `src/studio-ui/index.ts`.
+
+### Phase 3 — confirmed primitive catalog
+
+- The confirmed catalog imports the production calendar primitives directly from `StudioCalendarPrimitives.tsx`.
+- The calendar family presents Mini event chips, the segmented multi-day bar, and the thumbnail event chip as actual components, alongside the existing larger media-rail specimens.
+- Catalog regression coverage asserts the new production component markers, Mini size, segment variants, 16:9 thumbnail split, and public exports.
+
+### Verification status
+
+The source changes and regression assertions have been authored on the implementation branch. The repository runtime is not available in this execution environment, so the focused Vitest test, Studio Controls test gate, typecheck, build, and browser rendering have **not** been run here. Do not treat phases 2–3 as certified until those checks run in CI or a repository-capable environment.
 
 ## Creator-facing copy contract
 
@@ -76,4 +121,4 @@ The design uses uppercase Studio faces for compact control labels; explanatory h
 - [ ] Reduced-motion behavior is verified.
 - [ ] Project schedule changes are verified to persist through the existing Project owner.
 - [ ] External YouTube publish/scheduled state is reconciled only through its canonical integration; no fake status or inferred sync.
-- [ ] PR is opened against `master/consolidated-feature-integration` with honest verification results.
+- [ ] PR is opened against `fix/studio-controls-regression-recovery-2026-10-31` with honest verification results.

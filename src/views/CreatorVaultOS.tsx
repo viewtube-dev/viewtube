@@ -79,7 +79,7 @@ import {
  updateVaultTask,
 } from "../services/vaultTaskCenter"
 import { resolveVaultSelection } from "../services/vaultSelection"
-import { isVaultAssetProtected } from "../services/vaultMutationPolicy"
+import { canMutateVaultAsset } from "../services/vaultMutationPolicy"
 import { resolveVaultComparePair } from "../services/vaultCompare"
 import {
  createVaultSmartCollection,
@@ -598,23 +598,25 @@ const CreatorVaultOS: React.FC = () => {
     ? asset.kind
     : "document"
   ))
-  const protectedSelection = selectedRecords.some((asset) => isVaultAssetProtected(asset))
-  /* lifecycle state is evaluated independently from account/workspace authorization */
-  const allSelectedTrashed = selectedRecords.length > 0 && selectedRecords.every((asset) => (
-   Boolean(asset.metadata?.trashedAt) || String(asset.metadata?.lifecycle || "").toUpperCase() === "TRASHED"
-  ))
-  const anySelectedTrashed = selectedRecords.some((asset) => (
-   Boolean(asset.metadata?.trashedAt) || String(asset.metadata?.lifecycle || "").toUpperCase() === "TRASHED"
-  ))
+  /* Local lifecycle policy drives UI eligibility; server/account authorization remains separate. */
+  const canArchiveSelection = selectedRecords.length > 0
+   && selectedRecords.every((asset) => canMutateVaultAsset(asset, "archive"))
+  const canDeleteSelection = selectedRecords.length > 0
+   && selectedRecords.every((asset) => canMutateVaultAsset(asset, "permanent-delete"))
+  const canEditSelectedMetadata = selectedRecords.length === 1
+   && canMutateVaultAsset(selectedRecords[0], "metadata-edit")
+  /* The current handoff handler accepts one selected asset and requires a registered compatible target. */
+  const canSendSelectedAsset = selectedRecords.length === 1
+   && getVaultAssetToolTargets(selectedRecords[0].kind).length > 0
   return resolveVaultMediaCapabilities({
    kinds,
    videoProcessorAvailable: false,
    audioProcessorAvailable: false,
    eligibility: {
-    archive: selectedRecords.length > 0 && !protectedSelection && !anySelectedTrashed,
-    delete: allSelectedTrashed && !protectedSelection,
-    metadataEdit: selectedRecords.length === 1 && !anySelectedTrashed,
-    sendTo: selectedRecords.length > 0,
+    archive: canArchiveSelection,
+    delete: canDeleteSelection,
+    metadataEdit: canEditSelectedMetadata,
+    sendTo: canSendSelectedAsset,
    },
   })
  }, [allAssets, selectedAssetIds])
@@ -1281,14 +1283,13 @@ const CreatorVaultOS: React.FC = () => {
  }
 
  const resolveAssetYouTubeVideoId = (asset: VaultAsset): string | null => {
-  const direct = asset.metadata?.youtubeVideoId || asset.metadata?.videoId
-  if (typeof direct === "string" && direct.trim()) return direct.trim()
   const usage = getVaultAssetUsage(asset.id)
   for (const item of usage) {
-   const videoId = getContentBuild(item.contentBuildId)?.youtube?.videoId
+   const contentBuildVideoId = getContentBuild(item.contentBuildId)?.youtube?.videoId || null
+   const videoId = resolveVaultTranscriptVideoId({ asset, contentBuildVideoId })
    if (videoId) return videoId
   }
-  return null
+  return resolveVaultTranscriptVideoId({ asset })
  }
 
  const acquireTranscriptForAsset = async (asset: VaultAsset, taskId?: string | null) => {
@@ -2292,7 +2293,7 @@ const CreatorVaultOS: React.FC = () => {
       {selectedAssetIds.length && assetOperationsMode === "tools" ? (
        <section aria-label="Send to ViewTube" className="rounded-lg border-[3px] border-current p-3">
         <div className="mb-2 text-xs font-black uppercase">Send to ViewTube…</div>
-        {selectedAsset && selectedToolTargets.length ? (
+        {selectedAssetIds.length === 1 && selectedAsset && selectedToolTargets.length ? (
          <div className="flex flex-wrap gap-2">
           {selectedToolTargets.map((target) => (
            <SubToolboxInnerActionButton key={target.id} label={target.label} iconName="link" tone="blue" onClick={() => sendSelectedAssetToTool(target.id)} />
@@ -3466,18 +3467,21 @@ const CreatorVaultOS: React.FC = () => {
          <div>
           <div className="mb-2 text-xs font-black uppercase opacity-60">Recovery & Lifecycle</div>
           <div className="flex flex-wrap gap-2">
-           {selectedAsset.metadata?.trashed === true ? (
+           {selectedAsset.metadata?.trashedAt || String(selectedAsset.metadata?.lifecycle || "").toUpperCase() === "TRASHED" ? (
             <>
              <SubToolboxInnerActionButton label="Restore from Trash" iconName="checklist" tone="green" onClick={() => restoreAsset(selectedAsset)} />
              <SubToolboxInnerActionButton label="Delete Permanently" iconName="x" tone="pink" onClick={() => permanentlyDeleteAsset(selectedAsset)} />
             </>
-           ) : selectedAsset.metadata?.archived === true ? (
+           ) : selectedAsset.metadata?.archivedAt || String(selectedAsset.metadata?.lifecycle || "").toUpperCase() === "ARCHIVED" ? (
             <>
              <SubToolboxInnerActionButton label="Restore from Archive" iconName="checklist" tone="green" onClick={() => restoreAsset(selectedAsset)} />
              <SubToolboxInnerActionButton label="Move to Trash" iconName="x" tone="pink" onClick={() => trashAsset(selectedAsset)} />
             </>
            ) : (
-            <SubToolboxInnerActionButton label="Move to Trash" iconName="x" tone="pink" onClick={() => trashAsset(selectedAsset)} />
+            <>
+             <SubToolboxInnerActionButton label="Archive Asset" iconName="archive" tone="cyan" onClick={() => archiveAsset(selectedAsset)} />
+             <SubToolboxInnerActionButton label="Move to Trash" iconName="x" tone="pink" onClick={() => trashAsset(selectedAsset)} />
+            </>
            )}
           </div>
          </div>

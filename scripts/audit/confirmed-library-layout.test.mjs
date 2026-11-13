@@ -506,6 +506,25 @@ test("StudioDropdown owns the simple variant without a duplicate primitive famil
   assert.match(catalog, /<StudioDropdown sizeVariant="standard" ariaLabel="Studio dropdown standard specimen"/);
 });
 
+test("StudioSideTextCounter composes the side-counter rail with the canonical editable Studio input", () => {
+  assert.ok(controls.includes("export const StudioSideTextCounter = React.forwardRef"));
+  assert.ok(controls.includes("<StudioTextInput"));
+  assert.ok(controls.includes('type="text"'));
+  assert.ok(controls.includes("onChange={event => onValueChange(event.currentTarget.value)}"));
+  assert.ok(controls.includes('aria-label={inputProps["aria-label"] ?? ariaLabel}'));
+  assert.ok(controls.includes("onValueChange(String(Math.min(max, Math.max(min, next))))"));
+  assert.ok(controls.includes("const isAdjustable = textValue.trim() === \"\" || Number.isFinite(parsedValue)"));
+  assert.ok(controls.includes("!isAdjustable"));
+  const textInput = readFileSync("src/studio-ui/primitives/StudioTextInput.tsx", "utf8");
+  assert.ok(textInput.includes('data-vt-studio-field-kind="text-input"'));
+  const publicIndex = readFileSync("src/studio-ui/index.ts", "utf8");
+  assert.ok(publicIndex.includes("StudioSideTextCounter"));
+  const controlStyles = readFileSync("src/styles/studio-control-system.css", "utf8");
+  assert.ok(controlStyles.includes(".vt-studio-side-text-counter > [data-vt-studio-split-field]"));
+  assert.ok(catalog.includes('data-vt-library-component="StudioSideTextCounter"'));
+  assert.ok(catalog.includes('aria-label="Standard side text counter specimen"'));
+});
+
 test("StudioSplitTextInput is a real exported primitive with a full-width standard specimen", () => {
   const splitInput = readFileSync("src/studio-ui/primitives/StudioSplitTextInput.tsx", "utf8");
   const publicIndex = readFileSync("src/studio-ui/index.ts", "utf8");

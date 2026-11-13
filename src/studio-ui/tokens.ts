@@ -159,6 +159,14 @@ export const STUDIO_DROPDOWN_TOKENS = {
 
 
 /** Global open-menu defaults shared by standard, simple, and split-left dropdowns. */
+export const STUDIO_ICON_SIZE_COMPARISON = {
+  current: { standard: { size: 28, stroke: 2.5 }, compact: { size: 18, stroke: 1.65 } },
+  moderate: { standard: { size: 34, stroke: 2.0588 }, compact: { size: 22, stroke: 1.35 } },
+  large: { standard: { size: 38, stroke: 1.9 }, compact: { size: 24, stroke: 2.0 } },
+} as const
+
+export type StudioIconSizeVariant = keyof typeof STUDIO_ICON_SIZE_COMPARISON
+
 export const STUDIO_DROPDOWN_MENU_TOKENS = {
   menuGap: 8,
   menuPadding: 4,

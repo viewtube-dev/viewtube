@@ -52,4 +52,11 @@ describe("Vault archive and trash recovery", () => {
   setVaultAssetProtection(golden.id, true)
   expect(deleteVaultAsset(golden.id)).toBe(false)
  })
+ it("rejects restore requests for assets that are not archived or trashed", () => {
+  const asset = createLocalVaultAsset({ name: "Still Active", kind: "image", tags: [] })
+  expect(setVaultAssetState(asset.id, { archived: false })).toBeNull()
+  expect(setVaultAssetState(asset.id, { trashed: false })).toBeNull()
+  expect(listVaultAssets()[0]?.metadata?.lifecycle).toBeUndefined()
+ })
+
 })

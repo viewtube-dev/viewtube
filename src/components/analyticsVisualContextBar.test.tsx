@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest"
+import { renderToStaticMarkup } from "react-dom/server"
+import { AnalyticsActiveStats } from "./analyticsVisualContextBar"
 import {
   ANALYTICS_DARK_STATS_BACKGROUND,
   ANALYTICS_DARK_STATS_NEUTRAL_VALUE,
@@ -8,6 +10,27 @@ import {
   resolveAnalyticsVisualContextBarHeight,
 } from "./analyticsVisualContextBar"
 import { VT_VISUAL_METRIC_COLORS } from "../styles/toolboxPalette"
+
+describe("analytics split-left metric badges", () => {
+  it("renders metric stats with the canonical square Studio icon rail and compact right text pane", () => {
+    const html = renderToStaticMarkup(
+      <AnalyticsActiveStats stats={[{ label: "VIEWS", value: "1.2M" }]} />,
+    )
+
+    expect(html).toContain('data-vt-library-component="StudioSplitLeftButton"')
+    expect(html).toContain('data-vt-studio-split="left"')
+    expect(html).toContain('data-rail="start"')
+    expect(html).toContain("vt-analytics-active-stat-copy")
+    expect(html).toContain("w-auto")
+    expect(html).toContain("width:auto")
+    expect(html).toContain("flex:0 0 auto")
+    expect(html).toContain("flex-col")
+    expect(html).toContain("gap-0")
+    expect(html).toContain("py-0")
+    expect(html).toContain("VIEWS")
+    expect(html).toContain("1.2M")
+  })
+})
 
 describe("analytics visual context bar", () => {
   it("uses the shared standard and expanded heights", () => {

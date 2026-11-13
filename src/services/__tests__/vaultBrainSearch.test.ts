@@ -39,6 +39,19 @@ describe("Vault Brain integration", () => {
   expect(matches[0].name).toBe("Austerlitz map plate")
  })
 
+
+ it("links Brain Vault evidence back to the canonical Vault asset route", () => {
+  const asset = createLocalVaultAsset({
+   name: "Evidence source",
+   kind: "image",
+   tags: ["research"],
+  })
+
+  const result = searchVaultForBrain({ query: "Evidence source" })
+  expect(result.evidence).toHaveLength(1)
+  expect(result.evidence[0].route).toBe(`/vault?assetId=${encodeURIComponent(asset.id)}`)
+ })
+
  it("honors Brain Vault permission without disabling the creator Vault itself", () => {
   createLocalVaultAsset({ name: "Storyboard", kind: "image", tags: ["storyboard"] })
   writeBrainUserControls({ ...DEFAULT_BRAIN_USER_CONTROLS, allowVault: false }, "channel-test")

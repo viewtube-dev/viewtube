@@ -31,6 +31,8 @@
 /* Fixed square geometry for single-icon faces and rails (idea #10). */
 [data-vt-studio-control="true"] [data-vt-studio-split-rail],
 [data-vt-studio-control="true"] [data-vt-studio-split-face] [data-vt-studio-split-rail] {
+  position: relative;
+  z-index: 1;
   aspect-ratio: 1 / 1;
   flex: 0 0 auto;
 }

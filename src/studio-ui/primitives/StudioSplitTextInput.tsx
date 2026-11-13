@@ -1,4 +1,5 @@
 import React from "react"
+import type { StudioControlSize } from "../tokens"
 import "../../styles/studio-control-entry.css"
 import { StudioSplitLeftBadge, StudioSplitRightBadge, StudioDoubleSplitBadge } from "./StudioControls"
 import { StudioTextInput } from "./StudioTextInput"
@@ -6,7 +7,7 @@ import "./studio-split-text-input.css"
 
 export interface StudioSplitTextInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "children" | "type"> {
   split?: "left" | "right" | "double"
-  sizeVariant?: "standard" | "compact"
+  sizeVariant?: StudioControlSize
   type?: "text" | "search" | "email" | "url" | "tel" | "password"
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
@@ -20,10 +21,10 @@ export const StudioSplitTextInput = React.forwardRef<HTMLInputElement, StudioSpl
     return (
       <span className={["vt-studio-split-text-input", className].filter(Boolean).join(" ")} data-vt-studio-control="true" data-size={sizeVariant} data-split={split} style={style}>
         {split === "double"
-          ? <StudioDoubleSplitBadge sizeVariant={sizeVariant} leftIcon={leftIcon} rightIcon={rightIcon}>{input}</StudioDoubleSplitBadge>
+          ? <StudioDoubleSplitBadge data-vt-studio-split-input="true" sizeVariant={sizeVariant} leftIcon={leftIcon} rightIcon={rightIcon}>{input}</StudioDoubleSplitBadge>
           : split === "right"
-            ? <StudioSplitRightBadge sizeVariant={sizeVariant} icon={rightIcon}>{input}</StudioSplitRightBadge>
-            : <StudioSplitLeftBadge sizeVariant={sizeVariant} icon={leftIcon}>{input}</StudioSplitLeftBadge>}
+            ? <StudioSplitRightBadge data-vt-studio-split-input="true" sizeVariant={sizeVariant} icon={rightIcon}>{input}</StudioSplitRightBadge>
+            : <StudioSplitLeftBadge data-vt-studio-split-input="true" sizeVariant={sizeVariant} icon={leftIcon}>{input}</StudioSplitLeftBadge>}
       </span>
     )
   },

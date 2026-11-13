@@ -36,6 +36,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run test:studio-primitive-registry
       - run: npm run test:studio-component-grid-css
       - run: npm run audit:confirmed-catalog
       - run: npm run check:src-governance

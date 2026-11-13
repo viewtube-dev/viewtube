@@ -17,6 +17,12 @@ export {
   STUDIO_COMPONENT_GLOBAL_DEFAULTS,
   STUDIO_COMPONENT_SIZE_DEFAULTS,
   StudioButton,
+  StudioNumberInput,
+  StudioSplitLeftDropdown,
+  StudioBrainStatusIndicator,
+  StudioInlineStepper,
+  StudioSplitStepper,
+  StudioDoubleSplitSlider,
   StudioTwoLineButton,
   StudioSplitTwoLineButton,
   StudioActionButton,
@@ -35,6 +41,7 @@ export {
   StudioLegendMultiDropdown,
   StudioCounter,
   StudioSideCounter,
+  StudioSideTextCounter,
   StudioLeftCounter,
   StudioLeftWordCounter,
   StudioLeftWordSlider,
@@ -61,7 +68,20 @@ export {
   StudioSpectrumTag,
   StudioCloseableBadge,
   StudioTagEditor,
+  StudioVerticalWordToggle,
 } from "./primitives/StudioControls"
+export {
+  StudioSplitLeftIconRailTextInput,
+  StudioSplitRightIconRailTextInput,
+  StudioDoubleSplitIconRailTextInput,
+  StudioSplitLeftIconButtonTextInput,
+  StudioSplitRightIconButtonTextInput,
+  StudioDoubleSplitIconButtonTextInput,
+} from "./primitives/StudioIconRailTextInput"
+export type {
+  StudioIconRailTextInputProps,
+  StudioIconButtonRailTextInputProps,
+} from "./primitives/StudioIconRailTextInput"
 export type {
   StudioButtonProps,
   StudioButtonVariant,
@@ -71,6 +91,7 @@ export type {
   StudioLegendMultiDropdownProps,
   StudioLegendMultiDropdownOption,
   StudioCounterProps,
+  StudioSideTextCounterProps,
   StudioLeftCounterProps,
   StudioLeftWordCounterProps,
   StudioLeftWordSliderProps,
@@ -115,6 +136,10 @@ export type {
   StudioTagEditorProps,
 } from "./primitives/StudioControls"
 export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, StudioDoubleSplitWordCounter } from "./primitives/StudioValueToggles";
+export { StudioSplitTextInput } from "./primitives/StudioSplitTextInput";
+export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInput";
+export { StudioPanelAccordion } from "./primitives/StudioPanelAccordion";
+export type { StudioPanelAccordionProps, StudioPanelAccordionItem } from "./primitives/StudioPanelAccordion";
 export type { StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioDoubleSplitWordCounterProps, StudioToggleAppearance } from "./primitives/StudioValueToggles";
 export { StudioComponentGrid, StudioComponentGridCell, StudioComponentGridRow } from "./primitives/StudioComponentGrid";
 export type { StudioComponentGridProps, StudioComponentGridCellProps, StudioGridSize, StudioGridCorners } from "./primitives/StudioComponentGrid";
@@ -166,8 +191,6 @@ export { StudioResponseMetaRow } from "./primitives/StudioResponseMetaRow"
 export type { StudioResponseMetaRowProps, StudioResponseMetaRowSize } from "./primitives/StudioResponseMetaRow"
 export type { StudioInterModuleProps, StudioInterModuleSize } from "./primitives/StudioInterModule"
 
-export { StudioSplitTextInput } from "./primitives/StudioSplitTextInput"
-export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInput"
 
 export { StudioLedBadgeTab } from "./primitives/StudioLedBadgeTab"
 export type { StudioLedBadgeTabProps, StudioLedBadgeTabMode, StudioLedAnimation, StudioLedAlert, StudioLedTone } from "./primitives/StudioLedBadgeTab"
@@ -178,5 +201,5 @@ export type { StudioChatComposerDockProps, StudioChatComposerDockLayout } from "
 export { StudioChatResponseShell } from "./primitives/StudioChatResponseShell"
 export type { StudioChatResponseShellProps, StudioChatResponseShellSize } from "./primitives/StudioChatResponseShell"
 
-export { StudioCalendarEventChip, StudioCalendarMediaRail } from "./primitives/StudioCalendarPrimitives"
-export type { StudioCalendarEventKind, StudioCalendarEventChipProps, StudioCalendarMediaRailProps } from "./primitives/StudioCalendarPrimitives"
+export { StudioCalendarEventChip, StudioCalendarMultiDayBar, StudioCalendarThumbnailEventChip, StudioCalendarMediaRail } from "./primitives/StudioCalendarPrimitives"
+export type { StudioCalendarEventKind, StudioCalendarMiniSegment, StudioCalendarEventChipProps, StudioCalendarMultiDayBarProps, StudioCalendarThumbnailEventChipProps, StudioCalendarMediaRailProps } from "./primitives/StudioCalendarPrimitives"

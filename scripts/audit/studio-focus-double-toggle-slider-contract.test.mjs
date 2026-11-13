@@ -4,9 +4,13 @@ import test from "node:test";
 
 const toggles = readFileSync("src/styles/studio-control-value-toggles.css", "utf8");
 const splitInput = readFileSync("src/studio-ui/primitives/studio-split-text-input.css", "utf8");
+const splitComponent = readFileSync("src/studio-ui/primitives/StudioSplitTextInput.tsx", "utf8");
 const controls = readFileSync("src/styles/studio-control-system.css", "utf8");
 const fields = readFileSync("src/styles/studio-control-fields.css", "utf8");
 const splitStyles = readFileSync("src/styles/studio-control-split.css", "utf8");
+const distill = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8");
+const valueToggles = readFileSync("src/studio-ui/primitives/StudioValueToggles.tsx", "utf8");
+const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx", "utf8");
 
 test("focus outline and character fades share one duration and easing in both directions", () => {
   const duration = "var(--vt-studio-focus-outline-fade-ms, 500ms) ease-out";
@@ -34,11 +38,14 @@ test("split text input uses one continuous primary inset stroke at every size", 
 });
 
 
-test("standard and compact split text inputs bind their inline stroke to their own size tier", () => {
-  assert.match(splitInput, /\.vt-studio-split-text-input > \[data-vt-studio-control="true"\]\[data-size="standard"\] input[\s\S]*?--vt-studio-control-stroke:\s*var\(--vt-studio-standard-stroke/);
-  assert.match(splitInput, /\.vt-studio-split-text-input > \[data-vt-studio-control="true"\]\[data-size="compact"\] input[\s\S]*?--vt-studio-control-stroke:\s*var\(--vt-studio-compact-stroke/);
+test("split input sizes use the shared data-size token hierarchy without local stroke overrides", () => {
+  assert.match(splitComponent, /sizeVariant=\{sizeVariant\}/);
+  assert.match(controls, /\[data-vt-studio-control\]\s*\{[\s\S]*?--vt-studio-control-stroke:\s*var\(--vt-studio-standard-stroke/);
+  assert.match(controls, /\[data-vt-studio-control\]\[data-size="compact"\]\s*\{[\s\S]*?--vt-studio-control-stroke:\s*var\(--vt-studio-compact-stroke/);
+  assert.doesNotMatch(splitInput, /\.vt-studio-split-text-input > \[data-vt-studio-control="true"\]\[data-size="(?:standard|compact)"\] input/);
 });
-\ntest("slider track retains tier-aware clearance from both vertical dividers", () => {
+
+test("slider track retains tier-aware clearance from both vertical dividers", () => {
   assert.match(splitStyles, /padding-inline:\s*max\([\s\S]*?calc\(var\(--vt-studio-control-stroke, 3px\) \* 2\)[\s\S]*?calc\(var\(--vt-studio-control-height, 44px\) \* \.12\)/);
 });
 
@@ -89,4 +96,34 @@ test("text boxes retain a primary inline inset stroke without a clearing rule", 
   assert.ok(fields.includes('.vt-studio-text-box[data-vt-studio-control="true"]'));
   assert.ok(fields.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-field-primary"));
   assert.doesNotMatch(fields, /\.vt-studio-text-box\[data-vt-studio-control="true"\]\s*\{\s*box-shadow:\s*none/);
+});
+
+test("bar-toggle tooltip is visible only on focus and has a secondary downspout", () => {
+  assert.match(toggles, /\.vt-studio-value-toggle--bar:focus-within \.vt-studio-value-toggle__bar-tooltip\s*\{[^}]*visibility:\s*visible;[^}]*opacity:\s*1/s);
+  assert.doesNotMatch([toggles, distill].join("\\n"), /\.vt-studio-value-toggle__bar:hover/);
+  assert.doesNotMatch([toggles, distill].join("\\n"), /\.vt-studio-value-toggle--bar(?::is\()?[^{}]*hover[^{}]*\.vt-studio-value-toggle__bar-tooltip/);
+  assert.match(toggles, /\.vt-studio-value-toggle--bar:focus-within\s*\{[^}]*outline:/s);
+  assert.match(toggles, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top-color:\s*var\(--vt-studio-control-secondary/s);
+  assert.match(valueToggles, /index === Math\.max\(0, filled - 1\) && filled > 0 \?/);
+  assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar/);
+});
+
+test("double-split slider gallery copy matches the canonical rail, center, and progress colors", () => {
+  assert.ok(catalog.includes("Both split rails use secondary; the center track stays primary, and the active progress fill is a 50% white/secondary blend."));
+  assert.ok(catalog.includes("The counter-controlled specimen shares its value with the slider."));
+});
+
+test("arrow/side toggle faces and double-split word counter do not inherit the 50%-primary numeral mix", () => {
+  const faceStart = toggles.indexOf(".vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__face {");
+  const faceEnd = toggles.indexOf("\n}", faceStart);
+  const faceRule = toggles.slice(faceStart, faceEnd);
+  const wordStart = toggles.indexOf(".vt-studio-word-counter__value {");
+  const wordEnd = toggles.indexOf("\n}", wordStart);
+  const wordRule = toggles.slice(wordStart, wordEnd);
+  assert.notEqual(faceStart, -1, "shared arrow/side face rule should exist");
+  assert.notEqual(wordStart, -1, "double-split word counter value rule should exist");
+  assert.match(faceRule, /color:\\s*inherit/);
+  assert.doesNotMatch(faceRule, /--vt-studio-number-rest-color|color-mix/);
+  assert.doesNotMatch(wordRule, /--vt-studio-number-rest-color|color-mix/);
+  assert.ok(toggles.includes("--vt-toggle-text: #000"));
 });

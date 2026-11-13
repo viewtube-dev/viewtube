@@ -199,4 +199,113 @@ html body [data-vt-studio-control="true"].vt-studio-text-box:is(:focus, :focus-v
   color: var(--vt-field-text-focus, #000);
   -webkit-text-fill-color: var(--vt-field-text-focus, #000);
   -webkit-text-stroke-color: var(--vt-field-text-stroke-focus, #000);
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-text-stroke-focus, #000);
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-control-focus-stroke-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
+}
+
+
+/* StudioSideTextCounter:
+   - Split shell owns the single black outer perimeter (shared with the counter rail).
+   - Nested input has NO black border — only one primary inset ring (same as standard text inputs).
+   - Field host is transparent, full-bleed, no padding (padding was creating a double-outline gap).
+   - Text is vertically centered via flex on the host + line-height:1 on the input. */
+html body .vt-studio-side-text-counter[data-vt-studio-control="true"] > [data-vt-studio-split-field],
+html body .vt-studio-side-text-counter > [data-vt-studio-split-field] {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+html body .vt-studio-side-text-counter input.vt-studio-side-text-counter__input[data-vt-studio-control="true"],
+html body .vt-studio-side-text-counter input.vt-studio-side-text-counter__input,
+html body .vt-studio-side-text-counter[data-vt-studio-control="true"] > [data-vt-studio-split-field] > input.vt-studio-side-text-counter__input[data-vt-studio-control="true"],
+html body .vt-studio-side-text-counter .vt-studio-side-text-counter__input[data-vt-studio-control="true"],
+html body .vt-studio-side-text-counter input.vt-studio-text-input--simple[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  display: block;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding-block: 0 !important;
+  padding-inline: var(--vt-studio-control-stroke, 3px);
+  /* Kill every black / accent border the generic field contract would paint. */
+  border: 0 !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  border-color: transparent !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  line-height: normal;
+  /* Single primary inset ring — matches standard field inset, not a double stroke. */
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px)
+    var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+}
+/* Focus: keep primary inset; secondary outline only (no black border reintroduction). */
+html body .vt-studio-side-text-counter input.vt-studio-side-text-counter__input[data-vt-studio-control="true"]:is(:focus, :focus-visible),
+html body .vt-studio-side-text-counter .vt-studio-side-text-counter__input[data-vt-studio-control="true"]:is(:focus, :focus-visible) {
+  border: 0 !important;
+  outline: calc(var(--vt-studio-control-stroke, 3px) * 0.65) solid
+    var(--vt-field-secondary, var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b))) !important;
+  outline-offset: 0;
+  box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px)
+    var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+}
+
+/* StudioSideTextInput shares the side-counter field perimeter but replaces the
+   stacked action cells with one centered icon rail. */
+html body .vt-studio-side-text-input[data-vt-studio-control="true"] > [data-vt-studio-split-field] {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  padding-block: var(--vt-studio-control-stroke, 3px);
+  padding-inline: 0;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  background: transparent;
+}
+html body .vt-studio-side-text-input input.vt-studio-side-text-input__input[data-vt-studio-control="true"],
+html body .vt-studio-double-split-text-input input.vt-studio-double-split-text-input__input[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  display: block;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding-block: 0;
+  padding-inline: var(--vt-studio-control-stroke, 3px);
+  border: 0;
+  outline: 0;
+  border-radius: 0;
+  box-shadow:
+    inset 0 calc(var(--vt-studio-control-stroke, 3px) * 0.5) 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))),
+    inset 0 calc(var(--vt-studio-control-stroke, 3px) * -0.5) 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))),
+    inset var(--vt-studio-control-stroke, 3px) 0 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))),
+    inset calc(var(--vt-studio-control-stroke, 3px) * -1) 0 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  text-align: center;
 }

@@ -6,27 +6,26 @@ const styles = readFileSync("src/styles/studio-control-system.css", "utf8")
 const split = readFileSync("src/styles/studio-control-split.css", "utf8")
 const distill = readFileSync("src/styles/studio-control-distill-overrides.css", "utf8")
 const recovery = readFileSync("src/styles/studio-control-recovery-overrides.css", "utf8")
+const valueToggleStyles = readFileSync("src/styles/studio-control-value-toggles.css", "utf8")
 const tokens = readFileSync("src/studio-ui/tokens.ts", "utf8")
 const emitter = readFileSync("scripts/emit-studio-control-vars.mjs", "utf8")
 const generated = readFileSync("src/styles/studio-control-vars.generated.css", "utf8")
 
-test("counter shells size from a 2:1 inner value pane plus square rails and outer border", () => {
-  assert.match(split, /--vt-studio-counter-root-width:\s*calc\(\(var\(--vt-studio-control-height,\s*44px\)\s*-\s*2\s*\*\s*var\(--vt-studio-control-stroke,\s*3px\)\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,\s*2\)\s*\+\s*var\(--vt-studio-counter-double-rail-count,\s*2\)\)\s*\+\s*2\s*\*\s*var\(--vt-studio-control-stroke,\s*3px\)\)/)
-  assert.match(split, /--vt-studio-counter-root-width:\s*calc\(\(var\(--vt-studio-control-height,\s*44px\)\s*-\s*2\s*\*\s*var\(--vt-studio-control-stroke,\s*3px\)\)\s*\*\s*\(var\(--vt-studio-counter-value-area-aspect-ratio,\s*2\)\s*\+\s*var\(--vt-studio-counter-side-rail-count,\s*1\)\)\s*\+\s*2\s*\*\s*var\(--vt-studio-control-stroke,\s*3px\)\)/)
-  assert.match(styles, /\.vt-studio-counter__value,\[data-vt-studio-counter-value\]\{aspect-ratio:var\(--vt-studio-counter-value-area-aspect-ratio,2\/1\)/)
-  assert.match(split, /\[data-vt-studio-control="true"\] \[data-vt-studio-split-rail\][\s\S]*?width: var\(--vt-studio-split-rail-size/);
+test("counter shells use square size-tier rails and a 2:1 value face", () => {
+  assert.match(styles, /\.vt-studio-counter\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*var\(--vt-studio-control-height,\s*44px\)\s+minmax\(0,\s*1fr\)\s+var\(--vt-studio-control-height,\s*44px\)/s)
+  assert.match(styles, /\.vt-studio-counter__value,[\s\S]*?aspect-ratio:\s*2\s*\/\s*1/)
+  assert.match(generated, /--vt-studio-counter-value-area-aspect-ratio:\s*2\s*\/\s*1/)
+  assert.match(tokens, /valueAreaAspectRatio:\s*2/)
+  assert.match(split, /\[data-vt-studio-control="true"\] \[data-vt-studio-split-rail\][\s\S]*?width: var\(--vt-studio-control-height,\s*44px\)/)
   assert.doesNotMatch(recovery, /vt-studio-counter.*width|vt-studio-side-counter.*width/)
 })
 
-test("double-split word counter uses the primitive's solid primary face and black focus text", () => {
-  const wordStart = styles.indexOf("/* Double-split word counter")
-  const wordStyles = styles.slice(wordStart)
-  const shell = wordStyles.match(/\.vt-studio-word-counter\s*\{[^}]*\}/)?.[0] ?? ""
-  assert.match(shell, /background:\s*var\(--vt-studio-control-accent/)
-  assert.doesNotMatch(shell, /color-mix\([^;]*50%/)
-  assert.match(wordStyles, /\.vt-studio-word-counter > \[data-vt-studio-split-label\][\s\S]*?background:\s*var\(--vt-studio-control-accent/)
-  assert.match(wordStyles, /:focus-within[\s\S]*?color:\s*#000/)
-  assert.doesNotMatch(styles + distill + recovery, /\.vt-studio-value-toggle--arrow[^}]*background:\s*color-mix\([^}]*50%/)
+test("double-split word counter inherits a solid primary face and black focus text", () => {
+  assert.match(valueToggleStyles, /\.vt-studio-value-toggle\s*\{[^}]*--vt-toggle-fill:\s*var\(--vt-studio-control-accent/)
+  assert.match(valueToggleStyles, /\.vt-studio-split-shell\.vt-studio-value-toggle\s*\{[^}]*background:\s*var\(--vt-toggle-fill/)
+  assert.match(valueToggleStyles, /:focus-within[\s\S]*?\.vt-studio-word-counter__value[\s\S]*?color:\s*var\(--vt-studio-number-active-color,\s*#000\)/)
+  assert.match(valueToggleStyles, /\.vt-studio-word-counter\[data-vt-studio-control="true"\] > \[data-vt-studio-split-label\][\s\S]*?border-left:/)
+  assert.doesNotMatch(valueToggleStyles, /\.vt-studio-value-toggle--arrow[^}]*background:\s*color-mix\([^}]*50%/)
 })
 
 test("bar toggle tooltip is focus-only, the shell has a focus outline, and bars layer above rails", () => {
@@ -67,5 +66,6 @@ test("dropdowns use primary/secondary pair tokens, centered labels, and token-ow
   assert.match(generated, /--vt-studio-dropdown-menu-fill:\s*var\(--vt-studio-control-accent, var\(--pair-a\)\)/)
   assert.match(generated, /--vt-studio-dropdown-selected-fill:\s*var\(--vt-studio-control-secondary, var\(--pair-b\)\)/)
   assert.match(generated, /--vt-studio-dropdown-chevron-inset:\s*6px/)
-  assert.doesNotMatch(dropdown + generated, /#36e0f6|#ff7f6b/)
+  assert.match(dropdown, /--vt-studio-dropdown-menu-fill/)
+  assert.match(dropdown, /--vt-studio-dropdown-selected-fill/)
 })

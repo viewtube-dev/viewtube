@@ -2,7 +2,46 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { createLocalVaultAsset, listVaultAssets } from "../vaultAdapter"
 import { createVaultTask, listVaultTasks, updateVaultTask } from "../vaultTaskCenter"
-import { runVaultTranscriptTask } from "../vaultTranscriptTask"
+import { resolveVaultTranscriptVideoId, runVaultTranscriptTask } from "../vaultTranscriptTask"
+
+describe("resolveVaultTranscriptVideoId", () => {
+ it("prefers canonical asset metadata and falls back to legacy metadata and ContentBuild", () => {
+  const canonical = createLocalVaultAsset({
+   name: "Canonical",
+   kind: "video",
+   tags: [],
+   metadata: { youtubeVideoId: " youtube-primary ", videoId: "legacy-id" },
+  })
+  const legacy = createLocalVaultAsset({
+   name: "Legacy",
+   kind: "video",
+   tags: [],
+   metadata: { videoId: " legacy-video " },
+  })
+  const buildOnly = createLocalVaultAsset({ name: "Build", kind: "video", tags: [] })
+  const youtubeAlias = createLocalVaultAsset({
+   name: "YouTube alias",
+   kind: "video",
+   tags: [],
+   metadata: { youtubeId: " youtube-alias-id " },
+  })
+
+  expect(resolveVaultTranscriptVideoId({ asset: canonical, contentBuildVideoId: "build-id" })).toBe("youtube-primary")
+  expect(resolveVaultTranscriptVideoId({ asset: legacy })).toBe("legacy-video")
+  expect(resolveVaultTranscriptVideoId({ asset: buildOnly, contentBuildVideoId: " build-video " })).toBe("build-video")
+  expect(resolveVaultTranscriptVideoId({ asset: youtubeAlias })).toBe("youtube-alias-id")
+ })
+
+ it("returns null when every candidate is missing or invalid", () => {
+  const asset = createLocalVaultAsset({
+   name: "No source",
+   kind: "video",
+   tags: [],
+   metadata: { youtubeVideoId: " ", videoId: 42 },
+  })
+  expect(resolveVaultTranscriptVideoId({ asset })).toBeNull()
+ })
+})
 
 describe("runVaultTranscriptTask", () => {
  beforeEach(() => localStorage.clear())

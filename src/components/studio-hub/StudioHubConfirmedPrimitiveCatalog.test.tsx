@@ -11,6 +11,8 @@ const readStudioControlCss = () => [
   "studio-control-split.css",
   "studio-control-fields.css",
   "studio-inter-module.css",
+  "studio-control-value-toggles.css",
+  "studio-control-distill-overrides.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
@@ -31,7 +33,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(source).toContain("LED BADGE · SOLID + RAINBOW")
     expect(source).toContain("FLUSH NAVIGATION · FOUR TABS / ONE ACTIVE")
     expect(source).toContain("MOTION STATES · STEADY / PRISM / RADAR / FLARE2 / BLINK")
-    expect(source).toContain('label:"THINKING"')
+    expect(source).toContain('label="THINKING"')
   })
 
   it("shows the InterModule specimen using the production 4px side-gutter bleed override", () => {
@@ -64,12 +66,14 @@ describe("confirmed composite primitive catalog", () => {
       "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioTextInput",
       "StudioTextArea", "StudioTextBox", "StudioSplitTextInput",
+      "StudioSplitLeftIconRailTextInput", "StudioSplitRightIconRailTextInput", "StudioDoubleSplitIconRailTextInput",
+      "StudioSplitLeftIconButtonTextInput", "StudioSplitRightIconButtonTextInput", "StudioDoubleSplitIconButtonTextInput",
       "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
-      "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
+      "StudioDoubleSplitSlider", "StudioInlineStepper", "StudioSplitStepper", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
       "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioBrainStatusIndicator", "StudioTagEditor", "StudioUploadFrame",
-      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
+      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell",
     ]) {
       expect(representative).toContain(`data-vt-library-component="${primitive}"`)
     }
@@ -83,7 +87,7 @@ describe("confirmed composite primitive catalog", () => {
     for (const primitive of [
       "StudioBrainStatusIndicator", "StudioInterModule", "StudioTwoLineInterModule",
       "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule",
-      "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
+      "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell",
     ]) {
       expect(directPrimitiveNames).toContain(primitive)
     }
@@ -92,13 +96,13 @@ describe("confirmed composite primitive catalog", () => {
     }
 
     for (const title of [
-      "Double Split Button · Standard + Compact",
-      "Legend Multi Dropdown · Standard + Compact",
-      "Arrow Toggle · Standard + Compact",
-      "Bar Toggle · Standard + Compact",
-      "Word Toggle · Standard + Compact",
-      "Side Toggle · Standard + Compact",
-      "Double Side Toggle · Standard + Compact",
+      "Split Button Family · All Sizes × Left / Right / Double / Two-Line",
+      "Dropdown Family · All Sizes × Single / Simple / Split-Left / Multi-Select",
+      "Arrow / Side / Double Side / Bar Toggles",
+      "Word Toggles · Standard + Compact + Vertical",
+      "StudioCounter · Supreme + Standard + Compact + Mini + Micro",
+      "StudioDoubleSplitSlider · Supreme + Standard + Compact + Mini + Micro",
+      "Studio Numeric Steppers · Inline + Split",
     ]) {
       expect(source).toContain(`title="${title}"`)
     }
@@ -109,8 +113,8 @@ describe("confirmed composite primitive catalog", () => {
     const styles = readFileSync(resolve(process.cwd(), "src/styles/studio-confirmed-catalog-modules.css"), "utf8")
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
 
-    expect(source).toContain('className="vt-confirmed-catalog vt-confirmed-direct-representatives"')
-    expect(styles).toMatch(/\.vt-confirmed-direct-representatives\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s)
+    expect(source).toContain('className="vt-confirmed-catalog"')
+    expect(source).toContain('className="vt-confirmed-direct-primitive-rows"')
     expect(styles).toMatch(/\.vt-confirmed-direct-primitive-rows\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s)
     expect(styles).toMatch(/\.vt-confirmed-direct-primitive-rows\s*>\s*\.vt-confirmed-variant\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/s)
 
@@ -145,11 +149,13 @@ describe("confirmed composite primitive catalog", () => {
       expect(categoryCount(category), `${category} parent module count`).toBe(1)
     }
     expect(html).not.toContain("Counters & Sliders")
+    const iconButtonModule = html.match(/<details class="([^"]*)"[^>]*data-vt-primitive-title="Studio Icon Button Rail Text Inputs[^"]*"/)
+    expect(iconButtonModule?.[1] ?? "").not.toContain("vt-confirmed-button-family")
     expect(source).not.toContain("<ConfirmedCatalogFamilyGroups>\n       <Family title=\"StudioChatComposerDock")
     expect(source).toContain("useConfirmedAdditionalPrimitiveSections")
     expect(source).toContain('title="Compatibility Field Exports · Standard"')
     expect(source).toContain('title="Compatibility Control Exports · Standard"')
-    expect(source).toContain('title="Composition Helpers · Standard"')
+    expect(source).toContain('title="Component Grid · Grid / Cell / Row"')
   })
 
   it("registers the independent Split Accordion at standard, compact, and micro sizes", () => {
@@ -433,16 +439,16 @@ it("keeps one square-icon family and exposes all four canonical toggle/choice sk
   expect(html).toContain("COUNTER-CONTROLLED · UP / DOWN")
   const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
   const css = readStudioControlCss()
-  expect(source).not.toContain("StudioIconButton")
+  expect(source).toContain("StudioIconButton · All Five Sizes")
   expect(source).not.toContain('title="Icon Button · 44px + 28px"')
   expect(source).toContain("const CHOICE_SKINS = CANONICAL_SKINS")
   expect(source).toContain("const WORD_TOGGLE_SKINS = CANONICAL_SKINS")
-  const choiceFamily = source.slice(source.indexOf('<Family title="44px Radio + Checkbox"'), source.indexOf('<Family title="Word Toggles'))
+  const choiceFamily = source.slice(source.indexOf("const CanonicalControlFamilies"), source.indexOf("const CanonicalSplitBadgeFamily"))
   expect(choiceFamily).toContain("CHOICE_SKINS.map")
   expect(choiceFamily).toContain("StudioCheckbox")
   expect(choiceFamily).toContain("StudioXCheckbox")
   expect(css).toContain("Four canonical state-fill / indicator-shape variants shared by switches")
-  expect(css).toContain('background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important')
+  expect(css).toContain('background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, white) !important')
   expect(css).toContain(".vt-studio-44-choice.is-color-swap.is-on")
   expect(css).toContain(".vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle")
   expect(css).toContain(".vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle")
@@ -605,7 +611,11 @@ describe("responsive Studio upload frame", () => {
     expect(source).toContain('rightAppearance?: "primary" | "secondary" | "black-primary-text"')
     expect(source).toContain('STUDIO_VALUE_TOGGLE_VARIANTS = ["v1", "v2"] as const')
     expect(css).toContain(".vt-studio-value-toggle__bar")
-    expect(css).toContain("flex: 0 0 18px")
+    expect(css).toContain("flex: 0 0 var(--vt-bar-width)")
+    expect(css).toContain("height: var(--vt-bar-height)")
+    expect(css).toContain("var(--vt-studio-bar-height-to-width-ratio, 2.5)")
+    expect(css).toContain("var(--vt-studio-bar-empty-white-mix, 50%)")
+    expect(css).toContain("var(--vt-studio-bar-full-fill, #000000)")
     expect(css).toContain(".vt-studio-value-toggle--double:focus-within")
     expect(css).toContain(".vt-studio-value-toggle--double .vt-studio-value-toggle__arrow:focus-visible")
   })
@@ -649,7 +659,10 @@ describe("confirmed primitive family taxonomy", () => {
     expect(classifyConfirmedCatalogItem(specimen("StudioCounter · Standard"))).toBe("Controls")
     expect(classifyConfirmedCatalogItem(specimen("StudioDoubleSplitSlider · Standard"))).toBe("Controls")
     expect(classifyConfirmedCatalogItem(specimen("Arrow / Side / Double Side / Bar Toggles"))).toBe("Controls")
+    expect(classifyConfirmedCatalogItem(specimen("Studio Numeric Steppers · Inline + Split"))).toBe("Controls")
     expect(classifyConfirmedCatalogItem(specimen("Studio Text Input · Standard"))).toBe("Text Fields")
+    expect(classifyConfirmedCatalogItem(specimen("Studio Icon Rail Text Inputs · Non-Interactive"))).toBe("Text Fields")
+    expect(classifyConfirmedCatalogItem(specimen("Studio Icon Button Rail Text Inputs · Five Sizes"))).toBe("Text Fields")
     expect(classifyConfirmedCatalogItem(specimen("Split-left Button · Standard"))).toBe("Buttons & Badges")
     expect(classifyConfirmedCatalogItem(specimen("StudioInterModule · Standard"))).toBe("Modules & Frames")
     expect(classifyConfirmedCatalogItem(specimen("Publishing Card · Standard"))).toBe("Compositions")
@@ -674,13 +687,13 @@ describe("confirmed primitive family taxonomy", () => {
     expect(source).toContain("{additionalPrimitiveSections}")
     expect(source).toContain('title="Compatibility Field Exports · Standard"')
     expect(source).toContain('title="Compatibility Control Exports · Standard"')
-    expect(source).toContain('title="Composition Helpers · Standard"')
-    expect(source).toContain('title="Dropdown Family · Standard / Split-Left / Multi-Select"')
-    expect(source).toContain('title="StudioDropdown · Single Selection"')
+    expect(source).toContain('title="Component Grid · Grid / Cell / Row"')
+    expect(source).toContain('title="Dropdown Family · All Sizes × Single / Simple / Split-Left / Multi-Select"')
+    expect(source).toContain('data-vt-library-component="StudioDropdown"')
     expect(source).toContain('title="Studio Text Input · Standalone + Simple + Floating + Fixed Label"')
     expect(source).toContain('title="Studio Text Area · Standalone + Simple + Floating + Fixed Label"')
     expect(source).toContain('title="Studio Text Box · Supreme + Standard + Compact + Mini + Micro"')
-    expect(source).toContain('title="StudioLeftCounter · Standard"')
+    expect(source).toContain('title="StudioLeftCounter · Supreme + Standard + Compact + Mini + Micro"')
     expect(source).toContain('title="Arrow / Side / Double Side / Bar Toggles"')
   })
 })
@@ -723,7 +736,7 @@ describe("confirmed primitive representative coverage", () => {
       "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
       "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule",
       "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioBrainStatusBadge",
-      "StudioBrainStatusIndicator", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
+      "StudioBrainStatusIndicator", "StudioResponseMetaRow", "StudioChatResponseShell",
     ]) {
       expect(markup, primitive).toContain(`data-vt-library-component="${primitive}"`);
     }
@@ -742,10 +755,9 @@ describe("public export representative runtime coverage", () => {
       "Studioradio",
       "Studiocheck",
       "Studioxbox",
+      "StudioComponentGrid",
+      "StudioComponentGridCell",
       "StudioComponentGridRow",
-      "StudioComponentGridSpecimen",
-      "StudioComponentGridSpecimenPair",
-      "StudioHubCertification",
     ]) {
       expect(markup, representative).toContain(`data-vt-library-component="${representative}"`);
     }
@@ -788,10 +800,32 @@ describe("Studio Calendar confirmed primitive representatives", () => {
     expect(source).toContain('data-vt-library-component="StudioCalendarMediaRail"')
     expect(source).toContain('SPLIT TEXT INPUT · LEFT / RIGHT / DOUBLE')
     expect(toolbox).not.toContain('<StudioHubConfirmedSplitTextInputCatalog />')
-    expect(source).not.toContain('StudioInlineStepper')
-    expect(source).not.toContain('StudioSplitStepper')
+    expect(source).toContain('data-vt-library-component="StudioInlineStepper"')
+    expect(source).toContain('data-vt-library-component="StudioSplitStepper"')
   })
 
+});
+
+
+describe("confirmed numeric stepper family coverage", () => {
+  it("renders the imported inline and split steppers at their supported standard and compact sizes", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    const start = source.indexOf("const ConfirmedStudioNumericStepperFamily");
+    const end = source.indexOf("const ConfirmedStudioValueToggleFamily", start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    expect(family).toContain('const sizes = ["standard", "compact"] as const');
+    expect(family).toContain("<StudioInlineStepper size={size}");
+    expect(family).toContain("<StudioSplitStepper size={size}");
+    expect(html).toContain('data-vt-library-component="StudioInlineStepper"');
+    expect(html).toContain('data-vt-library-component="StudioSplitStepper"');
+    expect(html).toContain('data-vt-studio-control-kind="inline-stepper"');
+    expect(html).toContain('data-vt-studio-control-kind="split-stepper"');
+    expect(html).toContain('data-size="standard"');
+    expect(html).toContain('data-size="compact"');
+  });
 });
 
 
@@ -893,7 +927,7 @@ describe("confirmed library cleanup and counter module visibility", () => {
     for (const title of [
       "StudioCounter · Supreme + Standard + Compact + Mini + Micro",
       "StudioSideCounter · Supreme + Standard + Compact + Mini + Micro",
-      "StudioLeftCounter · Standard",
+      "StudioLeftCounter · Supreme + Standard + Compact + Mini + Micro",
       "StudioDoubleSplitSlider · Supreme + Standard + Compact + Mini + Micro",
       "StudioLeftWordCounter · Four-State Cycle + Five Sizes",
       "StudioDoubleSplitWordCounter · Two Chevron Rails + Four-State Word Cycle",
@@ -911,7 +945,7 @@ describe("confirmed library cleanup and counter module visibility", () => {
     const start = source.indexOf('data-vt-confirmed-representatives="true"');
     const end = source.indexOf("</Family>", start);
     const representatives = source.slice(start, end);
-    const headings = ["BUTTONS", "DROPDOWNS", "TEXT FIELDS", "CONTROLS", "BADGES", "MODULES & COMPOSITIONS"];
+    const headings = ["BUTTONS & ICON BUTTONS", "TEXT ENTRY & INPUTS", "DROPDOWNS", "SELECTION CONTROLS", "TOGGLES", "COUNTERS, STEPPERS & SLIDERS", "BADGES & STATUS INDICATORS", "LAYOUT PRIMITIVES", "MODULES & COMPOSITIONS"];
     let last = -1;
     for (const heading of headings) {
       const next = representatives.indexOf(heading);
@@ -947,6 +981,126 @@ describe("primitive module global width and stylesheet ownership", () => {
     for (const module of modules) {
       const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives", module), "utf8");
       expect(source, module).toContain("studio-control-entry.css");
+    }
+  });
+});
+
+
+describe("Studio Calendar primitives", () => {
+  it("renders every production calendar primitive and its registered variants in the confirmed catalog", () => {
+    const markup = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
+    for (const primitive of [
+      "StudioCalendarEventChip",
+      "StudioCalendarMultiDayBar",
+      "StudioCalendarThumbnailEventChip",
+      "StudioCalendarMediaRail",
+    ]) {
+      expect(markup).toContain(`data-vt-library-component="${primitive}"`);
+    }
+
+    // Event chips: standard semantic kinds, status/selection/removal, and mini tier.
+    expect(markup).toContain('data-event-kind="publish"');
+    expect(markup).toContain('data-event-kind="task"');
+    expect(markup).toContain('data-event-kind="milestone"');
+    expect(markup).toContain('data-event-kind="reminder"');
+    expect(markup).toContain('data-event-kind="deadline"');
+    expect(markup).toContain('data-calendar-size="mini"');
+    expect(markup).toContain('data-selected="true"');
+
+    // Multi-day bars: all four segment shapes plus channel-wide state.
+    expect(markup).toContain('data-calendar-segment="single"');
+    expect(markup).toContain('data-calendar-segment="start"');
+    expect(markup).toContain('data-calendar-segment="middle"');
+    expect(markup).toContain('data-calendar-segment="end"');
+    expect(markup).toContain('data-channel-wide="true"');
+
+    // Thumbnail and media-rail variants preserve both media ratios and all rail layouts.
+    expect(markup).toContain('data-thumbnail-ratio="16:9"');
+    expect(markup).toContain('data-aspect-ratio="16:9"');
+    expect(markup).toContain('data-aspect-ratio="9:16"');
+    expect(markup).toContain('data-split="left"');
+    expect(markup).toContain('data-split="right"');
+    expect(markup).toContain('data-split="double"');
+
+    const calendarCss = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/studio-calendar-primitives.css"), "utf8");
+    expect(calendarCss).toContain("height: 20px");
+    expect(calendarCss).toContain("border: 1.5px solid #000");
+    expect(calendarCss).toContain("color-mix(in srgb, #fff 50%");
+    expect(calendarCss).not.toContain("50%, transparent");
+  });
+
+  it("exports every calendar primitive through the Studio public API", () => {
+    const publicApi = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8");
+    for (const primitive of [
+      "StudioCalendarEventChip",
+      "StudioCalendarMultiDayBar",
+      "StudioCalendarThumbnailEventChip",
+      "StudioCalendarMediaRail",
+    ]) {
+      expect(publicApi).toContain(primitive);
+    }
+  });
+});
+
+
+describe("confirmed primitive catalog coverage corrections", () => {
+  it("represents SideCounter with the right-side production primitive at all five sizes", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf("const ConfirmedStudioSideCounterFamily");
+    const end = source.indexOf("const ConfirmedStudioSideTextCounterFamily", start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    expect(family).toContain('data-vt-library-component="StudioSideCounter"');
+    expect(family).toContain('primitive="StudioSideCounter"');
+    expect(family).toContain('<StudioSideCounter');
+    expect(family).not.toContain('<StudioLeftCounter');
+    for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+      expect(family).toContain(`size="${size}"`);
+    }
+  });
+
+  it("shows editable SideTextCounter specimens at every canonical size", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf("const ConfirmedStudioSideTextCounterFamily");
+    const end = source.indexOf("const ConfirmedStudioLeftWordCounterFamily", start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+      expect(family).toContain(`size="${size}"`);
+    }
+  });
+
+  it("shows five joined square actions with a selected V3 specimen at both supported group sizes", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf('title="Square Icon Button Groups');
+    const end = source.indexOf('title="Top Split Module', start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    expect((family.match(/<StudioSquareIconButton\b/g) ?? []).length).toBe(10);
+    expect((family.match(/variant="v3"/g) ?? []).length).toBe(10);
+    expect((family.match(/defaultSelected=\{true\}/g) ?? []).length).toBe(2);
+    expect(family).toContain('sizeVariant="standard"');
+    expect(family).toContain('sizeVariant="compact"');
+  });
+
+  it("documents the corrected five-tier border and radius ladder", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(source).toContain("3px / 3px / 2px / 1.5px / 1px borders");
+    expect(source).toContain("6px / 6px / 4px / 3px / 2px radii");
+    expect(source).not.toContain("1.5px / 1.5px borders");
+  });
+
+  it("represents LeftCounter independently at all five canonical sizes", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf('title="StudioLeftCounter · Supreme + Standard + Compact + Mini + Micro"');
+    const end = source.indexOf("</Family>", start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+      expect(family).toContain(`size="${size}"`);
     }
   });
 });

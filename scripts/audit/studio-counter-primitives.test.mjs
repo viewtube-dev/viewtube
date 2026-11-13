@@ -57,7 +57,7 @@ test("counter affordances have hold-repeat, enlarged icons, activation motion, a
   assert.match(styles, /vt-studio-counter-pop/);
   assert.match(styles, /vt-studio-counter-hold-pulse/);
   assert.match(styles, /\.vt-studio-side-counter__actions::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s);
-  assert.match(styles, /\.vt-studio-double-split-slider\.is-counter-controls \.vt-studio-double-split-slider__counter > button\.is-holding svg/);
+  assert.match(styles, /\.vt-studio-side-counter__actions button\.is-holding svg/);
 });
 
 test("counter palette variants use centered per-size pairs, tokenized numeral tint, and 0–100", () => {
@@ -263,4 +263,33 @@ test("value-toggle recovery defaults do not repaint arrow-toggle faces with half
   assert.ok(recoveryFillStart >= 0 && recoveryFillEnd > recoveryFillStart);
   assert.doesNotMatch(recoveryFill, /\.vt-studio-value-toggle\s*,/);
   assert.doesNotMatch(recoveryFill, /\.vt-studio-split-shell\.vt-studio-value-toggle\s*\{/);
+});
+
+test("split-left input and side text counter bind every size tier to distinct vertical geometry", () => {
+  const splitInputCss = readFileSync("src/studio-ui/primitives/studio-split-text-input.css", "utf8");
+  const tierValues = {
+    supreme: ["60px", "3px", "6px", "52px"],
+    standard: ["44px", "3px", "6px", "38px"],
+    compact: ["28px", "2px", "4px", "24px"],
+    mini: ["20px", "1.5px", "3px", "17.5px"],
+    micro: ["12px", "1px", "2px", "10px"],
+  };
+  for (const [tier, [height, stroke, radius, fontSize]] of Object.entries(tierValues)) {
+    assert.ok(splitInputCss.includes('data-size="' + tier + '"'), tier + " split input tier exists");
+    assert.ok(splitInputCss.includes('--vt-studio-control-height: var(--vt-studio-' + tier + '-height, ' + height + ')'));
+    assert.ok(splitInputCss.includes('--vt-studio-control-stroke: var(--vt-studio-' + tier + '-stroke, ' + stroke + ')'));
+    assert.ok(splitInputCss.includes('--vt-studio-control-radius: var(--vt-studio-' + tier + '-radius, ' + radius + ')'));
+    assert.ok(splitInputCss.includes('--vt-studio-control-font-size: var(--vt-studio-' + tier + '-font-size, ' + fontSize + ')'));
+    assert.ok(styles.includes('data-size="' + tier + '"'));
+    assert.ok(styles.includes('--vt-studio-control-height: var(--vt-studio-' + tier + '-height, ' + height + ')'));
+    assert.ok(styles.includes('--vt-studio-control-stroke: var(--vt-studio-' + tier + '-stroke, ' + stroke + ')'));
+    assert.ok(styles.includes('--vt-studio-control-radius: var(--vt-studio-' + tier + '-radius, ' + radius + ')'));
+  }
+  assert.ok(styles.includes(".vt-studio-counter__value,"));
+  assert.ok(styles.includes("display: grid;"));
+  assert.ok(styles.includes("place-items: center;"));
+  assert.ok(styles.includes("grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);"));
+  assert.ok(splitInputCss.includes("align-self: stretch;"));
+  assert.ok(splitInputCss.includes("border: 0 !important;"));
+  assert.ok(splitInputCss.includes("box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary) !important;"));
 });

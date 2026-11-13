@@ -28,10 +28,11 @@ export const STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS = {
   vaultSpectrumTag: {
     owner: "VaultAssetModule / StudioSpectrumTag",
     globalRuleException: true,
-    height: 15,
-    borderWidth: 2,
-    radius: 4,
-    fontSize: 8,
+    height: "15px default / 20px expanded",
+    borderWidth: "2px default / 8px÷3 expanded",
+    radius: "4px default / 16px÷3 expanded",
+    fontSize: "8px default / 32px÷3 expanded",
+    sizeVariants: { "15px": "donor-exact default geometry", "20px": "all geometry and typography scaled by 4/3" },
     fontWeight: 900,
     letterSpacing: "0.3px",
     fill: "alphabetical spectrum color mixed at 35% with white",
@@ -109,8 +110,8 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   splitDividers: "single split has exactly one shared internal divider; double split has exactly two; dividers use the global border width and are never duplicated on label edges",
   globalSizeLattice: "supreme 60px / 3px border / 6px radius / 52px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; mini 20px / 1.5px border / 3px radius / 17.5px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
-  globalTextAlignment: "center for buttons, badges, split labels, and icon faces; single-line text inputs and text areas align left",
-  textContainment: "Global rule for all single-line text-bearing Studio primitives: split-left, split-right, and double-split labels center against the full component outer border box, independent of rail placement; use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls. Multiline textareas are excluded.",
+  globalTextAlignment: "center for buttons, badges, split labels, icon faces, and side-text-counter/input value panels; standalone single-line text inputs and text areas align left",
+  textContainment: "Global rule for single-line text-bearing Studio primitives: split-left, split-right, and double-split labels center against the full component outer border box, independent of rail placement; side-text-counter and side-text-input value panels center within the text panel; standalone single-line text inputs remain left-aligned. Use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls. Multiline textareas are excluded.",
   buttonVariantContract: {
     v1: "primary fill / black text",
     v2: "secondary fill / black text",
@@ -1980,6 +1981,8 @@ export interface StudioSpectrumTagProps {
   className?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   ariaLabel?: string
+  /** 20px is a proportional 4/3 expansion of the donor-exact 15px tag. */
+  size?: "15px" | "20px"
 }
 
 /**
@@ -1994,17 +1997,19 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
   className,
   onClick,
   ariaLabel,
+  size = "15px",
 }) => {
   const normalized = label.trim().toUpperCase()
   const identity = (spectrumKey ?? label).trim().toUpperCase()
   const color = getAlphabeticalSpectrumColor(identity)
-  const classes = ["vt-studio-spectrum-tag", selected && "is-selected", className].filter(Boolean).join(" ")
+  const classes = ["vt-studio-spectrum-tag", size === "20px" && "is-20px", selected && "is-selected", className].filter(Boolean).join(" ")
   const style = { ["--vt-spectrum-tag-color" as string]: color } as React.CSSProperties
   if (!onClick) {
     return (
       <span
         className={classes}
         data-vt-studio-exception="vault-spectrum-tag"
+        data-size={size}
         data-tag={identity}
         style={style}
       >
@@ -2017,6 +2022,7 @@ export const StudioSpectrumTag: React.FC<StudioSpectrumTagProps> = ({
       type="button"
       className={classes}
       data-vt-studio-exception="vault-spectrum-tag"
+      data-size={size}
       data-tag={identity}
       aria-label={ariaLabel ?? normalized}
       aria-pressed={selected}
@@ -2359,6 +2365,7 @@ export type StudioLeftWordSliderProps = Omit<StudioDoubleSplitSliderProps, "min"
 
 export const STUDIO_LEFT_WORD_OPTIONS = ["ONE", "TWO", "THREE", "FOUR"] as const;
 export type StudioLeftWord = typeof STUDIO_LEFT_WORD_OPTIONS[number];
+export type StudioLeftWordVariant = StudioLeftWord;
 
 export const normalizeStudioLeftWordIndex = (value: number): number => {
   if (!Number.isFinite(value)) return 1;
@@ -2427,7 +2434,7 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
       sizeVariant={size}
       className={studioClasses("vt-studio-side-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
       railClassName="vt-studio-side-counter__rail"
-      rightRailContent={<span className="vt-studio-side-counter__actions">
+      rightRailContent={<span className="vt-studio-side-counter__actions" data-size={size}>
         <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
         <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
@@ -2438,6 +2445,260 @@ export const StudioSideCounter: React.FC<StudioCounterProps> = ({
   );
 };
 StudioSideCounter.displayName = "StudioSideCounter";
+
+/** Editable text field with the canonical side-counter's stacked right action rail. */
+export interface StudioSideTextCounterProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size" | "value" | "defaultValue" | "onChange" | "type" | "min" | "max" | "step" | "className" | "style"
+> {
+  value: string | number;
+  onValueChange: (value: string) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  size?: StudioControlSize;
+  disabled?: boolean;
+  ariaLabel?: string;
+  className?: string;
+  inputClassName?: string;
+  inputStyle?: React.CSSProperties;
+}
+
+export const StudioSideTextCounter = React.forwardRef<HTMLInputElement, StudioSideTextCounterProps>(({
+  value, onValueChange, min = 0, max = 100, step = 1,
+  size = "standard", disabled = false, ariaLabel = "Value",
+  className, inputClassName, inputStyle, ...inputProps
+}, ref) => {
+  const interactionFocus = useStudioInteractionFocus();
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const textValue = value == null ? "" : String(value);
+  const parsedValue = textValue.trim() === "" ? 0 : Number(textValue);
+  const isAdjustable = textValue.trim() === "" || Number.isFinite(parsedValue);
+  const current = Number.isFinite(parsedValue) ? parsedValue : 0;
+  const validBounds = Number.isFinite(min) && Number.isFinite(max) && min <= max;
+  const currentRef = React.useRef(current);
+  currentRef.current = current;
+  const adjust = React.useCallback((direction: -1 | 1) => {
+    const base = currentRef.current;
+    const precision = Math.min(12, Math.max(
+      String(base).split(".")[1]?.length ?? 0,
+      String(safeStep).split(".")[1]?.length ?? 0,
+    ));
+    const next = Number((base + direction * safeStep).toFixed(precision));
+    onValueChange(String(Math.min(max, Math.max(min, next))));
+  }, [max, min, onValueChange, safeStep]);
+  const decrement = useStudioCounterHold(
+    -1, current, min, max, safeStep, adjust,
+    disabled || !validBounds || !isAdjustable || current <= min,
+  );
+  const increment = useStudioCounterHold(
+    1, current, min, max, safeStep, adjust,
+    disabled || !validBounds || !isAdjustable || current >= max,
+  );
+  return (
+    <StudioSplitShell
+      layout="right"
+      fieldSlot
+      sizeVariant={size}
+      className={studioClasses("vt-studio-side-counter", "vt-studio-side-text-counter", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
+      railClassName="vt-studio-side-counter__rail"
+      rightRailContent={<span className="vt-studio-side-counter__actions" data-size={size}>
+        <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || !isAdjustable || current >= max} {...increment.events} onClick={event => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
+        <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || !isAdjustable || current <= min} {...decrement.events} onClick={event => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
+      </span>}
+      shellProps={{
+        "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined,
+        onPointerDownCapture: interactionFocus.start,
+        onPointerUpCapture: interactionFocus.end,
+        onPointerCancelCapture: interactionFocus.end,
+        role: "group",
+        "aria-label": ariaLabel,
+        "data-vt-studio-control-family": "counter",
+        "data-vt-studio-control-kind": "studio-side-text-counter",
+        "data-vt-library-component": "StudioSideTextCounter",
+      }}
+    >
+      <StudioTextInput
+        {...inputProps}
+        ref={ref}
+        type="text"
+        value={textValue}
+        onChange={event => onValueChange(event.currentTarget.value)}
+        aria-label={inputProps["aria-label"] ?? ariaLabel}
+        disabled={disabled}
+        inputMode={inputProps.inputMode ?? "text"}
+        sizeVariant={size}
+        className={["vt-studio-side-text-counter__input", inputClassName].filter(Boolean).join(" ")}
+        style={inputStyle}
+      />
+    </StudioSplitShell>
+  );
+});
+StudioSideTextCounter.displayName = "StudioSideTextCounter";
+
+/** Editable centered text field with one square icon rail instead of numeric step controls. */
+export interface StudioSideTextInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size" | "value" | "defaultValue" | "onChange" | "type" | "className" | "style"
+> {
+  value: string;
+  onValueChange: (value: string) => void;
+  icon: React.ReactNode;
+  iconLabel?: string;
+  onIconClick?: () => void;
+  size?: StudioControlSize;
+  disabled?: boolean;
+  ariaLabel?: string;
+  className?: string;
+  inputClassName?: string;
+  inputStyle?: React.CSSProperties;
+}
+
+export const StudioSideTextInput = React.forwardRef<HTMLInputElement, StudioSideTextInputProps>(({
+  value, onValueChange, icon, iconLabel = "Activate icon action", onIconClick,
+  size = "standard", disabled = false, ariaLabel = "Text",
+  className, inputClassName, inputStyle, ...inputProps
+}, ref) => {
+  const interactionFocus = useStudioInteractionFocus();
+  const iconContent = onIconClick
+    ? <button
+        type="button"
+        className="vt-studio-side-text-input__icon-button"
+        data-vt-studio-side-text-input-icon
+        aria-label={iconLabel}
+        disabled={disabled}
+        onClick={() => { onIconClick(); interactionFocus.pulse(); }}
+      >{icon}</button>
+    : <span className="vt-studio-side-text-input__icon" data-vt-studio-side-text-input-icon aria-hidden="true">{icon}</span>;
+
+  return (
+    <StudioSplitShell
+      layout="right"
+      fieldSlot
+      sizeVariant={size}
+      className={studioClasses("vt-studio-side-text-input", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
+      railClassName="vt-studio-side-counter__rail"
+      rightRailContent={iconContent}
+      shellProps={{
+        "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined,
+        onPointerDownCapture: interactionFocus.start,
+        onPointerUpCapture: interactionFocus.end,
+        onPointerCancelCapture: interactionFocus.end,
+        role: "group",
+        "aria-label": ariaLabel,
+        "data-vt-studio-control-family": "text-input",
+        "data-vt-studio-control-kind": "studio-side-text-input",
+        "data-vt-library-component": "StudioSideTextInput",
+      }}
+    >
+      <StudioTextInput
+        {...inputProps}
+        ref={ref}
+        type="text"
+        value={value}
+        onChange={event => onValueChange(event.currentTarget.value)}
+        aria-label={inputProps["aria-label"] ?? ariaLabel}
+        disabled={disabled}
+        inputMode={inputProps.inputMode ?? "text"}
+        sizeVariant={size}
+        className={["vt-studio-side-text-input__input", inputClassName].filter(Boolean).join(" ")}
+        style={inputStyle}
+      />
+    </StudioSplitShell>
+  );
+});
+StudioSideTextInput.displayName = "StudioSideTextInput";
+
+/** Editable centered text field with independent square icon rails on both sides. */
+export interface StudioDoubleSplitTextInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size" | "value" | "defaultValue" | "onChange" | "type" | "className" | "style"
+> {
+  value: string;
+  onValueChange: (value: string) => void;
+  leftIcon: React.ReactNode;
+  rightIcon: React.ReactNode;
+  leftIconLabel?: string;
+  rightIconLabel?: string;
+  onLeftIconClick?: () => void;
+  onRightIconClick?: () => void;
+  size?: StudioControlSize;
+  disabled?: boolean;
+  ariaLabel?: string;
+  className?: string;
+  inputClassName?: string;
+  inputStyle?: React.CSSProperties;
+}
+
+export const StudioDoubleSplitTextInput = React.forwardRef<HTMLInputElement, StudioDoubleSplitTextInputProps>(({
+  value, onValueChange, leftIcon, rightIcon,
+  leftIconLabel = "Activate left icon action",
+  rightIconLabel = "Activate right icon action",
+  onLeftIconClick, onRightIconClick,
+  size = "standard", disabled = false, ariaLabel = "Text",
+  className, inputClassName, inputStyle, ...inputProps
+}, ref) => {
+  const interactionFocus = useStudioInteractionFocus();
+  const renderIcon = (icon: React.ReactNode, label: string, onClick: (() => void) | undefined, side: "left" | "right") =>
+    onClick
+      ? <button
+          type="button"
+          className="vt-studio-side-text-input__icon-button"
+          data-vt-studio-double-split-text-input-icon={side}
+          aria-label={label}
+          disabled={disabled}
+          onClick={() => { onClick(); interactionFocus.pulse(); }}
+        >{icon}</button>
+      : <span
+          className="vt-studio-side-text-input__icon"
+          data-vt-studio-double-split-text-input-icon={side}
+          aria-hidden="true"
+        >{icon}</span>;
+
+  return (
+    <StudioSplitShell
+      layout="double"
+      fieldSlot
+      sizeVariant={size}
+      className={studioClasses("vt-studio-side-text-input", "vt-studio-double-split-text-input", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
+      railClassName="vt-studio-side-counter__rail"
+      leftRailContent={renderIcon(leftIcon, leftIconLabel, onLeftIconClick, "left")}
+      rightRailContent={renderIcon(rightIcon, rightIconLabel, onRightIconClick, "right")}
+      shellProps={{
+        "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined,
+        onPointerDownCapture: interactionFocus.start,
+        onPointerUpCapture: interactionFocus.end,
+        onPointerCancelCapture: interactionFocus.end,
+        role: "group",
+        "aria-label": ariaLabel,
+        "data-vt-studio-control-family": "text-input",
+        "data-vt-studio-control-kind": "studio-double-split-text-input",
+        "data-vt-library-component": "StudioDoubleSplitTextInput",
+      }}
+    >
+      <StudioTextInput
+        {...inputProps}
+        ref={ref}
+        type="text"
+        value={value}
+        onChange={event => onValueChange(event.currentTarget.value)}
+        aria-label={inputProps["aria-label"] ?? ariaLabel}
+        disabled={disabled}
+        inputMode={inputProps.inputMode ?? "text"}
+        sizeVariant={size}
+        className={["vt-studio-double-split-text-input__input", inputClassName].filter(Boolean).join(" ")}
+        style={inputStyle}
+      />
+    </StudioSplitShell>
+  );
+});
+StudioDoubleSplitTextInput.displayName = "StudioDoubleSplitTextInput";
+
+
+
+
+
+
 
 export const StudioLeftCounter: React.FC<StudioLeftCounterProps> = ({
   value, onValueChange, min = 0, max = 100, step = 1,
@@ -2464,7 +2725,7 @@ export const StudioLeftCounter: React.FC<StudioLeftCounterProps> = ({
       sizeVariant={size}
       className={studioClasses("vt-studio-side-counter", interactionFocus.active && "is-interaction-focus", "vt-studio-left-counter", `is-${size}`, className)}
       railClassName="vt-studio-left-counter__rail"
-      leftRailContent={<span className="vt-studio-side-counter__actions">
+      leftRailContent={<span className="vt-studio-side-counter__actions" data-size={size}>
         <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events} onClick={(event) => { increment.events.onClick(event); interactionFocus.pulse(); }}><ChevronUp aria-hidden="true" focusable="false" /></button>
         <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events} onClick={(event) => { decrement.events.onClick(event); interactionFocus.pulse(); }}><ChevronDown aria-hidden="true" focusable="false" /></button>
       </span>}
@@ -2960,9 +3221,9 @@ export const StudioDoubleSplitSlider: React.FC<StudioDoubleSplitSliderProps> = (
       className={studioClasses("vt-studio-double-split-slider", interactionFocus.active && "is-interaction-focus", `is-${size}`, leftControls === "counter" && "is-counter-controls", className)}
       railClassName="vt-studio-double-split-slider__rail"
       leftRailContent={leftControls === "counter" ? (
-        <span className="vt-studio-double-split-slider__counter" aria-label={`Adjust ${ariaLabel}`}>
-          <button type="button" className={`vt-studio-stepper-button${increment.isHolding ? " is-holding" : ""}`} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
-          <button type="button" className={`vt-studio-stepper-button${decrement.isHolding ? " is-holding" : ""}`} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
+        <span className="vt-studio-side-counter__actions" data-size={size} aria-label={`Adjust ${ariaLabel}`}>
+          <button type="button" className={increment.isHolding ? "is-holding" : undefined} data-press-holding={increment.isHolding ? "true" : undefined} aria-label={`Increase ${ariaLabel}`} title={`Increase ${ariaLabel}`} disabled={disabled || !validBounds || current >= max} {...increment.events}><ChevronUp aria-hidden="true" focusable="false" /></button>
+          <button type="button" className={decrement.isHolding ? "is-holding" : undefined} data-press-holding={decrement.isHolding ? "true" : undefined} aria-label={`Decrease ${ariaLabel}`} title={`Decrease ${ariaLabel}`} disabled={disabled || !validBounds || current <= min} {...decrement.events}><ChevronDown aria-hidden="true" focusable="false" /></button>
         </span>
       ) : (
         <button

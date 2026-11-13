@@ -56,16 +56,8 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-siz
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__body,
 .vt-studio-top-split-module[data-open="false"] > .vt-studio-top-split-module__body { display: none !important; border: 0 !important; padding: 0 !important; min-height: 0 !important; }
 
-/* Keep collapsed module header geometry identical to the expanded header.
-   A transparent bottom rule reserves the divider's space without drawing a
-   second line over the module shell's outer bottom border. */
-.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head,
-.vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__head,
-.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head,
-details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head,
-details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head {
-  border-bottom: var(--vt-top-split-stroke, 3px) solid transparent !important;
-}
+/* Collapsed header bottom border is owned by the consolidated block later in this file.
+   Do not force transparent here — that caused the misaligned double-edge. */
 
 /* Restore visible toggle/switch silhouettes after the final recovery layer.
    Scope these fills to the actual interactive primitives so this does not
@@ -271,40 +263,77 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] [data-vt-studio-sp
   border-bottom-color: #000 !important;
 }
 
-/* A closed module's bottom edge is raised by exactly one outer stroke. */
-.vt-studio-collapsing-split-module:not([open]) {
-  border-bottom-width: var(--vt-top-split-stroke, 3px);
+/* Collapsed modules: shell keeps a full perimeter (including bottom) so the
+   bottom edge is not clipped by overflow:hidden + border-radius. Head drops
+   its bottom rule so there is exactly one black edge — aligned with where the
+   expanded header/body divider sits. */
+.vt-studio-collapsing-split-module:not([open]),
+details.vt-studio-collapsing-split-module:not([open]),
+.vt-studio-two-line-module:not([open]),
+details.vt-studio-two-line-module:not([open]) {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+  overflow: hidden;
 }
-.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head {
-  border-bottom-color: transparent !important;
-  margin-bottom: calc(-1 * var(--vt-top-split-stroke, 3px));
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head,
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__head,
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head,
+.vt-studio-two-line-module:not([open]) > summary,
+.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head {
+  border-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+/* Expanded: full-width header divider under rails + title (same as split modules). */
+.vt-studio-collapsing-split-module[open] > .vt-studio-collapsing-split-module__head,
+.vt-studio-collapsing-split-module[open] > .vt-studio-top-split-module__head,
+details.vt-studio-collapsing-split-module[open] > summary.vt-studio-collapsing-split-module__head,
+details.vt-studio-collapsing-split-module[open] > summary.vt-studio-top-split-module__head,
+.vt-studio-top-split-module > .vt-studio-top-split-module__head {
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
 }
 
-/* Intermodules and their host are edge-to-edge: no inherited horizontal inset. */
+/* Intermodules: NO vertical borders of their own. They bleed full width of the
+   host/container and borrow the parent's vertical edges. Override every
+   horizontal inset the catalog or parent body may apply. */
 [data-vt-studio-inter-host="true"],
 [data-vt-studio-inter-host="true"] > .vt-studio-inter-module,
-.vt-studio-inter-module {
-  box-sizing: border-box;
+.vt-studio-inter-module,
+.vt-studio-intermodule,
+[data-vt-studio-inter-module="true"],
+[data-vt-studio-intermodule="true"] {
+  box-sizing: border-box !important;
   width: 100% !important;
   max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
   margin-inline: 0 !important;
   padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-radius: 0 !important;
 }
-
-/* Default double-split slider palette is the inverse of the prior rail scheme. */
-/* Slider palette and counter faces are owned by the canonical split/counter family sheets. */
-
-
-/* Restore the outer vertical edges after the earlier zero-side-border reset. */
-.vt-studio-inter-module {
-  border-left: var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
-  border-right: var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+/* When nested inside a padded module body, cancel that horizontal padding so
+   the intermodule spans the full inner width and uses the parent side borders. */
+.vt-studio-top-split-module__body > .vt-studio-inter-module,
+.vt-studio-top-split-module__body > [data-vt-studio-inter-host="true"],
+.vt-studio-collapsing-split-module__body > .vt-studio-inter-module,
+.vt-studio-collapsing-split-module__body > [data-vt-studio-inter-host="true"],
+.vt-studio-top-split-module__body > [data-vt-studio-inter-host="true"] > .vt-studio-inter-module,
+.vt-studio-collapsing-split-module__body > [data-vt-studio-inter-host="true"] > .vt-studio-inter-module {
+  width: calc(100% + 16px) !important;
+  max-width: none !important;
+  margin-inline: -8px !important;
+  padding-inline: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
 }
-.vt-studio-top-split-module:not([data-open="true"]) > .vt-studio-top-split-module__head {
-  border-bottom-color: #000 !important;
-}
-.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head {
-  border-bottom-color: #000 !important;
+.vt-studio-top-split-module[data-size="compact"] > .vt-studio-top-split-module__body > .vt-studio-inter-module,
+.vt-studio-top-split-module[data-size="compact"] > .vt-studio-top-split-module__body > [data-vt-studio-inter-host="true"],
+.vt-studio-top-split-module[data-size="compact"] > .vt-studio-top-split-module__body > [data-vt-studio-inter-host="true"] > .vt-studio-inter-module {
+  width: calc(100% + 12px) !important;
+  margin-inline: -6px !important;
 }
 /* Side-counter divider geometry is defined by its canonical split-shell family. */
 
