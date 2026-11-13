@@ -128,6 +128,12 @@ These are content-driven components, not fixed-width row controls. Their intrins
 | Word toggles | Width determined by the words and their measured active segment; must stay inside its container | Active handle fits measured word without overlap or overflow; text centered; state swaps color only and does not change outer geometry |
 | Tag editor | Row/container may fill; individual tags remain content-width; action controls are square | Plus/check actions use compact 28px / 2px / 4px geometry unless a future documented size variant is added |
 
+## 4A. Fixed-content-width square icon group exception
+
+- `StudioSquareIconButtonGroup` is the registered non-text content-width control exception. Its intrinsic width is exactly five fixed-size square faces in one shared outer shell; it must not flex-grow to fill the row.
+- The group uses the selected size tier for each square face. Default V3 faces use primary fill; selected V3 faces use secondary fill. The outer shell owns the perimeter and internal dividers.
+- Keep the group overflow visible so focus outlines, badges, and supported effects are not clipped. Geometry and state styling belong to `studio-control-system.css`; do not add duplicate width/overflow rules in `studio-control-distill-overrides.css`.
+
 ## 5. Text fields — explicit alignment and state contract
 
 **Both single-line text inputs and multiline textareas are left-aligned.** Text alignment is not a size variant and must never flip to right alignment.
