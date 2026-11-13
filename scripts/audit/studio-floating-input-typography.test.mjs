@@ -126,7 +126,7 @@ const singleLineInputStyles = [
   ["src/styles/studio-control-fields.css", readFileSync("src/styles/studio-control-fields.css", "utf8")],
 ];
 for (const [path, stylesheet] of singleLineInputStyles) {
-  assert.match(stylesheet, /line-height:\\s*normal\\s*;/, path + " must explicitly preserve native vertical centering for single-line inputs");
-  assert.doesNotMatch(stylesheet, /input[^{}]*\\{[^}]*line-height:\\s*1\\s*;/s, path + " must not force a tight line box on native inputs");
+  assert.match(stylesheet, /line-height:\s*normal\s*;/, path + " must explicitly preserve native vertical centering for single-line inputs");
+  assert.doesNotMatch(stylesheet, /input[^{}]*\{[^}]*line-height:\s*1\s*;/s, path + " must not force a tight line box on native inputs");
 }
 console.log("Studio single-line input vertical-centering contract: PASS");
