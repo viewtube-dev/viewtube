@@ -6574,3 +6574,48 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
   width: min(var(--vt-studio-control-icon-size, 38px), 100%);
   height: min(var(--vt-studio-control-icon-size, 38px), 100%);
 }
+
+/* StudioSideTextCounter centered value text and single-icon rail. */
+.vt-studio-side-text-counter .vt-studio-side-text-counter__input,
+.vt-studio-side-text-input .vt-studio-side-text-input__input,
+.vt-studio-double-split-text-input .vt-studio-double-split-text-input__input {
+  text-align: center;
+}
+.vt-studio-side-text-input > [data-vt-studio-split-field] {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: stretch;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+}
+.vt-studio-side-text-input__icon,
+.vt-studio-side-text-input__icon-button {
+  appearance: none;
+  box-sizing: border-box;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #000;
+}
+.vt-studio-side-text-input__icon-button { cursor: pointer; }
+.vt-studio-side-text-input__icon-button:disabled { opacity: .4; cursor: not-allowed; }
+.vt-studio-side-text-input__icon :is(svg),
+.vt-studio-side-text-input__icon-button :is(svg) {
+  display: block;
+  width: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
+  height: min(var(--vt-studio-control-icon-size, var(--vt-studio-standard-icon-size, 38px)), 100%);
+  max-width: 100%;
+  max-height: 100%;
+  color: currentColor;
+  stroke: currentColor;
+}
