@@ -1540,3 +1540,40 @@ describe("confirmed counter representative and focus-surface regressions", () =>
     expect(css).not.toMatch(/\.vt-studio-left-counter:has\([\s\S]*?\) \.vt-studio-side-counter__value\s*\{[^}]*background:/);
   });
 });
+
+
+describe("Studio icon rail alphabetical text input categories", () => {
+  it("renders non-interactive left, right, and double icon rails without buttons", async () => {
+    const { StudioSplitLeftIconRailTextInput, StudioSplitRightIconRailTextInput, StudioDoubleSplitIconRailTextInput } = await import("./StudioIconRailTextInput")
+    const icon = <span>i</span>
+    const left = renderToStaticMarkup(<StudioSplitLeftIconRailTextInput value="ALPHA" onValueChange={() => {}} leftIcon={icon} />)
+    const right = renderToStaticMarkup(<StudioSplitRightIconRailTextInput value="ALPHA" onValueChange={() => {}} rightIcon={icon} />)
+    const double = renderToStaticMarkup(<StudioDoubleSplitIconRailTextInput value="ALPHA" onValueChange={() => {}} leftIcon={icon} rightIcon={icon} />)
+    expect(left).toContain('data-vt-library-component="StudioSplitLeftIconRailTextInput"')
+    expect(right).toContain('data-vt-library-component="StudioSplitRightIconRailTextInput"')
+    expect(double).toContain('data-vt-studio-split="double"')
+    expect(left).not.toContain("<button")
+    expect(right).not.toContain("<button")
+    expect(double).not.toContain("<button")
+  })
+
+  it("renders one centered accessible icon button per configured rail", async () => {
+    const { StudioSplitLeftIconButtonTextInput, StudioSplitRightIconButtonTextInput, StudioDoubleSplitIconButtonTextInput } = await import("./StudioIconRailTextInput")
+    const icon = <span>i</span>
+    const left = renderToStaticMarkup(<StudioSplitLeftIconButtonTextInput value="ALPHA" onValueChange={() => {}} leftIcon={icon} leftIconLabel="Open options" onLeftIconClick={() => {}} />)
+    const right = renderToStaticMarkup(<StudioSplitRightIconButtonTextInput value="ALPHA" onValueChange={() => {}} rightIcon={icon} rightIconLabel="Confirm" onRightIconClick={() => {}} />)
+    const double = renderToStaticMarkup(<StudioDoubleSplitIconButtonTextInput value="ALPHA" onValueChange={() => {}} leftIcon={icon} rightIcon={icon} leftIconLabel="Open options" rightIconLabel="Confirm" />)
+    expect(left).toContain('aria-label="Open options"')
+    expect(right).toContain('aria-label="Confirm"')
+    expect((double.match(/<button/g) ?? []).length).toBe(2)
+    expect(double).toContain('data-vt-library-component="StudioDoubleSplitIconButtonTextInput"')
+  })
+
+  it("registers both categories in the standard representatives and confirmed primitive module", () => {
+    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
+    expect(html).toContain("ICON RAIL TEXT INPUTS")
+    expect(html).toContain("Studio Icon Rail Text Inputs")
+    expect(html).toContain('data-vt-library-component="StudioDoubleSplitIconRailTextInput"')
+    expect(html).toContain('data-vt-library-component="StudioDoubleSplitIconButtonTextInput"')
+  })
+})
