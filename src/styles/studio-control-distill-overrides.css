@@ -31,15 +31,6 @@
   flex: 0 0 auto;
 }
 
-/* Bar geometry and fill are owned by the canonical track block below. */
-/* Bar geometry and fill are owned by the canonical track block below. */
-.vt-studio-value-toggle__arrow {
-  position: relative;
-  z-index: 2;
-  pointer-events: auto;
-  touch-action: manipulation;
-}
-
 /* Icon groups size to their content instead of stretching across the row. */ 
  .vt-studio-square-icon-button-group { 
    display: inline-flex; 
