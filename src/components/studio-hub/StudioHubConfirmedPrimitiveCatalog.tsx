@@ -214,7 +214,7 @@ const CanonicalWordToggleFamily: React.FC = () => {
       <div className="vt-confirmed-vertical-word-toggle-family">
         {verticalSizes.map((size, sizeIndex) => <div className="vt-confirmed-vertical-word-toggle-size-row" key={size}>
           <strong>{size.toUpperCase()} · FOUR VARIANTS</strong>
-          <div className="vt-confirmed-vertical-word-toggle-standard">
+          <div className={size === "micro" ? "vt-confirmed-vertical-word-toggle-micro" : size === "compact" ? "vt-confirmed-vertical-word-toggle-compact" : "vt-confirmed-vertical-word-toggle-standard"}>
             {VERTICAL_WORD_TOGGLE_VARIANTS.map((item, variantIndex) => {
               const index = sizeIndex * VERTICAL_WORD_TOGGLE_VARIANTS.length + variantIndex
               return <div className="vt-confirmed-vertical-word-toggle-specimen" key={item.variant}>
