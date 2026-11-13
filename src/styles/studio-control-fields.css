@@ -199,6 +199,9 @@ html body [data-vt-studio-control="true"].vt-studio-text-box:is(:focus, :focus-v
   color: var(--vt-field-text-focus, #000);
   -webkit-text-fill-color: var(--vt-field-text-focus, #000);
   -webkit-text-stroke-color: var(--vt-field-text-stroke-focus, #000);
+  text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-field-text-stroke-focus, #000);
+  outline: calc(var(--vt-studio-control-stroke, 3px) * var(--vt-studio-control-focus-stroke-ratio, 0.65)) solid var(--vt-studio-control-secondary, var(--pair-b, #ff7f6b));
+  outline-offset: 0;
 }
 
 
