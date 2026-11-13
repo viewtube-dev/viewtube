@@ -376,3 +376,17 @@ test("StudioSideTextCounter primary inline stroke is thinner on horizontal edges
   assert.match(block, /inset var\(--vt-studio-control-stroke, 3px\) 0 0 0 var\(--vt-field-primary/);
   assert.match(block, /inset calc\(var\(--vt-studio-control-stroke, 3px\) \* -1\) 0 0 0 var\(--vt-field-primary/);
 });
+
+
+test("single-line text fields use native vertical centering across every split-field family", () => {
+  const stylesheets = [
+    ["plain text input", read("src/styles/studio-text-input.css")],
+    ["split text input", read("src/studio-ui/primitives/studio-split-text-input.css")],
+    ["icon rail text input", read("src/studio-ui/primitives/studio-icon-rail-text-input.css")],
+    ["shared side-counter field", read("src/styles/studio-control-fields.css")],
+  ];
+  for (const [name, css] of stylesheets) {
+    assert.match(css, /line-height:\\s*normal\\s*;/, name + " must use native vertical centering");
+    assert.doesNotMatch(css, /input[^{}]*\\{[^}]*line-height:\\s*1\\s*;/s, name + " must not force a tight native-input line box");
+  }
+});
