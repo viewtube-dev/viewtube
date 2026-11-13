@@ -64,6 +64,8 @@ describe("confirmed composite primitive catalog", () => {
       "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioTextInput",
       "StudioTextArea", "StudioTextBox", "StudioSplitTextInput",
+      "StudioSplitLeftIconRailTextInput", "StudioSplitRightIconRailTextInput", "StudioDoubleSplitIconRailTextInput",
+      "StudioSplitLeftIconButtonTextInput", "StudioSplitRightIconButtonTextInput", "StudioDoubleSplitIconButtonTextInput",
       "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
@@ -650,6 +652,8 @@ describe("confirmed primitive family taxonomy", () => {
     expect(classifyConfirmedCatalogItem(specimen("StudioDoubleSplitSlider · Standard"))).toBe("Controls")
     expect(classifyConfirmedCatalogItem(specimen("Arrow / Side / Double Side / Bar Toggles"))).toBe("Controls")
     expect(classifyConfirmedCatalogItem(specimen("Studio Text Input · Standard"))).toBe("Text Fields")
+    expect(classifyConfirmedCatalogItem(specimen("Studio Icon Rail Text Inputs · Non-Interactive"))).toBe("Text Fields")
+    expect(classifyConfirmedCatalogItem(specimen("Studio Icon Button Rail Text Inputs · Five Sizes"))).toBe("Text Fields")
     expect(classifyConfirmedCatalogItem(specimen("Split-left Button · Standard"))).toBe("Buttons & Badges")
     expect(classifyConfirmedCatalogItem(specimen("StudioInterModule · Standard"))).toBe("Modules & Frames")
     expect(classifyConfirmedCatalogItem(specimen("Publishing Card · Standard"))).toBe("Compositions")
