@@ -83,6 +83,13 @@ test("read-only StudioTextBox uses primary glyphs at rest and a secondary outlin
   assert.match(base, /color:\s*var\(--vt-field-primary,/);
   assert.match(base, /-webkit-text-fill-color:\s*var\(--vt-field-primary,/);
   assert.match(base, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-field-primary,/);
+  assert.doesNotMatch(base, /border:/);
+  assert.doesNotMatch(base, /box-shadow:/);
+  const fieldBaseStart = fieldCss.indexOf('html body .vt-studio-text-box[data-vt-studio-control="true"],');
+  const fieldBaseEnd = fieldCss.indexOf("}", fieldBaseStart);
+  const fieldBase = fieldCss.slice(fieldBaseStart, fieldBaseEnd);
+  assert.match(fieldBase, /border:\s*var\(--vt-studio-control-stroke, 3px\) solid #000/);
+  assert.match(fieldBase, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke, 3px\) var\(--vt-field-primary/);
   assert.match(fieldCss, /\.vt-studio-text-box\[data-vt-studio-control="true"\]:is\(:focus, :focus-visible\)[\s\S]*?outline:\s*calc\([\s\S]*?var\(--vt-studio-control-secondary/);
   assert.match(fieldCss, /\.vt-studio-text-box\[data-vt-studio-control="true"\]:is\(:focus, :focus-visible\)[\s\S]*?background-color:\s*var\(--vt-field-fill-focus,/);
 });
