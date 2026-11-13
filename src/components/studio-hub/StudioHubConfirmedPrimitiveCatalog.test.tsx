@@ -11,6 +11,8 @@ const readStudioControlCss = () => [
   "studio-control-split.css",
   "studio-control-fields.css",
   "studio-inter-module.css",
+  "studio-control-value-toggles.css",
+  "studio-control-distill-overrides.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n")
 
 describe("confirmed composite primitive catalog", () => {
