@@ -391,6 +391,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
   const [leftCounterRepValue, setLeftCounterRepValue] = React.useState(12)
   const [doubleWordCounterValue, setDoubleWordCounterValue] = React.useState(2)
   const [sideTextCounterValue, setSideTextCounterValue] = React.useState("42")
+  const [iconRailActionCount, setIconRailActionCount] = React.useState(0)
   const [composerValue, setComposerValue] = React.useState("Draft a response…")
   const options = ["ONE", "TWO", "THREE"] as const
   const dropdownOptions = [
@@ -435,13 +436,15 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioNumberInput"><span>Number Input · STANDARD</span><StudioNumberInput aria-label="Number input specimen" defaultValue={42} sizeVariant="standard" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextInput"><span>Text Input · STANDARD</span><StudioTextInput sizeVariant="standard" aria-label="Text input standard specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitTextInput"><span>Split Text Input · STANDARD</span><StudioSplitTextInput split="left" leftIcon={<Settings2 aria-hidden="true" />} sizeVariant="standard" aria-label="Split text input standard specimen" placeholder="SEARCH ASSETS" /></div>
-        <h4 className="vt-confirmed-representative-heading">ICON RAIL TEXT INPUTS</h4>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftIconRailTextInput"><span>Split Left Icon Rail Text Input · STANDARD</span><StudioSplitLeftIconRailTextInput value="ALPHABET" onValueChange={() => undefined} leftIcon={<Settings2 aria-hidden="true" />} ariaLabel="Alphabetical text with left informational icon" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightIconRailTextInput"><span>Split Right Icon Rail Text Input · STANDARD</span><StudioSplitRightIconRailTextInput value="ALPHABET" onValueChange={() => undefined} rightIcon={<Info aria-hidden="true" />} ariaLabel="Alphabetical text with right informational icon" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitIconRailTextInput"><span>Double Split Icon Rail Text Input · STANDARD</span><StudioDoubleSplitIconRailTextInput value="ALPHABET" onValueChange={() => undefined} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Info aria-hidden="true" />} ariaLabel="Alphabetical text with double informational icon rails" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftIconButtonTextInput"><span>Split Left Icon Button Text Input · STANDARD</span><StudioSplitLeftIconButtonTextInput value="ALPHABET" onValueChange={() => undefined} leftIcon={<Settings2 aria-hidden="true" />} leftIconLabel="Open options" ariaLabel="Alphabetical text with left icon button" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightIconButtonTextInput"><span>Split Right Icon Button Text Input · STANDARD</span><StudioSplitRightIconButtonTextInput value="ALPHABET" onValueChange={() => undefined} rightIcon={<Check aria-hidden="true" />} rightIconLabel="Confirm text" ariaLabel="Alphabetical text with right icon button" /></div>
-        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitIconButtonTextInput"><span>Double Split Icon Button Text Input · STANDARD</span><StudioDoubleSplitIconButtonTextInput value="ALPHABET" onValueChange={() => undefined} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Check aria-hidden="true" />} leftIconLabel="Open options" rightIconLabel="Confirm text" ariaLabel="Alphabetical text with double icon buttons" /></div>
+        <h4 className="vt-confirmed-representative-heading">NON-INTERACTIVE ICON RAIL TEXT INPUTS</h4>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftIconRailTextInput"><span>Split Left Icon Rail Text Input · STANDARD</span><StudioSplitLeftIconRailTextInput value={sideTextCounterValue} onValueChange={setSideTextCounterValue} leftIcon={<Settings2 aria-hidden="true" />} ariaLabel="Alphabetical text with left informational icon" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightIconRailTextInput"><span>Split Right Icon Rail Text Input · STANDARD</span><StudioSplitRightIconRailTextInput value={sideTextCounterValue} onValueChange={setSideTextCounterValue} rightIcon={<Info aria-hidden="true" />} ariaLabel="Alphabetical text with right informational icon" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitIconRailTextInput"><span>Double Split Icon Rail Text Input · STANDARD</span><StudioDoubleSplitIconRailTextInput value={sideTextCounterValue} onValueChange={setSideTextCounterValue} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Info aria-hidden="true" />} ariaLabel="Alphabetical text with double informational icon rails" /></div>
+        <h4 className="vt-confirmed-representative-heading">ICON BUTTON RAIL TEXT INPUTS</h4>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitLeftIconButtonTextInput"><span>Split Left Icon Button Text Input · STANDARD</span><StudioSplitLeftIconButtonTextInput value={sideTextCounterValue} onValueChange={setSideTextCounterValue} leftIcon={<Settings2 aria-hidden="true" />} leftIconLabel="Open options" onLeftIconClick={() => setIconRailActionCount(count => count + 1)} ariaLabel="Alphabetical text with left icon button" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSplitRightIconButtonTextInput"><span>Split Right Icon Button Text Input · STANDARD</span><StudioSplitRightIconButtonTextInput value={sideTextCounterValue} onValueChange={setSideTextCounterValue} rightIcon={<Check aria-hidden="true" />} rightIconLabel="Confirm text" onRightIconClick={() => setIconRailActionCount(count => count + 1)} ariaLabel="Alphabetical text with right icon button" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitIconButtonTextInput"><span>Double Split Icon Button Text Input · STANDARD</span><StudioDoubleSplitIconButtonTextInput value={sideTextCounterValue} onValueChange={setSideTextCounterValue} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Check aria-hidden="true" />} leftIconLabel="Open options" rightIconLabel="Confirm text" onLeftIconClick={() => setIconRailActionCount(count => count + 1)} onRightIconClick={() => setIconRailActionCount(count => count + 1)} ariaLabel="Alphabetical text with double icon buttons" /></div>
+        <span aria-live="polite">ICON RAIL BUTTON ACTIONS: {iconRailActionCount}</span>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextArea"><span>Text Area · STANDARD</span><StudioTextArea sizeVariant="standard" rows={3} aria-label="Text area standard specimen" placeholder="TYPE HERE" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioTextBox"><span>Text Box · STANDARD</span><StudioTextBox size="standard" aria-label="Text box standard specimen">Read-only text rendered by the production StudioTextBox primitive.</StudioTextBox></div>
         <h4 className="vt-confirmed-representative-heading">CONTROLS</h4>
@@ -605,33 +608,61 @@ const ConfirmedStudioSideCounterFamily: React.FC = () => {
 
 const ConfirmedStudioIconRailTextInputFamily: React.FC = () => {
   const [text, setText] = React.useState("ALPHABET")
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const labels = ["60px SUPREME", "44px STANDARD", "28px COMPACT", "20px MINI", "12px MICRO"]
+  const rows = (render: (size: typeof sizes[number]) => React.ReactNode) => (
+    <div className="vt-confirmed-counter-size-rows">{sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small>{render(size)}</div>)}</div>
+  )
+  return (
+    <Family title="Studio Icon Rail Text Inputs · Non-Interactive · Five Sizes"
+      nonDefaultSettings={[
+        "Left, right, and double-split rails contain one centered informational/decorative icon and are never buttons.",
+        "Rails have no click, hover, pressed, or keyboard-action behavior; icons are hidden from assistive technology while the editable field has its own accessible name.",
+        "All variants reuse StudioTextInput, StudioSplitShell, canonical rail dividers, field inset/focus styling, and the five Studio size tiers.",
+      ]}
+      provenance={<Provenance primitive="StudioSplitLeftIconRailTextInput · StudioSplitRightIconRailTextInput · StudioDoubleSplitIconRailTextInput" tsx="src/studio-ui/primitives/StudioIconRailTextInput.tsx" css="src/studio-ui/primitives/studio-icon-rail-text-input.css" tokens="60px / 44px / 28px / 20px / 12px · shared square rails · informational icon only" imports={["src/studio-ui/primitives/StudioIconRailTextInput.tsx", "src/studio-ui/primitives/studio-icon-rail-text-input.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconRailTextInput">
+        <strong>SPLIT LEFT · NON-INTERACTIVE ICON RAIL</strong>
+        {rows(size => <StudioSplitLeftIconRailTextInput value={text} onValueChange={setText} size={size} leftIcon={<Settings2 aria-hidden="true" />} ariaLabel="Alphabetical text with left informational icon" />)}
+        <strong>SPLIT RIGHT · NON-INTERACTIVE ICON RAIL</strong>
+        {rows(size => <StudioSplitRightIconRailTextInput value={text} onValueChange={setText} size={size} rightIcon={<Info aria-hidden="true" />} ariaLabel="Alphabetical text with right informational icon" />)}
+        <strong>DOUBLE-SPLIT · NON-INTERACTIVE ICON RAILS</strong>
+        {rows(size => <StudioDoubleSplitIconRailTextInput value={text} onValueChange={setText} size={size} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Info aria-hidden="true" />} ariaLabel="Alphabetical text with double informational icon rails" />)}
+      </div>
+    </Family>
+  )
+}
+
+const ConfirmedStudioIconButtonRailTextInputFamily: React.FC = () => {
+  const [text, setText] = React.useState("ALPHABET")
   const [actionCount, setActionCount] = React.useState(0)
   const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
   const labels = ["60px SUPREME", "44px STANDARD", "28px COMPACT", "20px MINI", "12px MICRO"]
   const rows = (render: (size: typeof sizes[number]) => React.ReactNode) => (
     <div className="vt-confirmed-counter-size-rows">{sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small>{render(size)}</div>)}</div>
   )
-  return <Family title="Studio Icon Rail Text Inputs · Non-Interactive + Icon Button Rails · Five Sizes"
-    nonDefaultSettings={[
-      "Non-interactive icon rails are informational/decorative surfaces: no button semantics, hover, pressed, or click behavior.",
-      "Icon button rails use one centered square icon button per configured rail, with independent click actions, accessible names, and disabled states.",
-      "Both categories reuse StudioTextInput, StudioSplitShell, shared split dividers, field inset stroke, and all five Studio size tiers.",
-    ]}
-    provenance={<Provenance primitive="StudioSplitLeftIconRailTextInput · StudioSplitRightIconRailTextInput · StudioDoubleSplitIconRailTextInput · StudioSplitLeftIconButtonTextInput · StudioSplitRightIconButtonTextInput · StudioDoubleSplitIconButtonTextInput" tsx="src/studio-ui/primitives/StudioIconRailTextInput.tsx" css="src/studio-ui/primitives/studio-icon-rail-text-input.css" tokens="60px / 44px / 28px / 20px / 12px · square icon rails · one centered icon per rail" imports={["src/studio-ui/primitives/StudioIconRailTextInput.tsx", "src/studio-ui/primitives/studio-icon-rail-text-input.css"]} />}>
-    <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconRailTextInput">
-      <strong>NON-INTERACTIVE ICON RAILS · SPLIT LEFT / RIGHT / DOUBLE</strong>
-      {rows(size => <StudioSplitLeftIconRailTextInput value={text} onValueChange={setText} size={size} leftIcon={<Settings2 aria-hidden="true" />} />)}
-      {rows(size => <StudioSplitRightIconRailTextInput value={text} onValueChange={setText} size={size} rightIcon={<Info aria-hidden="true" />} />)}
-      {rows(size => <StudioDoubleSplitIconRailTextInput value={text} onValueChange={setText} size={size} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Info aria-hidden="true" />} />)}
-    </div>
-    <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButtonRailTextInput">
-      <strong>ICON BUTTON RAILS · SPLIT LEFT / RIGHT / DOUBLE</strong>
-      {rows(size => <StudioSplitLeftIconButtonTextInput value={text} onValueChange={setText} size={size} leftIcon={<Settings2 aria-hidden="true" />} leftIconLabel="Open options" onLeftIconClick={() => setActionCount(n => n + 1)} />)}
-      {rows(size => <StudioSplitRightIconButtonTextInput value={text} onValueChange={setText} size={size} rightIcon={<Check aria-hidden="true" />} rightIconLabel="Confirm text" onRightIconClick={() => setActionCount(n => n + 1)} />)}
-      {rows(size => <StudioDoubleSplitIconButtonTextInput value={text} onValueChange={setText} size={size} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Check aria-hidden="true" />} leftIconLabel="Open options" rightIconLabel="Confirm text" onLeftIconClick={() => setActionCount(n => n + 1)} onRightIconClick={() => setActionCount(n => n + 1)} />)}
-      <span aria-live="polite">ICON ACTIONS TRIGGERED: {actionCount}</span>
-    </div>
-  </Family>
+  const activate = () => setActionCount(count => count + 1)
+  return (
+    <Family title="Studio Icon Button Rail Text Inputs · One Centered Button Per Rail · Five Sizes"
+      nonDefaultSettings={[
+        "Each configured rail contains exactly one centered square icon button; split-left, split-right, and double-split share the canonical Studio split shell.",
+        "Each button has its own accessible name, click callback, and disabled state; the text field remains independently editable.",
+        "Button focus uses the shared secondary outline at 65% of the selected stroke width with zero offset; rail fill, divider, icon color, and sizing come from the shared split-rail contract.",
+      ]}
+      provenance={<Provenance primitive="StudioSplitLeftIconButtonTextInput · StudioSplitRightIconButtonTextInput · StudioDoubleSplitIconButtonTextInput" tsx="src/studio-ui/primitives/StudioIconRailTextInput.tsx" css="src/studio-ui/primitives/studio-icon-rail-text-input.css" tokens="60px / 44px / 28px / 20px / 12px · one centered icon button per rail · secondary focus outline" imports={["src/studio-ui/primitives/StudioIconRailTextInput.tsx", "src/studio-ui/primitives/studio-icon-rail-text-input.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioIconButtonRailTextInput">
+        <strong>SPLIT LEFT · ONE CENTERED ICON BUTTON</strong>
+        {rows(size => <StudioSplitLeftIconButtonTextInput value={text} onValueChange={setText} size={size} leftIcon={<Settings2 aria-hidden="true" />} leftIconLabel="Open options" onLeftIconClick={activate} ariaLabel="Alphabetical text with left icon action" />)}
+        <strong>SPLIT RIGHT · ONE CENTERED ICON BUTTON</strong>
+        {rows(size => <StudioSplitRightIconButtonTextInput value={text} onValueChange={setText} size={size} rightIcon={<Check aria-hidden="true" />} rightIconLabel="Confirm text" onRightIconClick={activate} ariaLabel="Alphabetical text with right icon action" />)}
+        <strong>DOUBLE-SPLIT · ONE CENTERED ICON BUTTON PER RAIL</strong>
+        {rows(size => <StudioDoubleSplitIconButtonTextInput value={text} onValueChange={setText} size={size} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Check aria-hidden="true" />} leftIconLabel="Open options" rightIconLabel="Confirm text" onLeftIconClick={activate} onRightIconClick={activate} ariaLabel="Alphabetical text with double icon actions" />)}
+        <span aria-live="polite">ICON BUTTON ACTIONS TRIGGERED: {actionCount}</span>
+      </div>
+    </Family>
+  )
 }
 
 const ConfirmedStudioSideTextCounterFamily: React.FC = () => {
@@ -1592,6 +1623,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
     <ConfirmedStudioSideCounterFamily />
     <ConfirmedStudioSideTextCounterFamily />
     <ConfirmedStudioIconRailTextInputFamily />
+    <ConfirmedStudioIconButtonRailTextInputFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioLeftWordCounterFamily />
     <ConfirmedStudioDoubleSplitWordCounterFamily />

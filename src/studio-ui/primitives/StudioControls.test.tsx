@@ -18,6 +18,7 @@ const readStudioControlCss = () => [
   "studio-control-recovery-overrides.css",
   "studio-control-word-counter.css",
   "studio-control-value-toggles.css",
+  "studio-icon-rail-text-input.css",
 ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
 
 const canonicalTail = (css: string) => {
@@ -1572,8 +1573,34 @@ describe("Studio icon rail alphabetical text input categories", () => {
   it("registers both categories in the standard representatives and confirmed primitive module", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain("ICON RAIL TEXT INPUTS")
-    expect(html).toContain("Studio Icon Rail Text Inputs")
+    expect(html).toContain("Studio Icon Rail Text Inputs · Non-Interactive")
+    expect(html).toContain("Studio Icon Button Rail Text Inputs")
     expect(html).toContain('data-vt-library-component="StudioDoubleSplitIconRailTextInput"')
     expect(html).toContain('data-vt-library-component="StudioDoubleSplitIconButtonTextInput"')
+  })
+})
+
+
+describe("Studio icon rail text input styling contract", () => {
+  it("keeps one shell perimeter and a single primary inset on the editable field", () => {
+    const css = readStudioControlCss()
+    const iconInput = css.slice(css.indexOf("Alphabetical icon-rail inputs"), css.indexOf("@media (prefers-reduced-motion", css.indexOf("Alphabetical icon-rail inputs")))
+    expect(iconInput).toContain("border: 0 !important")
+    expect(iconInput).toContain("var(--vt-field-primary")
+    expect(iconInput).toContain("outline-offset: 0")
+    expect(iconInput).toContain("var(--vt-field-secondary")
+  })
+
+  it("keeps non-interactive rails free of button semantics and gives action rails one button per side", async () => {
+    const { StudioSplitLeftIconRailTextInput, StudioDoubleSplitIconRailTextInput, StudioDoubleSplitIconButtonTextInput } = await import("./StudioIconRailTextInput")
+    const icon = <span>i</span>
+    const left = renderToStaticMarkup(<StudioSplitLeftIconRailTextInput value="A" onValueChange={() => {}} leftIcon={icon} />)
+    const double = renderToStaticMarkup(<StudioDoubleSplitIconRailTextInput value="A" onValueChange={() => {}} leftIcon={icon} rightIcon={icon} />)
+    const actions = renderToStaticMarkup(<StudioDoubleSplitIconButtonTextInput value="A" onValueChange={() => {}} leftIcon={icon} rightIcon={icon} leftIconLabel="Left action" rightIconLabel="Right action" onLeftIconClick={() => {}} onRightIconClick={() => {}} />)
+    expect(left).not.toContain("<button")
+    expect(double).not.toContain("<button")
+    expect((actions.match(/<button/g) ?? []).length).toBe(2)
+    expect(actions).toContain('aria-label="Left action"')
+    expect(actions).toContain('aria-label="Right action"')
   })
 })
