@@ -166,6 +166,7 @@ test("square icon button group is content-width and system-owned with primary/se
   const end = system.indexOf("}", start);
   const groupRule = system.slice(start, end);
   assert.notEqual(start, -1, "square icon group base rule should exist");
+  assert.equal((system.match(/\.vt-studio-square-icon-button-group\s*\{/g) || []).length, 1, "square icon group should have one base geometry rule");
   assert.match(groupRule, /display:\s*inline-flex/);
   assert.match(groupRule, /width:\s*max-content/);
   assert.match(groupRule, /flex:\s*0 0 auto/);
