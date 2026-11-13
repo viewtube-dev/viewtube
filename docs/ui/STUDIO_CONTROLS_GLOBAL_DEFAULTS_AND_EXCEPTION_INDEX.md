@@ -51,7 +51,7 @@ These rules apply first. The selected size tier changes dimensions, not the mean
 | Baseline line-height | `1` for single-line controls; textarea multiline exception is `0.85` from the multiline token |
 | Primary color | `--pair-a` |
 | Secondary color | `--pair-b` |
-| Default fill | Fields use 50% primary fill at rest and 15% on focus. Solid button/badge/action faces may use 100% primary only where their family contract explicitly specifies a solid face; do not generalize that exception to fields or all controls. |
+| Default fill | Fields use a 50% white / 50% primary blend at rest and an 85% white / 15% primary blend on focus. Solid button/badge/action faces may use 100% primary only where their family contract explicitly specifies a solid face; do not generalize that exception to fields or all controls. |
 | Alternate / split-rail fill | Secondary color; split icon rails are secondary by default |
 | Default label color | Black (`#000`) unless a primitive/state contract explicitly specifies primary-colored text |
 | Default outer border | Black (`#000`) |
@@ -145,11 +145,11 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Alignment: left; vertically centered.
 - Standard/compact type: 38px / 24px, weight 1000, uppercase, `-0.02em` tracking, default line-height (`1`).
 - Geometry: 44px / 28px high, 3px / 2px border, 6px / 4px radius.
-- Resting fill: primary color at 50% opacity.
+- Resting fill: 50% white / 50% primary blend.
 - Resting value, placeholder, and caret: primary color.
 - Outer border: black, size-tier stroke.
 - Resting inline text stroke: primary color, matching the resting text color and selected size-tier width.
-- Focus fill: primary color at 15% opacity.
+- Focus fill: 85% white / 15% primary blend.
 - Focus text and inline text stroke: black (`#000000`), matching one another.
 - Focus caret: primary color (`--pair-a`), not black.
 - Focus outline: secondary color at 100% opacity, width 65% of the selected border (1.95px standard / 1.3px compact / 0.975px Mini and 0.65px Micro), outline offset 0.
@@ -166,7 +166,7 @@ These are content-driven components, not fixed-width row controls. Their intrins
 - Geometry still follows the selected size tier: standard 44px family / 3px border / 6px radius; compact 28px family / 2px border / 4px radius. The 92px minimum surface may make the textarea taller than the nominal one-line control height.
 The multiline exception is sourced from `STUDIO_CONTROL_SIZE_BASE.multiline` in `src/studio-ui/tokens.ts` and emitted by `scripts/emit-studio-control-vars.mjs` into `src/styles/studio-control-vars.generated.css`. Do not use the single-line input font-size or text-stroke tokens for textarea glyphs.
 
-- Rest/focus fill and color contract matches the text input: 50% primary at rest, 15% primary on focus, primary text at rest, black text on focus, secondary 100%-opacity outline at 65% of the selected border width, offset 0.
+- Rest/focus fill and color contract matches the text input: 50% white / 50% primary blend at rest, 85% white / 15% primary blend on focus, primary text at rest, black text on focus, secondary 100%-opacity outline at 65% of the selected border width, offset 0.
 - Floating/fixed label variants are presentation variants of the same textarea primitive, not separate typography or border systems. Resting floating labels match the native field primitive and size tier; every raised label is 18px, regardless of input/textarea type or standard/compact size.
 - No internal gap: textarea shells and any split anatomy inside them are flush; the 4px spacing unit is reserved for external gaps between whole controls.
 
