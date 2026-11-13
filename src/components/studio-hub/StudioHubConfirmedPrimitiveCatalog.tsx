@@ -1,6 +1,6 @@
 import React from "react"
 import { StudioPublishingCard } from "../../studio-ui/compositions/StudioPublishingCard"
-import { Check, Home, Info, Settings2, Sparkles } from "lucide-react"
+import { Check, Home, Info, Search, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitAccordionCatalogSpecimens } from "./StudioSplitAccordionCatalogSpecimens"
 import ConfirmedSpecimenGrid from "./ConfirmedSpecimenGrid"
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
@@ -31,6 +31,7 @@ import {
   StudioDoubleSplitSlider,
   StudioSideCounter,
   StudioSideTextCounter,
+  StudioSideTextInput,
   StudioLeftCounter,
   StudioLeftWordCounter,
   StudioLeftWordSlider,
@@ -612,6 +613,29 @@ const ConfirmedStudioSideTextCounterFamily: React.FC = () => {
       <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounter">
         <div className="vt-confirmed-counter-size-rows">
           {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small><StudioSideTextCounter value={values[index]} onValueChange={next => setValues(current => current.map((value, item) => item === index ? next : value))} size={size} min={0} max={100} step={1} ariaLabel={size + " side text counter specimen"} placeholder="TYPE TEXT OR NUMBER" /></div>)}
+        </div>
+      </div>
+    </Family>
+  )
+}
+
+const ConfirmedStudioSideTextInputFamily: React.FC = () => {
+  const [values, setValues] = React.useState(["SEARCH", "SEARCH", "SEARCH", "SEARCH", "SEARCH"])
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const labels = ["60px SUPREME", "44px STANDARD", "28px COMPACT", "20px MINI", "12px MICRO"]
+  return (
+    <Family
+      title="StudioSideTextInput · Centered Editable Text + Single Icon Rail · Five Sizes"
+      nonDefaultSettings={[
+        "The center panel uses the global centered text alignment default while retaining the canonical StudioTextInput field behavior.",
+        "The single square right rail contains one centered icon; it replaces the side text counter's stacked increment/decrement buttons.",
+        "The icon is decorative unless an action callback is supplied; all five canonical size tiers share the same global rail and field tokens.",
+      ]}
+      provenance={<Provenance primitive="StudioSideTextInput" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-fields.css" tokens="60px / 44px / 28px / 20px / 12px · centered editable field · one square icon rail." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-fields.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextInput">
+        <div className="vt-confirmed-counter-size-rows">
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small><StudioSideTextInput value={values[index]} onValueChange={next => setValues(current => current.map((value, item) => item === index ? next : value))} icon={<Search aria-hidden="true" />} size={size} ariaLabel={size + " side text input specimen"} placeholder="TYPE TEXT" /></div>)}
         </div>
       </div>
     </Family>
@@ -1552,6 +1576,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioSideCounterFamily />
     <ConfirmedStudioSideTextCounterFamily />
+    <ConfirmedStudioSideTextInputFamily />
     <ConfirmedStudioDoubleSplitSliderFamily />
     <ConfirmedStudioLeftWordCounterFamily />
     <ConfirmedStudioDoubleSplitWordCounterFamily />
