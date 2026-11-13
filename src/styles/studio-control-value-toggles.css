@@ -39,9 +39,7 @@
 .vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__face {
   display: flex; width: 100%; min-width: 0; height: 100%; align-items: center; justify-content: center;
   padding-block: 0; overflow: hidden; white-space: nowrap; text-overflow: clip; line-height: 1;
-  color: var(--vt-studio-number-rest-color, color-mix(in srgb, #fff 50%, var(--vt-toggle-fill, var(--pair-a))));
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
+  color: inherit;
 }
 .vt-studio-value-toggle--side .vt-studio-value-toggle__face { display: grid; place-items: center; align-content: center; justify-content: flex-start; line-height: 1; }
 .vt-studio-value-toggle--double { display: flex; align-items: stretch; box-sizing: border-box; width: 100%; min-width: 0; height: var(--vt-studio-control-height, 44px); border: var(--vt-studio-control-stroke, 3px) solid #000; border-radius: var(--vt-studio-control-radius, 6px); overflow: hidden; }
@@ -85,9 +83,6 @@
 .vt-studio-word-counter__value {
   display: grid; place-items: center; align-self: stretch; min-width: 0; width: 100%; height: 100%; padding: 0;
   line-height: 1; text-align: center;
-  color: var(--vt-studio-number-rest-color, color-mix(in srgb, #fff 50%, var(--vt-toggle-fill, var(--pair-a))));
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
 }
 .vt-studio-word-counter__button { display: grid; place-items: center; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; color: #000; }
 .vt-studio-word-counter__button { --vt-studio-stepper-icon-size: calc(var(--vt-studio-control-height, 44px) * .82); --vt-studio-stepper-icon-stroke: 3.75; }
