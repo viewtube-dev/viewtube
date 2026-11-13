@@ -118,3 +118,17 @@ test("value-toggle gallery covers all five sizes and every supported rail varian
   for (const variant of ['"v1"', '"v2"']) assert.ok(family.includes(variant), "double-side divider variant " + variant);
   for (const appearance of ['"primary"', '"secondary"', '"black-primary-text"']) assert.ok(family.includes(appearance), "double-side right appearance " + appearance);
 });
+
+test("vertical word toggle shows every canonical skin at all five size tiers", () => {
+  const start = catalog.indexOf("const CanonicalWordToggleFamily");
+  const end = catalog.indexOf("\\nconst Provenance", start);
+  assert.notEqual(start, -1, "canonical word-toggle family should exist");
+  assert.notEqual(end, -1, "canonical word-toggle family should close");
+  const family = catalog.slice(start, end);
+  assert.match(family, /Array\(20\)\.fill\(false\)/, "five sizes × four skins need independent state");
+  for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+    assert.ok(family.includes('sizeVariant="' + size + '"'), size + " vertical word toggle specimens should exist");
+  }
+  assert.equal((family.match(/VERTICAL_WORD_TOGGLE_VARIANTS\.map/g) || []).length, 5,
+    "each of the five sizes should show all four vertical toggle skins");
+});
