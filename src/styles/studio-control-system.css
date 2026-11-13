@@ -6475,7 +6475,8 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
 
 /* StudioSideTextCounter centered value text and single-icon rail. */
 .vt-studio-side-text-counter .vt-studio-side-text-counter__input,
-.vt-studio-side-text-input .vt-studio-side-text-input__input {
+.vt-studio-side-text-input .vt-studio-side-text-input__input,
+.vt-studio-double-split-text-input .vt-studio-double-split-text-input__input {
   text-align: center;
 }
 .vt-studio-side-text-input > [data-vt-studio-split-field] {
