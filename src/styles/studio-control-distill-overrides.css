@@ -203,6 +203,22 @@
   transform: translateX(-50%);
   pointer-events: none;
 }
+.vt-studio-value-toggle--bar:focus-within .vt-studio-value-toggle__bar-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+.vt-studio-value-toggle__bar-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top-color: var(--vt-studio-control-secondary, var(--pair-b));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
 
 /* Choice controls share the same five-tier geometry as the rest of Studio Controls. */
 .vt-studio-44-switch[data-vt-studio-control="true"] {
