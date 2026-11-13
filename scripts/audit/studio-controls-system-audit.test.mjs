@@ -168,6 +168,11 @@ test("bar toggle geometry and fills are owned by the primitive stylesheet and ca
   assert.match(valueToggleCss, /\.vt-studio-value-toggle__bar\s*\{[^}]*border-radius:\s*var\(--vt-bar-radius\)/s);
   assert.match(valueToggleCss, /background:\s*color-mix\(in srgb,\s*#fff var\(--vt-studio-bar-empty-white-mix,\s*50%\),\s*var\(--vt-studio-control-accent/);
   assert.match(valueToggleCss, /background:\s*var\(--vt-studio-bar-full-fill,\s*#000000\)/);
+  assert.match(generated, /--vt-studio-bar-height-to-text-ratio:\s*1;/);
+  assert.match(generated, /--vt-studio-bar-height-to-width-ratio:\s*2\.5;/);
+  assert.match(generated, /--vt-studio-bar-radius:\s*2px;/);
+  assert.match(generated, /--vt-studio-bar-empty-white-mix:\s*50%;/);
+  assert.match(generated, /--vt-studio-bar-full-fill:\s*#000000;/);
   assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar/);
   assert.doesNotMatch(distill, /\.vt-studio-value-toggle--bar/);
   assert.match(core, /\[data-vt-studio-control="true"\] \[data-vt-studio-split-rail\][\s\S]*?position:\s*relative;[\s\S]*?z-index:\s*1/);
