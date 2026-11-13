@@ -114,3 +114,19 @@ assert.ok(systemStyles.includes("-webkit-text-stroke-width: var(--vt-studio-floa
 assert.ok(systemStyles.includes("color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 40%, #fff)"));
 assert.ok(systemStyles.includes("left: 50%;") && systemStyles.includes("transform: translateX(-50%);"));
 assert.ok(!controls.includes('className={["vt-studio-legend-count"'));
+
+
+// Regression guard: native single-line inputs must use the browser's centered
+// input text layout instead of a tight line-height that pushes glyphs low in
+// Standard, Compact, and Micro controls. Keep this separate from textarea rules.
+const singleLineInputStyles = [
+  ["src/styles/studio-text-input.css", readFileSync("src/styles/studio-text-input.css", "utf8")],
+  ["src/studio-ui/primitives/studio-split-text-input.css", readFileSync("src/studio-ui/primitives/studio-split-text-input.css", "utf8")],
+  ["src/studio-ui/primitives/studio-icon-rail-text-input.css", readFileSync("src/studio-ui/primitives/studio-icon-rail-text-input.css", "utf8")],
+  ["src/styles/studio-control-fields.css", readFileSync("src/styles/studio-control-fields.css", "utf8")],
+];
+for (const [path, stylesheet] of singleLineInputStyles) {
+  assert.match(stylesheet, /line-height:\\s*normal\\s*;/, path + " must explicitly preserve native vertical centering for single-line inputs");
+  assert.doesNotMatch(stylesheet, /input[^{}]*\\{[^}]*line-height:\\s*1\\s*;/s, path + " must not force a tight line box on native inputs");
+}
+console.log("Studio single-line input vertical-centering contract: PASS");
