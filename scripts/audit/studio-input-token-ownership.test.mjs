@@ -40,7 +40,11 @@ test("plain Studio input geometry consumes the generated size tokens", () => {
     "--vt-studio-micro-font-size",
   ]) assert.ok(inputCss.includes(`var(${token},`), `plain input does not consume ${token}`);
 
-  assert.match(inputCss, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-studio-control-accent, var\(--pair-a, #36e0f6\)\)/);
+  assert.match(inputCss, /background:\s*var\(--vt-field-fill-rest,/);
+  assert.match(inputCss, /color:\s*var\(--vt-field-primary,/);
+  assert.match(inputCss, /-webkit-text-fill-color:\s*var\(--vt-field-primary,/);
+  assert.match(inputCss, /caret-color:\s*var\(--vt-field-primary,/);
+  assert.match(inputCss, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-field-primary,/);
 });
 
 test("floating-label metrics are generated from the size-ladder tokens and consumed by the shared field rules", () => {
@@ -57,6 +61,11 @@ test("floating-label metrics are generated from the size-ladder tokens and consu
   assert.doesNotMatch(systemCss, /\.vt-studio-floating-field\.is-textarea\s*\{[^}]*--vt-studio-floating-label-size/s);
 });
 
+test("input and textarea focus use black glyphs over the white-mixed primary 15% fill", () => {
+  assert.match(inputCss, /input\\.vt-studio-text-input:is\\(:focus, :focus-visible\\)[\\s\\S]*?background:\\s*var\\(--vt-field-fill-focus,/);
+  assert.match(inputCss, /input\\.vt-studio-text-input:is\\(:focus, :focus-visible\\)[\\s\\S]*?-webkit-text-stroke-color:\\s*#000/);
+  assert.match(inputCss, /textarea\\[data-vt-studio-control="true"\\]:is\\(:focus, :focus-visible\\)[\\s\\S]*?white 85%,[\\s\\S]*?-webkit-text-stroke-color:\\s*#000/);
+});
 test("plain Studio input retains the explicit standard, compact, and micro size hooks", () => {
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="standard"\]/);
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="compact"\]/);
