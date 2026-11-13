@@ -170,6 +170,16 @@ describe("Studio value toggle primitives", () => {
     expect(shell?.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(10);
   });
 
+  it("anchors the percentage tooltip to the rightmost filled bar", () => {
+    const { container } = mount(<StudioBarToggle value={50} barCount={10} onValueChange={() => {}} />);
+    const bars = [...container.querySelectorAll(".vt-studio-value-toggle__bar")];
+    const filled = bars.filter(bar => bar.getAttribute("data-active") === "true");
+    expect(filled).toHaveLength(5);
+    expect(filled[4]?.querySelector(".vt-studio-value-toggle__bar-tooltip")?.textContent).toBe("50%");
+    expect(filled[0]?.querySelector(".vt-studio-value-toggle__bar-tooltip")).toBeNull();
+    expect(container.querySelectorAll(".vt-studio-value-toggle__bar-tooltip")).toHaveLength(1);
+  });
+
   it("does not invent a filled-bar tooltip when the value is zero", () => {
     const { container } = mount(<StudioBarToggle value={0} barCount={10} onValueChange={() => {}} />);
     const bars = container.querySelectorAll(".vt-studio-value-toggle__bar");
