@@ -18,8 +18,9 @@ const readStudioControlCss = () => [
   "studio-control-recovery-overrides.css",
   "studio-control-word-counter.css",
   "studio-control-value-toggles.css",
-  "studio-icon-rail-text-input.css",
-].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8")).join("\n");
+ ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8"))
+  .concat(readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/studio-icon-rail-text-input.css"), "utf8"))
+  .join("\n");
 
 const canonicalTail = (css: string) => {
   const start = css.lastIndexOf("/* Canonical Studio Controls contract");
