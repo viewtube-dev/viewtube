@@ -16,32 +16,6 @@
   line-height: 1;
 }
 
-/* Group width is determined by its square cells, not the parent row. */
-.vt-studio-square-icon-button-group {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-self: flex-start;
-  width: max-content;
-  max-width: 100%;
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
-[data-vt-brain-component="BrainAnswerFeedback"] .vt-studio-square-icon-button-group {
-  width: max-content;
-  flex: 0 0 auto;
-}
-
-/* Icon groups size to their content instead of stretching across the row. */ 
- .vt-studio-square-icon-button-group { 
-   display: inline-flex; 
-   width: max-content; 
-   max-width: 100%; 
-   flex: 0 0 auto; 
-   align-self: flex-start; 
- } 
- 
-
-
 /* Value-toggle focus and character treatment are owned by
    studio-control-value-toggles.css and the shared counter interaction tokens. */
 
