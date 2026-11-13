@@ -72,7 +72,7 @@
   align-items: center;
   justify-content: center;
 }
-[data-vt-studio-control="true"][data-vt-studio-split] [data-vt-studio-split-label] {
+[data-vt-studio-control="true"][data-vt-studio-split]:not([data-vt-studio-split-input="true"]) [data-vt-studio-split-label] {
   position: absolute;
   z-index: 0;
   inset: 0;
