@@ -1568,6 +1568,7 @@ describe("Studio icon rail alphabetical text input categories", () => {
     expect(left).toContain('aria-label="Open options"')
     expect(right).toContain('aria-label="Confirm"')
     expect((double.match(/<button/g) ?? []).length).toBe(2)
+    expect(double).toContain("disabled")
     expect(double).toContain('data-vt-library-component="StudioDoubleSplitIconButtonTextInput"')
   })
 
