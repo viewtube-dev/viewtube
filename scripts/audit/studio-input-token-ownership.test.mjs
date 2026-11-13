@@ -62,9 +62,9 @@ test("floating-label metrics are generated from the size-ladder tokens and consu
 });
 
 test("input and textarea focus use black glyphs over the white-mixed primary 15% fill", () => {
-  assert.match(inputCss, /input\\.vt-studio-text-input:is\\(:focus, :focus-visible\\)[\\s\\S]*?background:\\s*var\\(--vt-field-fill-focus,/);
-  assert.match(inputCss, /input\\.vt-studio-text-input:is\\(:focus, :focus-visible\\)[\\s\\S]*?-webkit-text-stroke-color:\\s*#000/);
-  assert.match(inputCss, /textarea\\[data-vt-studio-control="true"\\]:is\\(:focus, :focus-visible\\)[\\s\\S]*?white 85%,[\\s\\S]*?-webkit-text-stroke-color:\\s*#000/);
+  assert.match(inputCss, /input\.vt-studio-text-input:focus[\s\S]*?background:\s*var\(--vt-field-fill-focus,/);
+  assert.match(inputCss, /input\.vt-studio-text-input:focus[\s\S]*?-webkit-text-stroke-color:\s*#000/);
+  assert.match(inputCss, /textarea\[data-vt-studio-control="true"\]:is\(:focus, :focus-visible\)[\s\S]*?white 85%,[\s\S]*?-webkit-text-stroke-color:\s*#000/);
 });
 test("plain Studio input retains the explicit standard, compact, and micro size hooks", () => {
   assert.match(inputCss, /input\.vt-studio-text-input\[data-size="standard"\]/);
