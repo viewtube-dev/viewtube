@@ -42,12 +42,6 @@ export {
   StudioCounter,
   StudioSideCounter,
   StudioSideTextCounter,
-  StudioSplitLeftIconRailTextInput,
-  StudioSplitRightIconRailTextInput,
-  StudioDoubleSplitIconRailTextInput,
-  StudioSplitLeftIconButtonTextInput,
-  StudioSplitRightIconButtonTextInput,
-  StudioDoubleSplitIconButtonTextInput,
   StudioLeftCounter,
   StudioLeftWordCounter,
   StudioLeftWordSlider,
@@ -76,6 +70,18 @@ export {
   StudioTagEditor,
   StudioVerticalWordToggle,
 } from "./primitives/StudioControls"
+export {
+  StudioSplitLeftIconRailTextInput,
+  StudioSplitRightIconRailTextInput,
+  StudioDoubleSplitIconRailTextInput,
+  StudioSplitLeftIconButtonTextInput,
+  StudioSplitRightIconButtonTextInput,
+  StudioDoubleSplitIconButtonTextInput,
+} from "./primitives/StudioIconRailTextInput"
+export type {
+  StudioIconRailTextInputProps,
+  StudioIconButtonRailTextInputProps,
+} from "./primitives/StudioIconRailTextInput"
 export type {
   StudioButtonProps,
   StudioButtonVariant,
@@ -86,8 +92,6 @@ export type {
   StudioLegendMultiDropdownOption,
   StudioCounterProps,
   StudioSideTextCounterProps,
-  StudioIconRailTextInputProps,
-  StudioIconButtonRailTextInputProps,
   StudioLeftCounterProps,
   StudioLeftWordCounterProps,
   StudioLeftWordSliderProps,
