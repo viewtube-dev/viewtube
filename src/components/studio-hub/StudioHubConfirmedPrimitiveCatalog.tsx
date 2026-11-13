@@ -960,7 +960,7 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Compatibility Control Exports/.test(title)) return "Controls"
 
   // Choice primitives share one top-level family; check this before broad button rules.
-  if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle|StudioChoice/.test(title)
+  if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle|StudioChoice|Stepper/.test(title)
     || componentName === "CanonicalControlFamilies"
     || componentName === "CanonicalWordToggleFamily"
     || componentName === "ConfirmedStudioValueToggleFamily") {
@@ -1623,6 +1623,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
         </div>)}
       </div>
     </Family>
+    <ConfirmedStudioNumericStepperFamily />
     <ConfirmedStudioValueToggleFamily />
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioSideCounterFamily />
@@ -1798,6 +1799,43 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
       {additionalPrimitiveSections}
     </ConfirmedCatalogFamilyGroups>
   </>
+  )
+}
+
+const ConfirmedStudioNumericStepperFamily: React.FC = () => {
+  const sizes = ["standard", "compact"] as const
+  const [inlineValues, setInlineValues] = React.useState([12, 8])
+  const [splitValues, setSplitValues] = React.useState([12, 8])
+  const updateAt = (setter: React.Dispatch<React.SetStateAction<number[]>>, index: number, value: number) =>
+    setter(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))
+  return (
+    <Family
+      title="Studio Numeric Steppers · Inline + Split"
+      nonDefaultSettings={[
+        "The production APIs support Standard and Compact only; Supreme, Mini, and Micro are intentionally not advertised.",
+        "Inline Stepper places decrement/increment actions around an editable number field.",
+        "Split Stepper keeps the editable number field beside one secondary action rail.",
+        "Each size and layout has independent controlled value state with the same min/max and step behavior.",
+      ]}
+      provenance={<Provenance primitive="StudioInlineStepper / StudioSplitStepper" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css" tokens="44px Standard / 28px Compact · editable numeric value · bounded increment/decrement actions" imports={["src/studio-ui/primitives/StudioControls.tsx", "src/studio-ui/tokens.ts"]} />}
+    >
+      <div className="vt-confirmed-toggle-subfamily">
+        <strong>INLINE STEPPER · STANDARD / COMPACT</strong>
+        {sizes.map((size, index) => <div className="vt-confirmed-variant is-full-row" key={"inline-" + size} data-vt-library-component="StudioInlineStepper">
+          <span>INLINE STEPPER · {size.toUpperCase()}</span>
+          <StudioInlineStepper size={size} value={inlineValues[index]} onValueChange={value => updateAt(setInlineValues, index, value)}
+            min={0} max={100} step={1} ariaLabel={size + " inline stepper value"} />
+        </div>)}
+      </div>
+      <div className="vt-confirmed-toggle-subfamily">
+        <strong>SPLIT STEPPER · STANDARD / COMPACT</strong>
+        {sizes.map((size, index) => <div className="vt-confirmed-variant is-full-row" key={"split-" + size} data-vt-library-component="StudioSplitStepper">
+          <span>SPLIT STEPPER · {size.toUpperCase()}</span>
+          <StudioSplitStepper size={size} value={splitValues[index]} onValueChange={value => updateAt(setSplitValues, index, value)}
+            min={0} max={100} step={1} ariaLabel={size + " split stepper value"} />
+        </div>)}
+      </div>
+    </Family>
   )
 }
 
