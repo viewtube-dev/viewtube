@@ -161,6 +161,21 @@ test("side and double-side toggle rail buttons reuse the side-counter action sys
   assert.ok(system.includes(".vt-studio-side-counter__actions button"));
 });
 
+test("square icon button group is content-width and system-owned with primary/secondary selection", () => {
+  const start = system.indexOf(".vt-studio-square-icon-button-group {");
+  const end = system.indexOf("\\n}", start);
+  const groupRule = system.slice(start, end);
+  assert.notEqual(start, -1, "square icon group base rule should exist");
+  assert.match(groupRule, /display:\\s*inline-flex/);
+  assert.match(groupRule, /width:\\s*max-content/);
+  assert.match(groupRule, /flex:\\s*0 0 auto/);
+  assert.match(groupRule, /align-self:\\s*flex-start/);
+  assert.match(groupRule, /overflow:\\s*visible/);
+  assert.doesNotMatch(distill, /\\.vt-studio-square-icon-button-group/);
+  assert.match(system, /data-vt-studio-button-variant="v3"\\]\[data-vt-studio-button-on="false"[\\s\\S]*?background:\\s*var\\(--pair-a/);
+  assert.match(system, /data-vt-studio-button-variant="v3"\\]\[data-vt-studio-button-on="true"[\\s\\S]*?background:\\s*var\\(--pair-b/);
+});
+
 test("bar toggle geometry and fills are owned by the primitive stylesheet and canonical tokens", () => {
   assert.match(valueToggleCss, /--vt-bar-height:\s*calc\(var\(--vt-studio-control-font-size,\s*38px\)\s*\*\s*var\(--vt-studio-bar-height-to-text-ratio,\s*1\)\)/);
   assert.match(valueToggleCss, /--vt-bar-width:\s*calc\(var\(--vt-bar-height\)\s*\/\s*var\(--vt-studio-bar-height-to-width-ratio,\s*2\.5\)\)/);
