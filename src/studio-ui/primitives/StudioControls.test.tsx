@@ -1566,6 +1566,14 @@ describe("confirmed counter representative and focus-surface regressions", () =>
     expect((family.match(/<StudioLeftCounter/g) ?? []).length).toBe(5);
   });
 
+  it("registers the icon-rail side text input as a standard representative and five-size family", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(catalog).toContain('data-vt-library-component="StudioSideTextInput"');
+    expect(catalog).toContain("const ConfirmedStudioSideTextInputFamily");
+    expect(catalog).toContain("StudioSideTextInput · Centered Editable Text + Single Icon Rail · Five Sizes");
+    expect(catalog).toContain('icon={<Search aria-hidden="true" />}');
+  });
+
   it("does not repaint counter text panels to 50% primary while an action is focused or held", () => {
     const css = readStudioControlCss();
     expect(css).not.toMatch(/\.vt-studio-counter:has\([\s\S]*?\) \.vt-studio-counter__value\s*\{[^}]*background:/);
