@@ -56,14 +56,15 @@ const checks = [
   ["dropdown menus and value controls are classified by their owning family", /Dropdown/.test(catalog) && /StudioCounter[\s\S]*return "Controls"/.test(catalog) && /StudioDoubleSplitSlider[\s\S]*return "Controls"/.test(catalog)],
 
   ["retired CLEAN COMPOSITION specimen is absent from confirmed catalog", !/CLEAN COMPOSITION|Confirmed Specimen Grid\s*[·-]\s*Layout Contract/i.test(catalog)],
+  ["side text counter has exactly one standard representative", (catalog.match(/data-vt-library-component="StudioSideTextCounter"/g) ?? []).length === 1],
+  ["side and double-split text inputs each have one canonical representative", (catalog.match(/data-vt-library-component="StudioSideTextInput"/g) ?? []).length === 1 && (catalog.match(/data-vt-library-component="StudioDoubleSplitTextInput"/g) ?? []).length === 1],
   ["specimen grid supports the complete five-tier global size vocabulary", specimenGrid.includes('export type SpecimenTier = "supreme" | "standard" | "compact" | "mini" | "micro"') && specimenGrid.includes('const SPECIMEN_TIERS = ["supreme", "standard", "compact", "mini", "micro"] as const')],
   ["confirmed library owns canonical production representatives while legacy tracks remain comparison-only", libraryAuthority.includes("The **Confirmed Primitive Library**") && libraryAuthority.includes("not evidence that a control is part of the public API") && libraryAuthority.includes("must not silently override the Confirmed catalog's ownership")],
 ]
 
 const requiredP0 = [
-  "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioSplitTextInput",
-  "StudioSplitLeftIconRailTextInput", "StudioSplitRightIconRailTextInput", "StudioDoubleSplitIconRailTextInput",
-  "StudioSplitLeftIconButtonTextInput", "StudioSplitRightIconButtonTextInput", "StudioDoubleSplitIconButtonTextInput", "StudioButton",
+  "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioSplitLeftIconRailTextInput", "StudioSplitRightIconRailTextInput", "StudioDoubleSplitIconRailTextInput",
+  "StudioSplitLeftIconButtonTextInput", "StudioSplitRightIconButtonTextInput", "StudioDoubleSplitIconButtonTextInput", "StudioButton", "StudioSideTextCounter", "StudioSideTextInput", "StudioDoubleSplitTextInput",
   "StudioActionButton", "StudioSquareIconButtonGroup", "StudioTopSplitModule", "StudioCollapsingTwoLineModule",
   "StudioUploadFrame", "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown", "StudioSplitTextInput",
   "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox", "StudioIconButton", "StudioSplitRightButton",
