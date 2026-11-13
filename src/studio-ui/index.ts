@@ -177,6 +177,8 @@ export type {
 } from "./recipes"
 
 export { StudioSplitAccordion } from "./primitives/StudioSplitAccordion"
+export { StudioPanelAccordion } from "./primitives/StudioPanelAccordion"
+export type { StudioPanelAccordionItem, StudioPanelAccordionProps } from "./primitives/StudioPanelAccordion"
 export type { StudioSplitAccordionItem, StudioSplitAccordionProps, StudioSplitAccordionLayout, StudioSplitAccordionSize } from "./primitives/StudioSplitAccordion"
 
 export { StudioPublishingCard } from "./compositions/StudioPublishingCard"
