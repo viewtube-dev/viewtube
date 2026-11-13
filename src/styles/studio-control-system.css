@@ -4696,8 +4696,7 @@ button.vt-studio-vertical-word-toggle[data-vt-studio-control="true"],
   .vt-studio-vertical-word-toggle__word { transition: none !important; }
 }
 
-/* Read-only text display shares textarea tokens but never receives edit/focus states. */
-/* Read-only text display follows the same geometry and glyph contract as editable fields. */
+/* Read-only text display shares textarea size/typography tokens and the field color contract. It remains non-editable; focus styling applies only when a caller makes it focusable. */
 .vt-studio-text-box[data-vt-studio-control="true"] {
   position: relative;
   box-sizing: border-box;
