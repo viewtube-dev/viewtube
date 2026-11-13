@@ -18,7 +18,7 @@ input.vt-studio-text-input {
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  line-height: 1;
+  line-height: normal;
   outline: none;
   box-shadow: none;
   appearance: none;
