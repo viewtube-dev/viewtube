@@ -30,6 +30,13 @@ A family is **source-confirmed** only when its specimen uses the production expo
 - No shadow, fake shadow, movement, or component-specific global-token change is introduced. Panel content is hidden when inactive and is labelled by its controlling trigger.
 - The Confirmed Primitive Library specimen and component/catalog contract tests are the source-certification surface. Visual browser certification must be reported separately from source/test certification.
 
+## Numeric Stepper — supported size subset (2026-11-13)
+
+- Canonical production exports: `StudioInlineStepper` and `StudioSplitStepper` from `src/studio-ui/primitives/StudioControls.tsx`.
+- Both APIs support Standard (44px) and Compact (28px) only. Supreme, Mini, and Micro are not supported and must not be fabricated in catalog galleries.
+- Inline Stepper presents decrement / editable value / increment in one flat control. Split Stepper presents the editable value beside one secondary action rail.
+- They are Controls, not compositions. The Confirmed Primitive Library must include direct imported Standard representatives and a dedicated family module showing both supported sizes with independent controlled values.
+
 ## 1. Global defaults — independent of size
 
 These rules apply first. The selected size tier changes dimensions, not the meaning of the shared color, alignment, typography, or layout rules.
