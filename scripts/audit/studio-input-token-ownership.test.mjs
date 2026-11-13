@@ -75,16 +75,16 @@ test("plain Studio input retains the explicit standard, compact, and micro size 
 test("read-only StudioTextBox uses primary glyphs at rest and a secondary outline only on focus", () => {
   const systemCss = readFileSync("src/styles/studio-control-system.css", "utf8");
   const start = systemCss.indexOf('.vt-studio-text-box[data-vt-studio-control="true"] {');
-  const end = systemCss.indexOf("\\n}", start);
+  const end = systemCss.indexOf("}", start);
   const base = systemCss.slice(start, end);
   assert.notEqual(start, -1, "text box base rule should exist");
-  assert.match(base, /background:\\s*var\\(--vt-field-fill-rest,/);
-  assert.match(base, /outline:\\s*0 solid transparent/);
-  assert.match(base, /color:\\s*var\\(--vt-field-primary,/);
-  assert.match(base, /-webkit-text-fill-color:\\s*var\\(--vt-field-primary,/);
-  assert.match(base, /-webkit-text-stroke:\\s*var\\(--vt-studio-control-text-stroke, 1px\\)\\s*var\\(--vt-field-primary,/);
-  assert.match(fieldCss, /\\.vt-studio-text-box\\[data-vt-studio-control="true"\\]:is\\(:focus, :focus-visible\\)[\\s\\S]*?outline:\\s*calc\\([\\s\\S]*?var\\(--vt-studio-control-secondary/);
-  assert.match(fieldCss, /\\.vt-studio-text-box\\[data-vt-studio-control="true"\\]:is\\(:focus, :focus-visible\\)[\\s\\S]*?background-color:\\s*var\\(--vt-field-fill-focus,/);
+  assert.match(base, /background:\s*var\(--vt-field-fill-rest,/);
+  assert.match(base, /outline:\s*0 solid transparent/);
+  assert.match(base, /color:\s*var\(--vt-field-primary,/);
+  assert.match(base, /-webkit-text-fill-color:\s*var\(--vt-field-primary,/);
+  assert.match(base, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-field-primary,/);
+  assert.match(fieldCss, /\.vt-studio-text-box\[data-vt-studio-control="true"\]:is\(:focus, :focus-visible\)[\s\S]*?outline:\s*calc\([\s\S]*?var\(--vt-studio-control-secondary/);
+  assert.match(fieldCss, /\.vt-studio-text-box\[data-vt-studio-control="true"\]:is\(:focus, :focus-visible\)[\s\S]*?background-color:\s*var\(--vt-field-fill-focus,/);
 });
 
 test("primary inline glyph stroke is declared separately from the outer field border", () => {
