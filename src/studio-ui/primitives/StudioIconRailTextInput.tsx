@@ -43,7 +43,7 @@ const IconButtonRailBase = React.forwardRef<HTMLInputElement, StudioIconButtonRa
     const button = (icon: React.ReactNode, side: "left" | "right") => <button type="button"
       className={`vt-studio-icon-button-rail-text-input__button is-${side}`}
       aria-label={(side === "left" ? leftIconLabel : rightIconLabel) ?? `${side === "left" ? "Left" : "Right"} icon action for ${ariaLabel}`}
-      disabled={side === "left" ? leftIconDisabled : rightIconDisabled}
+      disabled={side === "left" ? leftIconDisabled || !onLeftIconClick : rightIconDisabled || !onRightIconClick}
       onClick={side === "left" ? onLeftIconClick : onRightIconClick}><span aria-hidden="true">{icon}</span></button>
     return <StudioSplitShell layout={layout} fieldSlot sizeVariant={size}
       className={[`vt-studio-icon-button-rail-text-input ${name}`, className].filter(Boolean).join(" ")}
