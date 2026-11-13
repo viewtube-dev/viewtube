@@ -127,10 +127,10 @@
   border-radius: var(--vt-bar-radius);
   box-sizing: border-box;
   pointer-events: none;
-  background: color-mix(in srgb, #fff var(--vt-studio-bar-empty-white-mix, 50%), var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) !important;
+  background: color-mix(in srgb, #fff var(--vt-studio-bar-empty-white-mix, 50%), var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
 .vt-studio-value-toggle__bar[data-active="true"] {
-  background: var(--vt-studio-bar-full-fill, #000000) !important;
+  background: var(--vt-studio-bar-full-fill, #000000);
 }
 .vt-studio-value-toggle--bar {
   position: relative;
