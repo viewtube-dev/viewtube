@@ -62,3 +62,42 @@ test("critical public primitives have direct representatives in the confirmed ca
   assert.deepEqual(missingFromBarrel, [], "critical names should remain public exports");
   assert.deepEqual(missingRepresentative, [], "critical exports need a rendered catalog representative");
 });
+
+test("direct primitive representatives are grouped by related component family", () => {
+  const sectionStart = catalog.indexOf('data-vt-confirmed-representatives="true"');
+  const sectionEnd = catalog.indexOf('\\n      </div>\\n    </Family>', sectionStart);
+  assert.notEqual(sectionStart, -1, "direct representative section should exist");
+  assert.notEqual(sectionEnd, -1, "direct representative section should close");
+  const section = catalog.slice(sectionStart, sectionEnd);
+  const headings = [...section.matchAll(/<h4[^>]*>(.*?)<\\/h4>/g)].map(match => match[1]);
+  assert.deepEqual(headings, [
+    "BUTTONS & ICON BUTTONS",
+    "TEXT ENTRY & INPUTS",
+    "DROPDOWNS",
+    "SELECTION CONTROLS",
+    "TOGGLES",
+    "COUNTERS, STEPPERS & SLIDERS",
+    "BADGES & STATUS INDICATORS",
+    "LAYOUT PRIMITIVES",
+    "MODULES & COMPOSITIONS",
+  ]);
+  const groupBounds = headings.map((heading, index) => ({
+    heading,
+    start: section.indexOf(">" + heading + "</h4>"),
+    end: index + 1 < headings.length
+      ? section.indexOf(">" + headings[index + 1] + "</h4>")
+      : section.length,
+  }));
+  const has = (group, component) => {
+    const bounds = groupBounds.find(item => item.heading === group);
+    return new RegExp('data-vt-library-component="' + component + '"').test(section.slice(bounds.start, bounds.end));
+  };
+  assert.equal(has("TEXT ENTRY & INPUTS", "StudioSplitLeftIconRailTextInput"), true);
+  assert.equal(has("TEXT ENTRY & INPUTS", "StudioSplitLeftIconButtonTextInput"), true);
+  assert.equal(has("SELECTION CONTROLS", "StudioCheckbox"), true);
+  assert.equal(has("TOGGLES", "StudioDoubleSideToggle"), true);
+  assert.equal(has("COUNTERS, STEPPERS & SLIDERS", "StudioSplitStepper"), true);
+  assert.equal(has("COUNTERS, STEPPERS & SLIDERS", "StudioSideTextCounter"), true);
+  assert.equal(has("BADGES & STATUS INDICATORS", "StudioBrainStatusBadge"), true);
+  assert.equal(has("MODULES & COMPOSITIONS", "StudioPanelAccordion"), true);
+});
