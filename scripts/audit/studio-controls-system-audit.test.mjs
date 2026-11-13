@@ -389,4 +389,7 @@ test("single-line text fields use native vertical centering across every split-f
     assert.match(css, /line-height:\s*normal\s*;/, name + " must use native vertical centering");
     assert.doesNotMatch(css, /input[^{}]*\{[^}]*line-height:\s*1\s*;/s, name + " must not force a tight native-input line box");
   }
+  const system = read("src/styles/studio-control-system.css");
+  assert.match(system, /input\\[data-vt-studio-control="true"\\]\\[data-vt-studio-field-kind="text-input"\\]\\s*\\{[^}]*line-height:\\s*normal\\s*;/s,
+    "the global field selector must not override native input centering with the 1em control token");
 });
