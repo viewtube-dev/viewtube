@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioSideTextInput, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, STUDIO_COMPONENT_GLOBAL_DEFAULTS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioSideTextInput, StudioDoubleSplitTextInput, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, STUDIO_COMPONENT_GLOBAL_DEFAULTS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -1578,5 +1578,41 @@ describe("confirmed counter representative and focus-surface regressions", () =>
     const css = readStudioControlCss();
     expect(css).not.toMatch(/\.vt-studio-counter:has\([\s\S]*?\) \.vt-studio-counter__value\s*\{[^}]*background:/);
     expect(css).not.toMatch(/\.vt-studio-left-counter:has\([\s\S]*?\) \.vt-studio-side-counter__value\s*\{[^}]*background:/);
+  });
+});
+
+
+describe("StudioDoubleSplitTextInput", () => {
+  it("renders a centered editable field between two independent icon rails", () => {
+    const html = renderToStaticMarkup(
+      <StudioDoubleSplitTextInput
+        value="SEARCH"
+        onValueChange={() => undefined}
+        leftIcon={<span>LEFT_ICON</span>}
+        rightIcon={<span>RIGHT_ICON</span>}
+        size="standard"
+        ariaLabel="Double split search"
+        leftIconLabel="Open filters"
+        rightIconLabel="Run search"
+        onLeftIconClick={() => undefined}
+        onRightIconClick={() => undefined}
+      />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioDoubleSplitTextInput"');
+    expect(html).toContain('data-vt-studio-split="double"');
+    expect(html).toContain('aria-label="Double split search"');
+    expect(html).toContain('aria-label="Open filters"');
+    expect(html).toContain('aria-label="Run search"');
+    expect(html).toContain("LEFT_ICON");
+    expect(html).toContain("RIGHT_ICON");
+    expect((html.match(/data-vt-studio-split-rail/g) ?? []).length).toBe(2);
+    expect(html).toContain('class="vt-studio-double-split-text-input__input');
+  });
+
+  it("keeps both icon rails and the centered field registered in the confirmed library", () => {
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(catalog).toContain('data-vt-library-component="StudioDoubleSplitTextInput"');
+    expect(catalog).toContain("ConfirmedStudioDoubleSplitTextInputFamily");
+    expect(catalog).toContain("StudioDoubleSplitTextInput · Centered Editable Text + Two Icon Rails · Five Sizes");
   });
 });
