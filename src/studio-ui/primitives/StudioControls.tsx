@@ -2534,7 +2534,82 @@ export const StudioSideTextCounter = React.forwardRef<HTMLInputElement, StudioSi
     </StudioSplitShell>
   );
 });
+
 StudioSideTextCounter.displayName = "StudioSideTextCounter";
+
+/** Editable centered text field with one square icon rail instead of numeric step controls. */
+export interface StudioSideTextInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size" | "value" | "defaultValue" | "onChange" | "type" | "className" | "style"
+> {
+  value: string;
+  onValueChange: (value: string) => void;
+  icon: React.ReactNode;
+  iconLabel?: string;
+  onIconClick?: () => void;
+  size?: StudioControlSize;
+  disabled?: boolean;
+  ariaLabel?: string;
+  className?: string;
+  inputClassName?: string;
+  inputStyle?: React.CSSProperties;
+}
+
+export const StudioSideTextInput = React.forwardRef<HTMLInputElement, StudioSideTextInputProps>(({
+  value, onValueChange, icon, iconLabel = "Activate icon action", onIconClick,
+  size = "standard", disabled = false, ariaLabel = "Text",
+  className, inputClassName, inputStyle, ...inputProps
+}, ref) => {
+  const interactionFocus = useStudioInteractionFocus();
+  const iconContent = onIconClick
+    ? <button
+        type="button"
+        className="vt-studio-side-text-input__icon-button"
+        data-vt-studio-side-text-input-icon
+        aria-label={iconLabel}
+        disabled={disabled}
+        onClick={() => { onIconClick(); interactionFocus.pulse(); }}
+      >{icon}</button>
+    : <span className="vt-studio-side-text-input__icon" data-vt-studio-side-text-input-icon aria-hidden="true">{icon}</span>;
+
+  return (
+    <StudioSplitShell
+      layout="right"
+      fieldSlot
+      sizeVariant={size}
+      className={studioClasses("vt-studio-side-text-input", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
+      railClassName="vt-studio-side-counter__rail"
+      rightRailContent={iconContent}
+      shellProps={{
+        "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined,
+        onPointerDownCapture: interactionFocus.start,
+        onPointerUpCapture: interactionFocus.end,
+        onPointerCancelCapture: interactionFocus.end,
+        role: "group",
+        "aria-label": ariaLabel,
+        "data-vt-studio-control-family": "text-input",
+        "data-vt-studio-control-kind": "studio-side-text-input",
+        "data-vt-library-component": "StudioSideTextInput",
+      }}
+    >
+      <StudioTextInput
+        {...inputProps}
+        ref={ref}
+        type="text"
+        value={value}
+        onChange={event => onValueChange(event.currentTarget.value)}
+        aria-label={inputProps["aria-label"] ?? ariaLabel}
+        disabled={disabled}
+        inputMode={inputProps.inputMode ?? "text"}
+        sizeVariant={size}
+        className={["vt-studio-side-text-input__input", inputClassName].filter(Boolean).join(" ")}
+        style={inputStyle}
+      />
+    </StudioSplitShell>
+  );
+});
+StudioSideTextInput.displayName = "StudioSideTextInput";
+
 
 
 export const StudioLeftCounter: React.FC<StudioLeftCounterProps> = ({
