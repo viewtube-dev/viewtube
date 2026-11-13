@@ -170,12 +170,12 @@ describe("Studio value toggle primitives", () => {
     expect(shell?.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(10);
   });
 
-  it("renders the zero-percent bar tooltip on the first bar for focus reveal", () => {
+  it("does not invent a filled-bar tooltip when the value is zero", () => {
     const { container } = mount(<StudioBarToggle value={0} barCount={10} onValueChange={() => {}} />);
     const bars = container.querySelectorAll(".vt-studio-value-toggle__bar");
     expect(bars).toHaveLength(10);
-    expect(bars[0]?.querySelector(".vt-studio-value-toggle__bar-tooltip")?.textContent).toBe("0%");
-    expect(container.querySelectorAll(".vt-studio-value-toggle__bar-tooltip")).toHaveLength(1);
+    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(0);
+    expect(container.querySelectorAll(".vt-studio-value-toggle__bar-tooltip")).toHaveLength(0);
   });
 
   it("reserves each side's longest word in Double Side Toggle content-width variants", () => {
