@@ -32,11 +32,11 @@ const tiers = {
 
 test("all five size tiers are canonical, generated, and consumed by the system", () => {
   for (const [tier, values] of Object.entries(tiers)) {
-    const tokenBlock = tokens.match(new RegExp("\\b" + tier + ":\\s*\\{([^}]*)\\}"))?.[1];
+    const tokenBlock = tokens.match(new RegExp("\\b" + tier + ":\s*\{([^}]*)\\}"))?.[1];
     assert.ok(tokenBlock, "missing " + tier + " token object");
     for (const [key, value] of Object.entries(values)) {
       const numeric = String(value).replace(".", "\\.");
-      assert.match(tokenBlock, new RegExp("\\b" + key + ":\\s*" + numeric + "(?:,|\\s)"), tier + "." + key + " token");
+      assert.match(tokenBlock, new RegExp("\\b" + key + ":\s*" + numeric + "(?:,|\s)"), tier + "." + key + " token");
       const cssKey = key.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase());
       assert.ok(generated.includes("--vt-studio-" + tier + "-" + cssKey + ": " + value + "px;"), tier + "." + key + " generated variable");
     }
@@ -386,7 +386,7 @@ test("single-line text fields use native vertical centering across every split-f
     ["shared side-counter field", read("src/styles/studio-control-fields.css")],
   ];
   for (const [name, css] of stylesheets) {
-    assert.match(css, /line-height:\\s*normal\\s*;/, name + " must use native vertical centering");
-    assert.doesNotMatch(css, /input[^{}]*\\{[^}]*line-height:\\s*1\\s*;/s, name + " must not force a tight native-input line box");
+    assert.match(css, /line-height:\s*normal\s*;/, name + " must use native vertical centering");
+    assert.doesNotMatch(css, /input[^{}]*\{[^}]*line-height:\s*1\s*;/s, name + " must not force a tight native-input line box");
   }
 });
