@@ -1819,57 +1819,93 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
 }
 
 const ConfirmedStudioValueToggleFamily: React.FC = () => {
-  const [arrowStd, setArrowStd] = React.useState("ONE")
-  const [arrowCmp, setArrowCmp] = React.useState("ONE")
-  const [sideStd, setSideStd] = React.useState("LOW")
-  const [sideLeftCmp, setSideLeftCmp] = React.useState("LOW")
-  const [sideCmp, setSideCmp] = React.useState("LOW")
-  const [leftValues, setLeftValues] = React.useState(["SOURCE", "SOURCE", "SOURCE", "SOURCE", "SOURCE", "SOURCE"])
-  const [rightValues, setRightValues] = React.useState(["TARGET", "TARGET", "TARGET", "TARGET", "TARGET", "TARGET"])
-  const [levelStd, setLevelStd] = React.useState(50)
-  const [levelCmp, setLevelCmp] = React.useState(50)
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const sizeLabels = ["60PX SUPREME", "44PX STANDARD", "28PX COMPACT", "20PX MINI", "12PX MICRO"] as const
   const options = ["ONE", "TWO", "THREE"] as const
+  const sideOptions = ["LOW", "MID", "HIGH"] as const
+  const iconSides = ["left", "right", "double"] as const
+  const arrowSides = ["left", "right"] as const
+  const doubleSideVariants = [
+    { variant: "v1", appearance: "primary", label: "V1 · PRIMARY RIGHT" },
+    { variant: "v1", appearance: "secondary", label: "V1 · SECONDARY RIGHT" },
+    { variant: "v1", appearance: "black-primary-text", label: "V1 · BLACK / PRIMARY TEXT RIGHT" },
+    { variant: "v2", appearance: "primary", label: "V2 · PRIMARY RIGHT" },
+    { variant: "v2", appearance: "secondary", label: "V2 · SECONDARY RIGHT" },
+    { variant: "v2", appearance: "black-primary-text", label: "V2 · BLACK / PRIMARY TEXT RIGHT" },
+  ] as const
+  const [arrowValues, setArrowValues] = React.useState(Array(15).fill("ONE"))
+  const [sideValues, setSideValues] = React.useState(Array(10).fill("LOW"))
+  const [leftValues, setLeftValues] = React.useState(Array(30).fill("SOURCE"))
+  const [rightValues, setRightValues] = React.useState(Array(30).fill("TARGET"))
+  const [barValues, setBarValues] = React.useState([25, 40, 55, 70, 85])
+  const updateAt = <T,>(setter: React.Dispatch<React.SetStateAction<T[]>>, index: number, value: T) =>
+    setter(current => current.map((previous, itemIndex) => itemIndex === index ? value : previous))
   return (
     <Family title="Arrow / Side / Double Side / Bar Toggles" nonDefaultSettings={[
-      "All four controls use controlled value/selection APIs and shared Studio size/color tokens.",
-      "Arrow Toggle exposes independent label, face fill, text color, icon color, and icon fill settings.",
-      "Side Toggle defaults to a right-side arrow stack; the left-side orientation is the explicit alternative.",
-      "Double Side Toggle shows V1/V2 divider treatment and primary, secondary, or black right-face states.",
-      "Bar Toggle uses ten fixed-width bars (10 percentage points each) and press-and-hold arrow controls.",
-    ]} provenance={<Provenance primitive="StudioArrowToggle · StudioSideToggle · StudioDoubleSideToggle · StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-system.css" tokens="Studio size lattice · semantic primary/secondary colors · ten 18×38px standard bars" imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/styles/studio-control-system.css", "src/studio-ui/primitives/StudioControls.tsx"]} />}>
-      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioArrowToggle">
-        <span>ARROW TOGGLE · STANDARD</span>
-        <StudioArrowToggle value={arrowStd} options={options} onValueChange={setArrowStd} ariaLabel="Arrow toggle specimen" />
-        <span>SIDE TOGGLE · DEFAULT RIGHT / V2 LEFT</span>
-        <div style={{ display: "grid", gap: 4 }}>
-          <StudioSideToggle value={sideStd} options={["LOW", "MID", "HIGH"]} onValueChange={setSideStd} />
-          <StudioSideToggle value={sideLeftCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideLeftCmp} arrowSide="left" size="compact" />
-        </div>
-        <span>DOUBLE SIDE TOGGLE · V1 / V2 × THREE RIGHT-FACE APPEARANCES</span>
-        <div style={{ display: "grid", gap: 4 }}>
-          {([
-            { variant: "v1", appearance: "primary", label: "V1 · PRIMARY RIGHT" },
-            { variant: "v1", appearance: "secondary", label: "V1 · SECONDARY RIGHT" },
-            { variant: "v1", appearance: "black-primary-text", label: "V1 · BLACK / PRIMARY TEXT RIGHT" },
-            { variant: "v2", appearance: "primary", label: "V2 · PRIMARY RIGHT" },
-            { variant: "v2", appearance: "secondary", label: "V2 · SECONDARY RIGHT" },
-            { variant: "v2", appearance: "black-primary-text", label: "V2 · BLACK / PRIMARY TEXT RIGHT" },
-          ] as const).map(({ variant, appearance, label }, index) => <div key={variant + "-" + appearance} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 2 }}>
-            <small>{label}</small>
-            <StudioDoubleSideToggle variant={variant} rightAppearance={appearance}
-              size={index === 1 || index === 3 ? "compact" : "standard"}
-              left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => setLeftValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Left side selection " + label }}
-              right={{ value: rightValues[index], options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: value => setRightValues(current => current.map((item, i) => i === index ? value : item)), ariaLabel: "Right side selection " + label }} />
-          </div>)}
-        </div>
-        <span>BAR TOGGLE · {levelStd}%</span>
-        <StudioBarToggle value={levelStd} onValueChange={setLevelStd} ariaLabel="Bar toggle specimen" />
-        <span>COMPACT SPECIMENS</span>
-        <div style={{ display: "grid", gap: 4 }}>
-          <StudioArrowToggle size="compact" value={arrowCmp} options={options} onValueChange={setArrowCmp} />
-          <StudioSideToggle size="compact" value={sideCmp} options={["LOW", "MID", "HIGH"]} onValueChange={setSideCmp} />
-          <StudioBarToggle size="compact" value={levelCmp} onValueChange={setLevelCmp} />
-        </div>
+      "Arrow Toggle shows left, right, and double icon-rail positions at all five canonical sizes.",
+      "Side Toggle shows both left-rail and right-rail arrow orientations at all five canonical sizes.",
+      "Double Side Toggle shows V1/V2 divider treatment and all three right-face appearances at every size.",
+      "Bar Toggle has one independent controlled value at every size; its tooltip is focus-only and includes the secondary downspout.",
+      "Every specimen uses the imported production primitive and independent controlled state.",
+    ]} provenance={<Provenance primitive="StudioArrowToggle · StudioSideToggle · StudioDoubleSideToggle · StudioBarToggle" tsx="src/studio-ui/primitives/StudioValueToggles.tsx" css="src/styles/studio-control-value-toggles.css + src/styles/studio-control-distill-overrides.css" tokens="Supreme / Standard / Compact / Mini / Micro · left/right/double rails · V1/V2 · primary/secondary/black-primary-text right faces" imports={["src/studio-ui/primitives/StudioValueToggles.tsx", "src/styles/studio-control-value-toggles.css", "src/styles/studio-control-distill-overrides.css"]} />}>
+      <div className="vt-confirmed-toggle-subfamily">
+        <strong>ARROW TOGGLE · LEFT / RIGHT / DOUBLE ICON RAILS × FIVE SIZES</strong>
+        {sizes.map((size, sizeIndex) => <div className="vt-confirmed-control-row" key={"arrow-" + size}>
+          <strong>{sizeLabels[sizeIndex]}</strong>
+          <div className="vt-confirmed-control-variants" data-control-size={size} data-vt-library-component="StudioArrowToggle">
+            {iconSides.map((iconSide, variantIndex) => {
+              const index = sizeIndex * iconSides.length + variantIndex
+              return <div key={iconSide}>
+                <small>{iconSide.toUpperCase()} ICON RAIL</small>
+                <StudioArrowToggle size={size} iconSide={iconSide} value={arrowValues[index]} options={options}
+                  onValueChange={value => updateAt(setArrowValues, index, value)}
+                  ariaLabel={size + " arrow toggle " + iconSide + " rail"} />
+              </div>
+            })}
+          </div>
+        </div>)}
+      </div>
+      <div className="vt-confirmed-toggle-subfamily">
+        <strong>SIDE TOGGLE · LEFT / RIGHT ARROW ORIENTATION × FIVE SIZES</strong>
+        {sizes.map((size, sizeIndex) => <div className="vt-confirmed-control-row" key={"side-" + size}>
+          <strong>{sizeLabels[sizeIndex]}</strong>
+          <div className="vt-confirmed-control-variants" data-control-size={size} data-vt-library-component="StudioSideToggle">
+            {arrowSides.map((arrowSide, variantIndex) => {
+              const index = sizeIndex * arrowSides.length + variantIndex
+              return <div key={arrowSide}>
+                <small>{arrowSide.toUpperCase()} ACTION RAIL</small>
+                <StudioSideToggle size={size} arrowSide={arrowSide} value={sideValues[index]} options={sideOptions}
+                  onValueChange={value => updateAt(setSideValues, index, value)}
+                  ariaLabel={size + " side toggle " + arrowSide + " action rail"} />
+              </div>
+            })}
+          </div>
+        </div>)}
+      </div>
+      <div className="vt-confirmed-toggle-subfamily">
+        <strong>DOUBLE SIDE TOGGLE · V1 / V2 × THREE RIGHT-FACE APPEARANCES × FIVE SIZES</strong>
+        {sizes.map((size, sizeIndex) => <div className="vt-confirmed-control-row" key={"double-side-" + size}>
+          <strong>{sizeLabels[sizeIndex]}</strong>
+          <div className="vt-confirmed-vertical-word-toggle-standard" data-control-size={size} data-vt-library-component="StudioDoubleSideToggle">
+            {doubleSideVariants.map(({ variant, appearance, label }, variantIndex) => {
+              const index = sizeIndex * doubleSideVariants.length + variantIndex
+              return <div className="vt-confirmed-vertical-word-toggle-specimen" key={variant + "-" + appearance}>
+                <small>{label}</small>
+                <StudioDoubleSideToggle size={size} variant={variant} rightAppearance={appearance}
+                  left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => updateAt(setLeftValues, index, value), ariaLabel: size + " double side left " + label }}
+                  right={{ value: rightValues[index], options: ["TARGET", "OUTPUT", "DESTINATION"], onValueChange: value => updateAt(setRightValues, index, value), ariaLabel: size + " double side right " + label }} />
+              </div>
+            })}
+          </div>
+        </div>)}
+      </div>
+      <div className="vt-confirmed-toggle-subfamily">
+        <strong>BAR TOGGLE · FIVE SIZES</strong>
+        {sizes.map((size, index) => <div className="vt-confirmed-control-row" key={"bar-" + size} data-vt-library-component="StudioBarToggle">
+          <strong>{sizeLabels[index]} · {barValues[index]}%</strong>
+          <StudioBarToggle size={size} value={barValues[index]} onValueChange={value => updateAt(setBarValues, index, value)}
+            ariaLabel={size + " bar toggle level"} />
+        </div>)}
       </div>
     </Family>
   )
