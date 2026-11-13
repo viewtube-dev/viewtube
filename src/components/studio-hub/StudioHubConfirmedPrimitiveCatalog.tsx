@@ -1886,10 +1886,10 @@ const ConfirmedStudioValueToggleFamily: React.FC = () => {
         <strong>DOUBLE SIDE TOGGLE · V1 / V2 × THREE RIGHT-FACE APPEARANCES × FIVE SIZES</strong>
         {sizes.map((size, sizeIndex) => <div className="vt-confirmed-control-row" key={"double-side-" + size}>
           <strong>{sizeLabels[sizeIndex]}</strong>
-          <div className="vt-confirmed-vertical-word-toggle-standard" data-control-size={size} data-vt-library-component="StudioDoubleSideToggle">
+          <div className="vt-confirmed-control-variants" data-control-size={size} data-vt-library-component="StudioDoubleSideToggle">
             {doubleSideVariants.map(({ variant, appearance, label }, variantIndex) => {
               const index = sizeIndex * doubleSideVariants.length + variantIndex
-              return <div className="vt-confirmed-vertical-word-toggle-specimen" key={variant + "-" + appearance}>
+              return <div key={variant + "-" + appearance}>
                 <small>{label}</small>
                 <StudioDoubleSideToggle size={size} variant={variant} rightAppearance={appearance}
                   left={{ value: leftValues[index], options: ["SOURCE", "INPUT", "ORIGIN"], onValueChange: value => updateAt(setLeftValues, index, value), ariaLabel: size + " double side left " + label }}
