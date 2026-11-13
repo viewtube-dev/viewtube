@@ -144,5 +144,6 @@ test("numeric stepper primitives have a dedicated Controls family at their suppo
   assert.ok(family.includes("<StudioSplitStepper size={size}"), "split stepper should show both supported sizes");
   assert.ok(family.includes('data-vt-library-component="StudioInlineStepper"'));
   assert.ok(family.includes('data-vt-library-component="StudioSplitStepper"'));
-  assert.match(catalog, /Stepper[\s\S]*return "Controls"/);
+  assert.ok(catalog.includes("<ConfirmedStudioNumericStepperFamily />"), "numeric stepper family should be rendered in the catalog");
+  assert.ok(catalog.includes('componentName === "ConfirmedStudioNumericStepperFamily"'), "numeric stepper family should classify under Controls");
 });
