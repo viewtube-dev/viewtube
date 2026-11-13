@@ -85,7 +85,7 @@ describe("confirmed composite primitive catalog", () => {
     for (const primitive of [
       "StudioBrainStatusIndicator", "StudioInterModule", "StudioTwoLineInterModule",
       "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule",
-      "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
+      "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell",
     ]) {
       expect(directPrimitiveNames).toContain(primitive)
     }
@@ -679,13 +679,13 @@ describe("confirmed primitive family taxonomy", () => {
     expect(source).toContain("{additionalPrimitiveSections}")
     expect(source).toContain('title="Compatibility Field Exports · Standard"')
     expect(source).toContain('title="Compatibility Control Exports · Standard"')
-    expect(source).toContain('title="Composition Helpers · Standard"')
-    expect(source).toContain('title="Dropdown Family · Standard / Split-Left / Multi-Select"')
-    expect(source).toContain('title="StudioDropdown · Single Selection"')
+    expect(source).toContain('title="Component Grid · Grid / Cell / Row"')
+    expect(source).toContain('title="Dropdown Family · All Sizes × Single / Simple / Split-Left / Multi-Select"')
+    expect(source).toContain('data-vt-library-component="StudioDropdown"')
     expect(source).toContain('title="Studio Text Input · Standalone + Simple + Floating + Fixed Label"')
     expect(source).toContain('title="Studio Text Area · Standalone + Simple + Floating + Fixed Label"')
     expect(source).toContain('title="Studio Text Box · Supreme + Standard + Compact + Mini + Micro"')
-    expect(source).toContain('title="StudioLeftCounter · Standard"')
+    expect(source).toContain('title="StudioLeftCounter · Supreme + Standard + Compact + Mini + Micro"')
     expect(source).toContain('title="Arrow / Side / Double Side / Bar Toggles"')
   })
 })
@@ -728,7 +728,7 @@ describe("confirmed primitive representative coverage", () => {
       "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
       "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule",
       "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioBrainStatusBadge",
-      "StudioBrainStatusIndicator", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
+      "StudioBrainStatusIndicator", "StudioResponseMetaRow", "StudioChatResponseShell",
     ]) {
       expect(markup, primitive).toContain(`data-vt-library-component="${primitive}"`);
     }
