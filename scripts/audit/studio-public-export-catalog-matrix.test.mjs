@@ -55,7 +55,7 @@ test("critical public primitives have direct representatives in the confirmed ca
     "StudioDropdown", "StudioPublishingCard", "StudioLedBadgeTab",
     "StudioChatComposerDock", "StudioChatResponseShell",
     "StudioInput", "Studioarea", "Studiotoggle", "Studioswitch", "Studioradio", "Studiocheck", "Studioxbox",
-    "StudioComponentGridRow", "StudioComponentGridSpecimen", "StudioComponentGridSpecimenPair",
+    "StudioComponentGrid", "StudioComponentGridCell", "StudioComponentGridRow",
   ];
   const missingFromBarrel = critical.filter(name => !valueExports.some(item => item.name === name));
   const missingRepresentative = critical.filter(name => !hasJsxRepresentative(catalog, name));
