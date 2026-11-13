@@ -242,3 +242,46 @@ html body .vt-studio-side-text-counter input.vt-studio-side-text-counter__input[
     inset var(--vt-studio-control-stroke, 3px) 0 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))),
     inset calc(var(--vt-studio-control-stroke, 3px) * -1) 0 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
 }
+
+
+/* StudioSideTextInput shares the side-counter field perimeter but replaces the
+   stacked action cells with one centered icon rail. */
+html body .vt-studio-side-text-input[data-vt-studio-control="true"] > [data-vt-studio-split-field] {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  padding-block: var(--vt-studio-control-stroke, 3px);
+  padding-inline: 0;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  background: transparent;
+}
+html body .vt-studio-side-text-input input.vt-studio-side-text-input__input[data-vt-studio-control="true"] {
+  box-sizing: border-box;
+  display: block;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding-block: 0;
+  padding-inline: var(--vt-studio-control-stroke, 3px);
+  border: 0;
+  outline: 0;
+  border-radius: 0;
+  box-shadow:
+    inset 0 calc(var(--vt-studio-control-stroke, 3px) * 0.5) 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))),
+    inset 0 calc(var(--vt-studio-control-stroke, 3px) * -0.5) 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))),
+    inset var(--vt-studio-control-stroke, 3px) 0 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))),
+    inset calc(var(--vt-studio-control-stroke, 3px) * -1) 0 0 0 var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
+  text-align: center;
+}
