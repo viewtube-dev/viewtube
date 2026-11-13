@@ -963,7 +963,8 @@ const classifyConfirmedCatalogItem = (node: React.ReactNode): ConfirmedCatalogFa
   if (/Switches, Radios & Checkboxes|Word Toggles|Arrow \/ Side \/ Double Side \/ Bar Toggles|StudioSwitch|StudioRadio|StudioCheckbox|StudioXCheckbox|StudioWordToggle|StudioVerticalWordToggle|StudioArrowToggle|StudioSideToggle|StudioDoubleSideToggle|StudioBarToggle|StudioChoice|Stepper/.test(title)
     || componentName === "CanonicalControlFamilies"
     || componentName === "CanonicalWordToggleFamily"
-    || componentName === "ConfirmedStudioValueToggleFamily") {
+    || componentName === "ConfirmedStudioValueToggleFamily"
+    || componentName === "ConfirmedStudioNumericStepperFamily") {
     return "Controls"
   }
 
