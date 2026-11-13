@@ -83,6 +83,10 @@ test("read-only StudioTextBox uses primary glyphs at rest and a secondary outlin
   assert.match(base, /color:\s*var\(--vt-field-primary,/);
   assert.match(base, /-webkit-text-fill-color:\s*var\(--vt-field-primary,/);
   assert.match(base, /-webkit-text-stroke:\s*var\(--vt-studio-control-text-stroke, 1px\)\s*var\(--vt-field-primary,/);
+  for (const size of ["supreme", "compact", "mini", "micro"]) {
+    const pattern = "\\.vt-studio-text-box\\[data-size=\"" + size + "\"\\][\\s\\S]*?-webkit-text-stroke:[^;]*var\\(--vt-field-primary";
+    assert.match(systemCss, new RegExp(pattern));
+  }
   assert.doesNotMatch(base, /border:/);
   assert.doesNotMatch(base, /box-shadow:/);
   const fieldBaseStart = fieldCss.indexOf('html body .vt-studio-text-box[data-vt-studio-control="true"],');
