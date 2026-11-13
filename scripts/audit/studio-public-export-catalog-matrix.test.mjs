@@ -132,3 +132,17 @@ test("vertical word toggle shows every canonical skin at all five size tiers", (
   assert.match(family, /VERTICAL_WORD_TOGGLE_VARIANTS\.map\(\(item, variantIndex\)/,
     "each size row should render the four canonical vertical skins");
 });
+
+test("numeric stepper primitives have a dedicated Controls family at their supported sizes", () => {
+  const start = catalog.indexOf("const ConfirmedStudioNumericStepperFamily");
+  const end = catalog.indexOf("const ConfirmedStudioValueToggleFamily", start);
+  assert.notEqual(start, -1, "numeric stepper family should exist");
+  assert.notEqual(end, -1, "numeric stepper family should close before the value-toggle family");
+  const family = catalog.slice(start, end);
+  assert.match(family, /const sizes = \["standard", "compact"\] as const/);
+  assert.ok(family.includes("<StudioInlineStepper size={size}"), "inline stepper should show both supported sizes");
+  assert.ok(family.includes("<StudioSplitStepper size={size}"), "split stepper should show both supported sizes");
+  assert.ok(family.includes('data-vt-library-component="StudioInlineStepper"'));
+  assert.ok(family.includes('data-vt-library-component="StudioSplitStepper"'));
+  assert.match(catalog, /Stepper[\s\S]*return "Controls"/);
+});
