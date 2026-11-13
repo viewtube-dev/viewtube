@@ -71,7 +71,7 @@ describe("confirmed composite primitive catalog", () => {
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
       "StudioDoubleSplitSlider", "StudioSplitLeftBadge", "StudioSplitRightBadge", "StudioDoubleSplitBadge",
       "StudioSpectrumTag", "StudioCloseableBadge", "StudioBrainStatusBadge", "StudioBrainStatusIndicator", "StudioTagEditor", "StudioUploadFrame",
-      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell", "StudioChatActionGroup",
+      "StudioTopSplitModule", "StudioCollapsingSplitModule", "StudioCollapsingTwoLineModule", "StudioInterModule", "StudioTwoLineInterModule", "StudioSplitAccordion", "StudioResponseMetaRow", "StudioChatResponseShell",
     ]) {
       expect(representative).toContain(`data-vt-library-component="${primitive}"`)
     }
@@ -94,13 +94,12 @@ describe("confirmed composite primitive catalog", () => {
     }
 
     for (const title of [
-      "Double Split Button · Standard + Compact",
-      "Legend Multi Dropdown · Standard + Compact",
-      "Arrow Toggle · Standard + Compact",
-      "Bar Toggle · Standard + Compact",
-      "Word Toggle · Standard + Compact",
-      "Side Toggle · Standard + Compact",
-      "Double Side Toggle · Standard + Compact",
+      "Split Button Family · All Sizes × Left / Right / Double / Two-Line",
+      "Dropdown Family · All Sizes × Single / Simple / Split-Left / Multi-Select",
+      "Arrow / Side / Double Side / Bar Toggles",
+      "Word Toggles · Standard + Compact + Vertical",
+      "StudioCounter · Supreme + Standard + Compact + Mini + Micro",
+      "StudioDoubleSplitSlider · Supreme + Standard + Compact + Mini + Micro",
     ]) {
       expect(source).toContain(`title="${title}"`)
     }
@@ -111,8 +110,8 @@ describe("confirmed composite primitive catalog", () => {
     const styles = readFileSync(resolve(process.cwd(), "src/styles/studio-confirmed-catalog-modules.css"), "utf8")
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
 
-    expect(source).toContain('className="vt-confirmed-catalog vt-confirmed-direct-representatives"')
-    expect(styles).toMatch(/\.vt-confirmed-direct-representatives\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s)
+    expect(source).toContain('className="vt-confirmed-catalog"')
+    expect(source).toContain('className="vt-confirmed-direct-primitive-rows"')
     expect(styles).toMatch(/\.vt-confirmed-direct-primitive-rows\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s)
     expect(styles).toMatch(/\.vt-confirmed-direct-primitive-rows\s*>\s*\.vt-confirmed-variant\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/s)
 
@@ -153,7 +152,7 @@ describe("confirmed composite primitive catalog", () => {
     expect(source).toContain("useConfirmedAdditionalPrimitiveSections")
     expect(source).toContain('title="Compatibility Field Exports · Standard"')
     expect(source).toContain('title="Compatibility Control Exports · Standard"')
-    expect(source).toContain('title="Composition Helpers · Standard"')
+    expect(source).toContain('title="Component Grid · Grid / Cell / Row"')
   })
 
   it("registers the independent Split Accordion at standard, compact, and micro sizes", () => {
@@ -437,16 +436,16 @@ it("keeps one square-icon family and exposes all four canonical toggle/choice sk
   expect(html).toContain("COUNTER-CONTROLLED · UP / DOWN")
   const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8")
   const css = readStudioControlCss()
-  expect(source).not.toContain("StudioIconButton")
+  expect(source).toContain("StudioIconButton · All Five Sizes")
   expect(source).not.toContain('title="Icon Button · 44px + 28px"')
   expect(source).toContain("const CHOICE_SKINS = CANONICAL_SKINS")
   expect(source).toContain("const WORD_TOGGLE_SKINS = CANONICAL_SKINS")
-  const choiceFamily = source.slice(source.indexOf('<Family title="44px Radio + Checkbox"'), source.indexOf('<Family title="Word Toggles'))
+  const choiceFamily = source.slice(source.indexOf("const CanonicalControlFamilies"), source.indexOf("const CanonicalSplitBadgeFamily"))
   expect(choiceFamily).toContain("CHOICE_SKINS.map")
   expect(choiceFamily).toContain("StudioCheckbox")
   expect(choiceFamily).toContain("StudioXCheckbox")
   expect(css).toContain("Four canonical state-fill / indicator-shape variants shared by switches")
-  expect(css).toContain('background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, transparent) !important')
+  expect(css).toContain('background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, white) !important')
   expect(css).toContain(".vt-studio-44-choice.is-color-swap.is-on")
   expect(css).toContain(".vt-studio-44-word-toggle.is-white-indicator .vt-studio-44-word-handle")
   expect(css).toContain(".vt-studio-44-word-toggle.is-black-indicator .vt-studio-44-word-handle")
@@ -748,10 +747,9 @@ describe("public export representative runtime coverage", () => {
       "Studioradio",
       "Studiocheck",
       "Studioxbox",
+      "StudioComponentGrid",
+      "StudioComponentGridCell",
       "StudioComponentGridRow",
-      "StudioComponentGridSpecimen",
-      "StudioComponentGridSpecimenPair",
-      "StudioHubCertification",
     ]) {
       expect(markup, representative).toContain(`data-vt-library-component="${representative}"`);
     }
@@ -794,8 +792,8 @@ describe("Studio Calendar confirmed primitive representatives", () => {
     expect(source).toContain('data-vt-library-component="StudioCalendarMediaRail"')
     expect(source).toContain('SPLIT TEXT INPUT · LEFT / RIGHT / DOUBLE')
     expect(toolbox).not.toContain('<StudioHubConfirmedSplitTextInputCatalog />')
-    expect(source).not.toContain('StudioInlineStepper')
-    expect(source).not.toContain('StudioSplitStepper')
+    expect(source).toContain('data-vt-library-component="StudioInlineStepper"')
+    expect(source).toContain('data-vt-library-component="StudioSplitStepper"')
   })
 
 });
@@ -917,7 +915,7 @@ describe("confirmed library cleanup and counter module visibility", () => {
     const start = source.indexOf('data-vt-confirmed-representatives="true"');
     const end = source.indexOf("</Family>", start);
     const representatives = source.slice(start, end);
-    const headings = ["BUTTONS", "DROPDOWNS", "TEXT FIELDS", "CONTROLS", "BADGES", "MODULES & COMPOSITIONS"];
+    const headings = ["BUTTONS & ICON BUTTONS", "TEXT ENTRY & INPUTS", "DROPDOWNS", "SELECTION CONTROLS", "TOGGLES", "COUNTERS, STEPPERS & SLIDERS", "BADGES & STATUS INDICATORS", "LAYOUT PRIMITIVES", "MODULES & COMPOSITIONS"];
     let last = -1;
     for (const heading of headings) {
       const next = representatives.indexOf(heading);
