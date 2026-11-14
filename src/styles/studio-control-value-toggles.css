@@ -132,6 +132,7 @@
 .vt-studio-value-toggle__bar[data-active="true"] {
   background: var(--vt-studio-bar-full-fill, #000000);
 }
+.vt-studio-split-shell.vt-studio-value-toggle--bar,
 .vt-studio-value-toggle--bar {
   position: relative;
   z-index: 1;
