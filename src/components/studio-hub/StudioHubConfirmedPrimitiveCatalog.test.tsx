@@ -1104,3 +1104,24 @@ describe("confirmed primitive catalog coverage corrections", () => {
     }
   });
 });
+
+
+describe("StudioSideTextCounterIcon confirmed-library registration", () => {
+  it("registers a standard representative and its own five-size Controls module", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const start = source.indexOf("const ConfirmedStudioSideTextCounterIconFamily");
+    const end = source.indexOf("const ConfirmedStudioSideTextInputFamily", start);
+    const family = source.slice(start, end);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    expect(source).toContain('data-vt-library-component="StudioSideTextCounterIcon"><span>Side Text Counter + Icon Rail · STANDARD</span>');
+    expect(source).toContain("<ConfirmedStudioSideTextCounterIconFamily />");
+    expect(source).toContain("StudioSideTextCounterIcon|StudioSideCounter");
+    expect(family).toContain('primitive="StudioSideTextCounterIcon"');
+    expect(family).toContain("Single Icon Rail");
+    for (const size of ["supreme", "standard", "compact", "mini", "micro"]) {
+      expect(family).toContain(`size="${size}"`);
+    }
+    expect(classifyConfirmedCatalogItem(<div title="StudioSideTextCounterIcon · Editable Text + Single Icon Rail · Five Sizes" />)).toBe("Controls");
+  });
+});
