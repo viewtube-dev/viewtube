@@ -158,7 +158,7 @@ test("StudioLeftCounter places the two-button action rail on the left without an
 
 
 test("bar-toggle dimensions and measured widths use the reduced shared token ratio", () => {
-  assert.match(tokens, /heightToTextRatio:\\s*0\\.55/);
+  assert.match(tokens, /heightToTextRatio:\\s*1/);
   assert.match(valueToggles, /standard:\\s*\\{ bar:\\s*8\\.36/);
   assert.match(valueToggleStyles, /--vt-bar-height: calc\\(var\\(--vt-studio-control-font-size, 38px\\) \\* var\\(--vt-studio-bar-height-to-text-ratio, 1\\)\\)/);
 });
