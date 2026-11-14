@@ -379,7 +379,7 @@ test("StudioSideTextCounter has one outer black perimeter and no nested field bo
   assert.ok(start >= 0, "side text counter field ownership must be explicit");
   const block = fields.slice(start);
   assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*border:\s*0/s);
-  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*border:\s*0/s);
+  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\][^{}]*\{[^}]*border:\s*0/s);
   assert.match(block, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke/);
   assert.ok(controls.includes('fieldSlot'));
 });
@@ -392,7 +392,7 @@ test("StudioSideTextCounter input is inset and vertically centered within the sh
   assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*display:\s*flex/s);
   assert.match(block, /align-items:\s*center/s);
   assert.match(block, /padding:\s*0 !important/s);
-  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*height:\s*100%/s);
+  assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\][^{}]*\{[^}]*height:\s*100%/s);
 });
 
 
