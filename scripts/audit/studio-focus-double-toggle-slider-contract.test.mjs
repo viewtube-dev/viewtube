@@ -98,16 +98,17 @@ test("text boxes retain a primary inline inset stroke without a clearing rule", 
   assert.doesNotMatch(fields, /\.vt-studio-text-box\[data-vt-studio-control="true"\]\s*\{\s*box-shadow:\s*none/);
 });
 
-test("bar-toggle tooltip is visible only on focus and has a secondary downspout", () => {
-  assert.match(toggles, /\.vt-studio-value-toggle--bar:focus-within \.vt-studio-value-toggle__bar-tooltip\s*\{[^}]*visibility:\s*visible;[^}]*opacity:\s*1/s);
-  assert.doesNotMatch([toggles, distill].join("\\n"), /\.vt-studio-value-toggle__bar:hover/);
-  assert.doesNotMatch([toggles, distill].join("\\n"), /\.vt-studio-value-toggle--bar(?::is\()?[^{}]*hover[^{}]*\.vt-studio-value-toggle__bar-tooltip/);
-  assert.match(toggles, /\.vt-studio-value-toggle--bar:focus-within\s*\{[^}]*outline:/s);
-  assert.match(toggles, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top-color:\s*var\(--vt-studio-control-secondary/s);
-  assert.match(valueToggles, /index === Math\.max\(0, filled - 1\) && filled > 0 \?/);
-  assert.doesNotMatch(distill, /\.vt-studio-value-toggle__bar/);
+test("bar-toggle uses the compact speech-bubble tooltip and can overflow its shell", () => {
+  assert.match(toggles, /\\.vt-studio-value-toggle--bar:focus-within \\.vt-studio-value-toggle__bar-tooltip\\s*\\{[^}]*visibility:\\s*visible;[^}]*opacity:\\s*1/s);
+  assert.doesNotMatch([toggles, distill].join("\\n"), /\\.vt-studio-value-toggle--bar:hover/);
+  assert.doesNotMatch([toggles, distill].join("\\n"), /\\.vt-studio-value-toggle--bar(?::is\\()?[^{}]*hover[^{}]*\\.vt-studio-value-toggle__bar-tooltip/);
+  assert.match(toggles, /\\.vt-studio-value-toggle--bar:focus-within\\s*\\{[^}]*outline:/s);
+  assert.match(toggles, /\\.vt-studio-value-toggle__bar-tooltip\\s*\\{[^}]*border:\\s*2px solid #000[^}]*border-radius:\\s*var\\(--vt-studio-control-radius/s);
+  assert.match(toggles, /\\.vt-studio-value-toggle__bar-tooltip::after\\s*\\{[^}]*border-top-color:\\s*var\\(--vt-studio-control-secondary/s);
+  assert.match(toggles, /\\.vt-studio-split-shell\\.vt-studio-value-toggle--bar,[\\s\\S]*?overflow:\\s*visible !important/);
+  assert.match(valueToggles, /index === Math\\.max\\(0, filled - 1\\) && filled > 0 \\?/);
+  assert.doesNotMatch(distill, /\\.vt-studio-value-toggle__bar/);
 });
-
 test("double-split slider gallery copy matches the canonical rail, center, and progress colors", () => {
   assert.ok(catalog.includes("Both split rails use secondary; the center track stays primary, and the active progress fill is a 50% white/secondary blend."));
   assert.ok(catalog.includes("The counter-controlled specimen shares its value with the slider."));
