@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "productionDate": "2026-09-26",
-  "lastEdited": "2026-11-13",
+  "lastEdited": "2026-11-14",
   "migrationState": "phase-d-brain-prompt-authority-consolidation",
   "authorityRule": "One primary authority per bounded concern. Current executable evidence verifies implementation; registry metadata determines documentation role.",
   "entries": [
@@ -1311,6 +1311,28 @@
         "docs/architecture/capabilities.json",
         "docs/governance/VERIFICATION.md",
         "docs/governance/TASK_AUTHORITY.md"
+      ]
+    },
+    {
+      "id": "DOC-REF-PRIORITY-PARTNER-PITCH-PACK",
+      "path": "docs/partnerships/VIEWTUBE_PRIORITY_PARTNER_PITCH_PACK_2026-11.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "priority-partner-specific-pitch-materials-and-outreach",
+      "owner": "Founder + Product Strategy + Business Development",
+      "productionDate": "2026-11-14",
+      "lastEdited": "2026-11-14",
+      "lastAuditedMainSha": null,
+      "sourceTier": "OPERATIONAL_REFERENCE",
+      "authorityBoundary": "Subordinate pitch execution material for four priority prospects. Does not establish program eligibility, partner relationships, traction, technical deployment or send-readiness; the master partner playbook and research dossier remain parent authorities.",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/partnerships/VIEWTUBE_MASTER_PARTNER_INTELLIGENCE_AND_PITCH_PLANNING.md",
+        "docs/research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md",
+        "docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md",
+        "docs/architecture/capabilities.json",
+        "docs/governance/VERIFICATION.md"
       ]
     }
   ],

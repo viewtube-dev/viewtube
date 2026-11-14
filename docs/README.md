@@ -15,6 +15,7 @@ This directory contains ViewTube architecture, implementation plans, migration r
 - [Source Reconciliation Ledger](./audits/VIEWTUBE_SOURCE_RECONCILIATION_LEDGER_2026-11-13.md) — dated inventory, source dispositions, evidence limits and consolidation phases.
 - [Product Strategy, Competitive, Partnership & Technical Dossier](./research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md) — consolidated research reference with proposal, source-claim and verification-gap labels.
 - [Master Partner Intelligence & Pitch Planning Playbook](./partnerships/VIEWTUBE_MASTER_PARTNER_INTELLIGENCE_AND_PITCH_PLANNING.md) — partner-specific profiles, tailored pitch asks, attention ideas, outreach templates, evidence checklist, prioritization and 90-day plan.
+- [Priority Partner Pitch Pack](./partnerships/VIEWTUBE_PRIORITY_PARTNER_PITCH_PACK_2026-11.md) — tailored pitch briefs and outreach drafts for ERA, Forum Ventures, Google Cloud and Betaworks, with evidence and verification gates.
 
 ## Current explicit authorities
 
