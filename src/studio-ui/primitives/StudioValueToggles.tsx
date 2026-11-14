@@ -146,11 +146,11 @@ export type StudioBarToggleProps = {
 
 /** Bar geometry must remain aligned with --vt-bar-* in studio-control-distill-overrides.css. */
 const BAR_METRICS: Record<string, { bar: number; gap: number; pad: number }> = {
-  supreme: { bar: 11.4, gap: 4, pad: 16 },
-  standard: { bar: 8.36, gap: 3, pad: 12 },
-  compact: { bar: 5.28, gap: 2, pad: 8 },
-  mini: { bar: 3.85, gap: 1.5, pad: 6 },
-  micro: { bar: 2.2, gap: 1, pad: 4 },
+  supreme: { bar: 20.73, gap: 4, pad: 16 },
+  standard: { bar: 15.2, gap: 3, pad: 12 },
+  compact: { bar: 9.6, gap: 2, pad: 8 },
+  mini: { bar: 7, gap: 1.5, pad: 6 },
+  micro: { bar: 4, gap: 1, pad: 4 },
 };
 
 function barCountFromWidth(widthPx: number, size: string): number {
@@ -233,12 +233,9 @@ export function StudioBarToggle({
     <div ref={barsRef} className="vt-studio-value-toggle__bars" role="meter" aria-label={ariaLabel}
       aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(Math.max(0, Math.min(100, value)))} data-bar-count={barCount}>
       {Array.from({ length: barCount }, (_, index) => (
-        <span key={index} className="vt-studio-value-toggle__bar" data-active={index < filled ? "true" : "false"}>
-          {index === Math.max(0, filled - 1) && filled > 0 ? (
-            <span className="vt-studio-value-toggle__bar-tooltip" aria-hidden="true">{Math.round(Math.max(0, Math.min(100, value)))}%</span>
-          ) : null}
-        </span>
+        <span key={index} className="vt-studio-value-toggle__bar" data-active={index < filled ? "true" : "false"} />
       ))}
+      <span className="vt-studio-value-toggle__bar-tooltip" aria-hidden="true">{Math.round(Math.max(0, Math.min(100, value)))}%</span>
     </div>
   </StudioSplitShell>;
 }
