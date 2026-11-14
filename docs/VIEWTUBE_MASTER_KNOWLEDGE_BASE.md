@@ -70,6 +70,7 @@
 **Purpose:** define Studio tokens, defaults, control geometry, primitive ownership, catalog representation, variants, exceptions and acceptance contracts.
 
 **Canonical sources:**
+- [Studio Values, Tokens, Styles & Settings Hierarchy](./ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md) — normative ownership and precedence hierarchy.
 - [Toolbox / Studio UI Master Resource](./architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md) — global production Toolbox/SubToolbox system.
 - [Studio Hub Component Library Source of Truth](./ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md) — Confirmed Primitive Library/catalog presentation and primitive corrections.
 - [Studio Controls Global Defaults and Exception Index](./ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md) — normative Studio control defaults and exceptions.
