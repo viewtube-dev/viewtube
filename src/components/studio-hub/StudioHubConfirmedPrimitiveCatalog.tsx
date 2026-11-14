@@ -1204,27 +1204,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · A</span><StudioTextInput variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact A" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
         <div className="vt-confirmed-variant"><span>Fixed label box · 28px compact · B · reverse colors</span><StudioTextInput className="is-reverse-colors" variant="fixed-label" label="TITLE" aria-label="Studio fixed-label input compact B reverse colors" sizeVariant="compact" data-vt-library-component="StudioTextInput" /></div>
       </div>
-        <span>SPLIT TEXT INPUT · LEFT / RIGHT / DOUBLE</span>
-        <StudioSplitTextInput split="left" sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} aria-label="Standard split-left text input" placeholder="TYPE HERE" />
-        <StudioSplitTextInput split="right" sizeVariant="standard" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Standard split-right text input" placeholder="TYPE HERE" />
-        <StudioSplitTextInput split="double" sizeVariant="standard" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Standard double-split text input" placeholder="TYPE HERE" />
-        <span>COMPACT · LEFT / RIGHT / DOUBLE</span>
-        <StudioSplitTextInput split="left" sizeVariant="compact" leftIcon={<Check aria-hidden="true" />} aria-label="Compact split-left text input" placeholder="TYPE HERE" />
-        <StudioSplitTextInput split="right" sizeVariant="compact" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Compact split-right text input" placeholder="TYPE HERE" />
-        <StudioSplitTextInput split="double" sizeVariant="compact" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Compact double-split text input" placeholder="TYPE HERE" />
-        <span>SUPREME · LEFT / RIGHT / DOUBLE</span>
-        <StudioSplitTextInput split="left" sizeVariant="supreme" leftIcon={<Check aria-hidden="true" />} aria-label="Supreme split-left text input" placeholder="TYPE HERE" />
-        <StudioSplitTextInput split="right" sizeVariant="supreme" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Supreme split-right text input" placeholder="TYPE HERE" />
-        <StudioSplitTextInput split="double" sizeVariant="supreme" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Supreme double-split text input" placeholder="TYPE HERE" />
-        <span>MINI · LEFT / RIGHT / DOUBLE</span>
-        <StudioSplitTextInput split="left" sizeVariant="mini" leftIcon={<Check aria-hidden="true" />} aria-label="Mini split-left text input" placeholder="TYPE" />
-        <StudioSplitTextInput split="right" sizeVariant="mini" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Mini split-right text input" placeholder="TYPE" />
-        <StudioSplitTextInput split="double" sizeVariant="mini" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Mini double-split text input" placeholder="TYPE" />
-        <span>MICRO · LEFT / RIGHT / DOUBLE</span>
-        <StudioSplitTextInput split="left" sizeVariant="micro" leftIcon={<Check aria-hidden="true" />} aria-label="Micro split-left text input" placeholder="TYPE" />
-        <StudioSplitTextInput split="right" sizeVariant="micro" rightIcon={<Settings2 aria-hidden="true" />} aria-label="Micro split-right text input" placeholder="TYPE" />
-        <StudioSplitTextInput split="double" sizeVariant="micro" leftIcon={<Check aria-hidden="true" />} rightIcon={<Sparkles aria-hidden="true" />} aria-label="Micro double-split text input" placeholder="TYPE" />
-      </div>
+
     </Family>
     <Family title="Studio Text Area · Standalone + Simple + Floating + Fixed Label" nonDefaultSettings={[
         "Textarea exception: 18px Standard / 14px Compact text, multiline line-height/padding, and 92px minimum writing height.",
