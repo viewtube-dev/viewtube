@@ -25,6 +25,7 @@ test("dropdown option rows use their own size-tier height and typography", () =>
   assert.ok(row.includes("min-height: var(--vt-studio-control-height)"));
   assert.ok(row.includes("font-size: var(--vt-studio-control-font-size"));
   assert.ok(!row.includes("min-height: 44px"));
+  assert.ok(!css.includes(".vt-studio-dropdown-option + .vt-studio-dropdown-option"));
 });
 
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
