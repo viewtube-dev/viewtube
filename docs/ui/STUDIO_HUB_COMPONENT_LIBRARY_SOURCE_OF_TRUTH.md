@@ -641,3 +641,36 @@ Choice controls are fixed-geometry controls, not content-width exceptions. `Stud
 Dropdown chevrons are trailing and use `STUDIO_DROPDOWN_TOKENS` by direct size-tier lookup for supreme, standard, compact, mini, and micro. Standard/simple and split-left share the same trailing chevron contract; the multi-select legend dropdown maps its chevron rail and stroke to those same tokens.
 
 The split-left play/pause implementation is already source-identical to the reference branch; keep one production implementation. The double-split slider adopts the reference's primary rails/progress track and interaction-focus lifecycle. The upload frame adopts the reference 16:9 canvas anatomy and centered label while preserving multiple-file callbacks, image/video acceptance, preview URL cleanup, and keyboard activation. Split text input adopts the reference's primary inline field stroke and token-derived split rails. These changes are tracked in `docs/plans/STUDIO_PRIMITIVE_RESTORATION_FROM_CODEX_BRANCH_2026-10-30.md`.
+
+
+## Audit addendum — 2026-11-13 target-branch coverage reconciliation
+
+This addendum records a focused source inspection of `master/consolidated-feature-integration` at base SHA `767a223bb383addcaf6492d67a3b29ac53934b43`. It does not certify rendered visual behavior.
+
+### Confirmed Primitive catalog identifiers
+
+- `src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx` contains 174 `data-vt-library-component` occurrences and 73 distinct identifier values at the audited target ref.
+- This is a count of catalog metadata identifiers, **not** a count of unique public exports or proof of complete primitive coverage.
+- The set includes legacy-looking identifiers such as `StudioInput`, `Studioarea`, `Studiotoggle`, `Studioswitch`, `Studioradio`, `Studiocheck`, and `Studioxbox`. Audit these against real exports and specimen ownership before counting them as canonical primitives.
+- The recovery-branch design-intelligence donor reports 81 unique public exports, but that document is not present on the target branch and its count is not supported by the target catalog identifier count. Do not copy that number into target-branch coverage reporting without an export-to-specimen reconciliation.
+
+### Square icon button group
+
+- `StudioSquareIconButtonGroup` is exported from `src/studio-ui/primitives/StudioControls.tsx` and the public `src/studio-ui/index.ts` barrel.
+- The Confirmed Primitive Library imports it and contains a Standard representative plus a dedicated Standard/Compact family module.
+- Its default/fallback content is five square icon buttons. The public component also accepts two or more caller-supplied children, so five is the canonical representative pattern, not a runtime-enforced child count.
+- The group is the named non-text content-width exception; keep the shared outer shell, joined faces and visible overflow. Default V3 faces are primary and selected V3 faces are secondary.
+
+### Numeric stepper coverage gap
+
+- `StudioInlineStepper` and `StudioSplitStepper` are exported components in `src/studio-ui/primitives/StudioControls.tsx` and support Standard/Compact only.
+- They are **not** exported from `src/studio-ui/index.ts` and are **not** represented in the target Confirmed Primitive Library catalog at this audited ref.
+- They must not be counted as public-library-certified primitives until the public export path and pure imported representatives/family module are added and verified. Their supported size set must remain Standard/Compact; do not invent Supreme, Mini or Micro variants.
+
+### Required follow-up
+
+1. Reconcile every catalog identifier against the public barrel and actual production component export.
+2. Remove or correct legacy/typo specimen identifiers rather than treating them as additional primitives.
+3. Decide whether the two stepper components are intended public primitives; if yes, export them through the canonical barrel and add pure Standard representatives plus a Standard/Compact family module with controlled values.
+4. Keep the square icon group representative content-width and verify five-face default state, primary/default palette, secondary/selected palette, dividers, focus overflow and accessibility.
+5. Run the catalog/export matrix and focused Studio tests, then browser-verify the rendered representative and family module. No visual certification is claimed by this addendum.

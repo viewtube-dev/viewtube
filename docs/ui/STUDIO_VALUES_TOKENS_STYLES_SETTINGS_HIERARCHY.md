@@ -3,7 +3,7 @@
 **Status:** Normative architecture and reconciliation contract  
 **Scope:** ViewTube Studio UI, including Studio Controls, Studio Hub/Component Library, Brain surfaces that consume Studio primitives, and their shared styling layers.  
 **Target branch:** `master/consolidated-feature-integration`  
-**Last reviewed:** 2026-10-30
+**Last reviewed:** 2026-11-13
 
 This document defines **where decisions belong, which source wins, how exceptions are registered, and how changes are verified**. It does not claim that every existing implementation already conforms. Existing drift is a defect to reconcile, not an alternative source of truth.
 
@@ -83,8 +83,8 @@ These are the intended shared defaults. A named family contract may narrow suppo
 | Line height | `1` for control text; multiline reading roles may declare a separate explicit role |
 | Primary / secondary | `--pair-a` / `--pair-b` |
 | Outer border | Black (`#000`) unless a family contract explicitly says otherwise |
-| Ordinary field fill | Primary at 50% opacity |
-| Focused field fill | Primary at 15% opacity |
+| Ordinary field fill | 50% white / 50% primary blend |
+| Focused field fill | 85% white / 15% primary blend |
 | Ordinary field text/glyph stroke | Primary |
 | Focused field text/glyph stroke | Black |
 | Field inline inset stroke | Primary, always present, same width as the outer border |
@@ -99,11 +99,11 @@ These are the intended shared defaults. A named family contract may narrow suppo
 
 ### Field state contract
 
-**Resting text input / textarea:** black outer border, primary inline inset stroke at all times, primary text and glyph stroke, primary 50% fill, primary caret.
+**Resting text input / textarea:** black outer border, primary inline inset stroke at all times, primary text and glyph stroke, 50% white / 50% primary fill blend, primary caret.
 
-**Focused text input / textarea:** black outer border, primary inline inset stroke retained, black text and glyph stroke, primary 15% fill, secondary outline at 65% of border width with zero offset, primary caret. The outer border must not become primary on focus.
+**Focused text input / textarea:** black outer border, primary inline inset stroke retained, black text and glyph stroke, 85% white / 15% primary fill blend, secondary outline at 65% of border width with zero offset, primary caret. The outer border must not become primary on focus.
 
-**TextBox:** black text and black glyph stroke, primary inline inset stroke, secondary outline. Do not substitute the generic primary glyph stroke simply because the component is a field.
+**TextBox:** black outer border, primary inline inset stroke, primary text and glyph stroke at rest, and a 50% white / 50% primary fill blend. When focusable, text and glyph stroke become black, fill becomes an 85% white / 15% primary blend, and the secondary outline is 65% of border width at zero offset.
 
 These are distinct visual layers: outer border, inline inset stroke, and focus outline. One must not be omitted or substituted for another. Text-input caret width/shape behavior is a separate runtime behavior to test; it must not be inferred from color tokens alone.
 
@@ -334,7 +334,7 @@ The migration is selective: `codex/shared-studio-interaction-focus` is the visua
 - Switch/choice track dimensions are family-owned and cannot be collapsed by content-width metadata. Their background faces remain visible behind handles.
 - Square icon effects are opt-in primitive behavior; the Confirmed Library presents one standard row and one compact row rather than separate effect modules. The outer icon button/face allow overflow for badges and tooltips.
 - Dropdown chevron size and stroke are token-indexed for all five tiers across standard/simple, split-left, and multi-select variants.
-- Double-split slider adopts the reference primary rail/progress styling and interaction-focus hold lifecycle while retaining the destination size tiers.
+- Double-split slider uses secondary side rails, a primary center track, and a 50% white/secondary active progress fill, with the shared interaction-focus hold lifecycle and canonical size tiers.
 - Upload frame uses the reference 16:9 canvas and centered label; file APIs, image/video handling, accessibility, and object-URL cleanup remain production contracts.
 - Split text input uses one canonical stylesheet and the reference primary inline stroke with token-derived split rails.
 

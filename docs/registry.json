@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "productionDate": "2026-09-26",
-  "lastEdited": "2026-11-11",
+  "lastEdited": "2026-11-13",
   "migrationState": "phase-d-brain-prompt-authority-consolidation",
   "authorityRule": "One primary authority per bounded concern. Current executable evidence verifies implementation; registry metadata determines documentation role.",
   "entries": [
@@ -1134,8 +1134,8 @@
       "concern": "P1 canonical integration studio-controls workstream execution packet",
       "owner": "Integrated Application Program",
       "productionDate": "2026-10-30",
-      "lastEdited": "2026-10-30",
-      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "lastEdited": "2026-11-13",
+      "lastAuditedMainSha": "767a223bb383addcaf6492d67a3b29ac53934b43",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/TASK_AUTHORITY.md",
@@ -1232,6 +1232,63 @@
         "docs/specifications/prompt-registry.json",
         "tasks/p1-canonical-system-integration/plan.md",
         "tasks/p1-canonical-system-integration/workstreams/brain-continuity/plan.md"
+      ]
+    },
+    {
+      "id": "DOC-REF-MASTER-KNOWLEDGE-BASE",
+      "path": "docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "viewtube-master-knowledge-navigation",
+      "owner": "Documentation Governance + Integrated Application Program",
+      "productionDate": "2026-11-13",
+      "lastEdited": "2026-11-13",
+      "lastAuditedMainSha": "767a223bb383addcaf6492d67a3b29ac53934b43",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/registry.json",
+        "docs/governance/DOCUMENTATION.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md",
+        "docs/governance/CONVERSATION_HANDOFFS.md"
+      ]
+    },
+    {
+      "id": "DOC-AUDIT-SOURCE-RECONCILIATION-20261113",
+      "path": "docs/audits/VIEWTUBE_SOURCE_RECONCILIATION_LEDGER_2026-11-13.md",
+      "class": "AUDIT",
+      "status": "ACTIVE",
+      "concern": "viewtube-source-reconciliation-2026-11-13",
+      "owner": "Documentation Governance + Integrated Application Program",
+      "productionDate": "2026-11-13",
+      "lastEdited": "2026-11-13",
+      "lastAuditedMainSha": "767a223bb383addcaf6492d67a3b29ac53934b43",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/registry.json",
+        "docs/governance/DOCUMENTATION.md",
+        "docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md",
+        "docs/programs/INTEGRATED_APPLICATION.md"
+      ]
+    },
+    {
+      "id": "DOC-REF-STRATEGY-PARTNERSHIP-DOSSIER",
+      "path": "docs/research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "product-market-competitive-partnership-and-technical-research",
+      "owner": "Product Architecture + Integrated Application Program",
+      "productionDate": "2026-11-13",
+      "lastEdited": "2026-11-13",
+      "lastAuditedMainSha": "767a223bb383addcaf6492d67a3b29ac53934b43",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md",
+        "docs/architecture/capabilities.json",
+        "docs/programs/INTEGRATED_APPLICATION.md",
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/references/DEEP_RESEARCH_CONSTRUCTION_SOURCE.md"
       ]
     }
   ],
