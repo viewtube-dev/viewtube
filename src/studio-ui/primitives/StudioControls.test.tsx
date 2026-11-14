@@ -1550,6 +1550,7 @@ describe("StudioSideTextCounterIcon primitive", () => {
     expect(html).toContain('class="vt-studio-side-text-input__icon"');
     const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
     expect(fields).toContain("text-align: center;");
+    expect(fields).toContain("line-height: var(--vt-studio-control-line-height, 1);");
     expect(html).not.toContain("<button");
   });
 
