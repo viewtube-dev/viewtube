@@ -653,7 +653,7 @@ The split-left play/pause implementation is already source-identical to the refe
 
 ## 2026-11-14 — Split text-input family quarantine
 
-The generic split text input, left/right/double icon-rail inputs, icon-button-rail inputs, and the standalone side/double-side text-input variants have been removed from active public exports and Confirmed Primitive Library registration. Their source files and component declarations are retained for rollback in the quarantine area and are not production design options. The side/double-side component declarations embedded in `StudioControls.tsx` are private (non-exported). The dedicated split-input modules remain unreferenced; their stylesheet imports are not reached from active UI entry points.
+The generic split text input, left/right/double icon-rail inputs, icon-button-rail inputs, and the standalone side/double-side text-input variants have been removed from active public exports and Confirmed Primitive Library registration. Their source files and component declarations are retained for rollback; the standalone split-input catalog is non-exported, and the legacy catalog specimen has been removed. They are not production design options. The side/double-side component declarations embedded in `StudioControls.tsx` are private (non-exported). The dedicated split-input modules remain unreferenced; their stylesheet imports are not reached from active UI entry points.
 
 The active replacement is `StudioSideTextCounterIcon`, which provides one centered editable field and one right-side square icon rail across the five supported size tiers. The original numeric `StudioSideTextCounter` remains a separate active primitive. Other split controls—including buttons, badges, sliders, and word counters—are unchanged.
 
