@@ -116,7 +116,7 @@ test("double-split slider gallery copy matches the canonical rail, center, and p
 
 test("double-split word counter uses global resting tint and black interaction focus", () => {
   const wordStart = toggles.indexOf(".vt-studio-word-counter__value {");
-  const wordEnd = toggles.indexOf("\\n}", wordStart);
+  const wordEnd = toggles.indexOf("\n}", wordStart);
   const wordRule = toggles.slice(wordStart, wordEnd);
   assert.notEqual(wordStart, -1, "double-split word counter value rule should exist");
   assert.match(wordRule, /--vt-studio-number-rest-color:\\s*color-mix\\(in srgb, #fff var\\(--vt-studio-number-default-white-mix, 50%\\), var\\(--vt-studio-number-background\\)/);
