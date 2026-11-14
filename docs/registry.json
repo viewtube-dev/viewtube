@@ -1270,6 +1270,26 @@
         "docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md",
         "docs/programs/INTEGRATED_APPLICATION.md"
       ]
+    },
+    {
+      "id": "DOC-REF-STRATEGY-PARTNERSHIP-DOSSIER",
+      "path": "docs/research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "product-market-competitive-partnership-and-technical-research",
+      "owner": "Product Architecture + Integrated Application Program",
+      "productionDate": "2026-11-13",
+      "lastEdited": "2026-11-13",
+      "lastAuditedMainSha": "767a223bb383addcaf6492d67a3b29ac53934b43",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md",
+        "docs/architecture/capabilities.json",
+        "docs/programs/INTEGRATED_APPLICATION.md",
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/references/DEEP_RESEARCH_CONSTRUCTION_SOURCE.md"
+      ]
     }
   ],
   "legacyGlobalSources": [
