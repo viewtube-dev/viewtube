@@ -14,6 +14,7 @@ This directory contains ViewTube architecture, implementation plans, migration r
 - [ViewTube Master Knowledge Base](./VIEWTUBE_MASTER_KNOWLEDGE_BASE.md) — eight-area navigation map to existing canonical product, Studio, Brain, research and delivery authorities.
 - [Source Reconciliation Ledger](./audits/VIEWTUBE_SOURCE_RECONCILIATION_LEDGER_2026-11-13.md) — dated inventory, source dispositions, evidence limits and consolidation phases.
 - [Product Strategy, Competitive, Partnership & Technical Dossier](./research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md) — consolidated research reference with proposal, source-claim and verification-gap labels.
+- [Master Partner Intelligence & Pitch Planning Playbook](./partnerships/VIEWTUBE_MASTER_PARTNER_INTELLIGENCE_AND_PITCH_PLANNING.md) — partner-specific profiles, tailored pitch asks, attention ideas, outreach templates, evidence checklist, prioritization and 90-day plan.
 
 ## Current explicit authorities
 
@@ -33,6 +34,7 @@ This directory contains ViewTube architecture, implementation plans, migration r
 | Crown mission coordination | [Crown](./governance/CROWN.md) |
 | Canonical task mutation | [Task Authority](./governance/TASK_AUTHORITY.md) |
 | Brain / creator AI | [Brain](./domains/BRAIN.md) |
+| Partner intelligence / pitch planning | [Master Partner Intelligence & Pitch Planning Playbook](./partnerships/VIEWTUBE_MASTER_PARTNER_INTELLIGENCE_AND_PITCH_PLANNING.md) + [Product Strategy Dossier](./research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md) |
 | Prompt architecture | [Prompts](./specifications/PROMPTS.md) + [Prompt Registry](./specifications/prompt-registry.json) |
 
 ### Existing scoped authorities
