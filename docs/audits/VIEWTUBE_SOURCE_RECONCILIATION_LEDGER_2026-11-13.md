@@ -69,8 +69,15 @@ The repository's documentation governance requires preserving unique material, u
 - `docs/references/DEEP_RESEARCH_CONSTRUCTION_SOURCE.md`
 - `docs/programs/INTEGRATED_APPLICATION.md`
 
-**Candidate donor outside repository**
-- ChatGPT Library file: `ViewTube_Master_Research_and_Implementation_Resource.md`. A Library search/read in the originating conversation found a 75-proposal backlog spanning new capabilities, improvements, integrations and YouTube API opportunities. It also disclosed that prior live competitor research did not complete due to insufficient Browser Use credits. Treat it as a proposal/feasibility source, not as a verified competitor audit.
+**Candidate donor pack outside repository — ChatGPT Library**
+- `00_VIEWTUBE_RESEARCH_REFERENCE_MASTER_INDEX.md` — product positioning, evidence taxonomy, source register and navigation for a four-volume research library.
+- `01_VIEWTUBE_PRODUCT_MARKET_COMPETITIVE_RESEARCH.md` — customer segments, competitor cohorts, opportunity research and prioritization.
+- `02_VIEWTUBE_PARTNER_ECOSYSTEM_AND_BUSINESS_DEVELOPMENT.md` — partner tiers, fit, asks, evidence needs, commercial models and 90-day work sequence.
+- `03_VIEWTUBE_TECHNICAL_API_INTEGRATION_AND_RISK_REFERENCE.md` — YouTube/API opportunities, provider candidates, data rights, architecture, security, economics and validation.
+- `04_VIEWTUBE_SOURCE_REGISTER_CLAIM_LEDGER_AND_RESEARCH_GAPS.md` — source hierarchy, claim conflicts, capability claim ledger and unresolved research gaps.
+- `ViewTube_Master_Research_and_Implementation_Resource.md` and its DOCX companion — 10 proposed capabilities, 20 improvements, 30 provider candidates and 15 YouTube API opportunities.
+
+The pack explicitly states that live competitor/official-source verification did not complete due to insufficient Browser Use credits. Its competitor, provider, pricing, API, partner-program and market claims must not be presented as freshly verified. Consolidate these Library donors into the canonical repository dossier only after complete source reconciliation; retain the original Library versions as provenance.
 
 **Disposition:** no complete current competitive/partnership dossier was established. Do not present proposed integrations or competitor examples as verified market facts.
 
@@ -285,3 +292,12 @@ Relevant PR descriptions sampled:
 - [PR #1229](https://github.com/viewtube-dev/viewtube/pull/1229) describes a three-file conversation-intake package. The package paths were not found on the target branch during this pass; inspect the PR head and register/merge the package only after verifying its current state and unique content.
 
 These PR descriptions are claims from PR metadata, not independent verification receipts.
+
+
+## 11. Expanded Library source-pack inventory
+
+A follow-up Library search found the complete companion-pack structure: master index (00), product/market/competitive volume (01), partner/business-development volume (02), technical/API/risk volume (03), and source-register/claim-ledger volume (04). The companion volumes are intentionally consolidated references; they are not separate repository authorities yet.
+
+**Recommended repository treatment:** create one canonical combined strategy/competitive/partnership dossier that absorbs the index, product-market volume, partner volume and claim-ledger material. Fold the technical/API/risk volume into that dossier as a substantial technical-feasibility section unless a clearly independent owner and update cadence justify a separate subordinate specification. Keep the original Library artifacts as immutable source donors and record source-by-source harvested contributions in the consolidation manifest.
+
+The Library index also identifies older partner research with obsolete “privacy-first YouTube frontend/ad-free player” positioning. That source must remain historical only and must not be reused as the current ViewTube pitch. It records no verified signed partnerships, customer pilots, submitted applications or partner meetings in the reviewed source set. Program benefits, application windows, credit amounts and contact routes require current official verification.
