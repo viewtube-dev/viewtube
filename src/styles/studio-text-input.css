@@ -8,7 +8,7 @@ input.vt-studio-text-input {
   padding: 0 12px;
   border-style: solid;
   border-color: #000;
-  border-radius: var(--vt-studio-standard-radius, 6px);
+  border-radius: var(--vt-studio-control-radius, 6px);
   background: var(--vt-field-fill-rest, color-mix(in srgb, white 50%, var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6))) 50%));
   color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
   -webkit-text-fill-color: var(--vt-field-primary, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)));
@@ -26,9 +26,9 @@ input.vt-studio-text-input {
 
 input.vt-studio-text-input[data-size="supreme"] {
   height: var(--vt-studio-supreme-height, 60px);
-  border-width: var(--vt-studio-supreme-stroke, 4.09px);
-  border-radius: var(--vt-studio-supreme-radius, 8.18px);
-  font-size: var(--vt-studio-supreme-font-size, 51.82px);
+  border-width: var(--vt-studio-supreme-stroke, 3px);
+  border-radius: var(--vt-studio-supreme-radius, 6px);
+  font-size: var(--vt-studio-supreme-font-size, 52px);
 }
 
 input.vt-studio-text-input,
