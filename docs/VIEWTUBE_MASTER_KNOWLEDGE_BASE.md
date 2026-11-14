@@ -145,6 +145,6 @@
 
 ## Execution status
 
-The initial repository source inventory and mapping are recorded in [the Source Reconciliation Ledger](./audits/VIEWTUBE_SOURCE_RECONCILIATION_LEDGER_2026-11-13.md).
+The initial repository source inventory and mapping are recorded in [the Source Reconciliation Ledger](./audits/VIEWTUBE_SOURCE_RECONCILIATION_LEDGER_2026-11-13.md). The first consolidation package was merged into `master/consolidated-feature-integration` by PR #1259 at commit `861273f4fca1aff53ec5a0301996462d8a941fe9`.
 
-The ledger is an audit snapshot, not a claim that all eight areas are fully consolidated. Outstanding source verification, donor reconciliation, research validation and document updates must be completed as separately evidenced work.
+The ledger remains an audit snapshot, not a claim that all eight areas are fully consolidated. Outstanding source verification, donor reconciliation, research validation and document updates must be completed as separately evidenced work.
