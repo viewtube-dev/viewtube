@@ -965,6 +965,13 @@ describe("Studio counter divider alignment and slider counter hold", () => {
     expect(html).not.toContain('disabled=""');
   });
 
+  it("preserves a fully erased empty value in both side text counter variants", () => {
+    const stacked = renderToStaticMarkup(<StudioSideTextCounter value="" onValueChange={() => {}} ariaLabel="Editable quantity" />);
+    const icon = renderToStaticMarkup(<StudioSideTextCounterIcon value="" onValueChange={() => {}} icon={<span>ICON</span>} ariaLabel="Editable text" />);
+    expect(stacked).toContain('value=""');
+    expect(icon).toContain('value=""');
+  });
+
   it("keeps arbitrary text editable and disables numeric stepping until the value is numeric", () => {
     const html = renderToStaticMarkup(
       <StudioSideTextCounter value="draft text" onValueChange={() => {}} ariaLabel="Editable label" />,
