@@ -332,7 +332,7 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
 .vt-studio-dropdown-option-rail--start {
   display: grid;
   box-sizing: border-box;
-  width: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px));
+  width: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
   height: 100%;
   min-width: 0;
   place-items: center;
@@ -4340,23 +4340,7 @@ button[data-vt-studio-button="true"]:is([data-split-left="true"], [data-vt-studi
   background: color-mix(in srgb, var(--vt-studio-control-accent, var(--pair-a, #36e0f6)) 50%, #fff);
 }
 
-/* Compact dropdown split rails use the compact control height for both the
-   grid tracks and the visible rails. Keep the dimensions on the trigger as
-   well as its wrapper so nested split-shell defaults cannot restore 44px. */
-.vt-studio-dropdown[data-size="compact"] button[data-dropdown-trigger="true"] {
-  --vt-studio-dropdown-rail-size: var(--vt-studio-compact-height, 28px);
-  --vt-studio-control-height: var(--vt-studio-compact-height, 28px);
-}
-.vt-studio-dropdown[data-size="compact"] button[data-dropdown-trigger="true"] .vt-studio-dropdown-split-rail,
-.vt-studio-dropdown[data-size="compact"] button[data-dropdown-trigger="true"] .vt-studio-dropdown-chevron {
-  box-sizing: border-box;
-  width: var(--vt-studio-compact-height, 28px);
-  min-width: var(--vt-studio-compact-height, 28px);
-}
-.vt-studio-dropdown[data-size="compact"] button[data-dropdown-trigger="true"] .vt-studio-dropdown-chevron {
-  height: var(--vt-studio-compact-height, 28px);
-  flex-basis: var(--vt-studio-compact-height, 28px);
-}
+
 
 
 /* Toolbox header word toggles use a neutral white track in every selection state.
