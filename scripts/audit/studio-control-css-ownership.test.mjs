@@ -45,7 +45,7 @@ test("stylesheet order preserves token-first and family-final ownership", () => 
 
 test("quarantined split input styles are not part of the active shared cascade", () => {
   const entry = read("src/styles/studio-control-entry.css");
-  assert.doesNotMatch(entry, /studio-split-text-input\\.css|studio-icon-rail-text-input\\.css/);
+  assert.doesNotMatch(entry, /studio-split-text-input\.css|studio-icon-rail-text-input\.css/);
 });
 
 test("system layer defines the disabled dropdown option rule only once", () => {
