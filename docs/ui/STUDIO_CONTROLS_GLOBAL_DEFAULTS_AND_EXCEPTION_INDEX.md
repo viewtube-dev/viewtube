@@ -291,16 +291,16 @@ The Confirmed Primitive Library uses a **single 4px gap unit** for all catalog-l
 | Mini type/icon | 20px height; 1.5px / 3px geometry; 17.5px type/icon | Token and generated CSS align; duplicate tier declarations removed from core/recovery | Source aligned; runtime verification outstanding |
 | Micro | 12px; 1px stroke / 2px radius; 10px type/icon; 0.65px outline; `-0.02em` letter-spacing | Tokens, generated CSS, and system selector align | Source aligned; runtime verification outstanding |
 | Micro letter spacing | Shared `-0.02em` | TypeScript token matches the global contract | Source aligned; runtime verification outstanding |
-| Editable field inset | Primary inset persists at rest and focus; focus changes text/glyph to black | Shared field rules own editable text/stroke/color/caret; split input owns its black shell border and primary inset stroke, uses white-mixed rest/focus fills, and keeps its label as an interactive grid cell in `studio-split-text-input.css` | Source aligned; computed-style/browser verification outstanding |
+| Editable field inset | Primary inset persists at rest and focus; focus changes text/glyph to black | Shared field rules own editable text/stroke/color/caret; legacy split text-input families are quarantined and are not active. `StudioSideTextCounterIcon` is the supported editable single-icon split pattern | Source aligned; computed-style/browser verification outstanding |
 | TextBox | Primary text/glyph + 50% white/primary fill at rest; black text/glyph + 85% white/15% primary fill and secondary zero-offset outline when focusable; primary inset always | Field layer owns black outer border and primary inset; system layer owns primary resting glyphs; focus state switches glyphs to black | Source aligned; browser verification outstanding |
-| Catalog provenance | Real production exports; catalog CSS owns arrangement only | Confirmed catalog imports production primitives, including dedicated `StudioSplitTextInput` and `StudioSplitAccordion` | Source registration confirmed; visual certification outstanding |
+| Catalog provenance | Real production exports; catalog CSS owns arrangement only | Confirmed catalog imports production primitives, including dedicated `StudioSplitAccordion`; split text-input families are quarantined | Source registration confirmed; visual certification outstanding |
 
 ### Required follow-up
 
 1. Reconcile Mini typography in `src/styles/studio-control-recovery-overrides.css` with the 17.5px TypeScript token and regenerate/verify dependent output if required.
 2. Verify the emitter output, focused field/split tests, typecheck/build, computed styles, and desktop/mobile layouts.
 3. Run token emitter consistency checks, focused tests, typecheck/build, computed-style assertions, and desktop/mobile browser inspection for all five tiers.
-4. Test editable input, textarea, TextBox, and split input separately at rest and focus. Assert outer border, inset, fill, text/glyph stroke, caret, outline width/color/offset, and divider count.
+4. Test editable input, textarea, TextBox, and the active `StudioSideTextCounterIcon` separately at rest and focus. Assert outer border, inset, fill, text/glyph stroke, caret, outline width/color/offset, and divider count.
 
 **Verification boundary:** This is a source/documentation audit, not rendered visual certification. No tests, build, computed-style capture, browser screenshots, or assistive-technology tests were run in this pass.
 
@@ -353,7 +353,7 @@ All canonical Studio single-select dropdown variants (standard, simple, and spli
 
 - Global ownership order: global component defaults → five global size tiers → family defaults → registered primitive exceptions → generated variables and production consumers. Do not create a parallel token source or duplicate family override layer.
 - Five tiers: Supreme 60px / 3px / 6px / 52px; Standard 44px / 3px / 6px / 38px; Compact 28px / 2px / 4px / 24px; Mini 20px / 1.5px / 3px / 17.5px; Micro 12px / 1px / 2px / 10px. The sequence and values live in `STUDIO_CONTROL_SIZE_BASE`.
-- Text alignment for split-left, split-right, and double-split badges is measured against the full outer shell. The internal rail count must not move the label's center axis. Editable split text input is excluded and remains left-aligned.
+- Text alignment for split-left, split-right, and double-split badges is measured against the full outer shell. The internal rail count must not move the label's center axis. Legacy split text-input variants are quarantined; the active `StudioSideTextCounterIcon` uses centered editable text.
 - Editable field glyph stroke always matches glyph fill: primary at rest, black on focus. The primary inline inset remains present in both states. TextBox follows the same rest/focus field contract: primary text/glyph with a 50% white / 50% primary fill at rest; black text/glyph with an 85% white / 15% primary fill and secondary zero-offset outline when focusable.
 - Focused text fill and glyph stroke share the same transition duration/easing. Focus outline fade-out must animate instead of disappearing abruptly.
 - Inter-modules default to full width and flush edges; split rails are square to their tier, with no inherited 4px container inset.
@@ -362,7 +362,7 @@ All canonical Studio single-select dropdown variants (standard, simple, and spli
 - Bar-toggle empty bars use the 50%-white / 50%-primary blend; full bars are black. Bar height follows the current type size, aspect ratio is 2.5:1, corner radius is slight, and the percentage tooltip appears only during focus. Geometry and fill are sourced from STUDIO_BAR_TOGGLE_TOKENS; the system stylesheet owns the rendering, not recovery overrides.
 - Side/double-side arrow buttons share one button implementation and metrics. The double-side center divider never owns a secondary outline; the outer shell alone receives focus outline.
 - The Confirmed Library begins with one full-width Standard production specimen for each representative primitive, grouped by like primitive. Every primitive must also have a real family module with production provenance; no catalog-only lookalikes.
-- Split text input owns one canonical stylesheet at `src/styles/studio-split-text-input.css`, imported by the primitive. Do not maintain a second primitive-local duplicate or a competing global import.
+- Legacy split text-input stylesheet is quarantined and must not be imported. The active replacement is `StudioSideTextCounterIcon`.
 - The permanent audit is `scripts/audit/studio-controls-system-audit.test.mjs`, wired into `npm run test:studio-controls` and the release-gates workflow. Source tests are necessary but do not replace browser geometry/interaction certification at all supported sizes.
 
 
@@ -373,4 +373,9 @@ All canonical Studio single-select dropdown variants (standard, simple, and spli
 - Dropdown chevron rail size, icon size, and stroke are read from the five-tier `STUDIO_DROPDOWN_TOKENS` contract. The split-left and simple/standard variants use trailing placement; the multi-select legend dropdown consumes the same tier values.
 - Double-split slider track, rails, readout, and focus lifecycle follow the Codex interaction-focus reference. Keep five-tier size values token-owned; do not restore the reference's obsolete micro fallback.
 - Upload frame visual ownership follows the reference canvas design in the canonical control system stylesheet. Keep the 16:9 frame, centered prompt/filename label, preview URL cleanup, image/video defaults, multiple-file callback, and keyboard interaction in the production primitive.
-- Split text input keeps one stylesheet at `src/styles/studio-split-text-input.css`; the shell owns the black perimeter and split rails, while the nested field owns its persistent primary inline stroke and primary-tinted rest/focus fills. No duplicate primitive-local stylesheet.
+- Historical split-input ownership note superseded 2026-11-14: legacy split text-input source/styles are quarantined and not part of the active UI. Use `StudioSideTextCounterIcon` for the supported single right-side icon-rail field.
+
+
+## 2026-11-14 — Split text-input quarantine
+
+The generic split text input, icon-rail text inputs, icon-button-rail text inputs, and the old side/double-side text-input variants are quarantined. They are no longer public Studio exports or Confirmed Primitive Library modules. Their source is retained for rollback; do not restore their imports, exports, specimens, or family-specific CSS overrides without an explicit product decision. The active replacement is `StudioSideTextCounterIcon`; the numeric `StudioSideTextCounter` and unrelated split controls remain active.
