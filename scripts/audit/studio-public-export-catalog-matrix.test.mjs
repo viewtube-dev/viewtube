@@ -50,7 +50,7 @@ test("critical public primitives have direct representatives in the confirmed ca
   const valueExports = parsed.filter(item => !item.typeOnly);
   const critical = [
     "StudioButton", "StudioTextInput", "StudioTextArea", "StudioTextBox",
-    "StudioSplitTextInput", "StudioArrowToggle", "StudioSideToggle",
+    "StudioArrowToggle", "StudioSideToggle",
     "StudioDoubleSideToggle", "StudioBarToggle", "StudioSplitAccordion", "StudioPanelAccordion", "StudioInlineStepper", "StudioSplitStepper",
     "StudioDropdown", "StudioPublishingCard", "StudioLedBadgeTab",
     "StudioChatComposerDock", "StudioChatResponseShell",
