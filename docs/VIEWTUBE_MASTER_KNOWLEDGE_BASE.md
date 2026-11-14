@@ -42,13 +42,14 @@
 **Purpose:** assemble product positioning, creator problems, capability differentiation, competitive evidence, opportunity sizing, integration/partner fit, commercial value propositions and pitch-ready claims.
 
 **Current source set:**
+- [Consolidated Product Strategy, Competitive, Partnership & Technical Dossier](./research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md) — merged reference for the November 12 research pack, including source claims and verification gaps.
 - [Product Architecture](./architecture/PRODUCT_ARCHITECTURE.md).
 - [Capability Registry](./architecture/capabilities.json).
 - [Deep Research Construction Source](./references/DEEP_RESEARCH_CONSTRUCTION_SOURCE.md).
 - [Integrated Application Program](./programs/INTEGRATED_APPLICATION.md).
 - Existing product/domain authorities linked from [the documentation entrypoint](./README.md).
 
-**Known gap:** no single current, evidence-verified ViewTube competitive and partnership dossier was established in the repository. The ChatGPT Library contains a five-file research pack (`00_VIEWTUBE_RESEARCH_REFERENCE_MASTER_INDEX.md` through `04_VIEWTUBE_SOURCE_REGISTER_CLAIM_LEDGER_AND_RESEARCH_GAPS.md`) plus source reports. These are candidate donors, not yet repository-verified authorities. Consolidate the product/market/competitor/partner material and claim ledger into one canonical dossier, with the technical/API material retained as a clearly scoped section or annex. Preserve the explicit limitation that fresh competitor and official-source verification was not completed.
+**Evidence gap:** the consolidated dossier is now present in the repository, but its external claims are not freshly verified. The five Library volumes and source reports are preserved as provenance donors; the repository dossier consolidates their key content and caveats. Fresh competitor, API, provider, program and market verification remains outstanding.
 
 **Evidence rule:** competitor features, pricing, APIs, partner programs, permissions, terms and market claims require source URLs, access dates, excerpts, confidence and re-verification dates. Distinguish researched facts from proposals and hypotheses.
 
@@ -121,6 +122,8 @@
 ### 8. Research, design and delivery resource library
 
 **Purpose:** make prompts, research sources, citations, design references, schemas, skills, workflows, decision records, test templates and delivery evidence discoverable without copying their contents into a second knowledge store.
+
+**Related consolidated research reference:** [Product Strategy, Competitive, Partnership & Technical Dossier](./research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md).
 
 **Current source set:**
 - [Documentation Registry](./registry.json) and [Documentation Governance](./governance/DOCUMENTATION.md).
