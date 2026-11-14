@@ -105,6 +105,11 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
   line-height: var(--vt-studio-textarea-standard-line-height, 1.25);
 }
 html body textarea[data-vt-studio-control="true"][data-size="compact"],
+html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="mini"],
+html body textarea[data-vt-studio-control="true"][data-size="mini"] {
+  font-size: var(--vt-studio-textarea-mini-font-size, 17.5px);
+  -webkit-text-stroke: var(--vt-studio-textarea-mini-text-stroke, 0.4px) var(--vt-field-primary, var(--pair-a, #36e0f6));
+}
 html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="textarea"][data-size="compact"] {
   font-size: var(--vt-studio-textarea-compact-font-size, 14px);
   line-height: var(--vt-studio-textarea-compact-line-height, 1.3);
