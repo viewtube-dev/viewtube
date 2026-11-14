@@ -1551,7 +1551,15 @@ describe("StudioSideTextCounterIcon primitive", () => {
     const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
     expect(fields).toContain("text-align: center;");
     expect(fields).toContain("line-height: var(--vt-studio-control-line-height, 1);");
+    expect(fields).toContain("text-indent: calc(var(--vt-studio-control-height, 44px) / 2);");
+    expect(fields).toContain("pointer-events: auto;");
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    expect(catalog).toContain("value={sideTextCounterIconValue} onValueChange={setSideTextCounterIconValue}");
+    expect(catalog).not.toContain('value="36" onValueChange={() => undefined} icon={<Search');
+
     expect(html).not.toContain("<button");
+    expect(fields).toContain("text-indent: calc(var(--vt-studio-control-height, 44px) / 2);");
+
   });
 
   it("supports an accessible, disabled-aware icon action without changing the field contract", () => {
