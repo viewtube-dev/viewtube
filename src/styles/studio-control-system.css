@@ -6211,8 +6211,7 @@ details.vt-studio-two-line-module > :not(summary) {
   display: flex;
   width: 100%;
   min-width: 0;
-  min-height: var(--vt-dropdown-height, var(--vt-studio-control-height, 44px)) !important;
-  height: var(--vt-dropdown-height, var(--vt-studio-control-height, 44px)) !important;
+
   margin: 0 0 var(--vt-studio-dropdown-menu-row-gap, 3px) !important;
   padding: 2px 8px !important;
   border: var(--vt-studio-dropdown-row-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
