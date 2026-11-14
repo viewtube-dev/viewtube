@@ -212,7 +212,6 @@ export function StudioBarToggle({
     }, holdDelayMs);
   };
   const onPointerDown = (direction: -1 | 1) => (event: React.PointerEvent<HTMLButtonElement>) => {
-    event.preventDefault();
     event.currentTarget.setPointerCapture?.(event.pointerId);
     startRepeat(direction);
   };
