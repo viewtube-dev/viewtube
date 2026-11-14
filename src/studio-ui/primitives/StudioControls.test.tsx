@@ -253,9 +253,10 @@ describe("Studio dropdown chevron and split-left contract", () => {
     expect(css).toContain('--vt-studio-dropdown-rail-size: var(--vt-studio-dropdown-standard-rail-size, 44px)')
     expect(css).toContain('--vt-studio-dropdown-chevron-size: var(--vt-studio-dropdown-standard-chevron-size, 28px)')
     expect(css).toContain('min-height: var(--vt-studio-control-height, 44px)')
-    expect(css).toContain('height: auto;')
+    expect(css).toContain('height: var(--vt-studio-control-height, 44px);')
     expect(css).not.toContain('height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;')
     expect(css).toContain('grid-template-columns: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) minmax(0, 1fr)')
+    expect(css).toContain('width: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));')
     expect(css).toContain('.vt-studio-dropdown-option-rail--start')
     expect(css).toContain('font-size: var(--vt-studio-control-font-size, 38px) !important;')
     expect(css).not.toContain('--vt-dropdown-font-size')
@@ -1312,6 +1313,10 @@ describe("StudioTopSplitModule", () => {
     expect(css).toContain("border-bottom: var(--vt-top-split-stroke) solid #000;");
     expect(css).toContain(".vt-studio-collapsing-split-module:not([open])");
     expect(css).toContain("border-bottom: 0 !important;")
+    expect(css).not.toContain('.vt-studio-top-split-module:not([data-open="true"])')
+    const recovery = readFileSync(resolve(process.cwd(), "src/styles/studio-control-recovery-overrides.css"), "utf8")
+    expect(recovery).not.toContain(".vt-studio-top-split-module > .vt-studio-top-split-module__head")
+    expect(recovery).not.toContain(".vt-studio-collapsing-split-module[open]")
     expect(css).toContain(".vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head");
   });
 });
