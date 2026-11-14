@@ -5719,14 +5719,8 @@ button[data-vt-studio-button="true"][data-vt-studio-button-lines="two"][data-vt-
     var(--vt-im-rail, calc(var(--vt-im-face, var(--vt-studio-control-height, 44px)) - 2 * var(--vt-im-stroke, var(--vt-studio-control-stroke, 3px))));
 }
 
-/* Collapsed modules: shell keeps the bottom perimeter edge (avoids radius clip).
-   Head loses its bottom rule so there is exactly one black edge. */
-.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head,
-.vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__head,
-details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head,
-details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head {
-  border-bottom: 0 !important;
-}
+/* Collapsed modules retain the outer bottom edge; the header/body separator is
+   visible while open and reserved transparently while closed. */
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-top-split-module__body,
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__body {
   display: none !important;
@@ -5735,13 +5729,6 @@ details.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collap
   min-height: 0 !important;
   height: 0 !important;
   overflow: hidden !important;
-}
-
-
-/* Expanded collapsible modules need a visible horizontal separator between header and body.
-   The collapsed state above removes this line so only the outer bottom border remains. */
-.vt-studio-collapsing-split-module[open] > .vt-studio-collapsing-split-module__head {
-  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
 }
 
 /* Content-width exemptions: switches, radios, checkboxes, word toggles are content-sized, not row-fill. */
@@ -5873,32 +5860,10 @@ button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-sele
   margin-inline: 0 !important;
 }
 
-/* Keep the header's height and bottom rule invariant across disclosure states.
-   In the collapsed state, the header rule becomes the shell's bottom edge;
-   suppress only the shell's bottom border to avoid a doubled stroke. */
+/* Collapsing shell sizing is independent of disclosure state. */
 .vt-studio-collapsing-split-module {
   box-sizing: border-box;
   min-width: 0;
-}
-
-.vt-studio-collapsing-split-module > summary.vt-studio-collapsing-split-module__head,
-.vt-studio-collapsing-split-module > summary.vt-studio-top-split-module__head {
-  box-sizing: border-box;
-  flex: 0 0 auto;
-  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
-}
-
-.vt-studio-collapsing-split-module:not([open]) {
-  border-bottom: 0 !important;
-}
-
-.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
-.vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
-  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
-}
-
-.vt-studio-collapsing-split-module[open] {
-  border-bottom: var(--vt-top-split-stroke, 3px) solid #000;
 }
 
 /* The two-line family may have a taller content-driven header, but its box
@@ -5973,7 +5938,7 @@ details.vt-studio-two-line-module > summary {
   padding: 0;
   list-style: none;
   border: 0;
-  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
   border-radius: 0;
   background: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   box-shadow: none !important;
@@ -6028,21 +5993,19 @@ summary .vt-studio-top-split-module__title {
   -webkit-text-stroke: var(--vt-studio-control-text-stroke, 1px) currentColor;
 }
 
-/* Closed: shell keeps bottom perimeter (aligned with expanded header/body divider).
-   Head has no bottom rule — avoids double edge and radius clipping. */
+/* Collapsed modules use the shell's bottom perimeter as the header's final
+   horizontal edge. Expanded modules retain both the header divider and body edge. */
 details.vt-studio-collapsing-split-module:not([open]),
 details.vt-studio-two-line-module:not([open]),
 .vt-studio-collapsing-split-module:not([open]),
 .vt-studio-two-line-module:not([open]) {
-  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
 }
-
-/* Open: restore shell bottom under white body; header rule stays the divider */
 details.vt-studio-collapsing-split-module[open],
 details.vt-studio-two-line-module[open],
 .vt-studio-collapsing-split-module[open],
 .vt-studio-two-line-module[open] {
-  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
 }
 
 .vt-studio-top-split-module__body,
@@ -6118,10 +6081,12 @@ details.vt-studio-two-line-module > :not(summary) {
   box-sizing: border-box !important;
   display: flex;
   width: 100%;
+  height: var(--vt-studio-control-height);
+  min-height: var(--vt-studio-control-height);
   min-width: 0;
 
   margin: 0 0 var(--vt-studio-dropdown-menu-row-gap, 3px) !important;
-  padding: 2px 8px !important;
+  padding: 0 8px !important;
   border: var(--vt-studio-dropdown-row-stroke, var(--vt-studio-control-stroke, 3px)) solid #000 !important;
   border-radius: var(--vt-studio-dropdown-row-radius, var(--vt-studio-control-radius, 6px)) !important;
   background: var(--vt-studio-dropdown-row-fill, white) !important;
@@ -6487,4 +6452,20 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
   max-height: 100%;
   color: currentColor;
   stroke: currentColor;
+}
+
+/* Canonical split-module divider contract. Keep the full-width stroke on the
+   header/rail row; closed disclosures use the shell's bottom edge instead. */
+.vt-studio-top-split-module > .vt-studio-top-split-module__head {
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
+}
+.vt-studio-collapsing-split-module > .vt-studio-collapsing-split-module__head {
+  border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
+}
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head {
+  border-bottom-color: transparent;
+  margin-bottom: calc(-1 * var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)));
+}
+.vt-studio-collapsing-split-module:not([open]) {
+  border-bottom-width: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px));
 }
