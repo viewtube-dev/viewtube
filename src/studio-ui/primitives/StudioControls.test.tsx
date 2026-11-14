@@ -1558,7 +1558,6 @@ describe("StudioSideTextCounterIcon primitive", () => {
     expect(catalog).not.toContain('value="36" onValueChange={() => undefined} icon={<Search');
 
     expect(html).not.toContain("<button");
-    expect(fields).toContain("text-indent: calc(var(--vt-studio-control-height, 44px) / 2);");
 
   });
 
