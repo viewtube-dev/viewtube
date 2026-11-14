@@ -1,3 +1,4 @@
+// QUARANTINED 2026-11-14: retained for rollback/reference only; not a public Studio primitive.
 import React from "react"
 import { StudioSplitShell, StudioTextInput } from "./StudioControls"
 import type { StudioControlSize } from "../tokens"
