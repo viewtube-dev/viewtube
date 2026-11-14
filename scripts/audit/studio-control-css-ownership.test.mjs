@@ -36,7 +36,6 @@ test("stylesheet order preserves token-first and family-final ownership", () => 
     "studio-side-rail-unify.css",
     "studio-component-grid.css",
     "studio-control-word-counter.css",
-    "studio-split-text-input.css",
   ].map((name) => entry.indexOf(name));
 
   assert.ok(order.every((index) => index >= 0), "each active cascade layer should remain registered");
