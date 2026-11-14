@@ -77,6 +77,7 @@
 .vt-studio-value-toggle--double[data-right-appearance="black-primary-text"] .vt-studio-value-toggle__double-side:last-child { --vt-toggle-fill: #000; --vt-toggle-text: var(--pair-a); }
 .vt-studio-value-toggle--double[data-variant="v2"] .vt-studio-value-toggle__divider { display: none; }
 .vt-studio-value-toggle__bars {
+  position: relative;
   --vt-bar-gap: 3px;
   --vt-bar-height: calc(var(--vt-studio-control-font-size, 38px) * var(--vt-studio-bar-height-to-text-ratio, 1));
   --vt-bar-width: calc(var(--vt-bar-height) / var(--vt-studio-bar-height-to-width-ratio, 2.5));
@@ -185,8 +186,9 @@
   letter-spacing: .04em;
   text-transform: uppercase;
   white-space: nowrap;
-  transform: translate(-50%, 4px) scale(.96);
+  transform: translate(-50%, 0) scale(1);
   transform-origin: bottom center;
+  transition: opacity 120ms ease-out, transform 120ms ease-out;
   pointer-events: none;
 }
 .vt-studio-value-toggle--bar:focus-within .vt-studio-value-toggle__bar-tooltip {
