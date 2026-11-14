@@ -337,8 +337,9 @@ test("side counter is a separate family module, not nested in the counter family
   assert.ok(catalog.includes("<ConfirmedStudioSideCounterFamily />"));
 });
 
-test("Confirmed Library keeps the split text input in the canonical Text Fields family", () => {
-  assert.ok(catalog.includes("StudioSplitTextInput"));
+test("Confirmed Library excludes the quarantined split text-input family", () => {
+  assert.ok(!catalog.includes("StudioSplitTextInput"));
+  assert.ok(!publicIndex.includes("StudioSplitTextInput"));
   assert.ok(catalog.includes("Text Fields"));
   assert.ok(catalogCss.includes('[data-vt-primitive-title*="Representatives"]'));
   assert.ok(catalogCss.includes("grid-template-columns: minmax(0, 1fr)"));
