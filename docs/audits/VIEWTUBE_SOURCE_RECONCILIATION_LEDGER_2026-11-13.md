@@ -92,13 +92,17 @@ The repository's documentation governance requires preserving unique material, u
 ### Area 4 — Studio design system and Confirmed Primitive Library
 
 **Verified sources**
+- `docs/ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md` — present on the target branch; normative ownership/precedence hierarchy.
 - `docs/architecture/VIEWTUBE_TOOLBOX_UI_MASTER_RESOURCE.md`
 - `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md`
 - `docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md`
 - The defaults index identifies executable owners including `src/studio-ui/tokens.ts`, primitive TSX files, shared stylesheets, the Confirmed Primitive catalog and contract tests.
 
-**Not found at expected exact name**
-- `STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md` was not located by exact-name repository search. Its intended content may overlap the existing defaults index, Toolbox master and executable tokens. Do not create a replacement until its original source is located and compared.
+**Additional branch-only donor sources found**
+- `docs/ui/STUDIO_DESIGN_INTELLIGENCE_AND_PRIMITIVE_REGISTRY.md` exists on `fix/studio-controls-regression-recovery-2026-10-31`, but was not found on the requested target branch. It is a source-map/registry foundation, not a replacement for the Confirmed Primitive Library.
+- `docs/plans/VIEWTUBE_COMPONENT_STANDARDIZATION_PHASES_0_3_2026-11-11.md` exists on the recovery branch, but was not found on the requested target branch. Its calendar/resource/analytics scope must be reconciled separately from Studio-only changes.
+
+**Disposition:** the previously recorded exact-name gap for `STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md` is corrected: the exact file is present on the target branch and is now linked as a normative hierarchy source.
 
 **Disposition:** the three verified authorities have distinct scopes. The Component Library document is the catalog/primitive-correction authority; the global defaults index is the normative Studio control contract; the Toolbox master owns global Toolbox/SubToolbox behavior. Code/tests remain executable evidence.
 
@@ -173,7 +177,7 @@ These were surfaced by Library search in the originating conversation. Their ful
 | --- | --- | --- |
 | `STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md` | Verified present at `docs/ui/STUDIO_HUB_COMPONENT_LIBRARY_SOURCE_OF_TRUTH.md` | Retain and update only for its bounded catalog scope |
 | `STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md` | Verified present at `docs/ui/STUDIO_CONTROLS_GLOBAL_DEFAULTS_AND_EXCEPTION_INDEX.md` | Retain and update with Studio contract changes |
-| `STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md` | Not found by exact-name search | Locate original donor; compare with current defaults, Toolbox authority and tokens |
+| `docs/ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md` | Verified present on target branch | Retain as normative ownership/precedence hierarchy; reconcile with defaults, Toolbox authority and tokens |
 | `docs/brain/AI_BRAIN_MASTER_RESOURCE.md` | Verified present | Check registry role and harvest unique current proposals |
 | `docs/domains/BRAIN.md` | Verified present; current Brain authority | Retain as canonical |
 | `docs/brain/VIEWTUBE_AI_SYSTEMS_MASTER_RESOURCE.md` | Verified present; explicit Phase D supersession notice | Treat as donor/provenance |
@@ -267,3 +271,17 @@ Completion requires evidence appropriate to each claim. A file existing proves o
 - **Merge state:** PR open, draft, not merged. GitHub initially returned `mergeable: false`; recheck after status computation and any subsequent updates.
 
 This receipt records the initial delivery state only. It does not certify the full documentation consolidation or any application behavior.
+
+
+## 10. Additional Studio recovery-branch reconciliation evidence
+
+A direct GitHub compare of `master/consolidated-feature-integration` against `fix/studio-controls-regression-recovery-2026-10-31` returned **diverged: 352 commits ahead and 30 commits behind** relative to the requested target. The changed-file set spans Studio controls, Confirmed Primitive Library, Vault, calendar, Analytics context, Resource Library, package scripts and release workflow. This is not a safe wholesale-merge candidate. Use a file-by-file donor map, preserve unrelated changes and selectively port only verified unique work.
+
+The recovery branch contains the two branch-only documents listed in Area 4. The target branch already contains `docs/ui/STUDIO_VALUES_TOKENS_STYLES_SETTINGS_HIERARCHY.md`; it was fetched successfully from both refs, so it is not missing from the repository.
+
+Relevant PR descriptions sampled:
+- [PR #1258](https://github.com/viewtube-dev/viewtube/pull/1258) describes new side/double-split text-input primitives and catalog coverage. Its description says tests were added but not executed; browser verification is not claimed.
+- [PR #1243](https://github.com/viewtube-dev/viewtube/pull/1243) describes side text-counter and icon-rail input families, and a source-level global input line-height root-cause finding. Its description explicitly says bottom inset-stroke clipping and full five-size browser verification remain unproven.
+- [PR #1229](https://github.com/viewtube-dev/viewtube/pull/1229) describes a three-file conversation-intake package. The package paths were not found on the target branch during this pass; inspect the PR head and register/merge the package only after verifying its current state and unique content.
+
+These PR descriptions are claims from PR metadata, not independent verification receipts.
