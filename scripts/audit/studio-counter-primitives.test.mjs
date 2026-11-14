@@ -157,6 +157,12 @@ test("StudioLeftCounter places the two-button action rail on the left without an
 });
 
 
+test("bar-toggle dimensions and measured widths use the reduced shared token ratio", () => {
+  assert.match(tokens, /heightToTextRatio:\\s*0\\.55/);
+  assert.match(valueToggles, /standard:\\s*\\{ bar:\\s*8\\.36/);
+  assert.match(valueToggleStyles, /--vt-bar-height: calc\\(var\\(--vt-studio-control-font-size, 38px\\) \\* var\\(--vt-studio-bar-height-to-text-ratio, 1\\)\\)/);
+});
+
 test("StudioCounter uses the same directional chevrons as StudioBarToggle instead of plus/minus glyphs", () => {
   const start = component.indexOf("export const StudioCounter:");
   const end = component.indexOf("StudioCounter.displayName", start);
