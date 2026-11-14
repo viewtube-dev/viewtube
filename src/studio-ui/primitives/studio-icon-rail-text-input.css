@@ -1,3 +1,4 @@
+/* QUARANTINED 2026-11-14: legacy icon-rail input styles; not imported by active UI. */
 /* Alphabetical icon-rail inputs use the same single perimeter + internal divider contract as every Studio split primitive. */
 html body .vt-studio-icon-rail-text-input[data-vt-studio-control="true"] > [data-vt-studio-split-field],
 html body .vt-studio-icon-button-rail-text-input[data-vt-studio-control="true"] > [data-vt-studio-split-field] {
