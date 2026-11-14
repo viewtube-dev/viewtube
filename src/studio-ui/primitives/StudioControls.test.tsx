@@ -1558,8 +1558,13 @@ describe("legacy split text-input quarantine", () => {
   it("keeps the old source files but removes them from active public exports and catalog registration", () => {
     const barrel = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8");
     const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
+    const system = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
     expect(barrel).not.toMatch(/StudioSplitTextInput|StudioIconRailTextInput/);
     expect(catalog).not.toMatch(/StudioSplitTextInput|StudioIconRailTextInput|StudioSideTextInput|StudioDoubleSplitTextInput/);
+    expect(fields).not.toContain("vt-studio-side-text-input__input");
+    expect(fields).not.toContain("vt-studio-double-split-text-input");
+    expect(system).not.toContain("vt-studio-double-split-text-input");
     expect(existsSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitTextInput.tsx"))).toBe(true);
     expect(existsSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioIconRailTextInput.tsx"))).toBe(true);
   });
