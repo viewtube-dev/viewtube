@@ -5324,9 +5324,21 @@ button[data-vt-studio-play-pause="true"][aria-pressed="true"] > [data-vt-studio-
   min-width: 0;
   min-height: 0;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: inherit !important;
   box-shadow: none !important;
-  overflow: visible;
+  overflow: visible !important;
+}
+.vt-studio-square-icon-button-group > :first-child > [data-vt-studio-button-face] {
+  border-top-left-radius: var(--vt-icon-group-radius, 6px) !important;
+  border-bottom-left-radius: var(--vt-icon-group-radius, 6px) !important;
+}
+.vt-studio-square-icon-button-group > :last-child > [data-vt-studio-button-face] {
+  border-top-right-radius: var(--vt-icon-group-radius, 6px) !important;
+  border-bottom-right-radius: var(--vt-icon-group-radius, 6px) !important;
+}
+.vt-studio-square-icon-button-group > button,
+.vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"] {
+  overflow: visible !important;
 }
 
 .vt-studio-square-icon-button-group > [data-vt-studio-icon-button="true"]:focus-visible,
