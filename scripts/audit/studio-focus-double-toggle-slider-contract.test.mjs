@@ -114,17 +114,14 @@ test("double-split slider gallery copy matches the canonical rail, center, and p
   assert.ok(catalog.includes("The counter-controlled specimen shares its value with the slider."));
 });
 
-test("arrow/side toggle faces and double-split word counter do not inherit the 50%-primary numeral mix", () => {
-  const faceStart = toggles.indexOf(".vt-studio-split-shell.vt-studio-value-toggle .vt-studio-value-toggle__face {");
-  const faceEnd = toggles.indexOf("\n}", faceStart);
-  const faceRule = toggles.slice(faceStart, faceEnd);
+test("double-split word counter uses global resting tint and black interaction focus", () => {
   const wordStart = toggles.indexOf(".vt-studio-word-counter__value {");
-  const wordEnd = toggles.indexOf("\n}", wordStart);
+  const wordEnd = toggles.indexOf("\\n}", wordStart);
   const wordRule = toggles.slice(wordStart, wordEnd);
-  assert.notEqual(faceStart, -1, "shared arrow/side face rule should exist");
   assert.notEqual(wordStart, -1, "double-split word counter value rule should exist");
-  assert.match(faceRule, /color:\\s*inherit/);
-  assert.doesNotMatch(faceRule, /--vt-studio-number-rest-color|color-mix/);
-  assert.doesNotMatch(wordRule, /--vt-studio-number-rest-color|color-mix/);
+  assert.match(wordRule, /--vt-studio-number-rest-color:\\s*color-mix\\(in srgb, #fff var\\(--vt-studio-number-default-white-mix, 50%\\), var\\(--vt-studio-number-background\\)/);
+  assert.match(wordRule, /-webkit-text-fill-color:\\s*var\\(--vt-studio-number-rest-color\\)/);
+  assert.match(toggles, /\.vt-studio-value-toggle--double \\.vt-studio-value-toggle__double-side:focus-within \\.vt-studio-word-counter__value/);
   assert.ok(toggles.includes("--vt-toggle-text: #000"));
 });
+
