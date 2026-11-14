@@ -32,10 +32,10 @@ A family is **source-confirmed** only when its specimen uses the production expo
 
 ## Numeric Stepper — supported size subset (2026-11-13)
 
-- Canonical production exports: `StudioInlineStepper` and `StudioSplitStepper` from `src/studio-ui/primitives/StudioControls.tsx`.
+- `StudioInlineStepper` and `StudioSplitStepper` are named component exports from `src/studio-ui/primitives/StudioControls.tsx`; as of the audited target ref, neither is exported from `src/studio-ui/index.ts` nor represented in the Confirmed Primitive Library catalog.
 - Both APIs support Standard (44px) and Compact (28px) only. Supreme, Mini and Micro are not supported and must not be fabricated in catalog galleries.
 - Inline Stepper presents decrement / editable value / increment in one flat control. Split Stepper presents the editable value beside one secondary action rail.
-- They are Controls, not compositions. The Confirmed Primitive Library should include direct imported Standard representatives and a dedicated family module showing both supported sizes with independent controlled values.
+- They are Controls, not compositions. If approved for the public primitive API, add barrel exports, direct imported Standard representatives and a dedicated family module showing both supported sizes with independent controlled values; until then, track them as uncovered module exports, not public-library-certified primitives.
 
 ## 1. Global defaults — independent of size
 
