@@ -553,7 +553,7 @@ Source paths and imports were inspected. Browser visual certification, computed-
 - `src/styles/studio-control-system.css` owns global tier selectors and consumes generated named-tier variables.
 - `src/styles/studio-control-core.css` owns generic layout/interaction behavior, not a second size ladder.
 - `src/styles/studio-control-recovery-overrides.css` owns only scoped regressions that cannot yet live in the owning primitive stylesheet; it must not redefine the global size ladder.
-- `StudioSplitTextInput` imports `studio-split-text-input.css` for shell perimeter, rails, inset geometry, and focus routing. Shared field typography and state colors remain owned by `studio-control-fields.css` and global tokens.
+- Historical note superseded 2026-11-14: the legacy split text-input and icon-rail families are quarantined and are not imported by active product/catalog code. The supported editable single-icon split field is `StudioSideTextCounterIcon`.
 - For future changes, remove stale declarations and use existing token variables before adding CSS. Add a new selector/file only when a primitive truly owns unique anatomy that cannot be expressed by shared rules.
 
 
