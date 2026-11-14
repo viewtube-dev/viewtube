@@ -1310,7 +1310,7 @@ describe("StudioTopSplitModule", () => {
     expect(css).toContain(".vt-studio-top-split-module__head[data-split=\"left\"]");
     expect(css).toContain(".vt-studio-top-split-module__body");
     expect(css).toContain("border-bottom: var(--vt-top-split-stroke) solid #000;");
-    expect(css).toMatch(/\\.vt-studio-collapsing-split-module:not\\(\\[open\\]\\)\\s*\\{\\s*border-bottom: 0 !important;/);
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module:not\(\[open\]\)\s*\{\s*border-bottom: 0 !important;/);
     expect(css).toContain(".vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head");
   });
 });
