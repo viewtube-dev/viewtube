@@ -255,8 +255,11 @@ describe("Studio dropdown chevron and split-left contract", () => {
     expect(css).toContain('min-height: var(--vt-studio-control-height, 44px)')
     expect(css).toContain('height: auto;')
     expect(css).not.toContain('height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;')
-    expect(css).toContain('grid-template-columns: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px)) minmax(0, 1fr)')
+    expect(css).toContain('grid-template-columns: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) minmax(0, 1fr)')
     expect(css).toContain('.vt-studio-dropdown-option-rail--start')
+    expect(css).toContain('font-size: var(--vt-studio-control-font-size, 38px) !important;')
+    expect(css).not.toContain('--vt-dropdown-font-size')
+    expect(css).not.toContain('.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option')
   })
 })
 
