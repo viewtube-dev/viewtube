@@ -2,7 +2,8 @@ import React from "react"
 import { Check, Settings2, Sparkles } from "lucide-react"
 import { StudioSplitTextInput } from "../../studio-ui/primitives/StudioSplitTextInput"
 
-// QUARANTINED 2026-11-14: retained for rollback; do not import or mount in production.\nconst StudioHubConfirmedSplitTextInputCatalog: React.FC = () => (
+// QUARANTINED 2026-11-14: retained for rollback; do not import or mount in production.
+const StudioHubConfirmedSplitTextInputCatalog: React.FC = () => (
   <div className="vt-confirmed-catalog">
     <section className="vt-confirmed-family" data-vt-library-component="StudioSplitTextInput">
       <h3>Split text input · Standard · Left / Right / Double</h3>
