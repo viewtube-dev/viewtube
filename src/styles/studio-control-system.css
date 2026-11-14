@@ -1071,8 +1071,8 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 }
 .vt-studio-dropdown-option {
   box-sizing: border-box;
-  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
-  min-height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;
+  min-height: var(--vt-dropdown-height, var(--vt-studio-control-height, 44px)) !important;
+  height: auto;
   border: var(--vt-dropdown-stroke, 3px) solid #000 !important;
   border-radius: calc(var(--vt-dropdown-radius, 6px) - 2px) !important;
   margin: 0 0 3px !important;
@@ -1149,46 +1149,7 @@ button[data-vt-studio-control="true"].vt-studio-44-choice:focus-visible {
 }
 /* Compact dropdowns use the same proportions as the 44px control, scaled
    proportionally to 28px; the field label belongs to the trigger, not above it. */
-.vt-studio-dropdown[data-size="compact"] {
-  --vt-dropdown-height: 28px;
-  --vt-dropdown-stroke: 2px;
-  --vt-dropdown-radius: 4px;
-  --vt-dropdown-font-size: 24px;
-}
-.vt-studio-dropdown[data-size="compact"] button[data-dropdown-trigger="true"] {
-  box-sizing: border-box;
-  height: 28px !important;
-  min-height: 28px !important;
-  padding: 0 6px 0 8px !important;
-  border-width: 2px !important;
-  border-radius: 4px !important;
-  align-items: center;
-  line-height: 1 !important;
-}
-.vt-studio-dropdown[data-size="compact"] [data-vt-studio-dropdown-value] {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  align-self: stretch;
-  line-height: 1;
-}
-.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-menu {
-  border-width: 2px !important;
-  border-top-width: 0 !important;
-  border-radius: 0 0 4px 4px !important;
-  
-}
-.vt-studio-dropdown[data-size="compact"] .vt-studio-dropdown-option {
-  height: calc(var(--vt-studio-control-height, 28px) - 2 * var(--vt-studio-control-stroke, 2px)) !important;
-  min-height: calc(var(--vt-studio-control-height, 28px) - 2 * var(--vt-studio-control-stroke, 2px)) !important;
-  border-width: 2px !important;
-  border-radius: 4px !important;
-  padding: 2px 6px !important;
-  font-size: 24px !important;
-  font-weight: 1000 !important;
-  line-height: 1 !important;
-  letter-spacing: -.02em !important;
-}
+/* Dropdown trigger, option, and menu geometry inherit the active size-tier tokens. */
 /* Canonical Studio Controls field contract.
    Border stroke and typography stroke are separate tokens. Textareas own their
    multiline typography; single-line input rules never override textarea type. */
@@ -6020,12 +5981,12 @@ button[data-vt-studio-button="true"].vt-studio-double-split-button:is([data-sele
 }
 
 .vt-studio-collapsing-split-module:not([open]) {
-  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
+  border-bottom: 0 !important;
 }
 
 .vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-collapsing-split-module__head,
 .vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head {
-  border-bottom: 0 !important;
+  border-bottom: var(--vt-top-split-stroke, 3px) solid #000 !important;
 }
 
 .vt-studio-collapsing-split-module[open] {
