@@ -44,6 +44,7 @@
 **Current source set:**
 - [Consolidated Product Strategy, Competitive, Partnership & Technical Dossier](./research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md) — merged reference for the November 12 research pack, including source claims and verification gaps.
 - [Master Partner Intelligence & Pitch Planning Playbook](./partnerships/VIEWTUBE_MASTER_PARTNER_INTELLIGENCE_AND_PITCH_PLANNING.md) — operational partner profiles, partner-specific pitch angles and asks, 25 tailored activation ideas per 12 priority organizations, deck/demo/data-room plan, outreach templates, objection handling, prioritization, tracker schema and 90-day execution plan.
+- [Priority Partner Pitch Pack](./partnerships/VIEWTUBE_PRIORITY_PARTNER_PITCH_PACK_2026-11.md) — first-pass tailored briefs, meeting angles, asks, evidence checklists and outreach drafts for ERA, Forum Ventures, Google Cloud and Betaworks; send-readiness gates are explicit.
 - [Product Architecture](./architecture/PRODUCT_ARCHITECTURE.md).
 - [Capability Registry](./architecture/capabilities.json).
 - [Deep Research Construction Source](./references/DEEP_RESEARCH_CONSTRUCTION_SOURCE.md).
