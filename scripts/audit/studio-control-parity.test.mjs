@@ -149,7 +149,7 @@ test("top direct-representative module covers the full explicitly exported contr
     "StudioIconButton", "StudioSquareIconButton", "StudioSquareIconButtonGroup", "StudioCircleIconButton",
     "StudioSplitLeftButton", "StudioSplitRightButton", "StudioDoubleSplitButton",
     "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
-    "StudioNumberInput", "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioSplitTextInput",
+    "StudioNumberInput", "StudioTextInput", "StudioTextArea", "StudioTextBox",
     "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
     "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
     "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
