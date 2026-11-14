@@ -43,6 +43,11 @@ test("stylesheet order preserves token-first and family-final ownership", () => 
     "token source, shared defaults, corrections and final family sheets must retain declared order");
 });
 
+test("quarantined split input styles are not part of the active shared cascade", () => {
+  const entry = read("src/styles/studio-control-entry.css");
+  assert.doesNotMatch(entry, /studio-split-text-input\\.css|studio-icon-rail-text-input\\.css/);
+});
+
 test("system layer defines the disabled dropdown option rule only once", () => {
   const system = read("src/styles/studio-control-system.css");
   const duplicateRule = ".vt-studio-dropdown-option:disabled { cursor: not-allowed; opacity: .45; }";
