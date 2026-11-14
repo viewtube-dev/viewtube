@@ -312,3 +312,8 @@ The Library index also identifies older partner research with obsolete “privac
 
 
 A focused catalog check on the target base found 73 distinct `data-vt-library-component` identifiers across 174 occurrences. This is not a unique public-export count. `StudioSquareIconButtonGroup` is in the public barrel and catalog; `StudioInlineStepper` and `StudioSplitStepper` exist in the production module but are absent from the public barrel and catalog. The Component Library source now records this exact coverage gap and the recovery-branch donor's unsupported 81-export claim.
+
+
+## 13. Existing Studio workstream update
+
+The existing owner file `tasks/p1-canonical-system-integration/workstreams/studio-controls/README.md` has been updated in the documentation branch with the target/recovery branch comparison, PR #1229/#1243/#1258 donor caveats, target catalog identifier count, square icon group coverage and the stepper public-barrel/catalog gap. The three existing Studio source authorities were updated selectively rather than replaced. Their registry audit metadata now points to the target base SHA recorded above.
