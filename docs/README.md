@@ -11,6 +11,8 @@ This directory contains ViewTube architecture, implementation plans, migration r
 - [Machine Documentation Registry](./registry.json) — canonical current authority metadata and supersession routing.
 - [Legacy Documentation Registry](./DOCUMENTATION_REGISTRY.md) — preserved Wave 1 baseline inventory/audit source pending generated replacement.
 - [Documentation Governance](./governance/DOCUMENTATION.md) — current rules for authority, metadata, supersession, lossless consolidation, Removed Archive, and document creation.
+- [ViewTube Master Knowledge Base](./VIEWTUBE_MASTER_KNOWLEDGE_BASE.md) — eight-area navigation map to existing canonical product, Studio, Brain, research and delivery authorities.
+- [Source Reconciliation Ledger](./audits/VIEWTUBE_SOURCE_RECONCILIATION_LEDGER_2026-11-13.md) — dated inventory, source dispositions, evidence limits and consolidation phases.
 
 ## Current explicit authorities
 
