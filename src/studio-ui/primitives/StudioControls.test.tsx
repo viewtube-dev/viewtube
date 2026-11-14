@@ -1551,7 +1551,7 @@ describe("StudioSideTextCounterIcon primitive", () => {
     const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
     expect(fields).toContain("text-align: center;");
     expect(fields).toContain("line-height: var(--vt-studio-control-line-height, 1);");
-    expect(fields).toContain("text-indent: calc(var(--vt-studio-control-height, 44px) / 2);");
+    expect(fields).toContain("padding-inline-start: calc(var(--vt-studio-control-height, 44px) + var(--vt-studio-control-stroke, 3px));");
     expect(fields).toContain("pointer-events: auto;");
     const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
     expect(catalog).toContain("value={sideTextCounterIconValue} onValueChange={setSideTextCounterIconValue}");
