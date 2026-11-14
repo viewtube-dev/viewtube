@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioSideTextInput, StudioDoubleSplitTextInput, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioSideTextCounterIcon, StudioSideTextInput, StudioDoubleSplitTextInput, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
@@ -1661,5 +1661,51 @@ describe("centered side text input primitives", () => {
     expect(catalog).toContain("ConfirmedStudioDoubleSplitTextInputFamily");
     expect(catalog).toContain("<ConfirmedStudioSideTextInputFamily />");
     expect(catalog).toContain("<ConfirmedStudioDoubleSplitTextInputFamily />");
+  });
+});
+
+
+describe("StudioSideTextCounterIcon primitive", () => {
+  it("keeps the editable counter field and replaces the stacked controls with one standard icon rail", () => {
+    const html = renderToStaticMarkup(
+      <StudioSideTextCounterIcon value="36" onValueChange={() => undefined} icon={<span>COUNTER_ICON</span>} size="standard" ariaLabel="Side text counter icon" />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioSideTextCounterIcon"');
+    expect(html).toContain('data-vt-studio-control-kind="studio-side-text-counter-icon"');
+    expect(html).toContain('data-vt-studio-split="right"');
+    expect(html).toContain("COUNTER_ICON");
+    expect(html).toContain('class="vt-studio-side-text-counter__input');
+    expect(html).toContain('class="vt-studio-side-text-input__icon"');
+    expect(html).not.toContain("<button");
+  });
+
+  it("supports an accessible, disabled-aware icon action without changing the field contract", () => {
+    const active = renderToStaticMarkup(
+      <StudioSideTextCounterIcon value="36" onValueChange={() => undefined} icon={<span>RUN</span>} iconLabel="Run counter action" onIconClick={() => undefined} />,
+    );
+    const disabled = renderToStaticMarkup(
+      <StudioSideTextCounterIcon value="36" onValueChange={() => undefined} icon={<span>RUN</span>} iconLabel="Run counter action" onIconClick={() => undefined} disabled />,
+    );
+    expect(active).toContain('<button');
+    expect(active).toContain('aria-label="Run counter action"');
+    expect(disabled).toContain('aria-label="Run counter action"');
+    expect(disabled).toContain("disabled");
+  });
+
+  it("renders the new primitive at all five canonical size tiers", () => {
+    for (const size of ["supreme", "standard", "compact", "mini", "micro"] as const) {
+      const html = renderToStaticMarkup(
+        <StudioSideTextCounterIcon value="36" onValueChange={() => undefined} icon={<span>ICON</span>} size={size} />,
+      );
+      expect(html).toContain(`data-size="${size}"`);
+    }
+  });
+
+  it("leaves the original SideTextCounter stacked increment/decrement rail intact", () => {
+    const html = renderToStaticMarkup(
+      <StudioSideTextCounter value="36" onValueChange={() => undefined} size="standard" />,
+    );
+    expect(html).toContain('data-vt-library-component="StudioSideTextCounter"');
+    expect((html.match(/<button/g) ?? []).length).toBe(2);
   });
 });
