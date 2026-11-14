@@ -1380,6 +1380,17 @@ describe("Studio Controls regression recovery contracts", () => {
 
 
 describe("collapsing module header geometry", () => {
+  it("paints the expanded divider over the complete split header, including both rails", () => {
+    const css = readStudioControlCss()
+    expect(css).toContain(".vt-studio-collapsing-split-module__head::after")
+    expect(css).toMatch(/\.vt-studio-collapsing-split-module__head::after\s*\{[^}]*position:\s*absolute[^}]*left:\s*0[^}]*right:\s*0[^}]*background:\s*#000/s)
+    expect(css).toContain("z-index: 5;")
+  })
+  it("keeps the body mounted across open and close so content does not jump on disclosure", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    expect(source).toContain("{children != null ? <div className=\"vt-studio-top-split-module__body\">{children}</div> : null}")
+    expect(source).not.toContain("{children != null && isOpen ?")
+  })
   it("reserves the bottom divider space when collapsed so header content does not shift", () => {
     const css = readStudioControlCss()
     expect(css).toMatch(/\.vt-studio-collapsing-split-module:not\(\[open\]\)[^,{]*,?[\s\S]*?border-bottom:\s*var\(--vt-top-split-stroke,\s*3px\)\s+solid\s+transparent\s*!important/s)
