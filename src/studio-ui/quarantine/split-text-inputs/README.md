@@ -5,6 +5,8 @@
 The following implementations are retained in place as rollback/reference source while the active Studio UI standardizes on `StudioSideTextCounterIcon`:
 
 - `../primitives/StudioSplitTextInput.tsx` and its adjacent `studio-split-text-input.css`
+- `../../components/studio-hub/StudioHubConfirmedSplitTextInputCatalog.tsx` (standalone specimen catalog, now non-exported)
+- `../../components/StudioHubConfirmedPrimitiveCatalog.tsx` (legacy catalog source; split-input specimen removed)
 - `../primitives/StudioIconRailTextInput.tsx` and its adjacent `studio-icon-rail-text-input.css`
 - The former `StudioSideTextInput` and `StudioDoubleSplitTextInput` declarations retained as non-exported private source in `../primitives/StudioControls.tsx`
 
