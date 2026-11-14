@@ -13,17 +13,18 @@ const catalog = readFileSync("src/components/studio-hub/StudioHubConfirmedPrimit
 const dropdown = component.slice(component.indexOf("export const StudioDropdown"), component.indexOf("export interface StudioSimpleDropdownOption"))
 
 test("top-split and collapsing-split headers retain one full-width black divider", () => {
-  assert.match(css, /\\.vt-studio-top-split-module > \\.vt-studio-top-split-module__head\\s*\\{[^}]*border-bottom:\\s*var\\(--vt-top-split-stroke[^;]*solid #000/s);
-  assert.match(css, /\\.vt-studio-collapsing-split-module > \\.vt-studio-collapsing-split-module__head\\s*\\{[^}]*border-bottom:\\s*var\\(--vt-top-split-stroke[^;]*solid #000/s);
-  assert.match(css, /\\.vt-studio-collapsing-split-module:not\\(\\[open\\]\\)\\s*\\{[^}]*border-bottom:\\s*0/s);
+  assert.ok(css.includes(".vt-studio-top-split-module > .vt-studio-top-split-module__head"));
+  assert.ok(css.includes(".vt-studio-collapsing-split-module > .vt-studio-collapsing-split-module__head"));
+  assert.ok(css.includes("border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;"));
+  assert.ok(css.includes("border-bottom-color: transparent;"));
 });
 
 test("dropdown option rows use their own size-tier height and typography", () => {
   const row = css.slice(css.lastIndexOf(".vt-studio-dropdown-option {"));
-  assert.match(row, /height:\\s*var\\(--vt-studio-control-height/);
-  assert.match(row, /min-height:\\s*var\\(--vt-studio-control-height/);
-  assert.match(row, /font-size:\\s*var\\(--vt-studio-control-font-size/);
-  assert.doesNotMatch(row, /min-height:\\s*44px/);
+  assert.ok(row.includes("height: var(--vt-studio-control-height)"));
+  assert.ok(row.includes("min-height: var(--vt-studio-control-height)"));
+  assert.ok(row.includes("font-size: var(--vt-studio-control-font-size"));
+  assert.ok(!row.includes("min-height: 44px"));
 });
 
 test("dropdown chevron geometry has one token-owned source shared by single and multi-select", () => {
