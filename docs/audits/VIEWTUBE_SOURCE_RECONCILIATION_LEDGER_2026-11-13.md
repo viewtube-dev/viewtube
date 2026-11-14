@@ -69,7 +69,7 @@ The repository's documentation governance requires preserving unique material, u
 - `docs/references/DEEP_RESEARCH_CONSTRUCTION_SOURCE.md`
 - `docs/programs/INTEGRATED_APPLICATION.md`
 
-**Candidate donor pack outside repository — ChatGPT Library**
+**Candidate donor pack outside repository — ChatGPT Library (consolidated into repository dossier)**
 - `00_VIEWTUBE_RESEARCH_REFERENCE_MASTER_INDEX.md` — product positioning, evidence taxonomy, source register and navigation for a four-volume research library.
 - `01_VIEWTUBE_PRODUCT_MARKET_COMPETITIVE_RESEARCH.md` — customer segments, competitor cohorts, opportunity research and prioritization.
 - `02_VIEWTUBE_PARTNER_ECOSYSTEM_AND_BUSINESS_DEVELOPMENT.md` — partner tiers, fit, asks, evidence needs, commercial models and 90-day work sequence.
@@ -77,9 +77,9 @@ The repository's documentation governance requires preserving unique material, u
 - `04_VIEWTUBE_SOURCE_REGISTER_CLAIM_LEDGER_AND_RESEARCH_GAPS.md` — source hierarchy, claim conflicts, capability claim ledger and unresolved research gaps.
 - `ViewTube_Master_Research_and_Implementation_Resource.md` and its DOCX companion — 10 proposed capabilities, 20 improvements, 30 provider candidates and 15 YouTube API opportunities.
 
-The pack explicitly states that live competitor/official-source verification did not complete due to insufficient Browser Use credits. Its competitor, provider, pricing, API, partner-program and market claims must not be presented as freshly verified. Consolidate these Library donors into the canonical repository dossier only after complete source reconciliation; retain the original Library versions as provenance.
+The pack explicitly states that live competitor/official-source verification did not complete due to insufficient Browser Use credits. Its competitor, provider, pricing, API, partner-program and market claims must not be presented as freshly verified. The key content and claim caveats have now been consolidated into `docs/research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md`; original Library versions remain provenance sources and are not represented as byte-for-byte migrated copies.
 
-**Disposition:** no complete current competitive/partnership dossier was established. Do not present proposed integrations or competitor examples as verified market facts.
+**Disposition:** a consolidated repository dossier now exists at `docs/research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md`. It consolidates the 10 capability candidates, 20 improvements, competitor cohorts, 15 YouTube API opportunities, 30 provider candidates, partner map, program-claim ledger, source hierarchy and validation gaps. It remains a source-document reference, not a fresh verified market study. Do not present proposals or inherited claims as verified market facts.
 
 **Remaining:** retrieve and reconcile the full Library source, check repository prior art and current capabilities, then conduct fresh primary-source competitor/provider/partner research. Record source URL, access date, exact claim, excerpt, confidence, recheck date, price basis, API/partner evidence, permissions, terms and data rights.
 
@@ -219,7 +219,7 @@ The eight knowledge areas are implemented as a navigation map, not eight duplica
 | Planned artifact / subject | Preferred treatment |
 | --- | --- |
 | Master project & knowledge handoff | Link existing Product Architecture, Integrated Application, Conversation Handoffs and Task Authority |
-| Product strategy / competitive / partnership dossier | New bounded dossier only after Library donor reconciliation and fresh evidence-backed research |
+| Product strategy / competitive / partnership dossier | Consolidated in `docs/research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md`; primary-source verification remains open |
 | Capability / feature / implementation registry | Reuse Product Architecture, `capabilities.json`, code registries and Task Authority; create only derived coverage output if needed |
 | Studio design system / primitive library | Update existing Toolbox master, Component Library source and Global Defaults index |
 | Studio regression / recovery report | Consolidate into existing Studio workstream and regression handoff, then promote a single living report only if a genuine authority gap remains |
@@ -301,3 +301,11 @@ A follow-up Library search found the complete companion-pack structure: master i
 **Recommended repository treatment:** create one canonical combined strategy/competitive/partnership dossier that absorbs the index, product-market volume, partner volume and claim-ledger material. Fold the technical/API/risk volume into that dossier as a substantial technical-feasibility section unless a clearly independent owner and update cadence justify a separate subordinate specification. Keep the original Library artifacts as immutable source donors and record source-by-source harvested contributions in the consolidation manifest.
 
 The Library index also identifies older partner research with obsolete “privacy-first YouTube frontend/ad-free player” positioning. That source must remain historical only and must not be reused as the current ViewTube pitch. It records no verified signed partnerships, customer pilots, submitted applications or partner meetings in the reviewed source set. Program benefits, application windows, credit amounts and contact routes require current official verification.
+
+
+## 12. Consolidated dossier delivery receipt
+
+- **New repository file:** `docs/research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md`.
+- **Source families absorbed:** Library volumes 00–04; 10 proposed capabilities; 20 improvement candidates; 15 YouTube API areas; 30 provider candidates; competitor cohorts; partner tiers and inherited benefit claims; data-room and 90-day plans; technical/security/economics/test requirements; source and claim ledgers.
+- **Disposition:** one combined repository reference rather than five separate active masters. Original Library artifacts remain source provenance; this file is a consolidated synthesis, not a byte-for-byte archive copy.
+- **Evidence state:** fresh official-source verification is still outstanding. No competitor feature, provider access, price, partner credit, eligibility, traction, deployment or predictive-performance claim is promoted to VERIFIED by this migration.
