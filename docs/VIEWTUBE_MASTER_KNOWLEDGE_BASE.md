@@ -48,7 +48,7 @@
 - [Integrated Application Program](./programs/INTEGRATED_APPLICATION.md).
 - Existing product/domain authorities linked from [the documentation entrypoint](./README.md).
 
-**Known gap:** no single current, evidence-verified ViewTube competitive and partnership dossier was established by this initial repository audit. A separate dossier should be created only after source reconciliation and fresh research. The Library artifact `ViewTube_Master_Research_and_Implementation_Resource.md` is a candidate donor, not yet a repository-verified authority. Its prior research limitations must travel with any reused claims.
+**Known gap:** no single current, evidence-verified ViewTube competitive and partnership dossier was established in the repository. The ChatGPT Library contains a five-file research pack (`00_VIEWTUBE_RESEARCH_REFERENCE_MASTER_INDEX.md` through `04_VIEWTUBE_SOURCE_REGISTER_CLAIM_LEDGER_AND_RESEARCH_GAPS.md`) plus source reports. These are candidate donors, not yet repository-verified authorities. Consolidate the product/market/competitor/partner material and claim ledger into one canonical dossier, with the technical/API material retained as a clearly scoped section or annex. Preserve the explicit limitation that fresh competitor and official-source verification was not completed.
 
 **Evidence rule:** competitor features, pricing, APIs, partner programs, permissions, terms and market claims require source URLs, access dates, excerpts, confidence and re-verification dates. Distinguish researched facts from proposals and hypotheses.
 
