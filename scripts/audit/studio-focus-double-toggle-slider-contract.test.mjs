@@ -112,6 +112,15 @@ test("double-split slider gallery copy matches the canonical rail, center, and p
   assert.ok(catalog.includes("The counter-controlled specimen shares its value with the slider."));
 });
 
+test("square icon button groups retain rounded end faces and allow animation overflow", () => {
+  assert.ok(controls.includes(".vt-studio-square-icon-button-group > :first-child > [data-vt-studio-button-face]"));
+  assert.ok(controls.includes("border-top-left-radius: var(--vt-icon-group-radius, 6px) !important;"));
+  assert.ok(controls.includes(".vt-studio-square-icon-button-group > :last-child > [data-vt-studio-button-face]"));
+  assert.ok(controls.includes("border-top-right-radius: var(--vt-icon-group-radius, 6px) !important;"));
+  assert.ok(controls.includes(".vt-studio-square-icon-button-group > [data-vt-studio-icon-button=\\"true\\"]"));
+  assert.ok(controls.includes("overflow: visible !important;"));
+});
+
 test("double-split word counter uses global resting tint and black interaction focus", () => {
   const wordStart = toggles.indexOf(".vt-studio-word-counter__value {");
   const wordEnd = toggles.indexOf("\n}", wordStart);
