@@ -3,11 +3,10 @@ import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioSideTextCounterIcon, StudioSideTextInput, StudioDoubleSplitTextInput, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
+import { StudioActionButton, StudioButton, StudioTwoLineButton, StudioSplitTwoLineButton, StudioSquareIconButtonGroup, StudioTopSplitModule, StudioSplitLeftBadge, StudioDoubleSplitBadge, StudioSplitLeftButton, StudioSplitLeftDropdown, StudioDropdown, StudioSquareIconButton, StudioCircleIconButton, StudioPlayPauseButton, StudioLegendMultiDropdown, StudioSimpleDropdown, StudioTextArea, StudioTextBox, StudioTextInput, StudioWordToggle, StudioSwitch, StudioRadio, StudioSpectrumTag, StudioChoice, StudioUploadFrame, StudioCounter, StudioSideCounter, StudioSideTextCounter, StudioSideTextCounterIcon, StudioDoubleSplitSlider, StudioLeftWordCounter, StudioLeftWordSlider, normalizeStudioLeftWordIndex, STUDIO_LEFT_WORD_OPTIONS, StudioVerticalWordToggle, StudioCloseableBadge, StudioBrainStatusBadge, StudioBrainStatusIndicator, STUDIO_CONTROL_GLOBAL_RULE_EXCEPTIONS, getStudioCounterRepeatDelay } from "./StudioControls"
 import { StudioHubCompletePrimitiveCatalog } from "../../components/studio-hub/StudioHubCompletePrimitiveCatalog"
 import { StudioHubConfirmedPrimitiveCatalog } from "../../components/studio-hub/StudioHubConfirmedPrimitiveCatalog"
 import { STUDIO_CONTROL_SIZE_BASE, type StudioControlSize, studioSizeTierToCssVars } from "../tokens"
-import { StudioSplitTextInput } from "./StudioSplitTextInput"
 
 const readStudioControlCss = () => [
   "studio-control-system.css",
@@ -19,7 +18,6 @@ const readStudioControlCss = () => [
   "studio-control-word-counter.css",
   "studio-control-value-toggles.css",
  ].map((file) => readFileSync(resolve(process.cwd(), "src/styles", file), "utf8"))
-  .concat(readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/studio-icon-rail-text-input.css"), "utf8"))
   .join("\n");
 
 const canonicalTail = (css: string) => {
@@ -1440,40 +1438,6 @@ describe("Studio left word counter and word slider", () => {
 });
 
 
-describe("StudioSplitTextInput badge-owned composition", () => {
-  it("composes one split badge shell with the native StudioTextInput for left, right, and double layouts", () => {
-    const left = renderToStaticMarkup(<StudioSplitTextInput split="left" sizeVariant="standard" leftIcon={<span>SEARCH</span>} aria-label="Search" />);
-    const right = renderToStaticMarkup(<StudioSplitTextInput split="right" sizeVariant="standard" rightIcon={<span>FILTER</span>} aria-label="Filter" />);
-    const double = renderToStaticMarkup(<StudioSplitTextInput split="double" sizeVariant="standard" leftIcon={<span>SEARCH</span>} rightIcon={<span>FILTER</span>} aria-label="Search and filter" />);
-    expect(left).toContain('class="vt-studio-split-text-input"');
-    expect(left).toContain('data-vt-studio-split="left"');
-    expect(left).toContain('data-vt-library-component="StudioSplitLeftBadge"');
-    expect(right).toContain('data-vt-studio-split="right"');
-    expect(right).toContain('data-vt-library-component="StudioSplitRightBadge"');
-    expect(double).toContain('data-vt-studio-split="double"');
-    expect(double).toContain('data-vt-library-component="StudioDoubleSplitBadge"');
-    expect(double).toContain('class="vt-studio-text-input');
-    expect(double).toContain('aria-label="Search and filter"');
-  });
-
-  it("uses one shell perimeter and divider, secondary square rails, and a primary inset input stroke", () => {
-    const css = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/studio-split-text-input.css"), "utf8");
-    expect(css).toContain('grid-template-columns: var(--vt-studio-control-height, 44px) minmax(0, 1fr)');
-    expect(css).toContain('background: var(--vt-studio-control-secondary');
-    expect(css).toContain('box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px) var(--vt-split-field-primary)');
-    expect(css).toContain('border: 0;');
-    expect(css).not.toContain('!important');
-    expect(css).not.toContain('border: var(--vt-studio-control-stroke, 3px) solid var(--vt-split-field-primary)');
-  });
-
-  it("supports the complete five-tier size contract", () => {
-    for (const size of ["supreme", "standard", "compact", "mini", "micro"] as const) {
-      const html = renderToStaticMarkup(<StudioSplitTextInput split="double" sizeVariant={size} aria-label={size + " split input"} />);
-      expect(html).toContain('data-size="' + size + '"');
-    }
-  });
-});
-
 describe("confirmed split badge rails and double-side toggle shell", () => {
   it("renders both icon rails for split-left and double-split badges", () => {
     const left = renderToStaticMarkup(<StudioSplitLeftBadge icon={<span>LEFT_ICON</span>}>READY</StudioSplitLeftBadge>);
@@ -1544,127 +1508,6 @@ describe("confirmed counter representative and focus-surface regressions", () =>
 });
 
 
-describe("Studio icon rail alphabetical text input categories", () => {
-  it("renders non-interactive left, right, and double icon rails without buttons", async () => {
-    const { StudioSplitLeftIconRailTextInput, StudioSplitRightIconRailTextInput, StudioDoubleSplitIconRailTextInput } = await import("./StudioIconRailTextInput")
-    const icon = <span>i</span>
-    const left = renderToStaticMarkup(<StudioSplitLeftIconRailTextInput value="ALPHA" onValueChange={() => {}} leftIcon={icon} />)
-    const right = renderToStaticMarkup(<StudioSplitRightIconRailTextInput value="ALPHA" onValueChange={() => {}} rightIcon={icon} />)
-    const double = renderToStaticMarkup(<StudioDoubleSplitIconRailTextInput value="ALPHA" onValueChange={() => {}} leftIcon={icon} rightIcon={icon} />)
-    expect(left).toContain('data-vt-library-component="StudioSplitLeftIconRailTextInput"')
-    expect(right).toContain('data-vt-library-component="StudioSplitRightIconRailTextInput"')
-    expect(double).toContain('data-vt-studio-split="double"')
-    expect(left).not.toContain("<button")
-    expect(right).not.toContain("<button")
-    expect(double).not.toContain("<button")
-  })
-
-  it("renders one centered accessible icon button per configured rail", async () => {
-    const { StudioSplitLeftIconButtonTextInput, StudioSplitRightIconButtonTextInput, StudioDoubleSplitIconButtonTextInput } = await import("./StudioIconRailTextInput")
-    const icon = <span>i</span>
-    const left = renderToStaticMarkup(<StudioSplitLeftIconButtonTextInput value="ALPHA" onValueChange={() => {}} leftIcon={icon} leftIconLabel="Open options" onLeftIconClick={() => {}} />)
-    const right = renderToStaticMarkup(<StudioSplitRightIconButtonTextInput value="ALPHA" onValueChange={() => {}} rightIcon={icon} rightIconLabel="Confirm" onRightIconClick={() => {}} />)
-    const double = renderToStaticMarkup(<StudioDoubleSplitIconButtonTextInput value="ALPHA" onValueChange={() => {}} leftIcon={icon} rightIcon={icon} leftIconLabel="Open options" rightIconLabel="Confirm" />)
-    expect(left).toContain('aria-label="Open options"')
-    expect(right).toContain('aria-label="Confirm"')
-    expect((double.match(/<button/g) ?? []).length).toBe(2)
-    expect(double).toContain("disabled")
-    expect(double).toContain('data-vt-library-component="StudioDoubleSplitIconButtonTextInput"')
-  })
-
-  it("registers both categories in the standard representatives and confirmed primitive module", () => {
-    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
-    expect(html).toContain("ICON RAIL TEXT INPUTS")
-    expect(html).toContain("Studio Icon Rail Text Inputs · Non-Interactive")
-    expect(html).toContain("Studio Icon Button Rail Text Inputs")
-    expect(html).toContain('data-vt-library-component="StudioDoubleSplitIconRailTextInput"')
-    expect(html).toContain('data-vt-library-component="StudioDoubleSplitIconButtonTextInput"')
-  })
-})
-
-
-describe("Studio icon rail text input styling contract", () => {
-  it("keeps one shell perimeter and a single primary inset on the editable field", () => {
-    const css = readStudioControlCss()
-    const iconInput = css.slice(css.indexOf("Alphabetical icon-rail inputs"), css.indexOf("@media (prefers-reduced-motion", css.indexOf("Alphabetical icon-rail inputs")))
-    expect(iconInput).toContain("border: 0 !important")
-    expect(iconInput).toContain("var(--vt-field-primary")
-    expect(iconInput).toContain("outline-offset: 0")
-    expect(iconInput).toContain("var(--vt-field-secondary")
-    expect(iconInput).toContain("var(--vt-studio-supreme-icon-size")
-    expect(iconInput).toContain("var(--vt-studio-standard-icon-stroke")
-    expect(iconInput).toContain("var(--vt-studio-compact-icon-stroke")
-    expect(iconInput).toContain("var(--vt-studio-mini-icon-stroke")
-    expect(iconInput).toContain("var(--vt-studio-micro-icon-stroke")
-  })
-
-  it("keeps non-interactive rails free of button semantics and gives action rails one button per side", async () => {
-    const { StudioSplitLeftIconRailTextInput, StudioDoubleSplitIconRailTextInput, StudioDoubleSplitIconButtonTextInput } = await import("./StudioIconRailTextInput")
-    const icon = <span>i</span>
-    const left = renderToStaticMarkup(<StudioSplitLeftIconRailTextInput value="A" onValueChange={() => {}} leftIcon={icon} />)
-    const double = renderToStaticMarkup(<StudioDoubleSplitIconRailTextInput value="A" onValueChange={() => {}} leftIcon={icon} rightIcon={icon} />)
-    const actions = renderToStaticMarkup(<StudioDoubleSplitIconButtonTextInput value="A" onValueChange={() => {}} leftIcon={icon} rightIcon={icon} leftIconLabel="Left action" rightIconLabel="Right action" onLeftIconClick={() => {}} onRightIconClick={() => {}} />)
-    expect(left).not.toContain("<button")
-    expect(double).not.toContain("<button")
-    expect((actions.match(/<button/g) ?? []).length).toBe(2)
-    expect(actions).toContain('aria-label="Left action"')
-    expect(actions).toContain('aria-label="Right action"')
-  })
-})
-
-
-describe("centered side text input primitives", () => {
-  it("renders the single-icon side input with a centered editable value panel", () => {
-    const html = renderToStaticMarkup(
-      <StudioSideTextInput value="SEARCH" onValueChange={() => undefined} icon={<span>SEARCH_ICON</span>} size="standard" ariaLabel="Side search" />,
-    );
-    expect(html).toContain('data-vt-library-component="StudioSideTextInput"');
-    expect(html).toContain('data-vt-studio-split="right"');
-    expect(html).toContain("SEARCH_ICON");
-    expect(html).toContain('class="vt-studio-side-text-input__input');
-    const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
-    expect(css).toContain(".vt-studio-side-text-input .vt-studio-side-text-input__input");
-    expect(css).toContain("text-align: center;");
-  });
-
-  it("renders the double-split input with two independent square icon rails and one centered field", () => {
-    const html = renderToStaticMarkup(
-      <StudioDoubleSplitTextInput
-        value="SEARCH"
-        onValueChange={() => undefined}
-        leftIcon={<span>LEFT_ICON</span>}
-        rightIcon={<span>RIGHT_ICON</span>}
-        size="standard"
-        ariaLabel="Double split search"
-        leftIconLabel="Open filters"
-        rightIconLabel="Run search"
-        onLeftIconClick={() => undefined}
-        onRightIconClick={() => undefined}
-      />,
-    );
-    expect(html).toContain('data-vt-library-component="StudioDoubleSplitTextInput"');
-    expect(html).toContain('data-vt-studio-split="double"');
-    expect(html).toContain('aria-label="Double split search"');
-    expect(html).toContain('aria-label="Open filters"');
-    expect(html).toContain('aria-label="Run search"');
-    expect(html).toContain("LEFT_ICON");
-    expect(html).toContain("RIGHT_ICON");
-    expect((html.match(/data-vt-studio-split-rail/g) ?? []).length).toBe(2);
-    expect(html).toContain('class="vt-studio-double-split-text-input__input');
-  });
-
-  it("registers both input primitives as pure representatives and individual five-size modules", () => {
-    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
-    expect(catalog).toContain('data-vt-library-component="StudioSideTextInput"');
-    expect(catalog).toContain('data-vt-library-component="StudioDoubleSplitTextInput"');
-    expect(catalog).toContain("ConfirmedStudioSideTextInputFamily");
-    expect(catalog).toContain("ConfirmedStudioDoubleSplitTextInputFamily");
-    expect(catalog).toContain("<ConfirmedStudioSideTextInputFamily />");
-    expect(catalog).toContain("<ConfirmedStudioDoubleSplitTextInputFamily />");
-  });
-});
-
-
 describe("StudioSideTextCounterIcon primitive", () => {
   it("keeps the editable counter field and replaces the stacked controls with one standard icon rail", () => {
     const html = renderToStaticMarkup(
@@ -1707,5 +1550,19 @@ describe("StudioSideTextCounterIcon primitive", () => {
     );
     expect(html).toContain('data-vt-library-component="StudioSideTextCounter"');
     expect((html.match(/<button/g) ?? []).length).toBe(2);
+  });
+});
+
+
+describe("legacy split text-input quarantine", () => {
+  it("keeps the old source files but removes them from active public exports and catalog registration", () => {
+    const barrel = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8");
+    const catalog = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const quarantine = readFileSync(resolve(process.cwd(), "src/studio-ui/quarantine/split-text-inputs/README.md"), "utf8");
+    expect(barrel).not.toMatch(/StudioSplitTextInput|StudioIconRailTextInput/);
+    expect(catalog).not.toMatch(/StudioSplitTextInput|StudioIconRailTextInput|StudioSideTextInput|StudioDoubleSplitTextInput/);
+    expect(quarantine).toContain("StudioSideTextCounterIcon");
+    expect(existsSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioSplitTextInput.tsx"))).toBe(true);
+    expect(existsSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioIconRailTextInput.tsx"))).toBe(true);
   });
 });
