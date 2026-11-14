@@ -13,6 +13,7 @@
 
 [data-vt-studio-control] {
   --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px);
+  --vt-field-text-stroke-width: var(--vt-studio-standard-text-stroke, 1px);
   /* Canonical editable-field tokens: resting text/stroke match primary; focus uses black text/glyph stroke, a persistent primary inset, and a primary caret. */
   --vt-field-primary: var(--vt-studio-control-accent, var(--pair-a, #36e0f6));
   --vt-field-text: var(--vt-field-primary);
@@ -30,10 +31,11 @@
   --vt-studio-control-radius: var(--vt-studio-standard-radius, 6px);
   --vt-studio-control-font-size: var(--vt-studio-standard-font-size, 38px);
   --vt-studio-control-font-weight: var(--vt-studio-standard-font-weight, 1000);
+  --vt-studio-control-line-height: var(--vt-studio-standard-line-height, 1);
   --vt-studio-control-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-studio-control-text-transform: uppercase;
   --vt-studio-control-letter-spacing: -.02em;
-  --vt-studio-control-line-height: 1;
+  --vt-studio-control-line-height: var(--vt-studio-standard-line-height, 1);
   --vt-studio-textarea-line-height: .85;
   
   --vt-studio-control-outline-stroke: calc(var(--vt-studio-control-stroke, 3px) * 0.5);
@@ -51,12 +53,14 @@
 }
 
 [data-vt-studio-control][data-size="supreme"] {
+  --vt-field-text-stroke-width: var(--vt-studio-supreme-text-stroke, 1px);
   --vt-studio-control-text-stroke: var(--vt-studio-supreme-text-stroke, 1px);
   --vt-studio-control-height: var(--vt-studio-supreme-height, 60px);
   --vt-studio-control-stroke: var(--vt-studio-supreme-stroke, 3px);
   --vt-studio-control-radius: var(--vt-studio-supreme-radius, 6px);
   --vt-studio-control-font-size: var(--vt-studio-supreme-font-size, 52px);
   --vt-studio-control-font-weight: var(--vt-studio-supreme-font-weight, 1000);
+  --vt-studio-control-line-height: var(--vt-studio-supreme-line-height, 1);
   --vt-studio-control-icon-size: var(--vt-studio-supreme-icon-size, 52px);
   --vt-studio-control-icon-stroke: var(--vt-studio-supreme-icon-stroke, 1.9);
   --vt-studio-control-focus-outline-width: var(--vt-studio-supreme-focus-outline-width, 1.95px);
@@ -79,6 +83,7 @@
   --vt-studio-control-radius: var(--vt-studio-compact-radius, 4px);
   --vt-studio-control-font-size: var(--vt-studio-compact-font-size, 24px);
   --vt-studio-control-font-weight: var(--vt-studio-compact-font-weight, 1000);
+  --vt-studio-control-line-height: var(--vt-studio-compact-line-height, 1);
   
   --vt-studio-control-focus-outline-width: var(--vt-studio-compact-focus-outline-width, 1.3px);
   --vt-studio-control-focus-outline-offset: 0px;
@@ -87,6 +92,7 @@
   --vt-studio-control-icon-stroke: var(--vt-studio-compact-icon-stroke, 2.0);
 }
 [data-vt-studio-control][data-size="standard"] {
+  --vt-field-text-stroke-width: var(--vt-studio-standard-text-stroke, 1px);
   --vt-studio-control-text-stroke: var(--vt-studio-standard-text-stroke, 1px);
   --vt-studio-control-height: var(--vt-studio-standard-height, 44px);
   --vt-studio-control-stroke: var(--vt-studio-standard-stroke, 3px);
@@ -108,6 +114,7 @@
   --vt-studio-control-radius: var(--vt-studio-mini-radius, 3px);
   --vt-studio-control-font-size: var(--vt-studio-mini-font-size, 17.5px);
   --vt-studio-control-font-weight: var(--vt-studio-mini-font-weight, 1000);
+  --vt-studio-control-line-height: var(--vt-studio-mini-line-height, 1);
   --vt-studio-control-focus-outline-width: var(--vt-studio-mini-focus-outline-width, 0.975px);
   --vt-studio-control-focus-outline-offset: 0px;
   --vt-studio-control-secondary-outline-width: var(--vt-studio-mini-secondary-outline-width, 0.975px);
@@ -124,6 +131,7 @@
   --vt-studio-control-radius: var(--vt-studio-micro-radius, 2px);
   --vt-studio-control-font-size: var(--vt-studio-micro-font-size, 10px);
   --vt-studio-control-font-weight: var(--vt-studio-micro-font-weight, 1000);
+  --vt-studio-control-line-height: var(--vt-studio-micro-line-height, 1);
   --vt-studio-control-text-stroke: var(--vt-studio-micro-text-stroke, 0.4px);
   --vt-studio-control-icon-size: var(--vt-studio-micro-icon-size, 10px);
   --vt-studio-control-icon-stroke: var(--vt-studio-micro-icon-stroke, 1.5);
