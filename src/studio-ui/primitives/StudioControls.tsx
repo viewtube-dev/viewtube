@@ -111,7 +111,7 @@ export const STUDIO_COMPONENT_GLOBAL_DEFAULTS = {
   globalSizeLattice: "supreme 60px / 3px border / 6px radius / 52px type and icon; standard 44px / 3px border / 6px radius / 38px type and icon; compact 28px / 2px border / 4px radius / 24px type and icon; mini 20px / 1.5px border / 3px radius / 17.5px type and icon; micro 12px / 1px border / 2px radius / 10px type and icon",
   globalTextWeight: 1000,
   globalTextAlignment: "center for buttons, badges, split labels, icon faces, and side-text-counter/input value panels; standalone single-line text inputs and text areas align left",
-  textContainment: "Global rule for single-line text-bearing Studio primitives: split-left, split-right, and double-split labels center against the full component outer border box, independent of rail placement; side-text-counter and side-text-input value panels center within the text panel; standalone single-line text inputs remain left-aligned. Use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls. Multiline textareas are excluded.",
+  textContainment: "Global rule for single-line text-bearing Studio primitives: split-left, split-right, and double-split labels center against the full component outer border box, independent of rail placement; side-text-counter and side-text-counter-icon value panels center within the text panel; standalone single-line text inputs remain left-aligned. Use overflow hidden, nowrap, and clip (never ellipsis); never overlap adjacent controls. Multiline textareas are excluded.",
   buttonVariantContract: {
     v1: "primary fill / black text",
     v2: "secondary fill / black text",
