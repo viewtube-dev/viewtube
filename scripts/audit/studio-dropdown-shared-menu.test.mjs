@@ -28,7 +28,7 @@ test("regular dropdown option rows use the active size bracket height and radius
   assert.match(option, /min-height: var\(--vt-studio-control-height, 44px\)/);
   assert.match(option, /border-radius: var\(--vt-studio-control-radius, 6px\)/);
   assert.match(option, /box-sizing: border-box/);
-  assert.match(option, /font-size: var\\(--vt-studio-control-font-size, 38px\\)/);
+  assert.ok(option.includes("font-size: var(--vt-studio-control-font-size, 38px)"));
 });
 
 test("subsequent dropdown rows retain their size-bracket corner radius", () => {
@@ -41,8 +41,8 @@ test("split dropdown option rows have only the leading rail and centered label",
   const split = styles.match(/\.vt-studio-dropdown-option\[data-vt-studio-dropdown-split-option="true"\] \{([\s\S]*?)\n\}/)?.[1] ?? "";
   assert.match(split, /grid-template-columns:[^;]+minmax\(0, 1fr\)/);
   assert.match(split, /padding: 0/);
-  assert.match(split, /grid-template-columns: calc\\(var\\(--vt-studio-control-height, 44px\\) - 2 \\* var\\(--vt-studio-control-stroke, 3px\\)\\) minmax\\(0, 1fr\\)/);
-  assert.match(styles, /width: calc\\(var\\(--vt-studio-control-height, 44px\\) - 2 \\* var\\(--vt-studio-control-stroke, 3px\\)\\)/);
+  assert.ok(split.includes("grid-template-columns: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) minmax(0, 1fr)"));
+  assert.ok(styles.includes("width: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));"));
   assert.match(styles, /\.vt-studio-dropdown-option-rail--start/);
   assert.match(styles, /\.vt-studio-dropdown-option-label/);
   assert.doesNotMatch(styles, /\.vt-studio-dropdown-option-rail--end/);
