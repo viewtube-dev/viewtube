@@ -290,8 +290,8 @@ button[data-vt-studio-control][data-dropdown-trigger="true"] {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
-  min-height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px));
+  height: var(--vt-studio-control-height, 44px);
+  min-height: var(--vt-studio-control-height, 44px);
   align-items: center;
   margin-bottom: 3px;
   border: var(--vt-studio-control-stroke, 3px) solid #000;
