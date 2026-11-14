@@ -1723,7 +1723,7 @@ export const StudioCollapsingSplitModule: React.FC<StudioCollapsingSplitModulePr
           <span className="vt-studio-collapsing-split-module__disclosure" aria-hidden="true"><ChevronDown /></span>
         )}
       </summary>
-      {children != null && isOpen ? <div className="vt-studio-top-split-module__body">{children}</div> : null}
+      {children != null ? <div className="vt-studio-top-split-module__body">{children}</div> : null}
     </details>
   )
 }
