@@ -253,6 +253,10 @@ describe("Studio dropdown chevron and split-left contract", () => {
     expect(css).toContain('--vt-studio-dropdown-rail-size: var(--vt-studio-dropdown-standard-rail-size, 44px)')
     expect(css).toContain('--vt-studio-dropdown-chevron-size: var(--vt-studio-dropdown-standard-chevron-size, 28px)')
     expect(css).toContain('min-height: var(--vt-studio-control-height, 44px)')
+    expect(css).toContain('height: auto;')
+    expect(css).not.toContain('height: calc(var(--vt-studio-control-height, 44px) - 2 * var(--vt-studio-control-stroke, 3px)) !important;')
+    expect(css).toContain('grid-template-columns: var(--vt-studio-dropdown-rail-size, var(--vt-studio-control-height, 44px)) minmax(0, 1fr)')
+    expect(css).toContain('.vt-studio-dropdown-option-rail--start')
   })
 })
 
@@ -1302,6 +1306,9 @@ describe("StudioTopSplitModule", () => {
     const css = readFileSync(resolve(process.cwd(), "src/styles/studio-control-system.css"), "utf8");
     expect(css).toContain(".vt-studio-top-split-module__head[data-split=\"left\"]");
     expect(css).toContain(".vt-studio-top-split-module__body");
+    expect(css).toContain("border-bottom: var(--vt-top-split-stroke) solid #000;");
+    expect(css).toContain(".vt-studio-collapsing-split-module:not([open]) {\\n  border-bottom: 0 !important;");
+    expect(css).toContain(".vt-studio-collapsing-split-module:not([open]) > summary.vt-studio-top-split-module__head");
   });
 });
 
@@ -1509,6 +1516,13 @@ describe("confirmed counter representative and focus-surface regressions", () =>
 
 
 describe("StudioSideTextCounterIcon primitive", () => {
+  it("preserves an intentionally empty value so the final character can be deleted", () => {
+    const html = renderToStaticMarkup(<StudioSideTextCounterIcon value="" onValueChange={() => undefined} icon={<span>ICON</span>} ariaLabel="Editable text" />)
+    expect(html).toContain('value=""')
+    const source = readFileSync(resolve(process.cwd(), "src/studio-ui/primitives/StudioControls.tsx"), "utf8")
+    expect(source).toContain("onChange={event => onValueChange(event.currentTarget.value)}")
+  })
+
   it("keeps the editable counter field and replaces the stacked controls with one standard icon rail", () => {
     const html = renderToStaticMarkup(
       <StudioSideTextCounterIcon value="36" onValueChange={() => undefined} icon={<span>COUNTER_ICON</span>} size="standard" ariaLabel="Side text counter icon" />,
@@ -1519,6 +1533,8 @@ describe("StudioSideTextCounterIcon primitive", () => {
     expect(html).toContain("COUNTER_ICON");
     expect(html).toContain('class="vt-studio-side-text-counter__input');
     expect(html).toContain('class="vt-studio-side-text-input__icon"');
+    const fields = readFileSync(resolve(process.cwd(), "src/styles/studio-control-fields.css"), "utf8");
+    expect(fields).toContain("text-align: center;");
     expect(html).not.toContain("<button");
   });
 
