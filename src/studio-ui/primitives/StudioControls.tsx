@@ -2135,7 +2135,7 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
   }
 
   return (
-    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${variant === "split-left" ? "is-split-left" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant} data-open={open ? "true" : "false"}>
+    <div ref={rootRef} className={`vt-studio-dropdown ${variant === "simple" ? "is-simple" : ""} ${variant === "split-left" ? "is-split-left" : ""} ${className}`} data-vt-studio-dropdown data-vt-studio-control="true" data-vt-studio-control-family="dropdown" data-vt-studio-dropdown-variant={variant} data-size={sizeVariant} data-open={open ? "true" : "false"}>
       <button
         id={id}
         type="button"
@@ -2192,6 +2192,8 @@ export const StudioDropdown: React.FC<StudioDropdownProps> = ({
               aria-selected={option.value === currentValue}
               disabled={option.disabled}
               className="vt-studio-dropdown-option"
+              data-vt-studio-control="true"
+              data-size={sizeVariant}
               data-vt-studio-dropdown-split-option={variant === "split-left" ? "true" : undefined}
               data-active={index === activeIndex || undefined}
               data-selected={option.value === currentValue || undefined}
