@@ -7,7 +7,7 @@
 **Concern:** cross-domain navigation to ViewTube's canonical product, engineering, design, research and delivery knowledge  
 **Owner:** Documentation Governance + Integrated Application Program  
 **Registry ID:** DOC-REF-MASTER-KNOWLEDGE-BASE  
-**Last Audited Main SHA:** UNRESOLVED — this initial index is a navigation artifact; exact base-head certification remains in the linked reconciliation ledger  
+**Last Audited Main SHA:** `767a223bb383addcaf6492d67a3b29ac53934b43` — exact target-branch base SHA recorded by GitHub compare for PR #1259  
 **Supersedes:** none  
 **Related Authorities:** docs/registry.json; docs/governance/DOCUMENTATION.md; docs/architecture/PRODUCT_ARCHITECTURE.md; docs/programs/INTEGRATED_APPLICATION.md; docs/governance/CONVERSATION_HANDOFFS.md
 
