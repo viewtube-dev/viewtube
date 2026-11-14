@@ -7,7 +7,7 @@
 **Concern:** source inventory, authority mapping, donor reconciliation and phased documentation consolidation  
 **Owner:** Documentation Governance + Integrated Application Program  
 **Registry ID:** DOC-AUDIT-SOURCE-RECONCILIATION-20261113  
-**Last Audited Main SHA:** UNRESOLVED — branch ref was verified, but the exact target branch head SHA was not returned by the available repository read operations in this audit  
+**Last Audited Main SHA:** `767a223bb383addcaf6492d67a3b29ac53934b43` — exact target-branch base SHA returned by GitHub compare for PR #1259  
 **Supersedes:** none  
 **Related Authorities:** docs/registry.json; docs/governance/DOCUMENTATION.md; docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md; docs/programs/INTEGRATED_APPLICATION.md
 
@@ -251,3 +251,19 @@ Before any source is moved, archived, marked superseded or deleted:
 7. Run link/schema/documentation checks and inspect the final diff.
 
 Completion requires evidence appropriate to each claim. A file existing proves only file existence; a commit proves a repository change; a merged PR proves integration; tests/build/runtime/visual checks prove only the behaviors they actually exercise.
+
+
+## 9. Initial delivery receipt — PR #1259
+
+- **PR:** [#1259 — docs: establish consolidated ViewTube master knowledge index](https://github.com/viewtube-dev/viewtube/pull/1259)
+- **Working branch:** `docs/master-knowledge-consolidation-2026-11-13`
+- **Target branch:** `master/consolidated-feature-integration`
+- **Target base SHA:** `767a223bb383addcaf6492d67a3b29ac53934b43`
+- **Observed PR head SHA at initial review:** `8006d4789fb72be264623abc4946903675a96243`
+- **Comparison:** 4 commits ahead, 0 behind; merge base equals target base SHA.
+- **Changed files:** exactly the four files listed in the PR.
+- **Repository link checks:** all 20 direct linked paths were fetched successfully across two validation batches; the documentation registry parsed successfully with 73 entries.
+- **CI status at initial review:** three Vercel contexts were pending. No passing build/test result is claimed.
+- **Merge state:** PR open, draft, not merged. GitHub initially returned `mergeable: false`; recheck after status computation and any subsequent updates.
+
+This receipt records the initial delivery state only. It does not certify the full documentation consolidation or any application behavior.
