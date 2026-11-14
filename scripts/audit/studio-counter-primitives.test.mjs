@@ -190,17 +190,17 @@ test("selected split buttons swap both the label face and rail between primary a
 test("bar toggle exposes a rounded percentage tooltip and preserves visible bars between square rails", () => {
   assert.match(valueToggles, /vt-studio-value-toggle__bar-tooltip/);
   assert.match(valueToggles, /Math\.round\(Math\.max\(0, Math\.min\(100, value\)\)\)\}%/);
-  assert.match(distill, /\.vt-studio-value-toggle__bar-tooltip\s*\{[^}]*background:\s*var\(--vt-studio-control-secondary[^}]*color:\s*#000/s);
-  assert.match(distill, /\.vt-studio-value-toggle:focus-within/);
+  assert.match(valueToggleStyles, /\.vt-studio-value-toggle__bar-tooltip\s*\{[^}]*background:\s*var\(--vt-studio-control-secondary[^}]*color:\s*#000/s);
+  assert.match(valueToggleStyles, /\.vt-studio-value-toggle--bar:focus-within/);
   assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar > \[data-vt-studio-split-label\]\s*\{[^}]*flex:\s*1 1 0[^}]*width:\s*auto/s);
   assert.match(recovery, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{\s*overflow:\s*visible/s);
 });
 
 
 test("bar percentage tooltip escapes the component border and has a downward secondary-color pointer", () => {
-  assert.match(distill, /\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
-  assert.match(distill, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible/s);
-  assert.match(distill, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top:\s*6px solid var\(--vt-studio-control-secondary/s);
+  assert.match(valueToggleStyles, /\.vt-studio-value-toggle--bar\s*\{[^}]*overflow:\s*visible !important/s);
+  assert.match(valueToggleStyles, /\.vt-studio-split-shell\.vt-studio-value-toggle--bar,[\s\S]*?overflow:\s*visible !important/s);
+  assert.match(valueToggleStyles, /\.vt-studio-value-toggle__bar-tooltip::after\s*\{[^}]*border-top-color:\s*var\(--vt-studio-control-secondary/s);
 });
 
 test("all counter chevrons use one token-backed button class and shared click/hold animation", () => {
