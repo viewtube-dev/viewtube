@@ -9,6 +9,7 @@ The following implementations are retained in place as rollback/reference source
 - `src/components/StudioHubConfirmedPrimitiveCatalog.tsx` (legacy catalog source; split-input specimen removed)
 - `src/studio-ui/primitives/StudioIconRailTextInput.tsx` and its adjacent `studio-icon-rail-text-input.css`
 - The former `StudioSideTextInput` and `StudioDoubleSplitTextInput` declarations retained as non-exported private source in `src/studio-ui/primitives/StudioControls.tsx`
+- Their existing source tests and CSS ownership/geometry audit tests, retained as rollback evidence rather than active catalog registration
 
 The original `StudioSideTextCounter` numeric stepper is not quarantined. The replacement `StudioSideTextCounterIcon` remains active and keeps its five-tier API and optional accessible icon action.
 
