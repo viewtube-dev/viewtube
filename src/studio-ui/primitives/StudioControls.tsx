@@ -2536,6 +2536,64 @@ export const StudioSideTextCounter = React.forwardRef<HTMLInputElement, StudioSi
 });
 StudioSideTextCounter.displayName = "StudioSideTextCounter";
 
+/** Editable text counter with the canonical single-icon right split rail. */
+export interface StudioSideTextCounterIconProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "value" | "defaultValue" | "onChange" | "type" | "className" | "style"> {
+  value: string | number;
+  onValueChange: (value: string) => void;
+  icon: React.ReactNode;
+  iconLabel?: string;
+  onIconClick?: () => void;
+  size?: StudioControlSize;
+  disabled?: boolean;
+  ariaLabel?: string;
+  className?: string;
+  inputClassName?: string;
+  inputStyle?: React.CSSProperties;
+}
+
+export const StudioSideTextCounterIcon = React.forwardRef<HTMLInputElement, StudioSideTextCounterIconProps>(({
+  value, onValueChange, icon, iconLabel = "Activate icon action", onIconClick,
+  size = "standard", disabled = false, ariaLabel = "Value",
+  className, inputClassName, inputStyle, ...inputProps
+}, ref) => {
+  const interactionFocus = useStudioInteractionFocus();
+  const textValue = value == null ? "" : String(value);
+  const iconContent = onIconClick
+    ? <button type="button" className="vt-studio-side-text-input__icon-button" data-vt-studio-side-text-counter-icon aria-label={iconLabel} disabled={disabled} onClick={() => { onIconClick(); interactionFocus.pulse(); }}>{icon}</button>
+    : <span className="vt-studio-side-text-input__icon" data-vt-studio-side-text-counter-icon aria-hidden="true">{icon}</span>;
+
+  return (
+    <StudioSplitShell
+      layout="right"
+      fieldSlot
+      sizeVariant={size}
+      className={studioClasses("vt-studio-side-counter", "vt-studio-side-text-counter", "vt-studio-side-text-input", interactionFocus.active && "is-interaction-focus", `is-${size}`, className)}
+      railClassName="vt-studio-side-counter__rail"
+      rightRailContent={iconContent}
+      shellProps={{
+        "data-vt-interaction-focus": interactionFocus.active ? "true" : undefined,
+        onPointerDownCapture: interactionFocus.start,
+        onPointerUpCapture: interactionFocus.end,
+        onPointerCancelCapture: interactionFocus.end,
+        role: "group",
+        "aria-label": ariaLabel,
+        "data-vt-studio-control-family": "counter",
+        "data-vt-studio-control-kind": "studio-side-text-counter-icon",
+        "data-vt-library-component": "StudioSideTextCounterIcon",
+      }}
+    >
+      <StudioTextInput {...inputProps} ref={ref} type="text" value={textValue}
+        onChange={event => onValueChange(event.currentTarget.value)}
+        aria-label={inputProps["aria-label"] ?? ariaLabel} disabled={disabled}
+        inputMode={inputProps.inputMode ?? "text"} sizeVariant={size}
+        className={["vt-studio-side-text-counter__input", inputClassName].filter(Boolean).join(" ")}
+        style={inputStyle} />
+    </StudioSplitShell>
+  );
+});
+StudioSideTextCounterIcon.displayName = "StudioSideTextCounterIcon";
+
+
 /** Editable centered text field with one square icon rail instead of numeric step controls. */
 export interface StudioSideTextInputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
