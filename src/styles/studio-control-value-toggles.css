@@ -137,8 +137,9 @@
   position: relative;
   z-index: 1;
   isolation: isolate;
-  overflow: visible;
-  clip-path: none;
+  overflow: visible !important;
+  clip-path: none !important;
+  contain: none;
   outline: none;
 }
 .vt-studio-value-toggle--bar:focus-within {
