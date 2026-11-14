@@ -1134,8 +1134,8 @@
       "concern": "P1 canonical integration studio-controls workstream execution packet",
       "owner": "Integrated Application Program",
       "productionDate": "2026-10-30",
-      "lastEdited": "2026-10-30",
-      "lastAuditedMainSha": "d62d0aa4fcb09515a7b0d636a13fc6ee6f47d5e0",
+      "lastEdited": "2026-11-13",
+      "lastAuditedMainSha": "767a223bb383addcaf6492d67a3b29ac53934b43",
       "supersedes": [],
       "relatedAuthorities": [
         "docs/governance/TASK_AUTHORITY.md",
