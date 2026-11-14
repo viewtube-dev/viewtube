@@ -6473,7 +6473,23 @@ html body textarea[data-vt-studio-control="true"][data-vt-studio-field-kind="tex
   border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
 }
 .vt-studio-collapsing-split-module > .vt-studio-collapsing-split-module__head {
+  position: relative;
+  isolation: isolate;
   border-bottom: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px)) solid #000;
+}
+.vt-studio-collapsing-split-module__head::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--vt-top-split-stroke, var(--vt-studio-control-stroke, 3px));
+  background: #000;
+  pointer-events: none;
+}
+.vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head::after {
+  background: transparent;
 }
 .vt-studio-collapsing-split-module:not([open]) > .vt-studio-collapsing-split-module__head {
   border-bottom-color: transparent;
