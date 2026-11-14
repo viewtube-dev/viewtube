@@ -309,3 +309,6 @@ The Library index also identifies older partner research with obsolete “privac
 - **Source families absorbed:** Library volumes 00–04; 10 proposed capabilities; 20 improvement candidates; 15 YouTube API areas; 30 provider candidates; competitor cohorts; partner tiers and inherited benefit claims; data-room and 90-day plans; technical/security/economics/test requirements; source and claim ledgers.
 - **Disposition:** one combined repository reference rather than five separate active masters. Original Library artifacts remain source provenance; this file is a consolidated synthesis, not a byte-for-byte archive copy.
 - **Evidence state:** fresh official-source verification is still outstanding. No competitor feature, provider access, price, partner credit, eligibility, traction, deployment or predictive-performance claim is promoted to VERIFIED by this migration.
+
+
+A focused catalog check on the target base found 73 distinct `data-vt-library-component` identifiers across 174 occurrences. This is not a unique public-export count. `StudioSquareIconButtonGroup` is in the public barrel and catalog; `StudioInlineStepper` and `StudioSplitStepper` exist in the production module but are absent from the public barrel and catalog. The Component Library source now records this exact coverage gap and the recovery-branch donor's unsupported 81-export claim.
