@@ -193,7 +193,7 @@ export const STUDIO_FOCUS_INTERACTION_TOKENS = {
 // ─── Bar toggle family geometry and value colors ──────────────────────────────
 
 export const STUDIO_BAR_TOGGLE_TOKENS = {
-  heightToTextRatio: 1,
+  heightToTextRatio: 0.55,
   heightToWidthRatio: 2.5,
   radius: 2,
   emptyWhiteMixPercent: 50,
