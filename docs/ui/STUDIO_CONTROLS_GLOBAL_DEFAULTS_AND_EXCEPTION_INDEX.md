@@ -346,6 +346,10 @@ All canonical Studio single-select dropdown variants (standard, simple, and spli
 - Every option row uses the same stroke width and corner radius as the control, with the matching control-height typography and a 3px inter-row gap.
 - Unselected rows are white. Selected rows are secondary fill with black text. Hover/focus does not replace the selected/unselected palette contract. Menu and selected-row colors resolve through the active primary/secondary Toolbox pair; do not embed fallback pair hex values.
 - Trigger labels are centered independently of the trailing chevron. Split-left labels center within the full text pane, and the trailing chevron has a token-owned 6px horizontal inset.
+- Every option row follows the active control tier exactly: Supreme 60px, Standard 44px, Compact 28px, Mini 20px, Micro 12px. Row typography, stroke, and radius come from that same tier; no Standard-sized fallback or Compact-only hardcoded row rules are permitted.
+- Split-left option rows use a full-width two-cell grid: a leading square icon rail sized to the row's inner height (control height minus its two outer strokes), then a centered, clipped label. The icon rail starts flush at the option's inner left edge and shares the row's full inner height.
+- Text-counter value panels (including StudioSideTextCounterIcon) center their text horizontally and vertically. An empty string is a valid controlled value; clearing the last character must propagate onValueChange("") and must not restore a fallback/default value.
+- Top-split headers always retain one continuous full-width bottom divider beneath the rails and title. An open collapsing module uses that divider between header and body plus the outer bottom border; a closed collapsing module uses the header divider as its single bottom edge. The shared control-system stylesheet owns these states; recovery overrides must not redefine them.
 - These defaults are shared by standard, simple, and split-left variants. Do not add variant-specific menu color, spacing, or radius overrides; exceptions require a token-owned, documented reason.
 
 
