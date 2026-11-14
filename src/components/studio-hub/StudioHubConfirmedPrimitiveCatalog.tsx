@@ -32,6 +32,7 @@ import {
   StudioDoubleSplitSlider,
   StudioSideCounter,
   StudioSideTextCounter,
+  StudioSideTextCounterIcon,
   StudioSideTextInput,
   StudioDoubleSplitTextInput,
   StudioLeftCounter,
@@ -466,6 +467,7 @@ const ConfirmedDirectPrimitiveRows: React.FC = () => {
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftCounter"><span>Left Counter · STANDARD</span><StudioLeftCounter size="standard" value={leftCounterRepValue} onValueChange={setLeftCounterRepValue} min={0} max={100} ariaLabel="Left counter standard representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioLeftWordCounter"><span>Left Word Counter · STANDARD</span><StudioLeftWordCounter size="standard" value={leftWordValue} onValueChange={setLeftWordValue} ariaLabel="Studio left word counter standard specimen" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounter"><span>Side Text Counter · STANDARD</span><StudioSideTextCounter value={sideTextCounterValue} onValueChange={setSideTextCounterValue} size="standard" ariaLabel="Standard side text counter representative" /></div>
+        <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounterIcon"><span>Side Text Counter + Icon Rail · STANDARD</span><StudioSideTextCounterIcon value="36" onValueChange={() => undefined} icon={<Search aria-hidden="true" />} size="standard" ariaLabel="Standard side text counter icon representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextInput"><span>Side Text Input · STANDARD · CENTERED + ICON RAIL</span><StudioSideTextInput value="SEARCH" onValueChange={() => undefined} icon={<Search aria-hidden="true" />} size="standard" ariaLabel="Standard side text input representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitTextInput"><span>Double Split Text Input · STANDARD · CENTERED + TWO ICON RAILS</span><StudioDoubleSplitTextInput value="SEARCH" onValueChange={() => undefined} leftIcon={<Settings2 aria-hidden="true" />} rightIcon={<Search aria-hidden="true" />} size="standard" ariaLabel="Standard double split text input representative" /></div>
         <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioDoubleSplitWordCounter"><span>Double-Split Word Counter · STANDARD</span><StudioDoubleSplitWordCounter size="standard" value={doubleWordCounterValue} onValueChange={setDoubleWordCounterValue} ariaLabel="Double-split word counter standard representative" /></div>
@@ -692,6 +694,33 @@ const ConfirmedStudioSideTextCounterFamily: React.FC = () => {
         <div className="vt-confirmed-counter-size-rows">
           {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small><StudioSideTextCounter value={values[index]} onValueChange={next => setValues(current => current.map((value, item) => item === index ? next : value))} size={size} min={0} max={100} step={1} ariaLabel={size + " side text counter specimen"} placeholder="TYPE TEXT OR NUMBER" /></div>)}
         </div>
+      </div>
+    </Family>
+  )
+}
+
+
+
+const ConfirmedStudioSideTextCounterIconFamily: React.FC = () => {
+  const [values, setValues] = React.useState(["36", "36", "36", "36", "36"])
+  const [actionCount, setActionCount] = React.useState(0)
+  const sizes = ["supreme", "standard", "compact", "mini", "micro"] as const
+  const labels = ["60px SUPREME", "44px STANDARD", "28px COMPACT", "20px MINI", "12px MICRO"]
+  const activate = () => setActionCount(count => count + 1)
+  return (
+    <Family title="StudioSideTextCounterIcon · Editable Text + Single Icon Rail · Five Sizes"
+      nonDefaultSettings={[
+        "The editable text face, centered alignment, sizing, borders, inset stroke, fill, caret, and focus behavior match StudioSideTextCounter.",
+        "Only the right split rail changes: the stacked increment/decrement buttons are replaced by one standard square icon rail.",
+        "The icon is decorative unless an onIconClick callback is supplied; all five canonical size tiers reuse the shared Studio split-shell and icon-rail tokens.",
+      ]}
+      provenance={<Provenance primitive="StudioSideTextCounterIcon" tsx="src/studio-ui/primitives/StudioControls.tsx" css="src/styles/studio-control-system.css + src/styles/studio-control-fields.css" tokens="60px / 44px / 28px / 20px / 12px · editable centered text face · single square right icon rail." imports={["src/studio-ui/primitives/StudioControls.tsx", "src/styles/studio-control-fields.css"]} />}
+    >
+      <div className="vt-confirmed-variant is-full-row" data-vt-library-component="StudioSideTextCounterIcon">
+        <div className="vt-confirmed-counter-size-rows">
+          {sizes.map((size, index) => <div className="vt-confirmed-counter-size-row" key={size}><small>{labels[index]}</small><StudioSideTextCounterIcon value={values[index]} onValueChange={next => setValues(current => current.map((value, item) => item === index ? next : value))} icon={<Search aria-hidden="true" />} iconLabel={size + " side text counter icon action"} onIconClick={activate} size={size} ariaLabel={size + " side text counter icon specimen"} placeholder="TYPE TEXT OR NUMBER" /></div>)}
+        </div>
+        <span aria-live="polite">ICON ACTIONS TRIGGERED: {actionCount}</span>
       </div>
     </Family>
   )
@@ -1678,6 +1707,7 @@ export const StudioHubConfirmedPrimitiveCatalog: React.FC = () => {
     <ConfirmedStudioCounterFamily />
     <ConfirmedStudioSideCounterFamily />
     <ConfirmedStudioSideTextCounterFamily />
+    <ConfirmedStudioSideTextCounterIconFamily />
     <ConfirmedStudioSideTextInputFamily />
     <ConfirmedStudioDoubleSplitTextInputFamily />
     <ConfirmedStudioIconRailTextInputFamily />
