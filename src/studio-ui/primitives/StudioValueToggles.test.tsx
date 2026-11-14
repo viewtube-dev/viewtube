@@ -107,8 +107,8 @@ describe("Studio value toggle primitives", () => {
     act(() => {
       notify?.([{ target: track, contentRect: { width: 260 } as DOMRectReadOnly } as unknown as ResizeObserverEntry], {} as ResizeObserver);
     });
-    expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(20);
-    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(10);
+    expect(container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(14);
+    expect(container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(7);
   });
 
   it("uses size-specific bar and gap metrics when measuring compact and micro tracks", () => {
@@ -125,15 +125,15 @@ describe("Studio value toggle primitives", () => {
     const compactTrack = compact.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
     vi.spyOn(compactTrack, "getBoundingClientRect").mockReturnValue({ width: 264 } as DOMRect);
     act(() => notify?.([{ target: compactTrack, contentRect: { width: 256 } as DOMRectReadOnly } as unknown as ResizeObserverEntry], {} as ResizeObserver));
-    expect(compact.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(32);
-    expect(compact.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(16);
+    expect(compact.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(22);
+    expect(compact.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(11);
 
     const micro = mount(<StudioBarToggle value={50} size="micro" onValueChange={() => {}} />);
     const microTrack = micro.container.querySelector(".vt-studio-value-toggle__bars") as HTMLElement;
     vi.spyOn(microTrack, "getBoundingClientRect").mockReturnValue({ width: 164 } as DOMRect);
     act(() => notify?.([{ target: microTrack, contentRect: { width: 160 } as DOMRectReadOnly } as unknown as ResizeObserverEntry], {} as ResizeObserver));
-    expect(micro.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(40);
-    expect(micro.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(20);
+    expect(micro.container.querySelectorAll(".vt-studio-value-toggle__bar")).toHaveLength(32);
+    expect(micro.container.querySelectorAll('.vt-studio-value-toggle__bar[data-active="true"]')).toHaveLength(16);
   });
 
   it("builds Arrow Toggle from the canonical split shell with square icon rails", () => {
@@ -174,7 +174,7 @@ describe("Studio value toggle primitives", () => {
     const { container, cleanup } = mount(<StudioBarToggle value={50} barCount={10} onValueChange={() => {}} />);
     const tooltip = container.querySelector(".vt-studio-value-toggle__bar-tooltip");
     expect(tooltip?.textContent).toBe("50%");
-    expect(tooltip?.parentElement).toHaveClass("vt-studio-value-toggle__bars");
+    expect(tooltip?.parentElement?.classList.contains("vt-studio-value-toggle__bars")).toBe(true);
     expect(container.querySelectorAll(".vt-studio-value-toggle__bar-tooltip")).toHaveLength(1);
     cleanup();
     const zero = mount(<StudioBarToggle value={0} barCount={10} onValueChange={() => {}} />);
