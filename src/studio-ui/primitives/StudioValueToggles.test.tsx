@@ -176,7 +176,6 @@ describe("Studio value toggle primitives", () => {
     expect(tooltip?.textContent).toBe("50%");
     expect(tooltip?.parentElement?.classList.contains("vt-studio-value-toggle__bars")).toBe(true);
     expect(container.querySelectorAll(".vt-studio-value-toggle__bar-tooltip")).toHaveLength(1);
-    cleanup();
     const zero = mount(<StudioBarToggle value={0} barCount={10} onValueChange={() => {}} />);
     expect(zero.container.querySelector(".vt-studio-value-toggle__bar-tooltip")?.textContent).toBe("0%");
   });
