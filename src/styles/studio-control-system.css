@@ -2300,7 +2300,6 @@ button[data-vt-studio-circle-icon-button="true"] > [data-vt-studio-button-face] 
 
 
 /* Simple dropdown is a visual variant of the shared Studio dropdown family. */
-.vt-studio-dropdown.is-simple { --vt-dropdown-height: var(--vt-studio-control-height, 44px); }
 .vt-studio-dropdown.is-simple .vt-studio-dropdown-menu { background: color-mix(in srgb, var(--pair-a) 50%, white) !important; }
 .vt-studio-dropdown.is-simple .vt-studio-dropdown-option { background: white !important; }
 .vt-studio-dropdown.is-simple .vt-studio-dropdown-option[aria-selected="true"] { background: var(--pair-b) !important; }
