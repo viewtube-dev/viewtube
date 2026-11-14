@@ -375,7 +375,7 @@ test("double-split word counter paints one vertical divider at each button-to-pa
 
 
 test("StudioSideTextCounter has one outer black perimeter and no nested field border", () => {
-  const start = fields.lastIndexOf("/* StudioSideTextCounter exception");
+  const start = fields.lastIndexOf("/* StudioSideTextCounter:");
   assert.ok(start >= 0, "side text counter field ownership must be explicit");
   const block = fields.slice(start);
   assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*border:\s*0/s);
@@ -386,24 +386,24 @@ test("StudioSideTextCounter has one outer black perimeter and no nested field bo
 
 
 test("StudioSideTextCounter input is inset and vertically centered within the shell perimeter", () => {
-  const start = fields.lastIndexOf("/* StudioSideTextCounter: the shell owns the black perimeter;");
+  const start = fields.lastIndexOf("/* StudioSideTextCounter:");
   assert.ok(start >= 0, "side text counter inset layout must be explicit");
   const block = fields.slice(start);
   assert.match(block, /\.vt-studio-side-text-counter\[data-vt-studio-control="true"\]\s*>\s*\[data-vt-studio-split-field\]\s*\{[^}]*display:\s*flex/s);
   assert.match(block, /align-items:\s*center/s);
-  assert.match(block, /padding-block:\s*var\(--vt-studio-control-stroke/s);
+  assert.match(block, /padding:\s*0 !important/s);
   assert.match(block, /input\.vt-studio-side-text-counter__input\[data-vt-studio-control="true"\]\s*\{[^}]*height:\s*100%/s);
 });
 
 
-test("StudioSideTextCounter primary inline stroke is thinner on horizontal edges than vertical edges", () => {
-  const start = fields.lastIndexOf("/* StudioSideTextCounter: the shell owns the black perimeter;");
+test("StudioSideTextCounter values are centered and fully clearable", () => {
+  const start = fields.lastIndexOf("/* StudioSideTextCounter:");
   assert.ok(start >= 0, "side text counter field inset rule must exist");
   const block = fields.slice(start);
-  assert.match(block, /box-shadow:\s*inset 0 calc\(var\(--vt-studio-control-stroke, 3px\) \* 0\.5\) 0 0 var\(--vt-field-primary/);
-  assert.match(block, /inset 0 calc\(var\(--vt-studio-control-stroke, 3px\) \* -0\.5\) 0 0 var\(--vt-field-primary/);
-  assert.match(block, /inset var\(--vt-studio-control-stroke, 3px\) 0 0 0 var\(--vt-field-primary/);
-  assert.match(block, /inset calc\(var\(--vt-studio-control-stroke, 3px\) \* -1\) 0 0 0 var\(--vt-field-primary/);
+  assert.match(block, /text-align:\s*center/);
+  assert.match(block, /box-shadow:\s*inset 0 0 0 var\(--vt-studio-control-stroke/);
+  assert.ok(controls.includes("onChange={event => onValueChange(event.currentTarget.value)}"));
+  assert.ok(controls.includes("value={textValue}"));
 });
 
 
