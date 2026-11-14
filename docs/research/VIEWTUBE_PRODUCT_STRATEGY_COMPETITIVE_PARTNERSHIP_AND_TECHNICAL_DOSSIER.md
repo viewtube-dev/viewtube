@@ -490,3 +490,8 @@ This dossier consolidates content from the following ChatGPT Library source arti
 **Research limitation:** the source pack records that Browser Use public-web verification on November 12, 2026 returned `insufficient_credits` twice. No new official-source verification is claimed in this release.
 
 **Release 0.1 — 2026-11-13:** consolidated the four companion research volumes and claim ledger into one repository dossier; preserved evidence limitations, donor provenance, proposed opportunities and open verification work.
+
+
+## Partner execution companion
+
+The operational partner profiles, 12 tailored partner plans, 300 partner-specific activation ideas, pitch-deck and demo structure, outreach templates, objection handling, prioritization framework, tracker schema and 90-day business-development plan are maintained in [ViewTube Master Partner Intelligence & Pitch Planning Playbook](../partnerships/VIEWTUBE_MASTER_PARTNER_INTELLIGENCE_AND_PITCH_PLANNING.md). This companion does not replace this dossier's source register, technical/API research or claim-evidence requirements. Partner program facts and contact routes remain subject to fresh primary-source verification.

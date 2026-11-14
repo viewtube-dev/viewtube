@@ -1290,6 +1290,28 @@
         "docs/governance/TASK_AUTHORITY.md",
         "docs/references/DEEP_RESEARCH_CONSTRUCTION_SOURCE.md"
       ]
+    },
+    {
+      "id": "DOC-REF-MASTER-PARTNER-PITCH-PLAYBOOK",
+      "path": "docs/partnerships/VIEWTUBE_MASTER_PARTNER_INTELLIGENCE_AND_PITCH_PLANNING.md",
+      "class": "REFERENCE",
+      "status": "ACTIVE",
+      "concern": "partner-intelligence-pitch-planning-and-business-development",
+      "owner": "Founder + Product Strategy + Business Development",
+      "productionDate": "2026-11-13",
+      "lastEdited": "2026-11-13",
+      "lastAuditedMainSha": null,
+      "sourceTier": "OPERATIONAL_REFERENCE",
+      "authorityBoundary": "Operational partner and pitch execution companion to the Product Strategy Dossier. Does not establish program eligibility, partner relationships, traction or implemented capability; source/claim authority remains in the research dossier and official evidence.",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md",
+        "docs/research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md",
+        "docs/architecture/PRODUCT_ARCHITECTURE.md",
+        "docs/architecture/capabilities.json",
+        "docs/governance/VERIFICATION.md",
+        "docs/governance/TASK_AUTHORITY.md"
+      ]
     }
   ],
   "legacyGlobalSources": [
