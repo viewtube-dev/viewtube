@@ -65,9 +65,9 @@ describe("confirmed composite primitive catalog", () => {
       "StudioIconButton", "StudioSquareIconButton", "StudioCircleIconButton", "StudioSquareIconButtonGroup",
       "StudioPlayPauseButton", "StudioSwitch", "StudioChoice", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioTextInput",
-      "StudioTextArea", "StudioTextBox", "StudioSplitTextInput",
-      "StudioSplitLeftIconRailTextInput", "StudioSplitRightIconRailTextInput", "StudioDoubleSplitIconRailTextInput",
-      "StudioSplitLeftIconButtonTextInput", "StudioSplitRightIconButtonTextInput", "StudioDoubleSplitIconButtonTextInput",
+      "StudioTextArea", "StudioTextBox", ,
+      ,
+      ,
       "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioArrowToggle", "StudioBarToggle", "StudioWordToggle", "StudioVerticalWordToggle",
       "StudioSideToggle", "StudioDoubleSideToggle", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
@@ -228,16 +228,6 @@ describe("confirmed composite primitive catalog", () => {
     expect(html).toContain('aria-label="Compact circle icon button V4"')
   })
 
-  it("registers the unified split text input across left, right, double, and all five sizes", () => {
-    const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />);
-    expect(html).toContain('data-vt-library-component="StudioSplitTextInput"');
-    expect(html).toContain('aria-label="Standard split-left text input"');
-    expect(html).toContain('aria-label="Standard split-right text input"');
-    expect(html).toContain('aria-label="Standard double-split text input"');
-    expect(html).toContain('aria-label="Supreme split-left text input"');
-    expect(html).toContain('aria-label="Mini split-left text input"');
-    expect(html).toContain('aria-label="Micro split-left text input"');
-  })
   it("registers the production closeable badge and animated tag editor under global rule exceptions", () => {
     const html = renderToStaticMarkup(<StudioHubConfirmedPrimitiveCatalog />)
     expect(html).toContain("StudioCloseableBadge · Fixed 20px Exception")
@@ -727,7 +717,7 @@ describe("confirmed primitive representative coverage", () => {
       "StudioButton", "StudioSplitLeftButton", "StudioDoubleSplitButton", "StudioTwoLineButton",
       "StudioSplitTwoLineButton", "StudioDropdown", "StudioLegendMultiDropdown", "StudioSplitLeftDropdown",
       "StudioTextInput", "StudioTextArea", "StudioTextBox", "StudioNumberInput",
-      "StudioSplitTextInput", "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
+      "StudioCounter", "StudioSideCounter", "StudioLeftCounter",
       "StudioLeftWordCounter", "StudioDoubleSplitSlider", "StudioLeftWordSlider", "StudioSplitLeftBadge",
       "StudioSplitRightBadge", "StudioDoubleSplitBadge", "StudioRadio", "StudioCheckbox", "StudioXCheckbox",
       "StudioWordToggle", "StudioVerticalWordToggle", "StudioArrowToggle", "StudioSideToggle",
@@ -906,9 +896,7 @@ describe("confirmed individual module variant completeness", () => {
     expect(wordFamily).toContain('["60", "44", "28", "20", "12"]');
     expect(dropdownFamily).toContain("StudioLegendMultiDropdown");
     expect(source).toContain("StudioIconButton · All Five Sizes");
-    expect(source).toContain('data-vt-library-component="StudioSplitTextInput"');
-    expect(source).toContain('MINI · LEFT / RIGHT / DOUBLE');
-    expect(source).toContain('MICRO · LEFT / RIGHT / DOUBLE');
+    expect(source).toContain('data-vt-library-component=');
     expect(source).toContain('["supreme", "mini", "micro"] as const');
     expect(dropdownFamily).toContain("StudioSplitLeftDropdown");
   });
@@ -975,7 +963,6 @@ describe("primitive module global width and stylesheet ownership", () => {
       "StudioValueToggles.tsx",
       "StudioLedBadgeTab.tsx",
       "StudioComponentGrid.tsx",
-      "StudioSplitTextInput.tsx",
       "StudioSplitAccordion.tsx",
     ];
     for (const module of modules) {
@@ -1110,7 +1097,7 @@ describe("StudioSideTextCounterIcon confirmed-library registration", () => {
   it("registers a standard representative and its own five-size Controls module", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
     const start = source.indexOf("const ConfirmedStudioSideTextCounterIconFamily");
-    const end = source.indexOf("const ConfirmedStudioSideTextInputFamily", start);
+    const end = source.indexOf("const ConfirmedStudioLeftWordCounterFamily", start);
     const family = source.slice(start, end);
     expect(start).toBeGreaterThanOrEqual(0);
     expect(end).toBeGreaterThan(start);
@@ -1123,5 +1110,16 @@ describe("StudioSideTextCounterIcon confirmed-library registration", () => {
       expect(family).toContain(`size="${size}"`);
     }
     expect(classifyConfirmedCatalogItem(<div title="StudioSideTextCounterIcon · Editable Text + Single Icon Rail · Five Sizes" />)).toBe("Controls");
+  });
+});
+
+
+describe("split text-input quarantine registration", () => {
+  it("removes every legacy split text-input family from active representatives and modules", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/components/studio-hub/StudioHubConfirmedPrimitiveCatalog.tsx"), "utf8");
+    const barrel = readFileSync(resolve(process.cwd(), "src/studio-ui/index.ts"), "utf8");
+    expect(source).not.toMatch(/StudioSplitTextInput|StudioIconRailTextInput|StudioSideTextInput|StudioDoubleSplitTextInput/);
+    expect(barrel).not.toMatch(/StudioSplitTextInput|StudioIconRailTextInput/);
+    expect(source).toContain('data-vt-library-component="StudioSideTextCounterIcon"');
   });
 });
