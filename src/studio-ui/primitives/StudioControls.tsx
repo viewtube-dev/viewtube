@@ -2594,8 +2594,9 @@ export const StudioSideTextCounterIcon = React.forwardRef<HTMLInputElement, Stud
 StudioSideTextCounterIcon.displayName = "StudioSideTextCounterIcon";
 
 
+/** QUARANTINED 2026-11-14: retained source only; not exported or registered. */
 /** Editable centered text field with one square icon rail instead of numeric step controls. */
-export interface StudioSideTextInputProps extends Omit<
+interface StudioSideTextInputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "size" | "value" | "defaultValue" | "onChange" | "type" | "className" | "style"
 > {
@@ -2612,7 +2613,7 @@ export interface StudioSideTextInputProps extends Omit<
   inputStyle?: React.CSSProperties;
 }
 
-export const StudioSideTextInput = React.forwardRef<HTMLInputElement, StudioSideTextInputProps>(({
+const StudioSideTextInput = React.forwardRef<HTMLInputElement, StudioSideTextInputProps>(({
   value, onValueChange, icon, iconLabel = "Activate icon action", onIconClick,
   size = "standard", disabled = false, ariaLabel = "Text",
   className, inputClassName, inputStyle, ...inputProps
@@ -2667,8 +2668,9 @@ export const StudioSideTextInput = React.forwardRef<HTMLInputElement, StudioSide
 });
 StudioSideTextInput.displayName = "StudioSideTextInput";
 
+/** QUARANTINED 2026-11-14: retained source only; not exported or registered. */
 /** Editable centered text field with independent square icon rails on both sides. */
-export interface StudioDoubleSplitTextInputProps extends Omit<
+interface StudioDoubleSplitTextInputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "size" | "value" | "defaultValue" | "onChange" | "type" | "className" | "style"
 > {
@@ -2688,7 +2690,7 @@ export interface StudioDoubleSplitTextInputProps extends Omit<
   inputStyle?: React.CSSProperties;
 }
 
-export const StudioDoubleSplitTextInput = React.forwardRef<HTMLInputElement, StudioDoubleSplitTextInputProps>(({
+const StudioDoubleSplitTextInput = React.forwardRef<HTMLInputElement, StudioDoubleSplitTextInputProps>(({
   value, onValueChange, leftIcon, rightIcon,
   leftIconLabel = "Activate left icon action",
   rightIconLabel = "Activate right icon action",
