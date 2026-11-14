@@ -231,23 +231,23 @@ The eight knowledge areas are implemented as a navigation map, not eight duplica
 
 ### Phase 1 — Inventory and authority verification
 
-**Started.** Known canonical sources, governance, key Studio/Brain/release authorities and sampled PRs have been identified. Full recursive inventory and full source-family comparisons remain open.
+**Targeted pass complete; full inventory remains open.** Known canonical sources, governance, Studio/Brain/release authorities, selected Library donors, registries and sampled PRs have been identified. A recursive inventory of every repository document and complete source-family comparison remains open.
 
 ### Phase 2 — Reconcile and consolidate
 
-**Partially started.** Existing authorities are mapped; superseded Brain sources and candidate Library donors are distinguished. No source has been removed. Full no-loss comparison and consolidation manifests remain open.
+**Partially complete.** The five-volume product/market/partner/technical research pack has been synthesized into one repository dossier; the three existing Studio authorities and Studio workstream have been updated in place. Superseded Brain sources and historical/candidate donors are distinguished. No source has been removed. Full no-loss comparison and migration of remaining Library-only artifacts remain open.
 
 ### Phase 3 — Master knowledge navigation
 
-**Initial implementation in this branch.** `docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md` maps the eight subject areas to existing authorities and records known gaps.
+**Initial implementation merged.** `docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md`, the source ledger and consolidated research dossier are merged into the target branch; `docs/README.md` links them and `docs/registry.json` registers them.
 
 ### Phase 4 — Repository and implementation verification
 
-**Pending.** Must inspect current branch heads, exact PR diffs, task IDs, code, tests, build/runtime evidence and relevant visual acceptance. Do not mark implementation status complete from documentation alone.
+**Partially complete.** The merged documentation paths were fetched from target; documentation, ideas and capability JSON registries parse; 74 document entries, 228 ideas across 7 source lists and 13 capability records were confirmed. The target/recovery branch divergence and sampled PR donor scopes were recorded. Still outstanding: full branch/PR diff reconciliation, Task Index VNext path (explicitly unresolved by Task Authority), implementation tests, build/runtime evidence and Studio browser/visual acceptance. Do not mark implementation status complete from documentation alone.
 
 ### Phase 5 — External-facing research and partnership materials
 
-**Pending.** Requires primary-source research, validated capability claims, competitive comparisons, API/partner feasibility, data rights, costs and evidence-backed value propositions. The previous Library proposal backlog is not sufficient by itself.
+**Blocked pending research access.** A fresh read-only Browser Use attempt on 2026-11-13 returned `insufficient_credits`, matching the November 12 source limitation. No new official-source verification was completed. Requires current primary-source competitor/provider/API/program research, validated capability claims, data rights, costs, customer evidence and evidence-backed value propositions. The consolidated dossier remains an internal reference, not a verified current market study.
 
 ## 8. No-loss and completion gates
 
@@ -353,3 +353,13 @@ PR #1243's changed-file list contains 80 paths spanning Studio, Vault, Calendar,
 ## 17. Fresh research access attempt
 
 A new read-only Browser Use attempt on 2026-11-13 requested official Google for Startups, YouTube Data/Analytics/Reporting API and YouTube API Services Terms sources. It returned `insufficient_credits`. This confirms the research limitation persists. No new official-source verification was completed; the strategy dossier remains a consolidated internal research reference, not a verified current market/partner/API study.
+
+
+## 18. PR #1260 merge receipt and phase-status refresh
+
+- **PR:** [#1260 — docs: record knowledge consolidation merge receipt](https://github.com/viewtube-dev/viewtube/pull/1260).
+- **State:** merged (squash) into `master/consolidated-feature-integration`.
+- **Merge commit:** `965c57b831b557a5bb6159e37de0fb07df31d079`.
+- **Changed files:** Master Knowledge Base index and Source Reconciliation Ledger.
+- **Post-merge verification:** both files fetched from target branch; registry counts and phase boundaries were rechecked.
+- **CI:** Vercel checks again returned `build-rate-limit`; no application test/build success is claimed.
