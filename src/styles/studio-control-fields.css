@@ -248,7 +248,9 @@ html body .vt-studio-side-text-counter input.vt-studio-text-input--simple[data-v
   max-height: 100%;
   margin: 0;
   padding-block: 0 !important;
-  padding-inline: var(--vt-studio-control-stroke, 3px);
+  padding-inline-start: calc(var(--vt-studio-control-height, 44px) + var(--vt-studio-control-stroke, 3px));
+  padding-inline-end: var(--vt-studio-control-stroke, 3px);
+  /* Center the text against the complete shell, including its right action rail. */
   /* Kill every black / accent border the generic field contract would paint. */
   border: 0 !important;
   border-width: 0 !important;
@@ -258,7 +260,6 @@ html body .vt-studio-side-text-counter input.vt-studio-text-input--simple[data-v
   border-radius: 0 !important;
   line-height: var(--vt-studio-control-line-height, 1);
   text-align: center;
-  text-indent: calc(var(--vt-studio-control-height, 44px) / 2);
   user-select: text;
   pointer-events: auto;
   cursor: text;
