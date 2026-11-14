@@ -71,18 +71,6 @@ export {
   StudioTagEditor,
   StudioVerticalWordToggle,
 } from "./primitives/StudioControls"
-export {
-  StudioSplitLeftIconRailTextInput,
-  StudioSplitRightIconRailTextInput,
-  StudioDoubleSplitIconRailTextInput,
-  StudioSplitLeftIconButtonTextInput,
-  StudioSplitRightIconButtonTextInput,
-  StudioDoubleSplitIconButtonTextInput,
-} from "./primitives/StudioIconRailTextInput"
-export type {
-  StudioIconRailTextInputProps,
-  StudioIconButtonRailTextInputProps,
-} from "./primitives/StudioIconRailTextInput"
 export type {
   StudioButtonProps,
   StudioButtonVariant,
@@ -138,8 +126,6 @@ export type {
   StudioTagEditorProps,
 } from "./primitives/StudioControls"
 export { StudioArrowToggle, StudioSideToggle, StudioDoubleSideToggle, StudioBarToggle, StudioDoubleSplitWordCounter } from "./primitives/StudioValueToggles";
-export { StudioSplitTextInput } from "./primitives/StudioSplitTextInput";
-export type { StudioSplitTextInputProps } from "./primitives/StudioSplitTextInput";
 export { StudioPanelAccordion } from "./primitives/StudioPanelAccordion";
 export type { StudioPanelAccordionProps, StudioPanelAccordionItem } from "./primitives/StudioPanelAccordion";
 export type { StudioArrowToggleProps, StudioSideToggleProps, StudioDoubleSideToggleProps, StudioDoubleSplitWordCounterProps, StudioToggleAppearance } from "./primitives/StudioValueToggles";
