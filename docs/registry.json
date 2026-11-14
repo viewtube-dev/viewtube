@@ -1334,6 +1334,46 @@
         "docs/architecture/capabilities.json",
         "docs/governance/VERIFICATION.md"
       ]
+    },
+    {
+      "id": "DOC-HANDOFF-AUDIT-PLANNING-IDEAS-20261114",
+      "path": "docs/handoffs/AUDIT_PLANNING_IDEAS_MASTER_HANDOFF_2026-11-14.md",
+      "class": "HANDOFF",
+      "status": "ACTIVE",
+      "concern": "audit-planning-ideas-conversation-continuity-and-execution",
+      "owner": "Product Strategy + Technical Audit + Business Development",
+      "productionDate": "2026-11-14",
+      "lastEdited": "2026-11-14",
+      "lastAuditedMainSha": "b43c5b689c894bca5d3301ee313234a112f12c10",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/registry.json",
+        "docs/VIEWTUBE_MASTER_KNOWLEDGE_BASE.md",
+        "docs/audits/AUDIT_PLANNING_IDEAS_CONVERSATION_AUDIT_2026-11-14.md",
+        "docs/audits/VIEWTUBE_SOURCE_RECONCILIATION_LEDGER_2026-11-13.md",
+        "docs/research/VIEWTUBE_PRODUCT_STRATEGY_COMPETITIVE_PARTNERSHIP_AND_TECHNICAL_DOSSIER.md",
+        "docs/partnerships/VIEWTUBE_MASTER_PARTNER_INTELLIGENCE_AND_PITCH_PLANNING.md",
+        "docs/partnerships/VIEWTUBE_PRIORITY_PARTNER_PITCH_PACK_2026-11.md"
+      ]
+    },
+    {
+      "id": "DOC-AUDIT-PLANNING-IDEAS-CONVERSATION-20261114",
+      "path": "docs/audits/AUDIT_PLANNING_IDEAS_CONVERSATION_AUDIT_2026-11-14.md",
+      "class": "AUDIT",
+      "status": "ACTIVE",
+      "concern": "dated-evidence-record-for-audit-planning-ideas-conversation",
+      "owner": "Product Strategy + Technical Audit",
+      "productionDate": "2026-11-14",
+      "lastEdited": "2026-11-14",
+      "lastAuditedMainSha": "b43c5b689c894bca5d3301ee313234a112f12c10",
+      "supersedes": [],
+      "relatedAuthorities": [
+        "docs/handoffs/AUDIT_PLANNING_IDEAS_MASTER_HANDOFF_2026-11-14.md",
+        "docs/registry.json",
+        "docs/governance/VERIFICATION.md",
+        "docs/governance/TASK_AUTHORITY.md",
+        "docs/audits/VIEWTUBE_SOURCE_RECONCILIATION_LEDGER_2026-11-13.md"
+      ]
     }
   ],
   "legacyGlobalSources": [

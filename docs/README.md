@@ -17,6 +17,11 @@ This directory contains ViewTube architecture, implementation plans, migration r
 - [Master Partner Intelligence & Pitch Planning Playbook](./partnerships/VIEWTUBE_MASTER_PARTNER_INTELLIGENCE_AND_PITCH_PLANNING.md) — partner-specific profiles, tailored pitch asks, attention ideas, outreach templates, evidence checklist, prioritization and 90-day plan.
 - [Priority Partner Pitch Pack](./partnerships/VIEWTUBE_PRIORITY_PARTNER_PITCH_PACK_2026-11.md) — tailored pitch briefs and outreach drafts for ERA, Forum Ventures, Google Cloud and Betaworks, with evidence and verification gates.
 
+## Current conversation handoffs and audit records
+
+- [Audit Planning Ideas — Master Handoff](./handoffs/AUDIT_PLANNING_IDEAS_MASTER_HANDOFF_2026-11-14.md) — exhaustive continuation record, branch baselines, research inventory, AI Brain/Studio/UI audit guardrails, five-volume plan and outstanding work.
+- [Audit Planning Ideas — Conversation Audit](./audits/AUDIT_PLANNING_IDEAS_CONVERSATION_AUDIT_2026-11-14.md) — dated evidence record of repository inspection, branch comparison, route inventory, research status and verification limitations.
+
 ## Current explicit authorities
 
 | Concern | Current authority |
