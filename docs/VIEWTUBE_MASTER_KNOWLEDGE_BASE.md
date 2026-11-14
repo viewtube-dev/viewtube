@@ -35,7 +35,7 @@
 - [Conversation OS](./governance/CONVERSATION_OS.md) — conversation-derived improvement and continuity rules.
 - [Task Authority](./governance/TASK_AUTHORITY.md) — canonical task identity and lifecycle.
 
-**Boundary:** this index does not become a second project status store or task ledger. Exact task state belongs to the governed Task Index and Task Authority.
+**Boundary:** this index does not become a second project status store or task ledger. `docs/governance/TASK_AUTHORITY.md` is the lifecycle authority, but its current section says Task Index VNext storage/writer is not yet established. The canonical Task Index path must be positively resolved before any task-state mutation; this consolidation created no tasks and changed no task lifecycle state.
 
 ### 2. Product strategy, competitive research and partnership dossier
 
@@ -63,6 +63,8 @@
 - [Task Authority](./governance/TASK_AUTHORITY.md) and the governed Task Index — exact work state.
 - [Integrated Application Program](./programs/INTEGRATED_APPLICATION.md) — cross-system gaps and dependencies.
 - Domain registries and code-owned registries, such as `src/views/dashboard/WidgetRegistry.ts`, remain authoritative for their bounded inventories.
+
+**Current registry snapshot:** `docs/architecture/capabilities.json` contains 13 capability records; `ideas/registry.json` contains 228 ideas across 7 source lists. Both JSON registries parse successfully on the target branch.
 
 **Boundary:** do not create a competing global feature registry. Any broader coverage view must be a generated or explicitly subordinate projection of existing capability, task, domain and code registries.
 
