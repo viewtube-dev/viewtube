@@ -55,7 +55,8 @@ test("textarea typography inherits field size tiers and uses the canonical .85 m
   assert.match(textareaBlock, /line-height:\s*var\(--vt-studio-textarea-line-height, \.85\)/);
   assert.match(textareaBlock, /--vt-studio-textarea-compact-font-size, 14px/);
   assert.match(textareaBlock, /--vt-studio-textarea-micro-font-size, 10px/);
-  assert.match(textareaBlock, /vt-studio-textarea-standard-font-size/);\n  assert.match(textareaBlock, /vt-studio-textarea-compact-font-size/);
+  assert.match(textareaBlock, /vt-studio-textarea-standard-font-size/);
+  assert.match(textareaBlock, /vt-studio-textarea-compact-font-size/);
   assert.match(studioCss, /textarea\[data-vt-studio-control="true"\]\[data-vt-studio-field-kind="textarea"\]:is\(:focus, :focus-visible\)[\s\S]*?background: color-mix\(in srgb, var\(--vt-field-primary\) var\(--vt-studio-control-focus-fill-opacity\), transparent\)/);
 });
 
