@@ -331,3 +331,25 @@ The existing owner file `tasks/p1-canonical-system-integration/workstreams/studi
 - **Scope:** no application code or runtime behavior changed. Repository path/link and JSON validation completed; rendered Studio verification remains outstanding.
 
 This receipt supersedes the “open/draft/not merged” state in the initial PR review subsection above. The initial comparison values remain historical observations from that earlier review.
+
+
+## 15. Task, capability and idea registry verification
+
+On the merged target branch:
+- `docs/architecture/capabilities.json` parsed successfully and contains 13 capability records.
+- `ideas/registry.json` parsed successfully and contains 228 ideas across 7 source lists.
+- `docs/governance/TASK_AUTHORITY.md` explicitly says Task Index VNext structured storage/writer is not yet established and requires resolving the actual canonical path before mutation. GitHub search surfaced prior documentation confirming the VNext writer/storage remains unresolved. No Task Index path was guessed, no task was created, and no task lifecycle state was changed.
+
+These findings confirm that the current consolidation must remain a navigation/reference layer and must not introduce parallel capability, idea or task registries.
+
+## 16. Additional PR #1229 / Studio donor reconciliation
+
+A direct compare of `docs/studio-controls-regression-handoff-2026-10-30` against the target branch returned **diverged: 35 commits ahead / 531 behind**, with 12 changed paths, including production code, token emitter, CSS, Vite config and the conversation-intake package. PR #1229 has no review entries in the sampled review list and no merge SHA was recorded in the handoff donor. Its package files are not present on the target branch.
+
+The donor handoff/review/worklog contain a 2026-10-30 field interpretation that says the primary inline glyph stroke remains primary in every state. That conflicts with the later current contract: primary inline inset remains present, but focused text/glyph stroke becomes black; resting fill is a 50% white/50% primary blend and focus fill is an 85% white/15% primary blend. The donor package also references PR #923 and old branch lineage. **Do not merge or copy PR #1229 as-is.** Preserve it as historical provenance and update a current handoff only after a complete item-by-item reconciliation.
+
+PR #1243's changed-file list contains 80 paths spanning Studio, Vault, Calendar, Analytics and Resource Library; treat it as a cross-domain donor, not a focused Studio-only patch. PR #1258 lists five Studio input/catalog files, but its head branch compared against the recovery branch returned 0 commits ahead / 29 behind. Its PR description says tests were added but not run. Do not treat the PR description as a verification receipt.
+
+## 17. Fresh research access attempt
+
+A new read-only Browser Use attempt on 2026-11-13 requested official Google for Startups, YouTube Data/Analytics/Reporting API and YouTube API Services Terms sources. It returned `insufficient_credits`. This confirms the research limitation persists. No new official-source verification was completed; the strategy dossier remains a consolidated internal research reference, not a verified current market/partner/API study.
