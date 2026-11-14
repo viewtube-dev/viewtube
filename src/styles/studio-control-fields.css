@@ -256,7 +256,7 @@ html body .vt-studio-side-text-counter input.vt-studio-text-input--simple[data-v
   border-color: transparent !important;
   outline: 0 !important;
   border-radius: 0 !important;
-  line-height: normal;
+  line-height: var(--vt-studio-control-line-height, 1);
   text-align: center;
   /* Single primary inset ring — matches standard field inset, not a double stroke. */
   box-shadow: inset 0 0 0 var(--vt-studio-control-stroke, 3px)
