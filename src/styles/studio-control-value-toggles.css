@@ -192,6 +192,18 @@
   visibility: visible;
   opacity: 1;
 }
+.vt-studio-value-toggle__bar-tooltip::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-top-color: #000;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
 .vt-studio-value-toggle__bar-tooltip::after {
   content: "";
   position: absolute;
